@@ -63,4 +63,15 @@ step5:
 		测试 5种spring事务配置方式(测试)
 		
 	* jquery
+step6:
+	* 将代码版本管理放到 google code(网络开发,团队开发)	
+	* google code 版本控制：
+	  - 暂选用 subversion 作为版本控制，登陆googlecode后，找到source标签，里面有如何使用的说明，我的配置：
+			地址 https://my-javaweb-project-demo.googlecode.com/svn/mytest/ (mytest是用myeclipse的svn插件登陆后新建的目录)
+			用户名 邮箱名 ；密码 在 googlecode的setting标签里管理
+
+			
+step7: 
+	* 
 	
+				
