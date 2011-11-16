@@ -62,5 +62,5 @@ step5:
 	* 加入spring事务管理 
 		测试 5种spring事务配置方式(测试)
 		
-			
+	* jquery
 	
