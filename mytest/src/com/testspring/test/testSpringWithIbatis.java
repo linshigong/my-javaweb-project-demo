@@ -2,6 +2,8 @@ package com.testspring.test;
 
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
@@ -40,9 +42,7 @@ public class testSpringWithIbatis {
 	public static void main(String[] args) throws SQLException, InterruptedException, ClassNotFoundException {
 		
 		//init then get
-		ApplicationContext context = new ClassPathXmlApplicationContext("bean.xml");
-		BasicDataSource basicDataSource = (BasicDataSource)context.getBean("dataSource");
-		System.out.println("dataSouce :"+context.getBean("dataSource"));
+		ApplicationContext context = new ClassPathXmlApplicationContext("application-*.xml");
 		final SqlMapClient mapClient = (SqlMapClient)context.getBean("sqlMapClient");
 		System.out.println("ibatis sqlmapclient :"+mapClient);
 		
