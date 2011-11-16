@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd">
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<description>DBCP数据源配置</description>
+		<property name="driverClassName" value="${jdbc.driverName}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.userName}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="maxActive" value="30"/>
+		<property name="maxIdle" value="10"/>
+		<property name="maxWait" value="1000"/>
+		<property name="removeAbandonedTimeout" value="10"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="validationQuery" value="select 1"/>
+		<property name="testOnBorrow" value="true"/>
+		<property name="testOnReturn" value="false"/>
+		<property name="logAbandoned" value="true"/><!-- 是否记录销毁连接日志 -->
+	</bean>
+	
+	<bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<description>C3P0数据源配置</description>
+		<property name="driverClass" value="${jdbc.driverName}"/>
+		<property name="user" value="${jdbc.userName}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
+		<property name="minPoolSize" value="${c3p0.minPoolSize}"/>
+		<property name="maxIdleTime" value="10000"/>
+	</bean>
+	
+	<!-- jndi数据源 
+	<jee:jndi-lookup id="jndiDataSource" jndi-name="jdbc/mytest-c3p0"/>	
+	 -->
+	 
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<description>Spring集成Ibatis</description>
+		<property name="configLocation" value="classpath:com/testibatis/SqlMapConfig-withspring.xml"/>
+		<property name="dataSource" ref="basicDataSource"/>
+	</bean>
+	<bean id="SqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<description>Spring支持ibatis的模板类,事务交由Spring时，通过这个模板操作数据，保证事务</description>
+		<property name="dataSource">
+			<description>可以切换为其他数据源</description>
+			<ref bean="comboPooledDataSource"/>
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient"/>
+		</property>
+	</bean>
+	
+</beans>
