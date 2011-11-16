@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- /////////////// test /////////////// -->
+	<bean name="foo" class="com.testspring.test.Foo" lazy-init="false">
+		<property name="name">
+			<value>jack</value>
+		</property>
+		<property name="age">
+			<value>20</value>
+		</property>
+	</bean>
+	
+	<bean name="test" class="com.testspring.test.test" autowire="byName">
+		<property name="foo">
+			<ref bean="foo"/>
+		</property>
+		<property name="testName">
+			<value>testName</value>
+		</property>
+	</bean>
+	
+
+	
+	<!-- /////////////// configuration /////////////// -->
+	<!-- 配置数据源，用apache的DBCP数据库连接池 -->
+	<!-- 基本的数据源配置 -->
+	<bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/mytest"/>
+		<property name="username" value="root"/>
+		<property name="password" value="abc123"/>
+		<property name="maxActive" value="30"/>
+		<property name="maxIdle" value="10"/>
+		<property name="maxWait" value="1000"/>
+		<property name="removeAbandonedTimeout" value="10"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="validationQuery" value="select 1"/>
+		<property name="testOnBorrow" value="true"/>
+		<property name="testOnReturn" value="false"/>
+		<property name="logAbandoned" value="true"/><!-- 是否记录销毁连接日志 -->
+	</bean>
+	<!-- 带连接池功能的配置 -->
+	<bean id="driverManagerConnectionFactory" class="org.apache.commons.dbcp.DriverManagerConnectionFactory">
+		<constructor-arg value="jdbc:mysql://localhost:3306/mytest" />
+		<constructor-arg value="root" />
+		<constructor-arg value="abc123" />
+	</bean>
+	<bean id="objectPool" class="org.apache.commons.pool.impl.GenericObjectPool"/>
+	<bean id="poolableConnectionFactory" class="org.apache.commons.dbcp.PoolableConnectionFactory">
+		<constructor-arg ref="driverManagerConnectionFactory"/>
+		<constructor-arg ref="objectPool"/>
+		<constructor-arg type="org.apache.commons.pool.BaseKeyedPoolableObjectFactory" value=""/>
+		<constructor-arg type="java.lang.String" value=""/>
+		<constructor-arg type="boolean" value="false"/>
+		<constructor-arg type="boolean" value="true"/>
+	</bean>
+	<bean id="poolingDataSource" class="org.apache.commons.dbcp.PoolingDataSource">
+		<property name="pool" ref="objectPool"/>
+	</bean>
+	<!-- spring集成ibatis -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="com/testibatis/SqlMapConfig-withspring.xml"/><!-- add this to web application:WEB-INF/classes/ -->
+		<property name="dataSource" ref="poolingDataSource"/>
+	</bean>
+
+	<bean name="testSpringWithIbatis" class="com.testspring.test.testSpringWithIbatis" lazy-init="false">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+</beans>

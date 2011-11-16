@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<context>
+
+	<Resource name="jdbc/mytest" auth="Container"
+		type="javax.sql.DataSource" maxActive="100" maxIdle="30"
+		maxWait="1000" username="root" password="abc123" driverClassName=""
+		url="" />
+</context>
