@@ -53,20 +53,19 @@ step4:
 	* 在其他需要用到 SqlMapClient 的类中，得到这个工厂类返回的 SqlMapClient 即可
 	* 测试：通过springIOC注入 SqlMapClient 到业务类中，并使用 SqlMapClient 与数据库交互(web容器测试，或者初始化spring上下文来测试getBean)
 step5:
-	* 加入数据库连接池(这里指JDBC连接池，hibernate自带的不适合生产环境)框架 DBCP(或者c3p0等)，此处以加入apache的数据库
-	   连接池框架 DBCP1.4 (JDK1.6，JDBC4)为例,此框架依赖 common-pool包
+	* 加入数据库连接池(这里指JDBC连接池，hibernate自带的不适合生产环境)框架 c3p0(或者DBCP等)
 	* 数据源的配置 (简单jdbc数据源，容器数据源，jndi数据源，从缓冲池取得的数据源)
 	
 	
 step5:
 	* 加入spring事务管理 
 		测试 5种spring事务配置方式(测试)
-		
-	* jquery
+	待...
+	* 
 step6:
 	* 将代码版本管理放到 google code(网络开发,团队开发)	
 	* google code 版本控制：
-	  - 暂选用 subversion 作为版本控制，登陆googlecode后，找到source标签，里面有如何使用的说明，我的配置：
+	  - 暂选用 SubVersion 作为版本控制，登陆googlecode后，找到source标签，里面有如何使用的说明，我的配置：
 			地址 https://my-javaweb-project-demo.googlecode.com/svn/mytest/ (mytest是用myeclipse的svn插件登陆后新建的目录)
 			用户名 邮箱名 ；密码 在 googlecode的setting标签里管理
 
