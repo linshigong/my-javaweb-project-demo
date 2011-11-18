@@ -39,6 +39,7 @@
 		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
 		<property name="minPoolSize" value="${c3p0.minPoolSize}"/>
 		<property name="maxIdleTime" value="10000"/>
+		<property name="debugUnreturnedConnectionStackTraces" value="true"/>
 	</bean>
 	
 	<!-- jndi数据源 
