@@ -1,6 +1,8 @@
-package com.testibatis;
+package com.testibatis.dao;
 
 import java.util.List;
+
+import com.testibatis.User;
 
 public interface IUserDao {
 

@@ -1,10 +1,14 @@
-package com.testibatis;
+package com.testibatis.service.impl;
 
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;
+
+import com.testibatis.User;
+import com.testibatis.dao.IUserDao;
+import com.testibatis.service.IUserService;
 
 import common.Logger;
 
@@ -42,8 +46,11 @@ public class UserServiceImpl implements IUserService {
 		Object result = null;
 		try {
 			result = userDao.insertUser(user);
+			//test rollback
+			userDao.insertUser(new User("100","testRollBack",10));
 		} catch (Exception e) {
 			logger.debug("数据访问错误"+e);
+			throw (DataAccessException)e;
 		}
 		
 		//do something else
@@ -51,7 +58,6 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	public Object insertUsers(List<User> userList) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

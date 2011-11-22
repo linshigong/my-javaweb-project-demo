@@ -11,6 +11,11 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:application-*.xml</param-value>
 	</context-param>
+	<context-param>
+		<description>如果不定义webAppRootKey参数，那么webAppRootKey就是缺省的"webapp.root"</description>
+		<param-name>webAppRootKey</param-name>
+		<param-value>mytest.root</param-value>
+	</context-param>
 	
 	<resource-ref>
 		<description>DB Connection,jndi数据源</description>

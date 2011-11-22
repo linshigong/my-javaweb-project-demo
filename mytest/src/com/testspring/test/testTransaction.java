@@ -3,9 +3,9 @@ package com.testspring.test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.testibatis.IUserService;
 import com.testibatis.User;
-import com.testibatis.UserServiceImpl;
+import com.testibatis.service.IUserService;
+import com.testibatis.service.impl.UserServiceImpl;
 
 public class testTransaction {
 
