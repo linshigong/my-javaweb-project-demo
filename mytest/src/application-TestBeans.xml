@@ -4,8 +4,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	<!-- Service配置 -->
+	<bean id="userService" class="com.testibatis.UserServiceImpl">
+		<property name="userDao">
+			<ref bean="userDao"/>
+		</property>
+	</bean>
 	
 	<!-- Dao配置 -->
-
+	<bean id="userDao" class="com.testibatis.UserDaoImpl" parent="sqlMapClientDaoSupport"/>
 	
 </beans>

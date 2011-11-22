@@ -7,7 +7,7 @@ Step By Step Project
 	webservice框架cxf，
 	缓存框架 oscache，memcache
 	数据库连接池 例如 DBCP1.1 ; c3p0
-	视图技术 sitemash ，freemaker，jsp
+	视图技术 sitemash ，freemaker，velocity，jsp
 	js库jquery (常用正则及含义)
 
 	环境: java6 ,tomcat6,mysql5,windows xp(sp3),myeclipse6.5
@@ -18,7 +18,8 @@ Step By Step Project
 	Date:2011-10-24
 --------------------------------------------------------------------
 step1:
-	新建 web project
+	* 新建 web project
+	* 配置log4j，将信息根据其级别分别捕获，开发时打印debug，部署时打印error级别
 	
 step2:
 	* 加入spring2.5支持(作为业务层，并使用其提供的各类功能)，即把spring的core和web部分的jar包拷贝到项目lib目录下;
@@ -58,7 +59,7 @@ step5:
 	
 	
 step5:
-	* 加入spring事务管理 
+	* 加入spring事务管理 ,事务到方法级 
 		测试 5种spring事务配置方式(测试)
 	待...
 	* 
@@ -71,6 +72,7 @@ step6:
 
 			
 step7: 
-	* 
+	* 使用 spring-mvc ，作为控制器
+	*
 	
 				
