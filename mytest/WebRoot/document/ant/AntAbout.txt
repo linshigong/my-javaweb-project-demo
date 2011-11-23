@@ -15,3 +15,5 @@ Ant 没有定义它自己的自定义语法；相反，它的生成文件是用 
     <target name="init"> 
     </target> 
 </project> 
+
+具体ant的配置，参看项目build.xml的配置。

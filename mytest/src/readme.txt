@@ -92,7 +92,10 @@ step7:
 			5) Optionally, from the ANT_HOME directory run ant -f fetch.xml -Ddest=system to get the library dependencies of most of the Ant tasks that require them. If you don't do this, many of the dependent Ant tasks will not be available. See Optional Tasks for details and other options for the -Ddest parameter. 
 			6) Optionally, add any desired Antlibs. See Ant Libraries for a list.	  	  
 	   		example:path = %JAVA_HOME%\bin;E:\Program Files\Git\bin;%ANT_HOME%\bin;
-	   		
+	   	  myeclipse 提供了对ant的支持，提供ant编辑器编辑ant的配置文件，有属性提示等方便功能。
+	   	  
+	   	  - ant支持svn，需要下载svnant的支持包，里面有例子示范如何使用svnant
+	   	  
 	* 创建视图hello.jsp
 	* 部署，测试 http://localhost:8080/mytest/hello.action	,返回到正确的jsp页面上
 	* 注意这部分代码测试等的目录设置，测试与开发分开

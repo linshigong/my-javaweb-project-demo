@@ -1,44 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="MyProject" default="clean" basedir=".">
+<project name="MyProject" default="clear" basedir=".">
 	<description>
 		simple example build file
 	</description>
 	
 	<!-- set global properties for this build -->
-	<property file="${basedir}/build.properties" />
-	<property name="app.server.dir" value="${tomcat.dir}/webapps" />
-	<property name="web.root" value="${basedir}/webapp" />
+	<property file="${basedir}\build.properties" />
+	<property name="app.server.dir" value="${tomcat.dir}\webapps" />
+	<property name="web.root" value="${basedir}\webapp" />
 	<property name="build" value="build"/>
-	<property name="build.dir" value="${basedir}/${build}/${project.name}" />
-	<property name="classes.dir" value="${build.dir}/WEB-INF/classes" />
-	<property name="src.root" value="${basedir}/src" />
-	<property name="test.root" value="${basedir}/test" />
+	<property name="build.dir" value="${basedir}\${build}\${project.name}" />
+	<property name="classes.dir" value="${build.dir}\WEB-INF\classes" />
+	<property name="src.root" value="${basedir}\src" />
+	<property name="test.root" value="${basedir}\test" />
 	<property name="project.lib" value="${basedir}/webapp/WEB-INF/lib" />
+	<property name="svn.dest" value="${workspace.dir}\${project.name}-svn" />
 
-	<target name="init" description="do init project">
-		<!-- Create the time stamp -->
-		<tstamp/>
-		<!-- Create the build directory structure used by compile -->
-		<mkdir dir="${build}"/>
+	<!-- ================================= 
+          target: 初始话，创建目录                      
+         ================================= -->
+	<target name="init" description="初始话，创建目录 ">
+		<echo>Create folder ...</echo>
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<echo>create folder sucess!</echo>
 	</target>
 
-	<target name="compile" depends="init" description="compile the source " >
-		<!-- Compile the java code from ${src} into ${build} -->
-		<javac srcdir="${src}" destdir="${build}"/>
+	<path id="build.path">
+		<fileset dir="project.lib">
+			<include name="**\*.jar" />
+		</fileset>
+		<fileset dir="${tomcat.dir}/lib">
+			<include name="**\*.jar" />
+		</fileset>
+	</path>
+
+	<!-- ================================= 
+	        target: compile-code   
+	          编译原代码，依赖与初始话操作，windows下暂时不用          
+	     ================================= -->
+	<target name="compile-code" depends="init" description="编译原代码，依赖与初始话操作，windows下暂时不用  ">
+		<echo>Compile src code...</echo>
+		<javac encoding="utf-8" destdir="${classes.dir}" classpathref="build.path" debug="${javac.debug}" deprecation="${javac.deprecation}" nowarn="on">
+			<src path="${src.root}"/>
+			<src path="${test.root}"/>
+		</javac>
+		<copy todir="${classes.dir}">
+			<fileset dir="${src.root}">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+				<exclude name="**/.svn/*.*" />
+			</fileset>
+			</copy>
+		<copy todir="${classes.dir}">
+			<fileset dir="${frame.root}">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+				<exclude name="**/.svn/*.*" />
+			</fileset>
+		</copy>
+		<echo>Compile src code sucess!</echo>
 	</target>
 
-	<target name="dist" depends="compile" description="generate the distribution" >
-		<!-- Create the distribution directory -->
-		<mkdir dir="${dist}/lib"/>
-
-		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-		<jar jarfile="${dist}/lib/MyProject-${DSTAMP}.jar" basedir="${build}"/>
+	<!-- ================================= 
+	          target: web-copy   
+	          复制Jsp和web端class           
+	     ================================= -->
+	<target name="web-copy" depends="compile-code"
+		description=" 复制Jsp和web端class">
+		<copy todir="${build.dir}">
+			<fileset dir="${web.root}">
+				<include name="**/*.*" />
+				<include name="**/classes/**/*.*" />
+				<exclude name="**/.svn/*.*" />
+			</fileset>
+		</copy>
+		<copy todir="${web.root}/WEB-INF/lib">
+			<fileset dir="${erp.lib}">
+				<include name="**/*.jar" />
+				<exclude name="**/.svn/*.*" />
+			</fileset>
+		</copy>
 	</target>
 
-	<target name="clean" description="clean up" >
-		<!-- Delete the ${build} and ${dist} directory trees -->
-		<delete dir="${build}"/>
-		<delete dir="${dist}"/>
+	<!-- ================================= 
+	          target: deploy-web
+	          	发布web程序           
+	     ================================= -->
+	<target name="deploy-web" depends="web-copy"
+		description="--> description">
+		<echo>deploy web ${project.name}...</echo>
+		<!-- delete dir="${app.server.dir}/${project.name}"/ -->
+		<mkdir dir="${app.server.dir}/${project.name}" />
+		<copy todir="${app.server.dir}/${project.name}">
+			<fileset dir="${build.dir}">
+				<include name="**/*.*" />
+				<exclude name="**/.svn/*.*" />
+			</fileset>
+		</copy>
 	</target>
+
+	<!-- ================================= 
+	          target: clear              
+	     ================================= -->
+	<target name="clear" depends="deploy-web"
+		description=" description">
+		<!--delete dir="${build}" /-->
+	</target>
+
+	<!-- ================================= 
+		      SVN checkot ，use svnant v1.3.1            
+		 ================================= -->
+	<!-- path to the svnant libraries. Usually they will be located in ANT_HOME/lib -->
+	<path id="svnant.classpath">
+		<fileset dir="${ant.home}\\lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- load the svn task 
+	<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" classpathref="svnant.classpath" />
+	-->
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />	
+	<target name="clean.svn">
+		<delete dir="${svn.dest}" />
+	</target>
+
+	<target name="init.svn">
+		<delete dir="${svn.dest}"/>
+		<mkdir dir="${svn.dest}"/>
+	</target>
+
+	<target name="checkout.svn" depends="init.svn">
+		<!-- -->
+		<echoproperties/>
+		
+		<svnSetting id="svnsetting" username="${svnant.repository.user}" sslpassword="${svnant.repository.passwd}"/>
+		<svn refid="svnsetting">
+			<checkout url="${svnant.latest.url}" revision="HEAD" destPath="{svn.dest}" />
+		</svn>
+			
+	</target>
+
+	<!-- ================================= 
+	          cvs checkot             
+	     ================================= -->
+	<target name="checkout.cvs">
+		<delete dir="${cvsDest}/${cvsPackage}" />
+		<cvs cvsRoot=":pserver:${cvsUser}:${cvsPass}@${cvshost}:${cvsRoot}" package="${cvsPackage}" dest="${cvsDest}" command="checkout" />
+		<ant antfile="build.xml" dir="${components.root}" />
+		<mkdir dir="${jboss.deploy.dir}/projectname.jar" />
+
+		<copy todir="${jboss.deploy.dir}/projectname.jar">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*" />
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
+				<exclude name="**/cvs/*.*" />
+			</fileset>
+		</copy>
+	</target>
+	
+	
 </project>
 

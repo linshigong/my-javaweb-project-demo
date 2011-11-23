@@ -1,0 +1,12 @@
+
+例子：
+	E:\workspace>ant -f E:\workspace\mytestsvn\build.xml init.svn
+	Buildfile: E:\workspace\mytestsvn\build.xml
+	
+	init.svn:
+	    [mkdir] Created dir: E:\workspace\workspancetest\mytest-svn
+	
+	BUILD SUCCESSFUL
+	Total time: 0 seconds
+	
+	E:\workspace>ant -f E:\workspace\mytestsvn\build.xml init.svn
