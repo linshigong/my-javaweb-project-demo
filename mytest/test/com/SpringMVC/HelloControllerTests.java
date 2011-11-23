@@ -14,10 +14,13 @@ public class HelloControllerTests extends TestCase {
 		ModelAndView modelAndView = controller.handleRequest(null, null);
 //		assertEquals("test/hello.jsp",modelAndView.getViewName());//测试是否返回正确的view名称
 		
-		assertEquals("test/hello.jsp", modelAndView.getViewName());
+//		assertEquals("test/hello.jsp", modelAndView.getViewName());
 		assertNotNull(modelAndView.getModel());
 		String nowValue = (String) modelAndView.getModel().get("now");
 		assertNotNull(nowValue);
+		
+		//Decouple the view from the controller
+		assertEquals("hello", modelAndView.getViewName());
 		
 	}
 	

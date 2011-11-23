@@ -21,7 +21,9 @@ public class HelloController implements Controller {
 		logger.info("Returning hello view "+now);
 		
 //		return new ModelAndView("test/hello.jsp");
-		return new ModelAndView("test/hello.jsp","now",now);
+		
+		//Decouple the view from the controller,see config in mytestapp-servlet.xml
+		return new ModelAndView("hello","now",now);
 	}
 
 }

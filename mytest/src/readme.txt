@@ -95,12 +95,14 @@ step7:
 	   	  myeclipse 提供了对ant的支持，提供ant编辑器编辑ant的配置文件，有属性提示等方便功能。
 	   	  
 	   	  - ant支持svn，需要下载svnant的支持包，里面有例子示范如何使用svnant
+	   	  待解决？
 	   	  
 	* 创建视图hello.jsp
 	* 部署，测试 http://localhost:8080/mytest/hello.action	,返回到正确的jsp页面上
 	* 注意这部分代码测试等的目录设置，测试与开发分开
 	* jsp页面的jstl支持：attribute value does not accept any expressions ，可能是jstl的版本导致不支持,比如有的版本out标签的value属性不支持表达式。
-	
+	* 对测试用例中，把视图直接定义在controller中的代码进行解耦(Decouple the view from the controller)
+	* 
 	
 	
 	
