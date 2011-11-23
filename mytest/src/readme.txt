@@ -10,7 +10,8 @@ Step By Step Project
 	视图技术 sitemash ，freemaker，velocity，jsp
 	js库jquery (常用正则及含义)
 
-	环境: java6 ,tomcat6,mysql5,windows xp(sp3),myeclipse6.5
+	环境:windows xp sp3 pro 
+		java6 ,tomcat6,mysql5,windows xp(sp3),myeclipse6.5
 		struts2
 		spring2
 		ibatis2.3.4
@@ -61,6 +62,8 @@ step5:
 step5:
 	* 加入spring事务管理 ,事务到方法级 
 		测试 5种spring事务配置方式(测试)
+		1) tx方式配置service层事务
+		2)
 	待...
 	* 
 step6:
@@ -72,7 +75,31 @@ step6:
 
 			
 step7: 
-	* 使用 spring-mvc ，作为控制器
-	*
+	* 使用 spring-mvc ，作为控制器 spring自带的step by step mvc开发文档作为参考
+	* 在web.xml文件中配置控制器(DispatcherServlet,一个servlet)，作用：It is going to control
+	  where all our requests are routed based on information we will enter at a later point
+	  具体配置见web.xml文件
+	* 创建上面dispatcher要用的配置文件，文件名要和web.xml里配置的servlet名匹配(springapp-servlet.xml)；
+	   注意，配置文件放到WEB-INF 目录下。
+	* 创建controller(继承spring的org.springframework.web.servlet.mvc.Controller)并用junit测试(需要导入junit4的jar包)，
+	   测试controller是否返回正确的view，具体见代码
+	   补充：
+	  	  用Ant工具来编译并测试：到apache网站下载binary包和它的manual，根据manual配置。
+			1) Make sure you have a Java environment installed, See System Requirements for details. 
+			2) Download Ant. See Binary Edition for details. 
+			3) Uncompress the downloaded file into a directory. 
+			4) Set environmental variables JAVA_HOME to your Java environment, ANT_HOME to the directory you uncompressed Ant to, and add ${ANT_HOME}/bin (Unix) or %ANT_HOME%/bin (Windows) to your PATH. See Setup for details. 
+			5) Optionally, from the ANT_HOME directory run ant -f fetch.xml -Ddest=system to get the library dependencies of most of the Ant tasks that require them. If you don't do this, many of the dependent Ant tasks will not be available. See Optional Tasks for details and other options for the -Ddest parameter. 
+			6) Optionally, add any desired Antlibs. See Ant Libraries for a list.	  	  
+	   		example:path = %JAVA_HOME%\bin;E:\Program Files\Git\bin;%ANT_HOME%\bin;
+	   		
+	* 创建视图hello.jsp
+	* 部署，测试 http://localhost:8080/mytest/hello.action	,返回到正确的jsp页面上
+	* 注意这部分代码测试等的目录设置，测试与开发分开
+	* jsp页面的jstl支持：attribute value does not accept any expressions ，可能是jstl的版本导致不支持,比如有的版本out标签的value属性不支持表达式。
+	
+	
+	
+	
 	
 				

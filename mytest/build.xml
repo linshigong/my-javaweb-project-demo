@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="MyProject" default="clean" basedir=".">
+	<description>
+		simple example build file
+	</description>
+	
+	<!-- set global properties for this build -->
+	<property file="${basedir}/build.properties" />
+	<property name="app.server.dir" value="${tomcat.dir}/webapps" />
+	<property name="web.root" value="${basedir}/webapp" />
+	<property name="build" value="build"/>
+	<property name="build.dir" value="${basedir}/${build}/${project.name}" />
+	<property name="classes.dir" value="${build.dir}/WEB-INF/classes" />
+	<property name="src.root" value="${basedir}/src" />
+	<property name="test.root" value="${basedir}/test" />
+	<property name="project.lib" value="${basedir}/webapp/WEB-INF/lib" />
+
+	<target name="init" description="do init project">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+	</target>
+
+	<target name="compile" depends="init" description="compile the source " >
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}"/>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution" >
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}/lib"/>
+
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		<jar jarfile="${dist}/lib/MyProject-${DSTAMP}.jar" basedir="${build}"/>
+	</target>
+
+	<target name="clean" description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+</project>
+
