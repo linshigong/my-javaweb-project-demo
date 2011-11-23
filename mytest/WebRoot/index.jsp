@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.testspring.test.Foo" %>
+<%@ include file="/WEB-INF/jsp/test/include.jsp" %>
 <%
 	String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -25,7 +26,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <jsp:useBean id="foo" class="com.testspring.test.Foo"/>
   <jsp:useBean id="test" class="com.testspring.test.test"/>
     <p>This is my JSP page.</p>
-    <%=foo%> <br><% //request.getSession().getServletContext().get %>
-    <%=test %>
+    
+	<%-- Redirected because we can't set the welcome page to a virtual URL. --%>
+	<c:redirect url="/hello.action"/>
   </body>
 </html>
