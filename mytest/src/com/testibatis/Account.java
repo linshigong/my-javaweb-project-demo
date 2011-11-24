@@ -10,12 +10,6 @@ public class Account {
 	public Account() {
 	}
 	
-	/**
-	 * @param id
-	 * @param firstName
-	 * @param lastName
-	 * @param emailAddress
-	 */
 	public Account(int id, String firstName, String lastName,
 			String emailAddress) {
 		this.id = id;

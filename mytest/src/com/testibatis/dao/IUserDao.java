@@ -8,7 +8,17 @@ public interface IUserDao {
 
 	public User getUserById(String userId);
 	
+	/**
+	 * Save user
+	 * @param user the user pojo to save
+	 * @return a result object returned by the action, or null
+	 */
 	public Object insertUser(User user);
 	
+	/**
+	 * Get users by name,may be more than one user
+	 * @param userName
+	 * @return 
+	 */
 	public List<User> getUserByName(String userName);
 }

@@ -102,7 +102,7 @@ step7:
 	* 注意这部分代码测试等的目录设置，测试与开发分开
 	* jsp页面的jstl支持：attribute value does not accept any expressions ，可能是jstl的版本导致不支持,比如有的版本out标签的value属性不支持表达式。
 	* 对测试用例中，把视图直接定义在controller中的代码进行解耦(Decouple the view from the controller)
-	* 
+	* spring的Dao层封装异常 DataAccessException 是否需要捕捉(在哪里捕捉)，以及和事务回滚的关联？
 	
 	
 	

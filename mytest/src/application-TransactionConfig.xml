@@ -12,13 +12,15 @@
 		<property name="dataSource" ref="comboPooledDataSource"/>
 	</bean>
 
-	<tx:advice id="txAdvice" transaction-manager="springTransactionManager">
-		<tx:attributes>
-			<tx:method name="get*" read-only="true" rollback-for=""/>
-			<tx:method name="*" />
-		</tx:attributes>
-	</tx:advice>	
+	<!-- ============================================ 
+		 		事务配置方式1：每个Bean都有一个代理
+		 ============================================ -->
+	
+	
 
+	<!-- ============================================ 
+		 		事务配置方式4：tx方式配置事务
+		 ============================================ -->
 	<!-- AOP配置 -->
 	<aop:config>
 		<!-- Transaction on singal service class 
@@ -29,7 +31,14 @@
 		
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
 	</aop:config>
-
 	
-
+	<tx:advice id="txAdvice" transaction-manager="springTransactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" rollback-for=""/>
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	
+	
+	
 </beans>

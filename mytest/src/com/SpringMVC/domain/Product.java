@@ -7,7 +7,9 @@ public class Product implements Serializable {
 	private static final long serialVersionUID = -1420640960684531710L;
 
 	String description;
+	
 	Double price;
+	
 	public String getDescription() {
 		return description;
 	}

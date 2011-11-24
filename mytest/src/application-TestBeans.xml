@@ -3,14 +3,42 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-	<!-- Service配置 -->
+	<!-- ============================================ 
+		 				Service配置
+		 ============================================ -->
 	<bean id="userService" class="com.testibatis.service.impl.UserServiceImpl">
+		<description>Test tx方式配置service事务</description>
 		<property name="userDao">
 			<ref bean="userDao"/>
 		</property>
 	</bean>
 	
-	<!-- Dao配置 -->
+	<bean id="userServiceTarget" class="com.testibatis.service.impl.UserServiceImpl">
+		<description>Test 每个类一个代理方式的事务</description>
+		<property name="userDao">
+			<ref bean="userDao"/>
+		</property>
+	</bean>
+	<bean id="userServiceProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<description>这种方式配置的代理，记得调用这个代理类，而不是原来被代理的类(userServiceTarget)</description>
+		<property name="transactionManager" ref="springTransactionManager" />
+		<property name="target" ref="userServiceTarget" />
+		<property name="proxyInterfaces" value="com.testibatis.service.IUserService" />
+		<property name="transactionAttributes">
+			<description>配置事务属性</description>
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	
+	<!-- ============================================ 
+		 				Dao配置
+		 ============================================ -->
 	<bean id="userDao" class="com.testibatis.dao.impl.UserDaoImpl" parent="sqlMapClientDaoSupport"/>
+	
+	
 	
 </beans>

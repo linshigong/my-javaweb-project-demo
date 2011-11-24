@@ -1,0 +1,84 @@
+关于Spring的DataAccessException
+	
+	Spring的Dao层封装了底层(runtime exception)异常,便于数据访问接口，可以统一抛出 
+org.springframework.dao.DataAccessException 不用考虑数据访问层实现关于异常抛出的
+细节。
+
+	Spring’s DAO frameworks do not throw technology-specific exceptions, such
+as SQLException or HibernateException. Instead, all exceptions thrown are
+subclasses of the technology-agnostic org.springframework.dao.DataAccess-
+Exception. This enables your data access interfaces to throw Spring’s general
+DataAccessException instead of implementation-specific exceptions that would
+force other application layers to catch them and thus become coupled to a particular
+persistence implementation. In fact, you can intermingle multiple persistence
+technologies within the same application without your service objects even
+knowing it.
+	Since DataAccessException is the root of all Spring DAO exceptions, there are
+a couple of important things to know.
+
+
+-----
+Spring的DataAccessException 这个异常不需要捕获
+
+	DataAccessException：是Spring提供了一种与特定技术无关的异常，实现服务层与数据访问层的分离。
+	
+	你不一定要处理DataAccessException,同时由于DataAccessException是NestedRunTimeException的子类，
+你可以通过它的getCourse()获得导致这个异常的另一个异常，这样你就可以获得与特定技术相关的异常信息。
+
+	Spring为你打造异常分类
+	Spring清楚与特定技术相关的异常，Spring自己会抛出更为精确的异常
+	CleanupFailureDataAccessException
+	DataAccessResourceFailureException
+	DataIntegrityViolationException
+	DataRetrieveFailureException
+	DeadlockLoserDataAccessException
+	IncorrectUpdataSemanticsDataAccessException
+	InvalidDataAccessApiUsageException
+	InvalidDataAccessResourceUsageException
+	OptimisticLockingFailureException
+	TypeMismatchDataAccessException
+	UncategorizeDataAccesException
+
+2.与DataSource一起工作
+	从JNDI中获得DataSource
+	创建一个DataSource连接池 org.apache.commons.dbcp.BasicDataSource
+	在测试时使用DataSource   DriveManageDataSource
+
+3.一致的DAO支持
+	Tempate模式
+	流程顺序不变，可能有某个流程的细节是要变化，这个交给接口了，然后每个实现着去实现这个接口就可以。
+	所以Spring是通过提供相应的模板类来实现的，同时也提供了支撑类。
+
+4.Spring与hibernate整合
+	Spring与hibernate整合主要在以下几方面：
+	整合事务管理
+	异常处理
+	线程安全，轻量级模板类
+	便利的支持类
+	资源管理
+
+	配置SessionFactory
+	LocalSessionFactoryBean
+	dataSource
+	hibernateProperties
+	mappingDirectoryLocations
+	mappingResources
+	
+	HibernateTemplate
+	HibernateDaoSupport
+	
+来自：http://hi.baidu.com/zhy65991/blog/item/5b5eb26f3a2ccad680cb4ae5.html
+
+------
+		As mentioned, this has the added advantage that any SQLException will be wrapped 
+	in a Spring Framework CannotGetJdbcConnectionException - one of the Spring 
+	Framework's hierarchy of uncheckedDataAccessExceptions. This gives you more 
+	information than can easily be obtained from the SQLException,and ensures portability 
+	across databases: even across different persistence technologies.
+	
+	方便处理SQLException,使得能够跨数据库，甚至跨不同的持久层技术。
+	
+	来自：spring文档片段
+	
+	
+	

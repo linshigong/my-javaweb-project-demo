@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.util.StringUtils;
 
 import com.testibatis.User;
 import com.testibatis.dao.IUserDao;
@@ -14,14 +15,16 @@ import common.Logger;
 
 public class UserServiceImpl implements IUserService {
 
-	Logger logger = Logger.getLogger(UserServiceImpl.class);
+	protected Logger logger = Logger.getLogger(getClass());
 	
 	private IUserDao userDao;
 	
+	/** 细节：对于service层，这个get方法不需要提供，可以删除 
 	public IUserDao getUserDao() {
 		return userDao;
 	}
-
+	*/
+	
 	public void setUserDao(IUserDao userDao) {
 		this.userDao = userDao;
 	}
@@ -34,6 +37,7 @@ public class UserServiceImpl implements IUserService {
 			logger.debug("数据访问错误:"+e);
 		}
 		//do something else here
+		//...
 		return user;
 	}
 
@@ -46,19 +50,21 @@ public class UserServiceImpl implements IUserService {
 		Object result = null;
 		try {
 			result = userDao.insertUser(user);
-			//test rollback
-			userDao.insertUser(new User("100","testRollBack",10));
 		} catch (Exception e) {
 			logger.debug("数据访问错误"+e);
 			throw (DataAccessException)e;
 		}
-		
 		//do something else
+		//...
 		return result;
 	}
-
-	public Object insertUsers(List<User> userList) {
-		return null;
+	
+	public boolean insertUsers(List<User> userList) {
+		Object result = null;
+		for (User user : userList) {
+			result = userDao.insertUser(user);
+		}
+		return result == null?false:true;
 	}
 
 }

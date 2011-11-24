@@ -12,5 +12,10 @@ public interface IUserService {
 	
 	public Object insertUser(User user);
 	
-	public Object insertUsers(List<User> userList);
+	/**
+	 * 同时保存多个User
+	 * @param userList 将被保存的多个User
+	 * @return 是否同时保存成功,否则都不保存
+	 */
+	public boolean insertUsers(List<User> userList);
 }

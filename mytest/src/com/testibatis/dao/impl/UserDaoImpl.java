@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
-import com.mchange.v2.log.log4j.Log4jMLog;
 import com.testibatis.User;
 import com.testibatis.dao.IUserDao;
 
@@ -16,8 +15,6 @@ public class UserDaoImpl extends SqlMapClientDaoSupport implements IUserDao {
 	}
 
 	public List<User> getUserByName(String userName) {
-		//
-//		Log4jMLog log
 		return null;
 	}
 
