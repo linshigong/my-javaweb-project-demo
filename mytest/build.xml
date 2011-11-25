@@ -113,7 +113,19 @@
 		 ================================= -->
 	<!-- path to the svnant libraries. Usually they will be located in ANT_HOME/lib -->
 	<path id="svnant.classpath">
-		<fileset dir="${ant.home}\\lib">
+		<fileset dir="${ant.home}/lib">
+			<include name="svnant.jar"/>
+		</fileset>
+		<fileset dir="${ant.home}/lib">
+			<include name="svnClientAdapter.jar"/>
+		</fileset>
+		<fileset dir="${ant.home}/lib">
+			<include name="svnjavahl.jar"/>
+		</fileset>
+		<fileset dir="${ant.home}/lib">
+			<include name="svnkit.jar"/>
+		</fileset>
+		<fileset dir="${ant.home}/lib">
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
@@ -135,8 +147,8 @@
 		<!-- -->
 		<echoproperties/>
 		
-		<svnSetting id="svnsetting" username="${svnant.repository.user}" sslpassword="${svnant.repository.passwd}"/>
-		<svn refid="svnsetting">
+		<svnSetting id="svnsetting" username="${svnant.repository.user}" sslpassword="${svnant.repository.passwd}" javahl="true"/>
+		<svn refid="svnsetting" >
 			<checkout url="${svnant.latest.url}" revision="HEAD" destPath="{svn.dest}" />
 		</svn>
 			
