@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		">
 
 	<!-- ============================================ 
-		 				Service配置
+		 				Service及事务配置
 		 ============================================ -->
-	<bean id="userService" class="com.testibatis.service.impl.UserServiceImpl">
-		<description>Test tx方式配置service事务</description>
-		<property name="userDao">
-			<ref bean="userDao"/>
-		</property>
-	</bean>
-	
 	<bean id="userServiceTarget" class="com.testibatis.service.impl.UserServiceImpl">
-		<description>Test 每个类一个代理方式的事务</description>
+		<description>事务配置方式一 [每个类一个代理方式]</description>
 		<property name="userDao">
 			<ref bean="userDao"/>
 		</property>
@@ -31,6 +32,64 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean id="serviceTransactonBase" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true" lazy-init="true">
+		<description>事务配置方式二 [所有bean共用一个代理父类]</description>
+		<property name="transactionManager">
+			<ref bean="springTransactionManager"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="userServiceTarget2" class="com.testibatis.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+    
+    <bean id="userServiceProxy2" parent="serviceTransactonBase" >  
+        <property name="target" ref="userServiceTarget2"/> 
+    </bean>
+	
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<description>事务配置方式三 [使用拦截器]</description>
+		<property name="transactionManager" ref="springTransactionManager"/>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<description>根据bean名称自动生成代理器</description>
+		<property name="beanNames">
+			<list>
+				<value>*ServiceImpl</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="userService" class="com.testibatis.service.impl.UserServiceImpl">
+		<description>事务配置方式四 [tx标签方式配置service]</description>
+		<property name="userDao">
+			<ref bean="userDao"/>
+		</property>
+	</bean>
+	
+	<context:annotation-config>
+		<description>
+			事务配置方式五 [Anotation注解方式配置service]
+			此时在DAO上需加上@Transactional注解
+		</description>
+	</context:annotation-config>
+    <context:component-scan base-package="com.testibatis.service.impl" />
+    <tx:annotation-driven transaction-manager="springTransactionManager"/>
 	
 	
 	
