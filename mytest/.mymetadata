@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="mytest"
+  name="mytestsvn"
   id="myeclipse.1318841934578"
   context-root="/testcxf"
   j2ee-spec="5.0"
-  archive="mytest.war">
+  archive="mytestsvn.war">
   <attributes>
     <attribute name="webrootdir" value="WebRoot" />
   </attributes>
