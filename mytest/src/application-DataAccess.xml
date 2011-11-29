@@ -29,7 +29,7 @@
 		<property name="logAbandoned" value="true"/><!-- 是否记录销毁连接日志 -->
 	</bean>
 	
-	<bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
+	<bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<description>C3P0数据源配置</description>
 		<property name="driverClass" value="${jdbc.driverName}"/>
 		<property name="user" value="${jdbc.userName}"/>

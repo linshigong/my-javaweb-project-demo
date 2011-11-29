@@ -51,7 +51,7 @@
     <bean id="userServiceProxy2" parent="serviceTransactonBase" >  
         <property name="target" ref="userServiceTarget2"/> 
     </bean>
-	
+	 
 	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<description>事务配置方式三 [使用拦截器]</description>
 		<property name="transactionManager" ref="springTransactionManager"/>
@@ -65,7 +65,7 @@
 		<description>根据bean名称自动生成代理器</description>
 		<property name="beanNames">
 			<list>
-				<value>*ServiceImpl</value>
+				<value>*Service*</value>
 			</list>
 		</property>
 		<property name="interceptorNames">
@@ -74,7 +74,7 @@
 			</list>
 		</property>
 	</bean>
-	
+	 
 	<bean id="userService" class="com.testibatis.service.impl.UserServiceImpl">
 		<description>事务配置方式四 [tx标签方式配置service]</description>
 		<property name="userDao">

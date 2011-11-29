@@ -24,7 +24,7 @@ public class testTransaction {
 		System.out.println("insert user ,id="+result);
 		*/
 		
-		/* test 每个Bean都有一个代理方式事务,注意getBean时取的是代理类，不是原来的类 */
+		/* test 每个Bean都有一个代理方式事务,注意getBean时取的是代理类，不是原来的类 
 		IUserService userService = (IUserService)context.getBean("userServiceProxy");
 		User user1 = new User("100","Jack",16);//can save to DB
 		User user2 = new User(null,"tom",12);//can't save to DB
@@ -33,7 +33,28 @@ public class testTransaction {
 		userList.add(user2);
 		boolean result = userService.insertUsers(userList);
 		System.out.println("insert user ,result is :"+result);
-		//Assert.hasText(text)
+		*/
+		
+		/* test 所有bean共享一个代理方式 
+		IUserService userService = (IUserService)context.getBean("userServiceProxy2");
+		User user1 = new User("100","Jack",16);//can save to DB
+		User user2 = new User(null,"tom",12);//can't save to DB
+		List<User> userList = new ArrayList<User>();
+		userList.add(user1);
+		userList.add(user2);
+		boolean result = userService.insertUsers(userList);
+		System.out.println("insert user ,result is :"+result);
+		*/
+		
+		/* 拦截器方式 *ServiceImpl 匹配的bean都对方法加上事务 ；测试时，注意先把tx方式匹配参数修改，否则影响结果*/
+		IUserService userService = (IUserService)context.getBean("userService");
+		User user1 = new User("100","Jack",16);//can save to DB
+		User user2 = new User(null,"tom",12);//can't save to DB
+		List<User> userList = new ArrayList<User>();
+		userList.add(user1);
+		userList.add(user2);
+		boolean result = userService.insertUsers(userList);
+		System.out.println("insert user ,result is :"+result);
 	}
 	
 }

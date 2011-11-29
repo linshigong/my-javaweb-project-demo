@@ -65,6 +65,7 @@ step5:
 		1) tx方式配置service层事务
 		2)
 	待...
+	测试通过，具体见测试代码
 	* 
 step6:
 	* 将代码版本管理放到 google code(网络开发,团队开发)	
@@ -103,6 +104,9 @@ step7:
 	* jsp页面的jstl支持：attribute value does not accept any expressions ，可能是jstl的版本导致不支持,比如有的版本out标签的value属性不支持表达式。
 	* 对测试用例中，把视图直接定义在controller中的代码进行解耦(Decouple the view from the controller)
 	* spring的Dao层封装异常 DataAccessException 是否需要捕捉(在哪里捕捉)，以及和事务回滚的关联？自定义事务回滚策略
+	* Controller的成员变量，在dispatcher配置文件中配置，比如要用到的service等
+	* 可以通过tomcat的管理页面来启动和关闭实例。
+	
 	
 	
 	
