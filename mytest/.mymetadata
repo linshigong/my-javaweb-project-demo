@@ -2,8 +2,8 @@
 <project-module
   type="WEB"
   name="mytestsvn"
-  id="myeclipse.1318841934578"
-  context-root="/testcxf"
+  id="myeclipse.1322618581125"
+  context-root="/mytestsvn"
   j2ee-spec="5.0"
   archive="mytestsvn.war">
   <attributes>
