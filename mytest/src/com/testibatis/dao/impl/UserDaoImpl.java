@@ -3,7 +3,6 @@ package com.testibatis.dao.impl;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
 import com.testibatis.User;
 import com.testibatis.dao.BaseDao;
