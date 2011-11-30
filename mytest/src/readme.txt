@@ -8,7 +8,7 @@ Step By Step Project
 	缓存框架 oscache，memcache
 	数据库连接池 例如 DBCP1.1 ; c3p0
 	视图技术 sitemash ，freemaker，velocity，jsp
-	js库jquery (常用正则及含义)
+	js库jquery (常用正则及含义) 
 
 	环境:windows xp sp3 pro 
 		java6 ,tomcat6,mysql5,windows xp(sp3),myeclipse6.5
