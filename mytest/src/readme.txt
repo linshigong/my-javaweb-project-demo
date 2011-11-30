@@ -111,7 +111,9 @@ step7:
 		主要就是aop的相关jar包，aop的实现方式有多个。
 		方法：工具提示的错误，比如某个class找不到，即可定位是少了那些jar包。
 		
-	* 		
+	* 将project从svn上checkout一份到其他地方，以备份。
+	* 
+			
 	
 	
 	
