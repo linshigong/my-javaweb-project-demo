@@ -106,6 +106,12 @@ step7:
 	* spring的Dao层封装异常 DataAccessException 是否需要捕捉(在哪里捕捉)，以及和事务回滚的关联？自定义事务回滚策略
 	* Controller的成员变量，在dispatcher配置文件中配置，比如要用到的service等
 	* 可以通过tomcat的管理页面来启动和关闭实例。
+	* spring 初始化出现问题之一：没有导入对应的包，比如用了aop就需要导入aop对应的jar包，这在配置文件中配置了，但jar包没有导入，可能导致隐蔽的异常。
+		aop功能需要导入spring.jar包，用到aop公共组织的库;用aspectj实现aop需要导入aspectj的相关包,asm,cglib;
+		主要就是aop的相关jar包，aop的实现方式有多个。
+		方法：工具提示的错误，比如某个class找不到，即可定位是少了那些jar包。
+		
+	* 		
 	
 	
 	
