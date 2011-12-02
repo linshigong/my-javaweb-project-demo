@@ -6,7 +6,7 @@ Step By Step Project
 	常用j2ee框架整合(struts2+ibatis+spring2,struts2+hibernate3+spring2)，
 	webservice框架cxf，
 	缓存框架 oscache，memcache
-	数据库连接池 例如 DBCP1.1 ; c3p0
+	数据库连接池 例如 DBCP1.1 ; c3p00.9.1
 	视图技术 sitemash ，freemaker，velocity，jsp
 	js库jquery (常用正则及含义) 
 
@@ -57,6 +57,7 @@ step4:
 step5:
 	* 加入数据库连接池(这里指JDBC连接池，hibernate自带的不适合生产环境)框架 c3p0(或者DBCP等)
 	* 数据源的配置 (简单jdbc数据源，容器数据源，jndi数据源，从缓冲池取得的数据源)
+	* 配置好 c3p0对无效数据库链接的处理，比如数据库重启了；需要配置链接可用性检测策略。可在其自带文档中找解决方法。
 	
 	
 step5:

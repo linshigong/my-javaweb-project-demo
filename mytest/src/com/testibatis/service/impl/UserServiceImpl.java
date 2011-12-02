@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.util.StringUtils;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.testibatis.User;
 import com.testibatis.dao.IUserDao;
 import com.testibatis.service.IUserService;
@@ -35,6 +36,8 @@ public class UserServiceImpl implements IUserService {
 			user = userDao.getUserById(userId);	
 		} catch (DataAccessException e) {
 			logger.debug("数据访问错误:"+e);
+		}catch(Exception e){
+			System.out.println("出现错误");
 		}
 		//do something else here
 		//...
