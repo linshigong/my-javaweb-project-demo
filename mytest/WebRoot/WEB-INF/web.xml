@@ -16,10 +16,20 @@
 		<param-value>classpath:application-*.xml</param-value>
 	</context-param>
 	<context-param>
-		<description>如果不定义webAppRootKey参数，那么webAppRootKey就是缺省的"webapp.root"</description>
+		<description>
+			如果不定义webAppRootKey参数，那么webAppRootKey就是缺省的"webapp.root"
+		</description>
 		<param-name>webAppRootKey</param-name>
 		<param-value>mytest.root</param-value>
 	</context-param>
+	
+	<message-destination>
+		<description>
+			国际化配置(Internationalization),也可配置到spring的context中，
+			通过spring标签调	用，具体见spring的配置
+		</description>
+		<message-destination-name>classpath:i18n/mytest_i18n</message-destination-name>
+	</message-destination>
 	
 	<resource-ref>
 		<description>DB Connection,jndi数据源</description>

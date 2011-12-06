@@ -2,11 +2,17 @@ package com.SpringMVC.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
+
 import com.SpringMVC.domain.Product;
 import com.SpringMVC.service.ProductManager;
 
 @SuppressWarnings("serial")
 public class SimpleProductManager implements ProductManager {
+	
 	/**
 	 * 对于暂时没有实现的方法，返回 UnsupportedOperationException 异常是一个比较好的选择
 	 * 		

@@ -25,8 +25,13 @@ public class HelloController implements Controller {
 		logger.info("Returning hello view "+now);
 		
 //		return new ModelAndView("/WEB-INF/jsp/test/hello.jsp");
+		User user = null;
+		try {
+			user = userService.getUserById("100");
+		} catch (Exception e) {
+			logger.error("数据访问出错:\n"+e);
+		}
 		
-		User user = userService.getUserById("100");
 		System.out.println("------------- user is :"+user);
 		
 		//Decouple the view from the controller,see config in mytestapp-servlet.xml

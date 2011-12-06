@@ -7,7 +7,7 @@
 	
 	<!-- the application context definition for the springapp DispatcherServlet -->
 	<bean name="/hello.action" class="com.SpringMVC.HelloController" >
-		<property name="userService" ref="userService"/>
+		<property name="userService" ref="userServiceTarget2"/>
 	</bean>
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">

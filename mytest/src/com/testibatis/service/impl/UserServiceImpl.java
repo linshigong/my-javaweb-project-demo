@@ -16,7 +16,7 @@ import common.Logger;
 
 public class UserServiceImpl implements IUserService {
 
-	protected Logger logger = Logger.getLogger(getClass());
+	protected final Logger logger = Logger.getLogger(getClass());
 	
 	private IUserDao userDao;
 	
