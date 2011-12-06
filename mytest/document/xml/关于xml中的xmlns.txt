@@ -1,22 +1,22 @@
-¹ØÓÚxmlÖÐµÄxmlns
+å…³äºŽxmlä¸­çš„xmlns
 
-"xmlns"ÊÇXHTML namespaceµÄËõÐ´£¬½Ð×ö"Ãû×Ö¿Õ¼ä"ÉùÃ÷¡£Ãû×Ö¿Õ¼äÊÇÊ²Ã´×÷ÓÃÄØ£¿ÎÒµÄÀí½âÊÇ£º
+"xmlns"æ˜¯XHTML namespaceçš„ç¼©å†™ï¼Œå«åš"åå­—ç©ºé—´"å£°æ˜Žã€‚åå­—ç©ºé—´æ˜¯ä»€ä¹ˆä½œç”¨å‘¢ï¼Ÿæˆ‘çš„ç†è§£æ˜¯ï¼š
 
-ÓÉÓÚxmlÔÊÐíÄã×Ô¼º¶¨Òå×Ô¼ºµÄ±êÊ¶£¬Äã¶¨ÒåµÄ±êÊ¶ºÍÆäËûÈË¶¨ÒåµÄ±êÊ¶ÓÐ¿ÉÄÜÏàÍ¬£¬µ«±íÊ¾²»Í¬µÄÒâÒå¡£µ±ÎÄ¼þ½»»»»òÕß¹²ÏíµÄÊ±ºò¾ÍÈÝÒ×²úÉú´íÎó¡£ÎªÁË±ÜÃâÕâÖÖ´íÎó·¢Éú£¬XML²ÉÓÃÃû×Ö¿Õ¼äÉùÃ÷£¬ÔÊÐíÄãÍ¨¹ýÒ»¸öÍøÖ·Ö¸ÏòÀ´Ê¶±ðÄãµÄ±êÊ¶¡£
+ç”±äºŽxmlå…è®¸ä½ è‡ªå·±å®šä¹‰è‡ªå·±çš„æ ‡è¯†ï¼Œä½ å®šä¹‰çš„æ ‡è¯†å’Œå…¶ä»–äººå®šä¹‰çš„æ ‡è¯†æœ‰å¯èƒ½ç›¸åŒï¼Œä½†è¡¨ç¤ºä¸åŒçš„æ„ä¹‰ã€‚å½“æ–‡ä»¶äº¤æ¢æˆ–è€…å…±äº«çš„æ—¶å€™å°±å®¹æ˜“äº§ç”Ÿé”™è¯¯ã€‚ä¸ºäº†é¿å…è¿™ç§é”™è¯¯å‘ç”Ÿï¼ŒXMLé‡‡ç”¨åå­—ç©ºé—´å£°æ˜Žï¼Œå…è®¸ä½ é€šè¿‡ä¸€ä¸ªç½‘å€æŒ‡å‘æ¥è¯†åˆ«ä½ çš„æ ‡è¯†ã€‚
 
-±ÈÈçÔÚÒ»¸öÎÄµµ<table>wood table</table>ÖÐ<table>±íÊ¾×À×Ó£¬¶øÔÚÁíÒ»¸öÎÄµµ<table>namelist</table>ÖÐ<table>±íÊ¾±í¸ñ¡£Èç¹ûÎÒÐèÒªÍ¬Ê±´¦ÀíÕâÁ½¸öÎÄµµ£¬¾Í»á·¢ÉúÃû×Ö³åÍ»¡£ÎªÁË½â¾öÕâ¸öÎÊÌâ£¬ÎÒÃÇÒý½øÁËnamespacesÕâ¸ö¸ÅÄî¡£namespacesÍ¨¹ý¸ø±êÊ¶Ãû³Æ¼ÓÒ»¸öÍøÖ·(URL)¶¨Î»µÄ·½·¨À´Çø±ðÕâÐ©Ãû³ÆÏàÍ¬µÄ±êÊ¶¡£
-NamespacesÍ¬ÑùÐèÒªÔÚXMLÎÄµµµÄ¿ªÍ·²¿·ÖÉùÃ÷£¬ÉùÃ÷µÄÓï·¨ÈçÏÂ£º
+æ¯”å¦‚åœ¨ä¸€ä¸ªæ–‡æ¡£<table>wood table</table>ä¸­<table>è¡¨ç¤ºæ¡Œå­ï¼Œè€Œåœ¨å¦ä¸€ä¸ªæ–‡æ¡£<table>namelist</table>ä¸­<table>è¡¨ç¤ºè¡¨æ ¼ã€‚å¦‚æžœæˆ‘éœ€è¦åŒæ—¶å¤„ç†è¿™ä¸¤ä¸ªæ–‡æ¡£ï¼Œå°±ä¼šå‘ç”Ÿåå­—å†²çªã€‚ä¸ºäº†è§£å†³è¿™ä¸ªé—®é¢˜ï¼Œæˆ‘ä»¬å¼•è¿›äº†namespacesè¿™ä¸ªæ¦‚å¿µã€‚namespacesé€šè¿‡ç»™æ ‡è¯†åç§°åŠ ä¸€ä¸ªç½‘å€(URL)å®šä½çš„æ–¹æ³•æ¥åŒºåˆ«è¿™äº›åç§°ç›¸åŒçš„æ ‡è¯†ã€‚
+NamespacesåŒæ ·éœ€è¦åœ¨XMLæ–‡æ¡£çš„å¼€å¤´éƒ¨åˆ†å£°æ˜Žï¼Œå£°æ˜Žçš„è¯­æ³•å¦‚ä¸‹ï¼š
 <document xmlns:yourname='URL'>
-ÆäÖÐyournameÊÇÓÉÄã¶¨ÒåµÄnamespacesµÄÃû³Æ£¬URL¾ÍÊÇÃû×Ö¿Õ¼äµÄÍøÖ·¡£
-¼ÙÉèÉÏÃæµÄ"×À×Ó<table>"ÎÄµµÀ´×Ôhttp://www.zhuozi.com£¬ÎÒÃÇ¾Í¿ÉÒÔÉùÃ÷Îª
+å…¶ä¸­yournameæ˜¯ç”±ä½ å®šä¹‰çš„namespacesçš„åç§°ï¼ŒURLå°±æ˜¯åå­—ç©ºé—´çš„ç½‘å€ã€‚
+å‡è®¾ä¸Šé¢çš„"æ¡Œå­<table>"æ–‡æ¡£æ¥è‡ªhttp://www.zhuozi.comï¼Œæˆ‘ä»¬å°±å¯ä»¥å£°æ˜Žä¸º
 <document xmlns:zhuozi='http://www.zhuozi.com'>;
-È»ºóÔÚºóÃæµÄ±êÊ¶ÖÐÊ¹ÓÃ¶¨ÒåºÃµÄÃû×Ö¿Õ¼ä£º
+ç„¶åŽåœ¨åŽé¢çš„æ ‡è¯†ä¸­ä½¿ç”¨å®šä¹‰å¥½çš„åå­—ç©ºé—´ï¼š
 <zhuozi:table>wood table</table>
-ÕâÑù¾Í½«ÕâÁ½¸ö<table>Çø·Ö¿ªÀ´¡£×¢ÒâµÄÊÇ£ºÉèÖÃURL²¢²»ÊÇËµÕâ¸ö±êÊ¶ÕæµÄÒªµ½ÄÇ¸öÍøÖ·È¥¶ÁÈ¡£¬½ö½ö×÷ÎªÒ»ÖÖÇø±ðµÄ±êÖ¾¶øÒÑ¡£
+è¿™æ ·å°±å°†è¿™ä¸¤ä¸ª<table>åŒºåˆ†å¼€æ¥ã€‚æ³¨æ„çš„æ˜¯ï¼šè®¾ç½®URLå¹¶ä¸æ˜¯è¯´è¿™ä¸ªæ ‡è¯†çœŸçš„è¦åˆ°é‚£ä¸ªç½‘å€åŽ»è¯»å–ï¼Œä»…ä»…ä½œä¸ºä¸€ç§åŒºåˆ«çš„æ ‡å¿—è€Œå·²ã€‚
 
-ÃüÃû³åÍ»Çë¿´ÏÂÃæÁ½¸öÀý×Ó
+å‘½åå†²çªè¯·çœ‹ä¸‹é¢ä¸¤ä¸ªä¾‹å­
 
-Õâ¸ö XML ÎÄµµÔÚtableÔªËØÖÐÐ¯´øÁËË®¹ûµÄÐÅÏ¢:
+è¿™ä¸ª XML æ–‡æ¡£åœ¨tableå…ƒç´ ä¸­æºå¸¦äº†æ°´æžœçš„ä¿¡æ¯:
 
 <table>
 <tr>
@@ -25,7 +25,7 @@ NamespacesÍ¬ÑùÐèÒªÔÚXMLÎÄµµµÄ¿ªÍ·²¿·ÖÉùÃ÷£¬ÉùÃ÷µÄÓï·¨ÈçÏÂ£º
 </tr>
 </table>
 
-Õâ¸ö XML ÎÄµµÔÚtableÔªËØÖÐÐ¯´øÁË×À×ÓµÄÐÅÏ¢(¼Ò¾ß£¬²»ÄÜ³ÔµÄÅ¶):
+è¿™ä¸ª XML æ–‡æ¡£åœ¨tableå…ƒç´ ä¸­æºå¸¦äº†æ¡Œå­çš„ä¿¡æ¯(å®¶å…·ï¼Œä¸èƒ½åƒçš„å“¦):
 
 <table>
 <name>African Coffee Table</name>
@@ -33,13 +33,13 @@ NamespacesÍ¬ÑùÐèÒªÔÚXMLÎÄµµµÄ¿ªÍ·²¿·ÖÉùÃ÷£¬ÉùÃ÷µÄÓï·¨ÈçÏÂ£º
 <length>120</length>
 </table>
 
-Èç¹ûÉÏÃæÁ½¸öXMLÎÄµµÆ¬¶ÏÅöÇÉÔÚÒ»ÆðÊ¹ÓÃµÄ»°£¬ÄÇÃ´½«»á³öÏÖÃüÃû³åÍ»µÄÇé¿ö¡£ÒòÎªÕâÁ½¸öÆ¬¶Ï¶¼°üº¬ÁË<table>ÔªËØ£¬¶øÕâÁ½¸ötableÔªËØµÄ¶¨ÒåÓëËù°üº¬µÄÄÚÈÝÓÖ¸÷²»ÏàÍ¬¡£
+å¦‚æžœä¸Šé¢ä¸¤ä¸ªXMLæ–‡æ¡£ç‰‡æ–­ç¢°å·§åœ¨ä¸€èµ·ä½¿ç”¨çš„è¯ï¼Œé‚£ä¹ˆå°†ä¼šå‡ºçŽ°å‘½åå†²çªçš„æƒ…å†µã€‚å› ä¸ºè¿™ä¸¤ä¸ªç‰‡æ–­éƒ½åŒ…å«äº†<table>å…ƒç´ ï¼Œè€Œè¿™ä¸¤ä¸ªtableå…ƒç´ çš„å®šä¹‰ä¸Žæ‰€åŒ…å«çš„å†…å®¹åˆå„ä¸ç›¸åŒã€‚
 
 
 --------------------------------------------------------------------------------
 
-Ê¹ÓÃÇ°×º½â¾öÃüÃû³åÍ»ÎÊÌâ
-ÏÂÃæµÄXMLÎÄµµÔÚtableÔªËØÖÐÐ¯´øÁËÐÅÏ¢:
+ä½¿ç”¨å‰ç¼€è§£å†³å‘½åå†²çªé—®é¢˜
+ä¸‹é¢çš„XMLæ–‡æ¡£åœ¨tableå…ƒç´ ä¸­æºå¸¦äº†ä¿¡æ¯:
 
 <h:table>
 <h:tr>
@@ -48,7 +48,7 @@ NamespacesÍ¬ÑùÐèÒªÔÚXMLÎÄµµµÄ¿ªÍ·²¿·ÖÉùÃ÷£¬ÉùÃ÷µÄÓï·¨ÈçÏÂ£º
 </h:tr>
 </h:table>
 
-ÏÂÃæµÄXMLÎÄµµÐ¯´øÁË¼Ò¾ßtableµÄÐÅÏ¢:
+ä¸‹é¢çš„XMLæ–‡æ¡£æºå¸¦äº†å®¶å…·tableçš„ä¿¡æ¯:
 
 <f:table>
 <f:name>African Coffee Table</f:name>
@@ -56,15 +56,15 @@ NamespacesÍ¬ÑùÐèÒªÔÚXMLÎÄµµµÄ¿ªÍ·²¿·ÖÉùÃ÷£¬ÉùÃ÷µÄÓï·¨ÈçÏÂ£º
 <f:length>120</f:length>
 </f:table>
 
-ÏÖÔÚÒÑ¾­Ã»ÓÐÔªËØÃüÃû³åÍ»µÄÎÊÌâÁË£¬ÒòÎªÕâÁ½¸öÎÄµµ¶Ô¸÷×ÔµÄtableÔªËØÊ¹ÓÃÁË²»Í¬µÄÇ°×º£¬tableÔªËØÔÚÁ½¸öÎÄµµÖÐ·Ö±ðÊÇ(<h:table> ºÍ<f:table>)¡£
+çŽ°åœ¨å·²ç»æ²¡æœ‰å…ƒç´ å‘½åå†²çªçš„é—®é¢˜äº†ï¼Œå› ä¸ºè¿™ä¸¤ä¸ªæ–‡æ¡£å¯¹å„è‡ªçš„tableå…ƒç´ ä½¿ç”¨äº†ä¸åŒçš„å‰ç¼€ï¼Œtableå…ƒç´ åœ¨ä¸¤ä¸ªæ–‡æ¡£ä¸­åˆ†åˆ«æ˜¯(<h:table> å’Œ<f:table>)ã€‚
 
-Í¨¹ýÊ¹ÓÃÇ°×º£¬ÎÒÃÇ´´½¨ÁËÁ½¸ö²»Í¬µÄtableÔªËØ¡£
+é€šè¿‡ä½¿ç”¨å‰ç¼€ï¼Œæˆ‘ä»¬åˆ›å»ºäº†ä¸¤ä¸ªä¸åŒçš„tableå…ƒç´ ã€‚
 
 
 --------------------------------------------------------------------------------
 
-Ê¹ÓÃÃüÃû¿Õ¼ä
-ÏÂÃæµÄXMLÎÄµµÔÚtableÔªËØÖÐÐ¯´øÁËÐÅÏ¢:
+ä½¿ç”¨å‘½åç©ºé—´
+ä¸‹é¢çš„XMLæ–‡æ¡£åœ¨tableå…ƒç´ ä¸­æºå¸¦äº†ä¿¡æ¯:
 
 <h:table xmlns:h="http://www.w3.org/TR/html4/">
 <h:tr>
@@ -73,7 +73,7 @@ NamespacesÍ¬ÑùÐèÒªÔÚXMLÎÄµµµÄ¿ªÍ·²¿·ÖÉùÃ÷£¬ÉùÃ÷µÄÓï·¨ÈçÏÂ£º
 </h:tr>
 </h:table>
 
-ÏÂÃæµÄXMLÎÄµµÐ¯´øÁË¼Ò¾ßtableµÄÐÅÏ¢:
+ä¸‹é¢çš„XMLæ–‡æ¡£æºå¸¦äº†å®¶å…·tableçš„ä¿¡æ¯:
 
 <f:table xmlns:f="http://www.w3schools.com/furniture">
 <f:name>African Coffee Table</f:name>
@@ -81,44 +81,44 @@ NamespacesÍ¬ÑùÐèÒªÔÚXMLÎÄµµµÄ¿ªÍ·²¿·ÖÉùÃ÷£¬ÉùÃ÷µÄÓï·¨ÈçÏÂ£º
 <f:length>120</f:length>
 </f:table>
 
-ÔÚÉÏÃæÁ½¸öÀý×ÓÖÐ³ýÁËÊ¹ÓÃÇ°×ºÍâ£¬Á½¸ötableÔªËØ¶¼Ê¹ÓÃÁËxmlnsÊôÐÔ£¬Ê¹ÔªËØºÍ²»Í¬µÄÃüÃû¿Õ¼ä¹ØÁªµ½Ò»Æð¡£
+åœ¨ä¸Šé¢ä¸¤ä¸ªä¾‹å­ä¸­é™¤äº†ä½¿ç”¨å‰ç¼€å¤–ï¼Œä¸¤ä¸ªtableå…ƒç´ éƒ½ä½¿ç”¨äº†xmlnså±žæ€§ï¼Œä½¿å…ƒç´ å’Œä¸åŒçš„å‘½åç©ºé—´å…³è”åˆ°ä¸€èµ·ã€‚
 
 
 --------------------------------------------------------------------------------
 
-ÃüÃû¿Õ¼äÊôÐÔ
-ÃüÃû¿Õ¼äÊôÐÔÒ»°ã·ÅÖÃÔÚÔªËØµÄ¿ªÊ¼±ê¼Ç´¦£¬ÆäÊ¹ÓÃÓï·¨ÈçÏÂËùÊ¾:
+å‘½åç©ºé—´å±žæ€§
+å‘½åç©ºé—´å±žæ€§ä¸€èˆ¬æ”¾ç½®åœ¨å…ƒç´ çš„å¼€å§‹æ ‡è®°å¤„ï¼Œå…¶ä½¿ç”¨è¯­æ³•å¦‚ä¸‹æ‰€ç¤º:
 
 xmlns:namespace-prefix="namespace"
 
-ÔÚÉÏÃæµÄÀý×ÓÖÐ£¬ÃüÃû¿Õ¼ä¶¨ÒåÁËÒ»¸öInternet µØÖ·:
+åœ¨ä¸Šé¢çš„ä¾‹å­ä¸­ï¼Œå‘½åç©ºé—´å®šä¹‰äº†ä¸€ä¸ªInternet åœ°å€:
 
 xmlns:f="http://www.w3schools.com/furniture"
 
-W3C ÃüÃû¹æ·¶ÉùÃ÷ÃüÃû¿Õ¼ä±¾Éí¾ÍÊÇÒ»¸öÍ³Ò»×ÊÔ´±êÊ¾·û£¬Uniform Resource Identifier (URI)¡£
+W3C å‘½åè§„èŒƒå£°æ˜Žå‘½åç©ºé—´æœ¬èº«å°±æ˜¯ä¸€ä¸ªç»Ÿä¸€èµ„æºæ ‡ç¤ºç¬¦ï¼ŒUniform Resource Identifier (URI)ã€‚
 
-µ±ÎÒÃÇÔÚÔªËØµÄ¿ªÊ¼±ê¼Ç´¦Ê¹ÓÃÃüÃû¿Õ¼äÊ±£¬¸ÃÔªËØËùÓÐµÄ×ÓÔªËØ¶¼½«Í¨¹ýÒ»¸öÇ°×ºÓëÍ¬Ò»¸öÃüÃû¿Õ¼äÏà»¥¹ØÁª¡£
+å½“æˆ‘ä»¬åœ¨å…ƒç´ çš„å¼€å§‹æ ‡è®°å¤„ä½¿ç”¨å‘½åç©ºé—´æ—¶ï¼Œè¯¥å…ƒç´ æ‰€æœ‰çš„å­å…ƒç´ éƒ½å°†é€šè¿‡ä¸€ä¸ªå‰ç¼€ä¸ŽåŒä¸€ä¸ªå‘½åç©ºé—´ç›¸äº’å…³è”ã€‚
 
-×¢Òâ£ºÓÃÀ´±êÊ¶ÃüÃû¿Õ¼äµÄÍøÂçµØÖ·²¢²»±»XML½âÎöÆ÷µ÷ÓÃ£¬XML½âÎöÆ÷²»ÐèÒª´ÓÕâ¸öÍøÂçµØÖ·ÖÐ²éÕÒÐÅÏ¢£¬¸ÃÍøÂçµØÖ·µÄ×÷ÓÃ½ö½öÊÇ¸øÃüÃû¿Õ¼äÒ»¸öÎ¨Ò»µÄÃû×Ö£¬Òò´ËÕâ¸öÍøÂçµØÖ·Ò²¿ÉÒÔÊÇÐéÄâµÄ£¬È»¶øÓÖºÜ¶à¹«Ë¾¾­³£°ÑÕâ¸öÍøÂçµØÖ·ÖµÏóÒ»¸öÕæÊµµÄWebÒ³Ãæ£¬Õâ¸öµØÖ·°üº¬ÁË¹ØÓÚµ±Ç°ÃüÃû¿Õ¼ä¸üÏêÏ¸µÄÐÅÏ¢¡£
-¿ÉÒÔ·ÃÎÊhttp://www.w3.org/TR/html4/.
-
-
---------------------------------------------------------------------------------
-
-Í³Ò»×ÊÔ´±êÊ¶·û
-Í¨ÓÃ×ÊÔ´±êÊ¶·û£¨A Uniform Resource Identifier (URI)£©ÊÇÒ»¸ö±êÊ¶ÍøÂç×ÊÔ´µÄ×Ö·û´®¡£×îÆÕÍ¨µÄURIÓ¦¸ÃÊÇÍ³Ò»×ÊÔ´¶¨Î»·ûUniform Resource Locator (URL)¡£URLÓÃÓÚ±êÊ¶ÍøÂçÖ÷»úµÄµØÖ·¡£ÁíÒ»·½Ãæ£¬ÁíÒ»¸ö²»³£ÓÃµÄURIÊÇÍ¨ÓÃ×ÊÔ´Ãû×ÖUniversal Resource Name (URN)¡£ÔÚÎÒÃÇµÄÀý×ÓÖÐ£¬Ò»°ãÊ¹ÓÃµÄÊÇURLs¡£
-
-¼ÈÈ»Ç°ÃæµÄÀý×ÓÊ¹ÓÃµÄURLµØÖ·À´±êÊ¶ÃüÃû¿Õ¼ä£¬ÎÒÃÇ¿ÉÒÔÈ·ÐÅÕâ¸öÃüÃû¿Õ¼äÊÇÎ¨Ò»µÄ¡£
+æ³¨æ„ï¼šç”¨æ¥æ ‡è¯†å‘½åç©ºé—´çš„ç½‘ç»œåœ°å€å¹¶ä¸è¢«XMLè§£æžå™¨è°ƒç”¨ï¼ŒXMLè§£æžå™¨ä¸éœ€è¦ä»Žè¿™ä¸ªç½‘ç»œåœ°å€ä¸­æŸ¥æ‰¾ä¿¡æ¯ï¼Œè¯¥ç½‘ç»œåœ°å€çš„ä½œç”¨ä»…ä»…æ˜¯ç»™å‘½åç©ºé—´ä¸€ä¸ªå”¯ä¸€çš„åå­—ï¼Œå› æ­¤è¿™ä¸ªç½‘ç»œåœ°å€ä¹Ÿå¯ä»¥æ˜¯è™šæ‹Ÿçš„ï¼Œç„¶è€Œåˆå¾ˆå¤šå…¬å¸ç»å¸¸æŠŠè¿™ä¸ªç½‘ç»œåœ°å€å€¼è±¡ä¸€ä¸ªçœŸå®žçš„Webé¡µé¢ï¼Œè¿™ä¸ªåœ°å€åŒ…å«äº†å…³äºŽå½“å‰å‘½åç©ºé—´æ›´è¯¦ç»†çš„ä¿¡æ¯ã€‚
+å¯ä»¥è®¿é—®http://www.w3.org/TR/html4/.
 
 
 --------------------------------------------------------------------------------
 
-Ä¬ÈÏµÄÃüÃû¿Õ¼ä
-¶¨ÒåÒ»¸öÄ¬ÈÏµÄXMLÃüÃû¿Õ¼äÊ¹µÃÎÒÃÇÔÚ×ÓÔªËØµÄ¿ªÊ¼±ê¼ÇÖÐ²»ÐèÒªÊ¹ÓÃÇ°×º¡£ËûµÄÓï·¨ÈçÏÂËùÊ¾:
+ç»Ÿä¸€èµ„æºæ ‡è¯†ç¬¦
+é€šç”¨èµ„æºæ ‡è¯†ç¬¦ï¼ˆA Uniform Resource Identifier (URI)ï¼‰æ˜¯ä¸€ä¸ªæ ‡è¯†ç½‘ç»œèµ„æºçš„å­—ç¬¦ä¸²ã€‚æœ€æ™®é€šçš„URIåº”è¯¥æ˜¯ç»Ÿä¸€èµ„æºå®šä½ç¬¦Uniform Resource Locator (URL)ã€‚URLç”¨äºŽæ ‡è¯†ç½‘ç»œä¸»æœºçš„åœ°å€ã€‚å¦ä¸€æ–¹é¢ï¼Œå¦ä¸€ä¸ªä¸å¸¸ç”¨çš„URIæ˜¯é€šç”¨èµ„æºåå­—Universal Resource Name (URN)ã€‚åœ¨æˆ‘ä»¬çš„ä¾‹å­ä¸­ï¼Œä¸€èˆ¬ä½¿ç”¨çš„æ˜¯URLsã€‚
+
+æ—¢ç„¶å‰é¢çš„ä¾‹å­ä½¿ç”¨çš„URLåœ°å€æ¥æ ‡è¯†å‘½åç©ºé—´ï¼Œæˆ‘ä»¬å¯ä»¥ç¡®ä¿¡è¿™ä¸ªå‘½åç©ºé—´æ˜¯å”¯ä¸€çš„ã€‚
+
+
+--------------------------------------------------------------------------------
+
+é»˜è®¤çš„å‘½åç©ºé—´
+å®šä¹‰ä¸€ä¸ªé»˜è®¤çš„XMLå‘½åç©ºé—´ä½¿å¾—æˆ‘ä»¬åœ¨å­å…ƒç´ çš„å¼€å§‹æ ‡è®°ä¸­ä¸éœ€è¦ä½¿ç”¨å‰ç¼€ã€‚ä»–çš„è¯­æ³•å¦‚ä¸‹æ‰€ç¤º:
 
 <element xmlns="namespace">
 
-ÏÂÃæµÄXMLÎÄµµÔÚtableÔªËØÖÐ°üº¬ÁËË®¹ûµÄÐÅÏ¢:
+ä¸‹é¢çš„XMLæ–‡æ¡£åœ¨tableå…ƒç´ ä¸­åŒ…å«äº†æ°´æžœçš„ä¿¡æ¯:
 
 <table xmlns="http://www.w3.org/TR/html4/">
 <tr>
@@ -127,7 +127,7 @@ W3C ÃüÃû¹æ·¶ÉùÃ÷ÃüÃû¿Õ¼ä±¾Éí¾ÍÊÇÒ»¸öÍ³Ò»×ÊÔ´±êÊ¾·û£¬Uniform Resource Identifier 
 </tr>
 </table>
 
-ÏÂÃæµÄXMLÎÄµµ°üº¬ÁË¼Ò¾ßtableµÄÐÅÏ¢:
+ä¸‹é¢çš„XMLæ–‡æ¡£åŒ…å«äº†å®¶å…·tableçš„ä¿¡æ¯:
 
 <table xmlns="http://www.w3schools.com/furniture">
 <name>African Coffee Table</name>
@@ -138,10 +138,10 @@ W3C ÃüÃû¹æ·¶ÉùÃ÷ÃüÃû¿Õ¼ä±¾Éí¾ÍÊÇÒ»¸öÍ³Ò»×ÊÔ´±êÊ¾·û£¬Uniform Resource Identifier 
 
 --------------------------------------------------------------------------------
 
-Ê¹ÓÃÃüÃû¿Õ¼ä
-µµ¿ªÊ¼Ê¹ÓÃXSLµÄÊ±ºò,¾Í»á·¢ÏÖÃüÃû¿Õ¼äÊ¹ÓÃµÄÊÇÈç´ËÆµ·±¡£XSLÑùÊ½µ¥Ö÷ÒªÓÃÓÚ½«XMLÎÄµµ×ª»»³ÉÀàËÆÓÚHTMLÎÄ¼þµÄ¸ñÊ½¡£
+ä½¿ç”¨å‘½åç©ºé—´
+æ¡£å¼€å§‹ä½¿ç”¨XSLçš„æ—¶å€™,å°±ä¼šå‘çŽ°å‘½åç©ºé—´ä½¿ç”¨çš„æ˜¯å¦‚æ­¤é¢‘ç¹ã€‚XSLæ ·å¼å•ä¸»è¦ç”¨äºŽå°†XMLæ–‡æ¡£è½¬æ¢æˆç±»ä¼¼äºŽHTMLæ–‡ä»¶çš„æ ¼å¼ã€‚
 
-Èç¹û¿´Ò»ÏÂÏÂÃæµÄXSLÎÄµµ£¬¾Í»á·¢ÏÖÓÐºÜ¶à±ê¼Ç¶¼ÊÇHTML±ê¼Ç¡£ÄÇÐ©±ê¼Ç²¢²»ÊÇHTML±ê¼Ç£¬ÊÇ¼ÓÁËÇ°×ºµÄXSL,Õâ¸öXSLÇ°×ºÓÉÃüÃû¿Õ¼ä"http://www.w3.org/TR/xsl"Ëù±êÊ¶:
+å¦‚æžœçœ‹ä¸€ä¸‹ä¸‹é¢çš„XSLæ–‡æ¡£ï¼Œå°±ä¼šå‘çŽ°æœ‰å¾ˆå¤šæ ‡è®°éƒ½æ˜¯HTMLæ ‡è®°ã€‚é‚£äº›æ ‡è®°å¹¶ä¸æ˜¯HTMLæ ‡è®°ï¼Œæ˜¯åŠ äº†å‰ç¼€çš„XSL,è¿™ä¸ªXSLå‰ç¼€ç”±å‘½åç©ºé—´"http://www.w3.org/TR/xsl"æ‰€æ ‡è¯†:
 
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/TR/xsl">
@@ -166,4 +166,4 @@ W3C ÃüÃû¹æ·¶ÉùÃ÷ÃüÃû¿Õ¼ä±¾Éí¾ÍÊÇÒ»¸öÍ³Ò»×ÊÔ´±êÊ¾·û£¬Uniform Resource Identifier 
 </xsl:stylesheet>
 
 
-À´×Ô£ºhttp://blog.csdn.net/carefree31441/article/details/3235849
+æ¥è‡ªï¼šhttp://blog.csdn.net/carefree31441/article/details/3235849
