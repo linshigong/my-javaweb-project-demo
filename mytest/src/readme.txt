@@ -57,6 +57,16 @@ step4:
 step5:
 	* 加入数据库连接池(这里指JDBC连接池，hibernate自带的不适合生产环境)框架 c3p0(或者DBCP等)
 	* 数据源的配置 (简单jdbc数据源，容器数据源，jndi数据源，从缓冲池取得的数据源)
+	
+	补充：
+			配置就是，在项目的meta-inf下配置context.xml文件；然后再web.xml里引用数据源；如果出问题，比如找到了数据源，但是
+			是无效的数据源，获取不到jdbc连接，可能原因是：
+			在项目的meta-inf目录下定义的context.xml文件没用出现在 ：
+		{tomcat_home}\conf\Catalina\localhost目录里 有上面这个context文件，文件名为访问的命名 （E:\apache-tomcat-6.0.29\conf\Catalina\localhost）
+
+	测试方法，最小化测试：建个web项目，其他上面都不要只要最基本的测试jndi的东西（比如jdbc驱动，jsp页，数据源配置文件）
+	
+	
 	* 配置好 c3p0对无效数据库链接的处理，比如数据库重启了；需要配置链接可用性检测策略。可在其自带文档中找解决方法。
 	* spring结合c3p0，当连接不可用时(比如数据库重启后，会一直报一个错误)，c3p0报的异常如何捕获？ 待 
 	
@@ -122,7 +132,13 @@ step7:
 		
 	* 为每个错误准备一个错误页面。？
 			
+step7 增加ant功能 ，可参考其他项目的ant配置文件
+	结合ant进行测试，部署等任务
 	
+	
+step8 测试了JNDI数据源，对step5做了补充，jndi数据源测试通过
+
+
 	
 	
 	

@@ -45,7 +45,6 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	public List<User> getUserByName(String userName) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

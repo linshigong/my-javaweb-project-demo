@@ -14,7 +14,7 @@
 
 	<bean id="springTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<description>Spring事务管理</description>
-		<property name="dataSource" ref="comboPooledDataSource"/>
+		<property name="dataSource" ref="jndiDataSource"/>
 	</bean>
 
 	<!-- ============================================ 

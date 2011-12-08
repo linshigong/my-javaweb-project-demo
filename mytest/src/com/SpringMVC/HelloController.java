@@ -26,11 +26,12 @@ public class HelloController implements Controller {
 		
 //		return new ModelAndView("/WEB-INF/jsp/test/hello.jsp");
 		User user = null;
-		try {
+//		try {
 			user = userService.getUserById("100");
-		} catch (Exception e) {
-			logger.error("数据访问出错:\n"+e);
-		}
+//		} catch (Exception e) {
+//			logger.error("数据访问出错:\n"+e);
+//			e.printStackTrace();
+//		}
 		
 		System.out.println("------------- user is :"+user);
 		
