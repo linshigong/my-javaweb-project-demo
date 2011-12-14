@@ -138,6 +138,9 @@ step7 增加ant功能 ，可参考其他项目的ant配置文件
 	
 step8 测试了JNDI数据源，对step5做了补充，jndi数据源测试通过
 
+step9 配置spring异常捕获及处理 待 ？
+
+
 
 	
 	
