@@ -1,4 +1,10 @@
 
+* 对于多数开源项目，一般都有ant支持，这样我们可以借助ant配置文件build.xml来把项目导入到
+myeclipse中用于继续开发及其他运用。
+	new project -> from existing ant build file 
+	新建工程-从ant文件新建 （注意不是导入/import project）
+
+
 例子：
 	E:\workspace>ant -f E:\workspace\mytestsvn\build.xml init.svn
 	Buildfile: E:\workspace\mytestsvn\build.xml

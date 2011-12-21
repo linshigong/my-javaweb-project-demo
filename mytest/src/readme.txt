@@ -151,4 +151,12 @@ step9 配置spring异常捕获及处理 待 ？
 ---------------------------------------------------------------------------
 其他功能需求：
 	* 类似 google reader ，提供rss阅读功能；可以收藏rss并显示其内容
-	* 				
+	* 实现android手机版	
+	* 所部署的服务器(apache+tomcat / apache+resin)
+	  服务器cluster,loadbalance，数据库集群		
+	  
+	  resin:tomcat移resin后，classpath不一致配置文件路径需要修改，web.xml的某些标签比如国际化标签不支持。
+			resin pro 相对于tomcat来说，其配置和管理功能非常丰富，方便集群和负载均衡。详细见其文档 
+			tip:调试时，根据控制台输出来做相应调整。	
+	* 
+	

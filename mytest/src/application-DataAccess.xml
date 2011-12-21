@@ -19,6 +19,11 @@
 	</bean>
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
 
+	<bean id="simpleMapingExceptionHandleResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<description>Exception Handler</description>
+		<property name="defaultErrorView" value="error"/>
+	</bean>
+
 	<bean id="DbcpDataSource" class="org.apache.commons.dbcp.BasicDataSource" lazy-init="true" destroy-method="close">
 		<description>DBCP DataSouce</description>
 		<property name="driverClassName" value="${jdbc.driverName}"/>
