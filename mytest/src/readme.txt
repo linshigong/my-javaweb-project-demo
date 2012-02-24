@@ -141,9 +141,24 @@ step8 测试了JNDI数据源，对step5做了补充，jndi数据源测试通过
 step9 配置spring异常捕获及处理 待 ？
 
 
+step10 计划分支出maven版本 待？
 
+
+step11 对于项目context下配置的数据源，需要提供关闭入口，
+如果建立了数据源但在服务器关闭时没有关闭，服务器会强制关闭，并提示资源未关闭，将被强制关闭。
+	tomcat配置基本数据源(unpooled)和配置c3p0带连接池的数据源且都注册到JNDI中
 	
+	修改项目meta-info下面的context.xml配置文件后，部署到服务器时ide可能不能正确部署这个文件，比如tomcat，即使删除了这个部署重新部署旧的配置文件也还是没变，这时需要手动删除后，
+	再部署。参看 TipsOfDay 的 day331 第2条 有记录
 	
+	~不要钻牛角尖~，在正确的前提下，去尝试变化，不要将希望寄托于一个错误的前提 
+	案例：
+		在配置基本数据源，并测试通过情况下再去配置c3p0连接池；需要配置的地方有：
+			* 项目meta-info下的context.xml
+			* 项目web.xml里引用配置
+			* 调用数据源的地方配置（比如spring配置文件）
+	
+	经过：忘了配置web.xml，还一直以为context.xml配置不对，钻进去了。回头测了下基本数据源也提示错误，才意识到不是这里的问题。	
 	
 	
 
@@ -165,10 +180,14 @@ step9 配置spring异常捕获及处理 待 ？
 other
 	* 任务 对一个简单请求的完整处理流程有个大致了解。
 		从http请求达到web服务器到返回客户端，一些点的过程：
-			servlet容器，工具servlet规范请求来了是先经过过滤器(filter)然后才是servlet，到
+			HTTP服务器，请求到达端口(一般http请求在80端口)口，被HTTP服务器侦测到，并处理请求；根据配置把一些
+		动态资源请求交给一些容器处理(比如处理servlet请求的servlet容器)。
+			servlet容器，根据servlet规范请求来了是先经过过滤器(filter)然后才是servlet，到
 		servlet后，交给servlet的doService方法处理(根据servlet规范)。
 	
 	* usemon - 根据svn代码调试。
 	
+	
+	* 在 com.servlet包里新建一个servlet重写tomcat自带的DefaultServlet 测试
 	
 	

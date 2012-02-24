@@ -1,5 +1,10 @@
 package com.test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+
 public class test {
 
 	
@@ -18,6 +23,10 @@ public class test {
 		 * 这个值，则 重新创建新对象。（此处即为：享元模式）
 		 */
 		System.out.println((c==d)+" "+c.equals(d));//true true
+		
+//		Hashtable<K, V>
+//		HashMap<K, V>
+//		LinkedList<E>
 		
 	}
 }

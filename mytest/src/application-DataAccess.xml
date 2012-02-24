@@ -41,14 +41,15 @@
 		<property name="logAbandoned" value="true"/><!-- 是否记录销毁连接日志 -->
 	</bean>
 	
-	<bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" lazy-init="true">
+	<bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" lazy-init="true">
 		<description>C3P0 DataSouce</description>
 		<property name="driverClass" value="${jdbc.driverName}"/>
 		<property name="user" value="${jdbc.userName}"/>
 		<property name="password" value="${jdbc.password}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
 		<property name="acquireIncrement" value="${c3p0.acquireIncrement}"/>
 		<property name="initialPoolSize" value="${c3p0.initialPoolSize}"/>
-		<property name="jdbcUrl" value="${jdbc.url}"/>
+		
 		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
 		<property name="minPoolSize" value="${c3p0.minPoolSize}"/>
 		<property name="maxIdleTime">
@@ -60,9 +61,9 @@
 		<property name="acquireRetryDelay" value="500"/>
 	</bean>
 	
-	<!-- jndi数据源 -->
+	<!-- jndi数据源  -->
 	<jee:jndi-lookup id="jndiDataSource" jndi-name="jdbc/mytest" lookup-on-startup="true"/>	
-	 
+	
 	 
 	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
 		<description>Spring集成Ibatis</description>
