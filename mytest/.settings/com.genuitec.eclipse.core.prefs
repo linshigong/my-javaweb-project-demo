@@ -1,0 +1,4 @@
+#Wed Feb 29 17:31:31 CST 2012
+eclipse.preferences.version=1
+validator.Checked=src/webservice/client/jaxwsclient/wsdl/TrainTimeWebService.wsdl,WebRoot/WEB-INF/wsdl/qqOnlineWebService.wsdl,src/webservice/client/thirrdparywebserviceclient/wsdl/TrainTimeWebService.wsdl,src/thirrdparywebserviceclient/wsdl/TrainTimeWebService.wsdl
+validator.Unchecked=
