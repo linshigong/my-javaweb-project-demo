@@ -83,7 +83,12 @@ step6:
 	* 将代码版本管理放到 google code(网络开发,团队开发)	
 	* google code 版本控制：
 	  - 暂选用 SubVersion 作为版本控制，登陆googlecode后，找到source标签，里面有如何使用的说明，我的配置：
-			地址 https://my-javaweb-project-demo.googlecode.com/svn/mytest/ (mytest是用myeclipse的svn插件登陆后新建的目录)
+			地址 
+			
+					https://my-javaweb-project-demo.googlecode.com/svn/mytest/ 
+					
+					(mytest是用myeclipse的svn插件登陆后新建的目录)
+					
 			用户名 邮箱名 ；密码 在 googlecode的setting标签里管理
 
 			
@@ -161,7 +166,25 @@ step11 对于项目context下配置的数据源，需要提供关闭入口，
 	经过：忘了配置web.xml，还一直以为context.xml配置不对，钻进去了。回头测了下基本数据源也提示错误，才意识到不是这里的问题。	
 	
 	
+step12 基于lucene检索框架，实现简易的检索模块，集成到mytestsvn项目中 ?
+		* 下载lucene包，并根据文档将jar加入到项目lib目录中
+		
+		
+step13 实现天气webservice的调用，然后发布自己的service ？ 改为获得腾讯QQ在线状态服务调用
+		技术：jax-ws ，及其支持的api，服务供应商提供运行时包等
 
+		*  得到服务对应的WSDL文件(直接访问URL或者下载下来)
+		* 利用IDE提供的插件，根据WSDL由上到下生成需要的客户端文件
+		* 建立test类，测试服务调用
+		
+		注：测试时，碰到版本冲突问题 部分异常如下：
+						java.lang.LinkageError: JAXB 2.0 API is being loaded from the bootstrap classloader, but this RI (from jar:file:/E:/Program%20Files/MyEclipse%206.5/myeclipse/eclipse/plugins/com.genuitec.eclipse.ws.xfire_6.5.0.zmyeclipse650200806/lib/webservices-rt.jar!/com/sun/xml/bind/v2/model/impl/ModelBuilder.class) needs 2.1 API. Use the endorsed directory mechanism to place jaxb-api.jar in the bootstrap classloader. (See http://java.sun.com/j2se/1.5.0/docs/guide/standards/)
+				最后通过 sun的Endorsed Standards Override Mechanism机制解决新旧版本问题。(在javahome的lib或jre的lib下，建立endorse目录，并把最新的jar放到这里，加载时优先加载)
+				
+				
+		
+		
+		
 
 ---------------------------------------------------------------------------
 其他功能需求：

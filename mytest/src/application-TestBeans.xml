@@ -92,7 +92,6 @@
     <tx:annotation-driven transaction-manager="springTransactionManager"/>
 	
 	
-	
 	<!-- ============================================ 
 		 				Dao配置
 		 ============================================ -->

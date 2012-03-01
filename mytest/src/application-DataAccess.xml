@@ -61,14 +61,14 @@
 		<property name="acquireRetryDelay" value="500"/>
 	</bean>
 	
-	<!-- jndi数据源  -->
+	<!-- jndi数据源  
 	<jee:jndi-lookup id="jndiDataSource" jndi-name="jdbc/mytest" lookup-on-startup="true"/>	
-	
+	-->
 	 
 	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
 		<description>Spring集成Ibatis</description>
 		<property name="configLocation" value="classpath:com/testibatis/SqlMapConfig-withspring.xml"/>
-		<property name="dataSource" ref="jndiDataSource"/>
+		<property name="dataSource" ref="comboPooledDataSource"/>
 	</bean>
 	<bean id="SqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
 		<description>Spring支持ibatis的模板类,事务交由Spring时，通过这个模板操作数据，保证事务</description>
