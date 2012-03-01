@@ -1,0 +1,19 @@
+<?xml version = "1.0"?>
+<endpoints version="2.0"
+	xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime">
+	<endpoint name="qqOnlineWebServiceHttpPost"
+		implementation="webservice.client.jaxwsclient.qqOnlineWebServiceHttpPostImpl"
+		url-pattern="/qqOnlineWebServiceHttpPost">
+	</endpoint>
+	<endpoint name="qqOnlineWebServiceSoap12"
+		implementation="webservice.client.jaxwsclient.qqOnlineWebServiceSoap12Impl"
+		url-pattern="/qqOnlineWebServiceSoap12">
+	</endpoint>
+	<endpoint name="qqOnlineWebServiceSoap"
+		implementation="webservice.client.jaxwsclient.qqOnlineWebServiceSoapImpl"
+		url-pattern="/qqOnlineWebServiceSoap">
+	</endpoint>
+	<endpoint name="qqOnlineWebServiceHttpGet"
+		implementation="webservice.client.jaxwsclient.qqOnlineWebServiceHttpGetImpl"
+		url-pattern="/qqOnlineWebServiceHttpGet">
+	</endpoint></endpoints>
