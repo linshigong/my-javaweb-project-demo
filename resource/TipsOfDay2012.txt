@@ -890,6 +890,12 @@ day5 Tuesday, March 20, 2012
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day6 Wednesday, March 21, 2012
 
-1. 
+1. openapi 
+	OpenAPI - 消息推送/订阅(Message push/subscrible)  -Master 
+	
+	根据登记在消息服务器上的订阅节点信息，进行push
 
-2. 
+2. python nodejs
+
+
+3.  
