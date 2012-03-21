@@ -1,0 +1,895 @@
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day1 2012年3月14日
+
+1. 环境
+	..
+	eclipse 
+		常用插件
+			svn 
+			mavn 
+			spring插件 - 主要编译配置文件定位到java文件,自动提示等便捷功能
+			Eclipse Web Tools Platform
+			...
+		eclipse jre配置设置为jdk
+		-vm
+		D:\Java\jdk1.6.0_10\bin\javaw.exe —— 这里路径注意下 空格之类处理为 progra~1
+		-vmargs
+		-Dosgi.requiredJavaVersion=1.5
+		-Xms128m
+		-Xmx256m	
+
+2. svn 
+	wiki http://wiki.houyi.alibaba-inc.com/dashboard.action
+	申请权限
+	http://svn.alisoft-inc.com/repos/alisoft/houyi/console/
+	和
+	http://svn.alisoft-inc.com/repos/alisoft/houyi/cloudengine
+
+	department
+	阿里云-云计算业务发展-基础产品-平台技术
+
+wiki：
+	http://wiki.houyi.alibaba-inc.com/dashboard.action
+
+bbs:
+	http://bbs.aliyun.com/
+
+feitian SLB ACE（JCE...） (ACE - Ali Cloud Engine云引擎) OSS(kv storage)
+	
+	ACE php container, nodejs container,jsp container
+
+3. Cloud Engine - Cloud Engine是一个基于AEC的web应用托管运行环境，能够提供应用的自动伸缩以及多种核心服务。
+	
+	Google App Engine
+	
+
+
+4. linux about
+	* gdb:
+		What is GDB?
+
+		GDB, the GNU Project debugger, allows you to see what is going on `inside' another program while it executes -- or what another 
+		program was doing at the moment it crashed.
+
+		GDB can do four main kinds of things (plus other things in support of these) to help you catch bugs in the act:
+
+		    Start your program, specifying anything that might affect its behavior.
+		    Make your program stop on specified conditions.
+		    Examine what has happened, when your program has stopped.
+		    Change things in your program, so you can experiment with correcting the effects of one bug and go on to learn about another. 
+
+		The program being debugged can be written in Ada, C, C++, Objective-C, Pascal (and many other languages). Those programs might 
+		be executing on the same machine as GDB (native) or on another machine (remote). GDB can run on most popular UNIX and Microsoft 
+		Windows variants.
+		
+		DBP实战：
+			问题：
+
+			ndb进程cpu达到99%，怀疑存在死循环，需要排查
+
+			1.   ps -eLf | grep nbd-server
+
+			找出那个nbd-server线程占用cpu最高，记住他的ppid（线程id）
+
+			2.   gdb nbd-server <pid>
+
+			启动gdb ， attach到运行的nbd-server进程
+
+			3.  info thread
+
+			查看所有线程
+
+			4. thread 10
+
+			切换到这个线程
+
+			5. bt
+
+			查看线程堆栈
+
+			6. 分析代码
+
+			from:wiki http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=3932212
+
+5. ssh client
+	PuTTY
+6. 路由  消息订阅
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day2 2012年3月15日
+
+1. 后羿系统
+	
+	参考资料 Sina App Engine数据存储服务架构
+	
+2.  svn 账户授权 即 svn 注册用户 
+	wb_shen.chengs + pwd
+
+	url
+		...houyi/cloudengine
+		...houyi/console
+			branches-api...-requirement 
+
+3. houyi 异步通知
+	
+	异步通知是后羿系统提供的一套基于HTTP协议主动向客户系统发送VM操作结果状态的基础服务。其基本流程如下：
+	 
+	通知系统交互流程说明：
+	1. 后羿向外部系统发出通知，即访问外部系统提供的通知接收URL。// 外部系统提供的通知接收URL
+	2. 客户系统接到通知请求，根据签名信息验证通知真实性。
+	3. 客户系统处理通知。
+	摘自：houyi api 说明doc
+
+4. 通过svn checkout 部分houyi项目 熟悉 【配置 svn】
+	svn插件拉下项目代码 (svn 项目绑定到对应的svn库上，(对于eclipse，如果绑定错误，先删除原有svn库，从team里重新绑定即可))
+	maven插件构建
+		部分依赖找不到的情况：(把所在目录下已有的文件删除)通过到依赖库手动下载pom文件和相应jar.swf等文件，放到maven的.m2文件夹中解决。
+		nexus http://10.250.6.11:8081/nexus/index.html#welcome 
+
+	maven版本问题，比如编译，打包等用到plugin时，选择合适的版本，配置正确的repo，目前用maven2.2.1
+		配置文件配置:
+			   <!-- profile
+			     | Specifies a set of introductions to the build process, to be activated using one or more of the
+			     | mechanisms described above. For inheritance purposes, and to activate profiles via <activatedProfiles/>
+			     | or the command line, profiles have to have an ID that is unique.
+			     |
+			     | An encouraged best practice for profile identification is to use a consistent naming convention
+			     | for profiles, such as 'env-dev', 'env-test', 'env-production', 'user-jdcasey', 'user-brett', etc.
+			     | This will make it more intuitive to understand what the set of introduced profiles is attempting
+			     | to accomplish, particularly when you only have a list of profile id's for debug.
+			     |
+			     | This profile example uses the JDK version to trigger activation, and provides a JDK-specific repo.
+			    -->			
+			 <profile>
+			      <id>dev</id>
+
+			      <repositories>
+				
+				<repository>
+				  <id>ay32-releases</id>
+				  <url>http://repos.houyi.alibaba-inc.com:8081/nexus/content/repositories/releases/</url>
+				  <releases>
+						<enabled>true</enabled>
+					  </releases>
+					  <snapshots>
+						<enabled>true</enabled>
+					  </snapshots>
+				</repository>
+
+				<repository>
+				  <id>nexus-releases</id>
+				  <name>nexusre</name>
+				  <url>http://10.250.6.11:8081/nexus/content/groups/public</url>
+				  <releases>
+						<enabled>true</enabled>
+					  </releases>
+					  <snapshots>
+						<enabled>true</enabled>
+					  </snapshots>
+				</repository>
+			     
+			 </repositories>
+				  <pluginRepositories>
+				<pluginRepository>
+					  <id>ay32-releases</id>
+					  <url>http://repos.houyi.alibaba-inc.com:8081/nexus/content/repositories/releases/</url>
+					  <releases>
+					    <enabled>true</enabled>
+					  </releases>
+					  <snapshots>
+					   <enabled>true</enabled>
+				      </snapshots>
+					</pluginRepository>
+
+				<pluginRepository>
+					  <id>nexus-releases</id>
+					  <url>http://10.250.6.11:8081/nexus/content/groups/public</url>
+					  <releases>
+					    <enabled>true</enabled>
+					  </releases>
+					  <snapshots>
+					   <enabled>true</enabled>
+				      </snapshots>
+					</pluginRepository>
+
+				  </pluginRepositories>
+			    </profile>
+	
+
+	通过maven脚本构建测试部署 ？
+
+	ide里编辑，构建工具统一编译测试部署。
+	mvn clean install -rf :houyi-console-web-staff 
+	参数参考：
+		usage: mvn [options] [<goal(s)>] [<phase(s)>]
+
+		Options:
+		 -am,--also-make                        If project list is specified, al
+							build projects required by the
+							list
+		 -amd,--also-make-dependents            If project list is specified, al
+							build projects that depend on
+							projects on the list
+		 -B,--batch-mode                        Run in non-interactive (batch)
+							mode
+		 -C,--strict-checksums                  Fail the build if checksums don'
+							match
+		 -c,--lax-checksums                     Warn if checksums don't match
+		 -cpu,--check-plugin-updates            Ineffective, only kept for
+							backward compatibility
+		 -D,--define <arg>                      Define a system property
+		 -e,--errors                            Produce execution error messages
+		 -emp,--encrypt-master-password <arg>   Encrypt master security password
+		 -ep,--encrypt-password <arg>           Encrypt server password
+		 -f,--file <arg>                        Force the use of an alternate PO
+							file.
+		 -fae,--fail-at-end                     Only fail the build afterwards;
+							allow all non-impacted builds to
+							continue
+		 -ff,--fail-fast                        Stop at first failure in
+							reactorized builds
+		 -fn,--fail-never                       NEVER fail the build, regardless
+							of project result
+		 -gs,--global-settings <arg>            Alternate path for the global
+							settings file
+		 -h,--help                              Display help information
+		 -l,--log-file <arg>                    Log file to where all build outp
+							will go.
+		 -N,--non-recursive                     Do not recurse into sub-projects
+		 -npr,--no-plugin-registry              Ineffective, only kept for
+							backward compatibility
+		 -npu,--no-plugin-updates               Ineffective, only kept for
+							backward compatibility
+		 -nsu,--no-snapshot-updates             Suppress SNAPSHOT updates
+		 -o,--offline                           Work offline
+		 -P,--activate-profiles <arg>           Comma-delimited list of profiles
+							to activate
+		 -pl,--projects <arg>                   Comma-delimited list of specifie
+							reactor projects to build instea
+							of all projects. A project can b
+							specified by [groupId]:artifactI
+							or by its relative path.
+		 -q,--quiet                             Quiet output - only show errors
+		 -rf,--resume-from <arg>                Resume reactor from specified
+							project
+		 -s,--settings <arg>                    Alternate path for the user
+							settings file
+		 -T,--threads <arg>                     Thread count, for instance 2.0C
+							where C is core multiplied
+		 -t,--toolchains <arg>                  Alternate path for the user
+							toolchains file
+		 -U,--update-snapshots                  Forces a check for updated
+							releases and snapshots on remote
+							repositories
+		 -up,--update-plugins                   Ineffective, only kept for
+							backward compatibility
+		 -V,--show-version                      Display version information
+							WITHOUT stopping build
+		 -v,--version                           Display version information
+		 -X,--debug                             Produce execution debug output
+
+		tip:
+			parent pom declare most properties ,plugins etc,models under parent,only needs to config special requiments ,if needs to make war package for example and it can references definetions
+			from parent pom ,just lile inheritance(eg struts2's configuration file struts.xml).
+
+		maven 插件 ，源码自动下载
+
+5. 熟悉houyi代码，结构
+	
+	
+	
+6. xStream javabean 与 xml ，json映射工具
+	参考：http://www.cnblogs.com/hoojo/archive/2011/04/22/2025197.html
+	部分如下：
+		xStream框架
+
+			xStream可以轻易的将Java对象和xml文档相互转换，而且可以修改某个特定的属性和节点名称，而且也支持json的转换；
+
+			前面有介绍过json-lib这个框架，在线博文：http://www.cnblogs.com/hoojo/archive/2011/04/21/2023805.html
+
+			以及Jackson这个框架，在线博文：http://www.cnblogs.com/hoojo/archive/2011/04/22/2024628.html
+
+			它们都完美支持JSON，但是对xml的支持还不是很好。一定程度上限制了对Java对象的描述，不能让xml完全体现到对Java对象的描述。
+			这里将会介绍xStream对JSON、XML的完美支持。xStream不仅对XML的转换非常友好，而且提供annotation注解，可以在JavaBean中完成
+			对xml节点、属性的描述。以及对JSON也支持，只需要提供相关的JSONDriver就可以完成转换。 
+
+7. Quartz 调度
+
+8. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day3 2012年3月16日
+
+1. 项目目录结构 maven
+	
+	
+
+2. 结合 openapi 接口文档 ，熟悉代码，规范
+
+	以hoyi-console-openapi  为例，熟悉大体框架，配置方式，处理流程
+	
+	根据应用上下文配置文件(web.xml)，熟悉请求处理流程 （web应用 ,java应用根据程序入口）
+
+		* struts2 ,spring ,ibatis
+			spring
+				bean管理 - pojo,dao bean ,action
+				事务管理
+			struts2
+				interceptor - default and user defined interceptors / pluggable
+				objectfactory = spring
+				action继承/接口关系(部分)
+					public class RackQueryAction extends PagingInfovalidator implements ExecuteAction {
+					-> public abstract class PagingInfovalidator extends AbstractExecuteAction implements ActionValidator{
+					-> public abstract class AbstractExecuteAction implements ExecuteAction {
+
+				部分struts源码截取：【struts】
+					multi-thread safe
+					--------
+						package com.opensymphony.xwork2;
+						...
+						public class ActionContext implements Serializable {
+						    static ThreadLocal actionContext = new ThreadLocal();
+						...
+						    Map<String, Object> context;
+
+						    public ActionContext(Map<String, Object> context) {
+							this.context = context;
+						    }
+						...
+						    public static void setContext(ActionContext context) {
+							actionContext.set(context);
+						    }
+						    public static ActionContext getContext() {
+							return (ActionContext) actionContext.get();
+					--------
+					
+					--------
+					...
+					package com.opensymphony.xwork2;
+					public class ActionSupport implements Action, Validateable, ValidationAware, TextProvider, LocaleProvider, Serializable {
+					...
+					    public Locale getLocale() {
+						ActionContext ctx = ActionContext.getContext();
+						if (ctx != null) {
+						    return ctx.getLocale();
+						} else {
+						    LOG.debug("Action context not initialized");
+						    return null;
+						}
+					    }
+					...
+					--------
+					Interface :
+						Action - All actions may implement this interface, which exposes the execute() method. 
+						Validateable - Provides an interface in which a call for a validation check can be done.
+						ValidationAware - ValidationAware classes can accept Action (class level) or field level error messages. Action level messages are kept in a Collection. 
+									Field level error messages are kept in a Map from String field name to a List of field error msgs.
+						TextProvider - Provides access to ResourceBundles and their underlying text messages.
+						LocalProvider - Indicates that the implementing class can provide its own Locale. 
+					
+					ActionInvocation
+							An ActionInvocation represents the execution state of an Action. It holds the Interceptors and the Action instance. By repeated re-entrant execution 
+						of the invoke() method, initially by the ActionProxy, then by the Interceptors, the Interceptors are all executed, and then the Action and the Result.
+						代理类，维护interceptors集合并依次序传递和执行ActionInvocation的实现类。？
+
+
+
+
+			ibatis openAPI通过spring提供ibatis的template进行dao操作
+				部分代码，spring集成ibatis部分
+					--------
+					package org.springframework.orm.ibatis;
+					...
+					public class SqlMapClientTemplate extends JdbcAccessor implements SqlMapClientOperations {
+						public Object queryForObject(final String statementName, final Object parameterObject)
+								throws DataAccessException {
+
+							return execute(new SqlMapClientCallback() {
+								public Object doInSqlMapClient(SqlMapExecutor executor) throws SQLException {
+									return executor.queryForObject(statementName, parameterObject);
+								}
+							});
+						...
+						public Object execute(SqlMapClientCallback action) throws DataAccessException {
+							Assert.notNull(action, "Callback object must not be null");
+							Assert.notNull(this.sqlMapClient, "No SqlMapClient specified");
+
+							// We always needs to use a SqlMapSession, as we need to pass a Spring-managed
+							// Connection (potentially transactional) in. This shouldn't be necessary if
+							// we run against a TransactionAwareDataSourceProxy underneath, but unfortunately
+							// we still need it to make iBATIS batch execution work properly: If iBATIS
+							// doesn't recognize an existing transaction, it automatically executes the
+							// batch for every single statement...
+
+							SqlMapSession session = this.sqlMapClient.openSession();
+							if (logger.isDebugEnabled()) {
+								logger.debug("Opened SqlMapSession [" + session + "] for iBATIS operation");
+							}
+							Connection ibatisCon = null;
+
+							try {
+								Connection springCon = null;
+								DataSource dataSource = getDataSource();
+								boolean transactionAware = (dataSource instanceof TransactionAwareDataSourceProxy);
+
+								// Obtain JDBC Connection to operate on...
+								try {
+									ibatisCon = session.getCurrentConnection();
+									if (ibatisCon == null) {
+										springCon = (transactionAware ?
+												dataSource.getConnection() : DataSourceUtils.doGetConnection(dataSource));
+										session.setUserConnection(springCon);
+										if (logger.isDebugEnabled()) {
+											logger.debug("Obtained JDBC Connection [" + springCon + "] for iBATIS operation");
+										}
+									}
+									else {
+										if (logger.isDebugEnabled()) {
+											logger.debug("Reusing JDBC Connection [" + ibatisCon + "] for iBATIS operation");
+										}
+									}
+								}
+								catch (SQLException ex) {
+									throw new CannotGetJdbcConnectionException("Could not get JDBC Connection", ex);
+								}
+
+								// Execute given callback...
+								try {
+									return action.doInSqlMapClient(session);
+								}
+								catch (SQLException ex) {
+									throw getExceptionTranslator().translate("SqlMapClient operation", null, ex);
+								}
+								finally {
+									try {
+										if (springCon != null) {
+											if (transactionAware) {
+												springCon.close();
+											}
+											else {
+												DataSourceUtils.doReleaseConnection(springCon, dataSource);
+											}
+										}
+									}
+									catch (Throwable ex) {
+										logger.debug("Could not close JDBC Connection", ex);
+									}
+								}
+
+								// Processing finished - potentially session still to be closed.
+							}
+							finally {
+								// Only close SqlMapSession if we know we've actually opened it
+								// at the present level.
+								if (ibatisCon == null) {
+									session.close();
+								}
+							}
+						}	}
+					...
+					--------
+			dbcp - DB connection pool
+
+
+		* 枚举 enum 
+			定义常量(可扩展的)，优于普通常量定义
+			 AgreementParameter
+			 GlobalErrorMessage
+			...
+				eg:
+				return CloudEngineEvent.NGINX.getEvent();
+
+				public enum CloudEngineEvent {
+					REGISTER(10001),
+					NGINX(30001),
+					FASTCGI(30002),
+					SLB(30003),
+					MEMCACHED(30004),
+					RDS(30005),
+					NODEJS(30006)
+					;
+					
+					private CloudEngineEvent(Integer event) {
+						this.event = event;
+					}
+					
+					private Integer event;
+					public Integer getEvent() {
+						return event;
+					}
+				}
+
+		* 
+
+	openAPI mode 要引用到得其他各层分别在不同的model中: (openapi为houyi项目其中一个model)
+		<modules>
+		  <module>houyi.console.model</module> 域模型(历史原因有部分分散在其他model中)
+		  <module>houyi.console.util</module> 工具
+		  <module>houyi.console.acl</module> 访问控制
+		  <module>houyi.console.dao</module> DAO
+		  <module>houyi.console.clc</module> 对内master交互模块(操作vm等)
+		  <module>houyi.console.service</module> 逻辑层
+		  <module>houyi.console.message</module> 消息
+		  <module>houyi.console.statistics</module>  
+		  <module>houyi.console.web/houyi.console.web.support</module>  web这块原先以portal调
+		  <module>houyi.console.web/houyi.console.web.staff</module>
+		  <module>houyi.console.web/houyi.console.web.admin</module>
+		  <module>houyi.console.web/houyi.console.web.isv</module>
+		  <module>houyi.console.openapi</module> 对外openapi模块
+		</modules>		
+	
+	openAPI 放开的请求action配置：- 统一出入口 ？
+		<package name="instance" extends="houyi-open" namespace="/">
+			<action name="services" class="openAPIProxyAction" method="proxy"><!-- action交给spring管理，此action为：open api 的访问代理 -->
+			   <result type="userActionResult"></result> <!-- 自定义result -->
+			</action>
+		</package>
+		代理action利用req请求消息，通过工厂方式(目标action都实现相同接口)调用对应的目标acton，目标action通过spring context获得：
+			// Return the bean instances that match the given object type (including subclasses), judging from either bean definitions or the value of getObjectType in the case of FactoryBeans. 
+			Map map = context.getBeansOfType(ExecuteAction.class);
+
+
+3. xen 快照 了解  虚拟机快照 【快照】
+	虚拟机快照是一个非常好的功能，它能保存当前虚拟机的状态。不幸的是开源Xen不提供对快照的支持，而Linux能支持。
+由于开源Xen通常使用Linux作为它的特权域，所以你能使用Linux命令创建快照。
+	chain 模式 比如 struts的intercepter ，插拔式
+	
+	http://server.it168.com/a2009/0723/611/000000611079.shtml
+4. StringEscapeUtils 
+	Escapes and unescapes Strings for Java, Java Script, HTML, XML, and SQL
+	commons-lang包
+
+5. 
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day4 2012年3月19日
+
+1. RESTful REST 请求
+
+http://svn.alisoft-inc.com/repos/alisoft/houyi/cloudengine/branches/tgt_jce_20120507_v2/master/src/main/java/com/aliyun/cloudengine/
+JCE的master以REST架构，处理openAPI(为get/post请求规范)请求需要提供一个适配层(将REST请求转换为http方式的get/post请求) ？ - Java Cloud Engine
+
+jce的rest实现基于
+
+rest http://www.ibm.com/developerworks/cn/java/j-lo-jaxrs/
+	介绍jdk1.6提供的rest接口，master的rest基于jdk的rest接口 javax.ws.rs
+
+基于 REST 的 Web 服务遵循一些基本的设计原则：
+    系统中的每一个对象或是资源都可以通过一个唯一的 URI 来进行寻址，URI 的结构应该简单、可预测且易于理解，比如定义目录结构式的 URI。
+    以遵循 RFC-2616 所定义的协议的方式显式地使用 HTTP 方法，建立创建、检索、更新和删除（CRUD：Create, Retrieve, Update and Delete）操作与 HTTP 方法之间的一对一映射：
+        若要在服务器上创建资源，应该使用 POST 方法；
+        若要检索某个资源，应该使用 GET 方法；
+        若要更改资源状态或对其进行更新，应该使用 PUT 方法；
+        若要删除某个资源，应该使用 DELETE 方法。
+    URI 所访问的每个资源都可以使用不同的形式加以表示（比如 XML 或者 JSON），具体的表现形式取决于访问资源的客户端，客户端与服务提供者使用一种内容协商的机制（请求头与 MIME 类型）来选择合适的数据格式，最小化彼此之间的数据耦合。
+
+【Task】
+	以 /houyi-cloudengine-master/src/main/java/com/aliyun/cloudengine/RestAdminApplication.java 为例，熟悉rest方式，并分析rest方式与openapi标准的get/post方式如何转换 ？
+	houyi-cloudengine-master 提供几个rest接口供外界调用。
+	由于rest方式的请求url不同于普通http请求的url，需要提供一个模块处理标准http请求的处理(接受请求-调用接口-返回结果)
+		rest方式URI: persion/123		http方式: persion?id=123
+	
+	cloudengine运行是基于xuanyuan的一个组件，xuanyuan负责请求分配。
+	
+	参考实现的文档，搭建测试环境测试，判断是否支持预想的解决方案。 - tip -
+
+2.  test 测试
+JTester
+	   http://java-tester.googlecode.com/svn/maven2/
+
+	   http://www.blogjava.net/kiral/archive/2011/02/04/344072.html usage
+	
+
+3. 搭建 restful 环境，测试
+	jersey + tomcat 的restful测试环境搭建：
+		wiki https://wikis.oracle.com/display/Jersey/Main
+		参考 http://www.ibm.com/developerworks/cn/web/wa-aj-tomcat/
+
+	@POST 
+	@Path("/test")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String showTime(@FormParam("username") String userName,@Context HttpServletRequest httpRequest) {
+	:
+	:
+	:
+	}
+	// jersey - 通过context注解获得httprequest对象
+	
+	对于openAPI调用(待测试)：
+		可以给定URI请求，匹配到一个service上，然后取得request对象，做后续处理。
+		(要做的步骤：
+			配置一个service匹配opanapi的所有请求
+
+		)
+
+Using Entity Providers toMapHTTP Response and
+Request Entity Bodies
+Entity providers supply mapping services between representations and their associated Java
+types. There are two types of entity providers: MessageBodyReader and MessageBodyWriter.
+For HTTP requests, the MessageBodyReader is used to map an HTTP request entity body to
+method parameters. On the response side, a return value is mapped to an HTTP response entity
+body using a MessageBodyWriter. If the application needs to supply additional metadata, such
+Responding to HTTP Resources
+Chapter 3 • Creating a RESTful Resource Class 19
+as HTTP headers or a different status code, a method can return a Response that wraps the
+entity, and which can be built using Response.ResponseBuilder.
+
+——jersey文档
+
+4. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day5 Tuesday, March 20, 2012
+
+1. day4第3条 go on
+	* 下载jersey包
+	* 新建web项目，导入jersey必要包
+	* 配置jersey的请求处理servlet，并正确配置package属性：com.sun.jersey.config.property.packages - 指向你的resource包
+	* 部署到tomcat中
+	* 测试
+
+	部分代码：
+	-----
+		<servlet>
+			<servlet-name>Jersey REST Service</servlet-name>
+			<servlet-class>
+			  com.sun.jersey.spi.container.servlet.ServletContainer
+			</servlet-class>
+			<init-param>
+			  <param-name>com.sun.jersey.config.property.packages</param-name>
+			  <param-value>test.jersey.service</param-value>
+			</init-param>
+			<load-on-startup>1</load-on-startup>
+		</servlet>
+		<servlet-mapping>
+		  <servlet-name>Jersey REST Service</servlet-name>
+		  <url-pattern>/rest/*</url-pattern>
+		</servlet-mapping>
+
+		package test.jersey.service;
+		@Path("hello")
+		public class HelloResponse {
+
+			@GET
+			@Produces(MediaType.TEXT_PLAIN)
+			public String sayHello(){
+				return "Hello jersey";
+			}
+	
+		}
+	------
+	[ Test ]
+		req: http://localhost:8080/jersey/rest/hello
+		resp: Hello jersey
+
+	[ Test ]
+		@GET
+		@Produces(MediaType.TEXT_PLAIN)
+		public String sayHello(@DefaultValue("0") @QueryParam("id") String id,@DefaultValue("NaN")@QueryParam("name") String name){
+			return "id:"+id+" name:"+name;
+		}	
+		request: http://localhost:8080/jersey/rest/hello?id=1&name=jack   - 
+		response: id:1 name:jack
+
+	[ Test ]
+		@Path("/hello")
+		public class HelloResponse {
+
+			@GET
+			@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+			public MyResponse sayHello(@DefaultValue("0") @QueryParam("id") String id,@DefaultValue("NaN")@QueryParam("name") String name){
+		//		return "NORMAL id:"+id+" name:"+name+"\n";
+				return new MyResponse(id,name);
+			}
+			
+			@GET
+			@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+			@Path("/sayhello/{id}/{name}")
+			public Object sayHelloRest(@DefaultValue("1") @PathParam("id") String id,@DefaultValue("1NaN") @PathParam("name") String name){
+				return new MyResponse("1","jack");
+			}
+		}
+		web.xml: 
+			<servlet-mapping>
+				  <servlet-name>Jersey REST Service</servlet-name>
+				  <url-pattern>/open/*</url-pattern>
+			</servlet-mapping>
+		request: http://localhost:8080/jersey/open/hello/sayhello/1/1
+		response: 
+				<data>
+					<id>1</id><
+					name>jack</name>
+				</data>
+
+	要返回json或xml，需要将返回的对象配置上对象到xml的映射注解，比如利用jaxb等 ，需要提供一个对象到json或者xml的映射机制，如果直接返回
+	jdk的list对象会报错，无法转换：
+		A message body writer for Java class java.util.ArrayList, and Java type interface java.util.List, and MIME media type application/xml was not found
+		eg:http://blog.coderunnr.com/2011/02/clienthandlerexception-a-message-body-writer-for-java-type-class-and-mime-media-type-applicationoctet-stream-was-not-found/
+	将返回的pojo通过注解映射到xml即可：
+		@XmlRootElement(name="data")
+		public class MyResponse {
+			
+			private String id;
+			
+			private String name;
+			
+			public MyResponse(){}
+			
+			public MyResponse(String id,String name){
+				this.id = id;
+				this.name = name;
+			}
+			
+			@XmlElement(name="id")
+			public String getId() {
+				return id;
+			}
+			public void setId(String id) {
+				this.id = id;
+			}
+			
+			@XmlElement(name="name")
+			public String getName() {
+				return name;
+			}
+			public void setName(String name) {
+				this.name = name;
+			}
+		}
+		
+
+		问题：
+			// 这个标签标示注解的方法支持下面定义的 2 种返回数据格式，具体确定？
+			@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+			
+			如上，可以返回多个MIME，如何选择，确定返回的类型？
+				比如，需要返回xml，或者需要返回json 
+				看openAPI是根据什么返回指定格式的数据的？
+					openAPI通过请求参数 format 来判断client请求的数据格式，故这里需要用到 @queryparam 来取得 format ，从而返回对应的
+				格式。
+			jersey guide：
+					If a resource class is capable of producing more that one MIME media type then the resource method chosen will correspond to the most acceptable media type 
+				as declared by the client. More specifically the Accept header of the HTTP request declared what is most acceptable. For example if the Accept header is:
+					Accept: text/plain
+				then the doGetAsPlainText method will be invoked. Alternatively if the Accept header is:
+					Accept: text/plain;q=0.9, text/html
+				which declares that the client can accept media types of "text/plain" and "text/html" but prefers the latter, then the doGetAsHtml method will be invoked.
+				More than one media type may be declared in the same @Produces declaration, for example:
+			方案1：从jersey guide看，可以根据http请求头的 accept定义值返回相应格式。
+				但openapi规范提供的是根据get方式的 format参数来确定返回格式的
+			方案2:：根据 format 字段，找到rest框架提供的动态自定义返回格式的设置 ？ 在哪里设置？
+				在response里设置header，rest框架根据header定义的格式渲染结果。
+				通过response根据需要的返回状态(status)取得responsebuilder对象(处理返回内容)，取得请求参数，通过builder设置返回的Cotent-Type类型(MediaType定义的类型)
+				builder的entry方法处理需要返回的对象，build()，返回即可。
+
+			【tip】误区，试图设置request的accept值来影响response的返回数据格式，要返回什么样的数据及其格式都可以通过response来设置。
+				拥有者或者自身或其相关工具一般会提供操作其自身的值的入口。
+
+				
+
+2. jax-rs 注解(from jax-rs api)
+	Consumer - Defines the media types that the methods of a resource class or MessageBodyReader can accept 定义资源可以接受处理的请求类型
+	Produces - Defines the media type(s) that the methods of a resource class or MessageBodyWriter can produce
+	MediaType - An abstraction for a media type. Instances are immutable(不变的). 
+
+
+3. 对于第1条的REST框架也支持非REST请求uri的转发，这其中，只是转发的作用，不带有业务逻辑，是否可以用nginx的rewrite来实现？
+	后续SLB也需要对openapi提供处理层，其中含业务逻辑，选择REST方式。
+
+4. nginx rewrite 重写
+	目标：将openapi的标准请求重写为符合REST接口的rest请求。
+	nginx的rewrite规则(rewrite模块)：
+	http://xx.host/action?id=xx&name=xx rewrite为 http://xx.host/action/xx/xx
+
+	
+	URL rewriting is a key element to Search Engine Optimization (SEO). ——　摘自：Nginx HTTP Server p141
+
+		参考 http://chenxiaoyu.org/2011/10/30/nginx-modules.html
+	正则表达式 规则 regex
+	regular expression(Perl Compatible Regular Expression (PCRE) library):
+		Metacharacter
+			Description
+		^
+		Beginning
+			The entity after this character must be found at the beginning.
+			Example pattern: ^h
+			Matching strings: hello, h, hh
+			Non-matching strings: character, ssh
+		$
+		End
+			The entity before this character must be found at the end.
+			Example pattern: e$
+			Matching strings: sample, e, file
+			Non-matching strings: extra, shell
+		.
+		Any
+			Matches any character.
+			Example pattern: hell.
+			Matching strings: hello, hellx, hell5, hell!
+			Non-matching strings: hell, helo
+		[ ]
+		Set
+			Matches any character within the specified set.
+			Syntax: [a-z] for a range, [abcd] for a set, and [a-z0-9] for
+			two ranges
+			Example pattern: hell[a-y123]
+			Matching strings: hello, hell1, hell2, hell3
+			Non-matching strings: hellz, hell4, heloo
+		[^ ]
+		Negate set
+			Matches any character that is not within the specified set.
+			Example pattern: hell[^a-np-z0-9]
+			Matching strings: hello, hell;
+			Non-matching strings: hella, hell5
+		|
+		Alternation
+			Matches the entity placed either before or after the |.
+			Example pattern: hello|welcome
+			Matching strings: hello, welcome, helloes, awelcome
+			Non-matching strings: hell, ellow, owelcom
+		( )
+		Grouping
+			Groups a set of entities, often to be used in conjunction with |.
+			Example pattern: ^(hello|hi) there$
+			Matching strings: hello there, hi there.
+			Non-matching strings: hey there, ahoy there
+		\
+		Escape
+			Allows you to escape special characters.
+			Example pattern: Hello\.
+			Matching strings: Hello., Hello. How are you?, Hi! Hello...
+			Non-matching strings: Hello, Hello, how are you?
+
+		Quantifiers
+		So far, you are able to express simple patterns with a limited number of characters. Quantifiers allow you to extend the amount of accepted entities:
+		Quantifier
+			Description
+		*
+		0 or more times
+			The entity preceding * must be found 0 or more times.
+			Example pattern: he*llo
+			Matching strings: hllo, hello, heeeello
+			Non-matching strings: hallo, ello
+		+
+		1 or more times
+			The entity preceding + must be found 1 or more times.
+			Example pattern: he+llo
+			Matching strings: hello, heeeello
+			Non-matching strings: hllo, helo
+		?
+		0 or 1 time
+			The entity preceding ? must be found 0 or 1 time.
+			Example pattern: he?llo
+			Matching strings: hello, hllo
+			Non-matching strings: heello, heeeello
+		{x}
+		x times
+			The entity preceding {x} must be found x times.
+			Example pattern: he{3}llo
+			Matching strings: heeello, oh heeello there!
+			Non-matching strings: hello, heello, heeeello
+		{x,}
+		At least x times
+			The entity preceding {x,} must be found at least x times.
+			Example pattern: he{3}llo
+			Matching strings: heeello, heeeeeeello
+			Non-matching strings: hllo, hello, heello
+		{x,y}
+		x to y times
+			The entity preceding {x,y} must be found between x and y times.
+			Example pattern: he{2,4}llo
+			Matching strings: heello, heeello, heeeello
+			Non-matching strings: hello, heeeeello
+5. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day6 Wednesday, March 21, 2012
+
+1. 
+
+2. 
