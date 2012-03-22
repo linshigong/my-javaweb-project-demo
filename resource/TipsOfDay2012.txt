@@ -1,4 +1,6 @@
 
+本机ip 10.1.171.132
+
 通过svn管理记录文件 eg google code  TortoiseSVN
 搭建centos测试系统(vmware7) ssh连接
 wiki scheng 
