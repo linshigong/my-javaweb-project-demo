@@ -7,7 +7,9 @@ wiki scheng
 Linux Container - LXC	
 openapi rds  (关系型数据库服务)
 	ref: http://www.ibm.com/developerworks/linux/library/l-lxc-containers/
-
+test
+	https://my-javaweb-project-demo.googlecode.com/svn
+google 检索 apache site:*.apache.org 高级搜索
 
 linux command eg 命令
 	--------
@@ -548,6 +550,7 @@ linux command eg 命令
 	--------
 
 	vmware7安装centos5 - 自定义方式 -  OS Installlation步骤选择install later(否则后面可能直接进入live CD 模式，不是正常安装模式)
+		确保ssh模块已安装 ，通过ssh客户端连接vmware中的centos
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day1 2012年3月14日
@@ -1481,7 +1484,8 @@ day6 Wednesday, March 21, 2012
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day7 Thursday, March 22, 2012
 
-1. 
+1. ace mast agent(python shell) 
+	master 职责
 
 
 2. 

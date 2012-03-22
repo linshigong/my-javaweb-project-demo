@@ -11,7 +11,8 @@ szvpn.coastal.com.cn
 	</div>
 
 <eb:right id="" />
-
+mytest mytestsvn
+	https://my-javaweb-project-demo.googlecode.com/svn
  <meta http-equiv="content-type" content="text/html;charset=utf-8"> 页面编码声明和存储编码一致
 
 - border="2" bordercolor="green" 
@@ -27137,7 +27138,7 @@ day13 2012年3月7日
 1. centos 配置 vpn，连接myeclipse官网下载
 
 	centos5 + nginx + tomcat + ssl  搭建
-
+	
 	nginx作为反向代理服务器处理请求，apache等后台服务器只接受本地请求(也是安全性考虑)：
 
 		Accepting local requests only
@@ -27173,7 +27174,7 @@ day13 2012年3月7日
 			location ~ {
 				proxy_pass http://127.0.0.1:8080; # 对servlet请求交给tomcat处理
 			}
-
+	linux windows交互 ，http服务方式(当做http资源 ) ，ssh etc.
 			
 
 2. 
