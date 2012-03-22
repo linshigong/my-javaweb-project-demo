@@ -1,4 +1,10 @@
 
+通过svn管理记录文件 eg google code  TortoiseSVN
+搭建centos测试系统(vmware7) ssh连接
+wiki scheng 
+Linux Container - LXC	
+openapi rds  (关系型数据库服务)
+	ref: http://www.ibm.com/developerworks/linux/library/l-lxc-containers/
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day1 2012年3月14日
 
@@ -895,7 +901,43 @@ day6 Wednesday, March 21, 2012
 	
 	根据登记在消息服务器上的订阅节点信息，进行push
 
-2. python nodejs
+2. python nodejs 
+	python yaml模块 - YAML是一种直观的能够被电脑识别的的数据序列化格式，容易被人类阅读，并且容易和脚本语言交互。YAML类似于XML，但是语法比XML简单得多，对于转化成数组或可以hash的数据时是很简单有效的。
+
+3.  wget 从vmware中的centso访问本机的rest服务
+	取得返回内容，cat查看
+	sshl连接到centos命令行操作。
+	
+	环境：
+		apache ,
+		tomcat,
+		nginx,
+		mysql,
+		eclipse,
+		python,(test)
+		nodejs,(test)
+		linux container(test)
+
+4. CIDR Classless Inter-Domain Routing 了解
+	无类别域间路由选择
+	ref:
+		CIDR（无类型域间选路，Classless Inter-Domain Routing）是一个在Internet上创建附加地址的方法，这些地址提供给
+	服务提供商（ISP），	再由ISP分配给客户。CIDR将路由集中起来，使一个IP地址代表主要骨干提供商服务的几千个IP地址，
+	从而减轻Internet路由器的负担。		
+
+5. ce里shell脚本熟悉
+	"#!/bin/sh" - 对shell的声明，说明你所用的是那种类型的shell及其路径所在。
+	自定义shell function封装常用功能，提高shell编写效率。
+		eg: 
 
 
-3.  
+6. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day7 Thursday, March 22, 2012
+
+1. 
+
+
+2. 
