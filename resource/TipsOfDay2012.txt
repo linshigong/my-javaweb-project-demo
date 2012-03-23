@@ -11,6 +11,10 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+powerdesigner  生成er图
+	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
+
+	
 linux command eg 命令
 	--------
 		############################################################################
@@ -1513,3 +1517,85 @@ day7 Thursday, March 22, 2012
 	agent根据不同的应用类型(目前:php，nodejs，jsp)调用相应的build脚本(配置环境运行环境，部署应用，启动应用，启动agent)
 
 4. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day8 Friday, March 23, 2012
+
+1. cloudengine 
+	trunk
+		agent - agent模块(python)
+			fastcgi
+			memcached
+			monitor
+			nginx
+			nodejs
+			test
+			yaml
+		carrier - Erlang (rebar ...)
+		ftpserver - ftp服务(java)
+		master - master(java)
+		memcahched_pach - memchche部署
+		nginx_pach - nginx部署
+		nodejs -  nodejs部署(build_agent -> install_agent -> install_nodejs -> upgrade_nodejs)
+		php - php部署
+
+2. ACE计量 
+	计量单位，字段说明
+	oss接口
+	ms接口
+
+	目标：将ACE各计量单位取到并以ms要求的格式推送给ms(Metering System)计量系统系统 ，有一个python的
+	的实现可以参考:
+		python 
+			程序基本结构
+			变量，运算 etc
+			模块
+				MySQLdb
+					eg 通过此模块与mysql数据库交互：(下载这个库有linux和win版本)
+						conn=MySQLdb.connect(host="localhost",user="root",passwd="sa",db="mytable")
+	
+			执行
+			应用
+	* 
+
+	参考 houyi-console/static (java)实现，上述任务 【Task】
+		定义数据格式
+		定义任务
+		spring配置调用执行
+
+		步骤：(公用动作比如推送等已有实现，调用其逻辑处理即可) 细化
+			>> 取
+				* MS取SLB流量(appid对应的流量，appid指每个具体的应用)	单位 byte
+					- 从ACE DB中取得appid对应的slb_id，及应用的id与SLB的id对应关系 1对1
+						- 从cloudengine库中取 appid <-> slb_id   app - slb_alloc_record
+							select 
+								app.id app_id,
+								slb.id slb_id
+							from app app,slb_alloc_record slb
+							where app.id = slb.id
+					- 访问MS取flow的URL格式
+					-  MS返回vip对应的流量数据的数据格式
+						Flow_detail的格式如下：
+						[tcp(VIP:80|2|3|)(VIP:8080|2|3|)][http(www.a.com:80|2|3|)(www.b.com:90|2|3|)]
+					
+					- 
+
+
+
+				* MS取OSS
+					- URL格式
+						columns: storage;
+						where: openid=ace;pid=oss;bid=26842;inst_id=$bucketname;begin_time=13123121400;end_time =132123241500;
+						uri是http://metering.aliyun-inc.com:8080/aliyun/QS/OSS/RAW
+					- 
+						
+				* DB取cpu时间等
+			>> 处理
+
+			>> 推送
+				推送数据格式
+					* 在 DataFormat里定义枚举 
+					*  pojo (实现接口)
+
+
+3. 
