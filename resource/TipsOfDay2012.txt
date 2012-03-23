@@ -437,7 +437,17 @@ linux command eg 命令
 
 		来自：http://blogold.chinaunix.net/u/30619/showart.php?id=249558
 
+		1、alternatives --install /usr/bin/java java /usr/java/jdk1.6.0_24/bin/java 300
+		这一句的意思是给java这个LINK多加一个Path。至于什么是Link，请man alternatives，看alternatives命令的帮助，就大概能明白了。
+		2、alternatives --config java 会出现一下信息：
+		----------------------------------------------------------------------
+		*  1           /usr/lib/jvm/jre-1.4.2-gcj/bin/java
+		+ 2           /usr/java/jdk1.6.0_24/bin/java
+		按 Enter 来保存当前选择[+]，或键入选择号码：2
 
+		shutdown -h now
+		halt
+	
 		############################################################################
 
 		linux下Java环境的配置
@@ -549,8 +559,10 @@ linux command eg 命令
 		进到软件包的目录下 ，运行 ./jdk1.6***.bin 即可安装
 	--------
 
-	vmware7安装centos5 - 自定义方式 -  OS Installlation步骤选择install later(否则后面可能直接进入live CD 模式，不是正常安装模式)
+*	vmware7安装centos5 - 自定义方式 -  OS Installlation步骤选择install later(否则后面可能直接进入live CD 模式，不是正常安装模式)
 		确保ssh模块已安装 ，通过ssh客户端连接vmware中的centos
+
+*	虚拟集群,及其相关应用测试【测试】
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day1 2012年3月14日
@@ -563,6 +575,7 @@ day1 2012年3月14日
 			mavn 
 			spring插件 - 主要编译配置文件定位到java文件,自动提示等便捷功能
 			Eclipse Web Tools Platform
+			python 插件 pydev http://pydev.org/updates
 			...
 		eclipse jre配置设置为jdk
 		-vm
@@ -1488,4 +1501,15 @@ day7 Thursday, March 22, 2012
 	master 职责
 
 
-2. 
+2.  ace 计量单位讨论会议，
+	字段需要取出推送到消息系统，供后续计量，计费
+	主要关于 计量字段需求，及可行性确认
+	详见记录
+	tip: 由于涉及多个系统的交互，如何处理规则，处理变化的问题，如果适应变化减少依赖耦合。
+
+3. cloudengine 熟悉
+	master ,agent 部分
+	master调用agent
+	agent根据不同的应用类型(目前:php，nodejs，jsp)调用相应的build脚本(配置环境运行环境，部署应用，启动应用，启动agent)
+
+4. 

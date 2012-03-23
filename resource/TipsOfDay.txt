@@ -27037,6 +27037,11 @@ cat |more  分页 分页可以再命令后加上 |more 实现
 
 	rpm -ql  java-1.6.0-openjdk-1.6.0.0-1.16.b17.el5 —— 查询该套件所有的目录
 
+	卸载旧的或者已有的rpm包：
+
+	  比如卸载centos5自带的openjdk ：rpm -e --nodeps xxxxx   // 忽视依赖强制卸载
+
+
 find / 'openjdk'
 
 ifconfig #查看网络信息
