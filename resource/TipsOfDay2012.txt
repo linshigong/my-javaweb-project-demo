@@ -1567,35 +1567,55 @@ day8 Friday, March 23, 2012
 			>> 取
 				* MS取SLB流量(appid对应的流量，appid指每个具体的应用)	单位 byte
 					- 从ACE DB中取得appid对应的slb_id，及应用的id与SLB的id对应关系 1对1
-						- 从cloudengine库中取 appid <-> slb_id   app - slb_alloc_record
+						- 从DB得到app_id对应的slb_id(cloudengine库)
+
+							-- 从DB得到app_id对应的slb_id
 							select 
 								app.id app_id,
 								slb.id slb_id
 							from app app,slb_alloc_record slb
 							where app.id = slb.id
-					- 访问MS取flow的URL格式
+							
+					- 请求Meteriing Service，根据slb_id取数据
+						MS接口文档(比如如何查询SLB数据？)
+						http request header:
+						PUT /aliyun.com/QS/SLB/RAW HTTP/1.1（待定，需姜一提供）
+						HOST: ms.aliyun.com
+						CONTENT‐LENGTH: 12345
+						META: uid,string;inst_id,string; time, integer; usetime,integer; total_in,integer;total_out,integer;tcp_flow_in,integer;tcp_flow_out,integer;http_flow_in,integer;http_flow_out,integer;vip_type,string;rs,integer;flow_detail,string;region_id,string;end_time,integer;
+						meta元数据
+						http://metering.aliyun-inc.com:8080/aliyun/QS/OSS/RAW
+
 					-  MS返回vip对应的流量数据的数据格式
 						Flow_detail的格式如下：
 						[tcp(VIP:80|2|3|)(VIP:8080|2|3|)][http(www.a.com:80|2|3|)(www.b.com:90|2|3|)]
 					
 					- 
 
-
-
 				* MS取OSS
+					- 从app表(cloudengine)取得kv_bucket
+						select 
+							id app_id,
+							kv_bucket
+						from app
 					- URL格式
 						columns: storage;
 						where: openid=ace;pid=oss;bid=26842;inst_id=$bucketname;begin_time=13123121400;end_time =132123241500;
 						uri是http://metering.aliyun-inc.com:8080/aliyun/QS/OSS/RAW
+						bid - 用户ID，app所属的用户
+						$bucketname对应kv_bucket
 					- 
 						
 				* DB取cpu时间等
+					‘cloudengine`.`fastcgi_app_running_info` cpu_acc_usage App的cpu持续使用时间，单位：秒
+
 			>> 处理
 
-			>> 推送
+			>> 推送 写往MS
 				推送数据格式
 					* 在 DataFormat里定义枚举 
 					*  pojo (实现接口)
-
+					
+					* 整理字段对照 doc ？
 
 3. 
