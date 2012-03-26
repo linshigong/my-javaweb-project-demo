@@ -580,6 +580,8 @@ day1 2012年3月14日
 			spring插件 - 主要编译配置文件定位到java文件,自动提示等便捷功能
 			Eclipse Web Tools Platform
 			python 插件 pydev http://pydev.org/updates
+			uml
+			er - http://www.eclipse.org/gef/updates/index.php
 			...
 		eclipse jre配置设置为jdk
 		-vm
@@ -1544,7 +1546,7 @@ day8 Friday, March 23, 2012
 	oss接口
 	ms接口
 
-	目标：将ACE各计量单位取到并以ms要求的格式推送给ms(Metering System)计量系统系统 ，有一个python的
+	目标：将ACE各计量单位取到并以ms要求的格式推送给ms(Metering Service)计量系统系统 ，有一个python的
 	的实现可以参考:
 		python 
 			程序基本结构
@@ -1559,6 +1561,7 @@ day8 Friday, March 23, 2012
 	* 
 
 	参考 houyi-console/static (java)实现，上述任务 【Task】
+	= = URL请求的要求(格式，构造)等可以参考这个实现 = =
 		定义数据格式
 		定义任务
 		spring配置调用执行
@@ -1578,13 +1581,7 @@ day8 Friday, March 23, 2012
 							
 					- 请求Meteriing Service，根据slb_id取数据
 						MS接口文档(比如如何查询SLB数据？)
-						http request header:
-						PUT /aliyun.com/QS/SLB/RAW HTTP/1.1（待定，需姜一提供）
-						HOST: ms.aliyun.com
-						CONTENT‐LENGTH: 12345
-						META: uid,string;inst_id,string; time, integer; usetime,integer; total_in,integer;total_out,integer;tcp_flow_in,integer;tcp_flow_out,integer;http_flow_in,integer;http_flow_out,integer;vip_type,string;rs,integer;flow_detail,string;region_id,string;end_time,integer;
-						meta元数据
-						http://metering.aliyun-inc.com:8080/aliyun/QS/OSS/RAW
+						
 
 					-  MS返回vip对应的流量数据的数据格式
 						Flow_detail的格式如下：
@@ -1600,8 +1597,8 @@ day8 Friday, March 23, 2012
 						from app
 					- URL格式
 						columns: storage;
-						where: openid=ace;pid=oss;bid=26842;inst_id=$bucketname;begin_time=13123121400;end_time =132123241500;
-						uri是http://metering.aliyun-inc.com:8080/aliyun/QS/OSS/RAW
+						where: openid=ace;pid=oss;bid=26842;inst_id=$bucketname;begin_time=13123121400;end_time =132123241500;inst_id,migrate-win2003-vifs
+						http://10.1.157.163:8080/aliyun/QS/OSS/RAW
 						bid - 用户ID，app所属的用户
 						$bucketname对应kv_bucket
 					- 
@@ -1615,7 +1612,62 @@ day8 Friday, March 23, 2012
 				推送数据格式
 					* 在 DataFormat里定义枚举 
 					*  pojo (实现接口)
-					
-					* 整理字段对照 doc ？
+					* 请求
+						http request header:
+						PUT /aliyun.com/QS/SLB/RAW HTTP/1.1（待定，需姜一提供）
+						HOST: ms.aliyun.com
+						CONTENT‐LENGTH: 12345
+						META: uid,string;inst_id,string; time, integer; usetime,integer; total_in,integer;total_out,integer;tcp_flow_in,integer;tcp_flow_out,integer;http_flow_in,integer;http_flow_out,integer;vip_type,string;rs,integer;flow_detail,string;region_id,string;end_time,integer;
+						“META为用户发送的数据的格式信息，这部分必须添加在http的header部分，为计量服务(MS)特有字段”
+						http://metering.aliyun-inc.com:8080/aliyun/QS/OSS/RAW  —— 线上系统的地址
+						http://10.1.157.163:8080/aliyun/QS/SLB/RAW —— 测试时用测试系统地址
+					* 整理推送的字段对照 doc ？
+						Cpu(ms)、流量(byte)、存储空间(byte)、请求次数、memory-cache(byte)
 
+						属性名			类型			单位			描述
+						uid				string							包含用户在aliyun.com注册的用户名(openid),  用户购买产品类型(pid)和用户渠道商标识(bid), 格式为openid#pid#bid方式，彼此用sharp(#)分隔，由aliyun.com提供给各个产品服务
+						time				integer							开始时间(记录当前记录的时刻，为一点态时间，如果用户的计量数据采集并非实时，则time表示抽样开始时间即begin_time，采用可显示的unix时间表示法)
+						end_time			integer							结束时间(表示抽样结束时间，同样采用可显示的unix时间表示法)
+						inst_id			string							应用id即appid
+						cpu				integer			ms				cpu使用时间
+						flow				integer			byte				总流量(http流量)
+						flow_in			integer			byte				流入流量
+						flow_out			integer			byte				流出流量
+						app_size			integer			byte				存储空间(oss)
+						req_count			integer			个				请求次数(包括pv内的多个异步请求)
+						version			integer							版本号，目前为1
+
+
+
+						
+
+
+
+
+
+
+		uid：包含用户在aliyun.com注册的用户名(openid),  用户购买产品类型(pid)和用户渠道商标识(bid), 格式为openid#pid#bid方式，彼此用sharp(#)分隔，由aliyun.com提供给各个产品服务。
 3. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day9 Monday, March 26, 2012
+
+1. 计量的接口说明 最新的 ？
+	
+
+2. 把ace计量初步需求写入文档，
+	类似于slb接口文档等
+	
+	目的：设计ace计量项，并取到后处理然后提交到ms系统
+	计量项列表：
+	实现：
+		计量项获取：
+		处理
+		推送
+
+3. job的具体实现，失败补偿逻辑，参看console中的static模块
+	？
+
+
+4. 
