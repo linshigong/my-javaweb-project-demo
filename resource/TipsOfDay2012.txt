@@ -1739,4 +1739,49 @@ day10 Tuesday, March 27, 2012
 3. 表说明
 	region - 代表一个集群
 
- 
+ temp
+ update_apps_with_template_job:
+/**************************
+update_apps_with_template_job 表
+ **************************/
+DROP TABLE IF EXISTS `cloudengine`.`update_apps_with_template_job`;
+CREATE TABLE  `cloudengine`.`update_apps_with_template_job` (	
+  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT '@desc 主键ID' ,
+  `template_id` int unsigned NOT NULL  COMMENT '@desc 升级应用时所用的模板ID' ,
+  `exclude_files`  VARCHAR(1024)  COMMENT '@desc 升级应用时需要过滤的文件地址列表，以|分隔' ,
+  `status` tinyint NOT NULL COMMENT '@desc 任务状态。 0未完成，1已完成',
+  `callback_address`  VARCHAR(256)  COMMENT '@desc 任务执行完毕后的回调地址' ,
+  `gmt_create` datetime NOT NULL  COMMENT '@desc 创建时间',
+  `gmt_modify` datetime NOT NULL  COMMENT '@desc 修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+update_apps_with_template_job_result：
+/**************************
+update_apps_with_template_job_result 表
+ **************************/
+DROP TABLE IF EXISTS `cloudengine`.`update_apps_with_template_job_result`;
+CREATE TABLE  `cloudengine`.`update_apps_with_template_job_result` (	
+  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT '@desc 主键ID' ,
+  `job_id` int unsigned NOT NULL COMMENT '@desc 任务ID' ,
+  `app_id` int unsigned NOT NULL COMMENT '@desc 应用ID' ,
+  `status` tinyint NOT NULL COMMENT '@desc 升级结果：0正在升级 ， 1 成功，2失败',
+  `msg` VARCHAR(1024)  COMMENT '@desc 如果status=1，这里给出失败的简单原因' ,
+  `gmt_create` datetime NOT NULL  COMMENT '@desc 创建时间',
+  `gmt_modify` datetime NOT NULL  COMMENT '@desc 修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+cron：
+cloudengine@10.249.153.1 : cloudengine 21:11:05> desc cron;
++------------+------------------+------+-----+---------+----------------+
+| Field      | Type             | Null | Key | Default | Extra          |
++------------+------------------+------+-----+---------+----------------+
+| cron_id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| url        | varchar(1024)    | NO   | MUL | NULL    |                |
+| app_id     | int(11)          | NO   |     | NULL    |                |
+| scheduler  | varchar(64)      | YES  |     | NULL    |                |
+| timezone   | tinyint(4)       | NO   |     | NULL    |                |
+| type       | tinyint(4)       | YES  |     | NULL    |                |
+| gmt_create | datetime         | NO   |     | NULL    |                |
+| gmt_modify | datetime         | NO   |     | NULL    |                |
++------------+------------------+------+-----+---------+----------------+
