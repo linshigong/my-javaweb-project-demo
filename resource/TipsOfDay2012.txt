@@ -11,6 +11,15 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* 简称
+	 业务运营支撑系统(BOSS) 
+	 弹性计算(Elastic Computing - EC) 
+	 云引擎(Cloud Engine - CE) 
+	 开放存储服务(Open Storage Service - OSS) 
+	 云数据库服务(Cloud Database Service - CDS) 
+	 阿里邮箱(Ali Mail - AM) 
+	 开放表服务（Open Table Service - OTS）
+
 powerdesigner  生成er图
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
@@ -562,6 +571,13 @@ linux command eg 命令
 		安装 bin格式的jdk软件包 
 		进到软件包的目录下 ，运行 ./jdk1.6***.bin 即可安装
 	--------
+
+* base64 编码
+		Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一，大家可以查看RFC2045～RFC2049，上面有MIME的详细规范。
+	Base64编码可用于在HTTP环境下传递较长的标识信息。例如，在Java Persistence系统Hibernate中，就采用了Base64来将一个较长的唯一标识符
+	（一般为128-bit的UUID）编码为一个字符串，用作HTTP表单和HTTP GET URL中的参数。在其他应用程序中，也常常需要把二进制数据编码为
+	适合放在URL（包括隐藏表单域）中的形式。此时，采用Base64编码不仅比较简短，同时也具有不可读性，即所编码的数据不会被人用肉眼所
+	直接看到。
 
 *	vmware7安装centos5 - 自定义方式 -  OS Installlation步骤选择install later(否则后面可能直接进入live CD 模式，不是正常安装模式)
 		确保ssh模块已安装 ，通过ssh客户端连接vmware中的centos
@@ -1518,6 +1534,7 @@ day7 Thursday, March 22, 2012
 	master调用agent
 	agent根据不同的应用类型(目前:php，nodejs，jsp)调用相应的build脚本(配置环境运行环境，部署应用，启动应用，启动agent)
 
+	nodejs http://nodejs.org/
 4. 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1665,6 +1682,7 @@ day9 Monday, March 26, 2012
 		计量项获取：
 		处理
 		推送
+	cloudengine数据库表间关系由程序控制，注释说明关系。
 
 3. job的具体实现，失败补偿逻辑，参看console中的static模块
 	？
@@ -1707,7 +1725,13 @@ day9 Monday, March 26, 2012
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day10 Tuesday, March 27, 2012
 
-1. 
+1. 根据上面ace计量文档，编码
+	对于时间如何处理，补偿机制
 
-2. 
+2. ACE计量先不提供需要访问MS的SLB和OSS数据，暂先考虑DB数据 【task】
+	
+
+3. 表说明
+	region - 代表一个集群
+
  
