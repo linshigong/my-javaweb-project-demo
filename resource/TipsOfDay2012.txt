@@ -1670,4 +1670,44 @@ day9 Monday, March 26, 2012
 	？
 
 
-4. 
+4. 通过powerdesigner的reverse engine ，从database的sql文件将ddl转换为er图，了解db表关系
+
+5. velocity 方便对象格式化到文件
+	...
+	velocityEngine.init();//spring配置好resourceLoaderPath
+	template = velocityEngine.getTemplate(templateFile);
+	VelocityContext context = new VelocityContext();
+	context.put("datasMap", map);
+	writer = new FileWriter(outfile);
+	template.merge(context, writer);
+	...
+6. spring + quartz 执行定时任务
+	<bean id="collectDataDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="task" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" /> <!-- 设置是否并发执行，如果为true，则targetObject执行的逻辑需要注意线程并发控制 -->
+	</bean>	
+	<bean id="collectDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="collectDataDetail" />
+		<property name="cronExpression" value="0 0 */1 * * ?" />
+	</bean>  
+	<bean id="collectDataScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="collectDataTrigger" />
+			</list>
+		</property>
+	</bean>
+7. 操作记录及时保存为数据库的日志，后续补偿机制根据数据库补偿并更新 ？
+	细节
+
+8. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day10 Tuesday, March 27, 2012
+
+1. 
+
+2. 
+ 
