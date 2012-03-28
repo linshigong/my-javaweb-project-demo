@@ -10,6 +10,9 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* mysql
+	insert into vip (host,port,gmt_create,gmt_modify)values('host3',80,'2012-12-12 00:00:00','2012-12-12 00:00:00'); //id为自增列
+	 select last_insert_id() as id from vip limit 1 
 
 * 简称
 	 业务运营支撑系统(BOSS) 
@@ -1734,54 +1737,123 @@ day10 Tuesday, March 27, 2012
 		时间校准，以抽取逻辑定义的时间为准，根据定义的时间去取监控数据并汇总，处理，推送
 	处理的整体流程：
 		关键是发生错误的补偿处理逻辑：
-			
+		tasklog表记录task日志。		
 
 3. 表说明
 	region - 代表一个集群
 
- temp
- update_apps_with_template_job:
-/**************************
-update_apps_with_template_job 表
- **************************/
-DROP TABLE IF EXISTS `cloudengine`.`update_apps_with_template_job`;
-CREATE TABLE  `cloudengine`.`update_apps_with_template_job` (	
-  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT '@desc 主键ID' ,
-  `template_id` int unsigned NOT NULL  COMMENT '@desc 升级应用时所用的模板ID' ,
-  `exclude_files`  VARCHAR(1024)  COMMENT '@desc 升级应用时需要过滤的文件地址列表，以|分隔' ,
-  `status` tinyint NOT NULL COMMENT '@desc 任务状态。 0未完成，1已完成',
-  `callback_address`  VARCHAR(256)  COMMENT '@desc 任务执行完毕后的回调地址' ,
-  `gmt_create` datetime NOT NULL  COMMENT '@desc 创建时间',
-  `gmt_modify` datetime NOT NULL  COMMENT '@desc 修改时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-update_apps_with_template_job_result：
-/**************************
-update_apps_with_template_job_result 表
- **************************/
-DROP TABLE IF EXISTS `cloudengine`.`update_apps_with_template_job_result`;
-CREATE TABLE  `cloudengine`.`update_apps_with_template_job_result` (	
-  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT '@desc 主键ID' ,
-  `job_id` int unsigned NOT NULL COMMENT '@desc 任务ID' ,
-  `app_id` int unsigned NOT NULL COMMENT '@desc 应用ID' ,
-  `status` tinyint NOT NULL COMMENT '@desc 升级结果：0正在升级 ， 1 成功，2失败',
-  `msg` VARCHAR(1024)  COMMENT '@desc 如果status=1，这里给出失败的简单原因' ,
-  `gmt_create` datetime NOT NULL  COMMENT '@desc 创建时间',
-  `gmt_modify` datetime NOT NULL  COMMENT '@desc 修改时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
-cron：
-cloudengine@10.249.153.1 : cloudengine 21:11:05> desc cron;
-+------------+------------------+------+-----+---------+----------------+
-| Field      | Type             | Null | Key | Default | Extra          |
-+------------+------------------+------+-----+---------+----------------+
-| cron_id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
-| url        | varchar(1024)    | NO   | MUL | NULL    |                |
-| app_id     | int(11)          | NO   |     | NULL    |                |
-| scheduler  | varchar(64)      | YES  |     | NULL    |                |
-| timezone   | tinyint(4)       | NO   |     | NULL    |                |
-| type       | tinyint(4)       | YES  |     | NULL    |                |
-| gmt_create | datetime         | NO   |     | NULL    |                |
-| gmt_modify | datetime         | NO   |     | NULL    |                |
-+------------+------------------+------+-----+---------+----------------+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day11 Wednesday, March 28, 2012
+
+1. 设计好补偿处理逻辑
+	结合day10第二条的表记录job及其result实现补偿处理。
+
+2. 任务处理已有设计，在已有的任务设计下实现功能
+	* job代表每一次执行的任务
+		job推送前都记录到数据库，job下的内容保存为临时文件。
+	* spring+squza定时任务
+	* 日期处理
+		DateUtils.java —— 将date日期格式化为需要的格式；date到秒；string+patten到date  (SimpleDateFormat实现)
+	* pojo
+		TaskLog 任务日志pojo
+			private Long id;
+			private int status; // 1:success,0:failed
+			private String filename;
+			private Long taskTime;
+			private int jobType; //[0:vm job,1:device job; default 0]
+			private Date beginTime;
+			private Date endTime;
+			OR文件：/houyi-console-dao/src/main/resources/ibatis/TaskLog.xm
+				houyi库 statistics_log
+	* service
+		JobService ：job相关操作
+			public boolean addOrModify(TaskLog job);
+			public boolean checkStatus(TaskLog job);
+			public List<TaskLog> listFailedJobs(long startTime);
+			public List<TaskLog> listJobs(long startTime,long endTime);
+			public TaskLog getLastJob();
+	* dao
+		TaskLogDao ：任务日志DAO操作
+			void insertTaskLog(TaskLog log) ;
+			void updateTaskLog(TaskLog log) ;
+			TaskLog getTaskLog(TaskLog log) ;
+			TaskLog getLastTaskLog();
+			List<TaskLog> getFailedTaskLogs(Long bTime);
+			List<TaskLog> getTaskLogs(Long bTaskTime,Long eTaskTime);
+
+	* task 由于时间等内容不好共用，可再设计一个task，并通过spring配置执行。
+		或对task进行业务无关的再抽象，只留下共用的逻辑，其他都内聚到job自身中。-tip-
+
+	处理流程：(包括 Task ，JobProducer，需要的service,dao,pojo) - 由程序入口分析
+		--> task - execute()定时执行这个方法 - 调用dojob()  —— dojob是单线程的，如果job多或者某个前面的job占用时间长会影响后面的job的执行开始时间 ？ tip 如果是独立的task则不用考虑影响问题
+			遍历执行注入的jobproducer实现 (获取方式：beans = (Map<String, JobProducer>) applicationContext.getBeansOfType(JobProducer.class))
+		--> jobproducer(具体job逻辑在jobproducer的实现类里编写)\
+		--> service
+		--> dao
+		逻辑就在task，jobproducer,abstract jobproducer中，定义自己的逻辑即可。
+			原有任务以task作为主流程控制，jobproducer抽象类及其实现定义了所有逻辑。抽象类提供公用逻辑或抽象方法统一逻辑。-tip-
+				取数据 - 存入数据库/文件(通过velocity映射对象集合(以appid为标识)存为文本) - push - 更新状态
+3. 实现
+	根据原有static模块任务设计
+		* 定义数据结构 pojo ,velocity模板(用于对象格式化持久化)
+			是否需要将此pojo作为对象查询？即某个查询直接返回此pojo，需要ibatis映射配置，这样只要查询一次关联几张表得到数据；或者分别查询在程序中处理。
+			暂定位分别查询。分别查询，减少关联
+		* 实现一个job producer
+		* 定时task类，可能需要再实现一个并在spring里配置(原task再抽象以下，可配置)，
+		参考配置：
+			<bean id="collectDataDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject" ref="task" />
+				<property name="targetMethod" value="execute" />
+				<property name="concurrent" value="false" /> <!-- 设置是否并发执行，如果为true，则targetObject执行的逻辑需要注意线程并发控制 -->
+			</bean>	
+			<bean id="collectDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+				<property name="jobDetail" ref="collectDataDetail" />
+				<property name="cronExpression" value="0 0 */1 * * ?" />
+			</bean>  
+			<bean id="collectDataScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+				<property name="triggers">
+					<list> <!-- 此处配置定时要执行的task列表 -->
+						<ref bean="collectDataTrigger" /> 
+					</list>
+				</property>
+			</bean>
+		* 判断tasklog是否已执行过，通过jobtype类型和jobtime-job开始时间，如果是依据查询的最新执行时间作为job开始时间
+			if (jobService.checkStatus(job))
+			{
+				logger.info("exist job:" + jobTime);
+				return true;
+			}
+		* abstract producer的一些公用成员变量是否可以提供get方法供子类调用，子类不用重复定义 ？
+		* task的recoverJob逻辑处理丢失的任务（比如关机等造成的任务丢失），目前任务是能处理丢失10次的任务，是否可以根据做新一次的任务的开始时间
+		结合当前时间计算共丢失多少次任务，然后执行所有丢失的任务？
+			Task
+			------
+			...
+				/** Get the last record of success in the log table **/
+				TaskLog log = jobService.getLastJob();
+
+				/** compensate for missing the task **/
+				if (log != null)
+				{
+					int i = 1;
+					while (log.getTaskTime() + i * HOUR_SEC < jobTime)
+					{
+						/** Compensate for 10 times **/
+						if (i == 10)
+						{
+							break;
+						}
+
+						TaskLog job = new TaskLog();
+						job.setBeginTime(new Date());
+						job.setTaskTime(log.getTaskTime() + i * HOUR_SEC);
+						job.setStatus(0);
+						jobService.addOrModify(job);
+						i++;
+					}
+				}
+			...
+			------
+		* 一些任务参数是否可以配置到配置文件中，类似abstract job producer的parentpath路径配置 比如：采集间隔，一些补偿机制参数 ？
