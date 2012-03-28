@@ -1857,3 +1857,4 @@ day11 Wednesday, March 28, 2012
 			...
 			------
 		* 一些任务参数是否可以配置到配置文件中，类似abstract job producer的parentpath路径配置 比如：采集间隔，一些补偿机制参数 ？
+		* statistics_log表？
