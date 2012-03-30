@@ -41,6 +41,7 @@
 		 *******************************
 	-->
 	<context-param>
+    <description>这里配置最好采用配置一个spring配置文件，然后把其他的spring配置文件以import方式导入，这种配置方式不适合在命令行运行，提示不支持此类配置写法</description>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:application-*.xml</param-value>
 	</context-param>
