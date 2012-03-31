@@ -67,6 +67,27 @@ defy mb525 RSD android 2.2.*
 http://www.wdsxp.com/moto-defymb525-update-2-2-4/
 ///
 
+///
+svn 密码修改
+	Eclipse SVN插件的帐号、密码修改
+		问题描述： 
+		     Eclipse的SVN插件Subclipse做得很好，在svn操作方面提供了很强大丰富的功能。但到目前为止，该插件对svn用户的概念极为淡薄，不但不能方便地切换用户，而且一旦用户的帐号、密码保存之后，就无法再变更了。
+		解决思路：
+		     既然界面上不能进行修改，那就只有删除subclipse记录的帐号、密码信息，重新输入。
+		具体步骤：
+		     1. 查看你的Eclipse中使用的是什么SVN Interface，位置在
+		windows > preference > Team > SVN
+		       
+		     2. 如果是用的JavaHL, 找到以下目录并删除目录下的文件.
+		C:\"Documents and Settings"\[YourUserName]\"Application Data"\Subversion"\auth
+
+		     3. 如果你用的SVNKit, 找到以下目录并删除.keyring文件.
+		[eclipse_home]\"configuration"\org.eclipse.core.runtime
+
+
+		4. 重新通过Subclipse访问svn，输入新的帐号即可。
+		from: http://www.codesky.net/article/201008/118580.html
+///
 测试 :
 杨天九 321081196902030032 华兴建设有限公司·核电事业部·宁德核电项目部·项目经理部 
 临时 分包子系统增删改权限。

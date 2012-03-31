@@ -11,9 +11,13 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 * mysql
+	一些命令使用，可以参考gui工具执行命令的sql参考 比如：Aqua Data Studio ，在alter table 时可以查看preview sql
 	insert into vip (host,port,gmt_create,gmt_modify)values('host3',80,'2012-12-12 00:00:00','2012-12-12 00:00:00'); //id为自增列
 	 select last_insert_id() as id from vip limit 1 
 
+
+* ide eclipse 文件夹上下关系 project property - build path -move
+	source folder ，设置源码包 build path - change to source folder
 * 简称
 	 业务运营支撑系统(BOSS) 
 	 弹性计算(Elastic Computing - EC) 
@@ -22,8 +26,12 @@ google 检索 apache site:*.apache.org 高级搜索
 	 云数据库服务(Cloud Database Service - CDS) 
 	 阿里邮箱(Ali Mail - AM) 
 	 开放表服务（Open Table Service - OTS）
-
-powerdesigner  生成er图
+* Google App Engine 
+		虽然GAE有很多限制和缺陷，但是我对GAE还是喜爱有加的。GAE是免费的，任何人都可以很轻松的通过GAE实现自己的Web应用。比如，做一些实用的小工具，
+	实现一个博客程序来练手。通过GAE，我们可以轻松的搭建属于自己的Blog(micolog)，搭建属于自己的Wiki系统(NancyWiki)。
+	没有GAE，就不会有大家都懂的gappproxy，gtap，twiter-feed。是的，你懂的。	
+	from: http://www.cnblogs.com/coderzh/archive/2010/11/30/goodby-google-app-engine.html
+* powerdesigner  生成er图
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 	
@@ -1164,7 +1172,7 @@ rest http://www.ibm.com/developerworks/cn/java/j-lo-jaxrs/
 	由于rest方式的请求url不同于普通http请求的url，需要提供一个模块处理标准http请求的处理(接受请求-调用接口-返回结果)
 		rest方式URI: persion/123		http方式: persion?id=123
 	
-	cloudengine运行是基于xuanyuan的一个组件，xuanyuan负责请求分配。
+	cloudengine 运行是基于xuanyuan的一个组件，xuanyuan负责请求分配。
 	
 	参考实现的文档，搭建测试环境测试，判断是否支持预想的解决方案。 - tip -
 
@@ -1795,7 +1803,7 @@ day11 Wednesday, March 28, 2012
 		逻辑就在task，jobproducer,abstract jobproducer中，定义自己的逻辑即可。
 			原有任务以task作为主流程控制，jobproducer抽象类及其实现定义了所有逻辑。抽象类提供公用逻辑或抽象方法统一逻辑。-tip-
 				取数据 - 存入数据库/文件(通过velocity映射对象集合(以appid为标识)存为文本) - push - 更新状态
-3. 实现
+3. 模拟实现
 	根据原有static模块任务设计
 		* 定义数据结构 pojo ,velocity模板(用于对象格式化持久化)
 			是否需要将此pojo作为对象查询？即某个查询直接返回此pojo，需要ibatis映射配置，这样只要查询一次关联几张表得到数据；或者分别查询在程序中处理。
@@ -1858,3 +1866,174 @@ day11 Wednesday, March 28, 2012
 			------
 		* 一些任务参数是否可以配置到配置文件中，类似abstract job producer的parentpath路径配置 比如：采集间隔，一些补偿机制参数 ？
 		* statistics_log表？
+		* app的类别区分是哪个字段(php,nodejs,jsp) ?
+			templetid?
+		* 用到的一些接口需要修改 ，通过的方式过少，是否可修改，其他地方是否有调用？
+			比如提供id数组查询。
+		* 应用运行时状态表
+			fastcgi_app_running_info
+			nginx_app_running_info
+			memcache_app_running_info
+			nodejs_app_running_info
+		* console与cloudengine不是同一项目，maven管理依赖，引入cloudengine的包？
+			自己重新写maping文件pojo及dao接口和实现。不依赖不相关系统。
+			在dao，model等模块加入对应代码。
+		* ibatis查询，可以根据外键设置关联查询，减少查询次数
+		* 由于是另外一个数据库，需要再配置数据源
+		* 在houyi-console-dao里写dao层用到pojo是static中的，是否把pojo，dao，service都按照模块放置，负责dao就要依赖到static中的pojo ？
+			static的model不直接提供dao，而是从其他数据组合而成。比如从appdao的查询记录里组合而成。
+		* 统计一个时间段的缓存使用量，如何取？暂定为求和
+		* 参考master的constant 包定义的常量，帮助了解一些业务知识
+			AppType 定义了应用的类型。php.nodejs...
+			app 的 language 属性定义apptype类型。
+		* 
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day12 Thursday, March 29, 2012
+
+1. go on 
+	新建maven project开发，独立功能
+	参考console的static模块，做成一个任务模块(业务，逻辑分离，易配置)
+	wiki地址：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=8259199
+	svn ：http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/trunk
+	web项目 or java进程(jar包main函数启动) or 作为一个组件部署（作为组件部署，有哪些要求，比如 cloudengine 在 xuanyuan 上运行）？
+	
+	* 导入需要的包
+	* 拷贝公用代码 工具类 等
+	* dao设计依据master，提供抽象dao实现namespace的spring配置
+	* 参考master用jtester测试
+		加入jtester依赖包 地址http://java-tester.googlecode.com
+		jtester 配置文件中 unitils.modules=database,dbunit,dbfit,inject,spring,tracer ，这里列出了需要的模块
+		编译测试，提示编译版本问题时，可以切换下jdk版本，并clean下project。
+		测试用例数据，参考master的：eg
+			@DbFit(when = {"AgentCheckResultDaoTest.testReadByAgentId.when.wiki"})
+		集成spring测试时，可能由于spring配置等问题导致maven test失败；可通过基本的main函数先保证spring的注入式正确的 -tip-
+		maven test + main method test
+		maven clean + eclipse project clean solve cmplile problems 
+	
+		如何自动生成测试用例 ？ ，对每个方法都手工去编写基础测试代码过于繁琐
+
+	*  wiki project描述
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day13 Friday, March 30, 2012
+
+1. ameasure-data project
+	job基础代码与业务代码分离，实现可配置。
+	* 配置maven插件,jar (以及插件的参数配置，jar执行main函数配置 etc - 参考maven jar插件说明：http://maven.apache.org/shared/maven-archiver/index.html)
+	* 测试报 Could not find Velocity resource: class path resource [VM_global_library.vm
+	* 配置maven插件 maven-assembly-plugin ,packaged with-dependencies 打包并加上依赖 ,配置assembly参数，比如jar分别打包，
+		打包时可能jar包文件重复，test目录下的测试文件也打包进来，配置一些参数即可，例如：
+			-----
+			...
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.2-beta-5</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<mainClass>com.aliyun.houyi.acecalc.Test</mainClass>
+							</manifest>
+						</archive>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
+					</configuration>
+					<executions>
+						<execution>
+							<id>make-assembly</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				(2)
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.2-beta-5</version>
+					<configuration>
+						<descriptors>
+							<descriptor>src/main/assembly/src.xml</descriptor>
+						</descriptors>
+						<archive>
+							<manifest>
+								<mainClass>com.aliyun.houyi.acecalc.StartTask</mainClass>
+							</manifest>
+						</archive>
+					</configuration>
+					<executions>
+						<execution>
+							<id>make-assembly</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" 
+				  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+				  <!-- TODO: a jarjar format would be better -->
+				  <id>with-dependencies</id>
+				  <formats>
+				    <format>zip</format>
+				  </formats>
+				  <includeBaseDirectory>false</includeBaseDirectory>
+				  
+				  <dependencySets>
+				    <dependencySet>
+				      <outputDirectory>/</outputDirectory>
+				      <useProjectArtifact>true</useProjectArtifact>
+				      <unpack>false</unpack>
+				      <scope>runtime</scope>
+				    </dependencySet>
+				  </dependencySets>
+				</assembly>
+			...
+			-----
+			打成上面这种jar包集合方式，在同一文件夹下运行即可，省去classpath配置的麻烦。
+
+		maven clean after close resource opened -tip-
+	* 加上shell执行脚本，调用此jar并执行
+	* 原有推送逻辑，一次job比如推50条，一条失败就退出，暂处理为本次任务再尝试推送(设定尝试次数)
+	*  ibatis 在命令行下运行找不到mapping文件，在eclipse下测试ok 原因？ 待  —— ibatis没问题，spring也ok，字体用的不好(大小写居然相似，
+		最后还是仔细看了错误输出，错误点才发现大小写)大小写错误，配置文件配置和实际文件大小写不一致！！！-tip-
+		如何避免：提示文件找不到，名称不匹配等等，首要看是否书写错误，能拷贝一定拷贝，不要手工输入，特变是在配置文件场合。 -tip-
+
+
+
+
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day14 Saturday, March 31, 2012
+
+1. measure-data
+	* 逻辑细化 command
+	* quartz ? cluster
+	* 任务测试
+		测试表 tasklog `statistics_log`
+			CREATE TABLE  `cloudengine`.`statistics_log` (
+			  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT '@desc 主键ID' ,
+			  `status` tinyint NOT NULL COMMENT '@desc 1', 
+			  `filename` varchar(128)  COMMENT '@desc filename',
+			  `task_time` datetime NOT NULL  COMMENT '@desc tasktime',
+			  `begin_time` datetime NOT NULL  COMMENT '@desc begin_time',
+			  `end_time` datetime NOT NULL  COMMENT '@desc end_time',
+			  `job_type` tinyint NOT NULL COMMENT '@desc 1', 
+			  PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			ALTER TABLE `statistics_log` MODIFY COLUMN `task_time` bigint(20) NOT NULL GO
+			测试数据：
+			 insert into statistics_log (status,filename,task_time,begin_time,end_time,job_type) values(1,'testname','1333168395627','2012-02-02 00:10:00','2012-02-02 00:1:00',3);
+			 insert into statistics_log (status,filename,task_time,begin_time,end_time,job_type) values(2,'testname','1333168395627','2012-02-02 00:10:00','2012-02-02 00:1:00',1);
+2. 
