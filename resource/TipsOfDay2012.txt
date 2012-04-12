@@ -15,9 +15,10 @@ google 检索 apache site:*.apache.org 高级搜索
 	insert into vip (host,port,gmt_create,gmt_modify)values('host3',80,'2012-12-12 00:00:00','2012-12-12 00:00:00'); //id为自增列
 	 select last_insert_id() as id from vip limit 1 
 
-
+Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * ide eclipse 文件夹上下关系 project property - build path -move
 	source folder ，设置源码包 build path - change to source folder
+	xml 标签自动提示，schema ，dtd定义正确即可
 * 简称
 	 业务运营支撑系统(BOSS) 
 	 弹性计算(Elastic Computing - EC) 
@@ -26,6 +27,16 @@ google 检索 apache site:*.apache.org 高级搜索
 	 云数据库服务(Cloud Database Service - CDS) 
 	 阿里邮箱(Ali Mail - AM) 
 	 开放表服务（Open Table Service - OTS）
+* 工具类
+	 apache commond 
+		StringUtils 
+		...
+* 协作
+	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
+
+* python
+	Zope - opensource appserver written by python
+
 * Google App Engine 
 		虽然GAE有很多限制和缺陷，但是我对GAE还是喜爱有加的。GAE是免费的，任何人都可以很轻松的通过GAE实现自己的Web应用。比如，做一些实用的小工具，
 	实现一个博客程序来练手。通过GAE，我们可以轻松的搭建属于自己的Blog(micolog)，搭建属于自己的Wiki系统(NancyWiki)。
@@ -34,8 +45,43 @@ google 检索 apache site:*.apache.org 高级搜索
 * powerdesigner  生成er图
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
-	
+* shell
+	- 根据参数执行任务shell
+		#!/bin/bash
+		if [ ! -n "$1" ]
+		then
+		    echo  "usage: $0 [insert|remove]";
+		    exit 1
+		fi
+		ACTION="$1"
+		case $ACTION in
+		    insert) echo "device inserted.";;
+		    remove) echo "device removed.";;
+		    *) echo "invalid option.";;
+		esac
+
+* linux
+linux shell命令中Esac是什么意思？
+一些刚刚接触bash编程的人，总是很奇怪bash里的一些关键字，知道它的功能，但不知道为什么要这样写。比如：
+#!/bin/bash
+if [ ! -n "$1" ]
+then
+    echo  "usage: $0 [insert|remove]";
+    exit 1
+fi
+ACTION="$1"
+case $ACTION in
+    insert) echo "device inserted.";;
+    remove) echo "device removed.";;
+    *) echo "invalid option.";;
+esac
+fi是if语句的结束，esac是case语句的结束。Fi和esac这样的关键字是不是很怪异呢？呵，仔细想一想，一点也不怪，考虑一下{} [] 等等，{和}是垂直轴对称的，[和]是垂直轴对称的。现在来看， if和fi及case和esac不也是这样吗？它们刚好反过，分别表示开始和结束。
+
+
 linux command eg 命令
+字符转换 unix字符 window字符
+unix2dos dos2unix
+
 SERVER=/home/user - 定义=号两边不能有空格
 
 将shell执行的pid保存到文件，读取文件中的pid关闭程序
@@ -191,6 +237,8 @@ kill `cat server.pid` -- 这里注意是波浪号 ，不是单引号
 		一些常用的基本命令:
 		uname -a    查看内核版本       
 		ls -al    显示所有文件的属性
+			-R, --recursive            list subdirectories recursively
+			ls -a -R 显示子目录文件
 		pwd         显示当前路径        
 		cd -    返回上一次目录     cd ~    返回主目录
 		date s      设置时间、日期          
@@ -209,6 +257,7 @@ kill `cat server.pid` -- 这里注意是波浪号 ，不是单引号
 		chmod      改变属性     chmod 777 install.log     read=4  write=2  execute=1
 		cp   复制   cp filename
 		rm   删除文件  rm -rf filename   强制删除文件 
+			rm -rf directory or file   -r或-R或--recursive 　递归处理，将指定目录下的所有文件及子目录一并处理。
 		rmdir   删除文件夹
 		mv  移动    mv 123.txt 222.txt  重命名
 		mkdir     创建文件夹  
@@ -624,6 +673,8 @@ day1 2012年3月14日
 		-Dosgi.requiredJavaVersion=1.5
 		-Xms128m
 		-Xmx256m	
+
+		ide eclipse 依赖 ，依赖从上到下配置，上面不对会导致下面的类编译报错。
 
 2. svn 
 	wiki http://wiki.houyi.alibaba-inc.com/dashboard.action
@@ -1756,6 +1807,8 @@ day10 Tuesday, March 27, 2012
 
 3. 表说明
 	region - 代表一个集群
+测试环境 mysql
+mysql -h10.249.153.1 -ucloudengine -pcloudengine2011 -Dcloudengine
 
 
 
@@ -2144,4 +2197,333 @@ shell 下java程序控制：
 	* 启动的时候将shell脚本的PID记录到文件里面，然后关闭的时候就可以直接读文件获取PID，避免用ps查询了，有可能不准确的 
 	echo $! > $SERVER/server.pid
 
+2. mvn test package etc 配置好资源文件 如 -tip-
+	<resource>
+	<directory>src/main/resource</directory>
+	<filtering>true</filtering>
+	<includes>
+		<include>**/*.xml</include>
+		<include>*.properties</include>
+	</includes>
+	</resource>
+
+	<resource>
+	<directory>src/test/resource</directory>
+	<filtering>true</filtering>
+	<includes>
+		<include>**/*.wiki</include>
+		<include>**/*.xml</include>
+		<include>*.properties</include>
+	</includes>
+	</resource>
+	上面，加载包括main和test下的所有配置文件(部分子目录下的文件)。
+mvn test生成的报告会说明失败原因，依据错误解决问题。
+maven test failure —— 错误报告会告知哪里导致错误，一步步检查 cause 即可。另，test等都是依据pom的配置执行的，pom的配置要细心。
+3. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day16 Friday, April 06, 2012
+
+1. test 抽象类(实现方法，测视类中静态内部类继承) ，私有方法（反射）
+
+2. Cron expressions  ,quartz
+	
+
+3. acecalc
+	* 任务第一次执行时，采集时间点的确定，根据app的创建日期为起点开始采集？
+		自动查询数据库得出 or 配置文件配置初始抽取时间点 or 两者都支持
+	* 
+
+4. MS 改为 OMS 参看其文档
+	开放计量服务(OMS)的数据模型包括以下几个概念:
+		 Object
+		 Domain
+		 Accessid
+		 Accesskey
+	上面观念划分，体现了OMS的REST服务方式。
+	
+	推送数据格式：
+		* Date 目前Date只支持GMT格式，具体的GMT格式可参考如下示例:
+			Wed, 30 Aug 1991 09:13:05 GMT
+			更多关于GMT时间格式的信息，请参考RFC|1123
+		* 
+		
+5. 
+cpu
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day17 Monday, April 09, 2012
+
+1. 新OMS提交修改
+
+2. 访问次数 pv 所在表
+	nginx_app_abstract_running_info 
+	nginx_app_running_info
+3. 推送测试环境 ？ OMS测试环境提供推送测试
+	测试推送逻辑
+demo http://svn.simba.taobao.com/svn/Apsara/openapi/trunk/java/src/com/aliyun/openservices/oms/
+
+	uri：http://10.230.201.85:8080/ACE_RAW
+	accessid: rot1d0cc9bxp97vpcwjyo98o
+	accesskey: 0GC/ahEtRiNReKA1NhuNimJ2b3A
+
+	* 推送格式改为xml
+	* 请求头变化
+	
+	加好各种header后，进行签名，带上content 发送请求。
+
+	
+	临时文件名，取名时需要考虑2个或2个以上操作发生在同一秒内的情况。
+
+	403 签名错误 ，
+	400 非法参数 InvalidParameterValue <Message>unsuported content-type</Message>
+	* put内容的字段变化了 原来的uid，改为3个分开：
+		eg:
+			#foreach ($data.value in $datasMap.entrySet())
+			   <Object><uid>default</uid><pid>ace</pid><bid>aliyun</bid><inst_id>$data.value.appId</inst_id><time>$data.value.startTime</time><cpu_acc_usage>$data.value.cpuAccUsage</cpu_acc_usage><memcache_size>$data.value.memcacheSize</memcache_size><req_count>$data.value.reqCount</req_count><lb_id>$!data.value.lbId</lb_id><version>$data.value.version</version><end_time>$data.value.endTime</end_time></Object>
+			#end
+	 * OMS client的get方法，查询测试用。
+		查询OMS
+	main test 输出：
+		{response=<?xml version="1.0" encoding="UTF-8"?>
+		<Error>
+		<Code>AuthFailure</Code>
+		<Message>cannot authenticate user</Message>
+		<RequestID>41e3d2b9-31d0-2c4f-493b-e4635bff819b</RequestID>
+		</Error>
+		, status=403}
+
+4. mem_size 暂取为某个计量时间段内的平均值 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day18 Tuesday, April 10, 2012
+
+1. 
+	* oms get测试 - pass
+	* 一次put多个object测试
+	* 启动，关闭脚本修改 
+	* 计量值多数据测试，统计的sql是否存在问题，大数据计算精度问题
+	* 某些job中app并没有产生任何数据是否应该抛弃，不推送到OMS上，导致的问题是，在某个时间点或者区间查询时导致没有数据。？
+	* quartz 挂起api ，正常停止任务，不建议job执行时强制关闭进程（程序逻辑需要处理这种例外）
+	* 运行jar的配置文件独立到jar外面便于配置 
+		通过spring配置加载外部配置文件。
+			spring配置文件也配置在外部(不在classpath上)，spring提供了org.springframework.context.support.ClassPathXmlApplicationContext 以加载classpath之外的配置文件。外部配置文件 -tip-
+		log4j提供的配置文件设置类 org.apache.log4j.xml.DOMConfigurator ，可以设置定时检查配置文件修改并重新加载配置。在main函数里初始化如下：
+			String log4jfile = System.getProperty("user.dir") +File.separator +"config"+ File.separator +"log4j.xml";
+			DOMConfigurator.configure(log4jfile);
+		配置文件改为：
+			spring和properties文件都移到jar外面，ibatis配置文件还是在jar包中。
+			问题是，maven如何打包时，把config文件夹拷贝一份和包在同目录下？ assembly ？
+			改为：
+				配置文件只把关键的 log4j,job,jdbc 等放在jar外面加载，其他进jar包。
+			shell 脚本需要在bin目录下运行，否则有配置文件找不到等错误 -tip- ，如何优化shell脚本
+	* 拿到真实环境的相关数据库表机构，是否与本机一致？比如statistics_log表
+	
+
+2.  oms get测试
+
+	已push成功的待查询测试数据：
+		<?xml version="1.0" encoding="UTF-8"?>
+		<Objects>   
+			<Object>
+				<uid>default</uid>
+				<pid>ace</pid>
+				<bid>aliyun</bid>
+				<inst_id>1</inst_id>
+				<time>1334019600</time>
+				<cpu_acc_usage>0</cpu_acc_usage>
+				<memcache_size>0</memcache_size>
+				<req_count>0</req_count>
+				<lb_id></lb_id>
+				<version>1</version>
+				<end_time>1334023200</end_time>
+			</Object>
+		</Objects>
+	get查询请求参数：
+		"GET /ACE_RAW HTTP/1.1[\r][\n]"
+		"Authorization: OMS rot1d0cc9bxp97vpcwjyo98o:yqb7kFIP3prg8z0x4gw5T4lnXEw=[\r][\n]"
+		"Date: Tue, 10 Apr 2012 02:15:30 GMT[\r][\n]"
+		"x-oms-filter: time=1334019600[\r][\n]"
+		"x-oms-select: uid;pid;bid;inst_id;time;cpu_acc_usage;memcache_size;req_count;lb_id;version;end_time[\r][\n]"
+		"User-Agent: Jakarta Commons-HttpClient/3.1[\r][\n]"
+		"Host: 10.230.201.85:8080[\r][\n]"
+		"[\r][\n]"
+
+	返回成功信息：
+		"HTTP/1.1 200 OK[\r][\n]"
+		"Date: Tue, 10 Apr 2012 02:15:31 GMT[\r][\n]"
+		"Server: Apache/2.2.17 (Unix)[\r][\n]"
+		"Content-Length: 322[\r][\n]"
+		"Content-Type: text/xml;charset=UTF-8[\r][\n]"
+		"[\r][\n]"
+		"<?xml version="1.0" encoding="UTF-8" ?>
+		<Objects>
+			<Object>
+				<uid>default</uid>
+				<pid>ace</pid>
+				<bid>aliyun</bid>
+				<inst_id>1</inst_id>
+				<time>1334019600</time>
+				<cpu_acc_usage>0</cpu_acc_usage>
+				<memcache_size>0</memcache_size>
+				<req_count>0</req_count>
+				<lb_id>0</lb_id>
+				<version>1</version>
+				<end_time>1334023200</end_time>
+			</Object>
+		</Objects>"
+
+	注：上面put的数据与get返回的数据 lb_id由空变为了0，这是OMS对某些字段如果空会置默认值的逻辑。
+
+	uid+time
+	uid+pid+bid+inst_id+time
+	目前就这两个你有权限查
+	
+	domain没有操作权限：
+		<?xml version="1.0" encoding="UTF-8"?>
+		<Error>
+		<Code>AuthFailure</Code>
+		<Message>cannot authorize user</Message>
+		<RequestID>7a44a74b-211a-fda1-68b6-7f5907108b41</RequestID>
+		</Error>	
+	查询条件错误：
+		<?xml version="1.0" encoding="UTF-8"?>
+		<Error>
+		<Code>InvalidQueryExpressison</Code>
+		<Message>query condition not match any dimension</Message>
+		<RequestID>66a00276-6ad9-d94f-1bf7-db7f0c4830ba</RequestID>
+		</Error>	
+3. 部署  程序运行目录定义说明（配置简单操作为好）
+		bin - 放运行脚本
+		build - 放编译脚本(svn下载，maven构建，部署到设定的目录(到bin,lib,config))
+		config - 存放配置文件(log4j,job等的配置文件)
+		lib - jar文件
+		logs - 日志
+
+		操作从调用build下的脚本开始执行。
+		build下放置build好的文件，如何deploy脚本将build好的文件分别部署到相应的目录中去。
+		bin下的启动脚本需要在bin当前目录下运行，否则报配置文件找不到？
+
+4. sh -x xx.sh 查看
+	脚本可能因为隐藏字符导致错误，执行时 -x 查看即可。
+5. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day19 Wednesday, April 11, 2012
+
+1. 
+	执行过程中断处理
+	那些数据时不用推送的，比如某个时间段都没有产生数据（这压缩数据交给oms？）
+
+
+2. shell 执行路径问题  shell 必须在当前路径执行，否则路径错误 ，解决？【 spring加载资源文件路径 ，类路径，外部路径 配置路径 路径设置 改变工作目录 当前路径】
+	关键：cd 命令，设置当前路径 
+	#!/root/bash
+	echo `pwd`
+	current_dir=$(cd "$(dirname "${0}")";pwd)
+	echo $current_dir
+	
+	pwd会因为执行路径不同而变化，current_dir可以取到shell所在路径。 
+
+	但对于没有动态调用 user.dir 找到classpath之外资源路径的情况，可以在非shell所在目录执行时，在shell里cd到所在base目录，这样
+	后续java加载取值时，取得就是cd后的路径。-tip-
+
+	shell执行时，指定java系统参数 user.dir 即可 ，即指定java执行时用户当前目录为程序所在主目录（base目录，其子目录有lib，bin等等）。-tip-
+	通过java命令的 -D 参数指定 user.dir ,结合程序逻辑，指定资源文件等的路径path。
+		String log4jFile = System.getProperty("user.dir") + File.separator + "config"+ File.separator +"log4j.xml";
+		-----
+		...
+			#!/bin/bash
+			BIN_DIR=$(cd "$(dirname "${0}")";pwd)
+			BASE_DIR=`dirname $BIN_DIR`
+			LIB_DIR=$BASE_DIR/lib
+			LOG_DIR=$BASE_DIR/logs
+			#set for java to load resource
+			USER_DIR=$BASE_DIR
+			JAR_NAME=houyi-measuredata-all-0.0.1.jar
+			if [ ! -n "$1" ]
+			then
+			    echo  "usage: $0 [insert|remove]";
+			    exit 1
+			fi
+			ACTION="$1"
+			case $ACTION in
+			    start)
+				cd $BASE_DIR # 转到程序需要的工作路径，比如需要此路径来加载资源文件，spring里从外部文件加载的资源文件相对此$BASE_DIR取路径即可。
+				java -Xms64M -Xmx256M -Duser.dir=$USER_DIR -jar $LIB_DIR/$JAR_NAME > $BIN_DIR/server.log 2>&1 &
+				echo $! > $BIN_DIR/server.pid
+				;;
+			    stop)
+				kill `cat $BIN_DIR/server.pid`
+				rm -rf $BIN_DIR/server.pid
+				;;
+			    *)
+				echo  "invalid option ,usage: $0 [insert|remove]";
+				;;
+			esac
+
+			exit 0
+		...
+		-----
+		通过 -Duser.dir=xxx 设置user.dir参数好
+
+		执行路径，相对路径 ，程序默认读当前路径，执行路径时，在shell可以 cd 到所需要的当前路径(工作路径)，再执行即可。
+		
+3. svn 提交 eclipse ，还是用svn客户端 
+	eg: TortoiseSVN   
+		check for modification - revert  
+	可以用客户端管理版本，eclipse只负责项目开发。 不同svn客户端交叉用可能出错误。
+	svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/trunk 
+	username
+	password
+4. 从svn下载到maven编译到部署运行 ，整个的脚本
+	svn取到项目源码
+	mvn 构建
+		不同机子上构建时依赖可能出现的问题：
+			Error transferring file: Connection refused
+			Specified destination directory cannot be created: /usr/ali/maven/repository/org/slf4j/slf4j-api/1.5.6 - maven库没有添加jar权限，改为已有的版本绕过
+				eg: ls /usr/ali/maven/repository/org/slf4j/slf4j-api
+
+
+5. 部署说明文档 (测试，部署人员依据此文档操作)
+	* 从10.250.8.214机子上拷贝目录measure(/home/admin/measure)到目标机/home/admin目录下，进入该目录 (编译机和运行机都采用上面的目录结构)
+	* 执行bulid 目录中的build.sh构建
+	* 然后执行build目录下的deploy.sh部署
+	* 再执行bin目录下的execute.sh启动和关闭程序，用法如下：
+		execute.sh start - 启动程序
+		execute.sh stop - 关闭程序
+	目录结构说明：
+		measure
+			- bin 包含执行程序的脚本 execute.sh ，shell执行日志文件server.log,程序的的pid备份server.pid
+			- build 包含构建和部署脚本build.sh,deploy.sh
+			- config 包含程序配置文件log4j，job，jdbc的属性配置
+			- logs 程序执行日志
+			- src 存放源码
+				- target 打包后的文件(zip)
+
+6. maven换其他环境编译时，依赖找不到解决，看错误日志找到依赖找不到的原因，一般即可解决
+
+7.  shell 脚本  ,字符不认识问题 ，在windows下的文本，通过ssh工具拷贝到linux中后，不能正常执行命令。可能是字符编码或者异常特殊符号(;/r)等问题，可在linux下
+新建shell解决，拷贝的一般都有问题。
+
+或者，是因为使用的ssh客户端没设置好，传输时编码问题？从svn下载下来的shell(原在windows下创建)都不能正常执行。 -tip-
+
+原因：unix，dos 字符间需要转换 
+	xxx@xxx$ uni
+		unicode_start  unicode_stop   uniq           unix2dos       unix_chkpwd
+	dos2unix
+
+8. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ unix2dos dos2unix
+day20 Thursday, April 12, 2012
+
+1.  
+
 2. 
+	ls -R 
+	shell判断文件是否存在，再做后续操作
+		if [ -f urfile ]  then
+			./a.sh   
+		fi
