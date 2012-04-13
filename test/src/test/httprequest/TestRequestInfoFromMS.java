@@ -38,6 +38,13 @@ public class TestRequestInfoFromMS {
             propertys.put("WHERE", "openid,default; pid, oss; bid, 1640626172861173; begin_time, 1331179200;end_time, 1331182800;inst_id,migrate-win2003-vifs");// inst_id,migrate-win2003-vifs ?缺少这个请求错误
             */
             
+            /* OMS */
+            String url4 = "http://10.230.201.85:8080/ACE_RAW";
+            propertys.put("HOST", "service.oms.aliyun.com");
+            propertys.put("Data", "");
+            propertys.put("Authorization", "");
+            propertys.put("Content-Type", "utf-8");
+            
             HttpRespons hr = request.sendGet(url2, null, propertys);            
             System.out.println("---------- response ---------");
             System.out.println("url\t\t= "+hr.getUrlString());   

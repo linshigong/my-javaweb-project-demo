@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Objects>
+	<Object>
+		<uid>default</uid>
+		<pid>ace</pid>
+		<bid>aliyun</bid>
+		<inst_id>3</inst_id>
+		<time>1334116800</time>
+		<cpu_acc_usage>0</cpu_acc_usage>
+		<memcache_size>0</memcache_size>
+		<req_count>0</req_count>
+		<lb_id>0</lb_id>
+		<version>1</version>
+		<end_time>1334120400</end_time>
+	</Object>
+</Objects>
