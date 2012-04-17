@@ -47,6 +47,34 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	web项目(eg:webx3.0项目)
 		- 比如 group id 为 org.apache.maven.archetypes 下有多种Archetype。如何自定义Archetype？
 		- 还有pom文件中必须引入servlet，jsp的相关jar包，scope设置为provided，表示它们最终不会打包到war项目中
+	- mvn -Dmaven.surefire.debug=true -Dtest=OpenApplicatonControllerTest test
+	- maven test 
+		test 时需要debug，可以利用测试插件提供的方法，结合ide(eclipse)进行debug
+			比如： Surefire Plugin 测试环节的插件，支持test时，进行debug ，下面为maven的官网说明摘取：
+				Forked Tests
+					By default, Maven runs your tests in a separate ("forked") process. You can use the maven.surefire.debug property to debug your forked tests remotely, like this:
+						mvn -Dmaven.surefire.debug test	
+					The tests will automatically pause and await a remote debugger on port 5005. You can then attach to the running tests using Eclipse. You can setup a "Remote Java Application" 
+				launch configuration via the menu command "Run" > "Open Debug Dialog..."
+					If you need to configure a different port, you may pass a more detailed value. For example, the command below will use port 8000 instead of port 5005.
+						mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -Xnoagent -Djava.compiler=NONE"  test
+				Non-forked Tests
+					You can force Maven not to fork tests by configuring the forkMode configuration parameter.
+						mvn -DforkMode=never test
+					Then all you need to do is debug Maven itself. Since Maven 2.0.8, Maven has shipped with a "mvnDebug" shell script that you can use to launch Maven with convenient debugging options:
+					mvnDebug -DforkMode=never testThen you can attach Eclipse to Maven itself, which may be easier/more convenient than debugging the forked executable.
+				上面这段：	
+					The tests will automatically pause and await a remote debugger on port 5005. You can then attach to the running tests using Eclipse. You can setup a "Remote Java Application" 
+					launch configuration via the menu command "Run" > "Open Debug Dialog..."
+				说明如何通过eclipse来进行maven的debug调试。-tip-
+				mvn -Dmaven.surefire.debug test  //maven debug
+	- maven添加jar到本地库
+		mvn install:install-file -DgroupId=com.sun.jersey -DartifactId=jersey-servlet -Dversion=1.12 -Dfile=jersey-servlet-1.12.jar -Dpackaging=jar -DgeneratePom=true
+	- maven jar包重复问题，可通过
+		mvn dependency:tree 查看依赖关系。
+		配置的jar包，如果存在其他依赖，且jar包里有依赖配置文件，会自动下载附带依赖，不同的jar就可能依赖同一个jar的不同版本导致重复。
+		对于有依赖描述的jar包，只需加入此jar即可，不要再去定义它的依赖。
+		只定义用到的关键jar，至于jar的附带依赖让maven管理，若maven不能管理，再去手动添加依赖。
 * 工具类
 	 apache commond 
 		StringUtils 
@@ -2627,3 +2655,140 @@ day21 Friday, April 13, 2012
 	-------
 	前提 memcache_agent_id 与 app_id 为一对一或多对一的关系。
 5. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day22 Monday, April 16, 2012
+
+1. 
+	* 根据mast提供的service和jce openapi ,设计一个供openapi调用，处理普通get,put方式的rest服务。
+		目标：此服务通过master提供的接口，实现jce openapi提供的接口服务(比如创建app,删除app等等)
+			请求的验证，master在提供的service调用里已有处理，故此服务只根据请求的action定位到service，传递参数。
+		
+	* wiki 添加ace计量sql语句供review
+		- app_id查询时应该不带状态，如果只取已部署的app，可能导致部分app运行数据丢失
+		- memcache 计算sql语句错误，app_id和memcache上报agentId是多对多关系。
+			
+	* ace的部署方式，加上先从svn下载默认目录结构(包含build部署，执行脚本)，然后执行build进行build,然后deploy，最后execute
+		这样，部署ace计量程序步骤如下：
+			a. 在有写权限的临时路径下执行
+				svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/deploy-env			
+			b. 进入上面checkout下来的目录(deploy-env)，找到measure目录，将其拷贝到/home/admin/measure目录下(若没有此目录则新建，若重名就另外取目录名亦可)
+				cd deploy-env
+				cp -r measure /home/admin/measure
+			c. 进入 /home/admin/measure 目录
+				cd /home/admin/measure
+			d 执行构建脚本
+				sh build/build.sh
+			e 执行部署脚本
+				sh build/deploy.sh
+			f 执行启动服务脚本
+				sh bin/execute.sh
+
+2. master的rest对openapi，
+提供一个rest service接受所有openapi请求，内部通过一个方法接受所有请求并解析后调用对应action，service处理。
+
+jce的openapi调用文档 —— 据此文档解析请求，调用jce master提供的service
+
+
+3. ots
+	http://10.230.202.44/GetMetricData?UserId=1&MetricName=summary&BeginTime=0&EndTime=1340000000
+
+4.maven debug
+	mvn -Dmaven.surefire.debug test
+	在ide，比如eclipse上配置远程debug(remote java application)，通过socket来debug。
+	通过所使用的maven测试插件自带说明来配置debug，文档最清楚 -tip-
+
+	运行上面maven命令后，再到eclipse配置debug run 为remote java application等配置，执行debug即可进入远程debug模式。
+5. jce openapi
+	根据请求的action的不同，分发到各自的function去处理，如何去分发？
+		通过反射？
+			定义acton与方法的的对应关系,比如以属性文件方式配置
+			根据action通过反射调用service的方法
+		还是自定义注解解析请求uri的方式？
+			参考Spring MVC ，提供了完全基于注解的配置
+				参考：http://www.cnblogs.com/sunwei2012/archive/2010/05/11/1732518.htm
+					http://www.infoq.com/cn/articles/cf-java-annotationl
+	* jce日志接口调用
+		query_app_log这个接口的type类型，应用的日志是在ols(open log service)服务 里获取的
+		
+6. 自定义 annotation 实现元数据配置 ，自定义注解
+	* 定义action注解
+		actionName - 请求的action名称
+		parms - 对应action所需要的参数(这里每个action参数不一致，引出下面的问题)
+			需要rest提供一种方式，可以取到比较原始的请求消息，可以进行自定义再处理，而不是在rest方法里定义好
+		需要取那个参数。？
+	* 通过注解，由于每个jec open api的请求参数不同，所有需要根据rest规范，得到请求的所有参数，
+	参考了sum的RESTfulWeb Services Developer'sGuide(p26)，可以通过context注解来注入请求上下文内容，
+	从而获得所有请求参数。再匹配到对应的action取到各自的参数，调用service执行逻辑。-tip-
+		----
+		...
+			Form parameters (indicated by decorating the parameter with javax.ws.rs.FormParam)
+			extract information from a request representation that is of the MIME media type
+			application/x-www-form-urlencoded and conforms to the encoding specified by HTML
+			forms, as described here. This parameter is very useful for extracting information that is
+			POSTed by HTML forms. The following example extracts the form parameter named "name"
+			from the POSTed form data.
+			@POST
+			@Consumes("application/x-www-form-urlencoded")
+			public void post(@FormParam("name") String name) {
+			// Store the message
+			}
+			If it is necessary to obtain a general map of parameter names to values, use code such as that
+			shown in the following example , for query and path parameters.
+			@GET
+			public String get(@Context UriInfo ui) {
+			MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+			MultivaluedMap<String, String> pathParams = ui.getPathParameters();
+			}
+			Or code such as the following for header and cookie parameters:
+			@GET
+			public String get(@Context HttpHeaders hh) {
+			MultivaluedMap<String, String> headerParams = hh.getRequestHeaders();
+			Map<String, Cookie> pathParams = hh.getCookies();
+			}
+			In general @Context can be used to obtain contextual Java types related to the request or
+			response.
+			For form parameters it is possible to do the following:
+			@POST
+			@Consumes("application/x-www-form-urlencoded")
+			public void post(MultivaluedMap<String, String> formParams) {
+			// Store the message
+			}
+		...
+		-----
+		先看了注解源码说明，再依据文档。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day23 Tuesday, April 17, 2012
+
+1. 
+	* 通过 rest  的规范中的 @context 注解来取得请求参数，传递给其他函数处理
+		action映射在启动时初始化好。
+	* jce openapi
+	接口文档里面提到的一些param 字符串需要你这边把输入参数转换为json。
+		转换的内容在 com.aliyun.cloudengine.model.opeanapi 下，里面以Param结尾的类定义
+		siteId是之前跟王永生约定好的，调用方的标识ID
+	- com.aliyun.cloudengine.service.openapi.OpenApiFacadeService(定义在spring-base-service.xml中) 处理openapi请求
+		需要将请求参数转换为json格式传递
+	- 日志查询需要用到ols ？待
+		集合jce openapi文档参考ols文档
+		关于ACE OpenAPI的日志查询接口说明
+			1、操作接口是query_app_log，日志类型是manipulateLog和appRunningLog 
+			2、以上两种类型的日志需要通过OTS获取，其他类型的通过调用master接口获取
+			3、测试环境调用地址：curl 'http://10.230.202.44/GetMetricData?UserId=1&MetricName=summary&BeginTime=0&EndTime=1340000000'
+			4、具体的调用可参见《开放日志服务接口文档.docx》
+
+2. maven添加jar到本地库
+	mvn install:install-file -DgroupId=com.sun.jersey -DartifactId=jersey-servlet -Dversion=1.12 -Dfile=jersey-servlet-1.12.jar -Dpackaging=jar -DgeneratePom=true
+	from:http://blog.sina.com.cn/s/blog_4b81125f0100ifnm.html
+3. maven jar包重复问题，可通过
+	mvn dependency:tree 查看依赖关系。
+	配置的jar包，如果存在其他依赖，且jar包里有依赖配置文件，会自动下载附带依赖，不同的jar就可能依赖同一个jar的不同版本导致重复。
+	对于有依赖描述的jar包，只需加入此jar即可，不要再去定义它的依赖。
+	只定义用到的关键jar，至于jar的附带依赖让maven管理，若maven不能管理，再去手动添加依赖。
+
+	若还是冲突，修改scope为provided，或者通过exclusions来处理。
+4. 关于ace计量pv
+	nginx_app_abstract_running_info 中的pv包含静态和动态之和； nginx_app_running_info 中的pv只为静态请求次数
+
