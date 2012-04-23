@@ -24,9 +24,18 @@ google 检索 apache site:*.apache.org 高级搜索
 	 select last_insert_id() as id from vip limit 1 
 
 Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
-* ide eclipse 文件夹上下关系 project property - build path -move
-	source folder ，设置源码包 build path - change to source folder
-	xml 标签自动提示，schema ，dtd定义正确即可
+* ide 
+	- eclipse 文件夹上下关系 project property - build path -move
+		source folder ，设置源码包 build path - change to source folder
+		xml 标签自动提示，schema ，dtd定义正确即可
+		类似aqua data studio 通过快捷键查看表结构；通过 CTRL+T 快捷键查看类型的结构(实现，继承等)
+* php 
+	 Discuz
+* 测试
+	* jtester
+		- 测试框架，提供了各种测试方式及支持，比如mock，通过反射测试私有类等的工具JTesterReflector ，完整的去用一个测试框架。阅读其说明文档
+		- 提供集成测试支持(如数据库等)
+
 * 简称
 	 业务运营支撑系统(BOSS) 
 	 弹性计算(Elastic Computing - EC) 
@@ -70,11 +79,28 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 				mvn -Dmaven.surefire.debug test  //maven debug
 	- maven添加jar到本地库
 		mvn install:install-file -DgroupId=com.sun.jersey -DartifactId=jersey-servlet -Dversion=1.12 -Dfile=jersey-servlet-1.12.jar -Dpackaging=jar -DgeneratePom=true
+		添加源码到本地库 添加source
+		 mvn install:install-file -DgroupId=org.apache.velocity -DartifactId=velocity -Dversion=1.6.2 -Dpackaging=jar -Dfile=velocity-1.6.2-sources.jar -DgeneratePom=true -Dclassifier=sources 
 	- maven jar包重复问题，可通过
 		mvn dependency:tree 查看依赖关系。
 		配置的jar包，如果存在其他依赖，且jar包里有依赖配置文件，会自动下载附带依赖，不同的jar就可能依赖同一个jar的不同版本导致重复。
 		对于有依赖描述的jar包，只需加入此jar即可，不要再去定义它的依赖。
 		只定义用到的关键jar，至于jar的附带依赖让maven管理，若maven不能管理，再去手动添加依赖。
+		上面如果没效果：
+			通过定义 <dependencyManagement> 来自己管理依赖版本，然后再引用来解决 .work well.
+	- maven source:jar 打源码包
+	- maven test时一种错误
+	需要强制转换。
+	- maven构建时报内存溢出解决
+		 Windows环境中 
+			找到文件%M2_HOME%\bin\mvn.bat	
+			set MAVEN_OPTS= -Xms128m -Xmx512m
+			E:\test>mvn -version
+			E:\test>set MAVEN_OPTS= -Xms128m -Xmx512m
+		Linux环境中 
+			也可以通过设置环境变量解决该问题， 如，编辑文件 /etc/profile 如下
+			MAVEN_OPTS=-Xmx512m
+			export JAVA_HOME MAVEN_HOME MAVEN_OPTS JAVA_BIN PATH CLASSPATH
 * 工具类
 	 apache commond 
 		StringUtils 
@@ -109,21 +135,65 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		esac
 
 * linux
-linux shell命令中Esac是什么意思？
-一些刚刚接触bash编程的人，总是很奇怪bash里的一些关键字，知道它的功能，但不知道为什么要这样写。比如：
-#!/bin/bash
-if [ ! -n "$1" ]
-then
-    echo  "usage: $0 [insert|remove]";
-    exit 1
-fi
-ACTION="$1"
-case $ACTION in
-    insert) echo "device inserted.";;
-    remove) echo "device removed.";;
-    *) echo "invalid option.";;
-esac
-fi是if语句的结束，esac是case语句的结束。Fi和esac这样的关键字是不是很怪异呢？呵，仔细想一想，一点也不怪，考虑一下{} [] 等等，{和}是垂直轴对称的，[和]是垂直轴对称的。现在来看， if和fi及case和esac不也是这样吗？它们刚好反过，分别表示开始和结束。
+	-   $# 是传给脚本(或者函数)的参数个数, $0 是脚本本身的名字, $@ 是传给脚本(或者函数)的所有参数的列表. 举例:
+
+                  QUOTE:
+                  -(dearvoid@LinuxEden:Forum)-(~/tmp)-
+                  [15889 0] ; cat foo.sh
+                  #!/bin/bash
+
+                  echo "script name   : $0"
+                  echo "# of arguments: $#"
+                  echo "all arguments : $@"
+                  echo "arguments in order:"
+                  for sArg in "$@"; do
+                      echo "  $sArg"
+                  done
+                  -(dearvoid@LinuxEden:Forum)-(~/tmp)-
+                  [15889 0] ; ./foo.sh aa bb cc
+                  script name   : ./foo.sh
+                  # of arguments: 3
+                  all arguments : aa bb cc
+                  arguments in order:
+                    aa
+                    bb
+                    cc
+                  -(dearvoid@LinuxEden:Forum)-(~/tmp)-
+                  [15889 0] ; ./foo.sh aa "bb cc" dd
+                  script name   : ./foo.sh
+                  # of arguments: 3
+                  all arguments : aa bb cc dd
+                  arguments in order:
+                    aa
+                    bb cc
+                    dd
+                  -(dearvoid@LinuxEden:Forum)-(~/tmp)-
+                  [15889 0] ; bye
+
+
+                  付：
+                    $0   这个程式的执行名字       
+                    $n   这个程式的第n个参数值，n=1..9       
+                    $*   这个程式的所有参数       
+                    $#   这个程式的参数个数       
+                    $$   这个程式的PID       
+                    $!   执行上一个背景指令的PID       
+                    $?   执行上一个指令的返回值
+	- linux shell命令中Esac是什么意思？
+		一些刚刚接触bash编程的人，总是很奇怪bash里的一些关键字，知道它的功能，但不知道为什么要这样写。比如：
+		#!/bin/bash
+		if [ ! -n "$1" ]
+		then
+		    echo  "usage: $0 [insert|remove]";
+		    exit 1
+		fi
+		ACTION="$1"
+		case $ACTION in
+		    insert) echo "device inserted.";;
+		    remove) echo "device removed.";;
+		    *) echo "invalid option.";;
+		esac
+		fi是if语句的结束，esac是case语句的结束。Fi和esac这样的关键字是不是很怪异呢？呵，仔细想一想，一点也不怪，考虑一下{} [] 等等，{和}是垂直轴对称的，[和]是垂直轴对称的。现在来看， if和fi及case和esac不也是这样吗？它们刚好反过，分别表示开始和结束。
 
 
 linux command eg 命令
@@ -2792,3 +2862,156 @@ day23 Tuesday, April 17, 2012
 4. 关于ace计量pv
 	nginx_app_abstract_running_info 中的pv包含静态和动态之和； nginx_app_running_info 中的pv只为静态请求次数
 
+5. http状态表示 ，状态常量定义 
+	import org.apache.commons.httpclient.HttpStatus;
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day24 Wednesday, April 18, 2012
+
+1. 
+	* jce open api
+		- jce接口中的site_id就是jce请求的site_user_id ?site_id不是用户调用jce open apisite_user_id这个site_id表示阿里云，万网或是其他的id标识，可以
+		   到app表取到(注意：目前取app表的user_id作为site_id,后续会废弃user_id改为app表的site_id的值)这个site_id在到openapi处理时已经附加在用户请求中了
+		   参考 产品线接入Open API规范说明_v0.2
+		- 由于线上cloudengine的库表结构和最新开发的库表结构可能不一致，从trunk上拿线上版本的表，再测试下 ？
+			包括相关的mapping文件pojo等
+		- ace计量bid定为26842，测试时用的aliyun
+		- 测试oms时，可以到ace_calc_struct.xml把生成数据替换为测试数据测试
+		- jce sevice接口调用参数改为传递对象方式，原为json
+	* ace计量
+		- 对于没有任何app的情况，跳过不处理。
+
+2. firefox 能正确显示json格式，ie8却不能处理 ？
+	即content-type = application/json时ie8不认识，不会处理。
+	查看ie8支持的媒体类型：
+
+3. 通过注解anotation配置映射信息 ,取代配置文件实现元数据配置。
+	------
+	...
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		public @interface OpenAction {
+			
+			String actinName();
+			String[] paramNames();
+			
+		}	
+	...
+	------
+4. mysql 
+	不同版本统计函数返回的数据类型也是不一致的，
+
+5. jce openapi 日志
+	日志类型,manipulateLog、accessLog、jettyRunningLog、appRunningLog
+		其中，manipulateLog和appRunningLog类型日志从OLS服务获取，accessLog、jettyRunningLog调用master接口获取。
+
+	OLS测试地址：
+		curl 'http://10.230.202.44/GetMetricData?UserId=1&MetricName=summary&BeginTime=0&EndTime=1340000000'	
+		服务位置：http://ols.aliyun-inc.com
+6. 测试时从类相同路径加载资源文件
+	this.getClass().getResourceAsStream("JobServiceImplTest.testPushRequest.xml");
+	加载资源的方法有多种，下面摘自网络小节：
+			------
+				Java中getResourceAsStream的用法
+				首先，Java中的getResourceAsStream有以下几种： 
+				1). Class.getResourceAsStream(String path) ： path 不以’/'开头时默认是从此类所在的包下取资源，以’/'开头则是从
+				ClassPath根下获取。其只是通过path构造一个绝对路径，最终还是由ClassLoader获取资源。 
+				2). Class.getClassLoader.getResourceAsStream(String path) ：默认则是从ClassPath根下获取，path不能以’/'开头，最终是由
+				ClassLoader获取资源。 
+				3). ServletContext. getResourceAsStream(String path)：默认从WebAPP根目录下取资源，Tomcat下path是否以’/'开头无所谓，
+				当然这和具体的容器实现有关。 
+				4). Jsp下的application内置对象就是上面的ServletContext的一种实现。 
+				其次，getResourceAsStream 用法大致有以下几种： 
+				第一： 要加载的文件和.class文件在同一目录下，例如：com.x.y 下有类me.class ,同时有资源文件myfile.xml 
+				那么，应该有如下代码： 
+				me.class.getResourceAsStream("myfile.xml"); 
+				第二：在me.class目录的子目录下，例如：com.x.y 下有类me.class ,同时在 com.x.y.file 目录下有资源文件myfile.xml 
+				那么，应该有如下代码： 
+				me.class.getResourceAsStream("file/myfile.xml"); 
+				第三：不在me.class目录下，也不在子目录下，例如：com.x.y 下有类me.class ,同时在 com.x.file 目录下有资源文件myfile.xml 
+				那么，应该有如下代码： 
+				me.class.getResourceAsStream("/com/x/file/myfile.xml"); 
+				总结一下，可能只是两种写法 
+				第一：前面有 “   / ” 
+				“ / ”代表了工程的根目录，例如工程名叫做myproject，“ / ”代表了myproject 
+				me.class.getResourceAsStream("/com/x/file/myfile.xml"); 
+				第二：前面没有 “   / ” 
+				代表当前类的目录 
+				me.class.getResourceAsStream("myfile.xml"); 
+				me.class.getResourceAsStream("file/myfile.xml"); 
+			------
+
+		
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day25 Thursday, April 19, 2012
+
+1. 
+	* jce open api
+		- ols日志部分
+			a. 根据jce openapi文档日志查询部分需求，设计接口及实现
+			b. 使用master内处理http发送接收请求的代码与日志服务交互
+				http交互公用代码
+		其余action实现
+2. 关于rest的response问题 -tip-
+	* 在简单的测试项目中一个pojo service在暴露rest服务并做处理返回时，这个返回对象需要是rest规范定义的response的
+	子类，这样rest框架处理时就能正确响应给请求者。
+	* 还有一种方式，就是这个rest service继承某个类，或实现接口，其暴露的rest服务方法只返回pojo对象，处理响应交给依赖的
+	类去处理
+	fire: REST方法的返回对象必须是REST接口定义的Response类的子类。上面的说明还是和所使用的rest框架相关的，下面的 RESTEasy 框架
+	rest服务返回的就是直接的pojo对象，框架自身回去处理把pojo构造为标准的http response返回。
+3. RESTEasy  框架实现REST服务
+	RESTEasy
+		RESTEasy is a JBoss project that provides various frameworks to help you build RESTful Web Services and RESTful Java applications. 
+	It is a fully certified and portable implementation of the JAX-RS specification. JAX-RS is a new JCP specification that provides a Java API for RESTful Web Services over the HTTP protocol.
+		RESTEasy can run in any Servlet container, but tighter integration with the JBoss Application Server is also available to make the user experience nicer in that environment. 
+	While JAX-RS is only a server-side specification, RESTEasy has innovated to bring JAX-RS to the client through the RESTEasy JAX-RS Client Framework. This client-side framework allows you to map outgoing HTTP requests to remote servers using JAX-RS annotations and interface proxies.
+
+	from:http://www.jboss.org/resteasy/
+
+	搭建 RESTEasy 测试project。
+4. String.valueOf() 注意null值
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day26 Friday, April 20, 2012
+
+1. 
+	* 测试jce openapi
+		- 由于运行环境不易构建，通过 mock 方式测试用例，mock出需要的条件。
+			mock测试目的：测试目标类的功能时，模拟其依赖对象，关键在于测试目标类。
+		- openapi把用户请求转发给jce open api前会去校验action是否存在
+		- 停止APP的参数不统一？jce open api文档有的参数pojo中没有
+	* 参照jce open api对比所有参数正确性 ？ 
+
+2. jtester 可以利用其提供的反射工具类进行特殊方法(如私有方法)的测试
+	JTesterReflector 通过反射执行调用测试
+	提供集成测试支持(如数据库等)
+3. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day27 Monday, April 23, 2012
+
+1. 
+	*jce openapi 
+		- post请求 rest 取得post参数集合			
+		- 日志部分接口定义说明 ，返回码，格式
+		- 功能增加，实现
+			update OpenApiFacadeService ，svn diff with previous version ，得到新增接口方法，实现对应逻辑及单元测试。
+
+
+2. rest post请求参数 , get post parameters restful -tip-
+	jersey文档说明如下：
+		In general @Context can be used to obtain contextual Java types related to the request or response. For form parameters it is possible to do the following:
+
+		Example 2.19. Obtaining general map of form parameters
+
+		@POST
+		@Consumes("application/x-www-form-urlencoded")
+		 public void post(MultivaluedMap<String, String> formParams) {
+		     // Store the message
+		 }
+	参数集合，自动封装Injection 自动注入 。
+		get请求通过uriinfo封装
+		post请求直接通过MultivaluedMap封装
+
+3. 
