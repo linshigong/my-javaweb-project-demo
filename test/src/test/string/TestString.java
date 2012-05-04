@@ -6,8 +6,12 @@ public class TestString {
 		
 		Integer num = null;
 		
-		System.out.println(String.valueOf(num));
+		System.out.println(String.valueOf(num));//null字符串
 		
+		
+		StringBuffer sb = new StringBuffer();
+		System.out.println("result="+sb.toString());//返回空result=
+	
 	}
 	
 }

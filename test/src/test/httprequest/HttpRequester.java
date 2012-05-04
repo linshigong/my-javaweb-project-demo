@@ -32,7 +32,19 @@ public class HttpRequester {
      */  
     public HttpRespons sendGet(String urlString) throws IOException {   
         return this.send(urlString, "GET", null, null);   
-    }   
+    }  
+    
+    /**  
+     * 发送GET请求  
+     *   
+     * @param urlString  
+     *            URL地址  
+     * @return 响应对象  
+     * @throws IOException  
+     */  
+    public HttpRespons sendRestRequest(String urlString,String httpMethodName) throws IOException {   
+        return this.send(urlString, httpMethodName, null, null);   
+    }  
     
     /**  
      * 发送GET请求  
