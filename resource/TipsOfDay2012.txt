@@ -75,7 +75,7 @@ google 检索 apache site:*.apache.org 高级搜索
 * rest
 	rest方式的请求，根据uri定位资源 ，各种http方法发送的请求 可以用matrix url请求rest服务
 * memcache 
-	c / c++
+	c 实现
 	项目主页: http://code.google.com/p/memcached/wiki/Clients	
 	说明：
 		memcached is a high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load. 
@@ -86,7 +86,9 @@ google 检索 apache site:*.apache.org 高级搜索
 	
 	启动：
 		memcached -d -m 10 -u root -l 10.1.171.130192.168.232.162  -p 12000 -c 256 -P /tmp/memcached.pid
-
+		
+		client: 官网说明：
+			http://code.google.com/p/memcached/wiki/Clients
 	安装：
 		
 		- 需要libevent库 需要制定prefix
@@ -199,6 +201,48 @@ google 检索 apache site:*.apache.org 高级搜索
 					
 				服务端启动ok
 				设置client调用？
+
+	- 访问linux虚拟机中的memcache,需要设置linux防火墙规则，否则不能访问服务 key=centos memcache 访问
+		-------
+			在虚拟机里安装了centos，在centos里安装memcached服务器,可是在本机里使用memcached的php扩展来访问虚拟机里centos的memcached服务时，没有响应，发现PHP的日志里有以下信息：
+			[html] view plaincopyprint?
+			01.[29-Mar-2012 19:01:37] PHP Notice:  Memcache::set() [<a href='memcache.set'>memcache.set</a>]: Server 192.168.98.63 (tcp 11211) failed with: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。  
+			[29-Mar-2012 19:01:37] PHP Notice:  Memcache::set() [<a href='memcache.set'>memcache.set</a>]: Server 192.168.98.63 (tcp 11211) failed with: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+
+			后来在网上找了一些资料，才找到解决办法。即是在centos的iptable增加两条规则，让用户可以访问虚拟机的memcached的服务。
+			命令如下：
+			#/sbin/iptables -I INPUT -p tcp --dport 11211 -j ACCEPT
+			#/sbin/iptables -I INPUT -p udp --dport 11211 -j ACCEPT
+			如果启动memcached服务时用了其他端口，在将你的端口号代替11211. 
+		-------
+	- 用了gwhalin 的Memcached-Java-Client  api，基本操作ok
+	------
+		public class test {
+
+			public static void main(String[] args) {
+				
+				MemcachedClient mc = new MemcachedClient();
+				
+				mc.add("a", 1);
+				
+				System.out.println(mc.get("a"));
+				
+			}
+			
+			
+			//inital iopool
+			static {
+				String[] serverlist = { "192.168.232.162:12000" };
+
+				SockIOPool pool = SockIOPool.getInstance();
+				pool.setServers(serverlist);
+				pool.initialize();	
+			}
+
+			
+		}
+	------
 * mongodb
 
 * Elastic IP 弹性IP
@@ -3661,7 +3705,9 @@ day35 Friday, May 04, 2012
 1. 
 	* 配置slb api日志，调用日志，业务日志分开
 		api调用日志记录调用前后时间，按照设计的日志格式输出。可以在拦截器中记录调用日志
-	* 
+	* slb api配上签名验证
+		测试例子：http://localhost:8080/slb/api?sign=kxUxw8Op%2B8TsTemi6qrknQ%3D%3D&timestamp=2012-05-04%2014%3A53%3A51&session=cao.yin&action=query_loadbalancer_info&lb_id=25-region-test&region_no=region-test&format=json
+			{"code":200,"data":{"lb_type":"compact","lb_id":"25-region-test","frontend_port":[],"eip":"42.120.64.225","eip_type":"internet","rs_type":"houyi"},"msg":"successful"}
 2. 
 
 
