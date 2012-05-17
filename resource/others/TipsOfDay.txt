@@ -1728,7 +1728,8 @@ eprjid	"4028819224fb69d4012523eecf89184b,010820091027019-1-01 ,景德镇市金�
 【sql server】 修改字段类型 例子 
 
 alter table table_name ALTER COLUMN column_name varchar(200)
-
+【mysql】
+alter table rs modify column rs_pool_name varchar(100) COMMENT '@desc rs pool name'
 ---------- begin task----------
 
 根据 sql查询是有结果的，判断是 页面数据显示处理问题。

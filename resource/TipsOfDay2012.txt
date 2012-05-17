@@ -10,12 +10,249 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+
+* 消息系统 消息中间件
+	Jafka - 一个高性能的消息系统 : http://www.blogjava.net/xylz/archive/2012/05/10/377759.html
+	淘宝内部使用的Kafka克隆版metaq,内部做了大量的改进和附加组件。如果你需要一个全功能的“复杂”系统，可以试试metaq: 
+		https://github.com/killme2008/Metamorphosis
+
+* html/css模板 ，有此类网站搜集页面模板
+	http://www.html-themes.com/free/
+* 正则表达式 例子
+	通过一些小正则工具来验证表达式
+	
+	整数或者小数：^[0-9]+\.{0,1}[0-9]{0,2}$ 
+	只能输入数字："^[0-9]*$"。 
+	只能输入n位的数字："^\d{n}$"。 
+	只能输入至少n位的数字："^\d{n,}$"。 
+	只能输入m~n位的数字：。"^\d{m,n}$" 
+	只能输入零和非零开头的数字："^(0|[1-9][0-9]*)$"。 
+	只能输入有两位小数的正实数："^[0-9]+(.[0-9]{2})?$"。 
+	只能输入有1~3位小数的正实数："^[0-9]+(.[0-9]{1,3})?$"。 
+	只能输入非零的正整数："^\+?[1-9][0-9]*$"。 
+	只能输入非零的负整数："^\-[1-9][]0-9"*$。 
+	只能输入长度为3的字符："^.{3}$"。 
+	只能输入由26个英文字母组成的字符串："^[A-Za-z]+$"。 
+	只能输入由26个大写英文字母组成的字符串："^[A-Z]+$"。 
+	只能输入由26个小写英文字母组成的字符串："^[a-z]+$"。 
+	只能输入由数字和26个英文字母组成的字符串："^[A-Za-z0-9]+$"。 
+	只能输入由数字、26个英文字母或者下划线组成的字符串："^\w+$"。 
+	验证用户密码："^[a-zA-Z]\w{5,17}$"正确格式为：以字母开头，长度在6~18之间，只能包含字符、数字和下划线。 
+	验证是否含有^%&',;=?$\"等字符："[^%&',;=?$\x22]+"。 
+	只能输入汉字："^[\u4e00-\u9fa5]{0,}$" 
+	验证Email地址："^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"。 
+	验证InternetURL："^http://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$"。 
+	验证电话号码："^(\(\d{3,4}-)|\d{3.4}-)?\d{7,8}$"正确格式为："XXX-XXXXXXX"、"XXXX-XXXXXXXX"、"XXX-XXXXXXX"、"XXX-XXXXXXXX"、"XXXXXXX"和"XXXXXXXX"。 
+	验证身份证号（15位或18位数字）："^\d{15}|\d{18}$"。 
+	验证一年的12个月："^(0?[1-9]|1[0-2])$"正确格式为："01"～"09"和"1"～"12"。 
+	验证一个月的31天："^((0?[1-9])|((1|2)[0-9])|30|31)$"正确格式为；"01"～"09"和"1"～"31"。 
+	匹配中文字符的正则表达式： [\u4e00-\u9fa5] 
+
+	匹配双字节字符(包括汉字在内)：[^\x00-\xff] 
+	-  more -
+			正则表达式语法 
+		在典型的搜索和替换操作中，必须提供要查找的确切文字。这种技术对于静态文本中的简单搜索和替换任务可能足够了，但是由于它缺乏灵活性，因此在搜索动态文本时就有困难了，甚至是不可能的。 
+
+		使用正则表达式，就可以： 
+
+		•测试字符串的某个模式。例如，可以对一个输入字符串进行测试，看在该字符串是否存在一个电话号码模式或一个信用卡号码模式。这称为数据有效性验证。
+		•替换文本。可以在文档中使用一个正则表达式来标识特定文字，然后可以全部将其删除，或者替换为别的文字。
+		•根据模式匹配从字符串中提取一个子字符串。可以用来在文本或输入字段中查找特定文字。 
+		例如，如果需要搜索整个 web 站点来删除某些过时的材料并替换某些HTML 格式化标记，则可以使用正则表达式对每个文件进行测试，看在该文件中是否存在所要查找的材料或 HTML 格式化标记。用这个方法，就可以将受影响的文件范围缩小到包含要删除或更改的材料的那些文件。然后可以使用正则表达式来删除过时的材料，最后，可以再次使用正则表达式来查找并替换那些需要替换的标记。
+
+		另一个说明正则表达式非常有用的示例是一种其字符串处理能力还不为人所知的语言。VBScript 是 Visual Basic 的一个子集，具有丰富的字符串处理功能。与 C 类似的 Jscript 则没有这一能力。正则表达式给 JScript 的字符串处理能力带来了明显改善。不过，可能还是在 VBScript 中使用正则表达式的效率更高，它允许在单个表达式中执行多个字符串操作。
+
+		一个正则表达式就是由普通字符（例如字符 a 到 z）以及特殊字符（称为元字符）组成的文字模式。该模式描述在查找文字主体时待匹配的一个或多个字符串。正则表达式作为一个模板，将某个字符模式与所搜索的字符串进行匹配。
+
+		这里有一些可能会遇到的正则表达式示例：
+
+
+		JScript VBScript 匹配 
+		/^\[ \t]*$/ "^\[ \t]*$" 匹配一个空白行。 
+		/\d{2}-\d{5}/ "\d{2}-\d{5}" 验证一个ID 号码是否由一个2位数字，一个连字符以及一个5位数字组成。 
+		/<(.*)>.*<\/\1>/ "<(.*)>.*<\/\1>" 匹配一个 HTML 标记。 
+
+
+
+		下表是元字符及其在正则表达式上下文中的行为的一个完整列表：
+
+
+		字符 描述 
+		\ 将下一个字符标记为一个特殊字符、或一个原义字符、或一个 后向引用、或一个八进制转义符。例如，'n' 匹配字符 "n"。'\n' 匹配一个换行符。序列 '\\' 匹配 "\" 而 "\(" 则匹配 "("。 
+		^ 匹配输入字符串的开始位置。如果设置了 RegExp 对象的 Multiline 属性，^ 也匹配 '\n' 或 '\r' 之后的位置。 
+		$ 匹配输入字符串的结束位置。如果设置了RegExp 对象的 Multiline 属性，$ 也匹配 '\n' 或 '\r' 之前的位置。 
+		* 匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。 * 等价于{0,}。 
+		+ 匹配前面的子表达式一次或多次。例如，'zo+' 能匹配 "zo" 以及 "zoo"，但不能匹配 "z"。+ 等价于 {1,}。 
+		? 匹配前面的子表达式零次或一次。例如，"do(es)?" 可以匹配 "do" 或 "does" 中的"do" 。? 等价于 {0,1}。 
+		{n} n 是一个非负整数。匹配确定的 n 次。例如，'o{2}' 不能匹配 "Bob" 中的 'o'，但是能匹配 "food" 中的两个 o。 
+		{n,} n 是一个非负整数。至少匹配n 次。例如，'o{2,}' 不能匹配 "Bob" 中的 'o'，但能匹配 "foooood" 中的所有 o。'o{1,}' 等价于 'o+'。'o{0,}' 则等价于 'o*'。 
+		{n,m} m 和 n 均为非负整数，其中n <= m。最少匹配 n 次且最多匹配 m 次。刘， "o{1,3}" 将匹配 "fooooood" 中的前三个 o。'o{0,1}' 等价于 'o?'。请注意在逗号和两个数之间不能有空格。 
+		? 当该字符紧跟在任何一个其他限制符 (*, +, ?, {n}, {n,}, {n,m}) 后面时，匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。例如，对于字符串 "oooo"，'o+?' 将匹配单个 "o"，而 'o+' 将匹配所有 'o'。 
+		. 匹配除 "\n" 之外的任何单个字符。要匹配包括 '\n' 在内的任何字符，请使用象 '[.\n]' 的模式。 
+		(pattern) 匹配pattern 并获取这一匹配。所获取的匹配可以从产生的 Matches 集合得到，在VBScript 中使用 SubMatches 集合，在JScript 中则使用 $0…$9 属性。要匹配圆括号字符，请使用 '\(' 或 '\)'。 
+		(?:pattern) 匹配 pattern 但不获取匹配结果，也就是说这是一个非获取匹配，不进行存储供以后使用。这在使用 "或" 字符 (|) 来组合一个模式的各个部分是很有用。例如， 'industr(?:y|ies) 就是一个比 'industry|industries' 更简略的表达式。 
+		(?=pattern) 正向预查，在任何匹配 pattern 的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。例如， 'Windows (?=95|98|NT|2000)' 能匹配 "Windows 2000" 中的 "Windows" ，但不能匹配 "Windows 3.1" 中的 "Windows"。预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始。 
+		(?!pattern) 负向预查，在任何不匹配Negative lookahead matches the search string at any point where a string not matching pattern 的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。例如'Windows (?!95|98|NT|2000)' 能匹配 "Windows 3.1" 中的 "Windows"，但不能匹配 "Windows 2000" 中的 "Windows"。预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始  
+		x|y 匹配 x 或 y。例如，'z|food' 能匹配 "z" 或 "food"。'(z|f)ood' 则匹配 "zood" 或 "food"。  
+		[xyz] 字符集合。匹配所包含的任意一个字符。例如， '[abc]' 可以匹配 "plain" 中的 'a'。  
+		[^xyz] 负值字符集合。匹配未包含的任意字符。例如， '[^abc]' 可以匹配 "plain" 中的'p'。  
+		[a-z] 字符范围。匹配指定范围内的任意字符。例如，'[a-z]' 可以匹配 'a' 到 'z' 范围内的任意小写字母字符。  
+		[^a-z] 负值字符范围。匹配任何不在指定范围内的任意字符。例如，'[^a-z]' 可以匹配任何不在 'a' 到 'z' 范围内的任意字符。  
+		\b 匹配一个单词边界，也就是指单词和空格间的位置。例如， 'er\b' 可以匹配"never" 中的 'er'，但不能匹配 "verb" 中的 'er'。  
+		\B 匹配非单词边界。'er\B' 能匹配 "verb" 中的 'er'，但不能匹配 "never" 中的 'er'。 
+		\cx 匹配由x指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。 x 的值必须为 A-Z 或 a-z 之一。否则，将 c 视为一个原义的 'c' 字符。  
+		\d 匹配一个数字字符。等价于 [0-9]。  
+		\D 匹配一个非数字字符。等价于 [^0-9]。  
+		\f 匹配一个换页符。等价于 \x0c 和 \cL。 
+		\n 匹配一个换行符。等价于 \x0a 和 \cJ。 
+		\r 匹配一个回车符。等价于 \x0d 和 \cM。 
+		\s 匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。 
+		\S 匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。 
+		\t 匹配一个制表符。等价于 \x09 和 \cI。 
+		\v 匹配一个垂直制表符。等价于 \x0b 和 \cK。 
+		\w 匹配包括下划线的任何单词字符。等价于'[A-Za-z0-9_]'。  
+		\W 匹配任何非单词字符。等价于 '[^A-Za-z0-9_]'。  
+		\xn 匹配 n，其中 n 为十六进制转义值。十六进制转义值必须为确定的两个数字长。例如， '\x41' 匹配 "A"。'\x041' 则等价于 '\x04' & "1"。正则表达式中可以使用 ASCII 编码。. 
+		\num 匹配 num，其中 num 是一个正整数。对所获取的匹配的引用。例如，'(.)\1' 匹配两个连续的相同字符。  
+		\n 标识一个八进制转义值或一个后向引用。如果 \n 之前至少 n 个获取的子表达式，则 n 为后向引用。否则，如果 n 为八进制数字 (0-7)，则 n 为一个八进制转义值。 
+		\nm 标识一个八进制转义值或一个后向引用。如果 \nm 之前至少有is preceded by at least nm 个获取得子表达式，则 nm 为后向引用。如果 \nm 之前至少有 n 个获取，则 n 为一个后跟文字 m 的后向引用。如果前面的条件都不满足，若  n 和 m 均为八进制数字 (0-7)，则 \nm 将匹配八进制转义值 nm。 
+		\nml 如果 n 为八进制数字 (0-3)，且 m 和 l 均为八进制数字 (0-7)，则匹配八进制转义值 nml。 
+		\un 匹配 n，其中 n 是一个用四个十六进制数字表示的 Unicode 字符。例如， \u00A9 匹配版权符号 (?)。 
+
+		常用正则：
+		1.验证用户名和密码：（ "^[a-zA-Z]\w{5,15}$ "）正确格式： "[A-Z][a-z]_[0-9] "组成,并且第一个字必须为字母6~16位； 
+		2.验证电话号码：（ "^(\d{3.4}-)\d{7,8}$ "）正确格式：xxx/xxxx-xxxxxxx/xxxxxxxx； 
+		3.验证身份证号（15位或18位数字）：（ "^\d{15} ¦\d{18}$ "）； 
+		4.验证Email地址：( "^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$ ")； 
+		5.只能输入由数字和26个英文字母组成的字符串：( "^[A-Za-z0-9]+$ ") ; 
+		6.整数或者小数：^[0-9]+\.{0,1}[0-9]{0,2}$ 
+		7.只能输入数字： "^[0-9]*$ "。 
+		8.只能输入n位的数字： "^\d{n}$ "。 
+		9.只能输入至少n位的数字： "^\d{n,}$ "。 
+		10.只能输入m~n位的数字：。 "^\d{m,n}$ " 
+		11.只能输入零和非零开头的数字： "^(0 ¦[1-9][0-9]*)$ "。 
+		12.只能输入有两位小数的正实数： "^[0-9]+(.[0-9]{2})?$ "。 
+		13.只能输入有1~3位小数的正实数： "^[0-9]+(.[0-9]{1,3})?$ "。 
+		14.只能输入非零的正整数： "^\+?[1-9][0-9]*$ "。 
+		15.只能输入非零的负整数： "^\-[1-9][]0-9 "*$。 
+		16.只能输入长度为3的字符： "^.{3}$ "。 
+		17.只能输入由26个英文字母组成的字符串： "^[A-Za-z]+$ "。 
+		18.只能输入由26个大写英文字母组成的字符串： "^[A-Z]+$ "。 
+		19.只能输入由26个小写英文字母组成的字符串： "^[a-z]+$ "。 
+		20.验证是否含有^%& &apos;,;=?$\ "等字符： "[^%& &apos;,;=?$\x22]+ "。 
+		21.只能输入汉字： "^[\u4e00-\u9fa5]{0,}$ " 
+		22.验证URL： "^http://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$ "。 
+		23.验证一年的12个月： "^(0?[1-9] ¦1[0-2])$ "正确格式为： "01 "～ "09 "和 "1 "～ "12 "。 
+		24.验证一个月的31天： "^((0?[1-9]) ¦((1 ¦2)[0-9]) ¦30 ¦31)$ "正确格式为； "01 "～ "09 "和 "1 "～ "31 "。
+		25."^\d+$ "　　//非负整数（正整数 + 0） 
+		26."^[0-9]*[1-9][0-9]*$ "　　//正整数 
+		27."^((-\d+) ¦(0+))$ "　　//非正整数（负整数 + 0） 
+		28."^-[0-9]*[1-9][0-9]*$ "　　//负整数 
+		29."^-?\d+$ "　　　　//整数 
+		30."^\d+(\.\d+)?$ "　　//非负浮点数（正浮点数 + 0）
+		31."^(([0-9]+\.[0-9]*[1-9][0-9]*) ¦([0-9]*[1-9][0-9]*\.[0-9]+) ¦([0-9]*[1-9][0-9]*))$ "　　//正浮点数 
+		32."^((-\d+(\.\d+)?) ¦(0+(\.0+)?))$ "　　//非正浮点数（负浮点数 + 0） 
+		33."^(-(([0-9]+\.[0-9]*[1-9][0-9]*) ¦([0-9]*[1-9][0-9]*\.[0-9]+) ¦([0-9]*[1-9][0-9]*)))$ "　　//负浮点数
+		34."^(-?\d+)(\.\d+)?$ "　　//浮点数 
+		35."^[A-Za-z]+$ "　　//由26个英文字母组成的字符串
+		36."^[A-Z]+$ "　　//由26个英文字母的大写组成的字符串 
+		37."^[a-z]+$ "　　//由26个英文字母的小写组成的字符串 
+		38."^[A-Za-z0-9]+$ "　　//由数字和26个英文字母组成的字符串 
+		39."^\w+$ "　　//由数字、26个英文字母或者下划线组成的字符串
+		40."^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$ "　　　　//email地址
+		41."^[a-zA-z]+://(\w+(-\w+)*)(\.(\w+(-\w+)*))*(\?\S*)?$ "　　//url 
+		42.提取信息中的网络链接: (h ¦H)(r ¦R)(e ¦E)(f ¦F) *= *( &apos; ¦ ")?(\w ¦\\ ¦\/ ¦\.)+( &apos; ¦ " ¦ * ¦ >)? 
+		43.提取信息中的邮件地址: \w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)* 
+		44.提取信息中的图片链接: (s ¦S)(r ¦R)(c ¦C) *= *( &apos; ¦ ")?(\w ¦\\ ¦\/ ¦\.)+( &apos; ¦ " ¦ * ¦ >)? 
+		45.提取信息中的ip地址: (\d+)\.(\d+)\.(\d+)\.(\d+) 
+		46.提取信息中的中国手机号码: (86)*0*13\d{9} 
+		47.提取信息中的中国固定电话号码: (\(\d{3,4}\) ¦\d{3,4}- ¦\s)?\d{8} 
+		48.提取信息中的中国电话号码（包括移动和固定电话）: (\(\d{3,4}\) ¦\d{3,4}- ¦\s)?\d{7,14} 
+		49.提取信息中的中国邮政编码: [1-9]{1}(\d+){5} 
+		50.提取信息中的中国身份证号码: \d{18} ¦\d{15} 
+		51.提取信息中的整数： \d+ 
+		52.提取信息中的浮点数（即小数）：(-?\d*)\.?\d+ 
+		53.提取信息中的任何数字 ： (-?\d*)(\.\d+)? 
+		54.提取信息中的中文字符串： [\u4e00-\u9fa5]* 
+		55.提取信息中的双字节字符串 (汉字)：[^\x00-\xff]* 
+		56.提取信息中的英文字符串：\w*
+		57.提取任意HTML标记之间的内容：<script[\s\S]+</script *>
+		58.高强度日期验证
+		     ^((((1[6-9]|[2-9]\d)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((1[6-9]|[2-9]\d)\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\d|30))|(((1[6-9]|[2-9]\d)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-))$
+
+		59.高强度日期+时间验证
+		    ^((((1[6-9]|[2-9]\d)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((1[6-9]|[2-9]\d)\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\d|30))|(((1[6-9]|[2-9]\d)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-)) (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$
+
+		从上面我们可以看到: "^ "表示后面紧跟着的字符为开头;与之相对应的式 "$ "以紧跟前面的字符为结尾.但是要注意的式当 "^ "位于 "[] "里时,表示 "非 "的意思,例如:[^AZ]表示不能为 "AZ "中的任一个字符. "[] "表示当中的一个字符. "{} "可以取得一个范围,例如 "{9} "表示9个,而 "{1,9} "表示1到9个字符. 
+
+		正则调试工具：
+		/Files/yasin/RegexTester.zip 
+		来自：http://www.cnblogs.com/yasin/archive/2009/07/20/1527013.html
+* Squid cache 
+	- 代理服务器和Web缓存服务器
+	- Lighttpd->Squid->Apache :架构：
+			上述处理链，Lighttpd在最前面，专门处理静态内容的请求，把动态内容请求通过 Proxy模块转发给Squid，如果Squid中有该请求的内容且没有过期，
+		则直接返回给Lighttpd。新请求或者过期的页面请求交由Apache 中的脚本程序来处理。经过Lighttpd和Squid的两级过滤，Apache需要处理的请求大大减少，
+		减少了Web应用程序的压力。同时这样的构架，便于把不同的处理分散到多台计算机上进行，由Lighttpd在前面统一分发。 
+			在这种架构下，每一级都是可以进行单独优化的，比如Lighttpd可以采用异步IO方式，Squid可以启用内存来缓存，Apache可以启用 MPM（Multi -Processing Modules，
+		多道处理模块）等，并且每一级都可以使用多台机器来均衡负载，伸缩性好。
+
+
+* hadoop
+	- 公钥认证过程
+		简单的说，在dbrg-1上需要生成一个密钥对，即一个私钥，一个公钥。将公钥拷贝到dbrg-2，dbrg-3上，这样，比如当dbrg-1向dbrg-2发起ssh连接的时候，
+	dbrg-2上就会生成一个随机数并用dbrg-1的公钥对这个随机数进行加密，并发送给dbrg-1；dbrg-1收到这个加密的数以后用私钥进行解密，并将解密后的数发送回dbrg-2，dbrg-2确认解密的数无误后就允许dbrg-1进行连接了。这就完成了一次公钥认证过程。
+
 * mina
 		Apache MINA is a network application framework which helps users develop high performance and high scalability network applications easily. 
 	It provides an abstract ·event-driven · asynchronous API over various transports such as TCP/IP and UDP/IP via Java NIO.
 * Confluence 2.9.
 	- 企业级 wiki ，便于交流互动 ，文档修改并记录历史类似版本控制，可以回滚，很是方便
+* junit
+	- junit fixture工作
+		方法执行前准备工作，可以通过注解来配置，比如 @Before表示在每个用例执行前都行执行这个before注解的方法。
 
+	-	请牢记！请牢记这一条 JUnit 最佳实践：测试任何可能的错误。单元测试不是用来证明您是对的，而是为了证明您没有错。
+		JUnit 深入
+		当然，JUnit 提供的功能决不仅仅如此简单，在接下来的内容中，我们会看到 JUnit 中很多有用的特性，掌握它们对您灵活的编写单元测试代码非常有帮助。
+		Fixture
+		何谓 Fixture ？它是指在执行一个或者多个测试方法时需要的一系列公共资源或者数据，例如测试环境，测试数据等等。在编写单元测试的过程中，您会发现在大部分的测试方法 在进行真正的测试之前都需要做大量的铺垫——为设计准备 Fixture 而忙碌。这些铺垫过程占据的代码往往比真正测试的代码多得多，而且这个比率随着测试的复杂程度的增加而递增。当多个测试方法都需要做同样的铺垫时，重复代 码的“坏味道”便在测试代码中弥漫开来。这股“坏味道”会弄脏您的代码，还会因为疏忽造成错误，应该使用一些手段来根除它。
+		JUnit 专门提供了设置公共 Fixture 的方法，同一测试类中的所有测试方法都可以共用它来初始化 Fixture 和注销 Fixture。和编写 JUnit 测试方法一样，公共 Fixture 的设置也很简单，您只需要：
+		1).使用注解 org,junit.Before 修饰用于初始化 Fixture 的方法。
+		2).使用注解 org.junit.After 修饰用于注销 Fixture 的方法。
+		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
+		
+
+* test * mock 
+	- 单元测试
+		做的好处多，特别对于合作开发，对可变情况的检测，功能完整性，逻辑错误等等。
+	- junit mock
+		执行顺序
+			是否可以手动顺序调用用例？
+		数据库测试支持 ，类似jtester?
+	- easymock与junit结合 
+		EasyMock:
+			http://www.easymock.org/
+			EasyMock provides Mock Objects for interfaces (and objects through the class extension) by generating them on the fly using Java's proxy mechanism. Due to EasyMock's unique style of recording expectations, most refactorings will not affect the Mock Objects. So EasyMock is a perfect fit for Test-Driven Development.
+		例子：
+			-----
+			...
+				public void testRegisterUser() {   
+					User user = new User();   
+					user.type = "vip";   
+					userDao = createMock(UserDao.class);   
+					expect(userDao.insertUser(user)).andReturn(true);   
+					replay(userDao);   
+					userService.setUserDao(userDao);   
+					assertEquals(true, userService.registerUser(user));   
+					verify(userDao);  
+				} 
+			...
+			-----
+* struts
+	- ValueStack valueStack = con.getValueStack();
+			ResultDomain result = (ResultDomain)valueStack.findValue(ResultDomainVisitor.RESULT_KEY, ResultDomain.class);
+	- 
 * bat 批处理 不继续执行  (搜素 bat 调用mvn - 对于bat执行好mvn后就不继续执行其他操作的问题解决搜索关键词)
 	- mavn web project 自动部署启动容器脚本(bat脚本)
 		-------
@@ -85,7 +322,7 @@ google 检索 apache site:*.apache.org 高级搜索
 	 开源的东西，潜力与生俱来
 	
 	启动：
-		memcached -d -m 10 -u root -l 10.1.171.130192.168.232.162  -p 12000 -c 256 -P /tmp/memcached.pid
+		memcached -d -m 10 -u root -l 192.168.232.162  -p 12000 -c 256 -P /tmp/memcached.pid
 		
 		client: 官网说明：
 			http://code.google.com/p/memcached/wiki/Clients
@@ -259,9 +496,23 @@ google 检索 apache site:*.apache.org 高级搜索
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
-	ibatis配置文件的 typeHandler 标签配置类型转换处理方式
+	- ibatis配置文件的 typeHandler 标签配置类型转换处理方式
 		·实现 com.aliyun.slb.api.dao.support.TypeHandlerCallback 接口
-
+	- 动态where条件
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="ip">
+				ip=#ip#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="lbId">
+				lb_id=#lbId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="rsPoolName">
+				rs_pool_name=#rsPoolName#
+			</isNotEmpty>
+		</dynamic>	
+	- ibatis debug sql 执行语句位置
+		com.ibatis.sqlmap.engine.execution.SqlExecutor
+			public void executeQuery(StatementScope statementScope, Connection conn, String sql, Object[] parameters, int skipResults, int maxResults, RowHandlerCallback callback) throws SQLException {
 * aqua 
 	ctrl + d -- desc table
 * 遍历 map.entrySet()
@@ -292,7 +543,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		chengs@houyi-vm19.dev.sd.aliyun.com $ 
 
 
-* ide 
+* ide * eclipse
+	ctrl + shift + L 列出所有快捷键列表
+	- 字母大小写
+		ctrl + shift + x (大写)/ ctrl + shift + y (小写)
 	- eclipse 文件夹上下关系 project property - build path -move
 		source folder ，设置源码包 build path - change to source folder
 		xml 标签自动提示，schema ，dtd定义正确即可
@@ -300,8 +554,12 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- eclipse 快捷键 
 		ctrl + t;
 		ctrl + 1 quick fix ，如改包名等
+		ctrl + shift + r 查找资源类
+		ctrl + shift + t 查找类型(比如某个jar包中的某个类)
 * php 
 	 Discuz
+	 开源bug管理系统bugfree：
+		 http://www.bugfree.org.cn/blog/?page_id=9
 * 测试，测试框架，测试插件
 	* jtester
 		- 测试框架，提供了各种测试方式及支持，比如mock，通过反射测试私有类等的工具JTesterReflector ，完整的去用一个测试框架。阅读其说明文档
@@ -456,6 +714,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 * linux
 	- ssh远程命令行 ，通过 rz ,sz 传递/接受文件
+		远程拷贝目录结构：
+			scp -r $LIB_DIR/* admin@$1:$LIB_DIR/   #这里需要ssh可以自动登入，比如通过公钥认证
 	-   $# 是传给脚本(或者函数)的参数个数, $0 是脚本本身的名字, $@ 是传给脚本(或者函数)的所有参数的列表. 举例:
 
                   QUOTE:
@@ -515,6 +775,87 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		    *) echo "invalid option.";;
 		esac
 		fi是if语句的结束，esac是case语句的结束。Fi和esac这样的关键字是不是很怪异呢？呵，仔细想一想，一点也不怪，考虑一下{} [] 等等，{和}是垂直轴对称的，[和]是垂直轴对称的。现在来看， if和fi及case和esac不也是这样吗？它们刚好反过，分别表示开始和结束。
+	- 内核升级 linux 内核 升级 
+		下面是centos例子：
+			----
+				具体的过程如下:
+				[root@localhost ~]# uname -r
+				2.6.18-194.el5
+				1.下载linux-2.6.30内核包到/usr/src目录
+				cd /usr/src
+				wget ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-2.6.30.tar.gz
+				tar -xzvf linux-2.6.30.tar.bz2 -C /usr/src
+				cd linux-2.6.30
+				make mrproper  清除环境变量，即清除配置文件
+				make menuconfig 在菜单模式下选择需要编译的内核模块:
+				networking support—>networking options—>network packet filtering framework(netfilter)
+				(1).core netfilter configuration
+				A 勾中”Netfilter connection tracking support”  -m state相关模块是依赖它的，不选则没有。
+				B 将netbios name service protocal support(new)   编译成模块,不然后面升级iptables后启动时会出错
+				C 勾中“Netfilter Xtables support (required for ip_tables)”
+				(2).IP: Netfilter Configuration
+				A 将 “IPv4 connection tracking support (require for NAT)” 编译成模块。
+				B 勾中IP tables support (required for filtering/masq/NAT) 。
+				C 将 “Full NAT” 下的 “MASQUERADE target support” 和 “REDIRECT target support” 编译成模块
+				(3).其它模块可以根据自己的需要进行选择,若不懂可以参考内核配置手册.
+				make clean  确保所有东西均保持最新状态.
+				make bzImage  生成内核文件
+				make modules 编译模块
+				make modules_install 安装模块
+				make install  安装
+				mkinitrd  /boot/initrd_2.6.30.img  2.6.30  根据内核版本和指定参数生成映像文件
+				cp arch/x86/boot/bzImage /boot/vmlinuz-2.6.30
+				cp /usr/src/linux-2.6.30/System.map /boot/System.map-2.6.30
+				2.在/etc/grub.conf添加如下2.6.30的信息,并把default=1改为default=0
+				[root@localhost ~]# cat /etc/grub.conf
+				# grub.conf generated by anaconda
+				#
+				# Note that you do not have to rerun grub after making changes to this file
+				# NOTICE:  You have a /boot partition.  This means that
+				#          all kernel and initrd paths are relative to /boot/, eg.
+				#          root (hd0,0)
+				#          kernel /vmlinuz-version ro root=/dev/VolGroup00/LogVol00
+				#          initrd /initrd-version.img
+				#boot=/dev/sda
+				default=0
+				timeout=5
+				splashimage=(hd0,0)/grub/splash.xpm.gz
+				hiddenmenu
+				title CentOS (2.6.18-194.el5)
+					root (hd0,0)
+					kernel /vmlinuz-2.6.18-194.el5 ro root=/dev/VolGroup00/LogVol00 rhgb quiet
+					initrd /initrd-2.6.18-194.el5.img
+				title CentOS (2.6.30)
+					root (hd0,0)
+					kernel /vmlinuz-2.6.30 ro root=/dev/VolGroup00/LogVol00 rhgb quiet
+					initrd /initrd-2.6.30.img
+				3.此步若没有操作,重启会报错”insmod: error inserting ‘/lib/dm-region-hash.ko’: –1 File exits”,原因是重复了，根据网上查到的资料，2.6.x自编译内核会有这个小bug,我测试过不修改直接重启，虽然有报错，但仍然可以进入系统的.
+
+				[root@localhost]cp /boot/initrd-2.6.30.img /tmp
+				[root@localhost]cd /tmp/
+				[root@localhost tmp]mkdir newinitrd
+				[root@localhost tmp]cd newinitrd/
+				[root@localhost newinitrd]zcat ../initrd-2.6.30.img |cpio -i
+				[root@localhost newinitrd]vi init             删掉重复的如下两行:
+				echo “Loading dm-region-hash.ko module”
+				insmod /lib/dm-region-hash.ko
+				[root@localhost newinitrd]# find .|cpio -c -o > ../initrd
+				14765 blocks
+				[root@localhost newinitrd]# cd ..
+				[root@localhost tmp]# gzip -9 < initrd > initrd-2.6.30.img
+				[root@localhost tmp]# ls
+				gconfd-root  initrd  initrd-2.6.30.img  mapping-root  newinitrd  scim-panel-socket:0-root
+				[root@localhost tmp]# mv /boot/initrd-2.6.30.img /home/
+				[root@localhost tmp]# cp initrd-2.6.30.img /boot/
+				[root@localhost tmp]#reboot
+				4.重启成功后,再看看内核，是2.6.30，ok了。
+				[root@localhost ~]# uname -r
+				2.6.30 
+			----
+			from: http://bbs.51cto.com/thread-788212-1.html
+		实际：
+			make menuconfig 报需要ncurses包(及其devel包)
+				yum install ncurses-devel //通过yum安装
 
 
 linux command eg 命令
@@ -707,6 +1048,10 @@ kill `cat server.pid` -- 这里注意是波浪号 ，不是单引号
 		more  &  less   一面一面翻动
 		head -n filename   显示第N行内容
 		tail -n filename  显示后N行内容
+			tail -f  显示追加内容
+			-f
+			 如果输入文件是常规文件或如果 File 参数指定 FIFO（先进先出），那么 tail 命令不会在复制了输入文件的最后的指定单元后终止，而是继续从输入文件读取和复制额外的单元（当这些单元可用时）。如果没有指定 File 参数，并且标准输入是管道，则会忽略 -f 标志。tail -f 命令可用于监视另一个进程正在写入的文件的增长。
+			 
 		od        显示非纯文档
 		df -h 显示分区空间
 		du  显示目录或文件的大小
@@ -3391,7 +3736,7 @@ day28 Tuesday, April 24, 2012
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('check_app_name',60,'check_app_name',1,1,7,now(),now());
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('check_app_domain',60,'check_app_domain',1,1,7,now(),now());
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('set_web_container_quota',60,'set_web_container_quota',1,1,7,now(),now());
-			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('reverse_proxy_quota',60,'reverse_proxy_quota',1,1,7,now(),now());
+			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values(set_reverse_proxy_quota',60,'set_reverse_proxy_quota',1,1,7,now(),now());
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('set_memcache_quota',60,'set_memcache_quota',1,1,7,now(),now());
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('set_app_start_args',60,'set_app_start_args',1,1,7,now(),now());
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('set_app_stop_args',60,'set_app_stop_args',1,1,7,now(),now());
@@ -3413,6 +3758,64 @@ day28 Tuesday, April 24, 2012
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('get_reverse_proxy_configuration',60,'get_reverse_proxy_configuration',1,1,7,now(),now());
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('delete_reverse_proxy_configuration',60,'delete_reverse_proxy_configuration',1,1,7,now(),now());
 			insert into api(api_name,timeout,description,status,level_id,sp_id,gmt_create,gmt_modify)values('query_net_io',60,'query_net_io',1,1,7,now(),now());
+
+			| api_id | api_name                           | timeout | description                        | status | level_id | sp_id | gmt_create          | gmt_modify          |
+			+--------+------------------------------------+---------+------------------------------------+--------+----------+-------+---------------------+---------------------+
+			|    289 | create_app                         |      60 | create_app                         |      1 |        1 |     7 | 2012-04-24 10:30:45 | 2012-04-24 10:30:45 |
+			|    291 | check_app_name                     |      60 | check_app_name                     |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    292 | check_app_domain                   |      60 | check_app_domain                   |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    293 | set_web_container_quota            |      60 | set_web_container_quota            |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    294 | set_reverse_proxy_quota            |      60 | set_reverse_proxy_quota            |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    295 | set_memcache_quota                 |      60 | set_memcache_quota                 |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    296 | set_app_start_args                 |      60 | set_app_start_args                 |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    297 | set_app_stop_args                  |      60 | set_app_stop_args                  |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    298 | start_app                          |     600 | start_app                          |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    299 | stop_app                           |      60 | stop_app                           |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    300 | build_app                          |      60 | build_app                          |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    301 | query_build_job                    |      60 | query_build_job                    |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    302 | query_app                          |      60 | query_app                          |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    303 | delete_app                         |      60 | delete_app                         |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    304 | query_app_topology                 |      60 | query_app_topolgy                  |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    305 | query_os_monitor                   |      60 | query_os_monitor                   |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    306 | query_reverse_proxy_quota          |      60 | query_reverse_proxy_quota          |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    307 | query_web_container_quota          |      60 | query_web_container_quota          |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    308 | query_memcache_quota               |      60 | query_memcache_quota               |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    309 | query_memcache_info                |      60 | query_memcache_info                |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    310 | query_jvm_monitor                  |      60 | query_jvm_monitor                  |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    311 | set_reverse_proxy_configuration    |      60 | set_reverse_proxy_configuration    |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    312 | test_reverse_proxy_configuration   |      60 | test_reverse_proxy_configuration   |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    313 | get_reverse_proxy_configuration    |      60 | get_reverse_proxy_configuration    |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    314 | delete_reverse_proxy_configuration |      60 | delete_reverse_proxy_configuration |      1 |        1 |     7 | 2012-04-24 10:31:44 | 2012-04-24 10:31:44 |
+			|    315 | query_net_io                       |      60 | query_net_io                       |      1 |        1 |     7 | 2012-04-24 10:31:46 | 2012-04-24 10:31:46 |
+	
+	文档action名称定义：
+		create_app
+		check_app_name
+		check_app_domain
+		set_web_container_quota
+		set_reverse_proxy_quota
+		set_memcache_quota
+		set_app_start_args
+		set_app_stop_args
+		start_app
+		stop_app
+		build_app
+		query_build_job
+		query_app
+		delete_app
+		query_app_topology
+		query_os_monitor
+		query_reverse_proxy_quota
+		query_web_container_quota
+		query_memcache_quota
+		query_memcache_info
+		query_jvm_monitor
+		set_reverse_proxy_configuration
+		test_reverse_proxy_configuration
+		get_reverse_proxy_configuration
+		delete_reverse_proxy_configuration
+		query_net_io
+
 
 3. 产品线接入openapi ，诸如验证，访问控制，负载，api是否开放等等由openapi负责 ，产品线关心业务。 -tip-
 
@@ -3572,6 +3975,8 @@ day32 Saturday, April 28, 2012
 		创建LB: 
 			compact http://localhost:8080/slb/api?action=create_loadbalancer&region_no=region-test&lb_name=lbname1&lb_type=compact&eip_type=internet&session=accessid1&sign=xx
 				{"code":200,"data":{"lb_id":"53-region-test","eip":"42.120.64.204"},"msg":"successful"}
+				http://localhost:8080/slb/api?action=create_loadbalancer&region_no=region-test&lb_name=lbname1&lb_type=compact&eip_type=internet&session=cao.yin&sign=xx+
+				{"code":200,"data":{"lb_id":"29-region-test","eip":"42.120.64.225"},"msg":"successful"}
 			hybrid http://localhost:8080/slb/api?action=create_loadbalancer&region_no=region-test&lb_name=lbname1&lb_type=hybrid&eip_type=internet&session=accessid1&sign=xx
 				{"code":200,"data":{"lb_id":"60-region-test","eip":"42.120.64.238"},"msg":"successful"}
 				http://localhost:8080/slb/api?action=create_loadbalancer&region_no=region-test&lb_name=lbname2&lb_type=hybrid&eip_type=internet&session=cao.yin&sign=xx
@@ -3587,6 +3992,8 @@ day32 Saturday, April 28, 2012
 		
 		创建VIP: 
 			compact: http://localhost:8080/slb/api?action=create_vip&listeners=[{%22protocol%22%3A%22tcp%22%2C%22frontend_port%22%3A80%2C%22backend_port%22%3A82%2C%22config%22%3A{%22scheduler%22%3A%22rr%22%2C%22persistence_timeout%22%3A1000%2C%22check%22%3A{%22type%22%3A%22vtcp%22}}}%2C{%22protocol%22%3A%22tcp%22%2C%22frontend_port%22%3A83%2C%22status%22%3A%22inactive%22%2C%22backend_port%22%3A81%2C%22config%22%3A{%22scheduler%22%3A%22rr%22%2C%22forwardfor%22%3A%22on%22%2C%22keepalive%22%3A%22on%22}}]&lb_id=59-region-test&region_no=region-test&status=active&session=accessid1&sign=xx
+				{"code":200,"msg":"successful"}
+			http://localhost:8080/slb/api?action=create_vip&listeners=[{%22protocol%22:%22http%22,%22frontend_port%22:80,%22backend_port%22:82}]&lb_id=401-AT03-HOUYI1&region_no=region-test&status=active&session=cao.yin&sign=xx
 				{"code":200,"msg":"successful"}
 			hy: http://localhost:8080/slb/api?action=create_vip&listeners=[{%22protocol%22:%22http%22,%22frontend_port%22:80,%22backend_port%22:82}]&lb_id=62-region-test&region_no=region-test&status=active&session=accessid1&sign=xx
 				{"code":200,"msg":"successful"}		
@@ -3608,13 +4015,13 @@ day32 Saturday, April 28, 2012
 		查询VM信息: http://localhost:8080/slb/api?action=query_vm_info&region_no=region-test&lb_id=25-region-test&&session=accessid1&sign=xx
 			{"code":200,"data":{"lb_id":"25-region-test","vm_list":[{"weight":100,"vm_name":"vm1"}]},"msg":"successful"}
 			注：ip与vm名称是一对一，如果为一对多则会出错。依据业务为准
+			http://localhost:8080/slb/api?action=query_vm_info&region_no=region-test&lb_id=53-region-test&session=accessid1&sign=xx
+			{"code":200,"data":{"lb_id":"53-region-test","vm_list":[]},"msg":"successful"}
 		删除VM: http://localhost:8080/slb/api?action=delete_vm&vm_list=[%22vm1%22]&region_no=region-test&lb_id=53-region-test&session=accessid1&sign=xx
 			{"code":200,"msg":"successful"}
 		切换VM: http://localhost:8080/slb/api?action=switch_vm&old_vm=[%22vm1%22]&new_vm=[{%22vm_name%22:%22vm2%22,%22weight%22:100}]&region_no=region-test&lb_id=53-region-test&session=accessid1&sign=xx
 			{"code":200,"msg":"successful"}
-			注：与文档说明返回不一致？
-		查询VM信息: http://localhost:8080/slb/api?action=query_vm_info&region_no=region-test&lb_id=53-region-test&session=accessid1&sign=xx
-			{"code":200,"data":{"lb_id":"53-region-test","vm_list":[]},"msg":"successful"}
+			注：与文档说明返回不一致？			
 		
 		// hybrid
 		添加Rule: http://localhost:8080/slb/api?action=add_rule&frontend_port=80&rule_list=[{%22rule_name%22:%22rule1%22,%22domain%22:%22www.xxx.com%22,%22rs_pool_name%22:%22rspool1%22,%22private_header%22:{%22key1%22:%22value1%22,%22key2%22:%22value2%22}},{%22rule_name%22:%22rule2%22,%22domain%22:%22www.abc.com%22,%22rs_pool_name%22:%22rspool2%22}]&region_no=region-test&lb_id=59-region-test&session=accessid1&sign=xx
@@ -3710,4 +4117,359 @@ day35 Friday, May 04, 2012
 			{"code":200,"data":{"lb_type":"compact","lb_id":"25-region-test","frontend_port":[],"eip":"42.120.64.225","eip_type":"internet","rs_type":"houyi"},"msg":"successful"}
 2. 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day36 Monday, May 07, 2012
 
+1. 
+	* slb api日志记录在log拦截器执行 
+	* 在 10.230.204.24机子上部署测试
+		目录为 /home/admin/slbapi
+		编译: build/build.sh
+		关闭/启动tomcat: bin/tomcatctl stop/start
+		eg:
+			http://10.230.204.24/slb/api?sign=7kes%2FcmCqF5ofzJkpsI7rg%3D%3D&timestamp=2012-05-07%2015%3A21%3A13&session=cao.yin&lb_id=8-region-test&action=query_loadbalancer_info&region_no=AT03-HOUYI1&format=json
+			{"code":-2610,"msg":"LbIdNotExist"}
+			http://10.230.204.24/slb/api?sign=pp9LAo7fjImc9ge4NoIbmg%3D%3D&timestamp=2012-05-08%2009%3A43%3A35&session=cao.yin&lb_id=25-AT03-HOUYI1&action=query_loadbalancer_info&region_no=AT03-HOUYI1&format=json
+			{"code":200,"data":{"lb_type":"compact","lb_id":"25-AT03-HOUYI1","frontend_port":[],"eip":"42.120.64.197","eip_type":"internet","rs_type":"houyi"},"msg":"successful"}
+	* 日志实现改为 将各处log项存入localthread中，最后记录log时，把log对象tostring即可。
+		参考 http://svn.alisoft-inc.com/repos/alisoft/houyi/openapi/trunk/aliyun.openapi.model/src/main/java/com/aliyun/openapi/entity/MonitorLogHolder.java 实现
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/openapi/trunk/aliyun.openapi.model/src/main/java/com/aliyun/openapi/entity/MonitorLog.java
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/openapi/trunk/aliyun.openapi.framework/src/main/java/com/aliyun/openapi/interceptor/LogInterceptor.java
+	* slb api的region_no 问题
+		AT03-HOUYI1,region-test 此值从slbapi库的region_mapping表中查询得到；将客户传递来的vm region转换为slb的region，对外统一用vm的region
+	* rs表操作的测试，事务一致性测试
+	* slb api上线需要做的工作：
+
+2. slb api上线需要做的工作：部署
+	- 建库，建表
+		slbapi库，表有：
+			region(region_no ,region_name ,url ,status) slb api的region表，表示slb 的region(区别于vm的region)
+			region_mapping(region_no ,vm_region_no) slb的region与vm region的映射关系表，根据vm的region找到slb的region
+			rs(vm_name ,ip) 用来做负载均衡的vm服务器的名称对应的ip映射表(用户请求的vm名称通过调用vm的api得转换为其ip调用slb后端，slb后端返回时根据此表将ip转换回vm名称，即对外只提供vm名称的操作隐藏vm的ip)
+			user( user_id ,user_name ,service_secret_key ,service_access_id  ,status ,is_admin) slb用户
+			lb流量接口表：
+				monitor_datasource
+
+	- svn下载默认目录结构，地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api/deploy-env
+	- 将上面目录中的 slbapi 目录cp到 /home/admin 下
+	- 进入 slbapi 目录
+		cd /home/admin/slbapi
+	- 执行build并部署: sh build/build.sh
+	- 启动容器: sh bin/tomcattrl start/stop
+
+3. rs的一些操作事务一致性测试
+	参看文档，那些地方需要事务保证？
+	* 涉及到rs表操作的地方 ，文档中有vm_name, vm_list 相关的地方，据此查到action
+		query_vip_healthcheck
+		add_vm
+		delete_vm
+		query_vm_info
+		switch_vm
+		add_rs
+		delete_rs
+		switch_rs
+		query_rs_pool_info
+	* 注意： -tip- sprint事务配置 ，配置方式 + 触发回滚方式: 异常抛出，异常回滚
+			spring的事务回滚下面的配置是依据异常抛出来触发回滚的，如果catch了异常，没有抛出，则事务不会回滚，这点在
+		程序逻辑上要控制好，适当的抛出需要回滚的异常。
+	* spring事务配置例子：
+		<?xml version="1.0" encoding="UTF-8"?>
+		<beans xmlns="http://www.springframework.org/schema/beans"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xmlns:aop="http://www.springframework.org/schema/aop"
+			xmlns:jee="http://www.springframework.org/schema/jee" 
+			xmlns:tx="http://www.springframework.org/schema/tx"
+			xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/aop 
+			http://www.springframework.org/schema/aop/spring-aop.xsd
+			http://www.springframework.org/schema/jee
+			http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+		    http://www.springframework.org/schema/tx 
+		    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+		<tx:advice id="txAdvice4Ip" transaction-manager="transactionManager">
+			<tx:attributes>
+				<tx:method name="get*" read-only="true" />
+				<tx:method name="assign*" rollback-for="Throwable" />
+				<tx:method name="release*" rollback-for="Throwable" />
+				<tx:method name="modify*" rollback-for="Throwable" />
+				<tx:method name="bind*" rollback-for="Throwable" />
+				<tx:method name="unBind*" rollback-for="Throwable" />
+			</tx:attributes>
+		</tx:advice>
+		<aop:config>
+			<aop:pointcut
+				expression="execution(* com.aliyun.houyi.service.impl.IpAddressServiceImpl.*(..))"
+				id="ipAddressPointCut" />
+			<aop:advisor advice-ref="txAdvice4Ip" pointcut-ref="ipAddressPointCut" />
+		</aop:config>
+		<aop:config>
+			<aop:pointcut id="instanceStatusPointcut"
+				expression="@annotation(com.aliyun.houyi.service.rule.InstanceStatusConstraint)" />
+			<aop:advisor advice-ref="instanceStatusInterceptor"
+				pointcut-ref="instanceStatusPointcut" order="10" />
+		</aop:config>
+		...
+	
+	* 
+
+4. rs 增加删除混乱？	
+	目前是有问题的：
+		比如，进行更新rs的操作
+	是否每次将每个action自己的vm name 与ip关系保存到当前线程中，用好即抛弃？
+	可行性：
+		是否每次action查询的vm name 与ip映射都满足当前操作。根据文档分析
+		会存在返回其他ip的情况
+
+	第二种方式：
+		维护vm name 与ip的表，从houyi库里取得，只做查询，更新，不修改？
+
+	
+	有个业务前提：
+			rs表删除某个记录(vm name - ip address mapping)时，在slb后端已经事先删除了，即在后续查询中，除了再插入这个映射记录，
+		否则后端不会返回此ip。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day37 Tuesday, May 08, 2012
+
+1. 
+	* rs 重复add操作时，会无判断插入rs表记录，需要判断下，已有的话就跳过记录插入操作。
+	* delete_rs_pool 操作如果poo不存在，返回什么？文档需要定义此返回值，现根据slb后端返回来处理 ，先后端也没定义，只是返回 systembusy 
+	* slb backend文档修改 ，查看
+	* 目前对action的参数合法性没有进行验证，直接调用了slb后端？
+		需要实现 ActionValidator 接口，对每个action的参数验证，
+		slb api 具有自己的错误码和msg ，还是依赖slb后端的错误码，只是桥接？
+		slb后端也会进行验证，可参考
+
+
+2. rs重复操作测试例子：
+	删除没有执行成功，slb后端不是按照json格式解析rslist字段，只返回当前的rs配置。slb后端修改
+
+	http://localhost:8080/slb/api?action=create_loadbalancer&region_no=region-test&lb_name=lbname1&lb_type=compact&eip_type=internet&session=cao.yin&sign=xx+
+	{"code":200,"data":{"lb_id":"29-region-test","eip":"42.120.64.225"},"msg":"successful"}
+	http://localhost:8080/slb/api?action=create_rs_pool&rs_pool_name=rspool3&protocol=http&port=80&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":200,"data":{"name":"rspool3","protocol":"http","port":80},"msg":"successful"}
+	http://localhost:8080/slb/api?action=add_rs&rs_pool_name=rspool3&rs_list=[{%22vm_name%22:%22ceqa-ag-0419160429%22}]&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":200,"data":{"rsPoolName":"rspool3","rsList":[{"weight":100,"vm_name":"ceqa-ag-0419160429"}]},"msg":"successful"}
+	http://localhost:8080/slb/api?action=add_rs&rs_pool_name=rspool3&rs_list=[{%22vm_name%22:%22ceqa-ag-0419160429%22}]&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":200,"data":{"rsPoolName":"rspool3","rsList":[{"weight":100,"vm_name":"ceqa-ag-0419160429"}]},"msg":"successful"} // 返回值为更新后的rs列表。如果传入列表中有已经添加的rs，直接忽略，不会报错
+	http://localhost:8080/slb/api?action=delete_rs&rs_pool_name=rspool3&rs_list=[%22ceqa-ag-0419160429%22]&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":200,"data":{"rsPoolName":"rspool3","rsList":[{"weight":100,"vm_name":"ceqa-ag-0419160429"}]},"msg":"successful"}
+
+	一个vm对应在多个rs pool中，此时在某个pool中删除这个vm，另一个pool的vm返回正确吗？
+	http://localhost:8080/slb/api?action=create_rs_pool&rs_pool_name=rspool4&protocol=http&port=80&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":200,"data":{"name":"rspool4","protocol":"http","port":80},"msg":"successful"}
+	http://localhost:8080/slb/api?action=add_rs&rs_pool_name=rspool4&rs_list=[{%22vm_name%22:%22ceqa-ag-0419160429%22}]&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":200,"data":{"rsPoolName":"rspool4","rsList":[{"weight":100,"vm_name":"ceqa-ag-0419160429"}]},"msg":"successful"}
+	http://localhost:8080/slb/api?action=delete_rs&rs_pool_name=rspool3&rs_list=[%22ceqa-ag-0419160429%22]&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":200,"data":{"rsPoolName":"rspool3","rsList":[{"weight":100,"vm_name":"ceqa-ag-0419160429"}]},"msg":"successful"}
+	再执行一次：
+	http://localhost:8080/slb/api?action=delete_rs&rs_pool_name=rspool3&rs_list=[%22ceqa-ag-0419160429%22]&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":-2100,"msg":"SystemError"} //后端对不存在的rs直接忽略，返回最新的rs列表
+
+	http://localhost:8080/slb/api?action=list_rs_pool&vm_name=ceqa-ag-0419160429&lb_id=29-region-test&region_no=region-test&session=cao.yin&sign=xx
+	{"code":-2003,"msg":"system exception"}
+3. action validator
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day38 Wednesday, May 09, 2012
+
+1. 
+	* action 的业务参数验证，由于slb后端会做业务参数验证，slb api不做验证
+		如果要对每个action做各自的验证，可以在设计action时，提供公用方法通过spring IOC注入自己的validator，此时验证在执行action前操作；
+		或者在拦截器层处理，可以在拦截器的上配置action名称对应的validator类。
+	* slb api 文档与slb 后端文档在返回码参数定义上一致修正；compact，hybird文档独立
+	* rs表在多个rs pool上都有同一个vm是，执行某个pool上删除此vm，导致其他pool再删除此vm时，ip映射不到name，
+		解决：细化rs表，加入rs_pool_name ,lb_id分别用于rs操作和vm操作的ip映射,一标识各自的映射数据
+			alter table rs add  rs_pool_name varchar(100) NOT NULL COMMENT '@desc rs pool name'
+			alter table rs add  lb_id varchar(32) NOT NULL COMMENT '@desc lb_id'
+	* 单元测试 ,slb 后端调用加上单元测试
+		在有改动时，便于发现问题 ，对于易变部分的逻辑更能体现其作用 ~
+	* bug id #41
+		由于cacheManage为null导致错误，系统用到cacheManage的地方暂不用。
+		搜素整个project，处理
+2. alter table
+	修改表字段定义：
+		sql server:
+			alter table table_name alter column column_name varchar(200)
+		mysql:
+			alter table table_name modify column column_name varchar(100) 
+
+	-- alter table rs add  rs_pool_name varchar(100) NOT NULL COMMENT '@desc rs pool name'
+	-- alter table rs add  lb_id varchar(32) NOT NULL COMMENT '@desc lb_id'
+	-- alter table rs add id int(10) unsigned NOT NULL COMMENT '@desc id'
+	-- alter table rs add vm_name varchar(32) NOT NULL COMMENT '@desc vm name'
+
+	-- delete from rs;
+
+	-- alter table rs modify column rs_pool_name varchar(100) COMMENT '@desc rs pool name'
+	-- alter table rs modify column lb_id varchar(32) COMMENT '@desc lb_id'
+
+	修改主键
+	-- alter table rs drop column vm_name
+	-- alter table rs add id int(10) unsigned NOT NULL AUTO_INCREMENT primary key COMMENT '@desc id'
+	
+3. remote debug跳不过去，地址不是同一地址 ~~~
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day39 Thursday, May 10, 2012
+
+1.
+	* 单元测试补充
+		junit
+			mock
+			数据库测试
+			执行顺序
+	* 文档修改查看
+2. 
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day40 Friday, May 11, 2012
+
+1. 
+	* create_vip
+		delete_vip 后端参数名称修改：frontend_port 改为 frontend_port_list
+	delete_vm文档定义需要修改 ，address参数不需要，weight不需要？
+
+2. linux系统不同权限账户操作同一目录时注意，可以对导致其他用户不能访问，权限高账户创建的内容，导致任务失败。
+比如root创建了某个文件，其他没权限的账户就不能删除，导致文件没有更新。-tip-
+	例子：
+		root账户编译部署了web应用，换个admin账户去做同样操作时，root创建的文件不能被更新。
+3. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day41 Monday, May 14, 2012
+
+1. 
+	* 大region了解
+		数据中心随着业务增长，当前region不能放入更多vm，需要跨region，但逻辑上他们还是属于同一region，这样上层下发规则时，能对应到同region的vm。
+		当前解决方式，把region规则上提到api层，在这层统一region。
+	* houyi api 在vm迁移时需要刷新cache中的region信息以映射到新的region，在region定位接口，提供清楚指定资源的cache接口。
+		com.aliyun.houyi.service.ResourceLocator
+			DefaultResourceLocator 和 AbstractResourceLocator中实现(/houyi-console-service)
+			然后添加一个action(包位置：com.aliyun.houyi.openapi.control.vm)，并配置(/houyi-console-openapi):在spring里配置action这个bean，至于action请求映射配置由于用了
+			代理方式依据配置bean的name来执行，故不用再到struts.xml中配置(只配置一个代理的访问入口)。
+		action bean名为clean_cache
+		需要定义接口说明，传递参数，返回值，状态码说明等。
+			参考houyi api文档
+			cache_key: vm名称
+			cache_type:instance,ip,.. 要删除的cache实例类型，目前有instance,ip_segment,group,ip_address四种类型，默认为instance类型
+
+			ClearCacheErrorMessage
+			状态码可复用已有的比如vm中的vm_name验证状态码：VmErrorMessage
+				-200	vm name must set	没有指定VM的名称
+				-205	vm not exists	待操作的VM 不存在
+			对于cache type需要另外定义：
+				-283 cache类型不存在
+				-284 清除cache失败
+			resourceNO根据不同的cache类型对应不同的值，需要处理。
+2. open jce bug fix 
+	pojo属性拷贝错位。
+	2012-05-11 22:55:13,936   INFO [1700182798@qtp-980075617-11] (RestOpenApiService.java:76) - JCE OpenAPI called , paramsMap={start_args=[-Defg=abc], action=[set_app_start_args], app_id=[66], user_id=[wwg]} siteId=wwg
+	2012-05-11 22:55:13,936   INFO [1700182798@qtp-980075617-11] (OpenApplicatonControllerImpl.java:95) - set App Start Args is called. params={start_args=[-Defg=abc], action=[set_app_start_args], app_id=[66], user_id=[wwg]}
+	2012-05-11 22:55:13,937   INFO [1700182798@qtp-980075617-11] (OpenApiFacadeServiceImpl.java:225) - openapi called. action: setAppStartArgs, siteId: wwg, params: com.aliyun.cloudengine.openapi.model.SetAppStartArgsParamExt@28e2b1e1[appId=66,startArgs=66]
+
+3. vm api 测试地址
+	http://10.230.204.65/open/services
+	签名 ，vm name和slb一致
+
+	例子：http://10.230.204.65/open/services?sign=gMnnRDw0%2FIu05Yr9NpM0SA%3D%3D&timestamp=2012-05-14%2020%3A41%3A56&cache_type=instance&session=cao.yin&cache_key=AT03-HOUYI1&action=clear_cache&format=json
+		{"code":-284,"data":null,"msg":"cache of this key not exist"}
+4. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day42 Tuesday, May 15, 2012
+
+1. 
+	* slb api 加入流量查询接口2个，参考v1的文档：
+		指定时间段查询负载均衡流量 query_loadbalancer_flow
+		指定时间段批量获取负载均衡流量 list_loadbalancer_flows
+		从数据库获取，参考v1版本，不需要调用slb后端
+
+	* jce open api api表修改配置错误，并检查其他配置是否有误
+	* slb 后端文档修改：
+		- 查询vm接口删除，把其原先返回内容放到查询loadbalance信息接口的返回结果中
+		- 查询rs信息接口删除，同时修改了查询rs pool信息的uri
+
+2. lb流量查询的数据源
+	是否和slb api的库一致，还是需要再配个数据源。
+	先根据基本datasource配置（维护monitor_datasource表(需要订正维护)，和rs表同在一个库中），取得所有region的datasource配置，然后动态返回对应region_no的数据源(slb后端的数据源)。
+
+	* 验证上面到slb后端取数据的sql字段是否与slb后端的表结构一致，参考slb后端数据库表。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day43 Wednesday, May 16, 2012
+
+1. 
+	* slb api
+		- 流量接口sql与后端表核对
+		- 从slb后端得到region的数据源地址配置，并配置到monitor_datasource表中
+			10.230.130.1 root/654123 xuanyuan_monitor
+			insert  into monitor_datasource 
+				(url,username,passwd,region_no) 
+			values('jdbc:mysql://10.230.130.1/xuanyuan_monitor?useUnicode=true&amp;characterEncoding=utf-8','root','654123','AT03-HOUYI1')
+		- api文档修改
+		- regionno从vm转为lb的region
+	* slb api部署 day36
+
+2. lb region ，slb api这层的region概念
+	lb region在slbapi库region表里管理
+
+3. 测试新加入的lb流量接口
+	http://localhost:8080/slb/api?action=query_loadbalancer_flow&region_no=region-test&start_time=2012-05-06+10%3a10%3a10&end_time=2012-05-06+12%3a10%3a10&lb_id=31-region-test&&session=cao.yin&sign=xx
+
+4. sql 对照
+	LBMonitor.queryL4Flow —— vip_stats_xxx
+	LBMonitor.queryL7Flow —— haproxy_rule_stats_xxx
+	LBMonitor.loadBalancerCount —— loadbalancer
+	
+	lb_id 改为 lb_global_id
+	
+	loadbalancer 表在哪里?
+	
+5. tomcat报错一例，uri参数格式错误
+	invalid chunk starting at byte
+	http://localhost:8080/slb/api?action=query_loadbalancer_flow&=4
+6. jdbc url 过个空格 ，报错 
+	Cannot create JDBC driver of class 'com.mysql.jdbc.Driver' for connect URL ' jdbc:mysql://10.230.130
+	.1/xuanyuan_monitor?useUnicode=true&amp;characterEncoding=utf-8'
+	java.sql.SQLException: No suitable driver
+
+	一个简单问题，复杂了太多，源于告知 No suitable driver == 驱动没找对 ，忽略了 url错误也是报这个错 ，汗
+	+无语
+
+6. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day44 Thursday, May 17, 2012
+
+1. 
+	* 测试
+	* slb后端分计量数据的库 和 业务数据的库
+		即在LB流量接口的查询中，用到这两个库
+			业务库配置：
+				mysql -uroot -p654123 -h10.230.130.129 xuanyuan
+	* lb后端创建lb时，去掉name参数，api需要做相应修改，api文档修改
+	* 了解大region需求
+		
+2. 
+	select sum(in_bytes) as tcp_internet_rx,lb_global_id      
+	from  `vip_stats_20120506`      
+	where lb_global_id='57-tr' 
+	and user_id=235 
+	and (gmt_create between '2012-05-06 05:10:10' and '2012-05-06 12:10:10')        
+	group by lb_global_id
+
+	http://localhost:8080/slb/api?action=query_loadbalancer_flow&region_no=region-test&start_time=2012-05-06+05%3a10%3a10&end_time=2012-05-06+23%3a10%3a10&lb_id=83-tr&session=lei.chang@alibaba-inc.com&sign=xx
+	{"code":200,"data":{"tcp_internet_bandwidth":0,"http_internet_rx":0,"end_time":"2012-05-06 23:10:10","http_internet_bandwidth":0,"tcp_internet_tx":0,"lb_id":"83-tr","start_time":"2012-05-06 05:10:10","http_internet_tx":0,"tcp_internet_rx":477},"msg":"successful"}
+
+	http://localhost:8080/slb/api?action=list_loadbalancer_flows&page_no=1&page_size=10&region_no=region-test&start_time=2012-05-06+05%3a10%3a10&end_time=2012-05-06+23%3a10%3a10&lb_id=83-tr&session=lei.chang@alibaba-inc.com&sign=xx
+	{"code":200,"data":{"total":32,"page_size":10,"end_time":"2012-05-06 23:10:10","start_time":"2012-05-06 05:10:10","page_no":1,"loadbalancers":[{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"1","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"2","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"3","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"4","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"5","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"6","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"7","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"8","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"9","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"10","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0}]},"msg":"successful"}
+
+3. 
