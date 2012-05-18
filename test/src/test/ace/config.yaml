@@ -1,8 +1,0 @@
-blog_name: 我们的博客
-allow_comment: False
-masters:
-- name: Pickerel Yee
-  account: pickerel@gmail.com
-
-- name: 王二
-  account: wang2@gmail.com
