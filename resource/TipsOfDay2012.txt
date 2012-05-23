@@ -10,14 +10,45 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
-
+* 测试环境
+	单台linux物理机 > xen虚拟多个vm (vm的lxc下多个app,eg:jetty)> 疏通vm网络 > 在vm上部署haproxy+keepalived以及web应用实现软负载均衡 > ...
+	/etc/sysconfig/network-scripts/ifcfg-eth0
+	/etc/sysconfig/network
+	/etc/hosts
+	域名服务器配置文件：/etc/resolv.conf
+ 
 * 消息系统 消息中间件
 	Jafka - 一个高性能的消息系统 : http://www.blogjava.net/xylz/archive/2012/05/10/377759.html
 	淘宝内部使用的Kafka克隆版metaq,内部做了大量的改进和附加组件。如果你需要一个全功能的“复杂”系统，可以试试metaq: 
 		https://github.com/killme2008/Metamorphosis
-
+* loadbalance 负载均衡
+	haproxy + keepalived 方式实现软负载均衡
 * html/css模板 ，有此类网站搜集页面模板
 	http://www.html-themes.com/free/
+* 消息队列 消息队列框架 message queue ，MQ
+	发布/订阅
+	MQ的特点：
+			MQ的消费-生产者模型的一个典型的代表，一端往消息队列中不断的写入消息，而另一端则可以读取或者订阅队列中的消息。MQ和JMS类似，
+		但不同的是JMS是SUN JAVA消息中间件服务的一个标准和API定义，而MQ则是遵循了AMQP协议的具体实现和产品。
+	使用场景(异步处理需求):
+		　　最近在项目中，将一些无需即时返回且耗时的操作提取出来，进行了异步处理，而这种异步处理的方式大大的节省了服务器的请求响应时间，从
+		而提高了系统的吞吐量。
+	- Rabbitmq
+		http://www.rabbitmq.com/
+* JMS
+		JMS是一种与厂商无关的 API，用来访问消息收发系统。它类似于 JDBC(Java Database Connectivity)：这里，JDBC 是可以用来访问许多不同关系数据库的 API，
+	而 JMS 则提供同样与厂商无关的访问方法，以访问消息收发服务。许多厂商目前都支持 JMS，包括 IBM 的 MQSeries、BEA的 Weblogic JMS service和 Progress 的 
+	SonicMQ，这只是几个例子。 JMS 使您能够通过消息收发服务（有时称为消息中介程序或路由器）从一个 JMS 客户机向另一个 JMS客户机发送消息。消息是 JMS 
+	中的一种类型对象，由两部分组成：报头和消息主体。报头由路由信息以及有关该消息的元数据组成。消息主体则携带着应用程序的数据或有效负载。根据有效
+	负载的类型来划分，可以将消息分为几种类型，它们分别携带：简单文本 (TextMessage)、可序列化的对象 (ObjectMessage)、属性集合 (MapMessage)、字节流
+	(BytesMessage)、原始值流 (StreamMessage)，还有无有效负载的消息 (Message)。
+	
+	JMS提供者实现
+	　　要使用Java消息服务，你必须要有一个JMS提供者，管理会话和队列。现在既有开源的提供者也有专有的提供者。 　　
+		开源的提供者包括： 　　
+			Apache ActiveMQ —— is the most popular and powerful open source messaging and Integration Patterns server
+			http://activemq.apache.org/
+				
 * 正则表达式 例子
 	通过一些小正则工具来验证表达式
 	
@@ -716,6 +747,40 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- ssh远程命令行 ，通过 rz ,sz 传递/接受文件
 		远程拷贝目录结构：
 			scp -r $LIB_DIR/* admin@$1:$LIB_DIR/   #这里需要ssh可以自动登入，比如通过公钥认证
+			------
+				Linux下rz/sz安装及使用方法
+				-
+				-
+				1)    工具说明
+				在SecureCRT这样的ssh登录软件里, 通过在Linux界面里输入rz/sz命令来上传/下载文件. 对于RHEL5, rz/sz默认没有安装所以需要手工安装.
+				sz: 将选定的文件发送(send)到本地机器;
+				rz：运行该命令会弹出一个文件选择窗口, 从本地选择文件上传到服务器(receive).
+				下载安装包lrzsz-0.12.20.tar.gz: http://www.ohse.de/uwe/software/lrzsz.html
+
+				2)    软件安装
+				首先通过sftp工具把安装文件上传到/tmp目录下.
+
+				# cd /tmp
+				# tar zxvf lrzsz-0.12.20.tar.gz && cd lrzsz-0.12.20
+				# ./configure && make && make install
+				 
+
+				上面安装过程默认把lsz和lrz安装到了/usr/local/bin/目录下, 下面创建软链接, 并命名为rz/sz:
+
+				# cd /usr/bin
+				# ln -s /usr/local/bin/lrz rz
+				# ln -s /usr/local/bin/lsz sz
+				 
+
+				3)    使用说明
+				打开SecureCRT软件 -> Options -> session options -> X/Y/Zmodem 下可以设置上传和下载的目录; 然后在用SecureCRT登陆linux终端的时候:
+				# sz filename (发送文件到客户端,zmodem接收可以自行启动)
+				# rz (从客户端上传文件到linux服务端)
+
+				:)
+
+				来自：http://www.ej38.com/showinfo/linux-183843.htm
+			------
 	-   $# 是传给脚本(或者函数)的参数个数, $0 是脚本本身的名字, $@ 是传给脚本(或者函数)的所有参数的列表. 举例:
 
                   QUOTE:
@@ -858,17 +923,189 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 				yum install ncurses-devel //通过yum安装
 
 
-linux command eg 命令
-字符转换 unix字符 window字符
-unix2dos dos2unix
+	linux command eg 命令
+	字符转换 unix字符 window字符
+	unix2dos dos2unix
 
-SERVER=/home/user - 定义=号两边不能有空格
+	SERVER=/home/user - 定义=号两边不能有空格
 
-将shell执行的pid保存到文件，读取文件中的pid关闭程序
-#! /bin/sh
-SERVER=/home/chengs
-java test > $SERVER/server.log & echo $! > $SERVER/server.pid
-kill `cat server.pid` -- 这里注意是波浪号 ，不是单引号
+	将shell执行的pid保存到文件，读取文件中的pid关闭程序
+	#! /bin/sh
+	SERVER=/home/chengs
+	java test > $SERVER/server.log & echo $! > $SERVER/server.pid
+	
+	- 关于Linux网络配置
+		一：什么是网络接口卡以及如何查看网络接口的网络信息：
+		 在Linux系统中，主机的网络接口卡通常称为“网络接口”，我们可以使用ifconfig命令来查看网络
+		 
+		接口的信息（普通用户使用/sbin/ifconfig）:
+		 [root@lht ~]# ifconfig
+		 eth0      Link encap:Ethernet  HWaddr 00:0C:29:D1:42:3F
+			   inet addr:192.168.5.247  Bcast:192.168.5.255  Mask:255.255.255.0
+			   inet6 addr: fe80::20c:29ff:fed1:423f/64 Scope:Link
+			   UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+			   RX packets:6712 errors:0 dropped:0 overruns:0 frame:0
+			   TX packets:1219 errors:0 dropped:0 overruns:0 carrier:0
+			   collisions:0 txqueuelen:1000
+			   RX bytes:590780 (576.9 KiB)  TX bytes:156407 (152.7 KiB)
+			   Interrupt:177 Base address:0x1080
+		 
+		lo        Link encap:Local Loopback
+			   inet addr:127.0.0.1  Mask:255.0.0.0
+			   inet6 addr: ::1/128 Scope:Host
+			   UP LOOPBACK RUNNING  MTU:16436  Metric:1
+			   RX packets:1654 errors:0 dropped:0 overruns:0 frame:0
+			   TX packets:1654 errors:0 dropped:0 overruns:0 carrier:0
+			   collisions:0 txqueuelen:0
+			   RX bytes:3893045 (3.7 MiB)  TX bytes:3893045 (3.7 MiB)
+		 “eth0”是Linux系统中第一块以太网卡的名称，在大多数主机中只有一块物理网卡，因此“eth0”
+		 
+		代表系统中唯一的网络接口。
+		 “lo”是Linux系统中的“环回”网络接口，“lo”并不代表真正的网络接口，而是一个虚拟的网络
+		 
+		接口，其IP地址永远是“127.0.0.1”；“lo”网络接口通常用于对本机的网络测试，这样在主机没
+		 
+		有物理网络接口或物理网络接口没有激活时Linux系统仍然可以完成网络相关的操作；
+		 查看指定接口网络信息：ifconfig 网络接口名称：
+		 [root@lht ~]# ifconfig eth0
+		 eth0      Link encap:Ethernet  HWaddr 00:0C:29:D1:42:3F
+			   inet addr:192.168.5.247  Bcast:192.168.5.255  Mask:255.255.255.0
+			   inet6 addr: fe80::20c:29ff:fed1:423f/64 Scope:Link
+			   UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+			   RX packets:832 errors:0 dropped:0 overruns:0 frame:0
+			   TX packets:139 errors:0 dropped:0 overruns:0 carrier:0
+			   collisions:0 txqueuelen:1000
+			   RX bytes:73325 (71.6 KiB)  TX bytes:22844 (22.3 KiB)
+			   Interrupt:177 Base address:0x1080
+		 
+		[root@lht ~]#
+		 其中“HWaddr”表示网络接口物理地址（MAC地址），“inet addr”表示网络接口IP地址，“Bcast
+		 
+		”表示网各接口所在网络的广播地址，“Mask”表示网络接口的子网掩码；另外我们还可以用
+		 
+		ifconfig -a查看所有网络接口的网络信息。
+		 二：查看网关地址和路由信息：
+		 1：route:route命令不使用任何命令选项和参数时可以显示当前Linux主机中的路由表信息：
+		 [root@lht ~]# route
+		 Kernel IP routing table
+		 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+		 192.168.5.0     *               255.255.255.0   U     0      0        0 eth0
+		 169.254.0.0     *               255.255.0.0     U     0      0        0 eth0
+		 default         192.168.5.1     0.0.0.0         UG    0      0        0 eth0
+		 2：使用ping命令测试与其他主机的网络连接：
+		 ping 目标主机地址
+		 [root@lht ~]# ping 192.168.5.104
+		 PING 192.168.5.104 (192.168.5.104) 56(84) bytes of data.
+		 64 bytes from 192.168.5.104: icmp_seq=1 ttl=64 time=0.123 ms
+		 64 bytes from 192.168.5.104: icmp_seq=2 ttl=64 time=0.176 ms
+		 64 bytes from 192.168.5.104: icmp_seq=3 ttl=64 time=0.163 ms
+		 64 bytes from 192.168.5.104: icmp_seq=4 ttl=64 time=0.818 ms
+		 
+		--- 192.168.5.104 ping statistics ---
+		 4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+		 rtt min/avg/max/mdev = 0.123/0.320/0.818/0.288 ms
+		 注意：ping命令会持续发送测试包，因此会一直在屏幕上显示每个包的测试结果，使用Ctrl+C组合键
+		 
+		将结束ping命令发送测试数据包；
+		 使用ping命令发送指定数量的数据包进行网络测试连接：
+		 ping -c 测试数据包的数量 目标的主机地址：
+		 [root@lht ~]# ping -c 2 192.168.5.104
+		 PING 192.168.5.104 (192.168.5.104) 56(84) bytes of data.
+		 64 bytes from 192.168.5.104: icmp_seq=1 ttl=64 time=0.146 ms
+		 64 bytes from 192.168.5.104: icmp_seq=2 ttl=64 time=0.170 ms
+		 
+		--- 192.168.5.104 ping statistics ---
+		 2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+		 rtt min/avg/max/mdev = 0.146/0.158/0.170/0.012 ms
+		 3:使用traceroute命令测试当前主机到目的主机之间经过了哪些网络节点：
+		 traceroute 目的主机地址
+		 [root@lht ~]# traceroute 192.168.5.104
+		 traceroute to 192.168.5.104 (192.168.5.104), 30 hops max, 40 byte packets
+		  1   (192.168.5.104)  0.859 ms  0.255 ms  0.625 ms
+		 三：查看主机名称信息：
+		 1：使用hostname命令查看当前主机名称：
+		 [root@lht ~]# hostname
+		 lht
+		 2：更改主机名称：
+		 [root@lht ~]# hostname lihantuan
+		 [root@lht ~]# hostname
+		 lihantuan
+		 3：使用nslookup查询liuux主机中的域名：
+		 nslookup->输入需要查询的域名->回车
+		 nslookup 待解析的域名
+		 四：网络设置方法：
+		 1：DHCP网络配置：
+		 使用dhclient命令可以从DHCP服务器中申请新的网络配置应用于当前的Linux主机；
+		 2：手工网络配置：
+		 ip地址配置命令：
+		 ifconfig eth0 ip地址 netmask 子网掩码
+		 [root@lht ~]# ifconfig eth0 192.168.5.247 netmask 255.255.255.0
+		 [root@lht ~]#
+		 注意ifconfig命令设置的网络接口属性只在当前系统运行时起效，重启后将按照网络接口配置文件
+		 
+		ifcfg-xxx重新设置网络接口属性；
+		 3：路由配置命令：
+		 添加默认网关路由：
+		 route add default gw 网关地址
+		 [root@lht ~]# route add default gw 192.168.5.104
+		 [root@lht ~]#
+		 删除默认网关：
+		 route del default gw 网关地址：
+		 [root@lht ~]# route del default gw 192.168.5.104
+		 [root@lht ~]#
+		 4：通过修改配置文件进行网络设置：
+		 修改网络接口配置文件ifcfg-xxx,其中\"xxx\"是网络接口名称：
+		 vi /etc/sysconfig/network-scripts/ifcfg-eth0
+		 [root@lht ~]# vi /etc/sysconfig/network-scripts/ifcfg-eth0
+		 # Advanced Micro Devices [AMD] 79c970 [PCnet32 LANCE]
+		 DEVICE=eth0//用于设置网络接口的名称
+		 BOOTPROTO=static//用于设置网络接口是配置为静态地址（static）还是配置为dhcp；
+		 BROADCAST=192.168.5.255
+		 HWADDR=00:0C:29:D1:42:3F
+		 IPADDR=192.168.5.247 //设置网络接口地址
+		 GATEWAY=192.168.5.1 //设置网络接口的默网关
+		 IPV6ADDR=
+		 IPV6PREFIX=
+		 NETMASK=255.255.255.0 //设置网络接口的子网掩码
+		 NETWORK=192.168.5.0
+		 ONBOOT=yes
+		 保存好配置文件后还得重启网络服务：
+		 [root@lht ~]# /etc/init.d/network restart
+		 Shutting down interface eth0:                              [  OK  ]
+		 Shutting down loopback interface:                          [  OK  ]
+		 Bringing up loopback interface:                            [  OK  ]
+		 Bringing up interface eth0:                                [  OK  ]
+		 5：修改主机配置文件：
+		 /etc/sysconfig/network
+		 [root@lht ~]# cat /etc/sysconfig/network
+		 NETWORKING=yes
+		 NETWORKING_IPV6=yes
+		 HOSTNAME=lht
+		 GATEWAY=192.168.5.1
+		 如果改了/etc/sysconfig/network里的主机名，则还需更改/etc/hosts里的主机名
+		 [root@lht ~]# cat /etc/host
+		 cat: /etc/host: No such file or directory
+		 [root@lht ~]# cat /etc/hosts
+		 # Do not remove the following line, or various programs
+		 # that require network functionality will fail.
+		 127.0.0.1               lht localhost.localdomain localhost
+		 ::1             localhost6.localdomain6 localhost6
+		 再重启系统就生效；
+		 系统管理员还可以通过修改hosts文件添加更多的IP地址与主机的对应记录，hosts文件保存后就会立
+		 
+		刻生效。
+		 6：域名服务器配置文件：/etc/resolv.conf
+		 [root@lihantuan ~]# cat /etc/resolv.conf
+		 nameserver 192.168.6.100
+		 nameserver 192.168.6.90
+		 nameserver配置选项设置DNS服务器的IP地址，文件中最多可以有3个nameserver记录，linux系统会
+		 
+		优先使用文件最上面的nameserver记录，当前面的DNS服务器无效时系统会自动使用后面的DNS服务器
+		 进行域名解析。
+
+		来自：http://my.oschina.net/adamboy/blog/35109
+
+	kill `cat server.pid` -- 这里注意是波浪号 ，不是单引号
 	--------
 		############################################################################
 		mount -l -t
@@ -1313,7 +1550,7 @@ kill `cat server.pid` -- 这里注意是波浪号 ，不是单引号
 		shutdown -h now
 		halt
 	
-		############################################################################
+	############################################################################
 
 		linux下Java环境的配置
 		linux下Java环境的配置
@@ -1480,6 +1717,13 @@ bbs:
 feitian SLB ACE（JCE...） (ACE - Ali Cloud Engine云引擎) OSS(kv storage)
 	
 	ACE php container, nodejs container,jsp container
+
+test evn:
+	Latest SLB Build: http://10.1.152.71/release/houyi/slb/trunk/2.0.476963.0/
+	Latest Keepalived Build: http://10.1.152.71/release/houyi/slb/system/keepalived/1.1.20-476658.0/
+	Latest HAProxy Build: http://10.1.152.71/release/houyi/slb/system/haproxy/1.4.15.1-476658.0/
+
+	Bugfree: http://bugfree.aliyun-inc.com/index.php/bug/list/2
 
 3. Cloud Engine - Cloud Engine是一个基于AEC的web应用托管运行环境，能够提供应用的自动伸缩以及多种核心服务。
 	
@@ -4141,21 +4385,24 @@ day36 Monday, May 07, 2012
 	* slb api上线需要做的工作：
 
 2. slb api上线需要做的工作：部署
-	- 建库，建表
+	(1)建库，建表，表订正
 		slbapi库，表有：
 			region(region_no ,region_name ,url ,status) slb api的region表，表示slb 的region(区别于vm的region)
 			region_mapping(region_no ,vm_region_no) slb的region与vm region的映射关系表，根据vm的region找到slb的region
 			rs(vm_name ,ip) 用来做负载均衡的vm服务器的名称对应的ip映射表(用户请求的vm名称通过调用vm的api得转换为其ip调用slb后端，slb后端返回时根据此表将ip转换回vm名称，即对外只提供vm名称的操作隐藏vm的ip)
 			user( user_id ,user_name ,service_secret_key ,service_access_id  ,status ,is_admin) slb用户
 			lb流量接口表：
-				monitor_datasource
-
-	- svn下载默认目录结构，地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api/deploy-env
-	- 将上面目录中的 slbapi 目录cp到 /home/admin 下
-	- 进入 slbapi 目录
+				monitor_datasource slb后端提供
+		配置数据源：
+			- slb api库数据源配置(库slbapi)
+			- slb后端业务数据数据库源配置(xuanyuan)
+			- 上面的 monitor_datasource 表中配置slb后端计量数据数据库源
+	(2) svn下载默认目录结构，地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api/deploy-env
+	(3) 将上面目录中的 slbapi 目录cp到 /home/admin 下
+	(4) 进入 slbapi 目录
 		cd /home/admin/slbapi
-	- 执行build并部署: sh build/build.sh
-	- 启动容器: sh bin/tomcattrl start/stop
+	(5) 执行build并部署: sh build/build.sh
+	(6) 启动容器: sh bin/tomcattrl start/stop
 
 3. rs的一些操作事务一致性测试
 	参看文档，那些地方需要事务保证？
@@ -4457,6 +4704,9 @@ day44 Thursday, May 17, 2012
 				mysql -uroot -p654123 -h10.230.130.129 xuanyuan
 	* lb后端创建lb时，去掉name参数，api需要做相应修改，api文档修改
 	* 了解大region需求
+
+	* vm api 之前实现了清除cache的action，现在需要确认是否也能把预加载的region去掉？
+		houyi-console-openapi
 		
 2. 
 	select sum(in_bytes) as tcp_internet_rx,lb_global_id      
@@ -4473,3 +4723,120 @@ day44 Thursday, May 17, 2012
 	{"code":200,"data":{"total":32,"page_size":10,"end_time":"2012-05-06 23:10:10","start_time":"2012-05-06 05:10:10","page_no":1,"loadbalancers":[{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"1","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"2","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"3","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"4","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"5","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"6","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"7","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"8","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"9","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0},{"http_internet_bandwidth":0,"http_internet_rx":0,"http_internet_tx":0,"loadbalancer_id":"10","tcp_internet_bandwidth":0,"tcp_internet_rx":0,"tcp_internet_tx":0}]},"msg":"successful"}
 
 3. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day45 Friday, May 18, 2012
+
+1. 
+	* slb api cache region启用修改
+	* houyi防火墙规则了解，大region相关业务点熟悉
+	* slb后端api user_id必选，rs_type参数名改为mode ，对api这层做相应调整(代码+文档)
+
+2. 虚拟化
+	防火墙规则
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day46 Monday, May 21, 2012
+1. 
+	* vm 内部接口文档整理
+	* 大region设计预查看
+		对比加入大region前后 vm api流程操作的区别，比如 create_img，原来逻辑哪里需要修改？预分析
+		首先要了解原来的流程
+
+	* vm region cache 清除接口是否需要做操作控制？
+		属于某个用户的vm的缓存自己能清除，否则某个用户可以把别的缓存清除。再或者只留给内部调用，不需要控制。
+	* slb后端文档修改，slb api文档也做相应修改：健康检查查询接口frontend_port必选之后，url也应相应变化
+	* 
+
+2. 新浪云计算(关于配额系统，系统稳定摘取)：sina app engine
+		日志和统计中心：负责对用户所使用的所有服务进行统计和资源计费，并设定的分钟配额，来判定是否有非正常的使用。
+	分钟配额描述了资源消耗的速度，当资源消耗的速度到达一个预警阈值时，SAE通知系统会提前向用户发出一个警告，提醒用
+	户应用在某个服务上的使用可能存在问题，需要介入关注或处理，配额系统是SAE用来保证整个平台稳定的措施之一；日志中心
+	负责将用户所有服务的日志汇总并备份，并提供检索查询服务。
+
+	配额细化到每个调用者(用户)，以保证稳定持久的服务。
+
+3. 消息中间件 MQ
+	云服务器api
+	/houyi-console-message
+
+	<dependency>
+		<groupId>com.rabbitmq</groupId>
+		<artifactId>amqp-client</artifactId>
+	</dependency>
+
+4. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day47 Tuesday, May 22, 2012
+
+1. 
+	* big region 分3此迭代开发(测试尽早介入)  —— 具体见邮件
+		对开发部分，做设计文档说明(程序流程，控制)，便于测试
+		对于设计文档：
+			- 参考已有文档说明及程序实现
+		数据库：
+			xuanyuan
+	* big region 需求评审会议
+		处理开发迭代1/3涉及的接口修改。
+	* big region
+		项目管理页面：http://redmine.aliyun-inc.com/projects/vm wb_shen.chengs 域密码
+	* slb v2换build，此次改动较大，请前端注意查看最新的文档
+		1) rs_type->mode; 2) 去掉rule_name(待修改文档？)
+		
+2. 业务
+	云服务器 产品 - 通过api操作操作云服务器
+	ACE云引擎产品 - 目前包含php,node.js,java(JCE)应用环境，基于云服务器产品之上
+
+3.迭代一修改的地方列表如下：
+	背景信息
+	* API 数据库在zone表增加cluster_id的初始化，记录每个zone_no对应的cluster_id。
+		device_no改成：cluster_id-device_no；
+		snapshot_id改成：cluster_id-device_no-snapshot_id；
+		nc_id改成：cluster_id-nc_id
+	* action的执行从AbstractExecuteAction的doExecute()方法开始，具体实现由子类action的execute方法处理。
+		
+	- snapshotid等格式设计(API)
+	- add_disk时解析并拆分用户传入的snapshot_id
+		处理请求的snapshot_id和响应结果中的device_no
+		cluster_id由用户传递过来，那个地方需要用到？
+		AddDiskExecuteAction
+
+	- 查询VM设备接口，返回的device_no格式变成cluster_id-device_no
+		query_vm_device
+		QueryVmDeviceExecuteAction
+
+	- 创建snapshot接口，解析并拆分传递的device_no参数
+		CreateSnapshotExecuteAction
+	- 取消创建snapshot接口，解析并拆分传递的snapshot_id参数
+		CancelCreateSnapshotExecuteAction
+
+	- 查询设备已有的快照接口(list_snapshot)，解析并拆分传递的device_no参数，并修改返回值中snapshot_id的格式
+		ListSnapshotExecuteAction
+	- 查询快照详情接口，解析并拆分传递的snapshot_id参数，并修改返回值中snapshot_id格式
+		DetailSnapshotExecuteAction
+	- 删除快照接口，解析并拆分传递的snapshot_id,device_no参数
+		RemoveSnapshotExecuteAction
+	- 回滚快照接口，解析并拆分传递的snapshot_id,device_no参数
+		RollbackSnapshotExecuteAction
+	- 保留快照接口，解析并拆分传递的snapshot_id,device_no参数
+		RetainSnapshotExecuteAction
+	- 查看已挂载的快照接口(list_mounted_snapshot),修改返回值中device_no格式
+		ListMountedSnapshotExecuteAction
+	- 挂载快照接口(mount_snapshot)，解析并拆分传递的snapshot_id,device_no参数
+		MountSnapshotExecuteAction
+	- 卸载快照接口(unmount_snapshot)，解析并拆分传递的snapshot_id,device_no参数
+		UnmountSnapshotExecuteAction
+	- 在线迁移接口( live_migrate_vm),解析并拆分传递的nc_id参数
+		VmLiveMigrateExecuteAction
+	- 故障迁移接口，解析并拆分参数destination_nc,destination_rack，并修改返回值中nc_id格式
+		recover_vm
+		VmRecoverExecuteAction
+		
+	- 查询可切换的nc接口，修改返回值中nc_id格式
+		QueryAvaliableNcsExecuteAction
+	- 查询nc详情(detail_nc)接口，解析并拆分传递的nc_id参数，并修改返回值中nc_id格式
+		
+		
