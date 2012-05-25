@@ -10,6 +10,21 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* visio
+	- 提供多种图的绘制支持，比如uml，需要安装模板。
+	- 序列图，可以用横版画图；宽度还不够的话，可以将名称换行(选中文本工具，即可编辑一些形状的名称)
+	- 有些地方不可编辑，可能是保护原因，在形状上右键格式的保护力设置
+	- 取消保护后，可以根据文本是文本或者文本块（选中某中文本按钮移上去后会以图表方式提示鼠标位置是文本还是文本块），
+	  选中相应按钮，来调整形状的文字说明
+	- 修改图层次序，在形状上右键的格式中设置
+	- 对于名称，不能直接用文本按钮来设置，还是需要在名称属性里填上值，然后通过文本工具来设置文本格式，否则可能名称为空。
+* redmine * 项目管理系统
+	- redmine
+		Redmine是用Ruby开发的基于web的项目管理软件，是用ROR框架开发的一套跨平台项目管理系统，据说是源于Basecamp的ror版而来，
+		支持多种数据库，有不少自己独特的功能，例如提供wiki、新闻台等，还可以集成其他版本管理系统和BUG跟踪系统，例如SVN、CVS、TD等等。
+		这种 Web 形式的项目管理系统通过“项目（Project）”的形式把成员、任务（问题）、文档、讨论以及各种形式的资源组织在一起，大家参与更新任务、
+		文档等内容来推动项目的进度，同时系统利用时间线索和各种动态的报表形式来自动给成员汇报项目进度。
+
 * 测试环境
 	单台linux物理机 > xen虚拟多个vm (vm的lxc下多个app,eg:jetty)> 疏通vm网络 > 在vm上部署haproxy+keepalived以及web应用实现软负载均衡 > ...
 	/etc/sysconfig/network-scripts/ifcfg-eth0
@@ -17,15 +32,11 @@ google 检索 apache site:*.apache.org 高级搜索
 	/etc/hosts
 	域名服务器配置文件：/etc/resolv.conf
  
-* 消息系统 消息中间件
-	Jafka - 一个高性能的消息系统 : http://www.blogjava.net/xylz/archive/2012/05/10/377759.html
-	淘宝内部使用的Kafka克隆版metaq,内部做了大量的改进和附加组件。如果你需要一个全功能的“复杂”系统，可以试试metaq: 
-		https://github.com/killme2008/Metamorphosis
-* loadbalance 负载均衡
-	haproxy + keepalived 方式实现软负载均衡
-* html/css模板 ，有此类网站搜集页面模板
-	http://www.html-themes.com/free/
-* 消息队列 消息队列框架 message queue ，MQ
+ * word * office word
+	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
+
+* 消息系统 消息中间件 MQ
+	消息队列 消息队列框架 message queue ，MQ
 	发布/订阅
 	MQ的特点：
 			MQ的消费-生产者模型的一个典型的代表，一端往消息队列中不断的写入消息，而另一端则可以读取或者订阅队列中的消息。MQ和JMS类似，
@@ -33,9 +44,14 @@ google 检索 apache site:*.apache.org 高级搜索
 	使用场景(异步处理需求):
 		　　最近在项目中，将一些无需即时返回且耗时的操作提取出来，进行了异步处理，而这种异步处理的方式大大的节省了服务器的请求响应时间，从
 		而提高了系统的吞吐量。
-	- Rabbitmq
+
+	- Jafka - 一个高性能的消息系统 : http://www.blogjava.net/xylz/archive/2012/05/10/377759.html
+		淘宝内部使用的Kafka克隆版metaq,内部做了大量的改进和附加组件。如果你需要一个全功能的“复杂”系统，可以试试metaq: 
+			https://github.com/killme2008/Metamorphosis
+	
+	- Rabbitmq erlang实现的消息中间件
 		http://www.rabbitmq.com/
-* JMS
+	- JMS
 		JMS是一种与厂商无关的 API，用来访问消息收发系统。它类似于 JDBC(Java Database Connectivity)：这里，JDBC 是可以用来访问许多不同关系数据库的 API，
 	而 JMS 则提供同样与厂商无关的访问方法，以访问消息收发服务。许多厂商目前都支持 JMS，包括 IBM 的 MQSeries、BEA的 Weblogic JMS service和 Progress 的 
 	SonicMQ，这只是几个例子。 JMS 使您能够通过消息收发服务（有时称为消息中介程序或路由器）从一个 JMS 客户机向另一个 JMS客户机发送消息。消息是 JMS 
@@ -48,6 +64,11 @@ google 检索 apache site:*.apache.org 高级搜索
 		开源的提供者包括： 　　
 			Apache ActiveMQ —— is the most popular and powerful open source messaging and Integration Patterns server
 			http://activemq.apache.org/
+
+* loadbalance 负载均衡
+	haproxy + keepalived 方式实现软负载均衡
+* html/css模板 ，有此类网站搜集页面模板
+	http://www.html-themes.com/free/
 				
 * 正则表达式 例子
 	通过一些小正则工具来验证表达式
@@ -230,7 +251,40 @@ google 检索 apache site:*.apache.org 高级搜索
 
 
 * hadoop
-	- 公钥认证过程
+	这里先大致介绍一下Hadoop.
+	    本文大部分内容都是从官网Hadoop上来的。其中有一篇介绍HDFS的pdf文档，里面对Hadoop介绍的比较全面了。我的这一个系列的Hadoop学习笔记也是从这里一步一步进行下来的，同时又参考了网上的很多文章，对学习Hadoop中遇到的问题进行了归纳总结。
+	    言归正传，先说一下Hadoop的来龙去脉。谈到Hadoop就不得不提到Lucene和Nutch。首先，Lucene并不是一个应用程序，而是提供了一个纯Java的高性能全文索引引擎工具包，它可以方便的嵌入到各种实际应用中实现全文搜索/索引功能。Nutch是一个应用程序，是一个以Lucene为基础实现的搜索引擎应用，Lucene为Nutch提供了文本搜索和索引的API，Nutch不光有搜索的功能，还有数据抓取的功能。在nutch0.8.0版本之前，Hadoop还属于Nutch的一部分，而从nutch0.8.0开始，将其中实现的NDFS和MapReduce剥离出来成立一个新的开源项目，这就是Hadoop，而nutch0.8.0版本较之以前的Nutch在架构上有了根本性的变化，那就是完全构建在Hadoop的基础之上了。在Hadoop中实现了Google的GFS和MapReduce算法，使Hadoop成为了一个分布式的计算平台。
+	   其实，Hadoop并不仅仅是一个用于存储的分布式文件系统，而是设计用来在由通用计算设备组成的大型集群上执行分布式应用的框架。
+	   Hadoop包含两个部分：
+
+	   1)HDFS
+
+	      即Hadoop Distributed File System (Hadoop分布式文件系统)
+			HDFS具有高容错性，并且可以被部署在低价的硬件设备之上。HDFS很适合那些有大数据集的应用，并且提供了对数据读写的高吞吐率。HDFS是一个master/slave的结构，
+	      就通常的部署来说，在master上只运行一个Namenode，而在每一个slave上运行一个Datanode。
+	      HDFS支持传统的层次文件组织结构，同现有的一些文件系统在操作上很类似，比如你可以创建和删除一个文件，把一个文件从一个目录移到另一个目录，
+	      重命名等等操作。Namenode管理着整个分布式文件系统，对文件系统的操作（如建立、删除文件和文件夹）都是通过Namenode来控制。 
+	     下面是HDFS的结构：
+
+			从上面的图中可以看出，Namenode，Datanode，Client之间的通信都是建立在TCP/IP的基础之上的。当Client要执行一个写入的操作的时候，命令不是马上就发送
+	      到Namenode，Client首先在本机上临时文件夹中缓存这些数据，当临时文件夹中的数据块达到了设定的Block的值（默认是64M）时，Client便会通知Namenode，
+	      Namenode便响应Client的RPC请求，将文件名插入文件系统层次中并且在Datanode中找到一块存放该数据的block，同时将该Datanode及对应的数据块信息告诉Client，
+	      Client便这些本地临时文件夹中的数据块写入指定的数据节点。
+			HDFS采取了副本策略，其目的是为了提高系统的可靠性，可用性。HDFS的副本放置策略是三个副本，一个放在本节点上，一个放在同一机架中的另一个节点上，
+	      还有一个副本放在另一个不同的机架中的一个节点上。当前版本的hadoop0.12.0中还没有实现，但是正在进行中，相信不久就可以出来了。
+
+	   2) MapReduce的实现
+
+		      MapReduce是Google 的一项重要技术，它是一个编程模型，用以进行大数据量的计算。对于大数据量的计算，通常采用的处理手法就是并行计算。至少现阶段而言，
+	      对许多开发人员来说，并行计算还是一个比较遥远的东西。MapReduce就是一种简化并行计算的编程模型，它让那些没有多少并行计算经验的开发人员也可以开发并行应用。
+			MapReduce的名字源于这个模型中的两项核心操作：Map和 Reduce。也许熟悉Functional Programming（函数式编程）的人见到这两个词会倍感亲切。简单的说来，
+	      Map是把一组数据一对一的映射为另外的一组数据，其映射的规则由一个函数来指定，比如对[1, 2, 3, 4]进行乘2的映射就变成了[2, 4, 6, 8]。Reduce是对一组数据进行归约，
+	      这个归约的规则由一个函数指定，比如对[1, 2, 3, 4]进行求和的归约得到结果是10，而对它进行求积的归约结果是24。
+	      关于MapReduce的内容，建议看看孟岩的这篇MapReduce:The Free Lunch Is Not Over!
+
+	   好了，作为这个系列的第一篇就写这么多了，我也是刚开始接触Hadoop，下一篇就是讲Hadoop的部署，谈谈我在部署Hadoop时遇到的问题，也给大家一个参考，少走点弯路。
+
+	- 公钥认证过程 数字签名 非对称加密
 		简单的说，在dbrg-1上需要生成一个密钥对，即一个私钥，一个公钥。将公钥拷贝到dbrg-2，dbrg-3上，这样，比如当dbrg-1向dbrg-2发起ssh连接的时候，
 	dbrg-2上就会生成一个随机数并用dbrg-1的公钥对这个随机数进行加密，并发送给dbrg-1；dbrg-1收到这个加密的数以后用私钥进行解密，并将解密后的数发送回dbrg-2，dbrg-2确认解密的数无误后就允许dbrg-1进行连接了。这就完成了一次公钥认证过程。
 
@@ -240,6 +294,7 @@ google 检索 apache site:*.apache.org 高级搜索
 * Confluence 2.9.
 	- 企业级 wiki ，便于交流互动 ，文档修改并记录历史类似版本控制，可以回滚，很是方便
 * junit
+	- 参考开源框架使用junit的方式 eg: metaq
 	- junit fixture工作
 		方法执行前准备工作，可以通过注解来配置，比如 @Before表示在每个用例执行前都行执行这个before注解的方法。
 
@@ -252,7 +307,6 @@ google 检索 apache site:*.apache.org 高级搜索
 		1).使用注解 org,junit.Before 修饰用于初始化 Fixture 的方法。
 		2).使用注解 org.junit.After 修饰用于注销 Fixture 的方法。
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
-		
 
 * test * mock 
 	- 单元测试
@@ -553,9 +607,12 @@ google 检索 apache site:*.apache.org 高级搜索
 		Set<Entry<String,IMetaData>> set = map.entrySet();
 		for(Entry<String, IMetaData> data:set){
 * mysql
-	一些命令使用，可以参考gui工具执行命令的sql参考 比如：Aqua Data Studio ，在alter table 时可以查看preview sql
+	- 一些命令使用，可以参考gui工具执行命令的sql参考 比如：Aqua Data Studio ，在alter table 时可以查看preview sql
 	insert into vip (host,port,gmt_create,gmt_modify)values('host3',80,'2012-12-12 00:00:00','2012-12-12 00:00:00'); //id为自增列
 	 select last_insert_id() as id from vip limit 1 
+	 - select * from `group`
+		group是mysql的关键词，需要引起来查询
+		（mysql  Ver 14.14 Distrib 5.1.40, for unknown-linux-gnu (x86_64) using readline 5.1）
 
 Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * php 从小例子入手
@@ -4792,6 +4849,12 @@ day47 Tuesday, May 22, 2012
 
 3.迭代一修改的地方列表如下：
 	背景信息
+	
+	* cluster_id
+			之前用户传入小region，以给api查找region；现在用户传入大region，api需要定位到小region，通过用户传入的cluster_id
+		在zone表里找到对应的region_no。
+			api操作需要定位到region，然后执行操作。
+
 	* API 数据库在zone表增加cluster_id的初始化，记录每个zone_no对应的cluster_id。
 		device_no改成：cluster_id-device_no；
 		snapshot_id改成：cluster_id-device_no-snapshot_id；
@@ -4840,3 +4903,62 @@ day47 Tuesday, May 22, 2012
 	- 查询nc详情(detail_nc)接口，解析并拆分传递的nc_id参数，并修改返回值中nc_id格式
 		
 		
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day48 Wednesday, May 23, 2012
+
+1. 
+	* big region需求分解，要做哪些工作？
+		- 拦截器处理region时，根据： cluster_id-device_no； cluster_id-device_no-snapshot_id； cluster_id-nc_id
+		   得到cluster_id，再到zone表查询得到region_no,再到region表得到小region信息(对外大region，内部暂还是小region)。
+		- 设计文档
+
+	* slb后端文档修改：
+		create_rule: rule_list中去掉rule_name字段
+			相关的delete_rule的修改：
+				去掉原来的rule_name_list 改为 domain_list
+			query_rule_info文档说明修改
+		config_rule: domain由可选改为必选
+
+		open api文档需要做相应修改
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day49 Thursday, May 24, 2012
+
+1. 
+	* 继续迭代1文档及action流程整理
+
+
+2. select * from `group`
+group是mysql的关键词
+
+3. visio描述简单流程图
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day50 Friday, May 25, 2012
+
+1. 
+	* 文档整理，今天整理结束
+		文档根据项目模板文档要求修改
+	* uml seq图流程基本类似，修改相应地方即可
+	* slb后端 待？
+	昨天跟aliyun.com的同事讨论之后，对query_healthcheck这个接口做了比较大的调整。已经提交了。你们注意相应的修改。
+	另外 之前讨论所提到的“将一个rs从slb中删除”的接口，一直漏了，今天也添加到文档中了。
+2. 业务关键点 理解 大region
+	add_disk操作时如果instance和快照不在同一个region里，通过vm_name得到instance信息，通过snapshot_id得到其所属的region，然后进行相应操作
+
+	这也是大region需要参数修改，参数如是修改的目的。-tip-
+
+	大region需求分析：
+		小region时,open api根据用户传入的资源（region_no）来定位region信息，后续的操作都是在此小region内执行的，即不跨region调用。
+		随着业务增长，小region已不能满足业务上需要容纳更多的vm的需求，现需要在open api层实现跨region调用，这样对外就是一个大region，
+	open api下一层还是小region结构。
+		由上面跨region调用的需求结合内部是小region实现，现通过修改接口参数（在参数上携带cluster_id）以便open api通过请求参数定位资源
+	所在的region，从而完成跨region操作。（比如：add_disk操作时如果instance和快照不在同一个region里，通过vm_name得到instance信息，通过
+	snapshot_id得到其所属的region，然后进行相应操作），同时对应返回结果也做相应调整。
+
+
+3. houyi open api部分在内部文档，或者过期文档中
+	比如：list_mounted_snapshot
+
