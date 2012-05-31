@@ -8,7 +8,7 @@ public class tesetObject2Json {
 		
 		pojo p = new pojo("22","jack");
 		
-		System.out.println(JSONObject.fromObject(p));//{"id":"22","name":"jack"}
+		System.out.println(JSONObject.fromObject(p).toString());//{"id":"22","name":"jack"}
 		
 		//用json注解给属性名取别名显示
 		

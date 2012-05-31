@@ -1,8 +1,11 @@
 package test.json;
 
+import org.codehaus.jackson.annotate.JsonGetter;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class pojo {
+	
 	
 	private String id;
 	
@@ -15,7 +18,7 @@ public class pojo {
 		this.name = name;
 	}
 	
-	@JsonProperty(value="my_id")
+	@JsonIgnore(value=true)
 	public String getId() {
 		return id;
 	}
