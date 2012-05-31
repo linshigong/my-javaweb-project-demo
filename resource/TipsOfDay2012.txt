@@ -10,6 +10,38 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+
+* 业务熟悉 熟悉业务
+	文档
+	从数据库表理解
+	代码
+
+* NIO 非阻塞操作/ 阻塞操作 消息驱动
+	上图就是这个项目的总体结构图，从图中可以看出该程序分为这几大块：连接侦听线程、连接对象队列、发送线程池、接收线程池、分发线程、
+	事件处理对象、监控处理对象。下面我将描述下整个连接处理过程：
+	1、 连接侦听线程循环接收一个连接请求，如果有连接请求过来，则返回一个连接Socket对象，否则该线程就阻塞等待，直到有一个连接请求过来。
+	2、 封装该返回的Socket对象（主要是封装获取完整包数据，发送方法，关闭方法等）成Connection对象，并把封装好的Connection对象放入连接对象队列。
+	3、 分发线程不停的轮询连接对象队列，如果发现有可接收数据的连接对象，则扔给接收线程池去处理；如果发现有可发送数据的连接对象，则扔给发送线程池
+	去处理。如果轮询一圈发现既没有可发送数据的连接对象也没有可接收数据的连接对象，则该线程会休眠一段时间，休眠过后又接着循环。
+	4、 发送线程池内有一个连接对象队列，从队列中取出一个连接对象并发送数据，且记录连接状态信息。
+	5、 接收线程池内也有一个连接对象队列，从队列中取出一个连接对象并接收一个数据包，且记录连接状态信息。如果接收的数据包是心跳检测包则更新连接状态，
+	如果是数据包则通过事件处理对象发送给probe系统。
+	    从上面的过程来看，我们可能看不出设计上面的漏洞，但有几个地方确实非常影响效率，在这里我想先提出来：
+	1、 连接侦听线程一直在侦听，有连接请求过来则会返回，没有则会阻塞；这样这个线程就会一直挂着；如果时时刻刻都有很多的连接过来，这个线程还会充分发挥
+	它的作用，但其实大部分时候，连接请求并没有这么频繁，所以这个线程大部分时间是阻塞的；这样为了这样一个功能单独利用一个线程就有点浪费了。
+	2、 分发线程不停的轮询过程是导致整个系统效率低下最严重的一块，分发线程不停的轮询连接对象队列，其实分发线程并不知道哪个线程需要发送数据，哪些线程
+	需要接收数据，而他只是盲目地从队列的头遍历到队列的尾部，如果发现没有可操作的连接对象则休眠一段时间；其实在大部分情况下，连接对象并不是时时刻刻
+	都有数据发送和接收，所以这个分发线程大部分时间空循环，白忙了；并且这个休眠时间也不好控制，如果时间长了，则程序的即时性不够，如果太短了，程序似乎
+	就是在空跑了。
+	3、 在连接对象上发送和接收数据包的时候，这些方法都是阻塞操作的；所以当有大量的数据可接收和发送的时候，这种阻塞的操作时非常浪费资源的。
+	    以上所提出的问题，如果是在并发规模比较小的情况下，是没有什么问题；但确实有很大的改进空间。上面的问题归结起来主要是两个：
+	1、 当有连接请求过来或者有Socket连接有数据可读可写的时候，我们不会立即知道，我们必须要一个一个的轮询，我们能否有一种机制，即是，当有连接请求过来或者
+	连接有数据可读或者可写的时候，直接通知我们来处理，而不需要我们主动轮询。
+	2、 当读数据或者写数据的时候，所有的方法都阻塞了，能不能有一种办法当我们写数据或者接收数据的时候不用阻塞，而是直接返回，这样就明显提高了线程的使用率了。
+	    值得我们庆幸的是，在Java的JDK1.4之后的版本，提供了NIO包，这里提出了事件驱动的I/O编程模式和非阻塞信道的概念，NIO里面的Selector对象解决了上面提出分发
+	    和轮询的问题，Channel接口解决了阻塞读写的问题。我相信这些组件能够帮我们解决上面所提出的所有问题。所以下面有很大一部分篇幅来介绍NIO的使用和一些底层的机制。
+	from: http://www.cnblogs.com/phoebus0501/archive/2010/12/05/1897245.html
+
 * visio
 	- 提供多种图的绘制支持，比如uml，需要安装模板。
 	- 序列图，可以用横版画图；宽度还不够的话，可以将名称换行(选中文本工具，即可编辑一些形状的名称)
@@ -32,6 +64,9 @@ google 检索 apache site:*.apache.org 高级搜索
 	/etc/hosts
 	域名服务器配置文件：/etc/resolv.conf
  
+ * spring
+	spring通过aop拦截器，拦截自定义注解所注解的方法 参考day52
+	参考：http://raulraja.com/2009/06/13/aop-spring-intercepting-method-calls-using-annotations/
  * word * office word
 	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
 
@@ -248,12 +283,30 @@ google 检索 apache site:*.apache.org 高级搜索
 		减少了Web应用程序的压力。同时这样的构架，便于把不同的处理分散到多台计算机上进行，由Lighttpd在前面统一分发。 
 			在这种架构下，每一级都是可以进行单独优化的，比如Lighttpd可以采用异步IO方式，Squid可以启用内存来缓存，Apache可以启用 MPM（Multi -Processing Modules，
 		多道处理模块）等，并且每一级都可以使用多台机器来均衡负载，伸缩性好。
-
+	- summary
+			Squid is a caching proxy for the Web supporting HTTP, HTTPS, FTP, and more. It reduces bandwidth and improves response times by caching and reusing frequently-requested web pages. 
+		Squid has extensive access controls and makes a great server accelerator. It runs on most available operating systems, including Windows and is licensed under the GNU GPL.
+			Making the most of your Internet Connection
+			Squid is used by hundreds of Internet Providers world-wide to provide their users with the best possible web access. Squid optimises the data flow between client and server to improve 
+		performance and caches frequently-used content to save bandwidth. Squid can also route content requests to servers in a wide variety of ways to build cache server hierarchies which 
+		optimise network throughput.
+			Website Content Acceleration and Distribution
+			Thousands of web-sites around the Internet use Squid to drastically increase their content delivery. Squid can reduce your server load and improve delivery speeds to clients. Squid can also be used 
+		to deliver content from around the world - copying only the content being used, rather than inefficiently copying everything. Finally, Squid's advanced content routing configuration allows you to build 
+		content clusters to route and load balance requests via a variety of web servers.
+		
+		[The Squid systems] are currently running at a hit-rate of approximately 75%, effectively quadrupling the capacity of the Apache servers behind them. This is particularly noticeable when a large surge 
+		of traffic arrives directed to a particular page via a web link from another site, as the caching efficiency for that page will be nearly 100%. " - Wikimedia Deployment Information. 
 
 * hadoop
 	这里先大致介绍一下Hadoop.
-	    本文大部分内容都是从官网Hadoop上来的。其中有一篇介绍HDFS的pdf文档，里面对Hadoop介绍的比较全面了。我的这一个系列的Hadoop学习笔记也是从这里一步一步进行下来的，同时又参考了网上的很多文章，对学习Hadoop中遇到的问题进行了归纳总结。
-	    言归正传，先说一下Hadoop的来龙去脉。谈到Hadoop就不得不提到Lucene和Nutch。首先，Lucene并不是一个应用程序，而是提供了一个纯Java的高性能全文索引引擎工具包，它可以方便的嵌入到各种实际应用中实现全文搜索/索引功能。Nutch是一个应用程序，是一个以Lucene为基础实现的搜索引擎应用，Lucene为Nutch提供了文本搜索和索引的API，Nutch不光有搜索的功能，还有数据抓取的功能。在nutch0.8.0版本之前，Hadoop还属于Nutch的一部分，而从nutch0.8.0开始，将其中实现的NDFS和MapReduce剥离出来成立一个新的开源项目，这就是Hadoop，而nutch0.8.0版本较之以前的Nutch在架构上有了根本性的变化，那就是完全构建在Hadoop的基础之上了。在Hadoop中实现了Google的GFS和MapReduce算法，使Hadoop成为了一个分布式的计算平台。
+		本文大部分内容都是从官网Hadoop上来的。其中有一篇介绍HDFS的pdf文档，里面对Hadoop介绍的比较全面了。我的这一个系列的Hadoop学习笔记
+	    也是从这里一步一步进行下来的，同时又参考了网上的很多文章，对学习Hadoop中遇到的问题进行了归纳总结。
+		言归正传，先说一下Hadoop的来龙去脉。谈到Hadoop就不得不提到Lucene和Nutch。首先，Lucene并不是一个应用程序，而是提供了一个纯Java的高性能
+	全文索引引擎工具包，它可以方便的嵌入到各种实际应用中实现全文搜索/索引功能。Nutch是一个应用程序，是一个以Lucene为基础实现的搜索引擎应用，
+	Lucene为Nutch提供了文本搜索和索引的API，Nutch不光有搜索的功能，还有数据抓取的功能。在nutch0.8.0版本之前，Hadoop还属于Nutch的一部分，而从nutch0.8.0开始，
+	将其中实现的NDFS和MapReduce剥离出来成立一个新的开源项目，这就是Hadoop，而nutch0.8.0版本较之以前的Nutch在架构上有了根本性的变化，那就是完全构建在
+	Hadoop的基础之上了。在Hadoop中实现了Google的GFS和MapReduce算法，使Hadoop成为了一个分布式的计算平台。
 	   其实，Hadoop并不仅仅是一个用于存储的分布式文件系统，而是设计用来在由通用计算设备组成的大型集群上执行分布式应用的框架。
 	   Hadoop包含两个部分：
 
@@ -286,7 +339,8 @@ google 检索 apache site:*.apache.org 高级搜索
 
 	- 公钥认证过程 数字签名 非对称加密
 		简单的说，在dbrg-1上需要生成一个密钥对，即一个私钥，一个公钥。将公钥拷贝到dbrg-2，dbrg-3上，这样，比如当dbrg-1向dbrg-2发起ssh连接的时候，
-	dbrg-2上就会生成一个随机数并用dbrg-1的公钥对这个随机数进行加密，并发送给dbrg-1；dbrg-1收到这个加密的数以后用私钥进行解密，并将解密后的数发送回dbrg-2，dbrg-2确认解密的数无误后就允许dbrg-1进行连接了。这就完成了一次公钥认证过程。
+	dbrg-2上就会生成一个随机数并用dbrg-1的公钥对这个随机数进行加密，并发送给dbrg-1；dbrg-1收到这个加密的数以后用私钥进行解密，并将解密后的数发送回dbrg-2，
+	dbrg-2确认解密的数无误后就允许dbrg-1进行连接了。这就完成了一次公钥认证过程。
 
 * mina
 		Apache MINA is a network application framework which helps users develop high performance and high scalability network applications easily. 
@@ -302,8 +356,12 @@ google 检索 apache site:*.apache.org 高级搜索
 		JUnit 深入
 		当然，JUnit 提供的功能决不仅仅如此简单，在接下来的内容中，我们会看到 JUnit 中很多有用的特性，掌握它们对您灵活的编写单元测试代码非常有帮助。
 		Fixture
-		何谓 Fixture ？它是指在执行一个或者多个测试方法时需要的一系列公共资源或者数据，例如测试环境，测试数据等等。在编写单元测试的过程中，您会发现在大部分的测试方法 在进行真正的测试之前都需要做大量的铺垫——为设计准备 Fixture 而忙碌。这些铺垫过程占据的代码往往比真正测试的代码多得多，而且这个比率随着测试的复杂程度的增加而递增。当多个测试方法都需要做同样的铺垫时，重复代 码的“坏味道”便在测试代码中弥漫开来。这股“坏味道”会弄脏您的代码，还会因为疏忽造成错误，应该使用一些手段来根除它。
-		JUnit 专门提供了设置公共 Fixture 的方法，同一测试类中的所有测试方法都可以共用它来初始化 Fixture 和注销 Fixture。和编写 JUnit 测试方法一样，公共 Fixture 的设置也很简单，您只需要：
+			何谓 Fixture ？它是指在执行一个或者多个测试方法时需要的一系列公共资源或者数据，例如测试环境，测试数据等等。在编写单元测试的过程中，
+		您会发现在大部分的测试方法 在进行真正的测试之前都需要做大量的铺垫——为设计准备 Fixture 而忙碌。这些铺垫过程占据的代码往往比真正测试的代码多得多，
+		而且这个比率随着测试的复杂程度的增加而递增。当多个测试方法都需要做同样的铺垫时，重复代 码的“坏味道”便在测试代码中弥漫开来。这股“坏味道”会弄脏您的代码，
+		还会因为疏忽造成错误，应该使用一些手段来根除它。
+			JUnit 专门提供了设置公共 Fixture 的方法，同一测试类中的所有测试方法都可以共用它来初始化 Fixture 和注销 Fixture。和编写 JUnit 测试方法一样，
+		公共 Fixture 的设置也很简单，您只需要：
 		1).使用注解 org,junit.Before 修饰用于初始化 Fixture 的方法。
 		2).使用注解 org.junit.After 修饰用于注销 Fixture 的方法。
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
@@ -613,6 +671,8 @@ google 检索 apache site:*.apache.org 高级搜索
 	 - select * from `group`
 		group是mysql的关键词，需要引起来查询
 		（mysql  Ver 14.14 Distrib 5.1.40, for unknown-linux-gnu (x86_64) using readline 5.1）
+	- mysql>system ls
+		mysql下执行shell，命令行命令方式
 
 Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * php 从小例子入手
@@ -750,6 +810,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		Above declaration tell Maven to use JDK 1.6.
 	- maven 编码相关 - maven命令行执行能看到采用的编码
 		a. maven插件在处理任务时，如果没有定义编码会自动匹配编码，如果与需要的不符，则运行时报错。解决：定义各插件执行的编码格式，如下：
+			可以通过 mvn -version 查看maven默认采用的编码是什么？
 			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
@@ -766,7 +827,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 						<encoding>${file.encoding}</encoding>
 					</configuration>
 				</plugin>
-
+		- 执行时，设置maven参数
+			mvn -Dmaven.test.skip=false test 不跳过测试的test操作
 * 工具类
 	 apache commond 
 		StringUtils 
@@ -801,6 +863,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		esac
 
 * linux
+	- ls --color=never 或 --color=aways
+		命令行 ，终端 ，颜色
 	- ssh远程命令行 ，通过 rz ,sz 传递/接受文件
 		远程拷贝目录结构：
 			scp -r $LIB_DIR/* admin@$1:$LIB_DIR/   #这里需要ssh可以自动登入，比如通过公钥认证
@@ -2662,6 +2726,12 @@ day6 Wednesday, March 21, 2012
 	服务提供商（ISP），	再由ISP分配给客户。CIDR将路由集中起来，使一个IP地址代表主要骨干提供商服务的几千个IP地址，
 	从而减轻Internet路由器的负担。		
 
+	CIDR	Classless Inter-Domain Routing	无类别域间路由选择	是互联网中一种新的址方式，与传统的 A 类、B 类和 C 类寻址模式相比，CIDR 在 IP 地址分配方面更为高效。
+	IP号段是125.203.96.0 - 125.203.127.255， 怎样转换成CIDR格式呢？化cidr格式其实就是找相同:
+	125.203.0110 0000.0000 0000
+	125.203.0111 1111.1111 1111
+	前十九位相同,所以可以写成125.203.96.0/19
+
 5. ce里shell脚本熟悉
 	"#!/bin/sh" - 对shell的声明，说明你所用的是那种类型的shell及其路径所在。
 	自定义shell function封装常用功能，提高shell编写效率。
@@ -4477,6 +4547,7 @@ day36 Monday, May 07, 2012
 			spring的事务回滚下面的配置是依据异常抛出来触发回滚的，如果catch了异常，没有抛出，则事务不会回滚，这点在
 		程序逻辑上要控制好，适当的抛出需要回滚的异常。
 	* spring事务配置例子：
+	
 		<?xml version="1.0" encoding="UTF-8"?>
 		<beans xmlns="http://www.springframework.org/schema/beans"
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -4514,7 +4585,31 @@ day36 Monday, May 07, 2012
 				pointcut-ref="instanceStatusPointcut" order="10" />
 		</aop:config>
 		...
-	
+		
+		spring 编程式事务：
+			-------
+			...
+				DefaultTransactionDefinition def = new DefaultTransactionDefinition(
+						TransactionDefinition.PROPAGATION_REQUIRED);// 事务定义类
+
+				String[] results = null;
+				TransactionStatus status = transactionManager.getTransaction(def);
+				try
+				{
+					results = InstanceServiceHelper.createInstances(this.instanceDao,
+							noGenerator, this.instancePassworder, instance, count);
+					transactionManager.commit(status);
+				} catch (DuplicateNameException e)
+				{
+					transactionManager.rollback(status);
+					throw e;
+				} catch (Throwable e)
+				{
+					transactionManager.rollback(status);
+					throw new BizException("创建VM发生错误！", e);
+				}
+			...
+			-------
 	* 
 
 4. rs 增加删除混乱？	
@@ -4901,6 +4996,8 @@ day47 Tuesday, May 22, 2012
 	- 查询可切换的nc接口，修改返回值中nc_id格式
 		QueryAvaliableNcsExecuteAction
 	- 查询nc详情(detail_nc)接口，解析并拆分传递的nc_id参数，并修改返回值中nc_id格式
+		到houyi-openapi.xml找对应关系
+		SingleNcResourceAction
 		
 		
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -4944,7 +5041,7 @@ day50 Friday, May 25, 2012
 	* uml seq图流程基本类似，修改相应地方即可
 	* slb后端 待？
 	昨天跟aliyun.com的同事讨论之后，对query_healthcheck这个接口做了比较大的调整。已经提交了。你们注意相应的修改。
-	另外 之前讨论所提到的“将一个rs从slb中删除”的接口，一直漏了，今天也添加到文档中了。
+	另外 之前讨论所提到的“将一个rs从slb中删除”的接口(release_rs)，一直漏了，今天也添加到文档中了。
 2. 业务关键点 理解 大region
 	add_disk操作时如果instance和快照不在同一个region里，通过vm_name得到instance信息，通过snapshot_id得到其所属的region，然后进行相应操作
 
@@ -4962,3 +5059,238 @@ day50 Friday, May 25, 2012
 3. houyi open api部分在内部文档，或者过期文档中
 	比如：list_mounted_snapshot
 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day51 Monday, May 28, 2012
+
+1. 
+	* big region 参数修改文档再修订，加入4个接口修改说明
+		修改文档
+	* slb release_rs接口实现包含测试用例，并修改相应文档
+	* meeting，修改文档
+	
+2. 添加4个接口
+	解析并拆分创建VM（create_vm）接口用户传入的nc_id和rack_id参数
+		
+	解析并组装list_vm_status接口返回的nc_id
+		
+	解析并组装detail_vm接口返回的rack_id，nc_id
+		
+	解析并拆分调用remove_disk接口用户传入的device_no参数
+		
+		
+3. spring 编程式事务
+
+4. 业务 概念 清晰
+	VM	Virtual Machine	虚拟机	通过物理服务器，采用虚拟化技术虚拟出来的计算机
+	RS	Real server	后端服务器	用来做负载均衡的VM服务器
+
+	2个对比，理解rs即用于slb的vm，实际就是vm。
+	
+	add_rs即添加一个vm作为slb负载均衡用~ 
+	release_rs即在负载均衡集群中去掉一台vm（这里的去掉应该就是删除vm自身，具体看下面说明）
+
+	delete_rs是从rspool删除rs，release rs是前端删掉一台vm后，清掉所有与他相关的slb配置，
+	包括rspool里的rs，也包括loadbalancer里的vm
+	
+	zone属于某个region，是多对一的关系，cluster_id和region_no是一对一
+
+	houyi api部分涉及权限的操作是在zone内进行的，即不跨zone，比如：迁移，
+
+5. NIO
+	解决同步IO资源耗尽问题 ，open api 等场景部分优化
+	消息
+	并发处理
+	阻塞操作
+	http://www.cnblogs.com/phoebus0501/archive/2010/12/05/1897245.html
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day51 Tuesday, May 29, 2012
+
+1. 
+	* 在处理参数时，注意新老存储的调用兼容性 ，比如老存储的api调用是没有snapshot_id参数的，如果解析抽象出来要
+	考虑到这个情况。
+	
+2. 
+	几个概念
+		cluster	一个集群
+		rack		机架
+		region	数据中心	代表一个数据中心或者Houyi集群，不同数据中心的VM不能相互访问
+		zone		安全域		代表一个安全域，不同安全域的VM不能进行数据迁移
+		group	安全组		VM相关的安全组，一个VM一定属于某个安全控制组
+
+	之间的关系理清楚？
+		* 一个cluster对应一个region(小region)，多个region对外统一为一个大region
+		* region和zone是一对多的关系
+		* region与group是一对多关系 ( group表中有region_no,user_id字段)
+		* 从user层面看，user_id与group是一对多关系，某个user_id的group可以跨region
+			目前，权限是对group授权(后面再加上到vm的授权)，
+			授权源group的某个端口可以在公网(或者私网)网口通过某种协议访问目标group的某个端口的规则(accept，drop，reject)。
+		* 
+	tip：
+		可以从库表中反应它们间一定的关系 :)
+	
+	api层只有region的概念，houyi后端有cluster_id概念？
+	
+3. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day52 Wednesday, May 30, 2012
+
+1. 
+	* 基于参数修改设计文档，设计逻辑实现：
+		- 对于组合参数的解析，提供静态一个工具类方法，传入参数值和预知的组合个数，返回参数值依据“-”分割
+			 后的结果数组
+		- 封装一个service用于查询从cluster_id得到region_no
+		- 返回值的处理封装：在action层统一处理，实现方式：
+			在action的父类里实现，提供一个公用的方法处理。
+		- 尽量避免不必要的网络交互（eg：访问数据库，访问网络上的其他service服务）
+		- 
+	* 整理open api定位到region的规则
+			现有2个api，北京那边api（不升级），杭州这边api（要升级），准备在2个api之上，用一个类似路由程序来统一接受访问api的请求，
+		并根据预定规则，将请求转发给老api或者新api，故需要整理这个路由的规则，让其能判断某个请求是到老api还是新api的？
+			新老版本如何共享一个DB？
+				有没有表操作冲突，看数据库的改动。
+			规则分析如下：
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				可供识别的条件有：（类似RegionAwareIntercept定位region的逻辑）
+					- 首先根据所查询的资源(open api库)
+						1) vm_name - 根据vm_name查询instance表
+							select
+								d.instance_id,d.instance_no,d.image_id,d.status,d.status_comment,d.ip_address,d.group_id,d.node_id,d.mount_type,d.type_id,d.usage_type,
+								d.user_id,d.kernel_id,d.ramdisk_id,d.platform,d.passwd,d.start_to_passwd,d.gmt_modified,d.gmt_create,d.remark,d.zone_id,d.vlan_no,d.region_no,
+								d.group_no,d.bps,d.rx,d.tx,d.rx_pub,d.tx_pub,d.cores,d.mem,d.disk,d.image_device_no,d.recoverable,d.ballon_enable,d.recover_policy,d.rack_id,d.safety_quota,d.intensive_io,
+								d.hostname,d.intensive_cpu,d.intensive_net,a.image_no,a.image_name,a.location as image_location,a.version as image_version,a.services_sign as image_servicesSign,
+								a.image_size,a.base_image_id,a.snapshot_id,a.sys_driver,a.region_no as image_region_no,a.iso_id as iso_id,b.image_no as kernel_no,b.image_name as kernel_name,b.location as kernel_location,c.image_no as ramdisk_no,c.image_name as ramdisk_name,
+								c.location as ramdisk_location,k.key_pair_id,k.key_pair_name,k.public_key,d.nc_id,d.machine_no,d.machine_no,d.is_balloon,d.is_migrate,d.is_upgrade,d.startup_mode
+							from instance d
+							left outer join image a on d.image_id=a.image_id
+							left outer join image b on d.kernel_id=b.image_id
+							left outer join image c on d.ramdisk_id=c.image_id 
+							left outer join key_pair k on d.key_pair_id=k.key_pair_id 
+							where d.instance_no=#value#
+							?instance_no不是region_no
+
+						2)  ip - 根据ip查询zone_ip表得出ip所在的段的记录，从而得到其所属region
+							SELECT
+								zone_id, 
+								region_no,
+								zone_ip_segment, 
+								ip_begin, 
+								ip_end
+							FROM zone_ip 
+							where ip_begin <= #value# and ip_end >= #value#
+							limit 1
+
+						3)  group_no  根据group_no,user_id,region_no查询group表（由于需要region_no，故此资源的操作可被region_no代替）
+							select 
+								group_id,
+								group_no,
+								user_id,
+								description,
+								region_no 
+							from `group` 
+							where user_id=#userId# and group_no=#groupNo# and region_no=#regionNo#
+							order by region_no,group_no desc
+
+						4)  ip_segment 根据CIDR地址ip地址查询zone_ip表
+							SELECT
+								zone_id, 
+								region_no,
+								zone_ip_segment, 
+								ip_begin, 
+								ip_end
+							FROM zone_ip 
+							where ip_begin <= #ipBegin# and ip_end >= #ipEnd#
+							limit 1
+							结果例子：
+								| zone_id       | region_no   | zone_ip_segment | ip_begin  | ip_end    |
+								+---------------+-------------+-----------------+-----------+-----------+
+								| region-test-a | region-test | 10.249.130.0/24 | 184123904 | 184124159 
+					- 根据用户请求参数region_no
+						region_no - 根据region_no查询
+					- 根据调用者（user）
+						比如query_region接口只能通过user信息定位region，user信息可以根据session参数查询houyi open api数据库得到
+						但是，用户会在北京region和杭州region都有vm吗？
+
+					上面，只是得到了用户所要请求的是那个region，还需要判断这个region是老api的，还是新api的？
+						背景：
+							原来api只有一个入口一个版本，现在api会有2个入口且版本不一致但DB公用；路由层需要一个映射——根据region转发请求到相应的api。
+
+						是不是需要维护一张region和api地址的映射表，路由根据region_no从此表找到转发地址？
+
+						
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				还要考虑到用户传错参数的情况
+				
+				结果：
+					优先根据region_no定位老api（北京）还是新api（杭州）
+					再根据vm_name
+					最后根据user所在的region
+
+					要维护region和其对应的是老api，还是新api类型的映射关系表，不然只能到各自数据中心的region表查询是否存在，目前只部署一个点，
+					故可以从唯一的库中查询。
+
+2. 对于修改设计的实现设计部分细节分析
+	* 返回值修改
+			现有逻辑，已有一个从后端调用结果到api结果pojo对象转换的逻辑(在action层中，有的是map方式转，格局返回类型不同转换方式各异)，
+		可以考虑在后端数据类型转换为api pojo时，进行我们需要的参数修改需求。eg: SnapshotApi
+			现在，在那个位置统一处理好？影响小，透明化，易理解，好维护
+				- 现定义在返回执行统一转换
+				- 被转换的源类型包含多种(map,list,其他)
+					通过方法多态，提供通用几种类型的方法，对于参数个数不一致，通过可变长参数实现
+				- 被转换参数一个或者多个
+
+			
+3. houyi open api常量类设计分析
+		对于一些常量，状态值的设计定义，减少硬编码：通过枚举定义一些常量，或者一组状态；通过一个接口定义枚举
+	基本机构。
+		* 枚举定义一些基本常量 eg: InstanceStatus定义vm的状态（待启动，启动中，运行中等）
+		* 如果在上面基础上需要组合一组常量，为一个状态，通过往枚举的构造总放入数组即可
+			eg: InstanceStatusSet定义vm可启动状态集合（包含：待启动，启动失败，已停止3个状态）
+
+4. api操作权限控制 acl	
+	通过注解设置service操作权限，再通过在spring里配置此注解到pointcut，拦截操作，判断权限
+	
+	spring + annotation + aop 实现权限与业务分离，注解配置权限点，通过aop拦截包含这些注解的方法的执行，校验权限，继续执行。
+	被操作的对象（比如instance）有属性InstanceStatus（instance状态常量定义枚举）标记其状态，拦截器判断被操作的instance是否在允许的
+	状态中，以判断操作是否可进行（比如mount_disk操作，instance只能在特定的状态下）。
+
+	key words: expression="@annotation(
+	
+	<bean id="resourceQueryFacade" class="com.aliyun.houyi.acl.ResourceQueryFacade"/>
+	
+	<bean id="resourceSurveyor" class="com.aliyun.houyi.acl.ResourceSurveyor">
+    		<property name="resourceQueryFacade" ref="resourceQueryFacade"></property>
+	</bean>
+
+	<bean id="instanceStatusInterceptor" class="com.aliyun.houyi.service.rule.InstanceStatusInterceptor">
+		<property name="resourceSurveyor" ref="resourceSurveyor"/>
+	</bean>
+
+	<aop:config>
+		<aop:pointcut id="instanceStatusPointcut"
+			expression="@annotation(com.aliyun.houyi.service.rule.InstanceStatusConstraint)" />
+		<aop:advisor advice-ref="instanceStatusInterceptor"
+			pointcut-ref="instanceStatusPointcut" order="10" />
+	</aop:config>	
+	
+	参考：http://raulraja.com/2009/06/13/aop-spring-intercepting-method-calls-using-annotations/
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day53 Thursday, May 31, 2012
+
+1. 
+	* region定位规则，并细化步骤，便于路由部分参考
+		实现可以不一样，逻辑基本一致。
+	* 除了db公用冲突分析外，是否还有其他地方需要考虑？
+		考虑大region关于open api的需求还有那些地方可能会影响？
+			迭代2,3需要评估
+
+			迭代2
+
+	* slb release_rs接口url及参数名称修改 done
+	
+2. 
+	
