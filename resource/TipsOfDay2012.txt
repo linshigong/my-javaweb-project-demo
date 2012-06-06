@@ -10,6 +10,13 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* error
+	cannot find symbol —— maven test项目时报此错误，可能和eclipse编译的冲突，先清除eclipse的编译文件，再执行mvn test
+
+* debug
+	* 提奥斯
+	从日志看，应用或者服务器日志；
+	错误可能被应用屏蔽，没有输出，此时只能看应用的日志。
 
 * 业务熟悉 熟悉业务
 	文档
@@ -718,8 +725,47 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			http://beust.com/eclipse-old/ 5.14.0.1 新版本有问题，用这个旧版本
 		- TestNG is designed to cover all categories of tests:  unit, functional, end-to-end, integration, etc...
 			TestNG is a testing framework inspired from JUnit and NUnit but introducing some new functionalities that make it more powerful and easier to use
-		
-
+		- 新项目加入jtester步骤：
+			1）加入依赖
+				<repositories>
+					<repository>
+					<id>jtester-maven</id>
+					<name>JTester</name>
+					<url>http://java-tester.googlecode.com/svn/maven2/</url>
+					</repository>
+				</repositories>		
+				<dependencies>
+					<dependency>
+					<groupId>org.jtester</groupId>
+					<artifactId>jtester</artifactId>
+					<version>1.0.1</version>
+					<scope>test</scope>
+				</dependency>				
+			2）添加jtester.properties配置文件到classpath
+			3）创建抽象父类，进行测试前的资源初始化操作
+				@SpringApplicationContext({
+					"classpath:houyi-spring-test.xml",
+					"classpath:houyi-spring-dao.xml",
+				    "classpath:houyi-spring-db.xml",
+				    "classpath:houyi-openapi.xml",
+					})
+				@AutoBeanInject(maps = { @BeanMap(intf = "**.*", impl = "**.impl.*Impl") })
+				public abstract class BaseJtester extends JTester {
+				}
+				这里 classpath:houyi-spring-test.xml 是配置了jdbc等配置文件信息的参数信息，要配置正确
+			4）测试类继承上面的抽象类（db，mock，etc）
+				public class ZoneDaoImplTest extends BaseJtester {
+					
+					@SpringBeanByName
+					ZoneDao zoneDao;
+					
+					@DbFit(when={"ZoneDaoImplTest.testQueryClusterIdByZoneId.when.wiki"})
+					@Test
+					public void testQueryClusterIdByZoneId(){
+						String clusterId = zoneDao.queryClusterIdByZoneId("testZoneId");
+						Assert.assertEquals("testClusterId", clusterId);
+					}
+				
 * 简称
 	 业务运营支撑系统(BOSS) 
 	 弹性计算(Elastic Computing - EC) 
@@ -731,6 +777,11 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- mavne 插件使用说明，查阅其官方说明：
+		eclipse插件：maven-eclipse-plugin http://maven.apache.org/plugins/maven-eclipse-plugin/
+		mvn某些goal执行错误时，可以尝试eclipse中clean项目再执行。
+			如果eclipse使用的jdk和maven使用的jdk不是同一个的话，会报编译错误；保证2者使用同一个jdk。
+
 	- maven可以通过参数执行特定的goal，或测试某个用例，不需要全部执行，灵活 (-Dxxx=)
 		mvn test -Dtest=AppDaoImplTest
 	- maven 打包后，将jar包install到本地库中
@@ -827,8 +878,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 						<encoding>${file.encoding}</encoding>
 					</configuration>
 				</plugin>
-		- 执行时，设置maven参数
+	- 执行时，设置maven参数
 			mvn -Dmaven.test.skip=false test 不跳过测试的test操作
+	- No goals needed for project - skipping 跳过测试问题
+		大项目下有多个子项目，某些子项目mvn test 不执行里面的test，报：No goals needed for project - skipping
 * 工具类
 	 apache commond 
 		StringUtils 
@@ -4243,6 +4296,18 @@ day29 Wednesday, April 25, 2012
 			如果slb api前端报错，则根据前端文档返回对应状态及msg
 
 		- 任何异常(Exception)都指定到错误的result上去。
+	* slb 测试
+		测试地址：10.150.8.214
+		部署
+			部署结构：nginx+tomcat
+			启动tomcat 
+				/home/admin/slbapi/bin/tomcatctl start
+			启动nginx（/home/admin/openapi/bin/nginxctl start）——若已启动，则不需要操作，只需启动tomcat即可
+			
+			http://10.250.8.214/slb/api?action=list_rs_pool&timestamp=2012-05-31+19%3A45%3A37&region_no=AT03-HOUYI1&session=lei.chang%40alibaba-inc.com&sign=kmEdDhkMXlIqGXxpsfwG3A%3D%3D
+
+			查看tomcat日志，在..slbapi/.default/...tomcat-localhost-6.1xx.log
+				
 2. 
 openapi接入的服务
 mysql> select * from service_provider;
@@ -4518,7 +4583,7 @@ day36 Monday, May 07, 2012
 			region_mapping(region_no ,vm_region_no) slb的region与vm region的映射关系表，根据vm的region找到slb的region
 			rs(vm_name ,ip) 用来做负载均衡的vm服务器的名称对应的ip映射表(用户请求的vm名称通过调用vm的api得转换为其ip调用slb后端，slb后端返回时根据此表将ip转换回vm名称，即对外只提供vm名称的操作隐藏vm的ip)
 			user( user_id ,user_name ,service_secret_key ,service_access_id  ,status ,is_admin) slb用户
-			lb流量接口表：
+			lb流量接口表：（这个表会存在多个实例吗？）
 				monitor_datasource slb后端提供
 		配置数据源：
 			- slb api库数据源配置(库slbapi)
@@ -4679,7 +4744,7 @@ day38 Wednesday, May 09, 2012
 		如果要对每个action做各自的验证，可以在设计action时，提供公用方法通过spring IOC注入自己的validator，此时验证在执行action前操作；
 		或者在拦截器层处理，可以在拦截器的上配置action名称对应的validator类。
 	* slb api 文档与slb 后端文档在返回码参数定义上一致修正；compact，hybird文档独立
-	* rs表在多个rs pool上都有同一个vm是，执行某个pool上删除此vm，导致其他pool再删除此vm时，ip映射不到name，
+	* rs表在多个rs pool上都有同一个vm时，执行某个pool上删除此vm，导致其他pool再删除此vm时，ip映射不到name，
 		解决：细化rs表，加入rs_pool_name ,lb_id分别用于rs操作和vm操作的ip映射,一标识各自的映射数据
 			alter table rs add  rs_pool_name varchar(100) NOT NULL COMMENT '@desc rs pool name'
 			alter table rs add  lb_id varchar(32) NOT NULL COMMENT '@desc lb_id'
@@ -4748,12 +4813,15 @@ day41 Monday, May 14, 2012
 	* 大region了解
 		数据中心随着业务增长，当前region不能放入更多vm，需要跨region，但逻辑上他们还是属于同一region，这样上层下发规则时，能对应到同region的vm。
 		当前解决方式，把region规则上提到api层，在这层统一region。
-	* houyi api 在vm迁移时需要刷新cache中的region信息以映射到新的region，在region定位接口，提供清楚指定资源的cache接口。
+	* houyi api 在vm迁移时需要刷新cache中的region信息以映射到新的region，在region定位接口，提供清楚指定资源的cache接口。 clear_cache
+
+		缓存：AbstractResourceLocator 类的 resourceRegionCache 方法 (定位用)
+
 		com.aliyun.houyi.service.ResourceLocator
 			DefaultResourceLocator 和 AbstractResourceLocator中实现(/houyi-console-service)
 			然后添加一个action(包位置：com.aliyun.houyi.openapi.control.vm)，并配置(/houyi-console-openapi):在spring里配置action这个bean，至于action请求映射配置由于用了
 			代理方式依据配置bean的name来执行，故不用再到struts.xml中配置(只配置一个代理的访问入口)。
-		action bean名为clean_cache
+		action bean名为clear_cache
 		需要定义接口说明，传递参数，返回值，状态码说明等。
 			参考houyi api文档
 			cache_key: vm名称
@@ -4796,7 +4864,7 @@ day42 Tuesday, May 15, 2012
 		- 查询rs信息接口删除，同时修改了查询rs pool信息的uri
 
 2. lb流量查询的数据源
-	是否和slb api的库一致，还是需要再配个数据源。
+	是否和slb open api的库一致，还是需要再配个数据源？需要配置到数据库中，每个slb都有一个库；和操作slb后端api地址一样，每个slb是不同的地址。
 	先根据基本datasource配置（维护monitor_datasource表(需要订正维护)，和rs表同在一个库中），取得所有region的datasource配置，然后动态返回对应region_no的数据源(slb后端的数据源)。
 
 	* 验证上面到slb后端取数据的sql字段是否与slb后端的表结构一致，参考slb后端数据库表。
@@ -4854,6 +4922,9 @@ day44 Thursday, May 17, 2012
 		即在LB流量接口的查询中，用到这两个库
 			业务库配置：
 				mysql -uroot -p654123 -h10.230.130.129 xuanyuan
+
+		每个slb都会有这2个库，故需要根据不同的slb查询不同的地址。和slb 的region是一对一的，即一个slb region对应一套库（包含计量数据的库 和 业务数据库）；
+
 	* lb后端创建lb时，去掉name参数，api需要做相应修改，api文档修改
 	* 了解大region需求
 
@@ -5121,7 +5192,7 @@ day51 Tuesday, May 29, 2012
 
 	之间的关系理清楚？
 		* 一个cluster对应一个region(小region)，多个region对外统一为一个大region
-		* region和zone是一对多的关系
+		* region和zone是一对多的关系？zone是网络用的概念，一个region下有多个zone，zone和cluster_id是一对一关系
 		* region与group是一对多关系 ( group表中有region_no,user_id字段)
 		* 从user层面看，user_id与group是一对多关系，某个user_id的group可以跨region
 			目前，权限是对group授权(后面再加上到vm的授权)，
@@ -5146,7 +5217,7 @@ day52 Wednesday, May 30, 2012
 			在action的父类里实现，提供一个公用的方法处理。
 		- 尽量避免不必要的网络交互（eg：访问数据库，访问网络上的其他service服务）
 		- 
-	* 整理open api定位到region的规则
+	* 整理houyi open api定位到region的规则
 			现有2个api，北京那边api（不升级），杭州这边api（要升级），准备在2个api之上，用一个类似路由程序来统一接受访问api的请求，
 		并根据预定规则，将请求转发给老api或者新api，故需要整理这个路由的规则，让其能判断某个请求是到老api还是新api的？
 			新老版本如何共享一个DB？
@@ -5287,10 +5358,155 @@ day53 Thursday, May 31, 2012
 	* 除了db公用冲突分析外，是否还有其他地方需要考虑？
 		考虑大region关于open api的需求还有那些地方可能会影响？
 			迭代2,3需要评估
-
-			迭代2
+	* 后端mock：
+		调用houyi后端的mock实现。
+		对 ApsaraCommandExecutor 进行mock
+			保证传递进去的参数是正确的，mock出预期的返回，便于测试。
+	* 迭代2
 
 	* slb release_rs接口url及参数名称修改 done
 	
 2. 
+	分析迭代2部分需求：
+			原来的概念，上了大region都会改变，比如原来查询某个region下某个zone中的vlan信息，大region后
+		要查询的就是这个用户在大数据中心所有的zone下的vlan信息。
 	
+
+3. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day54 Friday, June 01, 2012
+
+1. 
+	* 迭代1新增需求分析
+		1）不停机升级云服务器配置，重启生效	API对modify_vm接口操作的VM前置状态增加running条件 1
+		2）SLB的L4 VIP不能配置健康检查的问题 1
+		3）因为machine_no（随机字段）这个值存在重复性，启用新的算法(类似于UUID类的算法)，保证生成的machine_no是不会重复的 2
+		4）支持动态添加新region信息，不需要重启 1
+			是否有添加region这个接口？
+				houyi.region表是手动插入记录
+				没有这个接口，需要设计方案；RegionValuesFactory里的region缓存，如何在region表手动插入记录时，更新RegionValuesFactory里region
+				缓存？
+					a. 定时刷新
+					b. 缓存找不到就去数据库找，若找到则加入缓存，找不到则返回相应的结果。
+
+
+
+
+	* 迭代2需求，各接口流程梳理
+	* 查询slb后端业务表的数据源，可能有多个的情况，配置在数据库中，根据不同的slb region调用不同的数据源。？待
+2. 
+	slb 测试环境：
+		
+		mysql
+			mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
+
+	http://workflow.it.alibaba-inc.com/StartWorkflow.ashx?wfid=dfdd6d75-e539-4cb6-a289-a01eaaa5b426
+	服务类型，新开令牌；需求权限，内网默认权限
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day55 Monday, June 04, 2012
+
+1. 
+	* 迭代1新增需求分析 见day54第1条
+		详见迭代一新增需求文档（doc）
+	* 将分支：http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_btc_migrate/中clear_cache接口代码加到分支	
+	   http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_update_struts上。
+		拉api_update_struts的代码，并更新上clear_cache接口
+	* slb后端会部署多个slb，每个slb对应一个计量库，一个业务库； 参考day42 slb 流量
+		一个slb对应多个vm，每个vm可能位于不同的region。
+		每个slb都会有这2个库，故需要根据不同的slb查询不同的地址。和slb 的region是一对一的，即一个slb region对应一套库（包含计量数据的库 和 业务数据库）；
+		？
+		monitor_datasource表，就是保存了每个slb，其region_no对应的取流量数据库的地址映射。
+			monitor_datasource的region_no指的是slb的region，不能和vm的混淆；region表里都是slb的信息，唯一vm和slb region有关系的就是region_mapping表，表示了vm region和slb
+			region的映射。
+
+		参考解决方案：
+			1）在monitor_datasource表加个type字段，用以标识slb后端数据库类型（0-业务库；1-计量库）；在LBMonitorSqlMapTemplateFactory里，
+			     初始化slb region对应的2个库的sqlmapclient实例。
+			2）slb后端提供查询接口，这样传入user_id，分页参数即可（region表定义了到那个url上去取数据）
+	* slb open api bugfix
+		delete_loadbalance 接口，同时清除LoadBalancer相关的配置——对应open api层也要清理rs表。
+
+2. redmine 任务列表
+	拉分支 ：
+	【代码SVN路径】
+		houyi-api: http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_big_region
+		控制系统：http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/houyi/branches/ec_big_region
+	
+	list_vlan 第三周期？
+
+3. cache不便于查找 缓存方案 cache方案
+	RegionValuesFactory - CachedRegionValuesFactory 
+	region 缓存
+
+	如果系统有多处需要使用cache，可以考虑使用一种cache框架，统一cache使用方案。-tip-
+		参考：http://www.cnblogs.com/ieage/archive/2012/05/20/2509454.html
+
+4. maven 跳过test ？
+	No goals needed for project - skipping
+
+
+5. LB,RS,RS_POOL,VIP之间什么关系？待
+	从delete_loadbalance接口需要删除那些相关东西入手
+	
+	看下面query_rs_ pool_info的结果截取：
+		{
+		"name":"testpool1",
+		"protocol":"http",
+		"port":80,
+		"vips":[{"lb_id":"1377236b076-region1","frontend_port":80,"rules":["www.wqwqwq2.com","www.wqwqwq1.com","www.wqwqwq3.com"]}],
+		"realservers":[{"address":"192.168.1.28","weight":100}]
+		}
+	一个rs pool对应多个vip，多个rs
+	删除LB,是否也删除rs_pool？不用，rs pool为用户自己管理
+	删除rs pool时，需要删除rs。
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day56 Tuesday, June 05, 2012
+
+1. 
+	* 迭代一开发
+	* slb open api bugfix
+		
+2. 迭代一开发记录
+	结果处理：
+		操作成功才需要修改返回内容，操作失败时，只返回错误码和状态，没有结果。
+	返回码修改：
+		由于参数格式修改，需要修改部分返回码的错误提示。
+	结合jtester框架测试
+		
+	- 4.2	查询VM的设备接口（query_vm_device）
+		* /houyi-console-service/src/main/java/com/aliyun/houyi/service/impl/InstanceServiceImpl.java
+			queryDevice方法修改
+		* zonedaoimpl
+		* ZoneDaoImplTest
+			jtester测试通过
+		* zoneservice / zoneserviceimpl
+		* /houyi-console-model/src/main/java/com/aliyun/houyi/entity/Zone.java 加上clusterId属性
+		* zone表加cluster_id字段【sql 修改】
+			alter table zone add cluster_id varchar(32) NOT NULL;
+		* /houyi-console-util/src/main/java/com/aliyun/houyi/util/ResultParseUtil.java 工具类 ，处理返回值装配
+		* /houyi-console-openapi/src/main/java/com/aliyun/houyi/openapi/control/vm/QueryVmDeviceExecuteAction.java 取得cluster_id，修改返回值
+			待测
+	- 4.3	磁盘创建snapshot接口（create_snapshot）
+		* 修改错误码：
+			SnapshotErrorMessage
+			DEVICE_IS_NULL(-900, "device No. is null"), ——》 改为：DEVICE_IS_NOT_ILLEGAL(-900, "device No. is not illegal"),
+		* CreateSnapshotExecuteAction
+			待测
+	- 4.4	取消创建snapshot接口（cancel_create_snapshot）
+		* 修改错误码：
+			SNAPSHOT_IS_NULL(-920, "snapshot is null"), ——》改为： SNAPSHOT_ID_IS_NOT_ILLEGAL(-920, "snapshot id is not illegal"),
+		* CancelCreateSnapshotExecuteAction
+			待测
+	- 4.1	add_disk接口
+		* AddDiskExecuteAction
+			待测
+		
+
+3. maven 跨项目test
+	独自测试依赖问题？
+
+4. jtester测试 参考： * jtester
