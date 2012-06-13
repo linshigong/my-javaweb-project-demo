@@ -18,6 +18,8 @@ google 检索 apache site:*.apache.org 高级搜索
 	从日志看，应用或者服务器日志；
 	错误可能被应用屏蔽，没有输出，此时只能看应用的日志。
 
+* virtual networking 虚拟网络
+	
 * 业务熟悉 熟悉业务
 	文档
 	从数据库表理解
@@ -373,7 +375,36 @@ google 检索 apache site:*.apache.org 高级搜索
 		2).使用注解 org.junit.After 修饰用于注销 Fixture 的方法。
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
-* test * mock 
+* test * mock  * jmock
+	- jtester ,用jmock框架
+		写期望 Expectations 时，要注意按照调用次序写 -tip-
+				a. 
+					when(resourceQueryFacade.query(Instance.class, (String[])any)).thenReturn(new Instance[]{new Instance(),new Instance()}); //java.lang.ClassCastException: [Ljava.lang.Object; cannot be cast to [Lcom.aliyun.houyi.entity.Instance;
+				b. 
+					//resourceQueryFacade.query(Instance.class, (String[])any);
+					//returnValue(new Instance[]{new Instance(),new Instance()});
+				上面2中写法结果不一样。
+	- new Expectations(){
+		理解Expectations的含义：
+			Expectations即期望，录制期望发生的动作（设置期望返回值），执行时，按照期望的顺序执行（如不是期望定义的顺序会报错）。
+		期望Expectations与mock的关系？
+			expectations里 要按照执行顺序写期望逻辑。
+				否则报调用错误 unexpected invocation xxx
+		参考下面jmock的说明：
+			JMockit Expectations
+
+			TheJMockit Expectationsmocking API provides arecord-replaymodel for writingbehavior-basedtests. In this model, a test
+			begins by setting one or moreexpectationson the invocations made from code under test to its collaborators (dependencies). 
+				The classes and instances for such dependencies are established through the declaration of one or
+			moremocked typesinside the test class/method. Such mocked types can be declared through instance fields of the test
+			class or of an Expectations anonymous subclass inside a test method, and also through parameters of test methods
+			(even though JUnit and TestNG don't allow regular test methods to have parameters). After expectations are defined in
+			thisrecording phase, the test transitions to thereplay phase, when the code under test is exercised. The invocations that
+			actually occur on the mocked collaborators are handled according to the mocked type declarations and the corresponding
+			expectations recorded on them (if any). At the end of the replay phase, those expectations for which one or more
+			invocations were expected are automatically verified so that missing invocations can be detected.
+	- mock私有方法时，参数的设置方式如下，否则报类似错误：Invalid null value passed as argument 0 (instead of null, provide the Class object for the parameter type)
+		
 	- 单元测试
 		做的好处多，特别对于合作开发，对可变情况的检测，功能完整性，逻辑错误等等。
 	- junit mock
@@ -402,7 +433,9 @@ google 检索 apache site:*.apache.org 高级搜索
 * struts
 	- ValueStack valueStack = con.getValueStack();
 			ResultDomain result = (ResultDomain)valueStack.findValue(ResultDomainVisitor.RESULT_KEY, ResultDomain.class);
-	- 
+	- ActionContext
+		内部实现为 ThreadLocal
+
 * bat 批处理 不继续执行  (搜素 bat 调用mvn - 对于bat执行好mvn后就不继续执行其他操作的问题解决搜索关键词)
 	- mavn web project 自动部署启动容器脚本(bat脚本)
 		-------
@@ -765,7 +798,11 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 						String clusterId = zoneDao.queryClusterIdByZoneId("testZoneId");
 						Assert.assertEquals("testClusterId", clusterId);
 					}
-				
+		- 配置jtester时，报属性文件找不到
+			Caused by: java.io.FileNotFoundException: C:\Users\wb_shen.chengs\.houyi\jdbc.properties (系统找不到指定的路径。)
+				查找jtester抽象父类，导入的配置文件中，是否那个配置文件引用了错误的路径；如果原配置文件不能动，可以再test包下的resource中对其
+			做个拷贝，修改相应值，替代原配置文件导入。
+
 * 简称
 	 业务运营支撑系统(BOSS) 
 	 弹性计算(Elastic Computing - EC) 
@@ -5382,7 +5419,7 @@ day54 Friday, June 01, 2012
 		1）不停机升级云服务器配置，重启生效	API对modify_vm接口操作的VM前置状态增加running条件 1
 		2）SLB的L4 VIP不能配置健康检查的问题 1
 		3）因为machine_no（随机字段）这个值存在重复性，启用新的算法(类似于UUID类的算法)，保证生成的machine_no是不会重复的 2
-		4）支持动态添加新region信息，不需要重启 1
+		4）支持动态添加新region信息，不需要重启 1  动态添加新region信息
 			是否有添加region这个接口？
 				houyi.region表是手动插入记录
 				没有这个接口，需要设计方案；RegionValuesFactory里的region缓存，如何在region表手动插入记录时，更新RegionValuesFactory里region
@@ -5467,16 +5504,26 @@ day55 Monday, June 04, 2012
 day56 Tuesday, June 05, 2012
 
 1. 
-	* 迭代一开发
+	* 迭代一开发 开始
 	* slb open api bugfix
-		
+		表修改：
+			alter table rs modify column vm_name varchar(50);
+			alter table rs modify column ip varchar(15);
+			alter table rs modify column lb_id varchar(110);
+	
 2. 迭代一开发记录
 	结果处理：
 		操作成功才需要修改返回内容，操作失败时，只返回错误码和状态，没有结果。
 	返回码修改：
 		由于参数格式修改，需要修改部分返回码的错误提示。
 	结合jtester框架测试
-		
+		service层mock后端执行的返回值：mock后端返回值
+			后端返回格式，参考每个command里的代码，比如：CreateSnapshotCommand ，这些命令都继承自 AbstractCommand
+	service层的测试，对于内部私有类，可以通过替sprintg配置来实现mock。
+		如果mock返回的类型不是预期，可以考虑让mock类实现相应的接口。
+	测试环境
+		测试依赖的配置文件，有一部分在用户目录下，需要在spring配置文件中配置正确。
+
 	- 4.2	查询VM的设备接口（query_vm_device）
 		* /houyi-console-service/src/main/java/com/aliyun/houyi/service/impl/InstanceServiceImpl.java
 			queryDevice方法修改
@@ -5488,25 +5535,398 @@ day56 Tuesday, June 05, 2012
 		* zone表加cluster_id字段【sql 修改】
 			alter table zone add cluster_id varchar(32) NOT NULL;
 		* /houyi-console-util/src/main/java/com/aliyun/houyi/util/ResultParseUtil.java 工具类 ，处理返回值装配
-		* /houyi-console-openapi/src/main/java/com/aliyun/houyi/openapi/control/vm/QueryVmDeviceExecuteAction.java 取得cluster_id，修改返回值
+		* QueryVmDeviceExecuteAction
+			取得cluster_id，修改返回值
 			待测
+				dao
+				service
+				action
+				util工具类
+					单元测试通过
 	- 4.3	磁盘创建snapshot接口（create_snapshot）
 		* 修改错误码：
 			SnapshotErrorMessage
 			DEVICE_IS_NULL(-900, "device No. is null"), ——》 改为：DEVICE_IS_NOT_ILLEGAL(-900, "device No. is not illegal"),
 		* CreateSnapshotExecuteAction
 			待测
+		状态码增加：
+			ILLEGAL_DEVICE_NO(-901,"illegal device no"), DOC
 	- 4.4	取消创建snapshot接口（cancel_create_snapshot）
 		* 修改错误码：
 			SNAPSHOT_IS_NULL(-920, "snapshot is null"), ——》改为： SNAPSHOT_ID_IS_NOT_ILLEGAL(-920, "snapshot id is not illegal"),
 		* CancelCreateSnapshotExecuteAction
 			待测
+		状态码增加：
+			ILLEGAL_SNSPASHOT_ID(-921,"illegal snapshot id "), DOC
 	- 4.1	add_disk接口
 		* AddDiskExecuteAction
 			待测
+		状态码增加：
+			ILLEGAL_SNSPASHOT_ID(-921,"illegal snapshot id "), DOC
 		
 
 3. maven 跨项目test
 	独自测试依赖问题？
 
 4. jtester测试 参考： * jtester
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day57 Wednesday, June 06, 2012
+
+1. 
+	* 迭代一开发
+	* slb bugfix
+		slb后端对于错误的url就直接返回原始错误，比如404之类；这样，open api这里需要保证url的准确性。
+
+2. 迭代一开发记录
+	- 4.5	查询设备已有的快照接口(list_snapshot)
+		ListSnapshotExecuteAction
+			待测
+		状态码增加：
+			ILLEGAL_DEVICE_NO(-901,"illegal device no"),  DOC
+	- 4.6	查询快照详情接口（detail_snapshot）
+		SnapshotService
+			mock测试
+			主要是mock每个action相应的command执行结果，这个结果参考相应action的command中处理返回值的代码。比如：此接口参考 QuerySnapshotCommand （由于缺少后端接口说明）结果处理，处理结果
+			？
+
+		DetailSnapshotExecuteAction 
+			待测
+		状态码修改：
+			SNAPSHOT_ID_IS_NOT_ILLEGAL(-920, "snapshot id is not illegal"), DOC
+				snapshot_id为空或格式不合法			
+	- 4.7	删除快照接口（remove_snapshot）
+		AbstractSnapshotExecuteAction 涉及deviceNo，需要修改
+		RemoveSnapshotExecuteAction
+			待测
+		状态码修改：
+			DEVICE_NO_IS_NOT_ILLEGAL(-900, "device No. is not illegal"), DOC
+				device_no为空或格式不合法
+			SNAPSHOT_ID_IS_NOT_ILLEGAL(-920, "snapshot id is not illegal"), DOC
+				snapshot_id为空或格式不合法	
+	- 4.8	回滚快照接口（rollback_snapshot）
+		RollbackSnapshotExecuteAction
+			待测
+		状态码修改：
+			DEVICE_NO_IS_NOT_ILLEGAL(-900, "device No. is not illegal"), DOC
+				device_no为空或格式不合法
+			SNAPSHOT_ID_IS_NOT_ILLEGAL(-920, "snapshot id is not illegal"), DOC
+				snapshot_id为空或格式不合法		
+	- 4.9	保留快照接口（retain_snapshot）
+		SnapshotService
+		RetainSnapshotExecuteAction
+			待测
+		状态码修改：
+			DEVICE_NO_IS_NOT_ILLEGAL(-900, "device No. is not illegal"), DOC
+				device_no为空或格式不合法
+			SNAPSHOT_ID_IS_NOT_ILLEGAL(-920, "snapshot id is not illegal"), DOC
+				snapshot_id为空或格式不合法
+
+3. spring，资源文件加载 问题
+	如果导入资源文件的配置文件没有初始化，提前处理调用资源文件会报错：
+		eg: jtester抽象父类，初始化spring context时。
+
+	mock复杂的私有内部类时，通过新建一个类（继承原来的类）来mock，配置时初始化由于早于属性文件导入，报了错。放到属性文件加载之后即可。
+
+4. 设计中测试的考虑
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day58 Thursday, June 07, 2012
+
+1. 
+	* 迭代一开发
+
+2. 开发记录
+	- 4.10	查看已挂载的快照接口(list_mounted_snapshot)
+		SnapshotService
+		ListMountedSnapshotExecuteAction
+			待测
+	- 4.11	挂载快照接口(mount_snapshot)
+		SnapshotService
+		MountSnapshotExecuteAction
+		？snapshot 和 snapshot_id混用？
+			String snapshot = ParameterValueGetter.getParameterValue(params, SnapshotParameter.SNAPSHOT);
+			if(StringUtils.isEmpty(snapshot)){
+				 snapshot=ParameterValueGetter.getParameterValue(params, SnapshotParameter.SNAPSHOT_ID);
+			}
+			—— 查看过期API，是因为兼容老api，snapshot已废弃被snapshot_id替代
+				按照当前逻辑，如果新旧参数都传了，还是以旧参数为准 ，其他接口一样，这点要注意。（以最新参数为准较好？）
+		状态码修改：
+			ILLEGAL_DEVICE_NO(-901,"illegal device no") DOC
+			ILLEGAL_SNSPASHOT_ID(-921,"illegal snapshot id ") DOC
+	- 4.13	在线迁移接口( live_migrate_vm)
+		InstanceService
+		VmLiveMigrateExecuteAction
+		状态码修改：
+			增加错误码：
+				GlobalErrorMessage NO_IN_THE_SAME_REGION(-142, "not in the same region"), 表示迁移时需要在同一个region中 ？ DOC
+					迁移目标NC和当前instance不在同一个region中
+					注：这个与对外是一个大region矛盾，是否处理可迁移的nc列表，不包含不可迁移的nc？还是只供内部用？
+				ILLEGAL_NC(-731,"illegal nc"),
+			待测
+	- 4.15	查询可切换的nc接口（query_available_nc）
+		QueryAvaliableNcsExecuteAction
+			待测
+	- 4.16	查询nc详情(detail_nc)接口 (houyi-openapi.xml)
+		NodeControlService
+		SingleNcResourceAction
+		状态码修改：NcErrorMessage 
+				NC_NO_IS_NULL(-730, "nc_no is null"), —— 》NC_NO_IS_NOT_ILLEGAL(-730, "nc_no is not illegal"), DOC
+			待测
+	- 4.17	创建VM（create_vm）接口 
+		VmCreateExecuteAction
+			逻辑在getInstanceInfo方法里
+		RackServiceImpl
+		状态码修改：
+			增加状态提示：
+				GlobalErrorMessage NO_IN_THE_SAME_REGION (-142, "not in the same region"), DOC
+				当rack的region和nc的region不一致时报错。
+			待测
+	- 4.14	故障切换接口（recover_vm）
+		状态码修改：
+			增加状态码：
+				NcErrorMessage RACK_ID_NOT_ILLEGAL(-719,"rack is not illegal"), DOC
+					rack_id格式不合法（destination_rack）
+			增加状态码：
+				GlobalErrorMessage NO_IN_THE_SAME_REGION(-142, "not in the same region"), DOC
+					nc region 和intance region不一致。
+		InstanceServiceImpl
+		VmRecoverExecuteAction
+			待测
+	- query_racks action也要改动？ 多态一个，此接口暂不变。
+
+3. 对于service层的 public CommandExecutor commandExecutor; mock费了不少时间，由于此属性的注入方式是通过一个工厂（CommandExecutorFactory）获得（spring的beanfactory接口的实现）
+mock这个工厂取得commandExecutor对应的实例对象时，返回的却是这个工厂的类型，不是CommandExecutor的实现类。
+		工厂内部通过一个私有内部类来得到真正的CommandExecutor实现类（不便mock），最后通过把这个工厂类的配置单独提出来，写一个mock类继承CommandExecutorFactory，并测试时
+	配置为工厂的mock类，这样测试能通过。
+		但是这个工厂需要根据场景返回不同的CommandExecutor实现类，不便于每次测试去修改mock类。
+		debug发现在测试类中再去mock一下这个mock类时，返回的是其自身，转型时不能转为CommandExecutor类型，于是让这个工厂mock类实现CommandExecutor接口。
+4. 
+	拦截器mock
+		如果不便于mock，则找到其内部关键点进行mock。
+	mock里面嵌套mock 是否可行？不必要，正确mock了某个类，可以忽略其内部逻辑。
+
+5. mock 与 expections 结合 jmockit ,jtester
+	mock对象，编写期望 expections 。
+		-------
+		...
+			@SpringBeanByName
+			QueryVmDeviceExecuteAction query_vm_device;
+			
+		//	@Mocked
+		//	@SpringBeanFor
+		//	InstanceService instanceService;
+			
+			@Mocked
+			@SpringBeanFor
+			ZoneService zoneService;
+			
+			@SuppressWarnings("unchecked")
+			@Test
+			public void testExecute() throws Throwable{
+
+				final Result<PagingInfo<DeviceEx,DeviceEx>> expectedDeviceResult = new Result<PagingInfo<DeviceEx,DeviceEx>>();
+				expectedDeviceResult.setSuccessful(true);
+				expectedDeviceResult.setResultInfo(new PagingInfo<DeviceEx, DeviceEx>(){
+					@Override
+					public List<DeviceEx> getItems() {
+						List<DeviceEx> list = new ArrayList<DeviceEx>();
+						list.add(new DeviceEx(10,1024,"System"));
+						list.add(new DeviceEx(11,512,"System"));
+						list.add(new DeviceEx(12,256,"System"));
+						return list;
+					}
+				});
+				
+				final String expectedClusterId = "testClusterId";
+				final ResultMessage expected = ResultMessage.SUCCESSFUL;
+				
+				final Instance instance = new Instance();
+				instance.setInstanceNo("testNo");
+				instance.setStatus(InstanceStatus.Running);
+				
+				final ResultDomain resultDomain = new ResultDomain(200, "successful");
+				
+				UserHolder.setCurrentUser(new User());
+				RegionHolder.setCurrentRegion(new Region());
+				
+			new Expectations(){
+				{
+		//        		when(instanceService.queryDevice((Instance)any)).thenReturn(expectedDeviceResult);
+					when(zoneService.queryClusterIdByZoneId(anyString)).thenReturn(expectedClusterId);
+				}
+				@Mocked(methods="queryDevice")
+				InstanceService instanceService;
+				{
+					when(instanceService.queryDevice((Instance)any)).thenReturn(expectedDeviceResult);
+				}
+
+			};
+				
+				ResultMessage result = query_vm_device.execute(instance, null, resultDomain);
+				
+				Assert.assertEquals(result, expected);
+				Assert.assertEquals(((List<DeviceApi>)resultDomain.getData().get("devices")).get(0).getDevice_no(), expectedClusterId+"-10");
+			}
+		...
+		-------
+	分析上面的测试用例代码的 instanceService 部分：
+		如果要mock instanceService的某个方法，可以在属性里定义mock；如果只是想测试一个调用期望，可以写在expections里（录制-重现），以验证是否被调用。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day59 Friday, June 08, 2012
+
+1. 
+	* 迭代一开发
+
+2. 开发记录
+	- 继续 create_vm接口
+		
+	- 继续nc详情
+	- 
+
+3. mock 测试 
+	代码里计量显式的传递变量，尽量少与第三方的代码耦合，否则耦合度高，同时也不利于单元测试。
+		比如struts框架的 ServletActionContext 便于读取action的上下文，尽量只在入口处调用，不是每个地方都去调用这个类。逻辑尽量紧凑。
+
+		即尽量减少与容器耦合。否则那些个特殊类都需要去mock（eg:session.rquest,respone....）
+
+	测试一个action时，可通过mock其父类的方法来便于测试。
+		利用mock框架的只对特定方法mock能力。
+
+	mock某个类，那么spring 的注入就失效了（=null）
+
+	* 对于静态方法，全局变量，可以再运行时设置进去。
+		比如struts2的actoncontext，可以自己注入一个用于测试：
+			ActionContext.setContext(new ActionContext(params));
+	
+			ActionContext.getContext().setParameters(params);
+	
+	* 下面2个方法的声明，就关于params参数的设置，看哪个好测试？
+	（1）
+		@Override
+		public ResultMessage execute(Instance instance, Map<String, Object> params,
+				ResultDomain resultHolder)
+		{
+	（2）
+		@Override
+		public ResultMessage execute()
+		{
+			Map<String, Object> params = ActionContext.getContext().getParamters();
+		很明显，第一个测试时传入即可，第二个却要去自己访问第三方类，设置值，如果不方便设置就囧了~~~
+		对于确实依赖第三方的地方，可以统一包装使用，不零散调用。比如抽取到工具类中去。朝着低耦合，高内聚的目标走
+4. 问题
+	VmCreateExecuteAction.
+		try{
+			 image = super.getResources(Image.class, imageNo);
+		}catch(ResourceUnfoundedException e){
+			 image = imageService.queryCustomImageByImageNo(imageNo);
+		} 
+		？异常做逻辑处理？
+	或者抛出，结束执行，或者捕获，日志，继续执行。
+5. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day60 Monday, June 11, 2012
+
+1. 
+	* 迭代一开发
+	* 补偿迭代一单元测试
+	* SLB open api原查询后端业务表的逻辑修改：
+		不查询SLB后端业务表，改为从查询LoadBalancer列表(list_lb)接口获取需要的信息：
+			a. 
+			b. 
+
+2. 开发记录
+	- 4.18	查询用户所有VM状态（list_vm_status）接口  ？ 当前还只是返回指定region下的所有vm状态，待到后面迭代实现返回大region下信息
+		QueryVmListInfoExecuteAction
+	- 4.20	删除云硬盘(remove_disk)接口
+		RemoveDiskExecuteAction
+		InstanceService
+		状态码修改：
+			增加：SnapshotErrorMessage DEVICE_NO_IS_NOT_ILLEGAL(-900, "device No. is not illegal"), 错误码  DOC
+	4.19	查询VM详情（detail_vm）接口
+		VmQueryExecuteAction
+		InstanceService修改queryInstanceAtNc方法
+		InstanceService修改queryInstancePublicIp方法
+		
+
+3. 单元测试补充记录
+	- CancelCreateSnapshotExecuteAction
+		SnapshotService 的cancelCreateSnapshot方法 done
+	- CreateSnapshotExecuteAction
+		snapshotService.createSnapshot
+	..具体见redmine
+
+4.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day61 Tuesday, June 12, 2012
+
+1. 
+	* 迭代一开发 +　单元测试补偿
+	* 迭代一接口的状态码修改，更新到设计文档中 ？待
+	
+	* SLB OPEN API bug修改
+		检查请求后端的URL的正确性，比如某些关键参数为空的话，则URL请求返回404等错误，后端没有处理，open api需要处理。
+		monitorInfoService 已处理一个方法，还有个得到分页的user lbs方法 待？
+			listLoadBalancerFlows 接口：
+				- slb流量接口，当前逻辑是查询统计所有流量数据，如何根据lb_id分页匹配数据，响应client。
+					后面可以优化根据需要查询的lb_id的流量进行真分页查询。？
+						先得到分页的lb_id列表，然后到后端流量表一次性查询对应的流量数据。
+				- 此接口获取lb_ids的逻辑改为从list_loadbalances接口间接获取，排序后分页，返回。
+
+
+2.  开发记录
+	新增接口修改：没有列入参数修改设计文档，根据redmine开发：
+	vlan_no 改为 cluster_id-vlan_no 涉及到 create_vm 也要修改
+	- 查询虚拟网络信息（list_vlans），修改返回值(vlan_no改成cluster_id-vlan_no)
+		VlanQueryAction
+
+3. mock 测试
+	测试框架提供了部分，常用J2EE框架的mock类 比如 ：HttpServletRequestSimulator ，用于测试struts时模拟request对象。
+
+4. 设计 ，id，name ，。。。命名统一，或者叫id或者统一name。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day62 Wednesday, June 13, 2012
+
+1. 
+	* slb bug fix
+	* 迭代一接口的状态码修改，更新到设计文档中 doing
+	* 迭代一  补充接口处理	redmine没录入？
+		- 4.12	卸载快照接口(unmount_snapshot)
+
+
+	* houyi open api 参数修改部分，某些参数不是必选的？逻辑需要考略 
+		参考原有逻辑，处理可选参数。
+	* 状态码修改补充
+		原状态码不变（尽量减小对客户端的影响），新增需要的状态码：
+			device_no is illegal	device_no参数格式不合法
+			nc_no is illegal	nc_no格式不合法（cluster_id-nc_no）
+			not in the same region	xxx的region和xxx的region不一致
+			rack is illegal	xxx rack格式不合法（cluster_id-xxxrack）
+			snapshot id is illegal	snapshot_id格式不合法
+
+			device_no is illegal  device_no参数格式不合法
+			ILLEGAL_DEVICE_NO(-901,"illegal device no"),
+
+			 nc_no is illegal nc_no格式不合法（cluster_id-nc_no）
+			ILLEGAL_NC(-731,"illegal nc"),
+
+			 rack is illegal    xxx rack格式不合法（cluster_id-xxxrack）
+			ILLEGAL_RACK_ID(-721, "illegal rack id") ;
+
+			 snapshot id is illegal         snapshot_id格式不合法
+			ILLEGAL_SNSPASHOT_ID(-921,"illegal snapshot id "),
+
+			vlan_no
+			ILLEGAL_VLAN_NO(-191, "illegal vlan_no"),;
+
+	之前的状态码修改 ，修改为上面的格式。
+	
+2. 文档管理
+
