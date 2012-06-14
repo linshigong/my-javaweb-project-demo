@@ -10,6 +10,12 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* API 用户体验
+	开发的api遵循一定的规范：（整齐划一，看着清爽）
+		接口命名
+		返回码规划（分段）
+		错误提示格式 比如驼峰式书写
+		语义描述统一
 * error
 	cannot find symbol —— maven test项目时报此错误，可能和eclipse编译的冲突，先清除eclipse的编译文件，再执行mvn test
 
@@ -384,6 +390,13 @@ google 检索 apache site:*.apache.org 高级搜索
 					//resourceQueryFacade.query(Instance.class, (String[])any);
 					//returnValue(new Instance[]{new Instance(),new Instance()});
 				上面2中写法结果不一样。
+		报 unexpected invocation 错误时，一般为expectation顺序不对，或者个数不对，比如某个方法有2个拦截器判断，就需要写2个expectation
+			可以通过一步步 debug 找到那里写的不对（笨了点，但实用，终极解决 ~~）
+				主要是通过反射执行代码，debug时要注意。debug也帮助理解mock测试的过程。比如：方法执行前会先执行方法拦截器。 -tip-
+				“ ----------- 一步步的debug，验证执行逻辑是否符合预期，也能知道是什么原因导致用例执行失败。----------"
+					是expectation顺序不对，还是数目不对或是其他，都可找到。
+		如果一个对象被mock了，那么每次调用的expectation需要编写，否则返回null（在一些场合就会报错）
+
 	- new Expectations(){
 		理解Expectations的含义：
 			Expectations即期望，录制期望发生的动作（设置期望返回值），执行时，按照期望的顺序执行（如不是期望定义的顺序会报错）。
@@ -953,6 +966,17 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		esac
 
 * linux
+	- 端口占用查询 ，端口查询 linux端口查询
+		查询端口被谁占用（linux命令）
+		分类： linux 资料或经验 2012-03-26 16:59 118人阅读 评论(0) 收藏 举报
+		lsof -i:3306
+		查看3306端口被谁占用
+		lsof简介
+		lsof（list open files）是一个列出当前系统打开文件的工具。在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。所以如传输控制协议 (tcp) 和用户数据报协议 (udp) 套接字等，系统在后台都为该应用程序分配了一个文件描述符，无论这个文件的本质如何，该文件描述符为应用程序与基础操作系统之间的交互提供了通用接口。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能够查看这个列表对系统监测以及排错将是很有帮助的。
+		lsof使用
+		lsof输出信息含义
+		在终端下输入lsof即可显示系统打开的文件，因为 lsof 需要访问核心内存和各种文件，所以必须以 root 用户的身份运行它才能够充分地发挥其功能。
+		from: http://blog.csdn.net/shuhuai007/article/details/7395690
 	- ls --color=never 或 --color=aways
 		命令行 ，终端 ，颜色
 	- ssh远程命令行 ，通过 rz ,sz 传递/接受文件
@@ -5843,6 +5867,7 @@ day60 Monday, June 11, 2012
 2. 开发记录
 	- 4.18	查询用户所有VM状态（list_vm_status）接口  ？ 当前还只是返回指定region下的所有vm状态，待到后面迭代实现返回大region下信息
 		QueryVmListInfoExecuteAction
+
 	- 4.20	删除云硬盘(remove_disk)接口
 		RemoveDiskExecuteAction
 		InstanceService
@@ -5899,7 +5924,9 @@ day62 Wednesday, June 13, 2012
 	* 迭代一接口的状态码修改，更新到设计文档中 doing
 	* 迭代一  补充接口处理	redmine没录入？
 		- 4.12	卸载快照接口(unmount_snapshot)
-
+	* SLB后端数据格式修改？
+		查询用户lb列表：
+			{\"code\":200,\"msg\":\"successful\",\"lbs\":[\"lb1\",\"lb2\"]}"); 由统一的data字段表示数据，改为lbs 。？
 
 	* houyi open api 参数修改部分，某些参数不是必选的？逻辑需要考略 
 		参考原有逻辑，处理可选参数。
@@ -5930,3 +5957,23 @@ day62 Wednesday, June 13, 2012
 	
 2. 文档管理
 
+3. 数组操作
+	Arrays 工具类 collections 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day63 Thursday, June 14, 2012
+
+1. 
+	* 迭代一单元测试补充
+	* umount_snapshot接口实现
+	* slb  api bugfix
+	及文档修改
+		错误提示都修改为驼峰式。eg: NameIsEmpty 
+
+2. 补充
+	- umount_snapshot 卸载快照接口
+		UnmountSnapshotExecuteAction
+		SnapshotServiceImpl
+		状态码增加：
+			-901	illegal device no	device_no格式不合法 DOC
+			-921	illegal snapshot id	snapshot_id格式不合法 DOC
