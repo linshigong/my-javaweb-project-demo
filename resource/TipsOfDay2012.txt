@@ -10,6 +10,14 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+
+* vim
+	- search
+		type '/' > type words > key 'n' for next match
+	- 
+
+* 一致性hash算法（consistent hashing） hash圆环 ，环形hash
+	http://www.cnblogs.com/liyulong1982/articles/2497731.html
 * API 用户体验
 	开发的api遵循一定的规范：（整齐划一，看着清爽）
 		接口命名
@@ -78,7 +86,11 @@ google 检索 apache site:*.apache.org 高级搜索
 	/etc/sysconfig/network
 	/etc/hosts
 	域名服务器配置文件：/etc/resolv.conf
- 
+	
+	 -------------------------
+	 slbapi测试环境：
+		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
+		http://10.230.204.24/slb/api?
  * spring
 	spring通过aop拦截器，拦截自定义注解所注解的方法 参考day52
 	参考：http://raulraja.com/2009/06/13/aop-spring-intercepting-method-calls-using-annotations/
@@ -396,7 +408,8 @@ google 检索 apache site:*.apache.org 高级搜索
 				“ ----------- 一步步的debug，验证执行逻辑是否符合预期，也能知道是什么原因导致用例执行失败。----------"
 					是expectation顺序不对，还是数目不对或是其他，都可找到。
 		如果一个对象被mock了，那么每次调用的expectation需要编写，否则返回null（在一些场合就会报错）
-
+	- void mock 无返回值方法mock mock void
+		直接mock那个对象或相应的方法，不做处理即可。
 	- new Expectations(){
 		理解Expectations的含义：
 			Expectations即期望，录制期望发生的动作（设置期望返回值），执行时，按照期望的顺序执行（如不是期望定义的顺序会报错）。
@@ -726,7 +739,10 @@ google 检索 apache site:*.apache.org 高级搜索
 		（mysql  Ver 14.14 Distrib 5.1.40, for unknown-linux-gnu (x86_64) using readline 5.1）
 	- mysql>system ls
 		mysql下执行shell，命令行命令方式
-
+	- mysql where条件字符串不区分大小写
+		？是否哪里可以设置要区分大小写
+	- mysql 区分大小写
+		参考day66
 Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * php 从小例子入手
 	- shell中执行php
@@ -763,6 +779,24 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		 http://www.bugfree.org.cn/blog/?page_id=9
 * 测试，测试框架，测试插件
 	* jtester
+		- 测试异常抛出
+			-----
+			...
+				new Expectations(){
+					{	when(xx).thenReturn(xx);
+						throwException(new RuntimeException(xxx));
+					}
+				};
+				try{
+					xxx.execute();
+				}catch (Exception e) {
+					Assert.assertEquals(e.getClass(), RuntimeException.class);
+					Assert.assertEquals(e.getMessage(), xxx);
+				}
+			...
+			-----
+		- 一个测试方法，含多个测试点的时候
+			可以按照顺序依次测试（在同一个方法中），不过expectation需要新建（从之前的拷贝过来即可），改动点需要设置的地方，再assert即可。
 		- 测试框架，提供了各种测试方式及支持，比如mock，通过反射测试私有类等的工具JTesterReflector ，完整的去用一个测试框架。阅读其说明文档
 		- 提供集成测试支持(如数据库等)
 		- jtester是结合其他框架基础上的，比如@Test 注解用的就是testing框架，此时eclipse插件就下载testing(TestNG )的插件，即可在ide执行测试。ide比如eclipse执行单元
@@ -952,19 +986,34 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 * shell
 	- 根据参数执行任务shell
-		#!/bin/bash
-		if [ ! -n "$1" ]
-		then
-		    echo  "usage: $0 [insert|remove]";
-		    exit 1
-		fi
-		ACTION="$1"
-		case $ACTION in
-		    insert) echo "device inserted.";;
-		    remove) echo "device removed.";;
-		    *) echo "invalid option.";;
-		esac
+		-----
+			#!/bin/bash
+			if [ ! -n "$1" ]
+			then
+			    echo  "usage: $0 [insert|remove]";
+			    exit 1
+			fi
+			ACTION="$1"
+			case $ACTION in
+			    insert) echo "device inserted.";;
+			    remove) echo "device removed.";;
+			    *) echo "invalid option.";;
+			esac
+		-----
+	- 常用shell ，执行sh后，用tail显示执行log
+		-----
+			#!/bin/bash
 
+			if [ $# -lt 2 ];
+			then
+				echo "USAGE: $0 -f server.properties"
+				exit 1
+			fi
+			LOGFILE=$(dirname $0)/../logs/metaServer.log
+
+			nohup sh $(dirname $0)/meta-run-class.sh com.taobao.metamorphosis.server.MetamorphosisStartup $@ 2>&1 >>$LOGFILE &
+			tail $LOGFILE -f
+		-----
 * linux
 	- 端口占用查询 ，端口查询 linux端口查询
 		查询端口被谁占用（linux命令）
@@ -3497,7 +3546,7 @@ maven test failure —— 错误报告会告知哪里导致错误，一步步检
 day16 Friday, April 06, 2012
 
 1. test 抽象类(实现方法，测视类中静态内部类继承) ，私有方法（反射）
-
+	通过反射测试
 	
 
 2. Cron expressions  ,quartz
@@ -3752,12 +3801,16 @@ day19 Wednesday, April 11, 2012
 		执行路径，相对路径 ，程序默认读当前路径，执行路径时，在shell可以 cd 到所需要的当前路径(工作路径)，再执行即可。
 		
 3. svn 提交 eclipse ，还是用svn客户端 
-	eg: TortoiseSVN   
-		check for modification - revert  
-	可以用客户端管理版本，eclipse只负责项目开发。 不同svn客户端交叉用可能出错误。
-	svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/trunk 
-	username
-	password
+		eg: TortoiseSVN   
+			check for modification - revert  
+		可以用客户端管理版本，eclipse只负责项目开发。 不同svn客户端交叉用可能出错误。
+		svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/trunk 
+		username
+		password
+	* svn
+		- 各种svn工具操作命令不相同，但svn基本功能都是提供的，只是不熟悉的话要去找找
+			比如：TortoiseSVN 查看某个文件的提交记录 ，是调用 show log 菜单 ；eclipse的svn插件用的可能就是 xx history ；熟练度的关系
+
 4. 从svn下载到maven编译到部署运行 ，整个的脚本
 	svn取到项目源码
 	mvn 构建
@@ -5013,6 +5066,8 @@ day45 Friday, May 18, 2012
 
 1. 
 	* slb api cache region启用修改
+		bug 41 继续报错
+
 	* houyi防火墙规则了解，大region相关业务点熟悉
 	* slb后端api user_id必选，rs_type参数名改为mode ，对api这层做相应调整(代码+文档)
 
@@ -5840,7 +5895,7 @@ day59 Friday, June 08, 2012
 		{
 			Map<String, Object> params = ActionContext.getContext().getParamters();
 		很明显，第一个测试时传入即可，第二个却要去自己访问第三方类，设置值，如果不方便设置就囧了~~~
-		对于确实依赖第三方的地方，可以统一包装使用，不零散调用。比如抽取到工具类中去。朝着低耦合，高内聚的目标走
+		对于确实依赖第三方的地方，可以统一包装使用（通过参数传递进来），不零散调用。比如抽取到工具类中去。朝着低耦合，高内聚的目标走
 4. 问题
 	VmCreateExecuteAction.
 		try{
@@ -5967,8 +6022,10 @@ day63 Thursday, June 14, 2012
 	* 迭代一单元测试补充
 	* umount_snapshot接口实现
 	* slb  api bugfix
-	及文档修改
-		错误提示都修改为驼峰式。eg: NameIsEmpty 
+		及文档修改
+			错误提示都修改为驼峰式。eg: NameIsEmpty 
+	* 迭代一
+		可选参数，逻辑处理检查 done
 
 2. 补充
 	- umount_snapshot 卸载快照接口
@@ -5977,3 +6034,351 @@ day63 Thursday, June 14, 2012
 		状态码增加：
 			-901	illegal device no	device_no格式不合法 DOC
 			-921	illegal snapshot id	snapshot_id格式不合法 DOC
+3. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day64 Friday, June 15, 2012
+
+1. 
+	* 动态添加region，不重启 ,
+		具体需求为：添加region表的信息，添加region对应的monitor_datasource信息
+		day54 no.1		
+		RegionValuesFactory
+			单元测试（region缓存初始化后，往数据库插一条新region记录，验证缓存中不存在就去数据库查找并存入缓存的逻辑）
+		下半部分需求分析：
+			- DefaultClcEndpointLoader （通过regionDao得到region_no与nuwa地址的map）
+			- CommandExecutorFactory 根据上面的map，初始化 executors：
+				this.executors = new HashMap<String, CommandExecutor>();
+			- 上面的 executors 每次调用时根据regionNO返回对应的操作后端的 ApsaraCommandExecutor
+				CommandExecutor executor = executors.get(regionNo);
+			
+			所以，更新 executors 即可将新region的monitor_datasource添加到缓存中。
+				由于对外没有提供修改 executors 变量的入口，考虑通过反射来动态设置 executors 。
+				这个逻辑的触发放到哪里？
+					谁最先知道有了新region？
+					分析代码知道，RegionAwareInterceptor 最先执行（需要通过 RegionValuesFactory 来查询用户请求中的region信息），所以，上面的逻辑触发
+					放到 RegionValuesFactory 动态加region信息的逻辑中。
+			方案：
+				在 RegionValuesFactory 处理新增region的缓存逻辑中，同时增加更新CommandExecutorFactory的executors属性，加上新region的调用对象的逻辑。
+			例外情况：
+				手动加region表记录和加monitor_datasource记录是不同步的，或者可以理解2者没关系。
+				所以上面的触发逻辑，分别处理各自在查找cache的逻辑中实现动态更新。
+		
+		monitor_datasource和 region，至少2者有各自的作用：
+			MonitorSqlMapTemplateFactory 的 monitorDatasources 变量
+				ConsistentCircle
+
+	* houyi open api 测试环境
+		http://10.250.6.33/open/services?
+		key:lisw,secret:lisw
+	* houyi open api 
+		涉及snapsho的接口，原部分接口逻辑在操作快照时没有对用户是否有权限操作快照做约束，现需要判断：
+			- 快照的owner和当前用户是否一致。
+			（image是有visibility使用权限设置的，可以设置为私有或公有或者其他定义的类型，快照为私有）
+
+			- 增加判断权限的单元测试
+			- 参考 InstanceServiceImpl 的 mountDisk 方法
+			- 修改范围：
+				迭代一中涉及用户对snapshot操作的接口
+			- 验证错误报：
+				CLCErrorCode.SnapshotNoPrivilege
+
+2. snapshot权限验证 （对snap操作时都应该验证owner，或是查询或取消创建或删除或挂载。。。）
+	然后，上面的验证逻辑是在open api层还是控制层？
+		是api自己去一次次查询再验证，还是把需要的参数给后端(user_id,snapshot_id etc..)，让后端来校验并返回给api？
+	
+	查询快照时，返回前判断快照是否属于这个user：
+
+		DetailSnapshotExecuteAction
+			if (!snapshotExt.getOwnerId().equals(
+					String.valueOf(UserHolder.getCurrentUserId())))
+			{
+				ResultMessage message = SnapshotErrorMessage.SNAPSHOT_NO_PRIVILEGE;
+				ResultDomain resultDomain = new ResultDomain(message);
+				return resultDomain;
+			}
+	
+	？ 需要确认，后端那些做了验证，那些没做验证？
+
+	- 4.1	add_disk接口 done
+		InstanceServiceImpl 的mountDisk方法
+			done
+			判断逻辑：
+				snapshotExt = (SnapshotExt) result.getResultInfo();
+
+				/** check permission **/
+				if(snapshotExt.getOwnerId().equals(String.valuseOf(UserHolder.getCurrentUserId()))){
+					return new Result<Object>(CLCErrorCode.SnapshotNoPrivilege);
+				}			
+		unit test
+			done
+	- 4.4	取消创建snapshot接口（cancel_create_snapshot）
+		？此接口没有查询快照，直接传递snapshot_id给后端，执行取消快照创建 ，是否需要先查询，判断owner正确，再取消创建？ 待
+			或者是后端会根据snapshot_id结合instance信息，判断是否有操作权限？后端确认，“无文档”，验证较好，权限体系
+		若api层做验证，参考4.1实现。
+	- 4.5	查询设备已有的快照接口(list_snapshot)
+		？同4.4，返回的快照列表是否可能是其他用户的快照
+			如果后端没验证，open api需要验证
+		ListSnapshotExecuteAction
+	- 4.6	查询快照详情接口（detail_snapshot）
+		DetailSnapshotExecuteAction
+		原逻辑已验证，跳过
+	- 4.7	删除快照接口（remove_snapshot）
+		？同4.4 ，原逻辑也是传递snapshotId给后端，是否需要先查询，再执行
+		部分代码：
+			RemoveSnapshotCommand command = new RemoveSnapshotCommand(instance, deviceNo, snapshotId);
+			return commandExecutor.execute(command,snapshotRegionNo);
+	- 4.8	回滚快照接口（rollback_snapshot）
+		？同4.4
+	- 4.9	保留快照接口（retain_snapshot）
+		？同4.4
+	- 4.10	查看已挂载的快照接口(list_mounted_snapshot)
+		？同4.4
+	- 4.11	挂载快照接口(mount_snapshot)
+		SnapshotServiceImpl > mountSnapshot
+			done
+		unit test
+			done
+	- 4.12	卸载快照接口(unmount_snapshot)
+		SnapshotServiceImpl
+			done
+		unit test 
+			done
+			
+
+
+3. api调控制系统的设计
+	采用command模式，每个接口都定义为一个command对象，封装了endpoint，参数，处理返回值等逻辑。
+
+	统一由一个执行对象执行。
+
+	action中处理返回值的逻辑，是否可以移到command的处理防护值方法中 职责划分
+
+4. houyi open api 系统
+	InstanceServiceImpl > mountDisk
+		this.instanceDao.updateInstanceConfig(instance); //没返回值，没log，非理想情况如何处理
+	mock？
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day65 Monday, June 18, 2012
+
+1. 
+	* slb bug fix
+		严格按照文档说明来开发，编写单元测试（基于文档）
+		- 流量接口 pageNO,pageSize可选，空的话采用默认值。依据文档说明
+		- 目前OPENAPI的RS表没有user_id字段，虽然lb_id是全局唯一的，但是rs_pool_name却是用户唯一的，所以光凭rs_pool_name无法唯一确定一个rs_pool，可能会有重复的情况出现。
+			rs表加user_id字段，增加删除时都带上这个筛选字段。lb_id ，rs_pool_name都带上对应的user_id
+			sql修改
+				alter table rs add user_id int(10) unsigned;
+	* big region
+		svn提交格式：
+			fix bug #3243 修复某问题的comments
+2. 设计
+action的参数验证，可以抽象出来，不用在acton的方法里详细验证
+
+3. 基于文档 ，每个条件/参数都提供测试用例，测试用例覆盖每个错误状态
+	理想状态用例
+	参数不合法用例
+	。。。
+4. 实现 ApplicationContextAware 接口的类，在spring初始化时初始化应用的一些缓存等操作时，bean需要配置，以便spring来实例化
+	
+
+5. linux部署时，会由于权限问题导致，部署失败，或者部署时，有部分文件没被更新。
+需要注意。
+
+6. 整理 slbapi 操作rs表的接口及其操作rs的逻辑（增加逻辑/删除逻辑）
+	- add_rs
+		根据vm_name,rs_pool_name和user_id增加rs表记录
+	- delete_rs
+		根据vm_name,rs_pool_name和user_id删除rs表记录
+	- switch_rs
+		根据vm_name,rs_pool_name和user_id增加rs表记录
+		根据vm_name,rs_pool_name和user_id删除rs表记录
+	-add_vm
+		根据vm_name,lb_id和user_id增加rs表记录
+	-delete_vm
+		根据vm_name,lb_id和user_id删除rs表记录
+	- switch_vm
+		根据vm_name,lb_id和user_id增加rs表记录
+		根据vm_name,lb_id和user_id删除rs表记录
+	- delete_lb
+		根据lb_id和user_id删除记录
+	- release_backend
+		根据vm_name 和user_id删除rs表记录
+	- delete_rs_pool
+		根据rs_pool_name和user_id删除rs表记录
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day66 Tuesday, June 19, 2012
+
+1. 
+	* big region 动态添加regin，更新monitor datasource信息
+		？更新缓存接口
+		逻辑实现 + 测试
+		触发条件：
+				需要用到各自region的SqlMapClientOperations操作的dao层，都是通过MonitorSqlMapTemplateFactory的 getMonitorDatasource 方法取到 SqlMapClientOperations 进行后续操作，
+			故，以 getMonitorDatasource 方法作为触发加载新region monitor datasource的点。
+		修改点：
+			MonitorSqlMapTemplateFactory 
+				public SqlMapClientOperations getMonitorDatasource(String regionNo, String instanceNo){
+	* slb rs表测试
+	* big region ,根据cluster_id查询region_no时，如果region_no不存在应该报错 ？ 添加验证逻辑
+		返回码设计：
+			根据不同参数的cluster_id查询region，设计相应的返回码
+			- cluster_id-device_no-snapshot_id
+				报snapshot_id不存在
+			- cluster_id-device_no
+				报device_no不存在
+			- cluster_id-nc_id
+				报nc_di不存在
+			- cluster_id-rack_id
+				报rack_id不存在
+			- cluster_id-vlan_no
+				报vlan_no不存在
+
+	* mysql case sensitive
+		mysql 区分大小写
+		参看下面：
+				The default character set and collation are latin1 and latin1_swedish_ci, so nonbinary string comparisons are case insensitive by default. This means that if you search with col_name LIKE 'a%', 
+			you get all column values that start with A or a. To make this search case sensitive, make sure that one of the operands has a case sensitive or binary collation. For example, if you are comparing a 
+			column and a string that both have the latin1 character set, you can use the COLLATE operator to cause either operand to have the latin1_general_cs or latin1_bin collation:
+				col_name COLLATE latin1_general_cs LIKE 'a%'
+				col_name LIKE 'a%' COLLATE latin1_general_cs
+				col_name COLLATE latin1_bin LIKE 'a%'
+				col_name LIKE 'a%' COLLATE latin1_bin
+				If you want a column always to be treated in case-sensitive fashion, declare it with a case sensitive or binary collation.
+			from:http://stackoverflow.com/questions/5629111/mysql-case-sensitive-string-comparison
+		2种方式实现mysql支持大小写区分
+			1) 查询时通过操作符 COLLATE
+			2) 建表时声明
+		此处选择建表时声明列区别大小写：
+			-- 此为更新语句 sql修改
+			alter table region_mapping modify column vm_region_no varchar(32) binary NOT NULL COMMENT '@desc vm region_no';  
+			alter table region_mapping modify column region_no varchar(32) binary NOT NULL COMMENT '@desc slb region_no';  
+			alter table region modify column region_no varchar(32) binary NOT NULL;  
+			alter table rs modify column vm_name varchar(50) binary NOT NULL COMMENT '@desc vm name';
+			alter table rs modify column rs_pool_name varchar(100) binary COMMENT '@desc rs pool name';
+			alter table rs modify column lb_id varchar(110) binary COMMENT '@desc lb_id';
+			alter table monitor_datasource modify column region_no varchar(32) binary NOT NULL;
+
+			建表语句类似上面。
+				  `region_no` varchar(32) binary NOT NULL COMMENT '@desc slb region_no',
+
+2. monitor datasource相关修改点，测试点
+	- monitorDatasource.xml 增加根据region_no查询记录的select语句定义
+		MonitorSqlMapTemplateFactory 直接用了这个映射文件（充当dao层）
+			测试时测试这个类即可
+				测试新增的select
+	- MonitorSqlMapTemplateFactory修改 getMonitorDatasource 方法
+	
+3. bug提交格式 
+	fix bug #3243 修复某问题的comments
+
+4. 单元测试覆盖程序的逻辑，覆盖关键点越细，工作量越大，但代码健壮性越强。
+	slb这边测试用例只测试几个正常的场景，对一些例外没有写用例，导致qa测试bug。
+
+5. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day67 Wednesday, June 20, 2012
+
+1. 
+	*  slb bug fix #122
+		先新建lb，然后重现问题
+		原因：
+			hybird类型 query_loadbalance_info时，返回值中没有vm_list字段
+	* slbapi rs表加region_no字段（slb的region），目的在操作rs_pool_name记录时，处理多个slb region_no的rs_pool_name重名情况
+		每个rs记录都记录region_no
+		sql修改
+			alter table rs add region_no varchar(32) DEFAULT NULL  COMMENT '@DESC slb region no';
+	* 迭代一 参数修改部分 ，新增2个接口需要修改
+		
+2. slbapi 测试环境
+	mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
+3. slb测试
+	测试的条件能重现，就可以在本地debug
+
+4. SystemError 2100
+	slbapi在处理 ip2name时会报这个异常
+5. rs表加region_no字段 —— 只在操作rs_pool_name时考虑这个字段
+	rs.xml
+6. 部署没更新问题
+	删除部署的内容后，重新build再部署。
+7. 接口测试，单元测试中，可能没有细致到返回结果处理的测试用例，隐藏了
+	a. 调用成功
+	b. 返回值正确
+	c. 处理返回的相应正确
+
+	一套单元测试用例很重要，打好基础，再变更时，处理就很方便；否则，未知数太多，需要QA或运行时才能暴露问题。
+
+8. 迭代一 参数修改 新增接口 文档说明整理
+	- 4.22	query_nc_resources接口
+		ClusterNcResourceListAction
+
+	- 4.23	query_racks接口
+		RackQueryAction
+
+		哪怕是那寥寥几个字节的注释，也能鼓起我看完这漫长代码的勇气~，如果连这点也剥夺，那也就只好苦逼的被一行行、一遍遍的摧残了
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day68 Thursday, June 21, 2012
+
+1.
+	* big region 迭代一bug处理
+	* big region 迭代一新增2个接口开发
+	* big region 测试环境
+		请求api的client 位置：
+			/houyi-console-openapi/src/test/java/com/aliyun/houyi/openapi/util
+		10.242.209.4  api地址
+		10.242.209.1 api db
+		日志 /home/admin/houyi/service/logs/openapi
+		10.250.8.214环境 admin操作
+			cd /home/admin/houyi/service
+			sh build/build.sh 
+			sh bin/reloadws_alone 
+			tail -f logs/openapi/jboss_stdout.log 
+		配置文件：
+			/home/admin/.houyi/
+
+2. big region 迭代一bug处理
+	- detail_vm 返回的vlan_no格式错误 http://bugfree.corp.taobao.com/bug/175626
+		原因：设计时丢了vlan_no的格式转换（vlan_no为后续增加待修改参数）
+		修改：
+			VmQueryExecuteAction
+			VmQueryExecuteActionTest
+	- 
+
+3.  big region 迭代一新增2个接口开发
+	- 4.22	query_nc_resources 接口
+		修改：
+			ClusterNcResourceListAction
+				zone_id的获取？
+					AbstractExecuteAction 提供2个重载的 getCurrentZone 方法供action调用，采用哪个无参的方法。（即请求中无zone_no，则取用户默认的zone）
+			ClusterNcResourceListActionTest
+	- 4.23	query_racks接口
+		修改：
+			RackQueryAction
+			RackQueryActionTest
+
+4. 问题排查
+	请求内容 + 错误返回内容 + 日志内容
+
+
+5. 迭代一 cluster_id 修改整理：
+	1）vm_name为空，返回码是VM_NAME_IS_NULL(-200, "vm name must set"),
+	2）没有权限操作snapshot，返回码是SNAPSHOT_NO_PRIVILEGE(-913, "has no privilege to visit snapshot")
+	 
+	3）cluster_id是否存在需要判断（nc_id,rack_id,vlan_no,device_no,snapshot_id）
+	DEVICE_NOT_EXISTS(-905, "device not exists at vm"),
+	SNAPSHOT_NOT_EXISTS(-910, "snapshot id not exists"),
+	NC_NOT_EXISTS(-700, "nc not exists"),
+	RACK_NOT_EXISTS(-160, "rack not exits"),
+	NC_NOT_EXISTS(-161, "nc not exits"),
+	VLAN_NOT_EXISTS(-190, "Virtual Lan not exits")
+	4）涉及新device_no，新snapshot_id中都需要判断格式中的device_no是否一致，若不存在，错误码是SNAPSHOT_NOT_EXISTS(-910, "snapshot id not exists"),
+	 
+	5）需要判断涉及cluster_id与vm_name对应的region是否一致，这个错误码待考虑？
+	以下4、5是在不跨region使用snapshot,disk情况下，API层作的权限验证。
