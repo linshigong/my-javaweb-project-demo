@@ -11,10 +11,75 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* 测试 
+	部署打开debug
+	远程shell(调用python封装好的各个接口调用，执行命令，传入参数即可)执行请求，ide debug处理过程
 * vim
+	-
+		:reg 查看剪贴板内容
 	- search
 		type '/' > type words > key 'n' for next match
-	- 
+	- 在整个文件里面有效移动光标
+		VIM 有很多命令，可以用来到达文件里面你想到达的地方。下面是一些在文件里面移动的命令：
+	　　<C-F>：向下移动一屏。
+	　　<C-D>：向下移动半屏。
+	　　<C-B>：向上移动一屏。
+	　　<C-U>：向上移动半屏。
+	　　G：到文件尾
+	　　numG：移动光标到指定的行（num）。（比如 10G 就是到第 10 行）
+	　　gg：到文件首
+	　　H：移动光标到屏幕上面
+	　　M：移动光标到屏幕中间
+	　　L：移动光标到屏幕下面
+	　　*：读取光标处的字符串，并且移动光标到它再次出现的地方。
+	　　#：和上面的类似，但是是往反方向寻找。
+	　　/text：从当前光标处开始搜索字符串 text，并且到达 text 出现的地方。必须使用回车来开始这个搜索命令。如果想重复上次的搜索的话，按 n移动到下个 text 处，N 移动到上一个 text 处 。
+	　　？text：和上面类似，但是是反方向。
+	　　m{a-z}：在当前光标的位置标记一个书签，名字为 a-z 的单个字母。书签名只能是小写字母。你看不见书签的存在，但它确实已经在那里了。
+	　　`a：到书签 a 处。注意这个不是单引号，它一般位于大部分键盘的 1 的左边。
+	　　`.：到你上次编辑文件的地方。这个命令很有用，而且你不用自己去标记它。
+	　　%：在成对的括号等符号间移动，比如成对的 [ ] ， { }， ( ) 之间。将光标放到任意符号上，然后通过 % 来移动到和这个符号匹配的符号上，% 还可以正确的识别括号的嵌套层数，总是移动到真正匹配的位置上。因此这个命令在编辑程序代码的时候非常有用，可以让你方便的在一段代码的头尾间移动。
+	　　6、它主要应用在--Linux系统
+	- VIM 复制黏贴
+		内容：
+		用vim 这么久 了，始终也不知道怎么在vim 中使用系统粘贴板，通常要在网上复制 一段代码都是先gedit打开文件，中键粘贴后关闭，然后再用vim 打开编辑，真的不 爽；上次论坛上有人问到了怎么在vim 中使用系统粘贴板，印象里回复很多，有好几页的回复却没有解决问题，今天实在受不了了又在网上找办法，竟意外地找到 了，贴出来分享一下。
+
+		如果只是想使用系统粘贴板的话直接在输入模式按Shift+Inset（粘贴）就可以了，下面讲一下vim 的粘贴板的基础知识，有兴趣的可以看看，应该会有所收获的。
+		vim 帮助文档里与粘贴板有关的内容如下：
+
+		    vim 有12个粘贴板，分别是0、1、2、...、9、a、“、＋；用:reg命令可以查看各个粘贴板里的内容。在vim 中简单用y只是复制 到“（双引号)粘贴板里，同样用p粘贴的也是这个粘贴板里的内容；
+
+		    要将vim 的内容复制 到某个粘贴板，需要退出编辑模式，进入正常模式后，选择要复制 的内容，然后按"Ny（注意带引号）完成复制 ，其中N为粘贴板号(注意是按一下双引号然后按粘贴板号最后按y)，例如要把内容复制 到粘贴板a，选中内容后按"ay就可以了，有两点需要说明一下：
+			“号粘贴板（临时粘贴板）比较特殊，直接按y就复制 到这个粘贴板中了，直接按p就粘贴这个粘贴板中的内容；
+			+号粘贴板是系统粘贴板，用"+y将内容复制 到该粘贴板后可以使用Ctrl＋V将其粘贴到其他文档（如firefox、gedit）中，同理，要把在其他地方用Ctrl＋C或右键复制 的内容复制 到vim 中，需要在正常模式下按"+p；
+
+		    要将vim 某个粘贴板里的内容粘贴进来，需要退出编辑模式，在正常模式按"Np，其中N为粘贴板号，如上所述，可以按"5p将5号粘贴板里的内容粘贴进来，也可以按"+p将系统全局粘贴板里的内容粘贴进来。
+
+		注意：在我这里，只有vim.gtk或vim.gnome才能使用系统全局粘贴板，默认的vim.basic看不到+号寄存器。安装vim.gnome使用apt-get install vim-gnome，然后vim自动会链接到vim.gnome。
+		（二）
+		yy  複製游標所在行整行。或大寫一個 Y。
+		2yy 或 y2y  複製兩行。ㄟ，請舉一反三好不好！:-)
+		y^  複製至行首，或 y0。不含游標所在處字元。
+		y$  複製至行尾。含游標所在處字元。
+		yw  複製一個 word。
+		y2w 複製兩個字。
+		yG  複製至檔尾。
+		y1G 複製至檔首。
+		p   小寫 p 代表貼至游標後（下）。
+		P   大寫 P 代表貼至游標前（上）。
+		    整行的複製，按 p 或 P 時是插入式的貼在下（上）一行。非整行的複製則是貼在游標所在處之後（前）。
+		"ayy  將本行文字複製到 a 緩衝區
+		    a 可為 26 個英文字母中的一個，如果是小寫的話，原先的內容會被清掉，如果是大寫的話是 append 的作用，會把內容附加到原先內容之後。
+		    " 是 Enter 鍵隔壁的那一個同上符號（ditto marks）。
+		"ap  將 a 緩衝區的內容貼上。
+		    緩衝區的術語在 vim 稱為 registers，vim 擴充了相當多的功能，有興趣深入的朋友請 :h registers。您用 d、c、s、x、y 等指令改變或刪除的內容都是放在 registers 中的。例如：您用 dd 刪除的一行，也是可以使用 p 來貼上的。只要是在緩衝區的內容都可以使用 p 來貼上，不是一定要 y 起來的內容才能用 p。因此您認為 p 是 paste 也可以，認為是 put 可能較正確。
+		5"ayy  複製五行內容至 a 緩衝區。
+		5"Ayy  再複製五行附在 a 內容之後，現在 a 中有十行內容了！
+		    ㄟ！不要我一直用 a 您就認為只有 a 可以用喔。26 個英文字母都可以的，交叉運用下，您會發覺 vi(m) 肚量不小。
+		    問題來了！忘記誰是誰的時候怎麼辦？ :reg（冒號命令）就會列出所有 registers 的代號及內容。您現在就試著按看看。咦！怎麼還有數目字、特殊符號的緩衝區，原來您剛剛刪除（複製）的內容就預設放在 " 這個緩衝區，然後依序是 0,1,2,...9。也就是說您按 p 不加什麼的話，是取出 " 緩衝區的內容的。% 指的是目前編輯的檔案，# 指的是前一次編輯的檔案。還有其它的呀！因為沒什麼重要，就請 :h registers 吧！registers 有個 "s" 結尾，不要搞錯了，而且 Tab 的補全鍵 vim 也支援的，也就是說您鍵入 :h regi 再按 Tab 鍵，vim 就會幫您補全，按了 Tab 後發現不是您要的，那就繼續按，總會出現您要的。:-)
+		    Tab 補全的功能，elvis 也有，但叫出 registers 列表的命令則沒有，您得自行記憶在您的腦袋瓜子裡。而且 elvis 的補全能力並沒 vim 強。
+
+		另外,按下v键,可以进入可视模式,这个时候可以更自由更灵活的选取要复制的段落,区块了.
 
 * 一致性hash算法（consistent hashing） hash圆环 ，环形hash
 	http://www.cnblogs.com/liyulong1982/articles/2497731.html
@@ -520,7 +585,15 @@ google 检索 apache site:*.apache.org 高级搜索
 
 * rest
 	rest方式的请求，根据uri定位资源 ，各种http方法发送的请求 可以用matrix url请求rest服务
-* memcache 
+
+* Redis
+	　　redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)和zset(有序集合)。
+	这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。
+	与memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，
+	并且在此基础上实现了master-slave(主从)同步。
+	http://redis.io/
+
+* Memcached  
 	c 实现
 	项目主页: http://code.google.com/p/memcached/wiki/Clients	
 	说明：
@@ -761,6 +834,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 
 * ide * eclipse
+	
 	ctrl + shift + L 列出所有快捷键列表
 	- 字母大小写
 		ctrl + shift + x (大写)/ ctrl + shift + y (小写)
@@ -772,13 +846,30 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		ctrl + t;
 		ctrl + 1 quick fix ，如改包名等
 		ctrl + shift + r 查找资源类
+			在open按钮处选择打开方式，后面会以此方式为默认
 		ctrl + shift + t 查找类型(比如某个jar包中的某个类)
+	- debug插件，远程debug时，有时报错，
+		一般是已打开了其debug模式，可以关闭debug（有多个debug在进行时，需要在debug面板选择需要操作的debug实例），重新打开remote debug，
+		再不行，可以尝试重启eclipse再debug
 * php 
 	 Discuz
 	 开源bug管理系统bugfree：
 		 http://www.bugfree.org.cn/blog/?page_id=9
 * 测试，测试框架，测试插件
 	* jtester
+		- 
+			jtester框架测试，用dbfit测试数据库，默认以jtester.properties的数据库操作，若要动态跨数据库操作可以在wiki文件里配置，格式如下：
+
+			指定需要连接的库
+				|connect|jdbc:mysql://10.10.10.10/databaseName?useUnicode=true&amp;characterEncoding=utf-8|userName|password|com.mysql.jdbc.Driver|
+				|clean table|`tableName`|
+				|insert|`table|`tableName`|`|
+				|id|name|
+				|1|jack|
+				|2|tom|
+			采用默认库
+				|connect|
+				|clean table|`tableName`|
 		- 测试异常抛出
 			-----
 			...
@@ -861,6 +952,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- 测试覆盖率插件 surefire-report
+		mvn surefire-report:report-only
+	- maven项目分为多个子项目debug时，如果debug到的类不在当前子项目中，会找不到源码，可把关联的子项目源码包位置指定给ide，指定class的目录，比如com.xxx.xx
 	- mavne 插件使用说明，查阅其官方说明：
 		eclipse插件：maven-eclipse-plugin http://maven.apache.org/plugins/maven-eclipse-plugin/
 		mvn某些goal执行错误时，可以尝试eclipse中clean项目再执行。
@@ -975,6 +1069,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 * python
 	Zope - opensource appserver written by python
+	PyDev eclipse python插件 http://www.fabioz.com/pydev/updates
+	PyDev for Eclipse 简介 http://www.ibm.com/developerworks/cn/opensource/os-cn-ecl-pydev/index.html
 
 * Google App Engine 
 		虽然GAE有很多限制和缺陷，但是我对GAE还是喜爱有加的。GAE是免费的，任何人都可以很轻松的通过GAE实现自己的Web应用。比如，做一些实用的小工具，
@@ -985,6 +1081,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- shell执行时，确保有执行权限
+	- shell中调用其他shell ,用点运算符或source命令
+		./shell.sh stop
 	- 根据参数执行任务shell
 		-----
 			#!/bin/bash
@@ -1031,6 +1130,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- ssh远程命令行 ，通过 rz ,sz 传递/接受文件
 		远程拷贝目录结构：
 			scp -r $LIB_DIR/* admin@$1:$LIB_DIR/   #这里需要ssh可以自动登入，比如通过公钥认证
+				scp -r xx.zip admin@xx.xx.xx.xx:/home/youDir
 			------
 				Linux下rz/sz安装及使用方法
 				-
@@ -1583,6 +1683,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		whereis   查找命令
 		locate    查找
 		find      查找   find / -name "***.***"
+			在当前目录下查找包含 hello 字符串的 后缀名为 .c 的文件:
+				find . -name "*.c" | xargs grep -H "hello"
 		which     查看工具
 		whoami    显示当前用户
 		gcc -v    查看GCC版本
@@ -1653,7 +1755,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		tar -ztvf /tmp/etc.tar.gz   查看tar内容
 		cpio -covB  > [file|device]   份份
 		cpio -icduv < [file|device]   还原
-		 zip -r xxx.zip ./*.txt - 打包当前目录下所有txt文件 -r 表示递归所有子目录
+		 zip -r fileName ./*.txt - 打包当前目录下所有txt文件 -r 表示递归所有子目录
+			zip -r foo . -i *.sql 打包当前目录下匹配文件名的文件到foo
 		vi一般用法
 		一般模式              编辑模式                  指令模式
 		h 左               a,i,r,o,A,I,R,O             :w 保存
@@ -6343,6 +6446,15 @@ day68 Thursday, June 21, 2012
 		配置文件：
 			/home/admin/.houyi/
 
+		dev开发测试环境：
+			AT-HOUYIDEV-AG 10.250.6.27
+			HOUYI-MASTER:10.250.8.212
+			HOUYI-NETC:/10.250.6.32
+			API:10.250.6.33
+			DB:10.250.6.27
+
+			
+
 2. big region 迭代一bug处理
 	- detail_vm 返回的vlan_no格式错误 http://bugfree.corp.taobao.com/bug/175626
 		原因：设计时丢了vlan_no的格式转换（vlan_no为后续增加待修改参数）
@@ -6367,10 +6479,7 @@ day68 Thursday, June 21, 2012
 	请求内容 + 错误返回内容 + 日志内容
 
 
-5. 迭代一 cluster_id 修改整理：
-	1）vm_name为空，返回码是VM_NAME_IS_NULL(-200, "vm name must set"),
-	2）没有权限操作snapshot，返回码是SNAPSHOT_NO_PRIVILEGE(-913, "has no privilege to visit snapshot")
-	 
+5. 迭代一 cluster_id 修改整理：	 from mail
 	3）cluster_id是否存在需要判断（nc_id,rack_id,vlan_no,device_no,snapshot_id）
 	DEVICE_NOT_EXISTS(-905, "device not exists at vm"),
 	SNAPSHOT_NOT_EXISTS(-910, "snapshot id not exists"),
@@ -6379,6 +6488,388 @@ day68 Thursday, June 21, 2012
 	NC_NOT_EXISTS(-161, "nc not exits"),
 	VLAN_NOT_EXISTS(-190, "Virtual Lan not exits")
 	4）涉及新device_no，新snapshot_id中都需要判断格式中的device_no是否一致，若不存在，错误码是SNAPSHOT_NOT_EXISTS(-910, "snapshot id not exists"),
-	 
+		 这个问题建议使用以前的错误码。
+		如recover_vm接口，在vm_name和destination_rack 或destination_nc的cluster_id的region不匹配时，复用以前的错误码  -283（not in same zone of vm）
+		如list_snapshot接口，在vm_name和device_no的cluster_id的region不匹配时，复用以前的错误码 -905（device not exists at vm ）
+
 	5）需要判断涉及cluster_id与vm_name对应的region是否一致，这个错误码待考虑？
 	以下4、5是在不跨region使用snapshot,disk情况下，API层作的权限验证。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day69 Monday, June 25, 2012
+
+1. 
+	* 迭代一cluster_id，device_no 验证bug修复
+	* slbapi回归bug
+		ip转name时，传入了lbId去查询，数据库中lb_id为null，导致ip转name错误；ip转name可以减少限定条件 只根据 vm_name,ip,region_no确定，如果多条记录报错，记录log，对外报SystemError
+			select distinct vm_name region_no=xxx and ip=xxx
+	* 职责
+		谁操作，谁知道，谁负责校验。
+
+2. bug 修复
+	1）修改设计文档
+	2）基于文档，修改程序
+	3）test
+	VmErrorMessage
+		NOT_IN_SAME_ZONE(-283, "not in same zone of vm"),
+		-283, not in same zone of vm
+	SnapshotErrorMessage
+		SNAPSHOT_NOT_AT_THE_DEVICE(-917,"snapshot not at the device"),
+		-917,snapshot not at the device
+	修改记录：
+		- add_disk
+			AddDiskExecuteAction
+			AddDiskExecuteActionTest
+			InstanceServiceImpl
+		- create_snapshot
+			CreateSnapshotExecuteAction
+			CreateSnapshotExecuteActionTest
+		- cancel_create_snapshot
+			CancelCreateSnapshotExecuteAction
+			CancelCreateSnapshotExecuteActionTest
+		- list_snapshot
+			ListSnapshotExecuteAction
+			ListSnapshotExecuteActionTest
+		- detail_snapshot
+			DetailSnapshotExecuteAction
+			DetailSnapshotExecuteActionTest
+		- remove_snapshot
+			RemoveSnapshotExecuteAction
+			RemoveSnapshotExecuteActionTest
+		- rollback_snapshot
+			RollbackSnapshotExecuteAction
+			RollbackSnapshotExecuteActionTest
+			RollbackSnapshotExecuteActionTestTest
+		- retain_snapshot
+			RetainSnapshotExecuteAction
+		- mount_snapshot
+			MountSnapshotExecuteAction
+		- unmount_snapshot
+			UnmountSnapshotExecuteAction
+		- live_migrate_vm
+			VmLiveMigrateExecuteAction
+			
+			
+		if(!vmClusterId.equals(deviceClusterId)){//check same region
+			logger.error("vmCluster and deviceClusterId not in the same region");
+			Result<Object> result = new Result<Object>();
+			result.setResultInfo(VmErrorMessage.NOT_IN_SAME_ZONE);
+			return result;
+		}
+		if(!vmClusterId.equals(snapshotClusterId)){//check same region
+			logger.error("vmCluster and snapshotClusterId not in the same region");
+			Result<Object> result = new Result<Object>();
+			result.setResultInfo(VmErrorMessage.NOT_IN_SAME_ZONE);
+			return result;
+		}
+		String snapshotRegionNo = instance.getRegionNo();
+		if(deviceNo!=null&&!deviceNo.equals(snapshotDeviceNo)){//check same device
+			logger.error("deviceNo and snapshotDeviceNo is not equal");
+			Result<Object> result = new Result<Object>();
+			result.setResultInfo(SnapshotErrorMessage.SNAPSHOT_NOT_AT_THE_DEVICE);
+			return result;
+		}
+
+3. 测试环境 部署时
+	打开远程debug，便于分析bug。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day70 Tuesday, June 26, 2012
+
+1. 
+	* 文档review，
+		修改部分内容，修改相应程序逻辑
+	* 迭代一bug fix
+		@Entry(action = Action.VM, resource = @Resource(argNo = 5)) }) 由于加了参数资源位置发生改变，需要更新
+	* slb v2 测试环境 monitor库地址修改：
+		10.230.204.24 slbapi monitor_datasource表 
+	* big region
+		状态码重复：							clear_cache接口状态码与现有重复
+			CACHE_TYPE_NOT_EXIST(-283,"cache type not exist"),
+			NOT_IN_SAME_ZONE(-283, "not in same zone of vm"),
+
+			CACHE_OF_THIS_KEY_NOT_EXIST(-284,"cache of this key not exist");
+			NOT_IN_SAME_SUBNET(-284, "not in same subnet of vm"),
+			-288
+			-292
+			ClearCacheErrorMessage
+	* cluster_id ,device_no,vm的校验方案修改：
+		方案改为：
+			1）cluster_id校验是否存在，报相应id不存在
+			2）nc_id,rack_id,vlan_no，vm校验cluster_id一致
+			3）nc_id,rack_id,vlan_no同时传时，取最小的
+			4）这5个参数的校验顺序：便于case
+				snapshot_id
+				device_no
+				nc_id
+				rack_id
+				vlan_no
+2. 资源位置改变更新bug修改点
+	SnapshotServiceImpl
+		unmountSnapshot
+3. big region api&houyi avalible
+	API:10.250.6.33
+	DB:10.250.6.27
+4. 错误码 ，调试时，错误码+log
+	-283 ,not in same zone of vm
+	-917,snapshot not existed at the device
+5. 根据修改的文档，继续day69第2条任务
+	VmErrorMessage
+		NOT_IN_SAME_ZONE(-283, "not in same zone of vm"),
+	SnapshotErrorMessage
+		SNAPSHOT_NOT_AT_THE_DEVICE(-917,"snapshot not at the device"),
+
+6. 
+	# web console staff
+	cd `dirname $0`/..
+	BASE_HOME=`pwd`
+
+	#rm -rf $BASE_HOME/src/*
+	svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api $BASE_HOME/src
+	cd $BASE_HOME/src
+	mvn clean package -Dmaven.test.skip=true 
+
+
+	# HOUYI API
+	cd $BASE_HOME
+	./bin/tomcatctl stop
+	cd $BASE_HOME/.default/webapps
+	rm -rf slb
+	rm -rf slb.war
+	ln -s $BASE_HOME/src/target/slb.war
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day71 Wednesday, June 27, 2012
+
+1. 
+	* 迭代一，cluster_id等校验规则重新设计，见文档
+		开发+测试用例
+	* 迭代一 sql调整整理
+	* action的validator方法
+		会提前验证 参数的格式，需要修改为匹配新格式
+			nc_id		NcParameter.NC_NO("nc_no",new RegularValidator("^[0-9]{0,75}$"),null),
+			snapshot_id	SnapshotParameter.NAPSHOT_ID("snapshot_id",null), 
+			device_no		SnapshotParameter.DEVICE_NO("device_no", null), 
+			InstanceParameter
+				RACK_ID("rack_id", null),
+				NC_ID("nc_id", null),
+				VLAN_NO("vlan_no", null),
+	* list_snapshot 接口文档返回以删除部分字符串，以实际返回为准
+				<rsp>
+		  <code>200</code>
+		  <msg>successful</msg>
+		  <data>
+		    <snapshotExts list="true">
+		      <snapshotExt>
+			<snapshot_id>27-703-520318</snapshot_id>
+			<snapshot_name></snapshot_name>
+			<progress>37%</progress>
+			<create_time>2012-06-27 20:24:54</create_time>
+			<image_no>windows2008_64_alibase_v02.vhd</image_no>
+			<owner>149</owner>
+		      </snapshotExt>
+		    </snapshotExts>
+		    <device_no>27-703</device_no>
+		    <vm_name>wysh-627-a</vm_name>
+		    <snapshots>
+		      <snapshot>520318</snapshot>
+		    </snapshots>
+		    <vm_status>Running</vm_status>
+		  </data>
+		</rsp>
+	* aghell05a10.250.6.27 hy create_vm_f vm_conf/windows_vm  wysh-627-a shell脚本执行操作，命名操作名称  ，参数
+
+2. 修改记录
+	- add_disk 
+		AddDiskExecuteAction @ -
+		AddDiskExecuteActionTest @
+		InstanceServiceImpl
+	- create_snapshot 
+		CreateSnapshotExecuteAction @ -
+		CreateSnapshotExecuteActionTest @
+	- cancel_create_snapshot 
+		CancelCreateSnapshotExecuteAction @ -
+		CancelCreateSnapshotExecuteActionTest @
+	- list_snapshot 
+		ListSnapshotExecuteAction @ -
+		ListSnapshotExecuteActionTest @
+	- detail_snapshot 
+		DetailSnapshotExecuteAction @ -
+		DetailSnapshotExecuteActionTest @
+	- remove_snapshot 
+		RemoveSnapshotExecuteAction @ - result返回设置
+		RemoveSnapshotExecuteActionTest @
+	- rollback_snapshot
+		RollbackSnapshotExecuteAction @ -
+		RollbackSnapshotExecuteActionTest @
+	- retain_snapshot
+		RetainSnapshotExecuteAction @ -
+		RetainSnapshotExecuteActionTest @
+	- mount_snapshot
+		MountSnapshotExecuteAction @ -
+		MountSnapshotExecuteActionTest @
+	- unmount_snapshot
+		UnmountSnapshotExecuteAction @ -
+		UnmountSnapshotExecuteActionTest @
+	- live_migrate_vm
+		VmLiveMigrateExecuteAction	@ -
+		VmLiveMigrateExecuteActionTest @
+	- recover_vm
+		VmRecoverExecuteAction @ -
+		VmRecoverExecuteActionTest @
+		NodeControlServiceImpl @
+	- detail_nc
+		SingleNcResourceAction @ -
+		SingleNcResourceActionTest @
+	- create_vm 
+		VmCreateExecuteAction @ -
+	- remove_disk
+		RemoveDiskExecuteAction @ -
+		RemoveDiskExecuteActionTest @
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day72 Thursday, June 28, 2012
+
+1. 
+	* bugfix 
+	* 项目单元测试报错问题
+		- 如果是junit，它会去执行带Test开头或结尾的类去执行测试，类不用耦合junit的类，junit会根据自己的规则去找测试类，
+		找到了，但类中没有测试方法会报：No runnable methods
+		- mvn skip的原因
+			原因为：testng框架在初始化时报错，对于依赖的测试用例都将skip
+			解决：解决初始化问题，比如spring容器初始化错误等
+				暂时先注释houyicontext重复加载抛错
+				设置 houyi.openapi.test=true 标识
+	* -90 system error 错误
+		原因之一：vm找不到image，ibatis执行时，不能正确封装对象，报错
+			com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.houyi.entity.Image.  Cause: java.lang.IllegalArgumentException
+				instance找到了，
+
+
+2. sql整理
+	houyi,zone表
+	alter table zone add cluster_id varchar(32) NOT NULL;
+	SELECT	region_no	FROM zone WHERE cluster_id=#clusterId#
+	SELECT	cluster_id	FROM zone WHERE zone_id=#zoneId#	
+	select 
+		url,
+		username,
+		passwd,
+		region_no,
+		index_at_region,
+		driver_class,
+		min_idle,
+		max_active,
+		max_idle,
+		validation_query
+	from monitor_datasource
+	where region_no=#regionNO#
+3. bugfix
+	- bug #177163 live_migrate_vm接口：nc_id为‘-’或者‘--’时，统一返回-90
+		
+4. mvn test
+	mvn test -Dmaven.test.failure.ignore=true -Dmaven.test.skip=false -Dmaven.test.error.ignore=true -Duser.home=/home/admin/houyi-test/src/test/resources -e -Duser.home=/home/admin
+		user.home为配置文件设置路径，不能错，spring容器初始化需要（可以用内包含逻辑，减少外部依赖）。
+
+	big region ，重复设置houyi上下文，导致spring初始化失败
+
+5. -90 system error 错误
+	原因之一：vm找不到image，ibatis执行时，不能正确封装对象，报错
+		instance.xml
+		instance.selectInstanceDetailByNo
+		com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.houyi.entity.Image.  Cause: java.lang.IllegalArgumentException
+			instance找到了，left outer join 去找image时，image的记录是不存在的，但这种join方式，还是返回了vm存在的记录，只是image的字段都是空的。
+			可以在 join 时，如果image找不到则不匹配，返回空。
+			OR
+			image对象字段都有默认值，但能判断是否存在。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day73 Friday, June 29, 2012
+
+1. 
+	* create_vm接口测试用例补充
+		
+	* web服务，对应非法的url，需要设计相应的错误提示页面，不直接返回服务器错误内容比如404之类。
+	* big region 状态码重复 修改
+
+2. 
+
+3. jtester 解析wiki文件时，会判断文件的编码格式 参考 jtester部分源码 [源码]
+	org.jtester.utility.ResourceUtil	
+		String encoding = ResourceUtil.getFileEncodingCharset(file);
+
+	/* inputstream to string */
+	public static String convertStreamToString(InputStream is, String encoding) {
+		BufferedReader reader = null;
+		String line = null;
+		try {
+			StringBuilder buffer = new StringBuilder();
+			reader = new BufferedReader(new InputStreamReader(is, encoding));
+			while ((line = reader.readLine()) != null) {
+				buffer.append(line + "\n");
+			}
+			return buffer.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(reader);
+			close(is);
+		}
+	}
+	/* 异常统一捕获，减少遍布try/catch的情况 */
+	public static void close(Reader reader) {
+		if (reader == null) {
+			return;
+		}
+		try {
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void close(InputStream is) {
+		if (is == null) {
+			return;
+		}
+		try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	ResourceUtil中的其他工具方法，开源框架的工具类代码风格
+
+4. web服务，对应非法的url，需要设计相应的错误提示页面，不直接返回服务器错误内容比如404之类。
+		对于不同的web服务器，或web框架都提供错误url处理方式。
+			java web项目可以再web.xml里针对异常或错误码配置error page
+				<error-page>
+					<error-code>404</error-code>
+					<location>index.jsp</location>
+				</error-page>
+		或者通过配置代理服务器，将非法url指向到错误页面。
+
+	生产环境的系统，要处理应用层的非法请求，还要处理服务器层的非法请求（比如，tomcat，apache处理非法请求的指向）；
+		比如服务器层的非法请求处理，下面以tomcat为例，在$TOMCAT_HOM/conf/web.xml中配置：
+			<error-page>
+				<error-code>404</error-code>
+				<location>/index.html</location>
+			</error-page>			
+		其他web服务器，可以参照其文档说明，找到配置点，配置即可。
+
+	实验了下，baidu，等网站对于域名下非法url指向到首页。
+
+5.  big region
+	状态码重复：
+		CACHE_TYPE_NOT_EXIST(-283,"cache type not exist"),
+		NOT_IN_SAME_ZONE(-283, "not in same zone of vm"),
+
+		CACHE_OF_THIS_KEY_NOT_EXIST(-284,"cache of this key not exist");
+		NOT_IN_SAME_SUBNET(-284, "not in same subnet of vm"),
+		-288
+		-292
+		ClearCacheErrorMessage
+
+	暂不改
