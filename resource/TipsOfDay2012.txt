@@ -10,6 +10,8 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* xml
+	- <![CDATA[]]>
 
 * 测试 
 	部署打开debug
@@ -159,6 +161,11 @@ google 检索 apache site:*.apache.org 高级搜索
  * spring
 	spring通过aop拦截器，拦截自定义注解所注解的方法 参考day52
 	参考：http://raulraja.com/2009/06/13/aop-spring-intercepting-method-calls-using-annotations/
+	- ioc时注意，有些ioc是直接通过注解注入的，故在配置文件中找不到，这个细节要注意
+		@Autowired(required = true)
+		public void setXX(@Qualifier("xx") xx xx) {
+			//
+		}
  * word * office word
 	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
 
@@ -459,6 +466,10 @@ google 检索 apache site:*.apache.org 高级搜索
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
 * test * mock  * jmock
+	- 查找框架已提供的mock类
+		技巧：
+				要想找某个接口是否有现成的mock类供使用，可以查看接口的所有实现，查找是否存在框架已提供的mock类，要点就是框架提供一些类的mock类时，
+			这些类，也需要继承这个接口。
 	- jtester ,用jmock框架
 		写期望 Expectations 时，要注意按照调用次序写 -tip-
 				a. 
@@ -526,6 +537,14 @@ google 检索 apache site:*.apache.org 高级搜索
 			ResultDomain result = (ResultDomain)valueStack.findValue(ResultDomainVisitor.RESULT_KEY, ResultDomain.class);
 	- ActionContext
 		内部实现为 ThreadLocal
+	- struts拦截器测试 ，interceptor 测试
+		struts2框架提供了相应的mock类，便于测试 ，比如：
+			com.opensymphony.xwork2.mock.MockActionInvocation
+		spring框架页提供了struts框架等框架类的mock实现，方便测试 比如：org.springframework.mock.web.MockHttpServletRequest
+		
+		技巧：
+				要想找某个接口是否有现成的mock类供使用，可以查看接口的所有实现，查找是否存在框架已提供的mock类，要点就是框架提供一些类的mock类时，
+			这些类，也需要继承这个接口。
 
 * bat 批处理 不继续执行  (搜素 bat 调用mvn - 对于bat执行好mvn后就不继续执行其他操作的问题解决搜索关键词)
 	- mavn web project 自动部署启动容器脚本(bat脚本)
@@ -851,6 +870,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- debug插件，远程debug时，有时报错，
 		一般是已打开了其debug模式，可以关闭debug（有多个debug在进行时，需要在debug面板选择需要操作的debug实例），重新打开remote debug，
 		再不行，可以尝试重启eclipse再debug
+	- eclipse 的 type hierarchy 面板应用
+		在测试时，比如jtester测试，如果只想执行某一个方法的测试，可以在这个视图的方法上右击执行（通过反射执行，不用执行每个用例）
 * php 
 	 Discuz
 	 开源bug管理系统bugfree：
@@ -1114,6 +1135,13 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			tail $LOGFILE -f
 		-----
 * linux
+	- 修改所有者，修改拥有者
+		例：要将当前目录下名 title 的文件夹及其子文件的所有者改为geust组的su用户，方法如下：
+		#chown -R su.geust title
+		-R 递归式地改变指定目录及其下的所有子目录和文件的拥有者。
+
+		chown -R admin src ——修改当前目录中的src目录及其所有内容的所有者为admin
+
 	- 端口占用查询 ，端口查询 linux端口查询
 		查询端口被谁占用（linux命令）
 		分类： linux 资料或经验 2012-03-26 16:59 118人阅读 评论(0) 收藏 举报
@@ -1476,7 +1504,6 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		 ::1             localhost6.localdomain6 localhost6
 		 再重启系统就生效；
 		 系统管理员还可以通过修改hosts文件添加更多的IP地址与主机的对应记录，hosts文件保存后就会立
-		 
 		刻生效。
 		 6：域名服务器配置文件：/etc/resolv.conf
 		 [root@lihantuan ~]# cat /etc/resolv.conf
@@ -1680,6 +1707,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		mkfs    建立各种文件系统  mkfs -t ext3  /dev/ram15   
 		fsck    检查和修复LINUX档案
 		ln      硬链接   ln -s  软件链接
+			rm -rf open.war
+			ln -s /home/admin/houyi/service/src/houyi.console.openapi/target/open.war
 		whereis   查找命令
 		locate    查找
 		find      查找   find / -name "***.***"
@@ -1702,6 +1731,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		umount /mnt/hda3  缷载
 		ifconfig   显示或设置网络设备
 			设置ip: ifconfig eth0 192.168.232.162 netmask 255.255.255.0
+			ifconfig eth0 hw ether 00:11:33:44:55:66 - set mac
 		service network restart   重启网卡  
 		ifdown eth0  关闭网卡
 		ifup eth0    开启网卡
@@ -6175,6 +6205,7 @@ day64 Friday, June 15, 2012
 	* houyi open api 测试环境
 		http://10.250.6.33/open/services?
 		key:lisw,secret:lisw
+
 	* houyi open api 
 		涉及snapsho的接口，原部分接口逻辑在操作快照时没有对用户是否有权限操作快照做约束，现需要判断：
 			- 快照的owner和当前用户是否一致。
@@ -6873,3 +6904,248 @@ day73 Friday, June 29, 2012
 		ClearCacheErrorMessage
 
 	暂不改
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day74 Monday, July 02, 2012
+
+1. 
+	* big region参数修改bug fix
+		创建    unmount_snapshot API超时返回-95
+		创建    API参数调整设计文档中未提及create_image接口
+		query_available_ncs: vm用户非法情况，API报-90
+		query_available_ncs: vm状态为destroyed的情况下，API报-90
+	* 关键性log，记录并打印关键内容 ，便于后续查找log排查问题。个人感觉，log需要记录关键性的原生请求内容，比如请求参数，返回内容等
+		进入拦截器打个日志，这样在某些关键点打日志就可以从日志中大致判断那个地方报错了。
+	* live_migrate_vm接口nc_id是否为必须？
+		待确定，代码里验证为必须。
+		
+2. big region参数修改bug fix
+	qa环境不在6.33上，看日志需要到qa测试机查看 10.242.209.4 （改为 10.230.204.19）
+	
+	创建    unmount_snapshot API超时返回-95
+	创建    API参数调整设计文档中未提及create_image接口			  done
+		修改设计文档
+		CreateImgExecuteAction
+		ImageServiceImpl
+	query_available_ncs: vm用户非法情况，API报-90
+	query_available_ncs: vm状态为destroyed的情况下，API报-90	   （控制系统destory，api这层为release状态）
+		在根据vm_name查找instance时（为了查询资源的regionNo），dao层sql语句报错，和之前一样，let join的表没数据，但result这个字段又是必须，故报ibatis设置result map错误，程序没有捕捉这个错误。
+			应该报这个错，日志没记录：
+				com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.houyi.entity.Image.  Cause: java.lang.IllegalArgumentException
+		解决：
+			捕捉这个错误，打出log。
+		注：
+			错误日志找了半天找不到（根据请求内容，返回结果），原因在于 log里没有打印请求相关的内容，不好根据请求内容匹配，建议可以适当打印请求的一些关键内容，便于排查错误。 【日志内容设计，建议】
+				2012-07-02 14:12:13,249 ERROR [com.aliyun.houyi.openapi.interceptor.ParameterInterceptor] - [业务参数校验有问题，请检查原因：com.aliyun.houyi.openapi.exception.ParameterException: 协议参数校验不通过，参数名称：timestamp！]
+
+				2012-07-02 14:35:38,204 ERROR [com.aliyun.houyi.openapi.interceptor.RegionAwareInterceptor] - [查询资源信息时发生错误!]
+				就这条日志，导致error错误发生，log里没有明确的内容标识本此请求，故通过即时重现来得到log输出。这里可以适当打印一些请求内容，便于后续排查错误。
+
+3. 日志打个唯一tag，再结合用户标识等唯一标识以及时间，可以从日志中统计出每个用户每次调用的所有有序日志输出。think it
+
+
+4. debug 代码不一致，不是部署错了，就是自己的代码没更新，排查呀排查 。。。 呵呵
+
+5. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day75 Tuesday, July 03, 2012
+
+1. 
+	* region转换需求分析 redmine
+	*迭代三 开发需求分析
+	* slb v1,v2的vm的小region转为大region	 需求分析
+
+
+2. 迭代三任务
+	- [ID:175057]兼容用户使用小region调用
+		a. 兼容用户使用小Region的调用(用户传入的小region统一转成大region，用户输入小region,API返回小region)
+			需求理解为：（需要review）
+				1. 兼容用户使用小Region的调用(用户传入的小region统一转成大region)
+				2. 用户传入小region，步骤1中转换为大region，即使用户传入小region，api实际返回的还是大region下的内容
+				3. api只返回大region的region_no
+
+				原则：
+				所谓兼容，指的是用户可以传入小region_no，但api都转换为大region_no处理，包括返回的也统一为大region_no			
+		b. 查询用户所有VM状态接口(list_vm_status)，根据用户输入的大Region返回大Region信息
+			需求理解为：（需要review正确与否）
+				1. 根据用户输入的大Region返回大Region下用户所有VM状态，返回大region_no
+				2. 若传入小region,查询小region下用户所有VM状态,返回小region_no
+				QA:
+				1. 大小region_no如何区分？
+					表region_alias记录小region与大region的关系
+						region_no
+						real_region_no
+					参考：弹性计算大Region项目_调度设计_API部分__20120628.docx
+
+			QueryVmListInfoExecuteAction
+			InstanceDaoImpl
+
+3. SLB V1版本，V2版本所使用region_no全部换成大region_no
+	前提：现在vm的大region和slb的region是一对一的，即vm的大region都对应slb的一个region。
+	有了上面的前提，v2版本的slb api项目要修改的地方：
+		1）配置vm的大region对应slb的region的映射关系，保证大region传递过来能正确调用到slb的region。
+		2）
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day76 Wednesday, July 04, 2012
+
+1. 
+	* 迭代三
+		region_alias表big_region_no字段增加
+	* 小region改为大region，涉及到的command中region属性判断需要设置为目标region。doing
+		参考：CreateInstanceCommand
+	* 迭代一的根据zoneId取clusterId逻辑，改为从cache中取，参考    QueryVmListInfoExecuteAction	       getRegionValuesFactory().getClusterIdByZoneId(xx)		  待
+			
+
+2. 迭代三
+	- list_vm_status
+		QueryVmListInfoExecuteAction
+			转换nc_id时，要考虑到不同region取出的nc的cluster_id是不一致的。
+			设计时，如果每个转换都查db，性能很低sql很简单当连接耗时，考虑缓存zone_id,cluster_id映射数据。
+				在RegionValuesFactory存放此缓存 缓存设计（总体设计，类设计，更新策略，。。。）
+					系统有多处小cache，是否设计一种通用方式，不用每个cache都自己去写个类，去clean等共性操作。
+						抽象出缓存操作接口层，不论底层是什么缓存工具，接口的实现来实现细节。上层应用只调用接口，在配置中配置具体实现。应用系统缓存设计
+			在处理每个nc不同的cluster_id前缀时，处理方式改为在原有逻辑循环中，从clusterId缓存中取得后设置。
+		InstanceDaoImpl
+		instance.xml 增加新查询，已有查询不动（避免影响已有调用）
+		RegionValuesFactory
+			getClusterIdByZoneId
+	- [ID:175056]大region下查询可用公网IP资源(query_unassigned_ips)
+		QueryUnassignedIpsExecuteAction
+
+		此接口需要根据 zone_id取到对应的小region_no，查询houyi时，指定在这个小region上操作。
+		
+3. dbfit 测试用的wiki文件，直接从sql检索结果贴过来，会有很多空格，可以用空来替换空格，再补上必要的空格，省去删空格的繁琐。
+	替换功能帮助不小
+4. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day77 Thursday, July 05, 2012
+
+1. 
+	* 迭代三开发
+
+
+2. 迭代三
+	- [ID:175056]大region下查询可用公网IP资源(query_unassigned_ips)
+		由于zone_id是必选，原有逻辑不变，不跨小region。
+		QueryUnassignedIpsExecuteAction
+		QueryUnassignedIpsExecuteActionTest
+	- [ID:175055]查询可用的ISO接口(query_available_isos)，根据大Region参数该大Region下的所有资源
+		QueryAvaliableIsosExecuteAction 
+			region_no参数没用到 ，iso_resource表加入region_no字段待确定？ 这样iso就属于某个小region
+				iso_resource 加region_no（小region_no）字段
+				sql修改
+					alter table iso_resource add region_no varchar(32)  NOT NULL COMMENT '@desc iso所在的小region_no';
+				相应要修改的点：
+					iso.xml
+						对region_no字段加入，需要修改的sql
+					IsoDaoImpl 修改 selectUserAvailableIsos方法
+
+3. 对于兼容的地方，文档应尽量说明，便于理解。
+	比如一个必选的参数，但没传也ok，容易误解。文档描述与程序逻辑的一致。
+
+4. 
+	- [ID:175054]大region下获取监控项指标TopN的VM接口(monitor_vm_topn)
+		  VmTopNMonitorExecuteAction
+
+	- [ID:175048]查询用户所有的VM监控信息接口，参数由小region变成大region(query_monitor_vms)
+		   VmPageMonitorExecuteAction
+
+4. big region ,houyi api 代码中多处用到java对象的址传递方式来，从一个方法中取得多个结果
+	比如：声明一个变量，传入到方法参数中，执行好后，方法返回一个结果，参数中对象也保存了结果
+
+	这样的现象出现的原因？有何优缺点？
+		原因还是对方法的结果没有更好的封装对象，需要
+		弱封装，一个方法包含多个功能 
+
+5. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day78 Friday, July 06, 2012
+
+1. 
+	* 迭代三开发
+		- 根据写的开发修改文档
+		- region表增加big_region_no字段，和region_alias表（real_region_no字段由于存储2个region_no对应同一个存储，
+			在imge接口里，为了区分用）的big_region_no一致
+			sql修改：
+				alter table region add big_region_no varchar(32)  NOT NULL COMMENT '@desc 小region_no对应的大region_no';
+			相应点的修改
+			测试用例，wiki文件修改 待？
+
+			注：7月9号，取消上面的修改，region表不增加big_region_no字段。
+				通过svn版本还原各个修改点。
+
+	* 缓存使用
+		- 系统多处地方，频繁调用数据库，结合简单缓存service，将某些查询缓存起来。在查询缓存命中时，免去数据库操作，提高性能。
+		- 提高公共缓存服务，可以根据类型操作各自缓存；便于扩展，加入新缓存类型
+		- 缓存的更新，若缓存没命中，则继续到数据库中找，找到就放到缓存中，并返回
+		- 缓存的过期清除，不用的缓存，命中率低的缓存，能自动清除或调整
+		- 缓存总大小限制，控制无限增大缓存(个数控制，。。。)
+		
+
+2. 迭代三记录
+	- [ID:175054]大region下获取监控项指标TopN的VM接口(monitor_vm_topn)
+		  VmTopNMonitorExecuteAction
+		  VmTopNMonitorExecuteActionTest
+		  MonitorServiceImplTest
+
+		  norm值，判断指标在指定的region是否支持，大region_no如何处理？
+			内部判断region是否为大二层网络，因为现在到以后都会是大二层网络，故这个判断可以忽略。
+
+	- [ID:175048]查询用户所有的VM监控信息接口，参数由小region变成大region(query_monitor_vms)
+		   VmPageMonitorExecuteAction
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day 79 Monday, July 09, 2012
+
+1. 
+	* region表取消big_region_no字段，相应修改
+	* 迭代三开发
+
+2. 迭代三
+	- 查询可用的ISO接口(query_available_isos
+		修改补充
+	- [ID:175048]查询用户所有的VM监控信息接口，参数由小region变成大region(query_monitor_vms)
+		VmPageMonitorExecuteAction
+		InstanceMonitorInfoDaoImpl
+		InstanceMonitorInfoDaoImplTest
+	- list_vm_status		
+		
+	- query_rack
+		RackQueryAction
+		RackQueryActionTest
+		AbstractExecuteAction
+	- ID:175051]大region下list_vlans接口
+		VlanQueryAction
+		VlanQueryActionTest
+	- [ID:175052]大region下 query_zones 接口
+		返回的region_no改为大region_no
+		ZoneQueryAction
+		ZoneQueryActionTest
+	- ID:175053]大region下 query_regions 接口
+		文档返回结果说明需要修改，现在返回的是大region_no
+		RegionQueryAction
+	- 大region下 add_ip_segment 接口，同时增加zone_no参数
+		AddIpSegmentExecuteAction
+		IpSegmentService
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day80 Tuesday, July 10, 2012
+
+1. 
+	* monitor_vm_topn 接口修改
+		VmTopNMonitorExecuteAction
+	* 用户体系修改review
+		关联到的slb v2用户改造
+	* region缓存修改问题
+		RegionValuesFactory
+
+2. 
