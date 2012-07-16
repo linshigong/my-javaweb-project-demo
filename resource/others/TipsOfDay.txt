@@ -20231,7 +20231,7 @@ day225 2011年7月5日
 
 
 
-4. sql 批量更新 sql循环更新
+4. sql 批量更新 sql循环更新	  动态更新
 
 	update table1 as t1
 	set (field1,field2) = ( select field21,field22

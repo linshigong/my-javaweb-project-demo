@@ -10,13 +10,193 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+
+* BVT (Build Verification Test)
+	　　BVT是在所有开发工程师都已经检入自己的代码，项目组编译生成当天的版本之后进行，主要目的是验证最新生成的软件版本在功能上是否完整，主要的软件特性是否正确。
+	如无大的问题，就可以进行相应的功能测试。BVT优点是时间短，验证了软件的基本功能。缺点是该种测试的覆盖率很低。因为运行时间短，不可能把所有的情况都测试到。
+* cgroups
+	What are CGroups?
+		You might be wondering at this point what CGroups actually are ? At a high level, it is a generic mechanism the kernel provides for grouping of processes and applying controls to those groups. 
+	The grouping is done via a virtual filesystem called “cgroup”. Within this filesytem, each directory defines a new group. Thus groups can be arranged to form an arbitrarily nested hierarchy simply 
+	by creating new sub-directories.
+
+		Tunables within a cgroup are provided by what the kernel calls ‘controllers’, with each controller able to expose one or more tunable or control. When mounting the cgroups filesystem it is possible to
+	indicate what controllers are to be activated. This makes it possible to mount the filesystem several times, with each mount point having a different set of (non-overlapping) controllers. Why might separate 
+	mount points be useful ? The key idea is that this allows the administrator to construct differing group hierarchies for different sets of controllers/tunables.
+
+	memory: Memory controller
+	    Allows for setting limits on RAM and swap usage and querying cumulative usage of all processes in the group
+	cpuset: CPU set controller
+	    Binding of processes within a group to a set of CPUs and controlling migration between CPus
+	cpuacct: CPU accounting controller
+	    Information about CPU usage for a group of processes
+	cpu: CPU schedular controller
+	    Controlling the priorization of processes in the group. Think of it as a more advanced nice level
+	devices: Devices controller
+	    Access control lists on character and block devices
+	freezer: Freezer controller
+	    Pause and resume execution of processes in the group. Think of it as SIGSTOP for the whole group
+	net_cls: Network class controller
+	    Control network utilization by associating processes with a ‘tc’ network class
+
+		This isn’t the blog post to go into fine details about each of these controllers & their capabilities, the high level overview will do. Suffice to say that at this time, the libvirt LXC driver (container based virtualization) 
+	will use all of these controllers except for net_cls and cpuset, while the libvirt QEMU driver will only use the cpu and devices controllers. 
+
+* SQL分页语句 分页
+	- mysql通过limit语句实现分页；
+				  
+	- sql server分页
+		摘自网络
+		---------
+			有关分页 SQL 的资料很多，有的使用存储过程，有的使用游标。本人不喜欢使用游标，我觉得它耗资、效率低；使用存储过程是个不错的选择，
+			因为存储过程是经过预编译的，执行效率高，也更灵活。先看看单条 SQL 语句的分页 SQL 吧。
+
+			方法1：
+			适用于 SQL Server 2000/2005
+			SELECT TOP 页大小 *
+			FROM table1
+			WHERE id NOT IN
+				  (
+				  SELECT TOP 页大小*(页数-1) id FROM table1 ORDER BY id
+				  )
+			ORDER BY id
+
+			方法2：
+			适用于 SQL Server 2000/2005
+			SELECT TOP 页大小 *
+			FROM table1
+			WHERE id >
+				  (
+				  SELECT ISNULL(MAX(id),0) 
+				  FROM 
+					(
+					SELECT TOP 页大小*(页数-1) id FROM table1 ORDER BY id
+					) A
+				  )
+			ORDER BY id
+
+			方法3：
+			适用于 SQL Server 2005
+			SELECT TOP 页大小 * 
+			FROM 
+				(
+				SELECT ROW_NUMBER() OVER (ORDER BY id) AS RowNumber,* FROM table1
+				) A
+			WHERE RowNumber > 页大小*(页数-1)
+
+			说明，页大小：每页的行数；页数：第几页。使用时，请把“页大小”和“页大小*(页数-1)”替换成数字。
+
+			其它的方案：如果没有主键，可以用临时表，也可以用方案三做，但是效率会低。
+			建议优化的时候，加上主键和索引，查询效率会提高。
+
+			通过SQL 查询分析器，显示比较：我的结论是:
+			分页方案二：(利用ID大于多少和SELECT TOP分页）效率最高，需要拼接SQL语句
+			分页方案一：(利用Not In和SELECT TOP分页)   效率次之，需要拼接SQL语句
+			分页方案三：(利用SQL的游标存储过程分页)    效率最差，但是最为通用
+		    ---------
+
+* LVM
+		LVM是逻辑盘卷管理（Logical Volume Manager）的简称，它是Linux环境下对磁盘分区进行管理的一种机制，LVM是建立在硬盘和分区之上的一个逻辑层，来提高磁盘分
+	区管理的灵活性。前面谈到，LVM是在磁盘分区和文件系统之间添加的一个逻辑层，来为文件系统屏蔽下层磁盘分区布局，提供一个抽象的盘卷，在盘卷上建立文件系统。
+	物理卷（physical volume）物理卷就是指硬盘分区或从逻辑上与磁盘分区具有同样功能的设备（如RAID），是LVM的基本存储逻辑块，但和基本的物理存储介质（如分区、磁盘等）比较，
+	却包含有与LVM相关的管理参数。
+	　　Linux用户安装Linux操作系统时遇到的一个最常见的难以决定的问题就是如何正确地给评估各分区大小，以分配合适的硬盘空间。而遇到出现 某个分区空间耗尽时，
+	解决的方法通常是使用符号链接，或者使用调整分区大小的工具（比如PatitionMagic等），但这都只是暂时解决办法，没有根本解决问题。随着Linux的逻辑盘卷管理功能的出现，
+	这些问题都迎刃而解，用户在无需停机的情况下方便地调整各个分区大小。	
+
+* VNC
+	VNC (Virtual Network Computing)是虚拟网络计算机的缩写。VNC是一款优秀的远程控制工具软件，由著名的AT&T的欧洲研究实验室开发的。
+	VNC是在基于UNIX和Linux操作系统的免费的开放源码软件，远程控制能力强大，高效实用，其性能可以和Windows和MAC中的任何远程控制软件媲美。 
+	在Linux中，VNC包括以下四各命令：vncserver，vncviewer，vncpasswd，和vncconnect。大多数情况下我只需要其中的两个命令：vncserver和vncviewer。
+	
+	TightVNC
+	　　应用平台： Win9x/NT/2000/XP/2003 Linux/unix
+	　　自由软件，遵循GPL条款，源代码开源，个人、企业使用均无任何限制。
+		vnc的加强，短小精悍，功能强大。
+* RPC
+	 介绍：
+		RPC（Remote Procedure Call Protocol）——远程过程调用协议，它是一种通过网络从远程计算机程序上请求服务，
+	 而不需要了解底层网络技术的协议。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。
+	 在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易
+		RPC采用客户机/服务器模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程
+	发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。
+	当一个调用信息到达，服务器获得进程参数，计算结果，发送答复信息，然后等待下一个调用信息，最后，客户端调用进程
+	接收答复信息，获得进程结果，然后调用执行继续进行。
+　　	目前，有多种 RPC 模式和执行。最初由 Sun 公司提出。IETF ONC 宪章重新修订了 Sun 版本，使得 ONC RPC 协议成为
+	IETF 标准协议。现在使用最普遍的模式和执行是开放式软件基础的分布式计算环境（DCE）。
+
 * xml
 	- <![CDATA[]]>
 
 * 测试 
 	部署打开debug
 	远程shell(调用python封装好的各个接口调用，执行命令，传入参数即可)执行请求，ide debug处理过程
+* yum 
+	yum的使用:  
+	    1)包的更新  
+	    1.1)检查可更新包: yum check-update  
+	    1.2)更新所有包: yum update  
+	    1.3)更新指定包: yum update package_name  
+	    1.4)版本升级: yum upgrade  
+	    2)包安装与删除  
+	    2.1)yum install package_name  
+	    2.2)yum remove package_name  
+	    3)包搜索  
+	    3.1)搜索特定包: yum search package_name  
+	    3.2)搜索包含特定文件名的包:yum provides name  
+	    4)包列表  
+	    4.1)列出所有安装或更新的包: yum list  
+	    4.2)列出指定包:yum list name  
+	    4.3)列出可更新包:yum list updates  
+	    4.4)列出已安装包:yum list installed  
+	    4.5)列出已安装但不包含在资源库中的包:yum list extras  
+
+	CentOS yum源设定
+	    2.1)加快yum下载速度: yum -y install yum-fastestmirror,在CentOs 4上名字叫做yum-plugin-fastestmirror  
+	    2.2)yum源文件:/etc/yum.repos.d/CentOS-Base.repo  
+	    2.3)CentOS 5的yum源设为上海交通大学网站 
+
 * vim
+	- 
+		~/.vimrc - vim对当前用户的配置文件
+		~/.vim/colors 目录下放自己的颜色方案文件  ，用户自己的设置
+
+		颜色方案下载地址：http://www.vim.org/scripts/script.php?script_id=1651
+
+	- 可以设置编辑的颜色方案
+		通常, 如果工作在终端模式下, 你只有一个黑色的背景和白色的前景色. 这种配色太单调了, 看起也太暗淡了. 其实颜色方案是可以设计的.
+		默认的, 你在终端下打开Vim时的的颜色和你打开的终端的颜色是一样的. 不过Vim给了用户一个权力来改变颜色的. 最常使用的就是配色方案文件. 这些文件通常放在Vim安装目录下的colors目录下.
+		你可以简单地通过下面的命令在己安装的本色方案中切换
+			:colorscheme mycolors
+		mycolors要换成安装的配色方案的名称. 如可你不知道安装了哪些配色方案, 可以在写下下面的命令后:
+			:colorscheme
+		通过按tab键来在安装的配色方案的名字间切换. 当发现了想要的配色方案后 就可以按回车键来应用它.
+		配色方案不仅只是应用在前景色和背景色, 也可以设置代码的高亮显示, 错误如何标识, 和其他的一些文本的可视化标识. 
+		
+		安装配色方案：
+			root@ag # rpm -qa | grep -i vim	      - 找到vim的安装包
+			vim-common-7.0.109-6.el5
+			vim-enhanced-7.0.109-6.el5
+			vim-minimal-7.0.109-6.el5
+			root@ag # rpm -ql vim-common-7.0.109-6.el5 | grep colors		- 找到colors目录位置      - 
+			/usr/share/vim/vim70/colors
+			/usr/share/vim/vim70/colors/README.txt
+			/usr/share/vim/vim70/colors/blue.vim
+			/usr/share/vim/vim70/colors/darkblue.vim
+			/usr/share/vim/vim70/colors/default.vim
+			/usr/share/vim/vim70/colors/delek.vim
+			/usr/share/vim/vim70/colors/desert.vim
+			/usr/share/vim/vim70/colors/elflord.vim
+			/usr/share/vim/vim70/colors/evening.vim
+			/usr/share/vim/vim70/colors/koehler.vim
+			/usr/share/vim/vim70/colors/morning.vim
+			/usr/share/vim/vim70/colors/murphy.vim
+			...
+
+			将配色方案文件 *.vim，拷贝到colors目录下，
+			切换颜色方案：
+			:colorscheme SchemeFileName 
+		
 	-
 		:reg 查看剪贴板内容
 	- search
@@ -797,6 +977,60 @@ google 检索 apache site:*.apache.org 高级搜索
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	* SQL预编译
+		下面我们就来详细看一下有关预编译的一些知识。
+		   1、什么是预编译语句
+		   预编译语句PreparedStatement 是java.sql中的一个接口，它是Statement的子接口。通过Statement对象执行SQL语句时，需要将SQL语句发送给DBMS，由DBMS首先进行编译后再执行。预编译语句和Statement不同，在创建PreparedStatement 对象时就指定了SQL语句，该语句立即发送给DBMS进行编译。当该编译语句被执行时，DBMS直接运行编译后的SQL语句，而不需要像其他SQL语句那样首先将其编译。
+		   2、什么时候使用预编译语句
+		   一般是在需要反复使用一个SQL语句时才使用预编译语句，预编译语句常常放在一个fo r或者while循环里面使用，通过反复设置参数从而多次使用该SQL语句。为了防止SQL注入漏洞，在某些数据操作中也使用预编译语句。
+		   3、为什么使用预编译语句
+		   预编译机制除了在开篇提到的可以防止SQL注入外，还有一下两方面的优点：
+		   (1)提高效率
+		   数据库处理一个SQL语句，需要完成解析SQL语句、检查语法和语义以及生成代码，一般说来，处理时间要比执行语句所需要的时间长。预编译语句在创建的时候已经是将指定的SQL语句发送给了DBMS，完成了解析、检查、编译等工作。因此，当一个SQL语句需要执行多次时，使用预编译语句可以减少处理时间，提高执行效率。
+		   (3)提高代码的可读性和可维护性
+		   将参数与SQL语句分离出来，这样就可以方便对程序的更改和扩展，同样，也可以减少不必要的错误。
+		   4、预编译语句的使用
+		   代码段二中创建了包含带两个 IN 参数占位符的 PreparedStatement 对象，在执行之前，必须设置每个 ? 参数的值。这可通过调用 setXXX 方法来完成，该方法的第一个参数是要设置的参数的序数位置，第二个参数是设置给该参数的值，其中 XXX 是与该参数相应的类型。例如，以下代码将第一个参数设为 “tom”，第二个参数设为 “123456a”：
+		   pstmt.setString(1, “tom”);
+		   pstmt.setString(2, “123456a”);
+		   一旦设置了给定语句的参数值，其值将一直保留，直到被设置为新值或者调用clearParameters()方法清除它为止。
+		   问题延伸：请大家看一下以下的代码：
+		    String sqlSt = “sel ect* from table1 where name=”+tb_name+” and passwo rd=”+tb_pwo rd;
+		   PrepareStatement pst = con.createPreparementStatement();
+		   ResultSet rsPst = pst.exe cuteQuery(sqlSt);
+		 
+		    那么在安全性和执行效率方面会不会有问题呢？请感兴趣的同事可以自己尝试一下吧。
+		    from：http://www.52testing.com/showart.asp?id=67
+
+	- ibatis 与sql注入
+		假设用户执行
+		    select * from product where id = 5 
+		    这条语句。其中5是有用户输入的。
+		    SQL注入的含义就是，一些捣蛋用户输入的不是5，而是
+		    5;  delete  from  orders
+		    那么原来的SQL语句将会变为，
+		    select * from product where id=5;  delete  from  orders 
+		    在执行完select后，还将删除orders表里的所有记录。（如果他只删了这些记录，已经谢天谢地了，他可能会做更可怕地事情）。
+		    不过庆幸的是，Ibatis使用的是预编译语句（PreparedStatement
+		    s ）。
+
+		    上述语句会被编译为，
+		    select * from product where id=? 
+		    从而有效防止SQL注入。
+		    不过当你使用$占位符时就要注意了。
+		     
+		    例如：动态的选择列和表
+		    SELECT * FROM $TABLE_NAME$ WHERE $COLUMN_NAME$ = #value# 
+		     
+		    这时你一定要仔细过滤那些值以避免SQL注入。当然这种情况不只存在Ibatis中。		
+			参考资料：
+			【iBATIS in Action】3.5.2 SQL injection 
+		    from: http://www.2cto.com/Article/201203/124648.html
+		
+		总结：
+			正如上文所说，动态选择列或表或构造排序等操作时，需要手工过滤那些值以避免sql注入。
+			当需要编程来避免sql注入时，可以通过工具类处理错位参数的字符，转义特殊字符。
+
 	- ibatis配置文件的 typeHandler 标签配置类型转换处理方式
 		·实现 com.aliyun.slb.api.dao.support.TypeHandlerCallback 接口
 	- 动态where条件
@@ -853,7 +1087,12 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 
 * ide * eclipse
-	
+	- Eclipse取消Show in Breadcrumb
+		随手右键启用这个功能，半天么找到如何取消，囧。。。
+		百度了下，方且搞定，位置在：
+			window > customize perspective > tool bar visibility > editor presentation > toggle greadcrumb
+		工具栏上有个按钮，也可直接取消选中。
+		后记：不过，对eclipse的使用及设置又学了一招。
 	ctrl + shift + L 列出所有快捷键列表
 	- 字母大小写
 		ctrl + shift + x (大写)/ ctrl + shift + y (小写)
@@ -973,6 +1212,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- 忽略测试失败
+		mvn test -Dmaven.test.failure.ignore=true -Dmaven.test.skip=false -Dmaven.test.error.ignore=true -Duser.home=/home/admin/houyi-test/src/test/resources -e -Duser.home=/home/admin
+		user.home为配置文件设置路径，不能错，spring容器初始化需要（可以用内包含逻辑，减少外部依赖）。
+
 	- 测试覆盖率插件 surefire-report
 		mvn surefire-report:report-only
 	- maven项目分为多个子项目debug时，如果debug到的类不在当前子项目中，会找不到源码，可把关联的子项目源码包位置指定给ide，指定class的目录，比如com.xxx.xx
@@ -1081,6 +1324,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			mvn -Dmaven.test.skip=false test 不跳过测试的test操作
 	- No goals needed for project - skipping 跳过测试问题
 		大项目下有多个子项目，某些子项目mvn test 不执行里面的test，报：No goals needed for project - skipping
+		内部程序配置冲突是原因之一
 * 工具类
 	 apache commond 
 		StringUtils 
@@ -1722,6 +1966,26 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		updatedb  更新资料库
 		mke2fs    格式化   mkfs -t ext3 
 		dd if=/etc/passwd of=/tmp/passwd.bak    备份
+			用法：dd [操作符]...
+			  或：dd 选项
+			Copy a file, converting and formatting according to the operands.
+
+			  bs=BYTES        force ibs=BYTES and obs=BYTES
+			  cbs=BYTES       convert BYTES bytes at a time
+			  conv=CONVS      convert the file as per the comma separated symbol list
+			  count=BLOCKS    copy only BLOCKS input blocks
+			  ibs=BYTES       read BYTES bytes at a time
+			  if=FILE         read from FILE instead of stdin
+			  iflag=FLAGS     read as per the comma separated symbol list
+			  obs=BYTES       write BYTES bytes at a time
+			  of=FILE         write to FILE instead of stdout
+			  oflag=FLAGS     write as per the comma separated symbol list
+			  seek=BLOCKS     skip BLOCKS obs-sized blocks at start of output
+			  skip=BLOCKS     skip BLOCKS ibs-sized blocks at start of input
+			  status=noxfer   suppress transfer statistics			
+
+			从dvd制作iso文件：
+			  dd if=/dev/cdrom of=/var/lib/libvirt/images/CentOS-6.2-x86_64-bin-DVD1.iso 
 		mount     列出系统所有的分区
 		mount -t iso9660 /dev/cdrom /mnt/cdrom   挂载光盘
 		mount -t vfat /dev/fd0 /mnt/floppy       挂载软盘
@@ -2142,7 +2406,7 @@ test evn:
 
 	Bugfree: http://bugfree.aliyun-inc.com/index.php/bug/list/2
 
-3. Cloud Engine - Cloud Engine是一个基于AEC的web应用托管运行环境，能够提供应用的自动伸缩以及多种核心服务。
+3. Cloud Engine - Cloud Engine是一个基于ACE的web应用托管运行环境，能够提供应用的自动伸缩以及多种核心服务。
 	
 	Google App Engine
 	
@@ -7131,6 +7395,7 @@ day 79 Monday, July 09, 2012
 		ZoneQueryActionTest
 	- ID:175053]大region下 query_regions 接口
 		文档返回结果说明需要修改，现在返回的是大region_no
+			返回值格式不修改，用大region_no字符串构造region对象，返回；向前兼容
 		RegionQueryAction
 	- 大region下 add_ip_segment 接口，同时增加zone_no参数
 		AddIpSegmentExecuteAction
@@ -7143,9 +7408,175 @@ day80 Tuesday, July 10, 2012
 1. 
 	* monitor_vm_topn 接口修改
 		VmTopNMonitorExecuteAction
+		排序
+			Collections
+			Arrays
 	* 用户体系修改review
 		关联到的slb v2用户改造
 	* region缓存修改问题
 		RegionValuesFactory
+	* slb v2 slb region那些地方用到？
+	* ID:175049]SLB V1版本，V2版本所使用region_no全部换成大region_no
+		需求分析
 
+	* ibatis的sql注入问题：在使用##时，采用预编译可以避免sql注入，但用$$时要程序避免sql注入
+		order by b.$orderBy$ $order$ 
+	* cache修改，涉及到丢失修改的测试用例修改
+		openapi模块
+
+
+2. slb v2 slb region那些地方用到
+	- 请求slb后端，需要slb region_no,定位后端请求信息（url之类）
+	- 查询流量接口，需要根据slb region_no，调用其对应的monitor库
+	- 操作api的rs表时用到slb region_no
+
+3. ID:175049]SLB V1版本，V2版本所使用region_no全部换成大region_no
+	需求分析 
+	slb v2 api ，在region_mapping表通过vm的region_no得到slb的region_no
+	，然后，在调用slb后端和查询流量数据时用到这个slb region_no。
+
+	slb v1 版本代码在houyi api的一个包中，属于houyi api project：
+		
+		
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day81 Wednesday, July 11, 2012
+
+1. 
+	* 迭代三开发
+	* -1007,"desc":  "ip segment is used
+		控制系统这个错误码，api层没有定义相应的错误映射，以默认-95，system error返回。暂不改
+
+	* 接口兼容
+
+
+2. 迭代三
+	- ID:175049]SLB V1版本，V2版本所使用region_no全部换成大region_no
+		前提:
+			一个vm大region_no对应slb的一个region_no，他们是一对一关系
+		需求分析
+		请求参数中region_no为大region_no时	   ，只要在region_mapping表找到对应的slb region_no即可：
+			SLB V1用到slb region_no的地方有(houyi库)：
+				a. slb流量查询接口，
+					slb_monitor_datasource（此表region_no为vm的region_no）
+						一个vm大region_no对应一个slb region_no ,对应一个monitor库，即同大region_no下不同的小vm region_no都是对应相同的slb region及相同的slb monitor库。
+
+				b. 调用slb后端时，根据region_no找到后端url
+					region_mapping
+						一个vm大region_no对应一个slb region_no,一一对应
+					slb_region
+			SLB V2 用到slb region_no的地方有（slbapi库）：
+				a. slb流量查询接口，
+					monitor_datasource
+						一个vm大region_no对应一个slb region_no ,对应一个monitor库，即同大region_no下不同的小vm region_no都是对应相同的slb region及相同的slb monitor库。
+				b. 调用slb后端时，根据region_no找到后端url
+					region_mapping
+						一个vm大region_no对应一个slb region_no,一一对应
+					region
+	数据订正：
+		SLB V1（houyi库）
+			1）region_mapping 表
+				订正 vm_region_no 字段为vm的大region_no值
+			2）slb_monitor_datasource 表
+				订正region_no为大region_no（原来此列值为小region_no）
+		SLB V2（slbapi库）
+			1）region_mapping 表
+				订正 vm_region_no 字段为vm的大region_no值
+	代码修改：
+		SLB V1 : 部分代码需要修改，涉及到从vm的region_no得到slb region_no的地方
+
+
+3. 全局变量设计 ，控制使用范围
+	系统全局变量设计时要考虑好，尽量不用或少用，用的不好导致系统各个地方充斥着全局变量调用或设置，
+	维护，调试比较麻烦，可通过在上层用，下层通过传参传递，这样也知道一个方法用到哪些参数，不是上层不知道的情况下，
+	调用了一个全局变量。个人见解
+
+4. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day82 Thursday, July 12, 2012
+
+1. 
+	* 迭代三修改点 与QA review
+	* SLB V2中根据vm的region_no查询slb region_no部分逻辑代码修改
+	* SLB V1,V2用户体系分析，新项目准备工作
+	* 提测前准备工作：
+		HOUYI API , SLB V1 API ,SLB V2 API
+		- 表订正
+
+	* iso_resource表增加的小region_no，修改为增加大region_no
+		sql修改
+			alter table iso_resource add big_region_no varchar(32)  NOT NULL COMMENT '@desc iso所在的大region_no';
+		相应要修改的点：
+			iso.xml
+				对region_no字段加入，需要修改的sql
+			IsoDaoImpl 修改 selectUserAvailableIsos方法		
+		
+	      待改数据库并svn提交 ？
 2. 
+
+										     
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day83 Friday, July 13, 2012
+
+1. 
+	* 用户体系改造项目设计review
+	* houyi api 接口调用用例编写，便于测试
+	* 
+		
+2. vm状态
+	Pending(1, "待启动") 
+	Starting(2, "启动中") 
+	Running(3, "运行中"), 
+	StartFailure(4, "启动失败") 
+	Shutting(5, "停止中") 
+	ShutFailure(6, "停止失败"), 
+	Shutted(7, "已停止"), 
+	Released(8, "已释放"), 	     释放后instance表记录保留
+	Resetting(9, "重置中") 
+	ResetFailure(10, "重置失败"),
+	Transferring(11, "迁移中");
+
+3. houyi api 接口调用用例编写，便于测试
+	- create_vm接口返回值region_no为小region_no？   是否还有其他的也需要检查
+	- 创建的vm，调start_vm状态为pengding，数据库为startfail
+	- start_vm start fail 原因？控制系统
+		看api调用此接口传递给控制系统的参数，isoName参数为空，因为iso_resource表增加了big_region_no，开发环境没有更新此表。
+	- houyi api对取消创建快照接口，控制系统报 cancel failed错误时，api没有映射对应的错误，统一以-95报错	 ，或者是控制系统状态码错误？	
+		注：确认为控制系统没有对错误码归类，比如不同错误可能都报-1码 ，有待控制系统返回特定码。
+		result: {"code":  -1,"desc":  "cancel failed","isSuccess":  "FALSE"}。
+		-95，invoke houyi system error
+	- 同上，卸载快照接口，
+		code":  -1,"desc":  "umount device from vm failed
+		-95，invoke houyi system error
+	- query_available_imgs 查询可用的镜像接口，返回值snapshot_id格式没更改	?
+		   文档注明返回值中snapshot_id部分废弃，本次代码不动，后续将去掉这个值
+	- list_vlans
+		-95，invoke houyi system error
+		Caused by: com.alibaba.apsara.kuafu.KuafuException: Exception: Message is dropped by KFC, server does not exist
+		控制系统服务不正常，在重启
+
+	qa测试：
+		cd /home/admin/lix/lix-src/tools  or /home/admin/lix/lix-src/tools/houyiTestFrame/houyiTestFrame
+		python2.7 houyiframe.py cases/release_test/bvt_ci.xml test vm_test		or python2.7 houyiframe.py cases/release_test/bvt_ci.xml 22:22
+		[root@AT-HOUYIDEV-AG]$me
+		Local_Address: 10.250.6.27
+
+		涉及到参数值修改在: bvt_ci.xml test vm_test 中
+			cluster_id=27
+
+
+ZoneServiceImpl
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day84 Monday, July 16, 2012
+
+1. 
+	   *  qa bvt测试 ，开发自测
+	   
+2. bvt测试
+	具体执行环境参考day83第3条
+
+
