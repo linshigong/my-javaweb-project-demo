@@ -10,6 +10,63 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* concurrent包 ，java concurrent
+	java concurrent 探秘
+		我们都知道，在JDK1.5之前，Java中要进行业务并发时，通常需要有程序员独立完成代码实现，当然也有一些开源的框架提供了这些功能，
+	但是这些依然没有JDK自带的功能使用起来方便。而当针对高质量Java多线程并发程序设计时,为防止死蹦等现象的出现，比如使用java之前的wait()、notify()和synchronized等，
+	每每需要考虑性能、死锁、公平性、资源管理以及如何避免线程安全性方面带来的危害等诸多因素，往往会采用一些较为复杂的安全策略，加重了程序员的开发负担.万幸的是，
+	在JDK1.5出现之后，Sun大神（Doug Lea）终于为我们这些可怜的小程序员推出了java.util.concurrent工具包以简化并发完成。开发者们借助于此，将有效的减少竞争条件（race conditions）
+	和死锁线程。concurrent包很好的解决了这些问题，为我们提供了更实用的并发程序模型。
+
+	Executor                  ：具体Runnable任务的执行者。
+	ExecutorService           ：一个线程池管理者，其实现类有多种，我会介绍一部分。我们能把Runnable,Callable提交到池中让其调度。
+	Semaphore                 ：一个计数信号量
+	ReentrantLock             ：一个可重入的互斥锁定 Lock，功能类似synchronized，但要强大的多。
+	Future                    ：是与Runnable,Callable进行交互的接口，比如一个线程执行结束后取返回的结果等等，还提供了cancel终止线程。
+	BlockingQueue             ：阻塞队列。
+	CompletionService         : ExecutorService的扩展，可以获得线程执行结果的
+	CountDownLatch            ：一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待。
+	CyclicBarrier             ：一个同步辅助类，它允许一组线程互相等待，直到到达某个公共屏障点
+	Future                    ：Future 表示异步计算的结果。
+	ScheduledExecutorService ：一个 ExecutorService，可安排在给定的延迟后运行或定期执行的命令。
+
+	接下来逐一介绍
+	from：http://www.cnblogs.com/aurawing/articles/1887056.html
+* volatile / Java中的volatile关键字	 
+	关于volatile
+	我们知道，在Java中设置变量值的操作，除了long和double类型的变量外都是原子操作，也就是说，对于变量值的简单读写操作没有必要进行同步。这在JVM 1.2之前，Java的内存模型实现总是从主存读取变量，是不需要进行特别的注意的。而随着JVM的成熟和优化，现在在多线程环境下volatile关键字的使用变得非常重要。在当前的Java内存模型下，线程可以把变量保存在本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成数据的不一致。要解决这个问题，只需要像在本程序中的这样，把该变量声明为volatile（不稳定的）即可，这就指示JVM，这个变量是不稳定的，每次使用它都到主存中进行读取。一般说来，多任务环境下各任务间共享的标志都应该加volatile修饰。
+	Volatile修饰的成员变量在每次被线程访问时，都强迫从共享内存中重读该成员变量的值。而且，当成员变量发生变化时，强迫线程将变化值回写到共享内存。这样在任何时刻，两个不同的线程总是看到某个成员变量的同一个值。 
+	Java语言规范中指出：为了获得最佳速度，允许线程保存共享成员变量的私有拷贝，而且只当线程进入或者离开同步代码块时才与共享成员变量的原始值对比。 
+	这样当多个线程同时与某个对象交互时，就必须要注意到要让线程及时的得到共享成员变量的变化。 
+	而volatile关键字就是提示VM：对于这个成员变量不能保存它的私有拷贝，而应直接与共享成员变量交互。 
+	使用建议：在两个或者更多的线程访问的成员变量上使用volatile。当要访问的变量已在synchronized代码块中，或者为常量时，不必使用。 
+	由于使用volatile屏蔽掉了VM中必要的代码优化，所以在效率上比较低，因此一定在必要时才使用此关键字。
+	from: http://www.cnblogs.com/xwdreamer/archive/2012/05/13/2498615.html
+* svn 代码
+	版本控制，代码管理，使用
+	整个SVN代码管理可以看做一棵倒置的树
+
+		1、Branches做为分支，它就像树枝，最终还是合并到主干，用来控制新需求、需求变更、BUG修改等，每个分支都有一个专用的目的，分支编号将跟特定目标关系与需求管理文档内容关联。
+		2、Tags做为里程碑，它就像树根，每一次Tag的生成都要根深蒂固，才能站稳，用来控制分支测试版本和生产正式版本，标志着一个时期。
+		3、Trunk做为主干，它就是雄壮的树干，由它来生出树枝，扎下树根，他的作用是保存着最稳定，功能最全面的程序代码，用来管理整个项目。
+
+* tddl	  取模，拆分，定位
+	参考: http://rdc.taobao.com/team/jm/archives/1645
+
+search in index find pdf 
+* 平台，产品线，生态
+	一个好的平台，衍生出多种产品线，构建良好的生态
+* OSGi
+		（OOSGi（Open Service Gateway Initiative）有双重含义。一方面它指OSGi Alliance组织；另一方面指该组织制定的一个基于Java语言的服务（业务）规范——OSGi服务平台（Service Platform）。
+	OSGi Alliance是一个由Sun Microsystems、IBM、爱立信等于1999年3月成立的开放的标准化组织，最初名为Connected Alliance。该组织及其标准原本主要目的在于使服务提供商通过住宅网关，为各种家庭智能设备提供各种服务。目前该平台逐渐成为一个为室内、交通工具、移动电话和其他环境下的所有类型的网络设备的应用程序和服务进行传递和远程管理的开放式服务平台。
+	该规范和核心部分是一个框架 ，其中定义了应用程序的生命周期模式和服务注册。基于这个框架定义了大量的OSGi服务： 日志、配置管理、偏好，HTTP（运行servlet）、XML分析、设备访问、软件包管理、许可管理、星级、用户管理、IO连接、连线管理、Jini和 UPnP。
+	这个框架实现了一个优雅、完整和动态的组件模型。应用程序（称为bundle）无需重新引导可以被远程安装、启动、升级和卸载（其中Java包／类的管理被详细定义）。API中还定义了运行远程下载管理政策的生命周期管理。服务注册允许bundles去检测新服务和取消的服务，然后相应配合。
+	OSGi原先关注于服务网关，其实可用于多个方面。现在OSGi规范已经用于从移动电话到开源的Eclipse（其中包括了与IBM的OSGi框架SMF兼容的开源版本）。 OSGi服务平台的应用包括：服务网关、 汽车、移动电话、 工业自动化、建筑物自动化、 PDA 网格计算、娱乐（如iPronto）、和 IDE。
+	OSGi规范是由成员通过公开的程序开发，对公众免费而且没有许可证限制。但是OSGi Alliance的兼容性程序只对成员开放，目前有12个兼容的实现。
+	2003年Eclipse选择OSGi作为其插件的底层运行时架构。Equinox project对该理念进行了实验，2004年6月在Eclipse3 R3中发布。ProSyst是面向OSGi开发者的Eclipse插件。
+	2003年10月， 诺基亚、摩托罗拉，ProSyst 和其他OSGi成员组建了Mobile Expert Group (MEG)为下一代智能手机规范业务平台，做为对 MIDP 和CDC的补充。
+	
+	eclipse 3.7.2提供了OSGI控制台
 
 * IaaS（Infrastructure as a Service），即基础设施即服务
 
@@ -137,7 +194,19 @@ google 检索 apache site:*.apache.org 高级搜索
 	部署打开debug
 	远程shell(调用python封装好的各个接口调用，执行命令，传入参数即可)执行请求，ide debug处理过程
 * yum 
-	yum的使用:  
+	- yum源设置
+		比如使用163镜像站，可以参考其提供的使用帮助,下面为摘取部分：
+			CentOS镜像使用帮助
+			使用说明
+				首先备份/etc/yum.repos.d/CentOS-Base.repo
+				    mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+			下载对应版本repo文件, 放入/etc/yum.repos.d/(操作前请做好相应备份)
+				•CentOS5
+				•CentOS6
+			运行yum makecache生成缓存
+			from: http://mirrors.163.com/.help/centos.html
+						
+	- yum的使用:  
 	    1)包的更新  
 	    1.1)检查可更新包: yum check-update  
 	    1.2)更新所有包: yum update  
@@ -220,7 +289,7 @@ google 检索 apache site:*.apache.org 高级搜索
 	　　M：移动光标到屏幕中间
 	　　L：移动光标到屏幕下面
 	　　*：读取光标处的字符串，并且移动光标到它再次出现的地方。
-	　　#：和上面的类似，但是是往反方向寻找。
+	　　#：读取光标处的字符串，但是是往反方向寻找。
 	　　/text：从当前光标处开始搜索字符串 text，并且到达 text 出现的地方。必须使用回车来开始这个搜索命令。如果想重复上次的搜索的话，按 n移动到下个 text 处，N 移动到上一个 text 处 。
 	　　？text：和上面类似，但是是反方向。
 	　　m{a-z}：在当前光标的位置标记一个书签，名字为 a-z 的单个字母。书签名只能是小写字母。你看不见书签的存在，但它确实已经在那里了。
@@ -352,6 +421,63 @@ google 检索 apache site:*.apache.org 高级搜索
 		public void setXX(@Qualifier("xx") xx xx) {
 			//
 		}
+	- 编程式事务一例：
+		spring 编程式事务管理
+		1）bean配置
+		<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		   <property name="dataSource" ref="dataSource" />
+		</bean>
+
+		<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" >
+		   <property name="transactionManager" ref="transactionManager"/>
+		</bean>
+
+		<bean id="servie" class="SimpleService">
+		  <property name="transactionTemplate" ref="transactionTemplate"/>
+		</bean>
+
+		TransactionTemplate是线程安全的，不同的service可以共用一个bean实例，其配置状态也是一致的。
+		如果要用到不同的配置状态，则需要配置不同的TransactionTemplate Bean
+
+		2）在Service中，定义TransactionTemplate全局变量
+
+		public class SimpleService implements Service {
+		  
+		  private final TransactionTemplate transactionTemplate;
+
+		  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+		    this.transactionTemplate = transactionTemplate;
+		  }
+
+		  public Object someServiceMethod() {
+		    return transactionTemplate.execute(new TransactionCallback() {
+
+		      // the code in this method executes in a transactional context
+		      public Object doInTransaction(TransactionStatus status) {
+			updateOperation1();
+			return resultOfUpdateOperation2();
+		      }
+		    });
+		  }
+		}
+
+		3）使用status.setRollbackOnly()方法回滚事务
+
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+
+		  protected void doInTransactionWithoutResult(TransactionStatus status) {
+		    try {
+		      updateOperation1();
+		      updateOperation2();
+		    } catch (SomeBusinessExeption ex) {
+		      status.setRollbackOnly();
+		    }
+		  }
+		});
+
+		doInTransaction方法一旦执行完毕，事务自动提交；如果在catch块中设置了回滚setRollbackOnly，方法执行完毕将“提交”回滚。
+
+		4、有返回值，使用TransactionCallback；如果没有返回值，使用TransactionCallbackWithoutResult
  * word * office word
 	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
 
@@ -801,6 +927,13 @@ google 检索 apache site:*.apache.org 高级搜索
 	http://redis.io/
 
 * Memcached  
+	- 使用外部缓存框架，对应程序，通过统一接口调用，
+	- memcached的交互接口
+			    memcached的客户端通过TCP连接与服务器通信（UDP协议的接口也可以使用，详细说明请参考”UDP 协议”部分）。一个给定的运行中的memcached服务器在某个（可配置的）端口上监听连接；客户端连接该端口，发送命令给服务器，读取反馈，最后关闭连接。
+	       没有必要发送一个专门的命令去结束会话。客户端可以在不需要该连接的时候就关闭它。注意：我们鼓励客户端缓存它们与服务器的连接，而不是每次要存储或读取数据的时候再次重新建立与服务器的连接。memcache同时打开很多连接不会对性能造成到大的影响，这是因为memcache在设计之处，就被设计成即使打开了很多连接（数百或者需要时上千个连接）也可以高效的运行。缓存连接可以节省与服务器建立TCP连接的时间开销（于此相比，在服务器段为建立一个新的连接所做准备的开销可以忽略不计）。
+	       memcache通信协议有两种类型的数据：文本行和非结构化数据。文本行用来发送从客户端到服务器的命令以及从服务器回送的反馈信息。非结构化的数据用在客户端希望存储或者读取数据时。服务器会以字符流的形式严格准确的返回相应数据在存储时存储的数据。服务器不关注字节序，它也不知道字节序的存在。memcahce对非结构化数据中的字符没有任何限制，可以是任意的字符，读取数据时，客户端可以在前次返回的文本行中确切的知道接下来的数据块的长度。
+	       文本行通常以“"r"n”结束。非结构化数据通常也是以“"r"n”结束，尽管"r、"n或者其他任何8位字符可以出现在数据块中。所以当客户端从服务器读取数据时，必须使用前面提供的数据块的长度，来确定数据流的结束，二不是依据跟随在字符流尾部的“"r"n”来确定数据流的结束，尽管实际上数据流格式如此。
+
 	c 实现
 	项目主页: http://code.google.com/p/memcached/wiki/Clients	
 	说明：
@@ -940,6 +1073,7 @@ google 检索 apache site:*.apache.org 高级搜索
 			命令如下：
 			#/sbin/iptables -I INPUT -p tcp --dport 11211 -j ACCEPT
 			#/sbin/iptables -I INPUT -p udp --dport 11211 -j ACCEPT
+			/etc/ini.d/iptabls save/status
 			如果启动memcached服务时用了其他端口，在将你的端口号代替11211. 
 		-------
 	- 用了gwhalin 的Memcached-Java-Client  api，基本操作ok
@@ -985,7 +1119,9 @@ google 检索 apache site:*.apache.org 高级搜索
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
-	* SQL预编译
+	- ibatis mapping文件检查       ，ibatis启动
+		会验证每个语句的传入参数/对象是否和定义的名称一致，不一致报出来相应的语句错误。	单元测试加载ibatis框架以验证mapping文件格式正确。
+	- * SQL预编译
 		下面我们就来详细看一下有关预编译的一些知识。
 		   1、什么是预编译语句
 		   预编译语句PreparedStatement 是java.sql中的一个接口，它是Statement的子接口。通过Statement对象执行SQL语句时，需要将SQL语句发送给DBMS，由DBMS首先进行编译后再执行。预编译语句和Statement不同，在创建PreparedStatement 对象时就指定了SQL语句，该语句立即发送给DBMS进行编译。当该编译语句被执行时，DBMS直接运行编译后的SQL语句，而不需要像其他SQL语句那样首先将其编译。
@@ -1065,6 +1201,8 @@ google 检索 apache site:*.apache.org 高级搜索
 		Set<Entry<String,IMetaData>> set = map.entrySet();
 		for(Entry<String, IMetaData> data:set){
 * mysql
+	-  mysql账户管理，账户授权
+		GRANT ALL PRIVILEGES ON *.* TO 'monty'@'localhost' IDENTIFIED BY 'some_pass' WITH GRANT OPTION;
 	- 一些命令使用，可以参考gui工具执行命令的sql参考 比如：Aqua Data Studio ，在alter table 时可以查看preview sql
 	insert into vip (host,port,gmt_create,gmt_modify)values('host3',80,'2012-12-12 00:00:00','2012-12-12 00:00:00'); //id为自增列
 	 select last_insert_id() as id from vip limit 1 
@@ -1134,6 +1272,11 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		 http://www.bugfree.org.cn/blog/?page_id=9
 * 测试，测试框架，测试插件
 	* jtester
+		- jtester顺序执行，按次序执行，类似集成测试的方式
+			观察jtester执行用例的方式，是以方法名排序的，通过加入字符人工干预其排序达到顺序执行用例，解决依赖测试问题（比如要先创建LB，才能查询LB,删除LB等等）。
+		- jtest 事务回滚测试，事务测试，unitils测试事务
+			@Transactional(TransactionMode.DISABLED)
+				测试事务时，需要关闭测试框架的事务，否则会出现在测试框架开启的事务中，又开启新的事务，导致交叉，不能准确的测试事务一致性。
 		- 
 			jtester框架测试，用dbfit测试数据库，默认以jtester.properties的数据库操作，若要动态跨数据库操作可以在wiki文件里配置，格式如下：
 
@@ -1190,6 +1333,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 					<scope>test</scope>
 				</dependency>				
 			2）添加jtester.properties配置文件到classpath
+				
 			3）创建抽象父类，进行测试前的资源初始化操作
 				@SpringApplicationContext({
 					"classpath:houyi-spring-test.xml",
@@ -1400,6 +1544,57 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			tail $LOGFILE -f
 		-----
 * linux
+	- beep关闭
+		1）编辑 /etc/inputrc，找到
+		＃set bell style none
+		这一行，去掉前面的注释符号。
+		2）或者编辑 /etc/profile，添加这一句，	setterm -blength 0即可。
+	- md5sum
+		计算md5值，验证文件完整性。
+	- 设置开机启动
+		在 /etc/rc.d/rc.local 	    目录：
+			/etc/rc.d目录详解：
+			--------
+				rc.d的内容如下：
+				init.d/ :各种服务器和程序的二进制文件存放目录。
+				rcx.d/: 各个启动级别的执行程序连接目录。里头的东西都是指向init.d/的一些软连接。具体的后边叙述。
+				还有三个脚本:rc.sysinit, rc,  rc.local
+
+				redhat的启动方式和执行次序是：
+				加载内核
+				执行init程序
+				/etc/rc.d/rc.sysinit            # 由init执行的第一个脚本
+				/etc/rc.d/rc $RUNLEVEL          # $RUNLEVEL为缺省的运行模式
+				/etc/rc.d/rc.local
+				/sbin/mingetty                  # 等待用户登录
+
+				在Redhat中，/etc/rc.d/rc.sysinit主要做在各个运行模式中相同的初始化工作，包括：
+				  调入keymap以及系统字体
+				  启动swapping
+				  设置主机名
+				  设置NIS域名
+				  检查（fsck）并mount文件系统
+				  打开quota
+				  装载声卡模块
+				  设置系统时钟
+				等等。
+
+
+				/etc/rc.d/rc则根据其参数指定的运行模式(运行级别，你在inittab文件中可以设置)来执行相应目录下的脚本。凡是以Kxx开头的
+				，都以stop为参数来调用；凡是以Sxx开头的，都以start为参数来调用。调用的顺序按xx
+				从小到大来执行。例如，假设缺省的运行模式是3，/etc/rc.d/rc就会按上述方式调用
+				/etc/rc.d/rc3.d/下的脚本。
+				值得一提的是，Redhat中的运行模式2、3、5都把/etc/rc.d/rc.local做为初始化脚本中
+				的最后一个，所以用户可以自己在这个文件中添加一些需要在其他初始化工作之后，登录之前执行的命令。
+
+				init在等待/etc/rc.d/rc执行完毕之后（因为在/etc/inittab中/etc/rc.d/rc的
+				action是wait），将在指定的各个虚拟终端上运行/sbin/mingetty，等待用户的登录。
+				至此，LINUX的启动结束。
+				from: http://zhidao.baidu.com/question/10963481.html
+			--------
+	- /etc/init.d/ 目录，存放程序的启动文件，比如mysql，httpd，iptables等等，这里都是程序安装好后，统一把控制脚本放到这里
+	- 看程序启动参数
+		ps 命令看程序启动命令
 	- 系统配置，语言，网络等等
 		/etc/sysconfig 目录下
 	- 字符编码，语言设置，编码设置	      
@@ -1987,7 +2182,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 				 tail -f -n+10
 
 		od        显示非纯文档
-		df -h 显示分区空间
+		df -h 显示分区空间      (磁盘)
 		du  显示目录或文件的大小
 		fdisk   分区设置    fdisk -l /dev/hda  显示硬盘分区状态
 		mkfs    建立各种文件系统  mkfs -t ext3  /dev/ram15   
@@ -2391,8 +2586,11 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	适合放在URL（包括隐藏表单域）中的形式。此时，采用Base64编码不仅比较简短，同时也具有不可读性，即所编码的数据不会被人用肉眼所
 	直接看到。
 
-*	vmware7安装centos5 - 自定义方式 -  OS Installlation步骤选择install later(否则后面可能直接进入live CD 模式，不是正常安装模式)
+*	vmware7安装centos5 - 自定义方式 -  OS Installlation步骤选择install later(否则后面可能直接进入live CD 模式，不是正常安装模式)	      ，
+	新建好VM后，再设置CD/DVD的地方指向ISO镜像，启动后，即可正常选择安装模式，进行安装
 		确保ssh模块已安装 ，通过ssh客户端连接vmware中的centos
+		vmware 修改磁盘容量 ，分区工具，重新分区
+		http://www.cnblogs.com/ZhengGuoQing/archive/2008/04/03/1135803.html
 
 *	虚拟集群,及其相关应用测试【测试】
 
@@ -7712,11 +7910,12 @@ day86 Wednesday, July 18, 2012
 1. 
 	*   query_available_vips 接口
 		查询时，没有将小region_no转换为大region_no
-		QueryAvailableVipsExecuteAction
+		QueryAvailableVipsExecuteAction										 s
 		IpAddressServiceImpl
 	* 用户体系改造项目
-		 - 待拉分支
+		 - 分支见redmine
 		 - 订正工具（python脚本实现）
+		 - 设计文档
 	* 用户体系项目分支
 		slb v2 http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform
 		houyi api http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_user_reform
@@ -7724,3 +7923,285 @@ day86 Wednesday, July 18, 2012
 2. 
 
 	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day87 Thursday, July 19, 2012
+
+1. 
+	* 账户体系改造SLB V2相关设计文档编写
+	* big region bug fix
+	* jteser事务测试
+		注意测试框架的事务会影响测试代码事务
+
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day88 Friday, July 20, 2012
+
+1. 
+	* 会议
+		防火墙，调度
+	* SLB V2用户体系改造设计
+	
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day89 Monday, July 23, 2012
+
+1. 
+	* SLB V2用户体系改造，根据邮件给出的prd文档，分析
+	* big region后续bug提交方式，通过下面的地址建立子任务，并建立对应的bug进行提交：
+		http://redmine.aliyun-inc.com/issues/2648
+	* 单元测试严格划分职能，对于数据库测试，wiki文件只应出现在dao层中，service层不应该出现（信任dao层），层层完成自己的验证，层间依赖信任
+		集成测试情况会跨多个层
+	* big region
+		- 迭代一周期 ，由于后续变动，需要更新redmine文档
+		- device，snapshot，vmAPI这边的权限验证，代码实现  ，具体见redmine新任务 待？
+
+		
+2. houyi api白名单
+	在配置文件定义白名单ip，spring注入到拦截器等需要校验的地方。
+	配置时，多个ip间以“,”逗号隔开，spring注入时，调用set方法注入，在set方法里编写逻辑将ip字符串处理为Map。（通过重写set方法实现指定注入转换）
+
+	也可通过直接在spring配置中配置Map数据。
+
+3.  SLB V2用户体系改造，根据邮件给出的prd文档		  本周完成下面子任务
+	- 白名单参考houyi api的实现
+		slbapi.properties 配置白名单ip
+		AgreementParameter 平台参数验证，session验证改为aliyun_idkp验证
+		CheckUserSignInterceptor 白名单验证，注掉以前user_id验证
+		GlobalErrorMessage
+			新增错误码：ILLEGAL_ALIYUN_IDKP(-2052, "illegal aliyun idkp"),
+		原来用到user的地方需要修改：
+			LogInterceptor
+				SlbApiLog
+			AbstractService
+				Rs
+				slbapi.sql rs表的user_id字段值为aliyunIDKP，原来是long类型的user_id，故重新定义字段，依据houyi api的user表user_id字段定义：
+					aliyun_idkp` varchar(32) DEFAULT NULL, 待确认？
+				RsService
+				RsServiceImpl
+				RsDao
+				RsDaoImpl
+			LoadBalancerServiceImpl
+			查询SLB流量接口
+				MonitorInfoDaoImpl
+			调用houyi api改动
+				ECServiceImpl
+
+
+	- 原校验机制注释，只采用AliyunIDKP验证机制，是否涉及错误码改动？待检查
+	- user表废弃
+	- 数据订正：rs表的user_id和rs_pool_name
+	- 调用houyi api部分，去掉原有签名（user表已废弃），通过aliyunIDKP方式调用houyi api（houyi api需要将slb api v2加入白名单中）
+	- 对于关键点，类编写测试用例
+		CheckUserSignInterceptorTest 
+
+
+4. 设计中，对于id这类的字段，虽然目前是long，后面可能会改为string，设计pojo时最好设计为string类型，
+否则后续类型改动，需要改相应接口及实现 设计
+	对于某些可预知，后续字段数据类型可能发生变化的场景，设计pojo时考虑好类型，方便后续变动。
+
+5. big region
+	校验逻辑梳理：
+		
+ 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day90 Tuesday, July 24, 2012
+
+ 1. 
+	* 用户体系改造-SLB V2 API
+	*  device，snapshot，vmAPI这边的权限验证
+		API有user和vm的所属关系（houyi instance表）
+		控制系统有VM，device，snapshot之间的所属关系
+	* houyi API 与控制系统状态保持
+		控制系统状态变化会通知rabbit MQ，API从MQ中得到消息，进行同步 ？	    Message模块中
+		通过rabbitMQ java开发包实现
+		eg：start_vm控制系统接到后返回200，过一段时间vm启动后，控制系统发消息到MQ,API读取消息，更新vm状态
+	* 控制系统重启，导致部分操作成功，部分失败：
+		结果之一：一个vm已经stop，但vm表的状态为starting，导致状态不一致。
+	* start_vm 控制系统对于vm不存在的情况，不返回结果，API超时返回
+	* VmCreateExecuteAction ，在createVM返回空时，instance = (Instance) result.getResultInfo(); 返回了快照对象，导致类型转换错误？
+		待修改提交 
+
+ 2. 用户体系改造
+	- 什么时候可以测试环境连调测试？
+		SLB后端
+		houyi API
+		SLB V2 API
+			流量接口
+			调用SLB后端
+			调用houyi API
+	- 数据订正谁来做，portal数据什么时候提供？	     由其他同学负责
+	- 测试类
+	- 后面的问题在于测试
+	- 修改点
+		UserDaoImpl.		      废弃
+		User			废弃
+		UserStatus		废弃
+		slbapi-ibatis-config.xml 修改
+		UserServiceImpl 废弃
+		RequestContext 修改
+		UserService  废弃
+		LoadBalancerServiceImplTest  修改
+		AbstractServiceTest 修改
+		User.xml 废弃
+		spring-dao.xml 修改
+		spring-service.xml 修改
+
+ 3.  device，snapshot，vmAPI这边的权限验证
+	下面3个接口，暂定由API将必要消息传给控制系统，控制系做资源所属验证：
+		a. API层验证user和vm的所属关系。
+		b. 由控制系统来判断资源间的所属关系（vm，device，snapshot）
+
+	- [ID:182636 ]retain_snapshot 安全风险 用户可retain其他用户的snapshot
+		RetainSnapshotExecuteAction
+
+		需求：用户进行retain快照操作时，检查快照是属于当前用户的
+			api目前只有snapshot_id，不带user信息，可以去再掉控制系统查快照详情
+			或者将vm信息一并传入控制系统，由控制系统验证所属关系？
+		此接口，只传递了device_id和snapshot_id
+			修改，将vm_name也传递到控制系统，由控制系统来验证vm，device，snapshot之间的所属关系
+
+	- [ID:182495]remove_snapshot 安全风险 可以删除其他用户的snapshot
+		RemoveSnapshotExecuteAction
+		需求：用户只能删除自己的snapshot
+			api目前只有snapshot_id，不带user信息，可以去再掉控制系统查快照详情
+			或者将vm信息一并传入控制系统，由控制系统验证所属关系？
+		[call houyi system. method:RemoveSnapshot,parameter:{"snapshot":"520322test","vmName":"mytestvm2012-2","deviceId":"817"}]
+			给控制系统有VM名称,快照ID和设备ID
+	- [ID:182101]cancel_create_snapshot时传入的vm_name和snapshot_id不匹配时没有报错
+		CancelCreateSnapshotExecuteAction
+		[call houyi system. method:CancelSnapshot,parameter:{"snapshotId":"520322","vmName":"mytestvm2012-2"}]
+			传给控制系统 快照ID和VM名称，是否应该控制系统验证所属关系？API去验证的话就需要多一步查询控制系统步骤，最后验证还是由控制系统决定。
+	- detail_snapshot需要判断snapshot是否属于该用户
+		经查看代码，已有验证，跳过
+	- umount_snapshot需要判断vm与device判断，device与snapshot判断
+		UnmountSnapshotExecuteAction
+		经查代码（region.isUpgrade() ==1），已有验证（跳过detail_snapshot接口去控制系统查询了下，这个接口vmName也是传递给控制系统的，对于这种有vmName的情况，
+		vm对应的资源所属验证统一交由控制系统处理，API只保证
+		user和vm的所属关系？）
+		region的isUpgrade判断目的是什么？
+			确定的是没有升级的region，快照没有userId字段，不需要验证快照与user的关系
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day91 Wednesday, July 25, 2012
+
+1. 
+	* big region
+		list_mounted_snapshot接口，返回值中，snapshot_name内容是snapshot_id，如何转换为3元组？
+		
+	* 用户体系改造
+		加入jtester测试框架，便于单元测试
+			
+
+	
+			
+2. list_mounted_snapshot 接口处理snapshot_name为cluster_id-device_no-snapshot_id三元组方式
+	确认为API返回的snapshot_name值为snapshot_id，三元组构成，可以通过从控制系统返回结果中得到snapshot的deviceNo，
+			从vm得到其clusterId，构造成：cluster_id-device_no-snapshot_id三元组整体返回。
+			问题：
+				返回结果中的deviceNo是快照挂载上去后，生成的新device的deviceNo,不是快照原来的deviceNo，这样对于用户来说，snapshot_id发生了变化，故不能从返回值的deviceNo拼接三元组
+			解决：
+				根据控制系统返回的快照id去查询其deviceNo,以拼接三元组返回？
+					去detail_snapshot,
+						具体见邮件：增加一个snapshot_id的属性，为了兼容性考虑目前保持snapshot_name与snapshot_id一致
+	ListMountedSnapshotExecuteAction
+		？待测
+
+3. 可用的image ，测试
+	select 
+		image.image_no,
+		image.region_no as imageRegionNo,
+		inst.region_no as instanceRegionNo 
+	from image image,instance inst 
+	where image.image_id=inst.image_id limit 1,2;
+	加上user，大region条件，筛选可用image。
+
+4. 高亮显示光标所在字符或字符串
+	命令行模式下：
+		*：读取光标处的字符串，并且移动光标到它再次出现的地方。
+	　　#：读取光标处的字符串，但是是往反方向寻找。
+
+	和 /text 方式查询类似，但可根据文本内多次直接搜索，不需输入检索字符串。
+
+5. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day92 Thursday, July 26, 2012
+
+1. 
+	* big region 测试用例验证，修改
+		http://10.250.8.214:81/surefire-report-dao.html		   fixed
+		http://10.250.8.214:81/surefire-report-service.html	   
+		提交ID:
+			[ID:183748]完善测试用例
+	* list_mounted_snapshot接口测试用例修改，提交代码
+	* houyi api
+		控制系统返回的对象类型定义在各自的command实现类中，可以查看API与控制系统交互的数据格式
+		确认rpc返回的pojo类类型。
+	* SLB API V2用户体系改造，调用SLB后端的user_id名称不变，只是值为aliyun_idkp
+	* SLB API V2流量查询接口，查询的时间早于计量库保存记录的时间点，导致计量库找不到对应的表，API报：
+		code":-2001,"msg":"backend service exception
+		是否要修改？要知道计量库的表设计逻辑，比如保存几天的记录表？这里跨系统访问数据库，不是接口，导致此类依赖问题
+			接口说明是7天，那么需要判断从当前时间往前6天供7天的表是有的，超出这个范围的是没有记录的，API需要做判断，并加入对应的状态码？
+				或者超出时间的直接返回空？
+				计量库 原lb_global_id改回为lb_id?
+					这是旧的库，新库地址：
+						mysql -uhouyi_odbs -phouyi_odbs -hmy3306.mysql.aliyun.com xuanyuan
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day93 Friday, July 27, 2012
+
+1. 
+	* 用户体系改造	
+		涉及到list_vm_status接口改动
+	* 	业务熟悉
+		技术：多线程，并发，性能，服务器编程，重构
+		
+	* houyi api 数据推送模块后续重构
+		考虑使用独立的缓存系统（比如，memcached），可以在API上抽象出操作缓存的接口，
+		可以针对不同的缓存框架使用对应的实现，比如通过操作memcached的接口，操作memcached缓存
+	* detail_vm接口问题
+		当vm release过后，调detail_vm接口报：-90 system error
+		文档没有说明不能查询released的vm
+		原因为代码处理问题导致空指针。fixed
+		
+2.  用户体系改造
+	- portal查询vm状态接口，由于此次用户改造，原有的根据144大用户取得其卖出的所有vm状态信息的功能已经不能用（已拆分为子用户，然后没有用户组等关系来
+		判断子用户属于哪个大用户；目前，vm主要包含portal和万网的vm，还有少量的其他用户的vm，暂定为在查询用户所有vm状态的接口逻辑里，以硬编码aliyunIDKP方式判断是portal的请求还是
+		万网的请求，portal的请求就返回除了万网的所有vm信息，万网的请求只返回万网的vm信息）
+	
+		问题：
+			如何区分IDKP是不是portal来的IDKP？
+				设置专门对原144的IDKP值，API根据此值可以知道是否为portal的请求。
+
+		需求变动，验证方式为key方式+白名单方式，即先需要经过key验证（通过在user表继续保留144账户），
+		然后判断是否有AliyunIDKP值，如果有继续处理，如果没有处理逻辑待定（判断为管理调用，返回所有接口的所有内容？）
+			上面的返回所有内容问题缘于之前是144用户的所有数据，现在切分为一个个独立的IDKP对应的数据，现在要返回这个大用户下所有IDKP账户对应的数据。这样portal需要遍历每个
+			IDKP去Houyi API取数据，原来一次即可，如何解决？
+				提供一个接口，能根据portal传递过来的IDKP列表批量返回对应的数据。							
+
+3. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day94 Saturday, July 28, 2012
+
+1. 
+	* big region
+		排查涉及 RegionHolder.getCurrentRegion() 语句的代码，此代码得到的小region_no可能为用户默认region_no。
+			eg：用户为HZ用户，需要到BZ的大region中create_vm，传入的是BZ的大region_no，而小region_no却默认到HZ了？
+				可以根据大region_no得到其默认操作的小region_no（）
+				检查用到用户小region_no的点
+	* 用户体系改造，user表加入代理商ID字段，标识子用户属于哪个代理商
+		- 所有请求都需要先经过签名认证
+		- 白名单配置代理商ID（IP会存在改变的问题）
+		- 没有传AliyunIDKP值，则用户类型为代理商用户，返回结果时需要处理，返回代理商下所有子用户的数据（涉及到的接口由PD整理）
+		- 传递了AliyunIDKP的	 ，判断user表是否已有记录，没有则增加记录（代理商ID根据白名单配置），有则继续操作。
+2. 
+													      
