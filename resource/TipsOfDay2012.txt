@@ -10,6 +10,46 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* nginx
+	  ---------
+	  ...
+		   server {
+			listen       80;
+			server_name  openapi.aliyun.com;
+
+			charset UTF-8;
+
+			proxy_connect_timeout 600;
+			proxy_read_timeout 600;
+			proxy_send_timeout 600;
+
+			#access_log  logs/host.access.log  main;
+
+			if ( $host ~* (.*)\.(.*)\.(.*)\.(.*)) 
+			{ 
+			  set $domain $1; 
+			  set $new_uri /openapi/$domain$request_uri;
+			} 
+
+			location /{
+			    proxy_set_header        X-Real-IP $remote_addr;
+			    proxy_set_header        Host $host;
+			    proxy_pass http://127.0.0.1:8080$new_uri;
+			
+			}
+
+		       location /slb/api{
+				   proxy_set_header        X-Real-IP $remote_addr;
+				   proxy_set_header        Host $host;
+	...
+	---------
+	部署一个nginx对外监听80端口，通过转发实现代理多个应用的访问（以uri区分请求的应用）：
+			
+			小结：
+					当nginx正确启动后，某个应用启动后能正常访问，另一个uri的访问确是空（没任何内容，这个是因为中间多了proxy层处理），可能原因就是后端应用（比如tomcat）
+				启动失败了，即服务器是起来了，但应用确没起来，导致访问应用的路径时浏览器没显示任何内容，如果直接去访问后端的tomcat路径会报404（一看就知道路径访问到，确认路径
+				ok的情况下极可能就是应用启动失败）。
+					这种有多个层转发的情况，错误排查可以从原始的端开始，逐一排查。
 * concurrent包 ，java concurrent
 	java concurrent 探秘
 		我们都知道，在JDK1.5之前，Java中要进行业务并发时，通常需要有程序员独立完成代码实现，当然也有一些开源的框架提供了这些功能，
@@ -49,6 +89,8 @@ google 检索 apache site:*.apache.org 高级搜索
 		1、Branches做为分支，它就像树枝，最终还是合并到主干，用来控制新需求、需求变更、BUG修改等，每个分支都有一个专用的目的，分支编号将跟特定目标关系与需求管理文档内容关联。
 		2、Tags做为里程碑，它就像树根，每一次Tag的生成都要根深蒂固，才能站稳，用来控制分支测试版本和生产正式版本，标志着一个时期。
 		3、Trunk做为主干，它就是雄壮的树干，由它来生出树枝，扎下树根，他的作用是保存着最稳定，功能最全面的程序代码，用来管理整个项目。
+	- svn 命令
+		svn log -r486678 查看某个reversion log
 
 * tddl	  取模，拆分，定位
 	参考: http://rdc.taobao.com/team/jm/archives/1645
@@ -231,6 +273,17 @@ search in index find pdf
 	    2.3)CentOS 5的yum源设为上海交通大学网站 
 
 * vim
+	- 替换
+		vi/vim 中可以使用 :s 命令来替换字符串
+		:s/vivian/sky/ 替换当前行第一个 vivian 为 sky
+		:s/vivian/sky/g 替换当前行所有 vivian 为 sky
+		:n,$s/vivian/sky/ 替换第 n 行开始到最后一行中每一行的第一个 vivian 为 sky
+		:n,$s/vivian/sky/g 替换第 n 行开始到最后一行中每一行所有 vivian 为 sky
+		n 为数字，若 n 为 .，表示从当前行开始到最后一行
+		:%s/vivian/sky/（等同于 :g/vivian/s//sky/） 替换每一行的第一个 vivian 为 sky
+		:%s/vivian/sky/g（等同于 :g/vivian/s//sky/g） 替换每一行中所有 vivian 为 sky
+		可以使用 # 作为分隔符，此时中间出现的 / 不会作为分隔符
+		:s#vivian/#sky/# 替换当前行第一个 vivian/ 为 sky/	
 	- set paste 保持黏贴格式
 	- 
 		~/.vimrc - vim对当前用户的配置文件
@@ -388,6 +441,8 @@ search in index find pdf
 	from: http://www.cnblogs.com/phoebus0501/archive/2010/12/05/1897245.html
 
 * visio
+	- 输出图片格式
+		
 	- 提供多种图的绘制支持，比如uml，需要安装模板。
 	- 序列图，可以用横版画图；宽度还不够的话，可以将名称换行(选中文本工具，即可编辑一些形状的名称)
 	- 有些地方不可编辑，可能是保护原因，在形状上右键格式的保护力设置
@@ -414,8 +469,10 @@ search in index find pdf
 		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
  * spring
-	spring通过aop拦截器，拦截自定义注解所注解的方法 参考day52
-	参考：http://raulraja.com/2009/06/13/aop-spring-intercepting-method-calls-using-annotations/
+	- spring抽象类注入，spring接口注入有区别
+		抽象类注入，子类需要显示的定义parent属性，指向到抽象类，否则抽象类中注入的属性不能从子类中获取。
+	- spring通过aop拦截器，拦截自定义注解所注解的方法 参考day52
+		参考：http://raulraja.com/2009/06/13/aop-spring-intercepting-method-calls-using-annotations/
 	- ioc时注意，有些ioc是直接通过注解注入的，故在配置文件中找不到，这个细节要注意
 		@Autowired(required = true)
 		public void setXX(@Qualifier("xx") xx xx) {
@@ -1119,6 +1176,14 @@ search in index find pdf
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- in查询，条件sql
+		select 
+			xx
+		 from xx
+		 where  
+		 <iterate property="userIds" prepend=" xx " open="(" close=")" conjunction=",">
+			#ids[]#
+		 </iterate> 
 	- ibatis mapping文件检查       ，ibatis启动
 		会验证每个语句的传入参数/对象是否和定义的名称一致，不一致报出来相应的语句错误。	单元测试加载ibatis框架以验证mapping文件格式正确。
 	- * SQL预编译
@@ -1201,6 +1266,12 @@ search in index find pdf
 		Set<Entry<String,IMetaData>> set = map.entrySet();
 		for(Entry<String, IMetaData> data:set){
 * mysql
+	- 从文件导大量数据到数据库时，可以用
+		source path/file eg: source d:\xx.sql
+		如果拷贝出来去执行速度很慢。
+		linux下：
+			mysql -uxx -pxx -Ddbname < xx.sql
+		需要相应权限
 	-  mysql账户管理，账户授权
 		GRANT ALL PRIVILEGES ON *.* TO 'monty'@'localhost' IDENTIFIED BY 'some_pass' WITH GRANT OPTION;
 	- 一些命令使用，可以参考gui工具执行命令的sql参考 比如：Aqua Data Studio ，在alter table 时可以查看preview sql
@@ -1235,6 +1306,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
 	
 * ide * eclipse
+	- eclipse debug时，可以激活 break points窗口中的skip all break points按钮，这样会跳过所有debug点。
+		debug点图标上会多个右斜线
 	- 设置文件默认打开编辑器：general - appearance - editors - file associations 比如设置文本方式打开xml文件
 	- 对于同时要打开重名项目的需求，可以通过放到不同的workspace中，单独打开操作，避开重名冲突。
 	- 字体大小
@@ -1373,6 +1446,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- maven 循环依赖问题，依赖交叉
+		可通过将接口抽取到一个模块中，被其他实现模块引用；接口模块自身不依赖或只依赖类似model的中立模块
+
 	- 忽略测试失败
 		mvn test -Dmaven.test.failure.ignore=true -Dmaven.test.skip=false -Dmaven.test.error.ignore=true -Duser.home=/home/admin/houyi-test/src/test/resources -e -Duser.home=/home/admin
 		user.home为配置文件设置路径，不能错，spring容器初始化需要（可以用内包含逻辑，减少外部依赖）。
@@ -1511,6 +1587,16 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- 
+	- if [ $# -lt 2 ]; then 命令行参数个数小于2判断
+		if [ $# -eq 3 ]; then 参数个数等于3
+		shell运算符：
+			
+	- 判断输入参数个数
+		#!/bin/sh
+		num=$#
+		echo $num
+		
 	- shell执行时，确保有执行权限
 	- shell中调用其他shell ,用点运算符或source命令
 		./shell.sh stop
@@ -2247,6 +2333,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		fg      将后台程序调到前台   fg n ------>n是数字,可以指定进行那个程序
 		bg      让工作在后台运行
 		kill    结束进程    kill -9 PID     [9]强制结束,[15]正常结束,[l]列出可用的kill信号
+			kill -9 强制停止进程，kill不了
 		ps aux  查看后台程序   
 		top     查看后台程序   top -d 2    每两秒更新一次        top -d 2 -p10604   观看某个PID
 			top -b -n 2 > /tmp/top.txt ----->將 top 的資訊進行 2 次，然後將結果輸出到 /tmp/top.txt    
@@ -7972,6 +8059,10 @@ day89 Monday, July 23, 2012
 		CheckUserSignInterceptor 白名单验证，注掉以前user_id验证
 		GlobalErrorMessage
 			新增错误码：ILLEGAL_ALIYUN_IDKP(-2052, "illegal aliyun idkp"),
+
+
+		ServerErrorMessage 错误码定义
+
 		原来用到user的地方需要修改：
 			LogInterceptor
 				SlbApiLog
@@ -8205,3 +8296,770 @@ day94 Saturday, July 28, 2012
 		- 传递了AliyunIDKP的	 ，判断user表是否已有记录，没有则增加记录（代理商ID根据白名单配置），有则继续操作。
 2. 
 													      
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day95 Monday, July 30, 2012
+
+1. 
+	* 用户体系改造，流程图ok
+	* big region 
+		- RegionAwareInterceptor 的region缓存替换为RegionCacheManage的统一方式
+		- RegionAwareInterceptor中，用户传入大region_no时，设置小region不能用user的默认小region,改为从大region的小region列表中取第一个。
+			排查代码用用到regionHolder中默认小region的点。
+				RegionHolder.getCurrentRegion().isUpgrade()
+				boolean isBigEtherNetwork = RegionHolder.getCurrentRegion().isBigEtherNetwork()
+				list_vlans接口
+					有region_no和zone_no
+					ZoneServiceImpl
+			提交修改后，在开发环境验证功能
+				
+	* SLB V2 用户体系改造，构建目录，deploy目录设置好，便于部署
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/build.sh
+
+		svn checkout 部署目录：			nginx+tomcat
+			在/home/admin/slbapi目录下：
+				svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform/deploy-env/slbapi
+				sh build/build.sh
+				sh bin/tomcatctl start
+		
+		部署一个nginx对外监听80端口，通过转发实现代理多个应用的访问（以uri区分请求的应用）：
+			
+			小结：
+					当nginx正确启动后，某个应用启动后能正常访问，另一个uri的访问确是空（没任何内容，这个是因为中间多了proxy层处理），可能原因就是后端应用（比如tomcat）
+				启动失败了，即服务器是起来了，但应用确没起来，导致访问应用的路径时浏览器没显示任何内容，如果直接去访问后端的tomcat路径会报404（一看就知道路径访问到，确认路径
+				ok的情况下极可能就是应用启动失败）。
+					这种有多个层转发的情况，错误排查可以从原始的端开始，逐一排查。
+			
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day96 Tuesday, July 31, 2012
+
+1. 
+	* big region bug fix
+		- 原有查询数据库得到clusterId,region_no等部分，改用新的 cluster,zone,region缓存方案。
+
+	* 用户体系改造，SLB API build脚本
+		当前的方式，需要在部署机去build，可能会因为网络不通等问题导致依赖找不到，编译失败，通过先build再分发的方式解决此问题，也是build机的用意。
+		参考已有build过程
+	* 用户体系改造，houyi api验证逻辑（管理接口前的逻辑实现）
+	* big region
+		create_vm等接口流程（在原有基础上加上了调度，防火墙的逻辑）
+	* SLB V2 在大region项目中的变动
+		兼容用户小region_no请求？待
+		维护小region_no到大region_no的映射，在请求传入时，将小region_no转换为大region_no。
+	* big region
+		计量推送，region_no改为大region_no？待
+	* 10.230.204.24 部署slb v2 user_reform环境
+		在slbapi-user-reform目录
+		svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform/deploy-env/slbapi .
+			删除src目录下的所有内容
+		修改build/build.sh的svn地址为 http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform
+		sh build/build.sh
+		修改spring配置文件中的属性文件路径：默认为 ${user.home}/slbapi/conf目录下
+			在src下修改spring配置，然后mvn build
+		配置白名单
+			slbapi.properties
+		通过各自项目的nginx.conf,mime.type文件，启动自己的应用监听。	    （不推荐，这样会导致端口修改，2个独立的nginx进程不能共享同一个端口）
+		下面，通过配置转发规则，让多个应用公用80端口：
+		 ---------
+			  ...
+				   server {
+					listen       80;
+					server_name  openapi.aliyun.com;
+
+					charset UTF-8;
+
+					proxy_connect_timeout 600;
+					proxy_read_timeout 600;
+					proxy_send_timeout 600;
+
+					#access_log  logs/host.access.log  main;
+
+					if ( $host ~* (.*)\.(.*)\.(.*)\.(.*)) 
+					{ 
+					  set $domain $1; 
+					  set $new_uri /openapi/$domain$request_uri;
+					} 
+
+					location /{
+					    proxy_set_header        X-Real-IP $remote_addr;
+					    proxy_set_header        Host $host;
+					    proxy_pass http://127.0.0.1:8080$new_uri;
+					
+					}
+
+				       location /slb/api{
+						   proxy_set_header        X-Real-IP $remote_addr;
+						   proxy_set_header        Host $host;
+			...
+			---------
+			此方式，先验证后端服务启动正常，再验证nginx转发正常，因为后端的错误可能不能从nginx的相应内容中直接看到，比如后端tomcat返回404，nginx给你的可能就是
+			空白。
+
+2. 原有查询数据库得到clusterId,region_no等部分，改用新的 cluster,zone,region缓存方案。
+	AbstractExecuteAction
+	SingleNcResourceAction
+	SingleNcResourceActionTest
+	CancelCreateSnapshotExecuteAction
+	CancelCreateSnapshotExecuteActionTest
+	CreateSnapshotExecuteAction
+	CreateSnapshotExecuteActionTest
+	DetailSnapshotExecuteAction
+	DetailSnapshotExecuteActionTest
+	ListSnapshotExecuteAction
+	ListSnapshotExecuteActionTest
+	MountSnapshotExecuteAction
+	MountSnapshotExecuteActionTest
+	RemoveSnapshotExecuteAction
+	RemoveSnapshotExecuteActionTest
+	RetainSnapshotExecuteAction
+	RetainSnapshotExecuteActionTest
+	RollbackSnapshotExecuteAction
+	RollbackSnapshotExecuteActionTest
+	UnmountSnapshotExecuteAction
+	UnmountSnapshotExecuteActionTest
+	VmCreateExecuteAction
+	VmCreateExecuteActionTest
+
+3. 用户体系改造 houyi api
+	user表修改，sql修改：
+	alter table user add is_agent tinyint default 0 COMMENT '@desc 0 不是代理商，默认为0;1 是代理商';
+	alter table user add agent_id int(10) unsigned DEFAULT null COMMENT '@desc 代理商ID，表示子用户属于哪个代理商';
+	alter table user add image_using_mode int(2) NOT NULL default 0 COMMENT '@desc 0 : public_and_private image permitted;1 : only private image permitted';
+	alter table  user  add  image_using_mode  int(2) NOT NULL default 0 COMMENT '@desc 0 : public_and_private image permitted ; 1 : only private image permitted';
+
+4. userholder 加标识isGent，标识用户身份。
+	user插入逻辑确定：
+
+5. 用户体系改造，houyi api验证逻辑（管理接口前的逻辑实现）
+	- user表增加字段，参看第3条
+	- 修改user表改动涉及的类改动，mapping文件改动
+		user.xml
+		User
+	- UserHolder不变，存入的是代理商用户还是最终用户需要根据user的isgent属性判断
+	- 老userId方式调用时，订正表时，isagent要标记为0，即非agent用户（比如万网）
+	- 兼容老userId方式调用（isgent=0，但agent_id为空），新aliyunIDKP调用，管理接口调用（取得对应的子aliyunIDKP账号）
+	- 新aliyunIDKP插入user记录，字段定义：
+		aliyun_idkp
+		key
+			沿用其代理商的key，自己的key字段为空
+				由于原user表字段约束，某些字段必须设置值（或者修改表约束，暂定位不动约束）
+				user默认值：insertSql = " insert into  user ( default_region , default_zone , aliyun_idkp ,  user_name ,  md5_password ,  service_secret_key , email ,  service_access_id ,  status ,  gmt_last_login, agent_id ) 
+											values('cn-hangzhou-1','cn-hangzhou-1-a', $idkp, $idkp, $idkp, $idkp, 'developer@aliyun.com', $idkp, 0, now(), 144) ; "
+		region_no
+		zone_no
+
+		
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day97 Wednesday, August 01, 2012
+
+1. 
+	* 用户体系改造，houyi api
+	* 用户体系改造，SLB V2 api
+	* 大region，slb v2兼容小region
+
+2. 用户体系改造，houyi api
+	- 是否为管理接口调用的判定？在白名单且aliyunidkp值为空
+	- 在判断IDKP是否为空前，增加判断，请求的接口是否必须IDKP参数值
+		在哪里判断？通过配置文件还是其他方式标识
+	- 搭建 houyi api user_reform版本开发环境， doing
+		10.250.8.214
+	- 	- 万网等非白名单用户，数据表订正时，标识为非agent用户，即isagent=0（万网等非白名单用户，和以前一样没有切分子用户）
+
+
+		
+3.  用户体系改造，SLB V2 api
+		需求待确定，SLB v2都需要做签名验证？
+			user表存基本的验证必须字段，aliyunIDKP透传和调用。
+			slb v2 api请求vm api和原来一样，走签名
+
+4. 大region，slb v2兼容小region
+	兼容用户大小region_no请求，小region_no转换为大region_no；
+	传递给SLB后端为大region_no；
+	后端接受的是大regionNo,对其数据推送影响？待确定
+	- sql修改
+		alter table region_mapping add vm_big_region_no varchar(32) NOT NULL COMMENT '@desc vm big region no',
+		一个vm小region_no对应一个vm大region_no，一个vm大region_no对应一个slb region_no。
+		修改约束，slb region_no与 vm_big_region_no联合主键：
+			alter table region_mapping drop primary key
+			alter table region_mapping add constraint primary key (region_no,vm_big_region_no);
+		region_mapping表维护：
+			vm小region_no和vm 大region_no关系，
+			加上vm大region_no和slb region_no关系，2种关系。
+			
+	- region拦截器中中处理大小vm region_no请求兼容问题：
+		将小vm region_no转换为大vm region_no后放入threadlocal中，
+	- SLB API调用需要lb所属的vm region_no，SLB API调用SLB后端只在create_loadbalance接口传入了vm的region_no。8/1/20128/1/20128/1/2012
+	- 兼容大小vm regionNo调用程序要处理的有两个地方：
+		a. 由vm regionNo取到对应的slb reigon，从而知道slb region调用信息
+		b. create_loadbalance接口需要将vm大region_no传递给SLB后端
+	- bug id：[ID:175049]SLB V1版本，V2版本所使用region_no全部换成大region_no
+	- 修改结束后，用 AbstractServiceTest 类测试几个接口，验证修改逻辑。	
+	- 大region中SLB V2 API没有分支，提交的代码需要回滚，重新拉分支提交，待处理？
+
+
+sudo bash root
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day98 Thursday, August 02, 2012
+
+1. 
+	* 用户体系改造 houyi api
+		提供管理者调用功能，
+		修改的点：
+			- 签名验证逻辑实现完善
+			- 白名单userid配置，以区别是idkp调用还是老接口调用及是
+				配置到spring文件中（List便于判断是否存在）
+			- 配置必需待IDKP参数的接口，即不提供管理功能的接口
+				配置到spring文件中（List便于判断是否存在）
+				必须带IDKP参数的接口，在拦截器中就判断后，如果没带返回错误；对于业务接口调用不用修改、
+				业务接口不需修改的接口列表：
+					1) 创建VM 
+					2) 创建自定义image  ： A, 用户自定义image， idkp为用户id；B,对外售卖的自定义镜像， idkp指定为：26842
+					3) 新增硬盘 
+					4) 创建Group
+					5) 创建快照 
+					6) 创建Key Pair
+			- 对于其他接口，都需要处理管理接口调用
+				业务接口需要修改
+			- 资源check类中（instance,ip,...ResourceChecker ），增加代理商调用处理逻辑，如果是代理商调用，且资源所属用户的代理商
+				check列表：
+					InstanceChecker
+					GroupChecker
+					ImageUseChecker
+					IpAddressChecker
+
+			- 对于有管理功能接口的修改，支持返回代理商下面所有用户对应原接口的数据
+				以list_vm_status接口为例。
+				查询数据时，原来根据user_id筛选；现在对于代理商调用，需要返回代理商下所有用户的数据。
+			- 对于接口返回值，代理商调用和最终用户调用（老user_id方式比如万网，待IDKP值的用户）的区别
+				类似detail_vm(指定了vm)，list_snapshot（指定了device）接口，指定了资源操作的接口，返回的是资源所属的信息（不存在跨代理商的子用户）
+				类似list_vm_status（指定用户），指定用户去操作用户的数据的接口，代理商去调用时，返回或操作的是代理商下所有用户的数据
+			- 对于代理商，也分配有IDKP，如果传入的是代理商自身的IDKP，视为最终用户处理
+				在返回代理商所有用户的数据时，还需加上代理商自身的数据（能否通过将代理商的agent_id设置为其自身一个sql解决？）
+			- 对于万网这些没有进行用户改造的用户，数据订正时，标识为非代理商用户。
+			- session拦截器取到用户后，需要判断其is_agent值为1（是代理商），这层check是因为最终用户的session_id列也是有值的（现在订正为用户的idkp），如果其传session_id为自身
+			的idkp时，会误认为其实代理商。
+				上面方式兼容万网等老用户调用有问题（万网is_agent=0）,判断代理商条件修改为：能根据session_id找到用户且其service_secret_key值不为空
+				
+			- houyi api数据库的user表，service_secret_key字段去掉不为空约束，对于代理商的子用户，此字段为空
+			- 配置白名单和action必须带IDKP的配置文件为：/houyi-console-openapi/src/main/resources/houyi-openapi.xml
+
+
+	* 用户体系改造 SLB V2 API需求列表：
+		- 所有请求都需签名验证（和用户体系改造前的验证一样）
+		- 只支持新用户AliyunIDKP的调用（签名沿用其代理商（比如 144）的key）
+		- 原user表保持不变，用于SLB API签名验证（只记录代理商账户）和访问houyi api请求的签名
+		- rs表数据订正
+
+2. 用户体系改造 houyi api  —— 参考第一条说明
+	管理接口修改：
+		- detail_vm
+			VmQueryExecuteAction
+			getInstanceService().viewInstanceAtNc(instance); 做权限验证（注解方式），需要修改：
+				修改check包下对应的 InstanceChecker 
+				
+			ResourceChecker抽象类中加入user cache，便于子checker调用。
+
+			InstanceChecker 修改，后面vm验证所属用户操作都会用这个checker，不再做说明
+			
+		- list_vm_status
+			先
+	
+	acl模块与service模块相互引用，导致依赖循环，如何解决？
+			
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day99 Friday, August 03, 2012
+
+1. 
+	* 用户体系改造，houyi api
+		- 解决maven循环依赖问题，将依赖的接口独立到一个接口模块中，接口的实现在其他模块中
+			mvn a
+		- cache方式，
+	* 大region项目
+		涉及SLB V2 API改动点，需要另开分支提交，不在下面分支提交，对已提交的兼容大小region_no调用修改进行回滚：
+			http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api
+	* 用户体系改造 SLB V2 api 代码回滚，提交后，将需要修改的地方再reversion回来
+		
+
+2. 用户体系改造 houyi api 
+	    管理接口修改
+		check修改
+			ipAddressChecker
+				isBinary 判断ip是否为网段
+		- list_vm_status			列表接口
+			限定条件：
+				region_no	必选	string		云服务器所属于的Region
+				zone_no	必选	string		云服务器所属的可用域
+					zone如果没传，取代理商的默认zone，保持原接口一致
+			QueryVmListInfoExecuteAction
+				是代理商时，去掉一些限定参数（如zone_id）
+			instance.xml
+				where条件里加上代理商查询条件，关联user表，查询出代理商所有子用户的数据
+					传参时需要处理
+			InstanceServiceImpl. 的 queryOwnInstances方法
+				涉及传入user筛选条件的地方需要修改（处理代理商调用条件）。			
+					数据订正逻辑？万网关联user_id字段，得到其instance列表；传入IDKP值的用户，也是关联user_id字段？
+						数据订正案例：业务方提供aliyun_idkp和vm_name的映射表，订正工具到user表加入此idkp对应的用户（user_id为自增值）记录（如果没有的话），然后
+						把user_id这个自增值更新到instance表对应vm_name的记录。
+			修改的sql是否会被多个dao层调用，加入了agent_id筛选条件是否会影响其他调用此sql的逻辑？
+				控制传入agetn_id的入口，即agent_id是显式的传入的，调用者知道传入agent_id会返回什么样的结果。
+					当前设计，只好在dao层还去取user信息，后续需要重构，参数从service传过来，dao层不做过多依赖 -tip-
+						在原有的statement上在加上分支查询逻辑，不利于维护，后续需要修改。
+			InstanceDaoImpl
+		- start_vm
+			VmStartExecuteAction
+			InstanceServiceImpl
+				addUrlCallback方法中，当是代理商调用时，不能取UserHolder.getCurrentUserId()用户，暂定用instance对象的user_id属性，待确认？
+					后面需要搜索整个项目用到：UserHolder.getCurrentUserId() 和 UserHolder.getCurrentUser() 的地方，确认调用是否ok？
+				每个操作过后，把回调信息存入houyidb的url_callback表。
+		- stop_vm
+			VmStopExecuteAction
+			和start_vm一样，也要调：addUrlCallback 方法
+		- restart_vm
+			VmRestartExecuteAction
+			和start_vm一样，也要调：addUrlCallback 方法
+
+
+3. 用户体系改造bugfree
+	http://bugfree.corp.taobao.com/bug/list/156?productmodule_id=12215
+
+
+4. 系统设计tip
+	- maven开发时，模块划分，在依赖方便需要设计好，可以剥离接口和实现到不同模块，避免交叉依赖问题
+	 - 方法的参数设计，需要利于扩展，比如增加或减少参数，或不同类型的参数等需求。
+5. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day100 Saturday, August 04, 2012
+
+1. 
+	* 
+2. 用户体系改造 houyi api 
+	重要：
+		- 原用到UserHolder.getCurrentUser() 或 UserHolder.getCurrentUserId()的地方，都需要考虑user不是最终用户的情况了。	     （幽灵般的userholder~~~）
+		- 代理商调用时，regionNo需要模拟最终用户的调用，否则会取代理商自身的默认region去操作。
+		- describe_vip接口属于slb v1接口，不需要处理
+	管理接口修改
+	- release_vm
+		VmReleaseExecuteAction
+		InstanceServiceImpl
+			releaseInstances方法，释放的VIP时需要传入user_id
+				暂改为instance的user_id，即销毁vm时，vm的vip和vm的user_id一致。
+			修改的点：
+				GetVIPInfoCommand
+				IpAddressServiceImpl
+				IpAddressService
+	- reset_vm
+		VmResetExecuteAction
+		ImageDaoImpl
+			selectImageByNos方法在dao层，调用了threadlocal中的user，建议从调用层传参过来，避免各层充斥这全局变量。
+			修改多个点：
+				实现查询资源带user信息
+		InstanceServiceImpl
+			getInstanceService().addUrlCallback(instance, url,Message.statusSync);
+	- reset_passwd
+		VmResetPasswdExecuteAction	       
+	- modify_vm
+		VmModifyExecuteAction
+	- modify_flow_limit
+		VmModifyFlowLimitExecuteAction
+	- modify_hostname
+		ModifyVmHostNameAction
+	- create_image
+		CreateImgExecuteAction
+		因为必带IDKP值，故userholder中的user为end user，业务逻辑代码不需修改
+	- remove_image  ？
+		先查询image和user关系，然后删除，代理商去查询image是否存在时，是否会存在返回多个image的情况，
+		即：imageNo+end userId是唯一的，imageNo+agent userId不唯一，可能会删除过个子用户同名的image，待确认？
+			加个参数标识代理商所操作的用户ID？targetAliyunIdkp
+				加个resource_owner参数（值为IDKP），以便代理商告知api其操作资源的目标用户是谁
+					错误提示：resource_owner不能为空
+						RESOURCE_OWNER_IS_EMPTY(-8000,"resource_owner must set")	resource_owner参数值为空或没传
+						RESOURCE_OWNER_NOT_EXISTS(-8005,"resource_owner not exists") resource_owner对应的用户找不到
+		RemoveImgExecuteAction
+			if(image.getUserId() != UserHolder.getCurrentUser().getUserId()){ 修改增加处理代理商调用逻辑
+		ImageServiceImpl
+			增加方法：queryImageDetailByImageNo(String image_no,Long userId)
+	- recover_vm
+		VmRecoverExecuteAction
+	- query_available_ncs
+		QueryAvaliableNcsExecuteAction
+	- query_available_isos	 列表接口
+		QueryAvaliableIsosExecuteAction
+		IsoServiceImpl 
+			加入代理商查询逻辑
+				新增代理商查询业务接口
+			修改点：
+				IsoDao
+				IsoDaoImpl
+	- mount_iso
+		VmMountIsoExecuteAction
+			
+		
+
+
+3. 通过方法拦截器结合注解来实现权限验证，设计的好，是个好的方式。	   设计 -tip-
+		将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来，通过对这些行为的分离，
+	我们希望可以将它们独立到非指导业务逻辑的方法中，进而改变这些行为的时候不影响业务逻辑的代码。
+
+4. 业务逻辑堆在action层，导致依赖变动复杂
+	
+
+5. 读取Houyi配置信息发生错误，装载Endpoint信息不能为空
+	houyi api启动时会初始化到控制系统的endpoint对象，需要提前在数据库配置好。
+	at java.lang.Thread.run(Thread.java:619)
+Caused by: com.aliyun.houyi.clc.CLCConfigException: 读取Houyi配置信息发生错误，装载Endpoint信息不能为空！
+        at com.aliyun.houyi.service.support.CommandExecutorFactory.afterPropertiesSet(CommandExecutorFactory.java:88)
+        at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1369)
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day101 Monday, August 06, 2012
+
+1. 
+	* big region bug fix
+		调用cancel_create_snapshot时传入的vm和snapshot不匹配时，报-95
+	* 用户体系改造-houyi api修改
+	* 用户体系改造，slb api 需求列表，最后修改整理说明，便于调用方知晓 待？
+
+2. 用户体系改造-houyi api修改
+	- mount_iso
+		VmMountIsoExecuteAction
+			增加处理代理商操作逻辑，此类验证逻辑代码后续可以移到service层，或者再抽取，提到切面中去。-tip-
+	- unmount_iso
+		VmUnMountIsoExecuteAction
+	- add_disk
+		AddDiskExecuteAction
+	- remove_disk
+		RemoveDiskExecuteAction
+	- shift_disk
+		ShiftDiskExecuteAction
+		------
+		...
+		@Authority(
+			{ @Entry(action = Action.VM),
+					@Entry(action = Action.VM, resource = @Resource(argNo = 1)) })
+			@InstanceStatusConstraint(statusSet = InstanceStatusSet.canRecover)
+			public Result<?> shiftDisk(Instance instance, Instance srcInstance,	  权限验证，多个entry，后续指定位置
+		...
+		-------
+	- detail_vm
+		VmQueryExecuteAction
+	- query_vm_security
+		QueryVMSecurityExecuteAction
+	- query_available_imgs			     列表接口
+		是否需要带目标用户去查？
+		查询代理商可用的image，这个结果是否为业务方需要的结果？
+			暂定返回代理商下所有的
+		ImgQueryExecuteAction
+		ImageServiceImpl 增加代理商查询可用image逻辑
+		imageUsingMode对结果的筛选逻辑？	代理商查询时，设置默认
+			0 : default 可以使用公有image和自建image   1 : 只使用自己的image
+	- query_unassigned_ips			 列表接口
+		QueryUnassignedIpsExecuteAction
+		user_id需要传给控制系统，结果如何返回？分页返回	，代理商调用返回public的ips
+		注意：ip相关接口，user_id都传递给了控制系统，api层不能通过代理商调用
+	- assign_ip  ？
+		确认houyi db的subnet表，原user_id=144的记录，是否都订正为public？如果是这样，那么传递代理商ID给控制系统即可。
+			这样接口就不需要修改，代理商传递代理商的userId给控制系统
+		AssignIpExecuteAction
+		IpAddressServiceImpl
+			assignIpAddressCommand 需要带user_id	   ？？
+			ipStatusCanOperate方法代理商调用逻辑添加
+	- release_ip	？
+		ReleaseIpExecuteAction
+		ReleaseIpAddressCommand 需要带user_id操作，必须传IDKP？
+	- bind_ip	    ？
+		BindIpExecuteAction
+		BindIpAddressCommand 需要user_id到控制系统		？
+	- unbind_ip     ？
+		UnBindIpExecuteAction
+		UnbindIpAddressCommand 需要user_id传递给控制系统 ？
+	- open_ftp_pasv
+		OpenFtpPasvExecuteAction
+		IpAddressServiceImpl
+			非大二层网络下，需要判断用户是否可用ip
+				ipStatusCanOperate方法，增加代理商调用处理逻辑
+	- add_ip_segment			 ？
+		AddIpSegmentExecuteAction
+		大二层，AddIpSegmentCommand需要传user_id到控制系统，代理商如何调用	      ？
+		非大二层，IpSegmentServiceImpl 的addIpSegment方法执行添加操作时，需要user_id ？
+		解决：
+			类似create_vm接口，必须传IDKP？
+	- add_dns_alias
+		AddDnsAliasExecuteAction
+	- del_dns_alias
+		RemoveDnsAliasExecuteAction
+	- monitor_vm
+		VmMonitorDataQueryExecuteAction
+	- monitor_vm_topn	       doing
+		VmTopNMonitorExecuteAction
+		需要到monitor库去查询，哪里的表没有agent_id字段，只能在api层遍历agent对应的所有user，然后去查询
+		monitorInfo.xml
+
+	- create_group
+		必须传IDKP
+	- authorize_group		  
+		AuthorizeGroupExecuteAction
+		AbstractGroupAuthExecuteAction
+		需要知道用户所拥有的group，代理商调用没有目标用户标识？
+			根据之前查询出来的group，找到userId，保证源group都是属于这个userId的（原逻辑是直接传userHOlder.getCurrentUser().getUserId()）
+	- revoke_group 撤销group规则	     
+		RevokeGroupExecuteAction
+	- adjust_group_auth
+		AdjustGroupExecuteAction
+		GroupServiceImpl
+			viewOwnGroupBaseInfo 方法增加代理商查询子用户数据逻辑
+	- remove_group
+		RemoveGroupExecuteAction
+		GroupServiceImpl
+			viewOwnGroupBaseInfo 
+	- detail_group
+		DetailGroupExecuteAction
+		GroupServiceImpl
+			viewOwnGroupWithAuthes方法增加代理商调用处理逻辑
+	- query_groups			   列表接口
+		QueryGroupsExecuteAction
+		GroupServiceImpl
+			viewOwnGroups方法增加代理商调用逻辑
+	- guard_ddos
+		GuardDDoSExecuteAction
+		对ip进行操作
+		IpAddressQuerier 查询出ip资源（需要user_id）	     结合ipaddresschecker
+			public Map<String, IpAddress> query(String[] businessCodes) {
+	- unguard_ddos
+		UnguardDDosExecuteAction
+	- query_vm_device
+		QueryVmDeviceExecuteAction
+	-  create_snapshot
+		必须带IDKP
+	- cancel_create_snapshot
+		CancelCreateSnapshotExecuteAction
+	- retain_snapshot
+		RetainSnapshotExecuteAction
+	- list_snapshot device的所有snapshot列表
+		ListSnapshotExecuteAction
+	- detail_snapshot
+		DetailSnapshotExecuteAction
+	- list_mounted_snapshot
+		ListMountedSnapshotExecuteAction
+	- remove_snapshot		imageService没注入？	     spring在配置文件中声明自动注入
+		RemoveSnapshotExecuteAction
+	- rollback_snapshot
+		RollbackSnapshotExecuteAction
+	- mount_snapshot
+		MountSnapshotExecuteAction
+	- unmount_snapshot
+		UnmountSnapshotExecuteAction
+	- query_nc_resources	 查询集群的nc资源信息（regionNo中的zone_id范围）
+		ClusterNcResourceListAction
+	- detail_nc
+		SingleNcResourceAction
+	- query_regions		？
+		 RegionQueryAction
+		 RegionSQL.xml 的 Region_listRegion 块带了分页参数，接口中无分页参数说明？
+	- query_zones	  查询指定集群下的Zone信息
+		ZoneQueryAction
+	- query_racks 查询指定region,，指定zone下rack列表
+		RackQueryAction
+	- list_vlans	  查询指定集群的Zone下的VLan信息 ？
+		VlanQueryAction
+		GetVlanListCommand 需要传递user_id？
+	- query_instance_type	  查询云服务器类型
+		QueryInstanceTypeAction
+	- create_key_pair
+		必须传IDKP
+	- remove_key_pair
+		KeyPairRemoveExecuteAction
+		KeyPairServiceImpl
+			public ErrorCode removeOwnKeyPair(String keyPairName) { 增加代理商处理逻辑。
+	- describe_key_pair
+		KeyPairDescribeExecuteAction
+		KeyPairServiceImpl
+			修改describeOwnKeyPair方法，增加代理商调用逻辑
+	
+3. image ,iso,snapshot三者关系
+	image为用户自定义image，系统盘
+	iso镜像为数据镜像，可以被挂载。
+
+4. 权限	，权限体系结构之一
+	级联权限关系
+		有了vm的操作权限，默认就有对vm已有资源的操作权限，比如卸载快照，查询其ip信息等
+
+5. pojo
+       BaseDomain中的动态字段，维护一个map，动态添加字段，这种方式用pojo传递动态新增的属性值到其他层。
+	dynamicFileds
+
+6. 用户体系改造，houyi api测试环境
+	http://10.250.8.214/open/service?action=detail_vm
+	部署的tomcat报内部错误：
+		500 
+		The server encountered an internal error () that prevented it from fulfilling this request.
+		java.lang.NullPointerException
+	org.apache.struts2.impl.StrutsActionProxy.getErrorMessage(StrutsActionProxy.java:69)
+	com.opensymphony.xwork2.DefaultActionProxy.prepare(DefaultActionProxy.java:185)
+	org.apache.struts2.impl.StrutsActionProxy.prepare(StrutsActionProxy.java:63)
+	org.apache.struts2.impl.StrutsActionProxyFactory.createActionProxy(StrutsActionProxyFactory.java:39)
+	com.opensymphony.xwork2.DefaultActionProxyFactory.createActionProxy(DefaultActionProxyFactory.java:58)
+	org.apache.struts2.dispatcher.Dispatcher.serviceAction(Dispatcher.java:500)
+	org.apache.struts2.dispatcher.FilterDispatcher.doFilter(FilterDispatcher.java:432)
+	org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:96)
+	org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+	是不是服务器文件不完整？
+	请求路径错误，应用的struts拦截器抛错，没有log，定位struts没找到执行的action，
+	nginx + tomcat
+		nginx负责把符合要求的uri请求转发给tomcat，tomcat自己配置接受处理的uri。
+
+	MQ配置
+		message.properties
+	EC配置（控制系统）
+
+	配置文件目录
+		/home/admin/.houyi/
+	EC日志查看
+		root@houyi-vm17.dev.sd.aliyun.com # vim /var/log/houyi/master/HouyiMaster.LOG
+		10.250.8.212
+7. nginx + tomcat
+	请求uri设置，在nginx的conf配置文件里，告诉那些uri需要proxy_pass到目标应用服务器地址即可，nginx直接把请求转发给应用服务器。
+
+8. ip,vlan 资源的userId在控制系统维护，依赖性增加
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day102 Tuesday, August 07, 2012
+
+1. 
+	* 用户体系改造 hoiuyi api
+		remove_image最终定为加上 resource_owner标识最终用户
+	
+2. 处理day101第2条带问号的接口
+	
+3. linux + tomcat7 + houyi api		  ，500 internal error 1990 
+	http://10.250.8.214/open/services
+		正确URI
+	http://10.250.8.214/open/service
+		这个路径由于struts没有配置此action（请求的uri找不到映射的action，即找不到servlet），导致在struts的自带拦截器：
+			 <interceptor name="prepare" class="com.opensymphony.xwork2.interceptor.PrepareInterceptor"/>
+			执行时，浏览器报：500 java.lang.NullPointerException 空指针错误，
+			错误如下：
+				----------
+					HTTP Status 500 -
+					type Exception report
+					message
+					description The server encountered an internal error () that prevented it from fulfilling this request.
+					exception
+					java.lang.NullPointerException
+						org.apache.struts2.impl.StrutsActionProxy.getErrorMessage(StrutsActionProxy.java:69)
+						com.opensymphony.xwork2.DefaultActionProxy.prepare(DefaultActionProxy.java:185)
+						org.apache.struts2.impl.StrutsActionProxy.prepare(StrutsActionProxy.java:63)
+						org.apache.struts2.impl.StrutsActionProxyFactory.createActionProxy(StrutsActionProxyFactory.java:39)
+						com.opensymphony.xwork2.DefaultActionProxyFactory.createActionProxy(DefaultActionProxyFactory.java:58)
+						org.apache.struts2.dispatcher.Dispatcher.serviceAction(Dispatcher.java:500)
+						org.apache.struts2.dispatcher.FilterDispatcher.doFilter(FilterDispatcher.java:432)
+						org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:96)
+						org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+				----------
+			debug进入源码分析：
+				----------
+				    protected void prepare() {
+					String profileKey = "create DefaultActionProxy: ";
+					try {
+					    UtilTimerStack.push(profileKey);
+					    config = configuration.getRuntimeConfiguration().getActionConfig(namespace, actionName);
+
+					    if (config == null && unknownHandlerManager.hasUnknownHandlers()) {
+						config = unknownHandlerManager.handleUnknownAction(namespace, actionName);
+					    }
+					    if (config == null) {
+						throw new ConfigurationException(getErrorMessage());
+					    }		
+				----------		
+				在找不到  config 时抛出了ConfigurationException。
+
+		从上面错误结果看，程序已经执行到houyi api应用中，在struts框架中报了错，找不到action的config信息。
+
+		然后看houyi api的action配置，地址为services ，struts找不到action，prepare拦截器执行时就抛出了异常，可能是设置原因，应用和服务器都没有对应log，囧。
+
+		实际struts.xml配置的action路径为services。
+
+		小结：-tip-
+			先判断问题出在哪个层次/部分，有log依据log，实在没log，debug源码，查找是什么原因导致抛出问题
+
+4. vim 查找替换
+	vi/vim 中可以使用 :s 命令来替换字符串
+	:s/vivian/sky/ 替换当前行第一个 vivian 为 sky
+	:s/vivian/sky/g 替换当前行所有 vivian 为 sky
+	:n,$s/vivian/sky/ 替换第 n 行开始到最后一行中每一行的第一个 vivian 为 sky
+	:n,$s/vivian/sky/g 替换第 n 行开始到最后一行中每一行所有 vivian 为 sky
+	n 为数字，若 n 为 .，表示从当前行开始到最后一行
+	:%s/vivian/sky/（等同于 :g/vivian/s//sky/） 替换每一行的第一个 vivian 为 sky
+	:%s/vivian/sky/g（等同于 :g/vivian/s//sky/g） 替换每一行中所有 vivian 为 sky
+	可以使用 # 作为分隔符，此时中间出现的 / 不会作为分隔符
+	:s#vivian/#sky/# 替换当前行第一个 vivian/ 为 sky/	
+
+
+5. 用户体系改造-houyi api白名单暂放到 houyi.properties中
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+typhoon
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day103 Thursday, August 09, 2012
+
+1. 
+	*  用户体系改造-houyi api
+		集成测试
+			
+	* 用户体系改造-slb api
+		rs表订正
+			portal提供 lb_id ,IDKP映射表，订正lb_id不为null的记录中的user_id为IDKP值
+			另外订正lb_id为null的记录的user_id为指定的测试用IDKP值
+	* big region
+		流量接口bigregion查询检查
+
+2. 本机ip地址是通过dhcp获取的，测试环境调用本地mysql，需要调整ip。 houyi apidev测试环境（8.214）
+
+3. 用户体系改造-houyi api
+	不支持管理员是个最终用户
+		比如不能创建vm
+	集成测试
+		白名单userId,
+			管理接口
+				299代理商操作其子用户数据
+					比如detail_vm （属于275用户）
+				调用必传IDKP接口时，报错
+			最终用户
+				299的一个子用户调用
+			万网老用户调用	       （没进行用户体系改造，is_agent=0,agent_id=null）
+				is_agent=0
+	接口修改
+		  monitor_vm_topn
+		VmTopNMonitorExecuteAction
+
+4. spring抽象类注入，spring接口注入有区别 * spring
+	抽象类注入，子类需要显示的定义parent属性，指向到抽象类，否则抽象类中注入的属性不能从子类中获取。
+	还是尽量面向接口编程
+5. 测试 create_vm保证image对应的快照是存在的
+	表查看，找快照id
+	detail_snapshot 查询快照详情（有快照id值）	
+	15-147019-137.vhd                           |          1 |      21 | 428         | AT03-HOUYI1
+6. monitor计量数据	  业务
+	根据是否大二层网络，对应的数据在不同的库中，表结构不一致。
+		rx - rx_intra
+7. slb 8.214测试
+	http://10.250.8.214/slb/api?
+	houyi api
+	http://10.250.8.214/open/services?
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day104 Friday, August 10, 2012
+
+1. 
+	* 用户体系改造 slb api处理
+		
+2. 
