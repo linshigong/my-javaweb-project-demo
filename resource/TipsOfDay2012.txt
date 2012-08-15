@@ -10,6 +10,15 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+
+* What Is a Socket
+		A socket is one end-point of a two-way communication link between two programs running on the network. 
+	Socket classes are used to represent the connection between a client program and a server program. The java.net package provides 
+	two classes--Socket and ServerSocket--that implement the client side of the connection and the server side of the connection, respectively. 
+* log * log4j
+	logger.error(e) vs logger.error("xxx",e)
+	看log4j的error方法说明，直接传对象接收的是message消息对象，如何给的是非message对象，可能没有重写tostring方法，输出的日志内容为对象而不是异常的内容。
+
 * nginx
 	  ---------
 	  ...
@@ -218,16 +227,48 @@ search in index find pdf
 	　　自由软件，遵循GPL条款，源代码开源，个人、企业使用均无任何限制。
 		vnc的加强，短小精悍，功能强大。
 * RPC
-	 介绍：
-		RPC（Remote Procedure Call Protocol）——远程过程调用协议，它是一种通过网络从远程计算机程序上请求服务，
-	 而不需要了解底层网络技术的协议。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。
-	 在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易
-		RPC采用客户机/服务器模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程
-	发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。
-	当一个调用信息到达，服务器获得进程参数，计算结果，发送答复信息，然后等待下一个调用信息，最后，客户端调用进程
-	接收答复信息，获得进程结果，然后调用执行继续进行。
-　　	目前，有多种 RPC 模式和执行。最初由 Sun 公司提出。IETF ONC 宪章重新修订了 Sun 版本，使得 ONC RPC 协议成为
-	IETF 标准协议。现在使用最普遍的模式和执行是开放式软件基础的分布式计算环境（DCE）。
+	 - 通过socket进行RPC调用
+		 --------
+		 ...
+			OutputStream localOutputStream = paramSocket.getOutputStream();
+
+			BufferedWriter localBufferedWriter = new BufferedWriter(new OutputStreamWriter(localOutputStream));
+			localBufferedWriter.write("GET /?address=");
+			localBufferedWriter.write(this.mRemoteAddress);
+			localBufferedWriter.write("&method=");
+			localBufferedWriter.write(MethodName);
+			localBufferedWriter.write("&timeout=");
+			localBufferedWriter.write(Integer.toString(this.mRpcTimeout));
+			localBufferedWriter.write("&client=");
+			localBufferedWriter.write(this.mRpcClientName);
+			localBufferedWriter.write("&token=");
+			localBufferedWriter.write(this.mRpcToken);
+			localBufferedWriter.write(" HTTP/1.1\r\n");
+			localBufferedWriter.write("HOST: *\r\n");
+			localBufferedWriter.write("Content-Length: ");
+			localBufferedWriter.write(Integer.toString(this.mRpcParameter.length));
+			localBufferedWriter.write("\r\nConnection: Keep-Alive\r\n");
+			localBufferedWriter.write("\r\n");
+			localBufferedWriter.flush();
+
+			localOutputStream.write(this.mRpcParameter);
+			localOutputStream.flush();
+
+			InputStream localInputStream = paramSocket.getInputStream();
+			paramSocket.setSoTimeout(this.mRpcTimeout);
+		...
+		--------
+
+	 - 介绍：
+			RPC（Remote Procedure Call Protocol）——远程过程调用协议，它是一种通过网络从远程计算机程序上请求服务，
+		 而不需要了解底层网络技术的协议。RPC协议假定某些传输协议的存在，如TCP或UDP，为通信程序之间携带信息数据。
+		 在OSI网络通信模型中，RPC跨越了传输层和应用层。RPC使得开发包括网络分布式多程序在内的应用程序更加容易
+			RPC采用客户机/服务器模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程
+		发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。
+		当一个调用信息到达，服务器获得进程参数，计算结果，发送答复信息，然后等待下一个调用信息，最后，客户端调用进程
+		接收答复信息，获得进程结果，然后调用执行继续进行。
+	　　	目前，有多种 RPC 模式和执行。最初由 Sun 公司提出。IETF ONC 宪章重新修订了 Sun 版本，使得 ONC RPC 协议成为
+		IETF 标准协议。现在使用最普遍的模式和执行是开放式软件基础的分布式计算环境（DCE）。
 
 * xml
 	- <![CDATA[]]>
@@ -1266,6 +1307,9 @@ search in index find pdf
 		Set<Entry<String,IMetaData>> set = map.entrySet();
 		for(Entry<String, IMetaData> data:set){
 * mysql
+	- mysql数据dump
+		mysqldump -hlocalhost -uxx -pxx dbName > /home/xx.sql
+		source /home/xx.sql
 	- 从文件导大量数据到数据库时，可以用
 		source path/file eg: source d:\xx.sql
 		如果拷贝出来去执行速度很慢。
@@ -1306,6 +1350,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
 	
 * ide * eclipse
+	- debug时，保证被debug的程序和当前源码一致，否则可能debug异常（比如debug不进来）
 	- eclipse debug时，可以激活 break points窗口中的skip all break points按钮，这样会跳过所有debug点。
 		debug点图标上会多个右斜线
 	- 设置文件默认打开编辑器：general - appearance - editors - file associations 比如设置文本方式打开xml文件
@@ -1630,6 +1675,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			tail $LOGFILE -f
 		-----
 * linux
+	- curl 
+		测
 	- beep关闭
 		1）编辑 /etc/inputrc，找到
 		＃set bell style none
@@ -9061,5 +9108,160 @@ day104 Friday, August 10, 2012
 
 1. 
 	* 用户体系改造 slb api处理
+		query_monitor_vms 
+			VmPageMonitorExecuteAction
+
+	* 用户体系改造　houyi api bug fix
 		
+2. 用户体系改造 slb api处理						  slb v2 api
+	用户体系改造 SLB V2 API需求和关键点列表：
+	1）所有请求都需签名验证（和用户体系改造前的验证一样）
+	2）只支持新用户AliyunIDKP的调用（签名沿用其代理商（比如 144）的签名信息）
+	3）原user表保持不变，用于SLB API签名验证（只记录代理商账户）和访问houyi api请求的签名
+	4）rs表数据订正
+	5）slb api透传aliyun_id值给slb后端，参数名和原来一致（即user_id）
+
+	对照上面需求点，处理SLB api代码
+
+	修改点：
+		新增错误码：
+			ILLEGAL_ALIYUN_IDKP(-2052, "illegal aliyun idkp"),
+3. mysql数据dump
+	mysqldump -hlocalhost -uxx -pxx dbName > /home/xx.sql
+	source /home/xx.sql
+
+4. 
+	8.214开发测试环境的slb环境，新建slb后端的计量库便于测试，地址在本机
+	houyi api 的db改用big region的db（6.27的db）
+
+
+	http://www.cnblogs.com/lovecindywang/archive/2012/08/06/2624678.html
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day105
+
+1. bug fix
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day106 Monday, August 13, 2012
+
+1. 
+	* 用户体系改造 houyi api bug fix
+		- live_migrate_vm 接口修改（需求时文档未列出此接口）
+		- create_vm接口
+			处理user_image_mode的逻辑，  只用自己的image还是可用自己的和公有的	   （0可用自己和公有的image；1只能用属于自己的image）
+		- reset_vm
+			处理user_image_mode的逻辑，只用自己的image还是可用自己的和公有的
+		- release_ip
+			控制系统新增接口，根据ips得到vm_names，api根据vm_name验证是否有release_ip权限。
+			
+	* 
 2. 
+
+3.  Linux查看程序端口占用情况，占用的程序
+	Tomcat 8080端口起不来，老提示端口已经被占用。
+	使用命令：
+	ps -aux | grep tomcat
+	发现并没有8080端口的Tomcat进程。
+	使用命令：netstat –apn
+	查看所有的进程和端口使用情况。发现下面的进程列表，其中最后一栏是PID/Program name 
+	clip_image002
+	发现8080端口被PID为9658的Java进程占用。
+	进一步使用命令：ps -aux | grep java，或者直接：ps -aux | grep pid 查看
+	clip_image004
+	就可以明确知道8080端口是被哪个程序占用了！然后判断是否使用KILL命令干掉！
+	方法二：直接使用 netstat   -anp   |   grep  portno
+	即：netstat –apn | grep 8080
+
+4. houyi api db业务
+	iso表
+		user_iso - 标识iso是用户上传还是管理员上传的，用户查询iso时，不会返回user_iso=0的iso，
+		visibility标识iso可见性，0为公有（此时忽略user_id），1为私有
+	image表
+		visibility 0为公有（忽略user_id），1为私有
+	
+	资源所属校验时，处理这些逻辑。不仅筛选user_id条件，还需处理公有私有情况等。
+
+	remove_image
+		删除image，用户必须为image所属的user_id，或其代理商
+	
+	user表
+		image_user_mode 0可用自己和公有的image；1只能用属于自己的image
+5. 根据ips返回names
+	http://10.250.6.111/wiki/index.php/QueryVmByIp
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day107 Tuesday, August 14, 2012
+
+1. 
+	* 用户体系改造 - houyi api
+		release_ip
+		ReleaseIpExecuteAction
+		需求：
+			修复用户可以release状态为public的ip，控制系统提供根据ip列表找到vmName列表接口，api判断vm与用户的所属关系后执行release操作。
+
+		IpAddressServiceImpl的 public Result<Object> releaseIpAddress(String ipAddress) 方法，注解判断权限
+		@Authority(
+		{ @Entry(action = Action.IpUse, actAtNetwork = HouyiNetworkSetting.nonBigEther, resource = @Resource(identify = Resource.Identify.QByCode, argNo = 0)) })
+		对于以“，”隔开的ip，根据注解配置找到其资源查询类，验证每个ip的权限
+		
+		增加错误码：
+			IP_ADDRESS_UNAUTHORIZED(-5008,"has no privilege to release ip"),
+		release_ip
+			ip为多个ip用“,”隔开时，根据资源定位region时报错-90。
+			那个版本修复？
+	* x
+2. 签名时api去掉了某些字段，然后进行服务端签名，再与用户签名比对
+	去掉 app_key,sign,sign_type，
+		app_key
+
+3. houyi api bug fix
+	- bug id：187183
+		UNIQUE KEY `key_pair` (`key_pair_name`,`user_id`) ，key_pair表key_pair_name不唯一
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day108 Wednesday, August 15, 2012
+
+1. 
+	*　用户体系改造 houyi api
+		remove_key_pair
+			KeyPairRemoveExecuteAction
+			增加错误码：
+				ILLEGAL_RESOURCE_OWNER(-8007,"illegal resource_owner")		   
+					resource_owner表示的IDKP不是最终用户或不是当前代理商的子用户
+		describe_key_pair
+			KeyPairDescribeExecuteAction
+			2个接口都增加 resource_owner 参数，标识代理商操作资源所属的用户标识，和remove_image类似。
+		release_ip
+			控制系统对于没分配的ip，vm_name值为0，此为控制系统的业务，返回给api应该为空。
+			api判断ip没找到vm。
+2. 
+
+3. 业务
+	资源No定位region，zone_ip表通过ip的long格式映射其对应的zone。
+
+4. 
+	 * @deprecated
+	 * @param keyPairName
+	 */
+	public
+
+5. 日志级别定义
+	info
+	debug
+	error
+	fatal
+	对各种异常的日志级别设置
+
+6. rpc同步，异步调用 （封装rpc调用包，内部提供调用接口，对外屏蔽调用细节） aos
+	线程池调用
+	ThreadPoolExecutor
+		java concurrent包
+	
+	每个请求封装为一个个工作任务（task，workitem），交给工作线程池去处理。
+	
+	接口开发，面向接口开发、
+	
+	合适的工具
+7. 
