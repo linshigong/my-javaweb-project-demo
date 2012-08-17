@@ -5,6 +5,7 @@ import java.util.Map;
 
 import test.Pojo;
 
+
 /**
  * 址传递
  * @author wb_shen.chengs
@@ -22,7 +23,7 @@ public class TestMap {
 		Pojo p = map.get("1");
 		p.setName("new name");
 		System.out.println("modified :" + map.get("1").getName());// modified :new name
-		
+		System.out.println("aa"+map);
 	}
 	
 }
