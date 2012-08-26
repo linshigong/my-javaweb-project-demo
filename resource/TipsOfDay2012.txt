@@ -11,6 +11,101 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* jboss优化，服务器优化，系统优化
+
+	   JBOSS访问缓慢，查看jboss的并发请求数及其TCP连接状态：
+	netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+	LAST_ACK 5
+	SYN_RECV 263
+	CLOSE_WAIT 30
+	ESTABLISHED 308
+	FIN_WAIT1 499
+	FIN_WAIT2 71
+	CLOSING 20
+	TIME_WAIT 19070
+	检查发现TIME_WAIT 状态链接很高, 这样就需要对内核做些优化，
+	Vi /etc/sysctl.conf
+	net.ipv4.tcp_fin_timeout = 30
+	net.ipv4.tcp_keepalive_time = 300
+	net.ipv4.tcp_syncookies = 1
+	net.ipv4.tcp_tw_reuse = 1
+	net.ipv4.tcp_tw_recycle = 1
+	net.core.netdev_max_backlog =8096
+	net.ipv4.ip_local_port_range = 1024    65000
+	net.ipv4.tcp_max_tw_buckets = 5000
+	 
+	修改完记的使用sysctl -p 让它生效
+
+	以上参数的注解
+	/proc/sys/net/ipv4/tcp_tw_reuse
+	该文件表示是否允许重新应用处于TIME-WAIT状态的socket用于新的TCP连接。
+
+	/proc/sys/net/ipv4/tcp_tw_recycle
+	recyse是加速TIME-WAIT sockets回收
+
+	对tcp_tw_reuse和tcp_tw_recycle的修改，可能会出现.warning, got duplicate tcp line warning, got BOGUS tcp line.上面这二个参数指的是存在这两个完全一样的TCP连接，这会发生在一个连接被迅速的断开并且重新连接的情况，而且使用的端口和地址相同。但基本上这样的事情不会发生，无论如何，使能上述设置会增加重现机会。这个提示不会有人和危害，而且也不会降低系统性能，目前正在进行工作
+
+	/proc/sys/net/ipv4/tcp_keepalive_time
+	表示当keepalive起用的时候,TCP发送keepalive消息的频度。缺省是2小时
+
+	/proc/sys/net/ipv4/tcp_fin_timeout    最佳值和BSD一样为30
+	fin_wait1状态是在发起端主动要求关闭tcp连接，并且主动发送fin以后，等待接收端回复ack时候的状态。对于本端断开的socket连接，TCP保持在FIN-WAIT-2状态的时间。对方可能会断开连接或一直不结束连接或不可预料的进程死亡。
+
+	/proc/sys/net/core/netdev_max_backlog
+	该文件指定了，在接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目。
+	net.ipv4.ip_local_port_range = 1024    65000
+	表示用于向外连接的端口范围。缺省情况下很小：32768到61000，改为1024到65000。
+	 
+	net.ipv4.tcp_max_tw_buckets = 5000
+	表示系统同时保持TIME_WAIT套接字的最大数量，如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。默认为180000，改为5000。对于Apache、Nginx等服务器，上几行的参数可以很好地减少TIME_WAIT套接字数量，但是对于Squid，效果却不大。此项参数可以控制TIME_WAIT套接字的最大数量，避免Squid服务器被大量的TIME_WAIT套接字拖死。
+	 
+	 
+	其它查看连接数据命令：
+	1)统计80端口连接数
+	netstat -nat|grep -i "80"|wc -l
+	1
+	2）统计httpd协议连接数
+	ps -ef|grep httpd|wc -l
+	1
+	3）、统计已连接上的，状态为“established'
+	netstat -na|grep ESTABLISHED|wc -l
+	2
+	4)、查出哪个IP地址连接最多,将其封了.
+	netstat -na|grep ESTABLISHED|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -r +0n
+	 
+	netstat -na|grep SYN|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -r +0n
+	iptables的设置:
+	 
+	防止同步包洪水（Sync Flood）
+	# iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT
+	也有人写作
+	#iptables -A INPUT -p tcp --syn -m limit --limit 1/s -j ACCEPT
+	--limit 1/s 限制syn并发数每秒1次，可以根据自己的需要修改
+	防止各种端口扫描
+	# iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j
+	ACCEPT
+	Ping洪水攻击（Ping of Death）
+	# iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
+	 
+	 
+	修改JBOSS连接池：
+	Vi /usr/local/jboss/server/default/deploy/jbossweb-tomcat55.sar/server.xml
+	<Connector port="80" address="${jboss.bind.address}"
+		 maxThreads="500" strategy="ms" maxHttpHeaderSize="8192"
+		 emptySessionPath="true" maxKeepAliveRequests="1"
+		 enableLookups="false" redirectPort="8443" acceptCount="100"
+		 connectionTimeout="10000" disableUploadTimeout="true"/>
+	 
+	 
+	修改JBOSS内存：
+	Vi /usr/local/jboss/bin/run.conf
+	if [ "x$JAVA_OPTS" = "x" ]; then
+	   JAVA_OPTS="-Xms1024m -Xmx2048m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"
+	fi
+	 
+
+	from:http://kerry.blog.51cto.com/172631/161179
+
 * What Is a Socket
 		A socket is one end-point of a two-way communication link between two programs running on the network. 
 	Socket classes are used to represent the connection between a client program and a server program. The java.net package provides 
@@ -1675,6 +1770,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			tail $LOGFILE -f
 		-----
 * linux
+	- text 分辨率修改
+		vim /boot/grub/menu.lst 
+		kernel行末尾加上 vga=791
 	- curl 
 		测
 	- beep关闭
