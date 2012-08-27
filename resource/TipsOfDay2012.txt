@@ -9593,18 +9593,58 @@ day108 Wednesday, August 15, 2012
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Wednesday, August 16, 2012 - Wednesday, August 26, 2012
 missing by svn revert operation
+补加：
 
+* svn 代码合并(tortoiseSVN)
+	eg：branch合并到trunk
+		将trunk代码check out到本地，在其目录中调用merger命令，选择相应的选项，可先预览合并结果，进行合并；
+		合并好后，通过diff工具(kdiff)对比branch目录，验证合并是否正确。
+		kdiff
+			对比时可设置参数，比如忽略的文件或目录等，然后比较。
+
+* 发布步骤整理及演练，发布失败回滚方案设计
+	保证正式发布顺利和优化发布流程
+
+	发布步骤细化到每个命令，具体到能直接执行。
+
+		服务停止
+		数据订正
+			大数据量，关联复杂时，订正方式，订正语句的优化
+		代码发布
+		回归测试
+
+	多系统联合发布，需要全盘考虑。
+* 系统全局变量使用设计
+	在mvc架构中，全局变量控制在c层即控制层，比如action层，保证其他层的逻辑不会意外的从全局变量中去取值，导致控制层对逻辑的不可控，不利于后续的
+	扩展和维护。
+	userholder控制范围，就不会出现不走到dao的执行层（参数交给ibatis）都不敢保证最终传入的参数的担心，它可能在dao层从userholder取了userId传入的~
+		不利于统一验证user的逻辑，而需要
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day118 Monday, August 27, 2012
 1. 
 	* big region+user_reform check go on
-	* 
+		对user_reform改动到的接口，big region和进来后，再进行review，是否满足user_reform需求？
+		根据之前列出的修改接口列表查看：
+			
+
+	* 权限验证优化重构，aop，切面编程，方法拦截器
+		可通过注解，将必要的参数放到方法的参数中，通过拦截器来处理这些注解，来验证用户操作资源的权限，这种设计，需要将待验证的资源显式的定义出来，比如
+		通过放在方法的参数中（一般在service层），通过方法拦截，进行权限验证；从而，避免验证逻辑充斥业务代码，也利于维护和扩展。-tip-
+			eg：
+				现有的vm和user的验证就是通过方法拦截器，解析service层操作资源的方法中的参数（由注解定义check类型和check的arg）来验证用户操作vm的权限。
+
+		验证能不能操作（比如现有的vm和user所属）和根据用户类型不同调用不同逻辑需要区分开，将功能分类；比如start_vm只需验证能否操作，后续操作管理接口和end user是一样的。
+
+		小节下权限分类：
+			不同系统有不同的权限体系，用户权限体系中，有角色权限（不同的角色对应的可访问功能不一样），资源权限/数据权限(对资源或数据用户是否有权限查看或操作)。
+		
+		user_reform项目由于接口设计，不便于
 
 2. big region+user_reform check go on
-	- 合并好的代码与big region比较
+	- 合并好的代码与big region比较，分析user_reform的修改点 ，是否正确
 		无
-	- 合并好的代码与user_reform比较
+	- 合并好的代码与user_reform比较，分析big_region的修改点，并分析是否需要再修改
 	查看big region的代码是否有需要对应user_reform进行修改？
 		- SnapshotServiceImpl
 		     mountSnapshot方法，快照校验所属用户需要修改？
@@ -9613,6 +9653,7 @@ day118 Monday, August 27, 2012
 		- AdjustGroupExecuteAction
 		     executeAdjust方法查找group传入的userId
 			       Group group1 = groupControlService.viewOwnGroupBaseInfo(resourceOwnerUserId, source, bigRregionNo);
+			
 		- AuthorizeGroupExecuteAction
 		     原groupService替换为big region的groupcontrulservice，user部分需要修改        ？如果userId只用来生成lock，不进行比较所属，是否不需要修改？
 		     建议，从group取userId不从userHolder取。
@@ -9624,3 +9665,12 @@ day118 Monday, August 27, 2012
 		     -191错误码重复
 		- JoinGroupAction        还有其他big region加入涉及取userHolder取user操作的新接口
 		     此为新增接口，不修改，根据代理商找不到group。
+		  
+3.  big region+user_reform check go on
+	- unmount_snapshot
+		UnmountSnapshotExecuteAction
+		去掉user和快照所属校验？控制系统对vm_name和快照已有校验
+	- mount_snapshot
+		MountSnapshotExecuteAction
+		去掉user和快照所属校验？控制系统对vm_name和快照已有校验
+	
