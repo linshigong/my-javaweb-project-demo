@@ -1,0 +1,274 @@
+ps：性能测试工具ab
+-------------------------------------------------
+开源性能测试工具 - Apache ab 介绍
+ 
+
+引子
+
+按照原定计划，今天开始研究 JMeter，一天的时间看完了大半的 User Manual，发现原来只要沉住气，学习效率还是蛮高的，而且大堆的英文文档也没有那么可怕 ^_^
+
+本来想顺便把文档翻译一下，不过后来想了想，看懂是一回事，全部翻译出来又是另外一回事了，工作量太大，而且这也不是我一开始要研究 JMeter 的本意。不如大家有兴趣一起研究的遇到问题
+再一起讨论吧。
+
+开源工具通常都是为了某个特定的目的而开发出来的，所以如果想找到一个开源的性能测试工具去与LoadRunner 或者 QALoad 之类去比较，实在有些勉强。但是开源工具也有它自己的优势：小巧
+、轻便，在自己擅长的领域可以提供优秀的解决方案。所以，我们可以考虑准备一个自己的“开源测试工具箱”，平时利用空闲时间了解各种工具所适用的环境和目的，知识慢慢积累下来以后，就
+可以在遇到问题时顺手拈来，轻松化解 ^_^
+
+另外，如果8月份和9月份的空闲时间足够多，我想我会写一个系列文章来讲述在实际的开发和测试过程中引入开源性能测试工具的情况。如果有朋友感兴趣，希望大家可以一起研究和讨论。
+
+简介
+
+ab的全称是ApacheBench，是 Apache 附带的一个小工具，专门用于 HTTP Server 的benchmark testing，可以同时模拟多个并发请求。前段时间看到公司的开发人员也在用它作一些测试，看起来也不错
+，很简单，也很容易使用，所以今天花一点时间看了一下。
+
+通过下面的一个简单的例子和注释，相信大家可以更容易理解这个工具的使用。
+
+一个简单的例子
+
+/*在这个例子的一开始，我执行了这样一个命令 ab -n 10 -c 10 http://www.google.com/。这个命令的意思是启动 ab ，向 www.google.com 发送10个请求(-n 10) ，并每次发送10个请求(-c 10)——也就是说
+一次都发过去了。跟着下面的是 ab 输出的测试报告，红色部分是我添加的注释。*/
+
+C:\Program Files\Apache Software Foundation\Apache2.2\bin>ab -n 10 -c 10 http
+
+://www.google.com/
+
+This is ApacheBench, Version 2.0.40-dev <$Revision: 1.146 $> apache-2.0
+
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+
+Copyright 1997-2005 The Apache Software Foundation, http://www.apache.org/
+
+ 
+
+Benchmarking www.google.com (be patient).....done
+
+ 
+
+ 
+
+Server Software:        GWS/2.1
+
+Server Hostname:        www.google.com
+
+Server Port:            80
+
+ 
+
+Document Path:          /
+
+Document Length:        230 bytes
+
+ 
+
+Concurrency Level:      10
+
+/*整个测试持续的时间*/
+
+Time taken for tests:   3.234651 seconds
+
+/*完成的请求数量*/
+
+Complete requests:      10
+
+/*失败的请求数量*/
+
+Failed requests:        0
+
+Write errors:           0
+
+Non-2xx responses:      10
+
+Keep-Alive requests:    10
+
+/*整个场景中的网络传输量*/
+
+Total transferred:      6020 bytes
+
+/*整个场景中的HTML内容传输量*/
+
+HTML transferred:       2300 bytes
+
+/*大家最关心的指标之一，相当于 LR 中的 每秒事务数 ，后面括号中的 mean 表示这是一个平均值*/
+
+Requests per second:    3.09 [#/sec] (mean)
+
+/*大家最关心的指标之二，相当于 LR 中的 平均事务响应时间 ，后面括号中的 mean 表示这是一个平均值*/
+
+Time per request:       3234.651 [ms] (mean)
+
+/*这个还不知道是什么意思，有知道的朋友请留言，谢谢 ^_^ */
+
+Time per request:       323.465 [ms] (mean, across all concurrent requests)
+
+/*平均每秒网络上的流量，可以帮助排除是否存在网络流量过大导致响应时间延长的问题*/
+
+Transfer rate:          1.55 [Kbytes/sec] received
+
+/*网络上消耗的时间的分解，各项数据的具体算法还不是很清楚*/
+
+Connection Times (ms)
+
+              min  mean[+/-sd] median   max
+
+Connect:       20  318 926.1     30    2954
+
+Processing:    40 2160 1462.0   3034    3154
+
+Waiting:       40 2160 1462.0   3034    3154
+
+Total:         60 2479 1276.4   3064    3184
+
+ 
+
+/*下面的内容为整个场景中所有请求的响应情况。在场景中每个请求都有一个响应时间，其中 50％ 的用户响应时间小于 3064 毫秒，60 ％ 的用户响应时间小于 3094 毫秒，最大的响应时间小于 
+3184 毫秒*/
+
+Percentage of the requests served within a certain time (ms)
+
+  50%   3064
+
+  66%   3094
+
+  75%   3124
+
+  80%   3154
+
+  90%   3184
+
+  95%   3184
+
+  98%   3184
+
+  99%   3184
+
+ 100%   3184 (longest request)
+
+ 
+
+更多信息
+
+ab 不像 LR 那么强大，但是它足够轻便，如果只是在开发过程中想检查一下某个模块的响应情况，或者做一些场景比较简单的测试，ab 还是一个不错的选择——至少不用花费很多时间去学习 LR 
+那些复杂的功能，就更别说那 License 的价格了。
+
+下面是 ab 的详细参数解释，大家有兴趣的可以研究一下，最近没有足够多的时间研究，如果哪位朋友有兴趣希望可以帮忙翻译一下每个参数的含义，有问题讨论也欢迎在这里回帖 ^_^
+
+ab [ -A auth-username:password ] [ -c concurrency ] [ -C cookie-name=value ] [ -d ] [ -e csv-file ] [ -g gnuplot-file ] [ -h ] [ -H custom-header ] [ -i ] [ -k ] [ -n requests ] [ -p POST-file ] [ -P proxy-auth-username:password ]
+[ -q ] [ -s ] [ -S ] [ -t timelimit ] [ -T content-type ] [ -v verbosity] [ -V ] [ -w ] [ -x <table>-attributes ] [ -X proxy[:port] ] [ -y <tr>-attributes ] [ -z <td>-attributes ] [http://]hostname[:port]/path
+
+ 
+
+-A auth-username:password
+
+Supply BASIC Authentication credentials to the server. The username and password are separated by a single : and sent on the wire base64 encoded. The string is sent regardless of whether the server needs it (i.e., has sent an
+401 authentication needed).
+
+-c concurrency
+
+Number of multiple requests to perform at a time. Default is one request at a time.
+
+-C cookie-name=value
+
+Add a Cookie: line to the request. The argument is typically in the form of a name=value pair. This field is repeatable.
+
+-d
+
+Do not display the "percentage served within XX [ms] table". (legacy support).
+
+-e csv-file
+
+Write a Comma separated value (CSV) file which contains for each percentage (from 1% to 100%) the time (in milliseconds) it took to serve that percentage of the requests. This is usually more useful than the 'gnuplot' file; as the
+results are already 'binned'.
+
+-g gnuplot-file
+
+Write all measured values out as a 'gnuplot' or TSV (Tab separate values) file. This file can easily be imported into packages like Gnuplot, IDL, Mathematica, Igor or even Excel. The labels are on the first line of the file.
+
+-h
+
+Display usage information.
+
+-H custom-header
+
+Append extra headers to the request. The argument is typically in the form of a valid header line, containing a colon-separated field-value pair (i.e., "Accept-Encoding: zip/zop;8bit").
+
+-i
+
+Do HEAD requests instead of GET.
+
+-k
+
+Enable the HTTP KeepAlive feature, i.e., perform multiple requests within one HTTP session. Default is no KeepAlive.
+
+-n requests
+
+Number of requests to perform for the benchmarking session. The default is to just perform a single request which usually leads to non-representative benchmarking results.
+
+-p POST-file
+
+File containing data to POST.
+
+-P proxy-auth-username:password
+
+Supply BASIC Authentication credentials to a proxy en-route. The username and password are separated by a single : and sent on the wire base64 encoded. The string is sent regardless of whether the proxy needs it (i.e., has
+sent an 407 proxy authentication needed).
+
+-q
+
+When processing more than 150 requests, ab outputs a progress count on stderr every 10% or 100 requests or so. The -q flag will suppress these messages.
+
+-s
+
+When compiled in (ab -h will show you) use the SSL protected https rather than the http protocol. This feature is experimental and very rudimentary. You probably do not want to use it.
+
+-S
+
+Do not display the median and standard deviation values, nor display the warning/error messages when the average and median are more than one or two times the standard deviation apart. And default to the min/avg/max values.
+(legacy support).
+
+-t timelimit
+
+Maximum number of seconds to spend for benchmarking. This implies a -n 50000 internally. Use this to benchmark the server within a fixed total amount of time. Per default there is no timelimit.
+
+-T content-type
+
+Content-type header to use for POST data.
+
+-v verbosity
+
+Set verbosity level - 4 and above prints information on headers, 3 and above prints response codes (404, 200, etc.), 2 and above prints warnings and info.
+
+-V
+
+Display version number and exit.
+
+-w
+
+Print out results in HTML tables. Default table is two columns wide, with a white background.
+
+-x <table>-attributes
+
+String to use as attributes for <table>. Attributes are inserted <table here >.
+
+-X proxy[:port]
+
+Use a proxy server for the requests.
+
+-y <tr>-attributes
+
+String to use as attributes for <tr>.
+
+-z <td>-attributes
+
+String to use as attributes for <td>.
+
+ 
+
+相关链接
+
+ab 是 Apache 的一个安装组件，所以需要下载 Apache 安装后才能使用，可以访问 Apache 的项目主页来下载 http://httpd.apache.org/download.cgi
+
+ab 的更多信息可以参加 Apache 主页上的描述
+
+http://httpd.apache.org/docs/2.0/programs/ab.html
+
+from: http://www.cnblogs.com/jackei/archive/2006/07/18/454144.html
