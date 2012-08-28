@@ -10,6 +10,11 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+* redis
+		redis是一个key-value存储系统。和Memcached类似，它支持存储的value类型相对更多，包括string(字符串)、list(链表)、set(集合)和zset(有序集合)。
+	这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，redis支持各种不同方式的排序。
+	与memcached一样，为了保证效率，数据都是缓存在内存中。区别的是redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，
+	并且在此基础上实现了master-slave(主从)同步。
 
 * jboss优化，服务器优化，系统优化
 
@@ -598,6 +603,8 @@ search in index find pdf
 	- 部署打开debug
 		远程shell(调用python封装好的各个接口调用，执行命令，传入参数即可)执行请求，ide debug处理过程
 * yum 
+	- yum 安装指定目录，指定安装目录
+		--installroot=[path]  set install root
 	- yum源设置
 		比如使用163镜像站，可以参考其提供的使用帮助,下面为摘取部分：
 			CentOS镜像使用帮助
@@ -930,8 +937,31 @@ search in index find pdf
 			Apache ActiveMQ —— is the most popular and powerful open source messaging and Integration Patterns server
 			http://activemq.apache.org/
 
-* loadbalance 负载均衡
+* loadbalance 负载均衡	      * slb software load balance * lb 
 	haproxy + keepalived 方式实现软负载均衡
+	slb的优点（相对于dns实现的lb）：
+	SLB has several benefits, which is why it is such a highly successful and widely
+	employed technology. Three main benefits directly address the concerns and
+	needs of highly trafficked, mission-critical web sites:
+	Flexibility
+		SLB allows the addition and removal of servers to a site at any time, and the
+		effect is immediate. Among other advantages, this allows for the maintenance
+		of any machine, even during peak hours with little or no impact to the site. A
+		load balancer can also intelligently direct traffic using cookies, URL parsing,
+		static and dynamic algorithms, and much more.
+	High availability
+		SLB can check the status of the available servers, take any nonresponding
+		servers out of the rotation, and put them in rotation when they are functioning
+		again. This is automatic, requiring no intervention by an administrator.
+		Also, the load balancers themselves usually come in a redundant configuration,
+		employing more than one unit in case any one unit fails.
+	Scalability
+		Since SLB distributes load among many servers, all that is needed to increase
+		the serving power of a site is to add more servers. This can be very economical,
+		since many small- to medium-sized servers can be much less expensive
+		than a few high-end servers. Also, when site load increases, servers can be
+		brought up immediately to handle the increase in traffic.
+	
 * html/css模板 ，有此类网站搜集页面模板
 	http://www.html-themes.com/free/
 				
@@ -9667,10 +9697,81 @@ day118 Monday, August 27, 2012
 		     此为新增接口，不修改，根据代理商找不到group。
 		  
 3.  big region+user_reform check go on
-	- unmount_snapshot
-		UnmountSnapshotExecuteAction
-		去掉user和快照所属校验？控制系统对vm_name和快照已有校验
+
+	- release_vm
+		GroupControlServiceImpl
+			private boolean leaveAllGroups(Instance instance, List<Group> groups) {
+			long ownerId = instance.getUserId();//此处替换从userholder取user
+		测试验证释放VIP是否正确
+	- remove_image
+		imageService.queryParentImageInBigRegion(imageNo,currentUser.getUserId()))
+		userholder中取user改为显式传参
+	- bind_ip
+		houyi-spring-action.xml
+		action配置修改：
+			<property name="limit" value="780"/> 改为：<property name="limit" value="5000"/>
+	- authorize_group		  
+		AuthorizeGroupExecuteAction
+		groupControlService.addGroupAuth(currentUserId, group, groupAuth)
+			此处user只用来取锁，代理商也ok，或者直接改为用group对象中的userId来做锁？谭总确认：已确认锁的逻辑不受影响
+	- adjust_group_auth
+		AdjustGroupExecuteAction
+		private ResultDomain executeAdjust(String bigRregionNo, String groupNo, String adjust) {
+		查询group时，显式的带userId过去查，替换原来从userholder中取的方式
+	- remove_group
+		RemoveGroupExecuteAction
+			groupControlService.deleteGroup(resourceOwnerUserId, bigRegionNo, groupNo);	      //此为新方法，用了userholder.getUser()
+			修改：
+				GroupControlServiceImpl
+					public OperationResult deleteGroup(long ownerId, String bigRegionNo, String groupNo) {
 	- mount_snapshot
 		MountSnapshotExecuteAction
-		去掉user和快照所属校验？控制系统对vm_name和快照已有校验
-	
+		暂修改为去掉user和快照所属校验，控制系统对deviceNO和快照已有校验
+		-913 变为 SNAPSHOT_NOT_EXISTED_AT_VM(-970, "snapshot not existed at vm"),	      -913状态码废弃
+	- unmount_snapshot
+		UnmountSnapshotExecuteAction
+		暂修改为去掉user和快照所属校验，控制系统对deviceNO和快照已有校验
+		-913 变为 SNAPSHOT_NOT_EXISTED_AT_VM(-970, "snapshot not existed at vm"),
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day119 Tuesday, August 28, 2012
+
+1. 
+	* 
+2. 
+
+3. 服务器性能检查
+	netstat
+
+4. lb
+
+5. tcp状态
+	eg：在6.33上打开一个访问8.214的mysql命令行终端
+	在8.214上查看网络连接情况：
+	netstat -n | grep 3306
+	tcp        0      0 10.250.8.214:3306           10.250.6.33:45378           ESTABLISHED
+	表示一个打开的连接
+
+* TCP/IP
+	tcp状态：
+	LISTEN：侦听来自远方的TCP端口的连接请求
+	SYN-SENT：再发送连接请求后等待匹配的连接请求
+	SYN-RECEIVED：再收到和发送一个连接请求后等待对方对连接请求的确认
+	ESTABLISHED：代表一个打开的连接
+	FIN-WAIT-1：等待远程TCP连接中断请求，或先前的连接中断请求的确认
+	FIN-WAIT-2：从远程TCP等待连接中断请求
+	CLOSE-WAIT：等待从本地用户发来的连接中断请求
+	CLOSING：等待远程TCP对连接中断的确认
+	LAST-ACK：等待原来的发向远程TCP的连接中断请求的确认
+	TIME-WAIT：等待足够的时间以确保远程TCP接收到连接中断请求的确认
+	CLOSED：没有任何连接状态
+
+6. 网络性能监控
+	netperf
+		is  a  benchmark that can be used to measure various aspects of networking performance.
+	netserver
+		a network performance benchmark server, listens  for  connections  from a benchmark, and responds accordingly.
+	http://www.netperf.org/netperf/
+
