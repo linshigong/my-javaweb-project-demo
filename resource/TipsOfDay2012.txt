@@ -642,6 +642,8 @@ search in index find pdf
 	    2.3)CentOS 5的yum源设为上海交通大学网站 
 
 * vim
+	- vimdiff
+		vimdiff 命令比较文本，比较文件，文件比较 对比工具
 	- 替换
 		vi/vim 中可以使用 :s 命令来替换字符串
 		:s/vivian/sky/ 替换当前行第一个 vivian 为 sky
@@ -1568,6 +1570,8 @@ search in index find pdf
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- where calse的共用需要设计好，否则反而增加维护
+		<isNotEqual>语句需要注意，类似if..else，可能会意外带入条件，最好还是用匹配上的条件去判断<isNotEmpty>,<isEqual>
 	- in查询，条件sql
 		select 
 			xx
@@ -1658,6 +1662,24 @@ search in index find pdf
 		Set<Entry<String,IMetaData>> set = map.entrySet();
 		for(Entry<String, IMetaData> data:set){
 * mysql
+	- mysql执行计划，sql执行计划
+		mysql> desc select * from region r left join region_alias r_a on r.region_no=r_a.region_no ;
+		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+		| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
+		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+		|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
+		|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
+		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+
+		mysql> explain select * from region r left join region_alias r_a on r.region_no=r_a.region_no ;       
+		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+		| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
+		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+		|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
+		|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
+		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+		更多见mysql计划ppt说明
+
 	- mysql数据dump
 		mysqldump -hlocalhost -uxx -pxx dbName > /home/xx.sql
 		source /home/xx.sql
@@ -2841,6 +2863,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		 grep -n '[a-z]$' 123.txt    搜索以a-z结尾的行---------- 行尾搜索$
 		 grep -n 'g..d' 123.txt     搜索开头g结尾d字符----------任意一個字元 . 
 		 grep -n 'ooo*' 123.txt     搜索至少有两个oo的字符---------重複字元 *
+			tail -f -n200 logs/openapi/info.log logs/openapi/error.log | grep -v 'hello world'
+				grep -v 查看不匹配的行（select non-matching lines）
+				grep -i 去区分大小写
+
 		sed    文本流编辑器    利用脚本命令来处理文本文件
 		awd    模式扫描和处理语言
 		 nl 123.txt | sed '2,5d'   删除第二到第五行的内容
@@ -8998,7 +9024,7 @@ day99 Friday, August 03, 2012
 				zone_no	必选	string		云服务器所属的可用域
 					zone如果没传，取代理商的默认zone，保持原接口一致
 			QueryVmListInfoExecuteAction
-				是代理商时，去掉一些限定参数（如zone_id）
+				是代理商时，去掉一些限定参数（如zone_id）	      ,不去掉，代理商也需要传
 			instance.xml
 				where条件里加上代理商查询条件，关联user表，查询出代理商所有子用户的数据
 					传参时需要处理
@@ -9775,3 +9801,144 @@ day119 Tuesday, August 28, 2012
 		a network performance benchmark server, listens  for  connections  from a benchmark, and responds accordingly.
 	http://www.netperf.org/netperf/
 
+7. grep -v 查看不匹配的行
+	eg：
+		tail -f -n200 logs/openapi/info.log logs/openapi/error.log | grep -v 'hello world'
+
+8. pangu 存储
+	k-v
+	rds
+
+9. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day120 Wednesday, August 29, 2012
+
+1. 
+	* 通过工具模拟大量并发请求，重现socket red 问题（服务访问缓慢甚至返回500错误）
+		然后分析原因
+	* big region合到trunk后，数据库表的改动对mapping文件中sql的影响排查
+		执行dao单元测试
+	* 大region对sql的修改，用户体系改造需检查是否有对应的修改
+		eg ：image.xml查询用户可用image sql
+
+		svn对比big region对mapping文件做了哪些修改点
+
+		*inBigRegion(xxx的方法都需要考虑从新加入user_reform逻辑。
+		byagentid 是否已换成新方法？
+			inbigregion的方法，还是用此方法，加入user_reform逻辑
+				没有对应的byagentid方法，就是从原有的方法中取需要的逻辑
+			byagentid还是用byagentid方法，加入bigregion逻辑
+		
+		daoimpl类中搜索 inbigregion ， byagentid
+
+		所有byagentid的sql加上big region逻辑。
+			
+		- remove_image
+			RemoveImgExecuteAction
+			用imageService.queryParentImageInBigRegion(imageNo,currentUser.getUserId())查询是否正确？
+	
+			
+
+2. 通过工具模拟大量并发请求，重现socket red 问题
+	- 并发请求，重现socketread问题
+		ab -n10000 -c300 http://xxxx
+
+	- jstack dump堆栈信息 （以时间段dump多份便于对比）
+		jstack 1345 > dump1
+		----------
+		java的线程状态值有：定义在 java.lang.State中
+			A thread state. A thread can be in one of the following states: 
+
+			NEW
+				A thread that has not yet started is in this state. 
+			RUNNABLE
+				A thread executing in the Java virtual machine is in this state. 
+			BLOCKED
+				A thread that is blocked waiting for a monitor lock is in this state. 
+			WAITING
+				A thread that is waiting indefinitely for another thread to perform a particular action is in this state. 
+			TIMED_WAITING
+				A thread that is waiting for another thread to perform an action for up to a specified waiting time is in this state. 
+			TERMINATED
+				A thread that has exited is in this state. 
+			
+			A thread can be in only one state at a given point in time. These states are virtual machine states which do not reflect any operating system thread states.
+		----------
+
+
+		分析运行的细节
+3. linux help
+	svn --help
+	svn co --help
+4. jboss ,tomcat
+	tomcat报 NoClassDefFoundError: org/slf4j/impl/StaticLoggerBinder ，表示缺少对应的jar或找不到
+	但，jboss却正常，是不是在不同的jar中有了这个实现？
+
+5. ibatis映射
+	返回值中无此参数和表中无此字段的报错的区别？
+		select中无此字段：
+		org.springframework.jdbc.BadSqlGrammarException: SqlMapClient operation; bad SQL grammar []; nested exception is com.ibatis.common.jdbc.exception.NestedSQLException:   
+		--- The error occurred in ibatis/iso.xml.  
+		--- The error occurred while applying a result map.  
+		--- Check the iso.isoMap.  
+		--- Check the result mapping for the 'bigRegionNo' property.  
+		--- Cause: java.sql.SQLException: Column 'big_region_no' not found.
+		
+		select有此字段，表中无此字段：
+		？
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day121 Thursday, August 30, 2012
+
+1. 
+	* bug fix test 
+	* houyi api 需要 slf4j-log4j12-1.5.8.jar依赖
+		jboss可不要？
+	* slb v2 ，houyi api
+		cache梳理，是否提供reload方法？
+
+
+2. bug fix test 
+
+	create_vm
+		image使用
+	reset_vm
+		image的检查
+	create_image	     (create_snapshot)
+		
+	remove_image
+
+	start_vm后，收到MQ的状态改变可确定vm是否启动成功。
+
+3. 控制系统维护vmName?
+	报vm exists
+
+4. create_snapshot过程中，master重启
+	ec master reboot ,but agent at nc is still working ,they send the latest message to db or master 
+5. slb v2 ，houyi api cache梳理，是否提供reload方法？
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day122 Friday, August 31, 2012
+
+1. 
+	* 
+	* 
+
+2. mysql执行计划，sql执行计划
+mysql> desc select * from region r left join region_alias r_a on r.region_no=r_a.region_no ;
++----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
++----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
+|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
++----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+
+mysql> explain select * from region r left join region_alias r_a on r.region_no=r_a.region_no ;       
++----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
++----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
+|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
+|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
++----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
