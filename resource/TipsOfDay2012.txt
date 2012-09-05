@@ -10,6 +10,79 @@ openapi rds  (关系型数据库服务)
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
+
+* diff和patch使用指南
+　　diff和patch是一对工具，在数学上来说，diff是对两个集合的差运算，patch是对两个集合的和运算。
+　　diff比较两个文件或文件集合的差异，并记录下来，生成一个diff文件，这也是我们常说的patch文件，即补丁文件。
+　　patch能将diff文件运用于 原来的两个集合之一，从而得到另一个集合。举个例子来说文件A和文件B,经过diff之后生成了补丁文件C,那么着个过程相当于 A -B = C ,
+	那么patch的过程就是B+C = A 或A-C =B。	
+	
+　　	因此我们只要能得到A, B, C三个文件中的任何两个，就能用diff和patch这对工具生成另外一个文件。
+　　这就是diff和patch的妙处。下面分别介绍一下两个工具的用法:
+　　1). diff的用法
+　　diff后面可以接两个文件名或两个目录名。 如果是一个目录名加一个文件名，那么只作用在那么个目录下的同名文件。
+　　如果是两个目录的话，作用于该目录下的所有文件，不递归。如果我们希望递归执行，需要使用-r参数。
+　　命令diff A B >C ,一般A是原始文件，B是修改后的文件，C称为A的补丁文件。
+
+　　	不加任何参数生成的diff文件格式是一种简单的格式，这种格式只标出了不一样的行数和内容。我们需要一种更详细的格式，可以标识出不同之处的上下文环境，
+	这样更有利于提高patch命令的识别能力。这个时候可以用-c开关。	
+　　2). patch的用法
+　　patch用于根据原文件和补丁文件生成目标文件。还是拿上个例子来说
+　　patch A C 就能得到B, 这一步叫做对A打上了B的名字为C的补丁。
+　　之一步之后，你的文件A就变成了文件B。如果你打完补丁之后想恢复到A怎么办呢？
+　　patch -R B C 就可以重新还原到A了。
+　　所以不用担心会失去A的问题。
+　　其实patch在具体使用的时候是不用指定原文件的，因为补丁文件中都已经记载了原文件的路径和名称。patch足够聪明可以认出来。但是有时候会有点小问题。比如一般对两个目录diff的时候可能已经包含了原目录的名字，但是我们打补丁的时候会进入到目录中再使用patch,着个时候就需要你告诉 patch命令怎么处理补丁文件中的路径。可以利用-pn开关，告诉patch命令忽略的路径分隔符的个数。举例如下：
+　　A文件在 DIR_A下，修改后的B文件在DIR_B下，一般DIR_A和DIR_B在同一级目录。我们为了对整个目录下的所有文件一次性diff,我们一般会到DIR_A和DIR_B的父目录下执行以下命令
+　　diff -rc DIR_A DIR_B >C
+　　这个时候补丁文件C中会记录了原始文件的路径为 DIR_A/A
+　　现在另一个用户得到了A文件和C文件，其中A文件所在的目录也是DIR_A。 一般，他会比较喜欢在DIR_A目录下面进行patch操作，它会执行	   
+　　
+	patch
+　　但是这个时候patch分析C文件中的记录，认为原始文件是./DIR_A/A，但实际上是./A，此时patch会找不到原始文件。为了避免这种情况我们可以使用-p1参数如下
+　　patch -p1	     
+　　此时，patch会忽略掉第1个”/”之前的内容，认为原始文件是 ./A，这样就正确了。
+　　最后有以下几点注意：
+　　1). 一次打多个patch的话，一般这些patch有先后顺序，得按次序打才行。
+　　2). 在patch之前不要对原文件进行任何修改
+　　3). 如果patch中记录的原始文件和你得到的原始文件版本不匹配(很容易出现)，那么你可以尝试使用patch, 如果幸运的话，可以成功。大部分情况下，会有不匹配的情况，此时patch会生成rej文件，记录失败的地方，你可以手工修改。
+
+	from: http://www.linuxsky.org/doc/admin/200712/213.html
+
+* xen 内存管理
+	xm info 查看总内存和可使用的内存
+
+	xm list
+	也看查看dom0的内存数
+
+	free -m 查看dom0的内存使用情况
+
+	如果dom0占用过多内存，可以通过
+	xm mem-set 0 xxx设置dom0的内存
+
+	centos5 xen3
+	创建domu时，报内存问题：
+
+		网上搜索确定为xen的一个bug，可通过打patch解决。
+
+* linux c 开发
+	eg：keepalived目录结构
+		bin		- 制作好的rpm包
+		patch	- svn更新patch
+		source	- 源码包
+		spec - 用于制作rpm包
+
+* 打开outlook的时候，错误提示“无法启动Microsoft Office Outlook。无法打开Outlook窗口”	* 修复 *系统修复　* 自修复
+	    重启机器仍无法解决问题。
+	    解决办法：
+	    Win7：开始> 搜索程序和文件夹里》输入“Outlook.exe /resetnavpane”回车
+	    WinXP：开始>执行>输入“Outlook.exe /resetnavpane”回车
+	    然后正常启动就可以了。
+	怕你输错，直接把我引号里的复制过去。
+
+	ps：
+		这个自修复功能还是蛮不错的
+
 * IP转发 * ip forward ,在Linux中使能IP转发
 	
 	应用：iptables中配置ip转发规则，需要开启ip转发功能。
@@ -75,15 +148,12 @@ google 检索 apache site:*.apache.org 高级搜索
 
 * keepalived是VRRP的完美实现，因此在介绍keepalived之前，先介绍一下VRRP的原理。
 	VRRP协议简介
-
-	在现实的网络环境中，两台需要通信的主机大多数情况下并没有直接的物理连接。对于这样的情况，它们之间路由怎样选择？主机如何选定到达目的主机的下一跳路由，这个问题通常的解决方法有二种：
-
+	在现实的网络环境中，两台需要通信的主机大多数情况下并没有直接的物理连接。对于这样的情况，它们之间路由怎样选择？主机如何选定到达目的主机的下一跳路由，
+	这个问题通常的解决方法有二种：
 	·        在主机上使用动态路由协议(RIP、OSPF等)
-
 	·        在主机上配置静态路由
-
-	很明显，在主机上配置路态路由是非常不切实际的，因为管理、维护成本以及是否支持等诸多问题。配置静态路由就变得十分流行，但路由器(或者说默认网关default gateway)却经常成为单点。
-
+	很明显，在主机上配置路态路由是非常不切实际的，因为管理、维护成本以及是否支持等诸多问题。配置静态路由就变得十分流行，但路由器(或者说默认网关default gateway)却经常
+	成为单点。
 	VRRP的目的就是为了解决静态路由单点故障问题。
 
 	VRRP通过一竞选(election)协议来动态的将路由任务交给LAN中虚拟路由器中的某台VRRP路由器。
@@ -684,6 +754,8 @@ search in index find pdf
 	　　Linux用户安装Linux操作系统时遇到的一个最常见的难以决定的问题就是如何正确地给评估各分区大小，以分配合适的硬盘空间。而遇到出现 某个分区空间耗尽时，
 	解决的方法通常是使用符号链接，或者使用调整分区大小的工具（比如PatitionMagic等），但这都只是暂时解决办法，没有根本解决问题。随着Linux的逻辑盘卷管理功能的出现，
 	这些问题都迎刃而解，用户在无需停机的情况下方便地调整各个分区大小。	
+
+	lvm howto：http://blog.haohtml.com/archives/10298
 
 * VNC
 	VNC (Virtual Network Computing)是虚拟网络计算机的缩写。VNC是一款优秀的远程控制工具软件，由著名的AT&T的欧洲研究实验室开发的。
@@ -2901,6 +2973,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		# env                    # 查看环境变量资源
 		# free -m                # 查看内存使用量和交换区使用量
 		# df -h                  # 查看各分区使用情况
+			-h human can read
 		# du -sh         # 查看指定目录的大小
 		# grep MemTotal /proc/meminfo   # 查看内存总量
 		# grep MemFree /proc/meminfo    # 查看空闲内存量
@@ -2908,6 +2981,13 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		# cat /proc/loadavg      # 查看系统负载磁盘和分区
 		# mount | column -t      # 查看挂接的分区状态
 		# fdisk -l               # 查看所有分区
+			/dev/hda4            2946        3916     7799557+   5  Extended
+				未分配的空间
+				fdisk /dev/hda
+				m查看帮助
+				n为新建分区
+				输入起始和结束cylinders ，可以通过fdisk -l 查看可分配空间，工具也会提示可分配空间
+
 		# swapon -s              # 查看所有交换分区
 		# hdparm -i /dev/hda     # 查看磁盘参数(仅适用于IDE设备)
 		# dmesg | grep IDE       # 查看启动时IDE设备检测状况网络
@@ -3236,7 +3316,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		 grep -n 'ooo*' 123.txt     搜索至少有两个oo的字符---------重複字元 *
 			tail -f -n200 logs/openapi/info.log logs/openapi/error.log | grep -v 'hello world'
 				grep -v 查看不匹配的行（select non-matching lines）
+					如果有多个字符串匹配，先去掉匹配率高的，否则可能导致响应慢
 				grep -i 去区分大小写
+
 
 		sed    文本流编辑器    利用脚本命令来处理文本文件
 		awd    模式扫描和处理语言
@@ -10425,6 +10507,114 @@ day124 Monday, September 03, 2012
 		list_snapshot
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day125 Tuesday, September 04, 2012
+
+1. 
+	* big region 
+		历史bug
+	* api_user_reform在加入了大region的db修改后，接口测试
+
+
+
+2. 业务
+	mount_snapshot
+		vm1的快照，挂载到vm2，需要验证vm1，vm2的关系
+	pending,startfail
+		master第一次启动失败pending，成功后为stop
+		api根据MQ和显示调用更新状态，pending只能通过MQ收到，故detail_vm会从starting到pending。
+
+
+3. api_user_reform在加入了大region的db修改后，接口测试
+	query_regions
+	query_zones
+	list_vlans
+	query_instance_type
+
+	detail_vm
+	query_vm_device
+	query_available_isos
+	list_vm_status
+
+	monitor_vm（无数据）
+	monitor_vm_topn
+
+	create_snapshot
+		控制系统返回-1的码，api统一报-95，如快照名称重复
+	detail_snapshot
+	cancel_create_snapshot
+		已cancel的再去cancel，控制系统报：
+		-1,"desc":  "cancel failed
+		-95给用户
+	mount_snapshot
+	list_mounted_snapshot
+	unmount_snapshot
+	remove_snapshot
+	restart_vm
+	stop_vm
+	rollback_snapshot
+	query_unassigned_ips
+	query_available_imgs
+	assign_ip
+	release_ip
+	query_available_ncs
+	detail_nc
+	add_disk
+	query_vm_security
+	query_nc_resources
+
+
+
+4. fdisk	   linux分区	    * fdisk
+	fdisk -l
+	fdisk /dev/hda
+	n
+	1
+	10
+	w
+	reboot
+	fdisk -l
+	vgcreate guestvol /dev/hda6
+		No physical volume label read from /dev/hda6
+		Physical volume "/dev/hda6" successfully created
+		Volume group "guestvol" successfully created
+	lvcreate -nubuntu01 -L5.4G /dev/guestvol
+		Rounding up size to full physical extent 5.40 GB
+		Logical volume "ubuntu01" created
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day126 Wednesday, September 05, 2012
+
+1. 
+	* 线上环境，vm创建后起不来原因定位，无pending？
+
+
+2. 线上环境，vm创建后起不来原因定位，无pending？
+		已定位为资源不足
+
+3. 业务,日志查看，控制系统日志，问题排查
+	iso在nuwa本地pangu，image同步工具
+	nuwa(master日志)
+		从reigon找nuwa地址，ssh上去，/apaxxx/nuwa/xxx.Log查看 日志，控制系统日志
+
+	api-kfc(httpd-record service name and address,do forward)-master/netc-agent-operate
+
+	控制系统角色查看 (AG上查看)/apsara/deploy/Fuxisrvd -v houyi status 	       （ag作为master访问入口admin gateway）
+	master、netc
+	history |grep status
+	/apsara/deploy/Fuxisrvd -v houyi status
+		查看控制系统，集群的角色（由多少nc组成，有哪些服务角色，各自在那个ip上）
+	ps axf |grep master
+	vim /var/log/houyi/master/HouyiMaster.LOG
+	vim /var/log/houyi/netc/HouyiNetcLOG
+
+	vim /var/log/xen/xend.log
+	
+	eg：
+		在6.33的api，看nuwa，找ag，看master日志
+
+	pending状态需要结合配置，保证start_vm ok。
 
 
 		
@@ -10434,3 +10624,4 @@ day124 Monday, September 03, 2012
 
 
 													
+													、
