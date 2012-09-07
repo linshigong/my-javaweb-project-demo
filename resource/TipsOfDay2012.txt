@@ -11,6 +11,226 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* 机器学习
+	
+* NAT
+	网络地址转换（NAT）简介
+	NAT概述
+	　　NAT（Network Address Translation，网络地址转换）是将IP 数据包头中的IP 地址转换为另一个IP 地址的过程。在实际应用中，
+	NAT 主要用于实现私有网络访问公共网络的功能。这种通过使用少量的公有IP 地址代表较多的私有IP 地址的方式，将有助于减缓可用IP 地址空间的枯竭。
+	　　说明：
+	　　私有 IP 地址是指内部网络或主机的IP 地址，公有IP 地址是指在因特网上全球唯一的IP 地址。
+	　　RFC 1918 为私有网络预留出了三个IP 地址块，如下：
+	　　A 类：10.0.0.0～10.255.255.255
+	　　B 类：172.16.0.0～172.31.255.255
+	　　C 类：192.168.0.0～192.168.255.255
+	　　上述三个范围内的地址不会在因特网上被分配，因此可以不必向ISP 或注册中心申请而在公司或企业内部自由使用。
+	NAT工作流程
+	　　①如右图这个 client 的 gateway 设定为 NAT 主机，所以当要连上 Internet 的时候，该封包就会被送到 NAT 主机，这个时候的封包 Header 之 source IP 为 192.168.1.100 ；
+	　　②而透过这个 NAT 主机，它会将 client 的对外联机封包的 source IP ( 192.168.1.100 ) 伪装成 ppp0 ( 假设为拨接情况 )这个接口所具有的公共 IP ，因为是公共 IP 了，
+	所以这个封包就可以连上 Internet 了！同时 NAT 主机并且会记忆这个联机的封包是由哪一个 ( 192.168.1.100 ) client 端传送来的；
+		注：这里NAT主机会记忆信息以区分不同client的包
+	　　③由 Internet 传送回来的封包，当然由 NAT 主机来接收了，这个时候， NAT 主机会去查询原本记录的路由信息，并将目标 IP 由 ppp0 上面的公共 IP 改回原来的 192.168.1.100 ；
+	　　④最后则由 NAT 主机将该封包传送给原先发送封包的 Client 。
+
+	from: http://baike.baidu.com/view/16102.htm
+* lvs DR			slb
+	- lvs安装
+		系统编译进内核方式，或者从源码编译安装
+		源码安装好后，要修改系统加载（grub，lilo）配置，内核指向打了lvs的patch编译出的内核，启动时选择此内核。
+
+		查看：ls /lib/modules/xxx
+
+	- DR 
+	Direct Routing: Packets from end users are forwarded directly to the real server. The IP
+	packet is not modified, so the real servers must be configured to accept traffic for the
+	virtual server's IP address. This can be done using a dummy interface or packet filtering
+	to redirect traffic addressed to the virtual server's IP address to a local port. The real
+	server may send replies directly back to the end user. Thus, the linux director does not
+	need to be in the return path.
+		第一次需要修改，后续可以直接enduser和realservr通信
+	- NAT
+		
+	- Tunnel
+		类似DR，但realserver可以和LD不在同一网络。
+	
+
+* linux 系统信息 查看
+	linux如何查看系统信息
+	一：cpu
+	   [root@srv /]# more /proc/cpuinfo | grep "model name"
+	 model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	  model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	[root@srv /]# grep "model name" /proc/cpuinfo
+	model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	model name    : Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	[root@srv /]# grep "model name" /proc/cpuinfo | cut -f2 -d:
+	Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	Intel(R) Xeon(R) CPU          X3220 @ 2.40GHz
+	linux如何查看系统信息（转） - 飞翔天空 - 飞翔天空
+
+	二：内存
+	[root@srv /]# grep MemTotal /proc/meminfo
+	MemTotal:        614400 kB
+	[root@srv /]# free -m
+			   total        used        free    shared     buffers    cached
+	Mem:          600       23       576           0           0           0
+	-/+ buffers/cache:       23       576
+	Swap:          0           0           0
+	[root@srv /]# free -m |grep "Mem" | awk '{print $2}'
+	600
+
+	三：查看CPU位数(32 or 64)
+	[root@srv /]# getconf LONG_BIT
+	32
+
+	四：查看linux版本
+	[root@srv /]# more /etc/redhat-release
+	CentOS release 5 (Final)
+	[root@srv /]# more /etc/issue
+	CentOS release 5 (Final)
+	Kernel \r on an \m
+	[root@srv /]# more /proc/version
+	Linux version 2.6.18-92.1.18.el5.028stab060.2PAE ([email=root@rhel5-32-build-xemul]root@rhel5-32-build-xemul[/email]) (gc
+	c version 4.1.2 20071124 (Red Hat 4.1.2-42)) #1 SMP Tue Jan 13 12:31:30 MSK 2009
+
+	五：查看内核版本
+	[root@srv /]# uname -r
+	2.6.18-92.1.18.el5.028stab060.2PAE
+	[root@srv /]# uname -a
+	Linux srv.eddiechen.cn 2.6.18-92.1.18.el5.028stab060.2PAE #1 SMP Tue Jan 13 12:31:30 MSK 2009 i686 i686 i386 GNU/Linux
+
+	六：查看时区
+	[root@srv /]# date -R
+	Wed, 25 Feb 2009 02:20:50 +0000
+	[root@srv /]# mv /etc/localtime /etc/localtime.save
+	[root@srv /]# cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+	[root@srv /]# date -R
+	Wed, 25 Feb 2009 10:24:26 +0800
+
+	七：主机名
+	查看主机名
+	[root@srv /]# hostname
+	www.ifuoo.com
+	修改主机名
+	[root@srv /]# cat /etc/sysconfig/network
+	linux如何查看系统信息（转） - 飞翔天空 - 飞翔天空
+
+	八：查看selinux情况
+	[root@srv /]# sestatus
+	SELinux status:                disabled
+
+	九：网络
+	IP
+	[root@srv /]# ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'
+	207.154.202.216
+	网关
+	[root@srv /]# cat /etc/sysconfig/network
+	NETWORKING="yes"
+	GATEWAY="192.0.2.1"
+	HOSTNAME="srv.eddiechen.cn"
+	dns
+	[root@srv /]# cat /etc/resolv.conf
+	nameserver 208.74.168.131
+	nameserver 208.74.168.132
+	nameserver 4.2.2.1
+	修改Host文件
+	[root@srv /]# cat /etc/hosts
+	linux如何查看系统信息（转） - 飞翔天空 - 飞翔天空
+
+	十：已经安装的软件包
+	[root@srv /]# rpm -qa | wc -l
+	197
+	[root@srv /]# yum list installed | wc -l
+	198
+
+	十一：磁盘和分区
+	[root@srv /]# df -h
+	Filesystem          Size    Used          Avail Use    %    Mounted on
+
+	/dev/simfs              10G     353M              9.7G       4%    /
+
+	[root@srv /]# du -sh
+
+	353M
+
+	[root@srv /]# du /etc -sh
+
+	4.6M     /etc
+
+	linux如何查看系统信息（转） - 飞翔天空 - 飞翔天空
+
+	九：查看键盘布局
+
+	cat /etc/sysconfig/keyboard
+
+	cat /etc/sysconfig/keyboard | grep KEYTABLE | cut -f2 -d=
+
+	十二：查看默认语言
+
+	echo $LANG $LANGUAGE
+
+	cat /etc/sysconfig/i18n
+
+	==================================
+
+	http://hi.baidu.com/mypc007
+
+	通过以下命令，可以查看RS/6000系统配备的物理内存的大小。
+
+	　　lsdev -Cc memory
+
+	　　查看RS/6000配置的物理内存设备，下面为其输出示例：
+
+	　　mem0 Available 00-00 Memory
+
+	　　L2cache0 Available 00-00 L2 Cache
+
+	　　再使用命令
+
+	　　lsattr -El mem0
+
+	　　输出如下
+
+	　　size 512 Total amount of physical memory in Mbytes False
+
+	　　goodsize 512 Amount of usable physical memory in Mbytes False
+
+	　　此例说明机器的物理内存为512MB。如果前面lsdev的输出中有设备名 mem1，则使用同样的命令查看其对应的大小并依此类推。L2cache0 为系统二级缓存(Level 2 Cache)的设备名。同样，使用命令：
+
+	　　lsattr -El L2cache0
+
+	　　可以查看其大小。
+
+	查看LINUX系统位数
+
+	1.编程实现：
+
+	在程序中返回sizeof(int)的值，返回的结果是操作系统的字节数。若返回4则是32位操作系统，返回8即是64位。
+
+	2.getconf命令：
+
+	getconf命令可以获取系统的基本配置信息，比如操作系统位数，内存大小，磁盘大小等。
+
+	例如：
+
+	确定磁盘 hdisk0 大小，若是 root 用户，则输入：
+
+	getconf DISK_SIZE /dev/hdisk0
+
+	确定实际内存大小：getconf REAL_MEMORY
+
+	确定是否机器硬件是 32 位或 64 位：getconf HARDWARE_BITMODE
+
+	确定是否内核是 32 位或 64 位： getconf KERNEL_BITMODE
+
+	若以上的getconf KERNEL_BITMODE方法不成功(在我的机器上就不成功)，可能是因为版本不一致，可以再尝试用：getconf WORD_BIT，这个命令返回int类型的长度，与sizeof(int)一致。
 * diff和patch使用指南
 　　diff和patch是一对工具，在数学上来说，diff是对两个集合的差运算，patch是对两个集合的和运算。
 　　diff比较两个文件或文件集合的差异，并记录下来，生成一个diff文件，这也是我们常说的patch文件，即补丁文件。
@@ -65,6 +285,42 @@ google 检索 apache site:*.apache.org 高级搜索
 
 		网上搜索确定为xen的一个bug，可通过打patch解决。
 
+	想到centos5上安装xen4，但Redhat 和Cent OS系统现在集成的是Xen3.x的版本，如果你不愿意折腾自行编译安装Xen4,下面教你用第三方Yum源快速安装xen4：
+		$ cd /etc/yum.repos.d
+		$ sudo wget http://www.gitco.de/repo/GITCO-XEN4.0.0_testing_x86_64.repo
+		$ sudo yum update
+		Dependencies Resolved
+		==========================================================================================
+		Package Arch Version Repository Size
+		==========================================================================================
+		Updating:
+		xen x86_64 4.0.0-3.el5 gitco-xen4.0.0-testing 12 M
+		xen-devel x86_64 4.0.0-3.el5 gitco-xen4.0.0-testing 408 k
+		xen-libs x86_64 4.0.0-3.el5 gitco-xen4.0.0-testing 366 k
+		Transaction Summary
+		==========================================================================================
+		Install 0 Package(s)
+		Update 3 Package(s)
+		Remove 0 Package(s)
+		Total download size: 13 M
+		Is this ok [y/N]: y
+		grub.conf添加记录
+		title CentOS (2.6.18-164.15.1.el5xen)
+		root (hd0,0)
+		kernel /xen.gz-4.0.0
+		module /vmlinuz-2.6.18-164.15.1.el5xen ro root=/dev/VolGroup00/LogVol00 rhgb quiet
+		module /initrd-2.6.18-164.15.1.el5xen.img
+		重启即可
+		$ sudo reboot
+		from: http://bbs.linuxtone.org/thread-7259-1-1.html
+
+		xen第三方源：http://www.gitco.de/repo/
+
+* linux 安装方式
+	系统集成了的软件安装
+	源码编译安装
+		如果需要打patch，则打好相应的patch后再编译安装
+	第三方源安装
 * linux c 开发
 	eg：keepalived目录结构
 		bin		- 制作好的rpm包
@@ -2488,6 +2744,16 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			tail $LOGFILE -f
 		-----
 * linux
+	-  linux在关机或重启时自动执行某个任务
+	　　先写一个脚本放在/etc/rc.d/init.d下，chmod -f 777 ， 再ln -s 到 /etc/rc.d/rc0.d/K01脚本名 与 /etc/rc.d/rc6.d/K01脚本名,同时也要 ln -s 到 /etc/rc.d/rc3.d/S99脚本名 与/etc/rc.d/rc5.d/S99脚本名。
+	　　K开头的代表系统关闭的时候执行，S开头的代表开机的时候执行。注意服务器脚本编写的规范，因为有K开通的软链接并不一定会在关机的时候自动去执行，这是为什么呢？
+	刚开始一直没搞明白，后来从网上看到，执行K脚本的时候会查询/var/lock/subsys/下是否有与K开头脚本同名的空文件名，如果没有就不去执行，所以要按照服务器脚本编写的规范，
+	启动的时候要在/var/lock/subsys/先touch一个与K01后面同名的空文件.同时也要调用/etc/rc.d/init.d/functions能够接受star与stop命令信号，具体可以参考/etc/rc.d/rc文件，
+	本人是在/etc/rc.d/rc0.d/K01yum基础上改写实现的。
+
+	ps：上面摘自网络，个人总结：
+		要在linux开关机时执行自定义任务，可在 /etc/rc.d/init.d 目录下放脚本；ln到/etc/rc.d/目录下对应启动级别目录下；然后在/var/lock/subsys/目录下建同名文件。
+	 
 	- text 分辨率修改
 		vim /boot/grub/menu.lst 
 		kernel行末尾加上 vga=791
@@ -10616,12 +10882,47 @@ day126 Wednesday, September 05, 2012
 
 	pending状态需要结合配置，保证start_vm ok。
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day127 Thursday, September 06, 2012
 
+1. 
+	*  wiki
+	* 6.33日志
+		release_vm时master调netc释放ip失败，在ag 6.27上找到netc地址，上去看log
+
+
+2. 
+	
 		
+3. 抛砖引玉的效果
+	demo
+
+4. /apaxx目录下熟悉各组件，总线服务
+	nuwa
+	pangu
+	...
+
+5. lvs
+	tcpdump -n -i any port 80		   tcp包查看
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day128 Friday, September 07, 2012
+
+1. 
+	* wanwang 连调
+		缓存deviceNo等数据，重新生成缓存
+	* 
+
+					
+
+2. wanwang 连调 ，业务
+	release_vm失败丢失group信息。
+	vm stopped，group
+
+	join group多次fail，no log
 
 
-
+														
 													
-													、
+
