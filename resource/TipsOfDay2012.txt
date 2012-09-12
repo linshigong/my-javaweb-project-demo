@@ -11,6 +11,228 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* ssh
+	- key登陆,公钥认证登陆
+		SSH设置
+		在Hadoop启动以后，Namenode是通过SSH（Secure Shell）来启动和停止各个节点上的各种守护进程的，这就需要在节点之间执行指令的时候是不需要输入密码的方式，故我们需要配置SSH使用无密码公钥认证的方式。
+		首先要保证每台机器上都装了SSH服务器，且都正常启动。实际中我们用的都是OpenSSH，这是SSH协议的一个免费开源实现。FC5中默认安装的OpenSSH版本是OpenSSH4.3P2。
+		以本文中的三台机器为例，现在dbrg-1是主节点，它需要主动发起SSH连接到dbrg-2和dbrg-3，对于SSH服务来说，dbrg-1就是SSH客户端，而dbrg-2、dbrg-3则是SSH服务端，因此在dbrg-2，dbrg-3上需要确定sshd服务已经启动。简单的说，在dbrg-1上需要生成一个密钥对，即一个私钥，一个公钥。将公钥拷贝到dbrg-2，dbrg-3上，这样，比如当dbrg-1向dbrg-2发起ssh连接的时候，dbrg-2上就会生成一个随机数并用dbrg-1的公钥对这个随机数进行加密，并发送给dbrg-1；dbrg-1收到这个加密的数以后用私钥进行解密，并将解密后的数发送回dbrg-2，dbrg-2确认解密的数无误后就允许dbrg-1进行连接了。这就完成了一次公钥认证过程。
+
+		对于本文中的三台机器，首先在dbrg-1上生成密钥对：
+		[dbrg@dbrg-1:~]$ssh-keygen  -t  rsa
+		这个命令将为dbrg-1上的用户dbrg生成其密钥对，询问其保存路径时直接回车采用默认路径，当提示要为生成的密钥输入passphrase的时候，直接回车，也就是将其设定为空密码。生成的密钥对id_rsa，id_rsa.pub，默认存储在/home/dbrg/.ssh目录下。然后将id_rsa.pub的内容复制到每个机器(也包括本机)的/home/dbrg/.ssh/authorized_keys文件中，如果机器上已经有authorized_keys这个文件了，就在文件末尾加上id_rsa.pub中的内容，如果没有authorized_keys这个文件，直接cp或者scp就好了，下面的操作假设各个机器上都没有authorized_keys文件。
+
+		对于dbrg-1
+		[dbrg@dbrg-1:.ssh]$cp id_rsa.pub authorized_keys
+
+		对于dbrg-2（dbrg-3同dbrg-2的方法）
+		[dbrg@dbrg-2:~]$mkdir .ssh
+		[dbrg@dbrg-1:.ssh]$scp authorized_keys dbrg-2:/home/dbrg/.ssh/
+		此处的scp就是通过ssh进行远程copy，此处需要输入远程主机的密码，即dbrg-2机器上dbrg帐户的密码，当然，你也可以用其他方法将authorized_keys文件拷贝到其他机器上
+
+		[dbrg@dbrg-2:.ssh]$chmod 644 authorized_keys
+		这一步非常关键，必须保证authorized_keys只对其所有者有读写权限，其他人不允许有写的权限，否则SSH是不会工作的。我就曾经在配置SSH的时候郁闷了好久。
+
+		[dbrg@dbrg-2:.ssh]ls -la
+		drwx------ 2 dbrg dbrg .
+		drwx------ 3 dbrg dbrg ..
+		 -rw-r--r-- 1 dbrg dbrg authorized_keys
+		注意每个机器上的.ssh目录的ls -la都应该和上面是一样的
+
+		接着，在三台机器上都需要对sshd服务进行配置(其实是可以不用配置的，完成了上面的那些操作了以后SSH就已经可以工作了)，在三台机器上修改文件/etc/ssh/sshd_config
+		#去除密码认证
+		PasswordAuthentication  no
+		AuthorizedKeyFile   .ssh/authorized_keys
+
+		至此各个机器上的SSH配置已经完成，可以测试一下了，比如dbrg-1向dbrg-2发起ssh连接
+		[dbrg@dbrg-1:~]$ssh  dbrg-2
+		如果ssh配置好了，就会出现以下提示信息
+		The authenticity of host [dbrg-2] can't be established.
+		Key fingerprint is 1024 5f:a0:0b:65:d3:82:df:ab:44:62:6d:98:9c:fe:e9:52.
+		Are you sure you want to continue connecting (yes/no)?
+		OpenSSH告诉你它不知道这台主机，但是你不用担心这个问题，因为你是第一次登录这台主机。键入“yes”。这将把这台主机的“识别标记”加到“~/.ssh/know_hosts”文件中。第二次访问这台主机的时候就不会再显示这条提示信息了。
+		然后你会发现不需要输入密码就可以建立ssh连接了，恭喜你，配置成功了
+		不过，别忘了测试本机ssh  dbrg-1
+* pssh
+	pssh  is  a program for executing ssh in parallel on a number of hosts.  It provides features such as sending input to all of the pro-
+	cesses, passing a password to ssh, saving output to files, and timing out.
+
+	PSSH provides parallel versions of OpenSSH and related tools. Included are pssh, pscp, prsync, pnuke, and pslurp. The project includes psshlib which can be used within custom applications. 
+	The source code is written in Python and can be cloned from:
+	git clone http://code.google.com/p/parallel-ssh/ 
+
+	eg:
+		pssh -i -h /tmp/nc.list 'sudo python /tmp/virt_ops_release_20120829/virt_ops.py -m ruleset -f config_env -c /tmp/virt_ops_release_20120829/modules/ruleset_ops/config/ruleset_config_env.json'
+
+	  ------
+		pssh HOWTO
+
+		Table of Contents
+		1. Installation and Setup
+		2. Preliminaries
+		3. Examples
+		3.1. pssh
+		3.2. pscp
+		3.3. pnuke
+		4. Environment Variables
+		5. Feedback
+		1. Installation and Setup
+		To install the software, become root on your machine and do the following (on RedHat systems): 
+
+		   # rpm -ivh pssh-0.2.3-1.i386.rpm
+		   Preparing...                ########################################### [100%]
+		      1:pssh                   ########################################### [100%]
+		 
+
+		By default, the software installs itself in /usr/localbin and /usr/local/lib. Thus, you'll next want to modify your PATH if needed: 
+
+		# export PATH=$PATH:/usr/local/bin
+
+		--------------------------------------------------------------------------------
+
+		2. Preliminaries
+		All four programs will print their usage and give an example if no arguments are given. For example, with pssh: 
+
+		   # pssh
+		   Usage: pssh [OPTIONS] -h hosts.txt prog [arg0] ..
+		   
+		     -h --hosts   hosts file (each line "host[:port] [user]")
+		     -l --user    username (OPTIONAL)
+		     -p --par     max number of parallel threads (OPTIONAL)
+		     -o --outdir  output directory for stdout files (OPTIONAL)
+		     -t --timeout timeout in seconds to do ssh to a host (OPTIONAL)
+		     -v --verbose turn on warning and diagnostic messages (OPTIONAL)
+		     -O --options SSH options (OPTIONAL)
+		   
+		   Example: pssh -h ips.txt -l irb2 -o /tmp/foo uptime
+		 
+		And for pscp:
+
+		   # pscp
+		   Usage: pscp [OPTIONS] -h hosts.txt local remote
+		   
+		     -h --hosts     hosts file (each line "host[:port] [login]")
+		     -r --recursive recusively copy directories (OPTIONAL)
+		     -l --user      username (OPTIONAL)
+		     -p --par       max number of parallel threads (OPTIONAL)
+		     -t --timeout   timeout in seconds to do scp to a host (OPTIONAL)
+		     -O --options   SSH options (OPTIONAL)
+		   
+		   Example: pscp -h hosts.txt -l irb2 foo.txt /home/irb2/foo.txt
+		 
+		Note that before using any of these tools, you will need to start ssh-agent! This can be done as follows (substitute zsh with your particular shell).
+
+		   # ssh-agent zsh
+		   # ssh-add
+		   Enter passphrase for /x/bnc/.ssh/identity: 
+
+		--------------------------------------------------------------------------------
+
+		3. Examples
+		3.1. pssh
+		The following example runs hostname on three machines (IPs or hostnames) specified in the file ips.txt using login irb2 and saves the output in /tmp/foo. 
+
+		   # cat ips.txt
+		   128.112.152.122
+		   18.31.0.190
+		   128.232.103.201
+		   
+		   # pssh -h ips.txt -l irb2 -o /tmp/foo hostname
+		   Success on 128.112.152.122:22
+		   Success on 18.31.0.190:22
+		   Success on 128.232.103.201:22
+		   
+		   # ls /tmp/foo
+		   128.112.152.122  128.232.103.201  18.31.0.190
+		   
+		   # cat /tmp/foo/*
+		   planetlab-1.cs.princeton.edu
+		   planetlab1.xeno.cl.cam.ac.uk
+		   planetlab1.lcs.mit.edu
+
+		By default, pssh uses at most 32 ssh processes in parallel to ssh to the various nodes. (This is somewhat important if you're controlling hundreds or thousands of machines.) By default, it also uses a timeout of one minute to ssh to a node and obtain a result. For ssh commands that take longer than this (e.g., sleep 61), the -t option can be used. Note that pssh and pnuke have a default timeout of one minute. pscp and prsync have no default timeout, but one can be specified using the -t option.
+
+		--------------------------------------------------------------------------------
+
+		3.2. pscp
+		Here's an example of using pscp to copy files in parallel to a set of machines.
+
+		   # pscp -h ips.txt -l irb2 /etc/hosts /tmp/hosts
+		   Success on 128.112.152.122:22
+		   Success on 18.31.0.190:22
+		   Success on 128.232.103.201:22
+
+		Using the -r option will perform a recursive copy for copying entire directories.
+  
+		--------------------------------------------------------------------------------
+
+		3.3. pnuke
+		The pnuke command is useful when you want to kill a bunch of processes on a set of machines. For example, suppose you've got a bunch of java processes running on three nodes that you'd like to nuke (let's use the three machines from the pssh example). Here you would do the following:
+
+		   # pnuke -h ips.txt -l irb2 java
+		   Success on 128.112.152.122:22
+		   Success on 18.31.0.190:22
+		   Success on 128.232.103.201:22
+
+		The result of the above is to send kill -9 to all processes owned by irb2 with the string java in their name (as reported by ps -ef).
+
+		--------------------------------------------------------------------------------
+
+		4. Environment Variables
+		All four programs take similar sets of options. All of these options can be set using the following environment variables:
+
+		   PSSH_HOSTS
+		   PSSH_USER
+		   PSSH_PAR
+		   PSSH_OUTDIR
+		   PSSH_VERBOSE
+		   PSSH_OPTIONS
+
+		Here are some example settings:
+
+		   # export PSSH_HOSTS="/x/bnc/ips.txt"
+		   # export PSSH_USER="irb2"
+		   # export PSSH_PAR="32"
+		   # export PSSH_OUTDIR="/tmp/bar"
+		   # export PSSH_VERBOSE="0"
+		   # export PSSH_OPTIONS="UserKnownHostsFile /tmp/known_hosts"
+
+		Using the above settings, the examples can be executed succinctly as:
+
+		   # pssh hostname
+		   Success on 128.112.152.122:22
+		   Success on 18.31.0.190:22
+		   Success on 128.232.103.201:22
+		   
+		   # ls /tmp/bar
+		   128.112.152.122  128.232.103.201  18.31.0.190
+		   
+		   # cat /tmp/bar/*
+		   planetlab-1.cs.princeton.edu
+		   planetlab1.xeno.cl.cam.ac.uk
+		   planetlab1.lcs.mit.edu
+		   
+		   # pscp /etc/hosts /tmp/hosts
+		   Success on 128.112.152.122:22
+		   Success on 18.31.0.190:22
+		   Success on 128.232.103.201:22
+		   
+		   # pnuke java  
+		   Success on 128.112.152.122:22
+		   Success on 18.31.0.190:22
+		   Success on 128.232.103.201:22
+	
+		--------------------------------------------------------------------------------
+	  ------
+
+	参考：http://code.google.com/p/parallel-ssh
+
+* Naming Service * 命名服务 * jndi
+	命名服务(Naming Service)提供了一种为对象命名的机制，可以定位任何通过网络可以访问的机器上的对象，使得用户可以在无需知道对象位置的情况下获取和使用对象。 
+	使用命名服务，首先要将对象在命名服务器上注册，然后用户就可以通过命名服务器的地址和该对象在命名服务器上注册的JNDI名找到该对象，获得其引用了。
+	
+	nuwa
+
 * 数据库优化，索引
 	 - SQL Server 索引
 		 -------
@@ -125,6 +347,7 @@ google 检索 apache site:*.apache.org 高级搜索
 		 -------
 	
 * NFS services
+	The Network File System (NFS) was developed to allow machines to mount a disk partition on a remote machine as if it were a local disk. It allows for fast, seamless sharing of files across a network. 
 	
 * 机器学习
 	
@@ -1458,7 +1681,13 @@ search in index find pdf
 	    2.3)CentOS 5的yum源设为上海交通大学网站 
 
 * vim
-	- vimdiff
+	-自动缩进
+		在文件末尾添加一行，输入  set autoindent
+		在添加一行，输入         set cindent
+		其中 autoindent 是自动缩进； cindent是特别针对 C语言语法自动缩进
+	- 可以为操作的一行添加下划线
+		set cursorline
+   	- vimdiff
 		vimdiff 命令比较文本，比较文件，文件比较 对比工具
 	- 替换
 		vi/vim 中可以使用 :s 命令来替换字符串
@@ -1741,7 +1970,7 @@ search in index find pdf
 	
 	- Rabbitmq erlang实现的消息中间件
 		http://www.rabbitmq.com/
-	- JMS
+	- JMS		       * JMS
 		JMS是一种与厂商无关的 API，用来访问消息收发系统。它类似于 JDBC(Java Database Connectivity)：这里，JDBC 是可以用来访问许多不同关系数据库的 API，
 	而 JMS 则提供同样与厂商无关的访问方法，以访问消息收发服务。许多厂商目前都支持 JMS，包括 IBM 的 MQSeries、BEA的 Weblogic JMS service和 Progress 的 
 	SonicMQ，这只是几个例子。 JMS 使您能够通过消息收发服务（有时称为消息中介程序或路由器）从一个 JMS 客户机向另一个 JMS客户机发送消息。消息是 JMS 
@@ -1749,6 +1978,8 @@ search in index find pdf
 	负载的类型来划分，可以将消息分为几种类型，它们分别携带：简单文本 (TextMessage)、可序列化的对象 (ObjectMessage)、属性集合 (MapMessage)、字节流
 	(BytesMessage)、原始值流 (StreamMessage)，还有无有效负载的消息 (Message)。
 	
+	消息通信是软件组件或应用程序用来通信的一种方法。JMS就是一种允许应用程序创建、发送、接收、和读取消息的JAVA技术。				
+
 	JMS提供者实现
 	　　要使用Java消息服务，你必须要有一个JMS提供者，管理会话和队列。现在既有开源的提供者也有专有的提供者。 　　
 		开源的提供者包括： 　　
@@ -2019,6 +2250,9 @@ search in index find pdf
 		简单的说，在dbrg-1上需要生成一个密钥对，即一个私钥，一个公钥。将公钥拷贝到dbrg-2，dbrg-3上，这样，比如当dbrg-1向dbrg-2发起ssh连接的时候，
 	dbrg-2上就会生成一个随机数并用dbrg-1的公钥对这个随机数进行加密，并发送给dbrg-1；dbrg-1收到这个加密的数以后用私钥进行解密，并将解密后的数发送回dbrg-2，
 	dbrg-2确认解密的数无误后就允许dbrg-1进行连接了。这就完成了一次公钥认证过程。
+* gfs
+	一曰google file system	   (google)
+	一曰global file system  (redhat)
 
 * mina
 		Apache MINA is a network application framework which helps users develop high performance and high scalability network applications easily. 
@@ -2864,6 +3098,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			tail $LOGFILE -f
 		-----
 * linux
+	- 目录树显示，树状目录显示
+		tree /home/admin/ -L 2 
 	-  linux在关机或重启时自动执行某个任务
 	　　先写一个脚本放在/etc/rc.d/init.d下，chmod -f 777 ， 再ln -s 到 /etc/rc.d/rc0.d/K01脚本名 与 /etc/rc.d/rc6.d/K01脚本名,同时也要 ln -s 到 /etc/rc.d/rc3.d/S99脚本名 与/etc/rc.d/rc5.d/S99脚本名。
 	　　K开头的代表系统关闭的时候执行，S开头的代表开机的时候执行。注意服务器脚本编写的规范，因为有K开通的软链接并不一定会在关机的时候自动去执行，这是为什么呢？
@@ -3556,6 +3792,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		ls -al    显示所有文件的属性
 			-R, --recursive            list subdirectories recursively
 			ls -a -R 显示子目录文件
+			ls -h 显示文件大写，以可读方式显示结果
 		pwd         显示当前路径        
 		cd -    返回上一次目录     cd ~    返回主目录
 		date s      设置时间、日期          
@@ -3876,6 +4113,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		rpm -qi ----->查询套件的说明资料       rpm -qc[d] ----->设定档与说明档
 		rpm -ivh  ---->安装                    rpm -V  -------->查看套件有否更动过
 		rpm -e  ------>删除                    rpm -Uvh ------->升级安装  
+			rpm -e --nodeps python-2.3.4-14.7.el4 卸载安装包，检查依赖包
 		--nodeps ----->强行安装                --test ----->测试安装
 
 		来自：http://blogold.chinaunix.net/u/30619/showart.php?id=249558
@@ -11193,6 +11431,35 @@ day130 Tuesday, September 11, 2012
 1. 
 	* ace4j对houyi api的需求背景说明
 		master提供的3个接口熟悉，对应api的接口设计
+	* openstack分享
+		中心授权，组件化运行，MQ消息
+
+		loadbalance，分布式存储
+
 
 
 2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day131 Wednesday, September 12, 2012
+
+1. 
+	* big region发布
+		数据模拟订正，slbv1表检查   region_mapping
+
+2. 底层
+	/home/admin/apasara
+
+3. pssh
+	python实现，便于从一台nc批量执行命令到其他多个nc等需要。
+
+4. 系统
+	API，命名服务，master，xx，分布式kv存储
+
+	cluster规模逐渐增大后，程序的维护，更新及发布，需要自动化，面对的是大量的nc节点，除了配置信息操作基本一致。
+	执行前check，执行后check，最终check，需要自动化更高的手段。
+		抽象出过程中可以独立的操作，做为一个执行单元（可以包含准备，执行，检查等）
+
+	这样的工具开发，采用高级语言认为还是很合适的，比如python（pssh工具）。
+		依据脚本和配置自动化执行nc操作。
