@@ -11,6 +11,101 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* kernel
+	build kernel with lvs support: 
+	1) Obtain and Unpack Kernel
+	It is always easiest to start with a fresh kernel. You can obtain this from www.kernel.org.
+	This example will use the 2.4.20 kernel. It can be unpacked using the following command
+	which should unpack the kernel into the linux-2.4.20 directory.
+	tar -jxvf linux-2.4.20.tar.bz2
+	2) Obtain and Unpack LVS
+	LVS can be obtained from www.linuxvirtualserver.org. This example will use 1.0.9. It
+	can be unpacked using the following command which should pack the kernel into the
+	ipvs-1.0.9 directory.
+	tar -zxvf ipvs-1.0.9.tar.gz
+	3) Apply LVS Patches to Kernel
+	Two minor kernel patches are required in order for the LVS modules to compile. To
+	apply these patches use the following:
+	cd linux-2.4.20/
+	patch -pq < ../ipvs-1.0.9/linuxkernel_ksyms_c.diff
+	patch -pq < ../ipvs-1.0.9/linuxnet_netsyms_c.diff
+	A third patch is applied to allow interfaces to be hidden. Hidden interfaces do not
+	respond to ARP requests and are used on real servers with LVS direct routing.
+	patch -pq < ../ipvs-1.0.9/contrib/patches/hidden-2.4.20pre10-1.diff
+	4) Congure the kernel
+	First ensure that the tree is clean:
+	make mrproper
+	Now congure the kernel. There are a variety of ways of doing this including make menuconfig,
+	make xconfig and make config. Regardless of the method that you use, be sure to
+	compile in netlter support, with at least the following options. It is suggested that
+	where possible these options are built as modules.
+	Networking options --->
+	Network packet filtering (replaces ipchains)
+	<m> IP: tunnelling
+	IP: Netfilter Configuration --->
+	<m> Connection tracking (required for masq/NAT)
+	<m> FTP protocol support
+	<m> IP tables support (required for filtering/masq/NAT)
+	<m> Packet filtering
+	<m> REJECT target support
+	<m> Full NAT
+	5
+	<m> MASQUERADE target support
+	<m> REDIRECT target support
+	<m> NAT of local connections (READ HELP) (NEW)
+	<m> Packet mangling
+	<m> MARK target support
+	<m> LOG target support
+	5) Build and Install the Kernel
+	As the kernel has been recongured the build dependencies need to be reconstructed.
+	make dep
+	The kernel and modules may now be build using:
+	make bzImage modules
+	To install the newly built modules and kernel run the following command. This should install
+	the modules under /lib/modules/2.4.20/and the kernel in /boot/vmlinuz-2.4.20
+	make install modules_install
+	6) Update boot loader
+	In the case of grub is used as the boot loader then a new entry should be added
+	to /etc/grub.conf. This example assumes that the /boot partition is /dev/hda3.
+	Existing entries in /etc/grub.conf should be used as a guide.
+	title 2.4.20 LVS
+	root (hd0,0)
+	kernel /vmlinuz-2.4.20 ro root=/dev/hda3
+	If the boot loader is lilo then a new entry should be added to /etc/lilo.conf. This
+	example assumes that the / partition is /dev/hda2. Existing entries in /etc/lilo.conf
+	should be used as a guide.
+	image=/boot/vmlinuz-2.4.20
+	label=2.4.20-lvs
+	read-only
+	root=/dev/hda2
+	Once /etc/lilo.conf has been updated run lilo.
+	lilo
+	Added Linux-LVS *
+	Added Linux
+	Added LinuxOLD
+	7) Reboot the system.
+	At your boot loader's prompt be sure to boot the newly created kernel.	
+* xStream框架
+	xStream可以轻易的将Java对象和xml文档相互转换，而且可以修改某个特定的属性和节点名称，而且也支持json的转换； 
+	pojo转xml
+
+* wsdl
+	REST service wsdl
+
+	WSDL的作用  
+		原理：从XML-RPC和SOAP的使用我们可以看到， 请求消息都是根据服务提供方的服务接口来生成一个HTTP请求，在请求当中封装所要调用的方法，以及方法调用时的参数。
+	　　客户端服务调用代码要完成的任务，也就是使用实现所提供的接口，来声明调用方所需要的方法名及参数，然后由实现根据用户的输入来组合HTTP请求。　　
+	　 　这个过程可以这样来描述，首先获取用户输入，然后把输入变成实现所要求的存储格式，然后再把该格式变成HTTP请求。一般情况下，我们需要手工完成到第 二步，但是，
+	这个过程显然是可以把他自动化的，自动化的效果就是用户不再需要书写这部分的代码，减少工作量和降低出错几率。　　
+	　　自动化的过程就需要WSDL的参与，他提供了服务方服务的描述，调用方根据这个描述，就可以知道服务所需要的参数个数，然后向用户索取。得到输入以后，
+	实现可以根据WSDL的要求来把输入转换成特定的存储格式，或者直接生成最后的HTTP请求。　　
+	　 　对于每个服务，WSDL需要描述两部分的内容，一是接口，二是实现。接口描述了服务的格式，例如服务名，服务参数，服务结果。服务实现则描述了，
+	用户所 对应提供的输入如何转换成符合某一实现协议的形式，一般情况下，我们使用SOAP作为实现协议，那么客户端在分析了WSDL文件以后，将会把用户的输入转 换成
+	我们已经看到过的SOAP请求，之后的过程就与之前的完全一样。
+	
+	Describe REST Web services with WSDL 2.0 
+		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
+
 * zookeeper
 	ZooKeeper是Hadoop的正式子项目，它是一个针对大型分布式系统的可靠协调系统，提供的功能包括：配置维护、名字服务、分布式同步、组服务等。
 	ZooKeeper的目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。
@@ -377,6 +472,49 @@ google 检索 apache site:*.apache.org 高级搜索
 
 	from: http://baike.baidu.com/view/16102.htm
 * lvs DR			slb
+	- realserver
+		---------
+			在两台Web Server上执行realserver.sh脚本，为lo:0绑定VIP地址10.0.0.148、抑制ARP广播。
+
+			[root@web1 ~]# cat realserver.sh
+			复制代码
+
+			#!/bin/bash
+			#description: Config realserver
+
+			VIP=10.0.0.148
+			 
+			/etc/rc.d/init.d/functions
+			 
+			case "$1" in
+			start)
+			       /sbin/ifconfig lo:0 $VIP netmask 255.255.255.255 broadcast $VIP
+			       /sbin/route add -host $VIP dev lo:0
+			       echo "1" >/proc/sys/net/ipv4/conf/lo/arp_ignore
+			       echo "2" >/proc/sys/net/ipv4/conf/lo/arp_announce
+			       echo "1" >/proc/sys/net/ipv4/conf/all/arp_ignore
+			       echo "2" >/proc/sys/net/ipv4/conf/all/arp_announce
+			       sysctl -p >/dev/null 2>&1
+			       echo "RealServer Start OK"
+			       ;;
+			stop)
+			       /sbin/ifconfig lo:0 down
+			       /sbin/route del $VIP >/dev/null 2>&1
+			       echo "0" >/proc/sys/net/ipv4/conf/lo/arp_ignore
+			       echo "0" >/proc/sys/net/ipv4/conf/lo/arp_announce
+			       echo "0" >/proc/sys/net/ipv4/conf/all/arp_ignore
+			       echo "0" >/proc/sys/net/ipv4/conf/all/arp_announce
+			       echo "RealServer Stoped"
+			       ;;
+			*)
+			       echo "Usage: $0 {start|stop}"
+			       exit 1
+			esac
+			 
+			exit 0
+		---------
+		此脚本在realserver上执行。
+
 	- lvs安装
 		系统编译进内核方式，或者从源码编译安装
 		源码安装好后，要修改系统加载（grub，lilo）配置，内核指向打了lvs的patch编译出的内核，启动时选择此内核。
@@ -384,17 +522,19 @@ google 检索 apache site:*.apache.org 高级搜索
 		查看：ls /lib/modules/xxx
 
 	- DR 
-	Direct Routing: Packets from end users are forwarded directly to the real server. The IP
-	packet is not modified, so the real servers must be configured to accept traffic for the
-	virtual server's IP address. This can be done using a dummy interface or packet filtering
-	to redirect traffic addressed to the virtual server's IP address to a local port. The real
-	server may send replies directly back to the end user. Thus, the linux director does not
-	need to be in the return path.
-		第一次需要修改，后续可以直接enduser和realservr通信
+		Direct Routing: Packets from end users are forwarded directly to the real server. The IP
+		packet is not modified, so the real servers must be configured to accept traffic for the
+		virtual server's IP address. This can be done using a dummy interface or packet filtering
+		to redirect traffic addressed to the virtual server's IP address to a local port. The real
+		server may send replies directly back to the end user. Thus, the linux director does not
+		need to be in the return path.
+			第一次需要修改，后续可以直接enduser和realservr通信
 	- NAT
 		
 	- Tunnel
 		类似DR，但realserver可以和LD不在同一网络。
+	- lvs+keepalived
+		http://www.cnblogs.com/mchina/archive/2012/08/27/2644391.html
 	
 
 * linux 系统信息 查看
@@ -3112,6 +3252,11 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			tail $LOGFILE -f
 		-----
 * linux
+	- sysctl命令 * 内核配置 * kernel配置 * kernel设置
+		vi /etc/sysctl.conf
+		sysctl -p 使内核配置生效
+		sysctl - configure kernel parameters at runtime
+
 	- 目录树显示，树状目录显示
 		tree /home/admin/ -L 2 
 	-  linux在关机或重启时自动执行某个任务
@@ -3322,6 +3467,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 				来自：http://www.ej38.com/showinfo/linux-183843.htm
 			------
+	
+		* SecureCRT
+			- 快捷键 alt + 1,2,3....切换子标签窗口
+
 	-   $# 是传给脚本(或者函数)的参数个数, $0 是脚本本身的名字, $@ 是传给脚本(或者函数)的所有参数的列表. 举例:
 
                   QUOTE:
@@ -11518,3 +11667,48 @@ day133 Friday, September 14, 2012
 
 	保证目标机对host名的正确解析（可以在目标机的host定义文件中定义host名到ip的映射关系）
 
+3. SLB 
+	lvs test
+	2 vm,lvs
+	using LVS as a module as this approach is easier and more exible.
+	kernel: http://www.kernel.org/pub/linux/kernel/v2.6/longterm/v2.6.34/linux-2.6.34.13.tar.bz2
+	ipvs: http://www.linuxvirtualserver.org/software/kernel-2.6/ipvsadm-1.26.tar.gz
+	Compiling ipvsadm on different Linux distributions:
+		http://kb.linuxvirtualserver.org/wiki/Compiling_ipvsadm_on_different_Linux_distributions
+4. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day134 Monday, September 17, 2012
+
+1. 
+	* ace4j Firewall
+		prd会
+
+2. ace4j防火墙接口
+	LXC内部网络跨vm访问，跨过arp FireWall，支持LXC每个容器一个私网IP(此私网为LXC的网络)。
+	arp FireWall -> ip FireWall
+
+	lxc网络规划(internal)
+
+	一些接口参数校验：
+		ip，ip段，ip range - 合法性（格式，范围）
+		PRD讨论，暂只支持单个ip
+
+	定义返回结果pojo类的xml映射
+		XStream		
+
+	具体验证，设计时考虑
+
+3. parse pojo to xml
+	eg: XStream
+
+	定义返回结果pojo类的xml映射 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day135 Tuesday, September 18, 2012
+
+1. 
+	* 
+
+2. 
