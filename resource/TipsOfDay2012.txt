@@ -515,6 +515,65 @@ google 检索 apache site:*.apache.org 高级搜索
 		---------
 		此脚本在realserver上执行。
 
+		注意，VIP是独立的，如果想将lvs服务与realserver放在同一台机子上测试的话，要保证vip是独立的（非lvs机的ip，也非rs机的ip）
+		上面这个脚本设置VIP查找的，如果错用了lvs或rs自身的ip，则出服务异常。
+
+		下面为一个测试例子：
+			VIP=10.1.171.253
+			2台VM，既充当LVS机，也充当RS机
+				vm1:
+					ip=10.1.171.140
+				vm2:
+					ip=10.1.171.148
+			起keepalived：
+				service keepalived start
+			
+			执行上面的shell脚本，绑定VIP的访问
+
+			查看LVS，vip下rs状态列表
+				[root@mydev2 home]# ipvsadm -L
+				IP Virtual Server version 1.2.1 (size=4096)
+				Prot LocalAddress:Port Scheduler Flags
+				  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn
+				TCP  10.1.171.253:webcache rr persistent 50
+				  -> mydev2.test.com.cn:http      Local   1      0          0         
+				  -> mydev.test.com.cn:http       Masq    1      0          0      
+				  
+				  可以看到2个rs都正常服务了。
+
+			测试场景：
+				1）keepalived检查rs的健康情况，对于down掉的rs，从rs列表中去除(ipvsadm -L验证是否去除)
+					关闭某台rs的http服务
+				2）lvs vip漂移验证（也即LoadBalance主机和BackUP主机之间failover的实现）
+					关闭某台lvs机的lvs服务，即关闭keepalived
+					验证VIP转移到另一台lvs机上，访问正常。
+
+			问题：上面的shell脚本，当rs正常访问后，ip add命令的结果中vip在eth0的信息中，即使删除lo:0也没用？	 若rs没启动成功此命令中eth0中不会有vip的信息
+				#ip add
+				1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue 
+				    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+				    inet 127.0.0.1/8 scope host lo
+				    inet6 ::1/128 scope host 
+				       valid_lft forever preferred_lft forever
+				2: peth0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
+				    link/ether fe:ff:ff:ff:ff:ff brd ff:ff:ff:ff:ff:ff
+				    inet6 fe80::fcff:ffff:feff:ffff/64 scope link 
+				       valid_lft forever preferred_lft forever
+				3: sit0: <NOARP> mtu 1480 qdisc noop 
+				    link/sit 0.0.0.0 brd 0.0.0.0
+				4: virbr0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue 
+				    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+				    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+				5: vif0.0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue 
+				    link/ether fe:ff:ff:ff:ff:ff brd ff:ff:ff:ff:ff:ff
+				    inet6 fe80::fcff:ffff:feff:ffff/64 scope link 
+				       valid_lft forever preferred_lft forever
+				6: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue 
+				    link/ether 00:0c:29:93:bd:30 brd ff:ff:ff:ff:ff:ff
+				    inet 10.1.171.140/25 brd 10.1.171.255 scope global eth0
+				    inet 10.1.171.253/32 scope global eth0
+				    inet6 fe80::20c:29ff:fe93:bd30/64 scope link 
+			
 	- lvs安装
 		系统编译进内核方式，或者从源码编译安装
 		源码安装好后，要修改系统加载（grub，lilo）配置，内核指向打了lvs的patch编译出的内核，启动时选择此内核。
@@ -11709,6 +11768,18 @@ day134 Monday, September 17, 2012
 day135 Tuesday, September 18, 2012
 
 1. 
-	* 
+	* ace4j firewall kick off
+		create wiki
 
-2. 
+
+
+2. Ace4j firewall
+	TODO:
+		- Call set firewall operation after add or remove white ip list ,like join or leave group.
+			add white ip list > call master set firewall	(new command)
+			remove white ip list > call master set friewall (new command)
+
+			 VM_PUSH_ACL(1),
+
+		- 
+
