@@ -11,6 +11,11 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* git，open source
+	从git上，google code上也能看到开源项目
+	facebook:
+		https://github.com/facebook
+	
 *avahi
 	/var/log/messages
 		avahi-daemon[3329]: Host name conflict, retrying with <localhost-99>
@@ -40,6 +45,9 @@ google 检索 apache site:*.apache.org 高级搜索
 		set it up by yourself
 * facebook
 	http://www.facebook.com/note.php?note_id=76191543919&ref=mf
+	开源项目在git：
+		https://github.com/facebook
+
 * 服务器端技术
 	搭设服务器都需要的技术，架构，安全，维护，扩展
 
@@ -141,6 +149,15 @@ google 检索 apache site:*.apache.org 高级搜索
 		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
 
 * zookeeper
+	解决hadoop的单点故障(single point of failure of Name Node)，ZooKeeper能够用来leader选举,配置信息维护等。在一个分布式的环境中，
+	我们需要一个Master实例或存储一些配置信息，确保文件写入的一致性等。目前ZooKeeper解决Hadoop的单点故障实现的是主备机方式。
+
+	leader-follower模式
+
+	Master选举
+		-动态
+		主备切换，一旦某个机器A挂了，马上能够通知到slave，然后slave能够在ZK挃定节点上获取master最后的运行状态，然后就可以把自己标识为master了。
+
 	ZooKeeper是Hadoop的正式子项目，它是一个针对大型分布式系统的可靠协调系统，提供的功能包括：配置维护、名字服务、分布式同步、组服务等。
 	ZooKeeper的目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。
 	
@@ -506,6 +523,12 @@ google 检索 apache site:*.apache.org 高级搜索
 
 	from: http://baike.baidu.com/view/16102.htm
 * lvs DR			slb
+	测试版本
+		centos5 32 
+			2.6.18-194.el5
+		keepalived Keepalived v1.1.20
+		ipvsadm v1.24
+
 	- 检测vip漂移，failover
 		ICMP包局域网内的其他主机也能收到
 		lvs的主/备机通过发送arp包，来取得vip的所有权，要验证vip漂移正确，可通过在vip本机上ping vip，抓tcp的 ICMP 包来确定vip是否切换到对应的机子上。
@@ -11957,7 +11980,11 @@ day138 Friday, September 21, 2012
 1. 
 	* slb测试通过后，测试slb下的mysql负载均衡(读负载均衡) -tip-
 		数据库部分部分应用读的压力大于写的压力，通过mysql的主从复制，读写分离实现db层的高可用，高并发。
-
+	* mysql
+		主从复制，
+		主备切换/failover，
+		读写分离
+		
 	
 2. lvs主备切换
 	/etc/init.d/iptables stop
@@ -11992,4 +12019,29 @@ day138 Friday, September 21, 2012
 
 3. lvs+keepalived负载均衡测试
 	分摊请求
+
+4. mysql
+	参考：http://www.blogjava.net/dongbule/archive/2010/08/22/329602.html
+	log
+		/var/log/mysqld.log
+
+	yum install mysql.i386
+	1) 主服务器上进行的操作
+	/opt/mysql/init.d/mysql start
+	/opt/mysql/bin/mysql -uroot -p'new-password'
+	
+	授权给从数据库服务器192.168.10.131
+	mysql> GRANT REPLICATION SLAVE ON *.* to 'rep1'@'192.168.10.131' identified by 'password';
+
+	查询主数据库状态
+	Mysql> show master status;
+		+------------------+----------+--------------+------------------+
+		| File | Position | Binlog_Do_DB | Binlog_Ignore_DB |
+		+------------------+----------+--------------+------------------+
+		| mysql-bin.000005 | 261 | | |
+		+------------------+----------+--------------+------------------+
+	记录下 FILE 及 Position 的值，在后面进行从服务器操作的时候需要用到。
+
+	2)从服务器操作
+
 
