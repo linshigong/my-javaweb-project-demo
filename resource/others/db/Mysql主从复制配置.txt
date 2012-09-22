@@ -1,0 +1,118 @@
+ Mysql主从复制配置
+
+ Mysql主从复制是一台服务器充当主服务器，另一台或多台服务器充当从服务器，主机自动复制到从机。对于多级复制，数据服务器即可充当主机，也可充当从机。Mysql复制的基础是主服务器对数据库修改记录二进制日志binlog，从服务器通过主服务器的binlog自动执行更新。
+
+ 
+下面以InnoDB引擎为例，说明配置主从复制的方法。
+ 
+1配置/etc/my.cnf
+修改主服务器my.cnf，在[mysqld]中增加如下内容：
+##打开binlog
+log-bin=mysql-bin
+##服务器ID。服务器之间不能有重复ID，一般主是1
+server-id       = 1
+##指定不写binlog的数据库，不同步系统库
+binlog-ignore-db = mysql
+binlog-ignore-db = information_schema
+binlog-ignore-db = cluster
+##指定写二进制的数据库，多个要多行
+replicate-do-db = DB_Test
+##指定跨库更新也同步的数据库。和replicate-do-db相同多行
+replicate-wild-do-table=DB\_Test.%
+ 
+修改从服务器my.cnf，设置server-id=2。
+另外，主从服务器的ip和端口信息配置不在my.cnf里配置，整合到后面的change master命令里。
+修改了my.cnf，重启主从服务器：
+mysqladmin -uroot shutdown
+ 
+2主服务器上添加数据库复制用户
+在主服务器上，必须为从服务器创建主从复制的用户，并设置replication slave权限。所用具体命令如下：
+grant replication slave on *.* to rep@'172.25.38.145' identified by '';
+flush privileges;
+172.25.38.145是从服务器，就通过rep用户密码为空来同步复制。通过查询user表查看Repl_slave_priv的值为Y：
+select * from mysql.user where user='rep'\G;
+ 
+3导出主服务器数据
+主服务器上要保证数据一致性，获取数据快照。在获取快照后，主服务器不能有写操作。
+先刷新所有语句并阻止写入，这样的目的是保证主机数据快照的一致性：
+FLUSH TABLES WITH READ LOCK;
+执行完这句后，所有对主服务器数据库的更新都被挂起，直到执行UNLOCK TABLES;或者关闭当前的终端。
+获取主服务器的快照：
+show master status\G;
+记录File 及Position 项的值，以便之后对从服务器进行配置。File是当前处理的binlog，Position是处理的binlog位置，这是从服务器的同步起点。
+接下来是导出主服务器的数据。导出数据有两种方式：mysqldump导出需要同步的数据库和拷贝数据库数据目录。
+ 
+1) mysqldump方式备份数据
+Mysqldump适合数据库还不是特别大的情况。
+导出主服务器需要同步的数据库数据，在另一个终端上执行命令：
+mysqldump -uroot DB_Test1 DB_Test2 –opt –single-transaction –flush-logs –routines –force –database > master.sql
+导出数据后就可以解锁了：
+UNLOCK TABLES;
+ 
+2) 拷贝文件方式备份数据
+拷贝文件是主服务器上的数据文件目录打包到从服务器上。
+拷贝文件的方式需要关闭数据，比较适合数据库庞大mysqldump比较慢的场合。注意：binlog可能非常庞大，影响文件备份速度。可以定期移走不用的binlog，通过show slave status查看当前的binlog，移走这以前的binlog。
+对于MyISAM引擎，可以在不关闭数据库的情况下直接tar，但对于InnoDB事务型数据库，就麻烦一些了。商业软件InnoDB Hot Backup提供了在线备份工具，除了这个收费的工具，最简单的办法就是关闭主服务器后执行tar。
+新开一个终端（不能在FLUSH TABLES WITH READ LOCK;的终端操作），关闭主服务器：
+mysqladmin -uroot shutdown
+打包数据库数据目录，例如数据目录是/data/dbdata：
+cd /data
+tar zcvf dbdata.tar.gz dbdata
+备份后就可以启动主服务器了：
+mysqld_safe –user=mysql &
+ 
+以上两种备份选择任意一种即可，把文件scp到从服务器上。
+ 
+4数据导入到从服务器
+在从服务器上导入数据。两种不同的备份方式分别对应其数据导入的方式。
+1) Mysqldump方式的导入
+mysql -uroot <./master.sql
+ 
+2) 备份文件方式的导入
+由于需要置换成主服务器的数据目录，先关闭服务：
+mysqladmin -uroot shutdown
+备份数据目录
+mv dbdata dbdata.bak
+解包从主服务器拷贝来的数据目录
+tar zxvf dbdata.tar.gz
+要确保文件的权限属主等设置没问题，dbdata目录应该是mysql:mysql用户所有。
+ 
+以上二选一，完成数据导入。
+删除dbdata下的主机信息文件和中继日志文件：
+rm dbdata/master.info
+rm dbdata/relay-log.info
+如果是拷贝文件方式同步，还需要启动从服务器：
+mysqld_safe –user=mysql &
+ 
+5在从服务器上开始同步
+在从服务器上操作，连接主服务器开始同步数据：
+Change master to
+Master_host = '10.6.209.126',
+Master_port = 3306,
+Master_user = 'rep',
+Master_password = '',
+Master_log_file = 'mysql-bin.000034',
+Master_log_pos = 102;
+这里包含的信息有主机的地址和端口、主机提供的复制帐号、主机的binlog位置信息。Master_log_file和Master_log_pos是主服务器的快照信息，从服务器从该binlog的相应位置开始从主服务器同步数据。
+启动从服务器线程就可以开始同步了：
+start slave;
+一旦从服务器开始同步了，就能在数据文件目录下找到2个文件master.info和relay-log.info。从服务器利用这2个文件来跟踪处理了多少master的binlog。
+分别在主从服务器show processlist查看连接，就可以看到rep用户的连接，可证明复制已经生效。
+ 
+灾难恢复
+主从不同步
+如果主从同步出现了不一致，就需要重新实施主从复制。步骤和上面相同，只是省略了修改配置文件和创建用户的步骤。
+重新配置之前，需要在从服务器停止同步线程：
+stop slave;
+ 
+从从服务器恢复
+如果主机挂了，可以把从服务器提升为主机，把原主服务器作为备机。
+先在从服务器停止同步线程：
+stop slave;
+在从服务器上添加同步用户：
+grant replication slave on *.* to rep@'新的从服务器ip' identified by '';
+flush privileges;
+配置文件中my.cnf的server-id可以不修改，只要保证id不冲突就行了。
+然后，按照主从复制的步骤来进行操作。
+
+from: http://www.cnblogs.com/luoine/archive/2011/05/25/2056493.html

@@ -3081,6 +3081,76 @@ search in index find pdf
 		Set<Entry<String,IMetaData>> set = map.entrySet();
 		for(Entry<String, IMetaData> data:set){
 * mysql
+	- mysql主从复制
+
+		环境：linux 2.6.32-220.el6.x86_64
+			mysql  Ver 14.14 Distrib 5.1.61, for redhat-linux-gnu (x86_64) using readline 5.1
+
+		下面以InnoDB引擎为例，说明配置主从复制的方法。
+		 
+		1) 配置/etc/my.cnf
+			修改主服务器my.cnf，在[mysqld]中增加如下内容：
+			##打开binlog
+			log-bin=mysql-bin
+			##服务器ID。服务器之间不能有重复ID，一般主是1
+			server-id=1
+
+			修改从服务器my.cnf，设置server-id=2。
+			另外，主从服务器的ip和端口信息配置不在my.cnf里配置，整合到后面的change master命令里。
+			修改了my.cnf，重启主从服务器：
+			mysqladmin -uroot shutdown
+
+
+		2) 主服务器上添加数据库复制用户
+			在主服务器上，必须为从服务器创建主从复制的用户，并设置replication slave权限。所用具体命令如下：
+			create user rep;
+			grant replication slave on *.* to rep@'10.250.8.33' identified by '';
+			flush privileges;
+			10.250.8.33是从服务器，就通过rep用户密码为空来同步复制。通过查询user表查看Repl_slave_priv的值为Y：
+			select * from mysql.user where user='rep'\G;
+
+		3) 获取主服务器的快照：
+			show master status\G;
+				+------------------+----------+--------------+------------------+
+				| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
+				+------------------+----------+--------------+------------------+
+				| mysql-bin.000003 |      106 |              |                  |
+				+------------------+----------+--------------+------------------+
+			记录File 及Position 项的值，以便之后对从服务器进行配置。File是当前处理的binlog，
+			Position是处理的binlog位置，这是从服务器的同步起点。
+
+		4) 在从服务器上操作，连接主服务器开始同步数据：
+			Change master to
+			Master_host = '10.250.8.11',
+			Master_port = 3306,
+			Master_user = 'rep',
+			Master_password = '',
+			Master_log_file = 'mysql-bin.000003',
+			Master_log_pos = 106;
+			这里包含的信息有主机的地址和端口、主机提供的复制帐号、主机的binlog位置信息。Master_log_file和Master_log_pos是主服务器的快照信息，从服务器从该binlog的相应位置开始从主服务器同步数据。
+			启动从服务器线程就可以开始同步了：
+			start slave;
+			一旦从服务器开始同步了，就能在数据文件目录下找到2个文件master.info和relay-log.info。从服务器利用这2个文件来跟踪处理了多少master的binlog。
+			分别在主从服务器show processlist查看连接，就可以看到rep用户的连接，可证明复制已经生效。
+
+		初步验证：
+			
+			a. 分别在主从服务器show processlist查看连接，就可以看到rep用户的连接，可证明复制已经生效。
+				mysql> show processlist;
+				+----+------+-------------------------+------+-------------+------+----------------------------------------------------------------+------------------+
+				| Id | User | Host                    | db   | Command     | Time | State                                                          | Info             |
+				+----+------+-------------------------+------+-------------+------+----------------------------------------------------------------+------------------+
+				|  3 | rep  | vm3.mytest.com.cn:39581 | NULL | Binlog Dump |  920 | Has sent all binlog to slave; waiting for binlog to be updated | NULL            
+			b. 或者查看mysql的日志，查看复制情况
+				tail -f -n100 /var/log/mysqld.log
+
+				从mysql的log：
+					120917 14:45:36 [ERROR] Slave I/O: error reconnecting to master 'rep@10.250.8.11:3306' - retry-time: 60  retries: 86400, Error_code: 2013
+					120917 14:46:36 [Note] Slave: connected to master 'rep@10.250.8.11:3306',replication resumed in log 'mysql-bin.000002' at position 432
+			
+
+		参考：http://www.cnblogs.com/luoine/archive/2011/05/25/2056493.html
+
 	- mysql执行计划，sql执行计划
 		mysql> desc select * from region r left join region_alias r_a on r.region_no=r_a.region_no ;
 		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
