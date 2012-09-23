@@ -1,0 +1,271 @@
+yum install http://au1.mirror.crc.id.au/repo/kernel-xen-release-6-3.noarch.rpm
+
+配置xen grub启动参数：
+1.title CentOS (2.6.32.56-1.el6xen.x86_64)
+2.root (hd0,7)
+3.kernel /xen.gz dom0_mem=1024M loglvl=all guest_loglvl=all
+4.module /vmlinuz-2.6.32.56-1.el6xen.x86_64 ro root=/dev/mapper/VolGroup-LogVol00 rd_LVM_LV=VolGroup/LogVol00 nomodeset
+5.module /initramfs-2.6.32.56-1.el6xen.x86_64.img
+
+这里有些东西需要加载的，负责xen不能运行。
+
+xen硬件支持：
+cat /proc/cpuinfo | grep flags
+
+confige bridge
+Restart the network...
+/etc/init.d/network restart
+
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT 
+
+关闭/开启防火墙
+/etc/init.d/iptables start/stop
+
+ssh服务开启 /etc/init.d/ssh...
+
+vmware设置网桥方式
+
+
+
+We need to modify that section so that the Xen hypervisor gets loaded first
+
+安装好xen，需要配置grub，否则xen不能启动（个人实践）
+参考这里：http://www.howtoforge.com/virtualization-with-xen-on-centos-6.2-x86_64-paravirtualization-and-hardware-virtualization
+[...]
+title CentOS (2.6.32.54-1.el6xen.x86_64)
+        root (hd0,0)
+        kernel /xen.gz dom0_mem=1024M cpufreq=xen dom0_max_vcpus=1 dom0_vcpus_pin
+        module /vmlinuz-2.6.32.54-1.el6xen.x86_64 ro root=/dev/mapper/VolGroup00-LogVol00 rd_NO_LUKS LANG=en_US.UTF-8 rd_NO_MD quiet SYSFONT=latarcyrheb-sun16 rhgb crashkernel=auto  KEYBOARDTYPE=pc KEYTABLE=de rd_LVM_LV=VolGroup00/LogVol01 rd_LVM_LV=VolGroup00/LogVol00 rd_NO_DM
+        module /initramfs-2.6.32.54-1.el6xen.x86_64.img
+[...] 
+
+
+xen用libvirt-install ：
+需要设置其相关参数并源码编译libvirt包，需要注意的是，不要在xen的kernel下编译，可能报错：
+	TEST: xencapstest
+	      ..!.!.!.!.                               10  FAIL
+	FAIL: xencapstest
+	TEST: reconnect
+具体说明参考:
+	http://answerpot.com/showthread.php?2794930-Skip+some+xen+tests+if+xend+is+not+running
+	http://www.howtoforge.com/virtualization-with-xen-on-centos-6.2-x86_64-paravirtualization-and-hardware-virtualization
+tip: 编译源码包时，注意kernel是否正确。
+
+
+
+#
+vware8安装centos6.2(dvd1.iso,dvd2.iso)时，在建立创建虚拟机时，如果按照默认会自动安装，跳过了安装类型选择
+窗口，后检查是因为vware以另一个iso启动了，删除那个cd设置，只保留centos6的dvd1.iso即可。
+
+在win7机子上搭建http服务器8080端口，提供http方式安装虚拟vm：
+	wget http://192.168.0.100:8080/mytestsvn/CentOS-6.2-x86_64-minimal.iso
+
+#
+按照这个地址安装：
+	http://www.howtoforge.com/virtualization-with-xen-on-centos-6.2-x86_64-paravirtualization-and-hardware-virtualization
+修改可用的xen kernel
+
+#网络安装地址
+http://mirrors.163.com/centos/6.2/os/x86_64/
+
+# 目录服务 目录列表服务
+
+Apache Tomcat 6.0
+Default Servlet Reference
+
+ directory listings (if directory listings are enabled
+$CATALINA_BASE/conf/web.xml
+     <servlet>
+        <servlet-name>default</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+---------
+文章目录
+[隐藏] 
+■1、安装Xen及内核
+■2、配置grub引导xen内核
+■3、关闭selinux
+■4、重启引导进入xen内核
+■5、安装api管理工具
+■6、编译安装libvirt
+■7、安装xen guest
+centos 6安装xen并不像centos 5那样轻松，因为在centos 6中，官方源已经去除了xen的rpm包，只能使用第三方源或自行编译，这里推荐使用第三方源，编译安装要解决的问题比较多。还有一个包libvirt，这个是管理xen的api，官方的这个包已经不支持xen，并且是0.9版的需要更高版本的iptables支持，所以libvirt需要编译安装。
+
+下面是在CentOS 6 64位系统进行安装配置Xen。
+
+1、安装Xen及内核
+1.rpm -Uvh http://www.crc.id.au/repo/x86_64/kernel-xen-release-6-3.noarch.rpm //导入第三方源安装Xen
+2.yum install bridge-utils //安装网桥设置工具
+3.yum install kernel-xen xen //安装xen及内核
+2、配置grub引导xen内核
+xen内核安装后，会自动插入引导xen内核代码到/boot/grub/grub.conf文件，但还需要进行相应的修改。
+
+修改后引导xen内核的代码如下：
+
+1.title CentOS (2.6.32.56-1.el6xen.x86_64)
+2.root (hd0,7)
+3.kernel /xen.gz dom0_mem=1024M loglvl=all guest_loglvl=all
+4.module /vmlinuz-2.6.32.56-1.el6xen.x86_64 ro root=/dev/mapper/VolGroup-LogVol00 rd_LVM_LV=VolGroup/LogVol00 nomodeset
+5.module /initramfs-2.6.32.56-1.el6xen.x86_64.img
+这段代码仅够参考，不一定适用于你的配置。
+
+3、关闭selinux
+这是必须关闭的，要不会因为selinux的安全机制导致xen无法正常工作。
+
+编辑selinux配置文件
+
+1.vi /etc/sysconfig/selinux
+修改为如下：
+
+1.# This file controls the state of SELinux on the system.
+2.# SELINUX= can take one of these three values:
+3.# enforcing - SELinux security policy is enforced.
+4.# permissive - SELinux prints warnings instead of enforcing.
+5.# disabled - No SELinux policy is loaded.
+6.SELINUX=disabled
+7.# SELINUXTYPE= can take one of these two values:
+8.# targeted - Targeted processes are protected,
+9.# mls - Multi Level Security protection.
+10.SELINUXTYPE=targeted
+还有一点配置也很重要，就是禁止netmanager接管网络，因为这个工具不支持网桥管理。
+在/etc/sysconfig/network-script/ifcfg-eth0中加入：
+
+1.NM_CONTROLLED=no
+4、重启引导进入xen内核
+引导后执行xm info测试：
+
+1.[root@localhost ~]# xm info
+2.host                   : localhost.localdomain
+3.release                : 2.6.32.56-1.el6xen.x86_64
+4.version                : #1 SMP Mon Feb 20 13:03:03 EST 2012
+5.machine                : x86_64
+6.nr_cpus                : 4
+7.nr_nodes               : 1
+8.cores_per_socket       : 2
+9.threads_per_core       : 2
+10.cpu_mhz                : 2394
+11.hw_caps                : bfebfbff:28100800:00000000:00003f40:009ae3bd:00000000:00000001:00000000
+12.virt_caps              : hvm
+13.total_memory           : 1972
+14.free_memory            : 412
+15.free_cpus              : 0
+16.xen_major              : 4
+17.xen_minor              : 1
+18.xen_extra              : .2
+19.xen_caps               : xen-3.0-x86_64 xen-3.0-x86_32p hvm-3.0-x86_32 hvm-3.0-x86_32p hvm-3.0-x86_64
+20.xen_scheduler          : credit
+21.xen_pagesize           : 4096
+22.platform_params        : virt_start=0xffff800000000000
+23.xen_changeset          : unavailable
+24.xen_commandline        : dom0_mem=1024M loglvl=all guest_loglvl=all
+25.cc_compiler            : gcc version 4.4.6 20110731 (Red Hat 4.4.6-3) (GCC)
+26.cc_compile_by          : mockbuild
+27.cc_compile_domain      : crc.id.au
+28.cc_compile_date        : Mon Feb 20 12:52:37 EST 2012
+29.xend_config_format     : 4
+5、安装api管理工具
+1.yum install virt-install virt-viewer
+6、编译安装libvirt
+因为rpm安装的libvirt不支持xen连接，所以我们使用编译安装。还有版本也不能选择高的，不然可能会因为iptables的版本低而不能使用libvirt。
+
+1.yum install gcc xen-devel libxml2-devel gnutls-devel device-mapper-devel libnl-devel make
+2.cd /tmp
+3.wget http://libvirt.org/sources/libvirt-0.8.1.tar.gz
+4.tar xzf libvirt-0.8.1.tar.gz
+5.cd libvirt-0.8.1
+6../configure --with-xen --with-xen-inotify --with-libvirtd
+7.make && make install
+然后打开/usr/local/etc/libvirt/libvirtd.conf文件，删除unix_sock_dir = “/var/run/libvirt”前面的注释,并创建/var/run/libvirt目录。
+之后启动libvirtd，并设置开机启动
+
+1.libvirtd -d
+2.echo "/usr/local/sbin/libvirtd -d" >>/etc/rc.d/rc.local
+7、安装xen guest
+我们这里使用virt-install工具进行guest的安装，当然你也可以使用xm命令安装，不过相对麻烦点。
+
+可以执行virt-install –help学习这工具的使用方法。
+下面是安装guest的示例
+
+1.virt-install -n CentOSVM1 -r 512 -f /xen/CentOSVM1.img  -l http://www/  –network=network:default -s 10 –nographics –vcpus=2
+或者使用交互式安装
+
+1.virt-install --prompt
+-n CentOSVM1 设置虚拟服务器名称
+-r 512 设置内存大小
+-f /xen/CentOSVM1.img  虚拟磁盘文件的保存路径，如果有重名可以使用–force参数强制重建。
+-l http://www/ 安装文件的访问方式，支持nfs http ftp smb等多种方式。如果你对你的带宽比较自信，可以使用http://mirrors.163.com/centos/5.5/os/i386/网易的镜像站
+–network=network:default 网络连接方式，我选择的是route中的default
+-s 10磁盘文件的大小，单位是G
+ –nographics 不使用图形界面，可以不加此参数，然后加–vnc看看图形效果
+ –vcpus=2 虚拟CPU的个数
+ 在执行virt-install命令安装系统之前，先确定你的安装源，支持nfs http ftp smb等多种方式，宽带大的话，可以使用http直接连接远程安装源，比如mirror.163.com。
+ 我这里adsl上网的，本地已经下载有iso文件了，所以在本地架设个http服务器进行安装。
+1、挂载iso文件到/iso目录，这个目录必须存在。
+
+1.mount -o loop CentOS-6.2-x86_64-minimal.iso /iso
+2、安装httpd服务器，我这里安装apache
+
+1.yum install httpd
+2.service httpd start
+3、创建软链接或直接复制文件到apache根目录/var/www/html，如果你的centos 6.2是完整版，只需要做个软链接，如果下载的是精简版，也就是minimal，需要复制全部文件到根目录，因为.treeinfo这个文件需要相应的修改。
+
+centos 6.2完整版：
+
+1.ln -s /iso /var/www/html
+centos 6.2精简版：
+
+1.cp -R /iso  /var/www/html
+修改.treeinfo文件，如：
+
+1.[general]
+2.family = CentOS
+3.timestamp = 1323560005.81
+4.variant =
+5.totaldiscs = 1
+6.version = 6.2
+7.discnum = 1
+8.packagedir =
+9.arch = x86_64
+10. 
+11.[images-x86_64]
+12.kernel = isolinux/vmlinuz
+13.initrd = isolinux/initrd.img
+14. 
+15.[images-xen]
+16.kernel = isolinux/vmlinuz
+17.initrd = isolinux/initrd.img
+18. 
+19.[stage2]
+20.mainimage = images/install.img
+4、在安装之前，需要暂时关闭iptables，否则安装过程中会无法取得相应文件。
+
+1.service iptables stop
+5、开始使用virt-install安装
+
+1.virt-install -n centos6 -r 512 -f /xen/CentOSVM1.img -l http://192.168.1.100/iso --network=network:default -s 4 --vcpus=2
+之后会自动调用virt-viewer工具显示安装界面。
+6、启动guest centos6
+安装完成后会要求重启，这时guest关闭之后不会自动启动，需要使用xm start命令启动：
+
+1.xm start centos6
+7、开启iptables
+
+之前为了连接安装源，暂时关闭了iptables，现在需要启动iptables，否则guest无法连接外网。
+
+1.service iptables start
+8、使用virt-viewer管理guest
+
+1.virt-viewer centos6
+执行这条命令即可连接虚拟机centos6进行管理了，当然也可以直接使用ssh连接更简单。
+
+另外，我安装过virt-manager来安装guest，但到创建域时就出现KeyError错误，不知道如何解决，有懂的告诉一声。

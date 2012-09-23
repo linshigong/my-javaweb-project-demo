@@ -11,6 +11,60 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* 网卡绑定 网卡HA bond * linux双网卡绑定 网卡bond
+	什么的linux系统？
+	sles：
+	# vi /etc/sysconfig/network/ifcfg-bond0 插入如下内容
+
+	BOOTPROTO='static'
+	IPADDR='10.34.81.21'
+	NETMASK='255.255.255.0'
+	STARTMODE='onboot'
+	BONDING_MASTER='yes'
+	BONDING_MODULE_OPTS='mode=1 miimon=200 use_carrier=1'
+	BONDING_SLAVE0='eth1'
+	BONDING_SLAVE1='eth2'
+
+	检查# /etc/sysconfig/network/ 下有没有eth1、eth2的MAC地址配置，若有，则删除
+	启动双网卡绑定# rcnetwork restart
+
+	其中：BONDING_MODULE_OPTS='mode=1 为主备 0为负荷分担 
+
+	redhat：
+
+	创建一个ifcfg-bond0
+	# vi /etc/sysconfig/network-scripts/ifcfg-bond0
+	DEVICE=bond0
+	BONDING_OPTS="mode=1 miimon=500"
+	BOOTPROTO=none
+	ONBOOT=yes
+	BROADCAST=192.168.0.255
+	IPADDR=192.168.0.180
+	NETMASK=255.255.255.0
+	NETWORK=192.168.0.0
+	USERCTL=no
+	其中：BONDING_OPTS="mode=1 为主备 0为负荷分担 
+
+	修改/etc/sysconfig/ifcfg-ethX
+	这里说的ethX指要加入绑定网卡的名称，本例中是eth0、eth1。
+	# vi  /etc/sysconfig/ifcfg-eth0
+	DEVICE=eth0 BOOTPROTO=none ONBOOT=yes MASTER=bond0 SLAVE=yes USERCTL=no
+	# vi  /etc/sysconfig/ifcfg-eth1
+	DEVICE=eth1BOOTPROTO=none ONBOOT=yes MASTER=bond0 SLAVE=yes USERCTL=no
+
+	配置/etc/modprobe.conf，添加alias bond0 bonding
+	# vi /etc/modprobe.conf
+	alias eth0 pcnet32
+	alias eth1 pcnet32
+	alias scsi_hostadapter mptbase
+	alias scsi_hostadapter1 mptspi
+	alias bond0 bonding
+
+	重启网络服务
+	#service network restart
+
+	from: http://zhidao.baidu.com/question/314912483.html&__bd_tkn__=74b942223728982e1751a83eb7fc2bbc951c80f48078338d51fed8133ea5c69d362ad36bb4bcda3b39bb3949f6bbe47087ac3af56e60b1f4e7eb60157b5df93b9c65adf05d0f03de0125277edc31b8084973e9027e22be84a139470b052c3b2abf6378313fb7d9deef0efaaccbdc8d03c93d24f146ac
+
 * git，open source
 	从git上，google code上也能看到开源项目
 	facebook:

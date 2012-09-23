@@ -1,0 +1,120 @@
+一、修改MAC地址方法
+
+　　linux环境下:
+
+　　需要用
+
+　　#ifconfig eth0 down
+
+　　先把网卡禁用
+
+　　再用ifconfig eth0 hw ether 1234567890ab
+
+　　这样就可以改成功了
+
+　　要想永久改就这样:
+
+　　在/etc/rc.d/rc.local里加上这三句(也可以在/etc/init.d/network里加下面三行)
+
+　　ifconfig eth0 down
+
+　　ifconfig eth0 hw ether 1234567890ab
+
+　　ifconfig eht0 up
+
+　　
+
+二、修改IP地址的方法
+
+　　#ifconfig ethe0 down
+
+　　#ifconfig ethe0 192.168.169.245 netmask 255.255.255.0
+
+　　以上的方法下次启动时就无效了
+
+　　如果要以后每次都生效则加入到以下文件里面
+
+　　在/etc/sysconfig/network-scripts/下修改ifcfg-eth0地址
+
+ 
+
+　　三、一块网卡添加两个ip地址
+
+　　ifconfig eth0:1 192.168.1.1 netmask 255.255.255.0
+
+　　ifconfig eth0:2 192.168.1.2 netmask 255.255.255.0
+
+　　以上是对网卡eth0修改了两个IP地址的方法
+
+
+
+
+首先必须关闭网卡设备，否则会报告系统忙，无法更改。
+  命令是：
+  /sbin/ifconfig eth0 down
+  
+  修改 MAC 地址，这一步较 Windows 中的修改要简单。
+  命令是：
+  /sbin/ifconfig eth0 hw ether 00:AA:BB:CC:DD:EE
+  
+  重新启用网卡
+  /sbin/ifconfig eht0 up
+  网卡的 MAC 地址更改就完成了
+
+上面的方法是开机状态，如果想固定改变MAC地址，在/etc/rc.local添加
+
+ifconfig eth0 hw ether 00:AA:BB:CC:DD:EE
+
+就可以了。
+
+或者直接用 ifconfig xl0 ether 00:b0:d0:33:33:33 就可以改掉, 不用先DOWN 再UP，（这个方法我没有试验过）
+
+
+可以的，我用的是fedora 但都是一样的，在“管理”找到“网络”，找开“网络配置”找到点 “设备”标签，再点上面的“编辑”在弹出的“以太网设备”中点“硬件设备”标签 看到了没？？？？就是第二个“关联到MAC地址”好了，亲爱的朋友，你改就好啦，改完了别忘了点左边的“探测”试试行不行啊～
+好了，就这样吧，再有事再问我吧，我也刚开始啊～相互交流吧 
+
+一个网卡绑定多个IP
+
+linux的网络设备配置文件存放在/etc/sysconfig/network-scripts里面， 
+对于以太网的第一个网络设备，配置文件名一般为ifcfg-eth0。
+如果需要为第一个网络设备多绑定一个IP地址，只需要在
+/etc/sysconfig/network-scripts目录里面创建一个名为ifcfg-eth0:0的文件，
+内容样例为：
+
+DEVICE="eth0:0"
+IPADDR="211.100.10.119"
+NETMASK="255.255.255.0"
+ONBOOT="yes"
+
+其中的DEVICE为设备的名称，
+IPADDR为此设备的IP地址，
+NETMASK为子网掩码
+ONBOOT 表示在系统启动时自动启动。
+如果需要再绑定多一个IP地址，
+只需要把文件名和文件内的DEVICE中的eth0:x加一即可。
+LINUX最多可以支持255个IP别名
+
+ 
+
+多个网卡绑定一个IP
+
+使用多块网卡虚拟成为一块网卡，具有相同的IP地址。
+这项技术其实在sun和cisco中已经存在，分别称为Trunking和etherchannel技术，
+在linux中，这种技术称为bonding。
+因为bonding在内核2.4.x中已经包含了，
+只需要在编译的时候把网络设备选项中的 Bonding driver support选中就可以了。
+　　然后，重新编译核心，重新起动计算机，执行如下命令：
+
+　　ismod bonding
+　　ifconfig eth0 down
+　　ifconfig eth1 down
+　　ifconfig bond0 ipaddress
+　　ifenslave bond0 eth0
+　　ifenslave bond0 eth1
+
+　　现在两块网卡已经象一块一样工作了，这样可以提高集群节点间的数据传输。
+　　你最好把这几句写成一个脚本,再由/etc/rc.d/rc.local调用，
+以便一开机就生效。
+　　bonding对于服务器来是个比较好的选择，在没有千兆网卡时，
+用两三块100兆网卡作 bonding，可大大提高服务器到交换机之间的带宽。
+但是需要在交换机上设置连接bonding 网卡的两个口子映射为同一个虚拟接口。

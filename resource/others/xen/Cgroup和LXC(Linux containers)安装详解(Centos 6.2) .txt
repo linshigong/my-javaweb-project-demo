@@ -1,0 +1,32 @@
+Cgroup和LXC(Linux containers)安装详解(Centos 6.2) 
+系统：Centos 6.2
+
+系统依赖：
+
+gcc：yum install gcc
+
+libcap-devel:yum install libcap-devel
+
+安装Cgroup
+
+yum install libcgroup
+
+安装LXC
+
+•从sourceforge上下载源代码:sourceforge.net/projects/lxc/files/lxc
+•解压
+•进入解压后的目录执行以下命令
+•./configure
+•make
+•make install
+注意:
+
+make install 后，默认是把lxc相关的命令拷贝到了/usr/local/bin,如果你没有把/usr/local/bin加入到PATH，你使用lxc命令时，系统会说找不到命令。解决办法：在主目录下的.bash_profile中将/usr/local/bin加入到PATH中。
+
+还有一个问题是第一次执行时，它会说配置目录找不到/usr/local/var/lib/lxc，我看了下系统本身是没有这个目录的，解决办法，建立这个目录：mkdir -p /usr/local/var/lib/lxc
+
+ 
+
+ 
+来自：http://www.cnblogs.com/lisperl/archive/2012/02/27/2369668.html
+

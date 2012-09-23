@@ -1,0 +1,41 @@
+1. dom0
+
+virsh#net-define /home/public/xen/br1
+
+<network>
+<name>br1</name>
+<bridge name="br1" />
+<forward mode="route" />
+<ip address="10.250.8.1" netmask="255.255.255.0" />
+</network>
+
+virsh#net-autostart br1
+
+2. vm1
+
+#vim /etc/sysconfig/network-script/ifcfg-eth0
+
+DEVICE="eth0"
+IPADDR=10.250.8.111
+NETMASK=255.255.255.0
+BOOTPROTO="static"
+HWADDR="00:16:3E:EF:D8:D7"
+ONBOOT="yes"
+TYPE="Ethernet"
+
+3. vm2
+
+DEVICE="eth0"
+IPADDR=10.250.8.33
+NETMASK=255.255.255.0
+BOOTPROTO="static"
+HWADDR="12:34:56:78:90:02"
+ONBOOT="yes"
+TYPE="Ethernet"
+
+4. test
+[root@localhost ~]# ping 10.250.8.111
+PING 10.250.8.111 (10.250.8.111) 56(84) bytes of data.
+64 bytes from 10.250.8.111: icmp_seq=1 ttl=64 time=3.98 ms
+64 bytes from 10.250.8.111: icmp_seq=2 ttl=64 time=0.667 ms
+64 bytes from 10.250.8.111: icmp_seq=3 ttl=64 time=0.705 ms
