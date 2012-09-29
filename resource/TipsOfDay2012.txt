@@ -11,6 +11,61 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* 旋风网页版
+	离线download
+* ant
+	一个ant项目拿到，如何确认其使用的ant版本？
+		已有编译的jar中查找(eg:MANIFEST.MF)
+
+	- eclipse导入ant工程
+		----------
+		不同于maven可以直接对IDE的支持(mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavaDocs=true),ant并不具有这样的命令.这样如果eclipse需要import ant工程需要加入两个.classPath .project文件。如下: 
+		.project 
+		<?xml version="1.0" encoding="UTF-8"?> 
+		<projectDescription> 
+		<name>your_project-name</name> 
+		<comment></comment> 
+		<projects> 
+		</projects> 
+		<buildSpec> 
+		  <buildCommand> 
+		   <name>org.eclipse.jdt.core.javabuilder</name> 
+		   <arguments> 
+		   </arguments> 
+		  </buildCommand> 
+		</buildSpec> 
+		<natures> 
+		  <nature>org.eclipse.jdt.core.javanature</nature> 
+		</natures> 
+		</projectDescription> 
+
+
+		.classpath 
+		<?xml version="1.0" encoding="UTF-8"?> 
+		<classpath> 
+		    <classpathentry kind="src" path="src"/> 
+		    <classpathentry kind="src" path="othersrc"/> 
+		       <classpathentry kind="con" 
+		path="org.eclipse.jdt.launching.JRE_CONTAINER"/> 
+		    <!--<classpathentry kind="lib" path="lib/dom4j.jar"/>--> 
+		    <classpathentry kind="output" path="classes"/> 
+		</classpath> 
+
+		方法2:可以导入为 
+		导入的时候选new project-->Java Project From Existing Ant Buildfile 
+		最后在你的workspace下面只有一个build.xml被导过去 
+		前提是你的build.xml要正确包含需要的全部东西，比如你要用到的资源文件,类等等
+		----------
+		from: http://blog.csdn.net/screensky/article/details/7840893
+* google应用
+	https://drive.google.com/?authuser=0#my-drive		  google云端硬盘
+		生态系统
+			浏览器
+			OS
+			搜索
+			社交 google+
+			。。。
+
 * md5 * 完整性验证
 	md5码验证，或其他方式验证文件完整性(integrity of the files)。
 	Verify the integrity of the files
@@ -2773,10 +2828,26 @@ search in index find pdf
 		of traffic arrives directed to a particular page via a web link from another site, as the caching efficiency for that page will be nearly 100%. " - Wikimedia Deployment Information. 
 	ref: http://www.squid-cache.org/Intro/
 * hadoop
+	- sbin/hadoop-setup-hdfs.sh
+		用户问题
+		Optional parameters:
+		     --format                                                        Force namenode format
+		     --group=hadoop                                                  Set Hadoop group
+		     -h                                                              Display this message
+		     --hdfs-user=hdfs                                                Set HDFS user
+		     --kerberos-realm=KERBEROS.EXAMPLE.COM                           Set Kerberos realm
+		     --hdfs-user-keytab=/home/hdfs/hdfs.keytab                       Set HDFS user key tab
+		     --mapreduce-user=mr                                             Set mapreduce user			
 	- install		     参考：http://blog.csdn.net/starxu85/article/details/2120412
 		svn: https://svn.apache.org/repos/asf/hadoop/common/tags/release-1.0.3/
 			编译安装，要考虑jdk版本，ant版本，hadoop版本
-		或者直接下rpm包安装：
+		
+		或者直接下rpm包安装，目录prefix不支持不推荐
+
+		下载tar包，解压即可: 
+			http://mirror.bjtu.edu.cn/apache/hadoop/common/stable/hadoop-1.0.3.tar.gz
+			tar -xvf  hadoop-1.0.3.tar.gz	     （避免rpm包安装，文件散落在各个目录中）
+			设置hadoop-env.sh配置java环境
 
 		user
 			groupadd hadoop
@@ -2793,6 +2864,8 @@ search in index find pdf
 				配置
 		/etc/init.d/hadoop/hadoop-namenode statt
 		tail -f /var/log/hadoop/xxx.log
+
+		hadoop账户启动服务，执行目录，日志目录，通过chown让hadoop具有权限。
 
 	-  这里先大致介绍一下Hadoop.
 			本文大部分内容都是从官网Hadoop上来的。其中有一篇介绍HDFS的pdf文档，里面对Hadoop介绍的比较全面了。我的这一个系列的Hadoop学习笔记
@@ -11142,6 +11215,12 @@ day101 Monday, August 06, 2012
 	image为用户自定义image，系统盘
 	iso镜像为数据镜像，可以被挂载。
 
+		image为系统盘，iso可以是数据盘，也可以是系统盘，可以挂在到vm上
+
+		vm基于image创建,imagej基于系统盘快照创建，iso就是系统光盘具有配置脚本，image没有配置脚本；vm通过iso修复。
+
+		业务：iso类似系统光盘，挂在在光驱上，只读
+
 4. 权限	，权限体系结构之一
 	级联权限关系
 		有了vm的操作权限，默认就有对vm已有资源的操作权限，比如卸载快照，查询其ip信息等
@@ -12377,5 +12456,106 @@ day140 Tuesday, September 25, 2012
 	* ace4j kick off
 	* api proxy 接口根据api文档与qa确认
 	* 9.27 design doc send mailz 
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day141 Wednesday, September 26, 2012
+
+1. 
+	* 大region二期
+		ace4j
+			详细设计文档
+				补充接口逻辑处理说明
+		快照计费，aliyun_idkp透传master(快照接口)
+			
+
+2. 大region二期
+	
+	ace4j
+		拉分支
+		详细文档细化程序处理流程逻辑
+		代码：
+			command参考 VmPushAclSetFireWallCommand
+	快照计费
+		api需求分析
+			快照相关接口列出(需要传aliyun_idkp)
+				create_snapshot
+			是否调用了master
+				message_vm ？
+			控制系统是否要修改接口，相应的对api的影响
+		idkp只做标识，不做验证？	    透传master
+	OSS存储打通
+		整理需要跨小region操作的接口，API是否支持或需要支持，master是否支持或需要支持
+			add_disk 已支持
+			mount_snapshot
+			rollback_snapshot
+			create_vm
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day142 Thursday, September 27, 2012
+
+1. 
+	* 大region二期
+		create_snapshot接口透传aliyun_idkp
+		mount_snapshot等接口中snapshot跨region使用，需要将cluster_id等消息传给master	       （oss大region内互通[http]）
+			已传入快照cluster_id
+		add_disk已实现跨region的快照使用,带入了快照的cluster_id到master	 (AddDiskCommand)	- 忽略	      
+	* 线上bug处理
+		nic=INTERNET
+2. 
+	mount_snapshot
+		snapshot clusterId
+	add_disk
+		snapshot clusterId
+	start_vm
+		imageClusterId=snapshot clusterId
+	reset_vm
+		imageClusterId=snapshot clusterId
+	create_vm
+		imageClusterId=snapshot clusterId
+
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day143 Friday, September 28, 2012
+
+1. 
+	* 大region二期kick off
+	* 老版本api，启动模式问题
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/tags/20120426_473751_trunk trunk上打的tag
+
+		create_vm没设置启动模式参数
+
+2. 
+防火墙
+	消息给master
+
+3. 老api
+
+	  InstanceStartupMode.java
+	public static InstanceStartupMode getInstance(String name)
+	{
+		for (InstanceStartupMode mode : InstanceStartupMode.values())
+		{
+			if (mode.getName().equals(name))
+			{
+				return mode;
+			}
+		}
+		return InstanceStartupMode.NORMAL;
+	}
+	若模式没找到，则返回normal=0
+
+	创建vm时，为0，找不到也为0，直接传递给master为0
+
+	确认创建时，startup_mode为3，不为0
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day144 Saturday, September 29, 2012
+
+1. 
+	* 
 
 2. 
