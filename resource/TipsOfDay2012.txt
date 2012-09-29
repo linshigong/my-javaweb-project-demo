@@ -11,10 +11,102 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache site:*.apache.org 高级搜索
 
+* jmx
+
+* tomcat6
+	feature：NIO,MBEAN etc
+	svn: http://svn.apache.org/repos/asf/tomcat/tc6.0.x/trunk/
+
+	- tomcat源码分析
+		--------
+			Tomcat的体系结构或者源码，
+			将Tomcat的源码导入到ide中，编写实例进行代码跟踪（debug）。
+
+			准备：
+			1.Tomcat源码下载
+
+			这个里下载tomcat-6.0.33源码。
+			2.ant安装，用于编译tomcat的源码。
+			ant下载解压后将其bin添加到系统环境path中。
+			3.IDE——选用Eclipse3.7。
+			 
+			=================================
+			第一步：
+			解压Tomcat源码，例如解压到D:\tomcat\apache-tomcat-6.0.33-src。
+			第二步：
+			2.1）使用ant编译tomcat源码，在编译之前需要下载相关的依赖项目。我们并不知道编译需要哪些依赖项目，怎么办？
+			让ant来帮忙吧！我们只需要准备一个存放这些依赖项目的地方，例如d:\tomcat\basepath。
+			2.2）要让ant工作起来，我们还要将apache-tomcat-6.0.33-src文件夹中的build.properties.default重命名为build.properties，
+			并且打开它，修改base.path=d:\tomcat\basepath。
+			2.3）下载依赖项目，进入命令控制台，进入目录D:\tomcat\apache-tomcat-6.0.33-src，执行命令：ant download。
+			2.4）等依赖项目下载好后，就可以编译tomcat了。执行命令：ant。当编译完成后，我们可以查看目录D:\tomcat\apache-tomcat-6.0.33-src，
+			可以发现里面多了一个文件夹：output。
+			output文件夹的结构如下：
+
+			我们会发现这个结构和从安装包里解压出来的tomcat结构一致。
+			进入bin，启动tomcat成功，就说明——ant编译tomcat成功了！
+			 
+			=====================================
+			将tomcat源码导入eclipse。
+			第一步：
+			在eclipse里新建一个java项目，例如：tomcat6。
+			第二步：
+			import->file system
+			在From directory选择tomcat源码，选择java和test（如果你需要测试的话选择test），如下图：
+
+			在into folder中选择我们刚新建的tomcat6，finish。
+			note：将java、test设置成source folder，java build path ->Source->Add folder...->选择java和test。
+			现在项目结构如下图所示：
+
+			第三部：导入jar包。
+			上面那些不爽的红叉是因为缺少jar的原因，我们现在需要那些jar包呢？
+			test需要junit.jar，这个直接用eclipse里面的即可。
+			java中需要：
+			ant.jar
+			jaxrpc.jar
+			org.eclipse.jdt.core_3.3.1.v_780_R33x.jar
+			wsdl4j-1.5.1.jar
+			导入后就清爽了！
+
+			第四步：
+			在eclipse中启动tomcat。
+			找到类：org.apache.catalina.startup包中的Bootstrap类。
+			run as：在Arguments的VM arguments中设置
+			-Dcatalina.home="d:\output\build"
+			然后就可以启动了！
+			 
+			==========================================
+			问题：
+			为什么要设置-Dcatalina.home="d:\output\build"？
+			首先说明output是什么——它就是ant编译出来的output文件夹，大家可以试试删除里面的东西看还是否可以成功启动。
+			如果不配置这个参数又会发生什么情况呢？删除-Dcatalina.home="d:\output\build"，报错：
+			2011-10-20 14:49:35 org.apache.catalina.startup.ClassLoaderFactory validateFile
+			警告: Problem with directory [D:\myWorkSpace\tomcat6\lib], exists: [false], isDirectory: [false], canRead: [false]
+			2011-10-20 14:49:35 org.apache.catalina.startup.ClassLoaderFactory validateFile
+			警告: Problem with directory [D:\myWorkSpace\tomcat6\lib], exists: [false], isDirectory: [false], canRead: [false]
+			2011-10-20 14:49:35 org.apache.catalina.startup.Catalina load
+			警告: Can't load server.xml from D:\myWorkSpace\tomcat6\conf\server.xml
+			2011-10-20 14:49:35 org.apache.catalina.startup.Catalina load
+			警告: Can't load server.xml from D:\myWorkSpace\tomcat6\conf\server.xml
+			2011-10-20 14:49:35 org.apache.catalina.startup.Catalina start
+			严重: Cannot start server. Server instance is not configured.
+			从中可以看出在项目的根目录下没有lib文件夹，没有conf文件夹，conf中没有server.xml，从而不能实例化server。
+			那么按照他的提示做，在启动就ok了！
+		--------
+		from: http://www.cnblogs.com/huangfox/archive/2011/10/20/2218970.html
+
+		从bootstrap处debug分析，debugtomcat的启动过程以及处理请求流程等。
+
+
 * 旋风网页版
 	离线download
 * ant
-	一个ant项目拿到，如何确认其使用的ant版本？
+	- build.xml
+		<target>标签定义了ant的操作 ，如 #ant download ,#ant compile ,#ant clean
+	- ivy ant的子项目，管理依赖
+		从maven库下载依赖jar
+	- 
+		一个ant项目拿到，如何确认其使用的ant版本？
 		已有编译的jar中查找(eg:MANIFEST.MF)
 
 	- eclipse导入ant工程
@@ -2828,6 +2920,8 @@ search in index find pdf
 		of traffic arrives directed to a particular page via a web link from another site, as the caching efficiency for that page will be nearly 100%. " - Wikimedia Deployment Information. 
 	ref: http://www.squid-cache.org/Intro/
 * hadoop
+	- 提供暴露rest方式的service
+		rest实现应该用了jersey(jersey jar)
 	- sbin/hadoop-setup-hdfs.sh
 		用户问题
 		Optional parameters:
@@ -12552,10 +12646,13 @@ day143 Friday, September 28, 2012
 
 	确认创建时，startup_mode为3，不为0
 
+	故，此版本start_vm需要传 startup_mode=init
+
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day144 Saturday, September 29, 2012
 
 1. 
 	* 
 
-2. 
+2. 发布管理，版本管理（相关API，master等的版本），文档管理，工具管理
+	后面查询时，有统一的地方可查。
