@@ -9,8 +9,20 @@ openapi rds  (关系型数据库服务)
 	ref: http://www.ibm.com/developerworks/linux/library/l-lxc-containers/
 test
 	https://my-javaweb-project-demo.googlecode.com/svn
-google 检索 apache site:*.apache.org 高级搜索
+google 检索 apache： site:*.apache.org 高级搜索
+	site:cnblogs.com 工厂
 
+* htttpd
+	apache服务器，指定httpd.cof文件启动，在执行命令的目录下的confi文件夹中的，tpd.conf文件中配置~~。。。
+* 设计模式
+	- 工厂模式是创建型模式中最典型的模式，主要是用来创建对象，减少我们在使用某个对象时的new() 操作，我相信大家都有这样的困惑，
+	目前我所在的项目都在程序开发的过程中，还是有很多的new()操作出现在表现层中，并没有通过工厂来创建对象，一方面可能是因为我们自身比较懒，
+	不规范项目的编码形式，另外一方面也是由于项目的进度比较紧，没有那么多的时间去
+	完成工厂的统一创建，当然对于这样的动态创建对象的工厂，推荐的做法还是我们后面会讲到的创建型模式--《抽象工厂模式》来解决吧。
+	from: http://www.cnblogs.com/hegezhou_hot/archive/2010/11/30/1892227.html
+* Megastore:
+	Providing Scalable, Highly Available
+Storage for Interactive Services
 * jmx
 
 * tomcat6
@@ -3032,6 +3044,8 @@ search in index find pdf
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
 * test * mock  * jmock		       * 单元测试 * 集成测试
+	- jtester
+		mock时，可通过比较未mock对象和mocked对象的运行状态值（cglib or jdk proxy）来判断是否正确mock了。
 	- 单元测试ok后，可以进行集成测试，以测试集成逻辑调用是否ok，比如各个环节的集成调用。
 		
 	- 查找框架已提供的mock类
@@ -12622,6 +12636,11 @@ day143 Friday, September 28, 2012
 
 		create_vm没设置启动模式参数
 
+		原因：
+			sql是旧版本，创建default值为init类型
+
+			sql版本维护的问题？
+
 2. 
 防火墙
 	消息给master
@@ -12652,7 +12671,152 @@ day143 Friday, September 28, 2012
 day144 Saturday, September 29, 2012
 
 1. 
-	* 
+	* 线上问题处理
+		报image找不到
+			饶入一个偏题			
+				最终，由于使用的账户问题，image_using_mode自能用自己的。
 
 2. 发布管理，版本管理（相关API，master等的版本），文档管理，工具管理
 	后面查询时，有统一的地方可查。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day145 Monday, October 08, 2012
+
+1. 
+	* ace4j
+		pojo
+			nic，command	  ,api返回pojo，
+		
+	* 大region二期task见redmine
+		设计文档下周一评审，内容包括：
+			a. 取消快照数据推送逻辑
+			b. 创建快照接口带入用户标识
+			c. 确认快照相关接口已带入cluster_id，若没有则需要带入
+			
+		http://redmine.aliyun-inc.com/issues?set_filter=1&f%5B%5D=status_id&op%5Bstatus_id%5D=o&v%5Bstatus_id%5D%5B%5D=1&f%5B%5D=project_id&op%5Bproject_id%5D=%3D&v%5Bproject_id%5D%5B%5D=214&f%5B%5D=assigned_to_id&op%5Bassigned_to_id%5D=%3D&v%5Bassigned_to_id%5D%5B%5D=me&f%5B%5D=&c%5B%5D=project&c%5B%5D=tracker&c%5B%5D=priority&c%5B%5D=subject&c%5B%5D=author&c%5B%5D=assigned_to&c%5B%5D=updated_on&c%5B%5D=fixed_version&c%5B%5D=start_date&c%5B%5D=due_date&c%5B%5D=done_ratio&group_by=
+	* new wiki
+		http://10.250.6.111/wiki/index.php
+			API接口wiki说明由PD维护。
+
+2. 项目各种文件版本管理
+	PRD
+	需求文档
+	数据库变更
+
+	项目管理软件管理(redmine)？wiki管理？svn管理？
+		eg: redmine管理
+
+3. houyi.json
+	后羿角色的配置	 cc,nc,netc,master,monitor
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day146 Tuesday, October 09, 2012
+
+1. 
+	* ace4j development
+		nic error define
+			GroupErrorMessage
+			ServerErrorMessage
+	* image跨小region调用
+		原来通过region_alias表的字段实现image可以在打通KFC的小region间使用，现在不需要KFC打通实现的
+		image跨小region调用，而是大region内的http方式调用。API层需要修改使用image时过滤条件？
+		
+2. 接口设计，参数设计
+	OO思想，参数对象化
+	结果统一处理
+		配置状态码对应返回值
+		command自封装内部处理，对外统一结构返回
+		参数对象化，验证逻辑封装（常用验证-按功能，按业务逻辑的封装后统一调用），类似struts的form bean
+		验证逻辑与主业务逻辑分开，主逻辑只处理参数正常的情况
+	统一调用
+
+	系统优化：-tip-
+		参考struts，在action处理请求时，将请求参数注入到到定义的参数对象中，无需在action类中再去取键对应的值。
+
+3. jtester
+	commandexecute进行mock测试时，注意spring配置实用mock的executor来测试。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day147 Wednesday, October 10, 2012
+
+1. 
+	* ace4j今天提测
+		service层单元测试补充(add已ok)
+		补上其他action(add已ok)
+		action层单元测试
+
+		与master连调
+
+		ace4j关于大region业务，用户体系改造业务分析：
+			大region业务已处理；
+			用户体系改造，代理商逻辑，在vm统一验证时已处理，即支持代理商调用。
+		
+		-tip-
+			程序各层逻辑分明，单元测试保证单元逻辑测试通过，层层独立分工，保证整体逻辑清晰准确。
+
+		开发环境搭设API服务，准备和master进行连调测试
+			10.250.8.214
+			打包已有部署目录：tar -cvf ../houyi-ace4j/service.tar service/
+			清楚旧项目日志，程序等内容
+			修改，svn地址
+			修改apache配置文件httpd.conf，已本项目的conf文件启动
+				配置access_log
+					<IfModule log_config_module>
+					    #
+					    # The following directives define some format nicknames for use with
+					    # a CustomLog directive (see below).
+					    #
+					    # LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+					    # LogFormat "%h %l %u %t \"%r\" %>s %b" common
+
+					    LogFormat "\"%{X-Forwarded-For}i\" %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{Host}i\" \"%{Accept-Encoding}i\"" common
+					    CustomLog "/home/admin/houyi-ace4j/service/logs/openapi/access_log" common
+
+					    <IfModule logio_module>
+					      # You need to enable mod_logio.c to use %I and %O
+					      # LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
+					    </IfModule>
+
+					</IfModule>					
+			修改项目配置文件
+				job.properties
+			编译，部署，运行
+
+			集成测试类（ApiTest）中加入上面3个接口的测试用例
+
+				
+
+	* big region二期项目
+		大region内，跨小region使用image，snapshot需求
+			现有API限制image不跨小region使用(KFC打通并在region_alias配置能跨小region使用的region除外)。
+				上面的逻辑变动要进入到设计文档中：涉及使用image的接口整理对应的改动
+
+				根据api文档中，有image_no参数的接口列出待检查的接口：
+					create_vm
+					reset_vm
+					create_image	     image_no已保证表内唯一
+					remove_image	     已在大region范围删除image
+					revise_vm
+
+					selectParentImage没有原有kfc打通可跨小region使用image逻辑
+					
+2. 设计 系统api
+	通过visitor或者factory来实现bean，pojo的生产
+
+3. test
+	add_firewall_whitelist 
+	remove_firewall_whitelist 
+	list_firewall_whitelist
+
+	集成测试：
+		正常流程
+		异常流程
+			参数错误
+			操作不允许
+
+4. 业务，系统业务
+	kfc对应参数格式错误的情况会自己捕获，并抛出异常，但不做response，这样api在参数发送错误时，报kfc超时异常。
+		eg: api to nuwa to netc 
+			可以看netc的日志，报参数格式错误
+
