@@ -12,6 +12,171 @@ test
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 
+* JVM配置，jvm优化
+	------
+		Java HotSpot VM Options
+
+		XML 
+		This document provides information on typical command-line options and environment variables that can affect the performance characteristics of the Java HotSpot Virtual Machine. 
+		Unless otherwise noted, all information in this document pertains to both the Java HotSpot Client VM and the Java HotSpot Server VM.
+
+		Categories of Java HotSpot VM Options
+		  
+		Standard options recognized by the Java HotSpot VM are described on the Java Application Launcher reference pages for Windows, Solaris and Linux. This document deals exclusively 
+		with non-standard options recognized by the Java HotSpot VM:
+
+		Options that begin with -X are non-standard (not guaranteed to be supported on all VM implementations), and are subject to change without notice in subsequent releases of the JDK.
+		Options that are specified with -XX are not stable and are subject to change without notice.
+		Users of JDKs older than 1.3.0 who wish to port to a Java HotSpot VM, should see Java HotSpot Equivalents of Exact VM flags.
+
+		Some Useful -XX Options
+		  
+		Default values are listed for Java SE 6 for Solaris Sparc with -server. Some options may vary per architecture/OS/JVM version. Platforms with a differing default value are listed in the description.
+
+		Boolean options are turned on with -XX:+<option> and turned off with -XX:-<option>.
+		Numeric options are set with -XX:<option>=<number>. Numbers can include 'm' or 'M' for megabytes, 'k' or 'K' for kilobytes, and 'g' or 'G' for gigabytes (for example, 32k is the same as 32768).
+		String options are set with -XX:<option>=<string>, are usually used to specify a file, a path, or a list of commands
+		Flags marked as manageable are dynamically writeable through the JDK management interface (com.sun.management.HotSpotDiagnosticMXBean API) and also through JConsole. In Monitoring and Managing Java SE 6 Platform Applications, Figure 3 shows an example. The manageable flags can also be set through jinfo -flag. 
+
+		The options below are loosely grouped into categories.
+
+		Behavioral options change the basic behavior of the VM.
+		Garbage First (G1) Garbage Collection Options
+		Performance tuning options are knobs which can be used to tune VM performance.
+		Debugging options generally enable tracing, printing, or output of VM information.
+		  
+		Behavioral Options
+
+		Option and Default Value	Description
+		-XX:-AllowUserSignalHandlers	Do not complain if the application installs signal handlers. (Relevant to Solaris and Linux only.)
+		-XX:AltStackSize=16384	Alternate signal stack size (in Kbytes). (Relevant to Solaris only, removed from 5.0.)
+		-XX:-DisableExplicitGC	Disable calls to System.gc(), JVM still performs garbage collection when necessary.
+		-XX:+FailOverToOldVerifier	Fail over to old verifier when the new type checker fails. (Introduced in 6.)
+		-XX:+HandlePromotionFailure	The youngest generation collection does not require a guarantee of full promotion of all live objects. (Introduced in 1.4.2 update 11) [5.0 and earlier: false.]
+		-XX:+MaxFDLimit	Bump the number of file descriptors to max. (Relevant  to Solaris only.)
+		-XX:PreBlockSpin=10	Spin count variable for use with -XX:+UseSpinning. Controls the maximum spin iterations allowed before entering operating system thread synchronization code. (Introduced in 1.4.2.)
+		-XX:-RelaxAccessControlCheck	Relax the access control checks in the verifier. (Introduced in 6.)
+		-XX:+ScavengeBeforeFullGC	Do young generation GC prior to a full GC. (Introduced in 1.4.1.)
+		-XX:+UseAltSigs	Use alternate signals instead of SIGUSR1 and SIGUSR2 for VM internal signals. (Introduced in 1.3.1 update 9, 1.4.1. Relevant to Solaris only.)
+		-XX:+UseBoundThreads	Bind user level threads to kernel threads. (Relevant to Solaris only.)
+		-XX:-UseConcMarkSweepGC	Use concurrent mark-sweep collection for the old generation. (Introduced in 1.4.1)
+		-XX:+UseGCOverheadLimit	Use a policy that limits the proportion of the VM's time that is spent in GC before an OutOfMemory error is thrown. (Introduced in 6.)
+		-XX:+UseLWPSynchronization	Use LWP-based instead of thread based synchronization. (Introduced in 1.4.0. Relevant to Solaris only.)
+		-XX:-UseParallelGC	Use parallel garbage collection for scavenges. (Introduced in 1.4.1)
+		-XX:-UseParallelOldGC	Use parallel garbage collection for the full collections. Enabling this option automatically sets -XX:+UseParallelGC. (Introduced in 5.0 update 6.)
+		-XX:-UseSerialGC	Use serial garbage collection. (Introduced in 5.0.)
+		-XX:-UseSpinning	Enable naive spinning on Java monitor before entering operating system thread synchronizaton code. (Relevant to 1.4.2 and 5.0 only.) [1.4.2, multi-processor Windows platforms: true]
+		-XX:+UseTLAB	Use thread-local object allocation (Introduced in 1.4.0, known as UseTLE prior to that.) [1.4.2 and earlier, x86 or with -client: false]
+		-XX:+UseSplitVerifier	Use the new type checker with StackMapTable attributes. (Introduced in 5.0.)[5.0: false]
+		-XX:+UseThreadPriorities	Use native thread priorities.
+		-XX:+UseVMInterruptibleIO	Thread interrupt before or with EINTR for I/O operations results in OS_INTRPT. (Introduced in 6. Relevant to Solaris only.)
+
+		Back to Options 
+		  
+		Garbage First (G1) Garbage Collection Options
+
+		Option and Default Value	Description
+		-XX:+UseG1GC	Use the Garbage First (G1) Collector
+		-XX:MaxGCPauseMillis=n	Sets a target for the maximum GC pause time. This is a soft goal, and the JVM will make its best effort to achieve it.
+		-XX:InitiatingHeapOccupancyPercent=n	Percentage of the (entire) heap occupancy to start a concurrent GC cycle. It is used by GCs that trigger a concurrent GC cycle based on the occupancy of the entire heap, not just one of the generations (e.g., G1). A value of 0 denotes 'do constant GC cycles'. The default value is 45.
+		-XX:NewRatio=n	Ratio of new/old generation sizes. The default value is 2.
+		-XX:SurvivorRatio=n	Ratio of eden/survivor space size. The default value is 8.
+		-XX:MaxTenuringThreshold=n	Maximum value for tenuring threshold. The default value is 15.
+		-XX:ParallelGCThreads=n	Sets the number of threads used during parallel phases of the garbage collectors. The default value varies with the platform on which the JVM is running.
+		-XX:ConcGCThreads=n	Number of threads concurrent garbage collectors will use. The default value varies with the platform on which the JVM is running.
+		-XX:G1ReservePercent=n	Sets the amount of heap that is reserved as a false ceiling to reduce the possibility of promotion failure. The default value is 10.
+		-XX:G1HeapRegionSize=n	With G1 the Java heap is subdivided into uniformly sized regions. This sets the size of the individual sub-divisions. The default value of this parameter is determined ergonomically based upon heap size. The minimum value is 1Mb and the maximum value is 32Mb.
+
+		Back to Options 
+		 
+		Performance Options
+
+		Option and Default Value	Description
+		-XX:+AggressiveOpts	Turn on point performance compiler optimizations that are expected to be default in upcoming releases. (Introduced in 5.0 update 6.)
+		-XX:CompileThreshold=10000	Number of method invocations/branches before compiling [-client: 1,500]
+		-XX:LargePageSizeInBytes=4m	Sets the large page size used for the Java heap. (Introduced in 1.4.0 update 1.) [amd64: 2m.]
+		-XX:MaxHeapFreeRatio=70	Maximum percentage of heap free after GC to avoid shrinking.
+		-XX:MaxNewSize=size	Maximum size of new generation (in bytes). Since 1.4, MaxNewSize is computed as a function of NewRatio. [1.3.1 Sparc: 32m; 1.3.1 x86: 2.5m.]
+		-XX:MaxPermSize=64m	Size of the Permanent Generation.  [5.0 and newer: 64 bit VMs are scaled 30% larger; 1.4 amd64: 96m; 1.3.1 -client: 32m.]
+		-XX:MinHeapFreeRatio=40	Minimum percentage of heap free after GC to avoid expansion.
+		-XX:NewRatio=2	Ratio of new/old generation sizes. [Sparc -client: 8; x86 -server: 8; x86 -client: 12.]-client: 4 (1.3) 8 (1.3.1+), x86: 12]
+		-XX:NewSize=2m	Default size of new generation (in bytes) [5.0 and newer: 64 bit VMs are scaled 30% larger; x86: 1m; x86, 5.0 and older: 640k]
+		-XX:ReservedCodeCacheSize=32m	Reserved code cache size (in bytes) - maximum code cache size. [Solaris 64-bit, amd64, and -server x86: 48m; in 1.5.0_06 and earlier, Solaris 64-bit and amd64: 1024m.]
+		-XX:SurvivorRatio=8	Ratio of eden/survivor space size [Solaris amd64: 6; Sparc in 1.3.1: 25; other Solaris platforms in 5.0 and earlier: 32]
+		-XX:TargetSurvivorRatio=50	Desired percentage of survivor space used after scavenge.
+		-XX:ThreadStackSize=512	Thread Stack Size (in Kbytes). (0 means use default stack size) [Sparc: 512; Solaris x86: 320 (was 256 prior in 5.0 and earlier); Sparc 64 bit: 1024; Linux amd64: 1024 (was 0 in 5.0 and earlier); all others 0.]
+		-XX:+UseBiasedLocking	Enable biased locking. For more details, see this tuning example. (Introduced in 5.0 update 6.) [5.0: false]
+		-XX:+UseFastAccessorMethods	Use optimized versions of Get<Primitive>Field.
+		-XX:-UseISM	Use Intimate Shared Memory. [Not accepted for non-Solaris platforms.] For details, see Intimate Shared Memory.
+		-XX:+UseLargePages	Use large page memory. (Introduced in 5.0 update 5.) For details, see Java Support for Large Memory Pages.
+		-XX:+UseMPSS	Use Multiple Page Size Support w/4mb pages for the heap. Do not use with ISM as this replaces the need for ISM. (Introduced in 1.4.0 update 1, Relevant to Solaris 9 and newer.) [1.4.1 and earlier: false]
+		-XX:+UseStringCache	Enables caching of commonly allocated strings.
+		 
+		-XX:AllocatePrefetchLines=1	Number of cache lines to load after the last object allocation using prefetch instructions generated in JIT compiled code. Default values are 1 if the last allocated object was an instance and 3 if it was an array. 
+		 
+		-XX:AllocatePrefetchStyle=1	Generated code style for prefetch instructions.
+		0 - no prefetch instructions are generate*d*,
+		1 - execute prefetch instructions after each allocation,
+		2 - use TLAB allocation watermark pointer to gate when prefetch instructions are executed.
+		 
+		-XX:+UseCompressedStrings	Use a byte[] for Strings which can be represented as pure ASCII. (Introduced in Java 6 Update 21 Performance Release) 
+		 
+		-XX:+OptimizeStringConcat	Optimize String concatenation operations where possible. (Introduced in Java 6 Update 20) 
+		 
+
+		Back to Options 
+		  
+		Debugging Options
+
+		Option and Default Value	Description
+		-XX:-CITime	Prints time spent in JIT Compiler. (Introduced in 1.4.0.)
+		-XX:ErrorFile=./hs_err_pid<pid>.log	If an error occurs, save the error data to this file. (Introduced in 6.)
+		-XX:-ExtendedDTraceProbes	Enable performance-impacting dtrace probes. (Introduced in 6. Relevant to Solaris only.)
+		-XX:HeapDumpPath=./java_pid<pid>.hprof	Path to directory or filename for heap dump. Manageable. (Introduced in 1.4.2 update 12, 5.0 update 7.)
+		-XX:-HeapDumpOnOutOfMemoryError	Dump heap to file when java.lang.OutOfMemoryError is thrown. Manageable. (Introduced in 1.4.2 update 12, 5.0 update 7.)
+		-XX:OnError="<cmd args>;<cmd args>"	Run user-defined commands on fatal error. (Introduced in 1.4.2 update 9.)
+		-XX:OnOutOfMemoryError="<cmd args>; 
+		<cmd args>"	Run user-defined commands when an OutOfMemoryError is first thrown. (Introduced in 1.4.2 update 12, 6)
+		-XX:-PrintClassHistogram	Print a histogram of class instances on Ctrl-Break. Manageable. (Introduced in 1.4.2.) The jmap -histo command provides equivalent functionality.
+		-XX:-PrintConcurrentLocks	Print java.util.concurrent locks in Ctrl-Break thread dump. Manageable. (Introduced in 6.) The jstack -l command provides equivalent functionality.
+		-XX:-PrintCommandLineFlags	Print flags that appeared on the command line. (Introduced in 5.0.)
+		-XX:-PrintCompilation	Print message when a method is compiled.
+		-XX:-PrintGC	Print messages at garbage collection. Manageable.
+		-XX:-PrintGCDetails	Print more details at garbage collection. Manageable. (Introduced in 1.4.0.)
+		-XX:-PrintGCTimeStamps	Print timestamps at garbage collection. Manageable (Introduced in 1.4.0.)
+		-XX:-PrintTenuringDistribution	Print tenuring age information.
+		-XX:-TraceClassLoading	Trace loading of classes.
+		-XX:-TraceClassLoadingPreorder	Trace all classes loaded in order referenced (not loaded). (Introduced in 1.4.2.)
+		-XX:-TraceClassResolution	Trace constant pool resolutions. (Introduced in 1.4.2.)
+		-XX:-TraceClassUnloading	Trace unloading of classes.
+		-XX:-TraceLoaderConstraints	Trace recording of loader constraints. (Introduced in 6.)
+		-XX:+PerfSaveDataToFile	Saves jvmstat binary data on exit.
+		-XX:ParallelGCThreads=n	Sets the number of garbage collection threads in the young and old parallel garbage collectors. The default value varies with the platform on which the JVM is running.
+		-XX:+UseCompressedOops	Enables the use of compressed pointers (object references represented as 32 bit offsets instead of 64-bit pointers) for optimized 64-bit performance with Java heap sizes less than 32gb.
+		-XX:+AlwaysPreTouch	Pre-touch the Java heap during JVM initialization. Every page of the heap is thus demand-zeroed during initialization rather than incrementally during application execution.
+		-XX:AllocatePrefetchDistance=n	Sets the prefetch distance for object allocation. Memory about to be written with the value of new objects is prefetched into cache at this distance (in bytes) beyond the address of the last allocated object. Each Java thread has its own allocation point. The default value varies with the platform on which the JVM is running.
+		-XX:InlineSmallCode=n	Inline a previously compiled method only if its generated native code size is less than this. The default value varies with the platform on which the JVM is running.
+		-XX:MaxInlineSize=35	Maximum bytecode size of a method to be inlined.
+		-XX:FreqInlineSize=n	Maximum bytecode size of a frequently executed method to be inlined. The default value varies with the platform on which the JVM is running.
+		-XX:LoopUnrollLimit=n	Unroll loop bodies with server compiler intermediate representation node count less than this value. The limit used by the server compiler is a function of this value, not the actual value. The default value varies with the platform on which the JVM is running.
+		-XX:InitialTenuringThreshold=7	Sets the initial tenuring threshold for use in adaptive GC sizing in the parallel young collector. The tenuring threshold is the number of times an object survives a young collection before being promoted to the old, or tenured, generation.
+		-XX:MaxTenuringThreshold=n	Sets the maximum tenuring threshold for use in adaptive GC sizing. The current largest value is 15. The default value is 15 for the parallel collector and is 4 for CMS.
+		-Xloggc:<filename>	Log GC verbose output to specified file. The verbose output is controlled by the normal verbose GC flags.
+		-XX:-UseGCLogRotation	Enabled GC log rotation, requires -Xloggc.
+		-XX:NumberOfGClogFiles=1	Set the number of files to use when rotating logs, must be >= 1. The rotated log files will use the following naming scheme, <filename>.0, <filename>.1, ..., <filename>.n-1.
+		-XX:GCLogFileSize=8K	The size of the log file at which point the log will be rotated, must be >= 8K.
+	------
+	from: http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
+
+* 代码review辅助工具
+	reviewboard.
+		Take the pain out of code review
+		http://www.reviewboard.org/docs/manual/1.0/
+	python实现：
+	项目主页：
+		http://code.google.com/p/reviewboard/
+
+	
 * htttpd
 	apache服务器，指定httpd.cof文件启动，在执行命令的目录下的confi文件夹中的，tpd.conf文件中配置~~。。。
 * 设计模式
@@ -25,7 +190,7 @@ google 检索 apache： site:*.apache.org 高级搜索
 Storage for Interactive Services
 * jmx
 
-* tomcat6
+* tomcat6			 tomcat源码分析
 	feature：NIO,MBEAN etc
 	svn: http://svn.apache.org/repos/asf/tomcat/tc6.0.x/trunk/
 
@@ -1145,21 +1310,39 @@ Storage for Interactive Services
 
 	from: http://www.linuxsky.org/doc/admin/200712/213.html
 
-* xen 内存管理
-	xm info 查看总内存和可使用的内存
+* xen 
+	- 选择一种开源实现，以此为基础，利用其API或修改源码实现业务需求；需要对开源产品本身的深入研究，然后在此基础上开发相应工具，于自身业务系统对接，实现产品（包扩相关的方方面面的再封装和管理）。
+	- tapdisk2
+		tap_disk 结构抽象了 tapdisk2 所有支持的 disk 类型，如 vhd, qcow, img 等等
 
-	xm list
-	也看查看dom0的内存数
+		ref: http://blog.csdn.net/majieyue
+	- xen api
+		通过xen开发的API，管理xen
+		OR 通过修改源码，实现特殊业务
+	- xen device 快照管理			    tapdisk2
+		http://blog.csdn.net/majieyue/article/category/846491
+	-  xen 快照 了解  虚拟机快照 【快照】
+		虚拟机快照是一个非常好的功能，它能保存当前虚拟机的状态。不幸的是开源Xen不提供对快照的支持，而Linux能支持。
+	由于开源Xen通常使用Linux作为它的特权域，所以你能使用Linux命令创建快照。
+		chain 模式 比如 struts的intercepter ，插拔式
+		
+		http://server.it168.com/a2009/0723/611/000000611079.shtml
+	- nc通过libvirt采集所属vm性能数据
+	- 内存管理
+		xm info 查看总内存和可使用的内存
 
-	free -m 查看dom0的内存使用情况
+		xm list
+		也看查看dom0的内存数
 
-	如果dom0占用过多内存，可以通过
-	xm mem-set 0 xxx设置dom0的内存
+		free -m 查看dom0的内存使用情况
 
-	centos5 xen3
-	创建domu时，报内存问题：
+		如果dom0占用过多内存，可以通过
+		xm mem-set 0 xxx设置dom0的内存
 
-		网上搜索确定为xen的一个bug，可通过打patch解决。
+		centos5 xen3
+		创建domu时，报内存问题：
+
+			网上搜索确定为xen的一个bug，可通过打patch解决。
 
 	想到centos5上安装xen4，但Redhat 和Cent OS系统现在集成的是Xen3.x的版本，如果你不愿意折腾自行编译安装Xen4,下面教你用第三方Yum源快速安装xen4：
 		$ cd /etc/yum.repos.d
@@ -3756,6 +3939,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- mvn clean package -Dmaven.test.skip=true -Dconfig.file=/home/admin/houyi-ace4j/service/config/auto-config.properties
 	- maven 循环依赖问题，依赖交叉
 		可通过将接口抽取到一个模块中，被其他实现模块引用；接口模块自身不依赖或只依赖类似model的中立模块
 
@@ -4041,6 +4225,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		kernel行末尾加上 vga=791
 	- curl 
 		测
+
 	- beep关闭
 		1）编辑 /etc/inputrc，找到
 		＃set bell style none
@@ -6707,16 +6892,31 @@ day16 Friday, April 06, 2012
 	通过反射测试
 	
 
-2. Cron expressions  ,quartz
-	-----
-	...
-		Method method = aceCalcJob.getClass().getDeclaredMethod("buildAceCalcStruct", Date.class,Date.class);
-			method.setAccessible(true);
-			Object result = method.invoke(aceCalcJob,startDate,endDate );
-			@SuppressWarnings("unchecked")
-			Map<String,IMetaData> map = (Map<String,IMetaData>)result;
-	...
-	-----
+2. Cron expressions  ,quartz		 cron表达式
+	- expressions format
+		Format
+		A cron expression is a string comprised of 6 or 7 fields separated by white space. Fields can contain any of 
+		the allowed values, along with various combinations of the allowed special characters for that 
+		field. The fields are as follows:
+
+		Field Name	Mandatory	Allowed Values	Allowed Special Characters 
+		Seconds		YES			0-59				, - * / 
+		Minutes		YES			0-59				, - * / 
+		Hours		YES			0-23				, - * / 
+		Day of month	YES			1-31				, - * ? / L W
+		Month		YES			1-12 or JAN-DEC	, - * / 
+		Day of week	YES			1-7 or SUN-SAT	, - * ? / L # 
+		Year			NO			empty, 1970-2099	, - * / 
+	- 
+		-----
+		...
+			Method method = aceCalcJob.getClass().getDeclaredMethod("buildAceCalcStruct", Date.class,Date.class);
+				method.setAccessible(true);
+				Object result = method.invoke(aceCalcJob,startDate,endDate );
+				@SuppressWarnings("unchecked")
+				Map<String,IMetaData> map = (Map<String,IMetaData>)result;
+		...
+		-----
 3. acecalc
 	* 任务第一次执行时，采集时间点的确定，根据app的创建日期为起点开始采集？
 		自动查询数据库得出 or 配置文件配置初始抽取时间点 or 两者都支持
@@ -12820,3 +13020,67 @@ day147 Wednesday, October 10, 2012
 		eg: api to nuwa to netc 
 			可以看netc的日志，报参数格式错误
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day148 Thursday, October 11, 2012
+
+1. 
+	* ace4j测试用例评审
+		白名单无限加问题
+		vm状态控制问题(非released的vm)
+			代码已修改提交
+	*　tdc设计评审
+		device - tdc子进程
+		oss存储 bucket
+	*　
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day149 Friday, October 12, 2012
+
+1. 
+	* ace4j,计量，mac-net项目周会
+		项目需求阶段，需要考虑测试环境问题（特别对于依赖）
+	* ace4j计量
+		增加，删除白名单接口，不支持nic=all的类型
+	* 大region二期设计文档初评审
+		
+
+2. 系统业务			      * master
+	master: 总控模块，负责调度/与cc连接状态监控
+	cc : 路由模块，同时负责监控与nc连接情况
+	nc: vm管理模块，负责最终对vm的操作
+	network controller : 负责网络安全，group互通管理
+
+	命名服务
+3. ace4j改动
+	reversion：625581
+	ace4j项目改动：
+	1）3个接口都增加vm状态限制，released状态的vm调用时会报错，详细说明见设计文档
+	2）增加，删除白名单接口，不支持nic=all的类型，只支持nic=internet和nic=intranet
+4. 大region二期设计文档初评审，需求变动及增加点
+	1)  部分使用快照的接口需要从master查询快照后，将新增的字段 snapshot_type 再传给master
+		修改点：
+			增加snapshot_type涉及接口改动：
+				detail_snapshot 返回值增加snapshot_type值
+				list_snapshot 返回值增加snapshot_type值
+				create_snapshot 返回值增加snapshot_type值
+			需要传递snapshot_type涉及接口改动：
+				mount_snapshot 增加传递快照的snapshot_type给master
+				add_disk 同上
+				start_vm 同上
+				reboot_vm 同上
+				reset_vm 同上
+				rollback_snapshot 同上
+				recover_vm 同上
+	2) image可以在大region下跨小region使用后，对于老image（非buckut方式存储、http方式访问的image，本次项目上线前已有的image）将不能被使用，master新增对应的错误码，
+	API需处理此错误码
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day150 Monday, October 15, 2012
+
+1. 
+	* 
+
+2. 
