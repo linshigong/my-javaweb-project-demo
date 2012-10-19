@@ -3665,6 +3665,16 @@ search in index find pdf
 		for(Entry<String, IMetaData> data:set){
 * mysql
 	- 读写分离
+		get mysql-proxy: http://mysql.cdpa.nsysu.edu.tw/Downloads/MySQL-Proxy/mysql-proxy-0.8.3-linux-rhel5-x86-64bit.tar.gz
+		lua/lua-devel
+		mysql-devel
+		glib2-devel.x86_64
+		libevent
+
+		make
+		make install
+
+		/usr/local/bin/mysql-proxy 
 
 	- mysqlbinlog
 		二进制日志
