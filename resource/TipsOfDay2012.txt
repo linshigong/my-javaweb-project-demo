@@ -11,7 +11,50 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* code source code
+	http://www.codeproject.com/
+* jprofiler ,MAT, 内存分析工具，性能分析工具，检测工具
+	- Memory Analyzer (MAT)
+		The Eclipse Memory Analyzer is a fast and feature-rich Java heap analyzer that helps you find memory leaks and reduce memory consumption.
+			Use the Memory Analyzer to analyze productive heap dumps with hundreds of millions of objects, quickly calculate the retained sizes of objects, 
+		see who is preventing the Garbage Collector from collecting objects, run a report to automatically extract leak suspects.
+		http://www.eclipse.org/mat/
+* excel单元格换行（手动）
+	ALT + Enter
+* ESB enterprise service bus
+	企业级服务总线
+	SOA
 
+* ethtool
+	
+	tso、gso
+	------
+		Large segment offload
+		From Wikipedia, the free encyclopedia
+
+
+		Dialogue box showing offload TCP segmentation settings for an Intel Pro 1000 NIC
+		In computer networking, large segment offload (LSO) is a technique for increasing outbound throughput of high-bandwidth network connections by reducing CPU overhead. It works by queuing up large buffers and letting the network interface card (NIC) split them into separate packets. The technique is also called TCP segmentation offload (TSO) when applied to TCP, or generic segmentation offload (GSO).
+		The inbound counterpart of large segment offload is large receive offload (LRO).
+		[edit]Operation
+
+		When large chunks of data are to be sent over a computer network, they need to be first broken down to smaller segments that can pass through all the network elements like routers and switches between the source and destination computers. This process is referred to as segmentation. Segmentation is often done by the TCP protocol in the host computer. Offloading this work to the NIC is called TCP segmentation offload (TSO).
+		For example, a unit of 64KB (65,536 bytes) of data is usually segmented to 46 segments of 1448 bytes each before it is sent over the network through the NIC. With some intelligence in the NIC, the host CPU can hand over the 64 KB of data to the NIC in a single transmit request, the NIC can break that data down into smaller segments of 1448 bytes, add the TCP, IP, and data link layer protocol headers -- according to a template provided by the host's TCP/IP stack -- to each segment, and send the resulting frames over the network. This significantly reduces the work done by the CPU. Many new NICs on the market today support TSO.
+		Some network cards implement TSO generically enough that it can be used for offloading fragmentation of other transport layer protocols, or by doing IP fragmentation for protocols that don't support fragmentation by themselves, such as UDP.
+	------
+	
+	ref: http://en.wikipedia.org/wiki/Large_segment_offload
+
+* 灰度发布 灰度发布引擎 , 不同版本兼容问题设计
+		灰度发布是指在黑与白之间，能够平滑过渡的一种发布方式。AB test就是一种灰度发布方式，让一部用户继续用A，一部分用户开始用B，
+	如果用户对B没有什么反对意见，那么逐步扩大范围，把所有用户都迁移到B上面来。灰度发布可以保证整体系统的稳定，在初始灰度的时候就可以发现、
+	调整问题，以保证其影响度。
+	from：http://baike.baidu.com/view/2563299.htm
+
+* keluda * 组件化 组件化系统设计，架构设计
+	当前只使用缺陷管理模块，取代原来的bugfree（不便于统计和bug全局管理）
+
+	
 * JVM配置，jvm优化
 	------
 		Java HotSpot VM Options
@@ -191,6 +234,10 @@ Storage for Interactive Services
 * jmx
 
 * tomcat6			 tomcat源码分析
+	- boottrap
+		main方法的：daemon.load(args); daemon.start(); 为主要启动过程，前面是初始化等工作
+		
+	-
 	feature：NIO,MBEAN etc
 	svn: http://svn.apache.org/repos/asf/tomcat/tc6.0.x/trunk/
 
@@ -781,6 +828,8 @@ Storage for Interactive Services
 	使用命名服务，首先要将对象在命名服务器上注册，然后用户就可以通过命名服务器的地址和该对象在命名服务器上注册的JNDI名找到该对象，获得其引用了。
 	
 	nuwa
+
+	架构上，总线架构，各种服务通过总线相互通信，消息总线
 
 * 数据库优化，索引
 	 - SQL Server 索引
@@ -1382,7 +1431,11 @@ Storage for Interactive Services
 	源码编译安装
 		如果需要打patch，则打好相应的patch后再编译安装
 	第三方源安装
-* linux c 开发
+* linux c 开发			linux c/c++ c++
+	- 以简单的c/c++例子学习
+		http://www.oschina.net/code/list/2/cpp?show=month
+		源码中国等技术网站，有用户上传的各类源码程序，是一个好的学习资源
+
 	eg：keepalived目录结构
 		bin		- 制作好的rpm包
 		patch	- svn更新patch
@@ -2812,7 +2865,10 @@ search in index find pdf
 	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
 
 * 消息系统 消息中间件 MQ
-	消息队列 消息队列框架 message queue ，MQ
+	- AMQP协议
+		rabbitMQ基于此协议实现
+
+	- 消息队列 消息队列框架 message queue ，MQ
 	发布/订阅
 	MQ的特点：
 			MQ的消费-生产者模型的一个典型的代表，一端往消息队列中不断的写入消息，而另一端则可以读取或者订阅队列中的消息。MQ和JMS类似，
@@ -3204,9 +3260,21 @@ search in index find pdf
 	一曰google file system	   (google)
 	一曰global file system  (redhat)
 
-* mina
+* mina 以及基于mina的应用，如apache的纯java ftp server
 		Apache MINA is a network application framework which helps users develop high performance and high scalability network applications easily. 
 	It provides an abstract ·event-driven · asynchronous API over various transports such as TCP/IP and UDP/IP via Java NIO.
+
+	 Apache FtpServer
+		The Apache FtpServer is a 100% pure Java FTP server. It's designed to be a complete and portable FTP server engine solution based on currently available open protocols. 
+		FtpServer can be run standalone as a Windows service or Unix/Linux daemon, or embedded into a Java application. We also provide support for integration within Spring 
+		applications and provide our releases as OSGi bundles.
+		from：http://mina.apache.org/ftpserver/index.html
+	mina：http://mina.apache.org/downloads.html
+
+The default network support is based on Apache MINA, a high performance asynchronous IO library. Using MINA, FtpServer can scale to a large number of concurrent users.
+
+It is also an FTP application platform. We have developed a Java API to let you write Java code to process FTP event notifications that we call the Ftplet API. Apache FtpServer provides an implementation of an FTP server to support this API.
+
 * Confluence 2.9.
 	- 企业级 wiki ，便于交流互动 ，文档修改并记录历史类似版本控制，可以回滚，很是方便
 * junit
@@ -3572,6 +3640,27 @@ search in index find pdf
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- mappin文件，标签属性的意义整理：     there is a hole if u ignore this^^ 
+		比如<select></select>标签中：
+			resultMap	  自定义返回结果bean的map映射定义，通过map定义将结果集映射为bean	 ,将查询结果集映射到不同的对象
+				返回对象为自定义的class
+			resultClass 基本类
+				返回对象为标准class
+			parameterMap 自定义参数bean到参数map的映射，可以定义参数对象的属性如何映射到SQL查询语句的动态参数上
+			paremeterClass 基本参数类
+
+
+	- ibatis属性转换，自定义转换 TypeHandlerCallback
+		通过在mapping文件中直接定义或者统一定义
+		（1）各自的mapping文件中	（sqlMap）
+			<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
+			<typeAlias alias="snapshotStorageTypeHandler" type="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>	
+			<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER" typeHandler="snapshotStorageTypeHandler"/>
+		（2）在config文件中统一配置（sqlMapConfig）
+			<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
+			<typeHandler javaType="snapshotStorageType" callback="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>
+
+			<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER"/>
 	- where calse的共用需要设计好，否则反而增加维护
 		<isNotEqual>语句需要注意，类似if..else，可能会意外带入条件，最好还是用匹配上的条件去判断<isNotEmpty>,<isEqual>
 	- in查询，条件sql
@@ -3810,6 +3899,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
 	
 * ide * eclipse
+	- eclipse设置文件默认编辑器时，在edit配置中，比如wiki类型，可以新建类型，设置编辑器时，需要设置默认编辑器（有default按钮），否则ide可能出错，导致设置失败。
 	- debug时，保证被debug的程序和当前源码一致，否则可能debug异常（比如debug不进来）
 	- eclipse debug时，可以激活 break points窗口中的skip all break points按钮，这样会跳过所有debug点。
 		debug点图标上会多个右斜线
@@ -3856,6 +3946,19 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		 http://www.bugfree.org.cn/blog/?page_id=9
 * 测试，测试框架，测试插件
 	* jtester
+		- 不便于全局mock，需要细粒度到方法mock时，注意被mock属性的定义，需要定义到实现类，而不能是接口类型（否则不会被mock），正确例子如下：
+			new Expectations(){
+				@Mocked(methods={"selectXXX"})
+				ImageDaoImpl imageDao; //这里声明的是实现类
+				{
+					when(imageDao.selectXXX(anyLong, (Image)any, anyInt, -1)).thenReturn(expectImageList);
+				}
+				@Mocked(methods={"detailXXX"})
+				SnapshotServiceImpl snapshotService;    
+				{
+					when(snapshotService.detaildetailXXX("testSnapshotId", "testRegionNO")).thenReturn(expectResult);
+				}
+			};
 		- jtester顺序执行，按次序执行，类似集成测试的方式
 			观察jtester执行用例的方式，是以方法名排序的，通过加入字符人工干预其排序达到顺序执行用例，解决依赖测试问题（比如要先创建LB，才能查询LB,删除LB等等）。
 		- jtest 事务回滚测试，事务测试，unitils测试事务
@@ -10716,6 +10819,26 @@ day89 Monday, July 23, 2012
 
 
 		ServerErrorMessage 错误码定义
+			------
+
+				/** server error code **/
+				/** -3000 ~ -3099 **/
+				
+				/** vm FAIL **/
+				/** -3100 ~ -3999 **/
+
+				/** snapshot error code **/
+				/** -4000 ~ -4999 **/
+				
+				/** ip error code **/
+				/** -5000 ~ -5999 **/
+
+				/**group error code **/
+				/** -6000 ~ -6999 **/
+
+				/** admin error code **/
+				/** -7000 ~ -7999 **/
+			------
 
 		原来用到user的地方需要修改：
 			LogInterceptor
@@ -13236,4 +13359,246 @@ day153 Thursday, October 18, 2012
 	原有的快照不变，即老快照还是存在
 
 	新proxy方案，新老快照都能用。大master？
+
+4. 
+snapshot_type取值为int   :    1（HASH_ON_KFC），2（BUCKET_ON_KFC），3（BUCKET_ON_HTTP）
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day154 Friday, October 19, 2012
+
+1. 
+	* big region二期开发
+		dao层单元测试，jtest注意
+			程序jdbc配置在当前用户的目录中；测试框架配置在各自项目jtester配置文件中。
+		
+2. big region二期开发
+	修改原有方法，对应的单元测试方法，在提交时检查是否都修改正确。
+
+3. region别名表，kfc region查询业务说明
+	select 
+		region_no 
+	from region_alias alias 
+	where exists (select 1 
+			from region_alias 
+			where region_no='AT-HOUYIDEV' 
+			and real_region_no=alias.real_region_no);	
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day155 Monday, October 22, 2012
+
+1. 
+	* 大region二期需求变动
+		snapshot_type值在API这边保存一份冗余
+			image表，非空，hash或kfc
+			涉及的相关改动
+
+		数据库变动，需要DBA review通过
+	* 大region二期灰度发布		   需求
+		master的小region，按阶段分批升级，API目前是大region升级，需要考虑小region的灰度发布。
+		之前的方案：
+			- 新存储，大二层网络等通过简单的代码hack方式
+			- 通过上层proxy转发，部署不同版本
+			- OR 从架构设计上支持灰度发布？
+
+		API和master各自梳理，分析可行性。（proxy方式）
+
+	* 二期，参数废弃待PD确认？
+
+
+2. 大region二期灰度发布接口整理及支持
+	create_vm		老image不跨小region；新快照的image可跨小region
+		兼容新老master的调用
+	reset_vm		老image不跨小region；新快照的image可跨小region
+		参数：vm_name
+	mount_snapshot	校验快照user ; 老快照不跨小region，新快照可跨小region ；snapshot_at_vm,device_no文档标注废弃；API到master不再传递snapshot_at_vm和device_no参数;
+		参数：vm_name
+	unmount_snapshot	校验快照user ; snapshot_at_vm,device_no文档标注废弃 ; API到master不再传递snapshot_at_vm和device_no参数 ; 
+		参数：vm_name
+	detail_snapshot		master返回值增加snapshot_type
+	list_snapshot		master返回值增加snapshot_type ; 
+	list_mounted_snapshot	master返回值增加snapshot_type ; 
+	create_snapshot	传递aliyun_idkp到master
+	add_disk			校验快照user ; 老快照不跨小region，新快照可跨小region ; snapshot_at_vm,device_no文档标注废弃 ; 
+	
+	
+	问题：
+		master给出灰度发布带来的影响（比如未发布的小region是否能用http的快照？） - 控制系统整理
+		proxy将region没有升级的调用（vm_name对应的vm所在的region是否升级）发送到老的API上。
+		新API调老master
+		参数废弃
+	
+3. 设计，规范，编码规范
+	参数传递时，封装为对象OR通过多个原子参数来传递？
+		封装面向对象，但在中间层不能明显知道底层逻辑和上层逻辑
+		单独参数传递，参数个数增加，但条件明显
+
+		参看，开源系统
+4. sql修改
+	image表：
+		alter table image add snapshot_type int(4) NOT NULL COMMENT '@desc 快照存储类型 1-hash_on_kfc;2-bucket_on_kfc';
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day156 Tuesday, October 23, 2012
+
+1. 
+	* 大region二期，部分开发继续
+	* 二期灰度发布方案讨论，目前两种方案
+		- API兼容新老master，以及是否支持新老KFC
+		- master兼容新老TDC
+		
+
+2. 
+
+3. mysql * mysql myisam ,innodb
+	myisam不支持事务，建表语句，show create命令查看表的存储引擎类型是Myisam，改为Innodb类型即可
+
+	jtester db模块插入数据没有回滚，小不解了一番。。。
+
+4. ibatis属性转换，自定义转换
+	通过在mapping文件中直接定义或者统一定义
+	（1）各自的mapping文件中	（sqlMap）
+		<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
+		<typeAlias alias="snapshotStorageTypeHandler" type="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>	
+		<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER" typeHandler="snapshotStorageTypeHandler"/>
+	（2）在config文件中统一配置（sqlMapConfig）
+		<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
+		<typeHandler javaType="snapshotStorageType" callback="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>
+
+		<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER"/>
+
+	ibatis参数对象，返回对象的定义问题，注意坑啊。。。
+
+5. 
+
+		     image.xml
+		     /houyi-console-dao/src/main/resources/ibatis/image.xml
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day157 Wednesday, October 24, 2012
+
+1. 
+	* 二期灰度发布方案
+	* 二期开发连调环境搭设
+		
+
+2. 设计
+	灰度发布功能与业务逻辑剥离，即灰度发布对业务程序是透明的。可有好的方案或设计？灰度发布的粒度问题，API是大region粒度，master是小region粒度。
+		根据粒度范围进行灰度，如API是以大region为粒度的，在
+
+alter table 
+
+3. 系统 代码风格 代码规范 重构 优化
+	houyi api
+		查询快照等的逻辑调用其service层即可，无需再实现。
+		commandexecute无需mock
+
+4. 二期开发连调环境搭设
+	API ：
+		APIf访问地址：6.32
+		数据库地址：6.32
+		数据库数据：qa测试环境API的数据库
+			'mysql -uhouyi -phouyiat03 -h10.230.204.19 houyi --auto-rehash --default-character-set=utf8'
+	master环境：
+		进入方式：6.27 admin go2houyi1 >  go2houyi3
+		ag: 10.230.204.19
+		Local_nuwa: 10.230.204.24
+		Local_mysql: 10.230.204.19
+	MQ：message.properties 
+		houyi.message.host=10.230.204.67
+		#10.249.38.101  
+		houyi.message.port=5672
+		houyi.message.username=guest
+		houyi.message.password=guest
+		houyi.message.queueName=queue1
+		houyi.message.retryTime=10
+		houyi.message.flag=false
+		white.ip=10.230.204.24,10.249.195.162
+		lb.server.url=http://10.249.182.102:8088		
+
+	操作：
+		拷贝6.33的环境：
+			service目录，去掉log等文件；
+			/usr/ali/下jboss ，maven，httpd等需要的程序
+		修改6.32的环境变量 PATH HOME等
+		取到数据库：
+			mysqldump -hxx -uxx -pxx dbname > ./xx.sql
+			修改相应的表：（保证数据可用）
+				region
+					at03
+				zone
+					cluster=3
+				region_alias
+				master_region
+
+			修改新API的jdbc配置指向到上面的新库
+		MQ配置修改：配置mq地址，访问账户，端口等
+
+		bigRegionNo=cn-hangzhou-xy2-test01
+
+		houyimonitor0过大，mysql报：ERROR 1030 (HY000): Got error 28 from storage engine			
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day158 Thursday, October 25, 2012
+
+1. 
+	* 二期灰度方案讨论
+		API做代码兼容的方案
+	* slb api文档内部评审
+		准备对外开放
+		流量接口带宽，计量库存最近时间带宽瞬时值，API给出为时间段的平均带宽
+	* create_vm		 系统
+		ballon参数校验
+
+2. 二期灰度方案讨论
+	API做代码兼容的方案
+		- 二期涉及的接口兼容问题
+		- 原有的接口是否能兼容的评估
+	
+		
+3. 参数废弃问题基于灰度方案的确定
+	- API兼容新老master则，废弃参数需要在master都升级完时公布，返回值废弃可发布开始后公布；
+	- master兼容底层时，废弃参数和返回值废弃都可在发布时公布
+
+ select image_no,user_id from image where region_no='AT03-HOUYI3' and status=0 and image_no not like '%lyytest%' and user_id=229;
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day159 Friday, October 26, 2012
+
+1. 
+	* 二期灰度方案3API修改代码评估
+	* 
+		
+
+2. 看jdk源码一个方法的写法     源码学习
+
+	javax.management.MBeanServerFactory.findMBeanServer(String agentId)
+
+	/**
+	* <p>Return a list of registered MBeanServer objects.  A
+	* registered MBeanServer object is one that was created by one of
+	* the <code>createMBeanServer</code> methods and not subsequently
+	* released with <code>releaseMBeanServer</code>.</p>
+	*
+	* @param agentId The agent identifier of the MBeanServer to
+	* retrieve.  If this parameter is null, all registered
+	* MBeanServers in this JVM are returned.  Otherwise, only
+	* MBeanServers whose id is equal to <code>agentId</code> are
+	* returned.  The id of an MBeanServer is the
+	* <code>MBeanServerId</code> attribute of its delegate MBean.
+	*
+	* @return A list of MBeanServer objects.
+	*
+	* @exception SecurityException if there is a SecurityManager and the 
+	* caller's permissions do not include or imply <code>{@link
+	* MBeanServerPermission}("findMBeanServer")</code>.
+	*/
+	public synchronized static ArrayList<MBeanServer> findMBeanServer(String agentId) {
+		....
+	}				
+	方法名；参数说明；返回值；异常返回都定义的清楚明了，看到这些说明这个方法如何用也就一目了然了。
 
