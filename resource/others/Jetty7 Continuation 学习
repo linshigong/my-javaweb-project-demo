@@ -1,0 +1,134 @@
+Jetty7 Continuation 学习
+0人收藏此文章, 我要收藏 发表于5个月前(2012-06-01 11:50) , 已有163次阅读 共0个评论
+Jetty Continuation 实际上是一种异步Http技术，他能让Http连接挂起，直到超时或者异步事件发生时，Http连接可以恢复。Jetty Continuation 的技术应用起来不复杂，有几个关键的API，和两种设计模式：
+
+ 
+
+API: 
+(1) 得到Continuation
+Continuation continuation = ContinuationSupport.getContinuation(request);
+
+ 
+
+(2) 挂起Http请求
+void doGet(HttpServletRequest request, HttpServletResponse response)
+{
+    ...
+    continuation.setTimeout(long);  // 可选：设置continuation 超时
+    continuation.suspend();
+    ...
+}
+
+ 
+
+(3) 恢复Http连接，一旦异步事件发生了，可以通过异步事件的回调函数来恢复Http连接
+void myAsyncCallback(Object results)
+{
+    continuation.setAttribute("results", results);
+    continuation.resume();
+}
+
+ 
+
+(4) 完成Http连接，通常用在异步事件回调函数里返回Http Response时：
+void myAsyncCallback(Object results)
+{
+    writeResults(continuation.getServletResponse(), results); // 将异步事件结果result，通过Response返回客户端
+    continuation.complete();
+}
+
+ 
+
+(5)注册异步事件处理器
+myAsyncHandler.register(continuation);
+
+ 
+
+(6)监听continuation事件
+void doGet(HttpServletRequest request, HttpServletResponse response)
+{
+    ...
+    Continuation continuation = ContinuationSupport.getContinuation(request);
+    continuation.addContinuationListener(new ContinuationListener()
+    {
+      public void onTimeout(Continuation continuation) { ... } // 超时事件
+      public void onComplete(Continuation continuation) { ... } // 完成事件
+    });
+ 
+    continuation.suspend();
+    ...
+
+}
+
+
+两种设计模式：Suspend/Resume模式，Suspend/Continue模式:
+(1) Suspend/Resume模式:
+
+Java代码     
+void doGet(HttpServletRequest request, HttpServletResponse response)   
+{   
+     // 如果我们需要异步方式得到一个result，并放入request中   
+     Object results = request.getAttribute("results");   
+     if (results==null) // 如果异步处理尚未返回结果   
+      {   
+       final Continuation continuation = ContinuationSupport.getContinuation(request);   
+    
+       // 判断是否超时   
+       if (continuation.isExpired())   
+       {   
+         // 返回超时Response   
+         sendMyTimeoutResponse(response);   
+         return;   
+       }   
+    
+       // 挂起HTTP连接   
+       continuation.suspend();    
+    
+       // 注册一个异步事件处理器   
+       myAsyncHandler.register(new MyHandler()   
+       {   
+          // 异步事件   
+          public void onMyEvent(Object result)   
+          {   
+            continuation.setAttribute("results", results); // 传送results   
+            continuation.resume(); // 恢复连接   
+          }   
+       });   
+       return; // or continuation.undispatch();   
+     }   
+    
+     // 连接恢复后返回结果   
+     sendMyResultResponse(response,results);   
+} 
+
+(2)Suspend/Continue模式:
+
+Java代码     
+void doGet(HttpServletRequest request, HttpServletResponse response)   
+{   
+     final Continuation continuation = ContinuationSupport.getContinuation(request);   
+    
+       // 判断是否超时   
+       if (continuation.isExpired())   
+       {   
+         // 返回超时Response   
+         sendMyTimeoutResponse(response);   
+         return;   
+       }   
+    
+       // 挂起HTTP连接   
+       continuation.suspend(response); // response被包装   
+    
+       // 注册一个异步事件处理器   
+       myAsyncHandler.register(new MyHandler()   
+       {   
+          // 异步事件   
+          public void onMyEvent(Object result)   
+          {   
+            sendMyResultResponse(continuation.getServletResponse(), results); // 通过response返回results   
+            continuation.complete(); // 完成   
+          }   
+       });   
+     }   
+}  
+
