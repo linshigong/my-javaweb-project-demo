@@ -1,0 +1,39 @@
+½ûÓÃJava DNS»º´æ-Disable DNS caching
+ Once an application has performed network access (i.e. urlconnection, parsing of xml document with external references, etc), the DNS settings get cached so any subsequent operation will use the old settings even if the real settings have changed. To reset everything, you have to restart the server since the the default setting JVM setting is to cache forever.
+
+There are 4 properties that can be used to override the default behaviour.
+
+networkaddress.cache.ttl (default: -1)
+    Specified in java.security to indicate the caching policy for successful 
+    name lookups from the name service. The value is specified as as integer 
+    to indicate the number of seconds to cache the successful lookup.
+
+    A value of -1 indicates "cache forever".
+
+networkaddress.cache.negative.ttl (default: 10)
+    Specified in java.security to indicate the caching policy for un-successful
+    name lookups from the name service. The value is specified as as integer to 
+    indicate the number of seconds to cache the failure for un-successful lookups.
+
+    A value of 0 indicates "never cache". A value of -1 indicates "cache forever". 
+
+sun.net.inetaddr.ttl
+    This is a sun private system property which corresponds to networkaddress.cache.ttl. 
+    It takes the same value and has the same meaning, but can be set as a command-line 
+    option. However, the preferred way is to use the security property mentioned above. 
+
+sun.net.inetaddr.negative.ttl
+    This is a sun private system property which corresponds to networkaddress.cache.negative.ttl. 
+    It takes the same value and has the same meaning, but can be set as a command-line option. 
+    However, the preferred way is to use the security property mentioned above.
+So you can disable caching by adding -Dsun.net.inetaddr.ttl=0 on the command line starting the JVM. But you can't set the value of networkaddress.cache.ttl on the command line. You can set the required value in the java.security file located in %JRE%\lib\security
+
+networkaddress.cache.ttl=60
+networkaddress.cache.negative.ttl=10
+or set the value in your code with
+
+java.security.Security.setProperty("networkaddress.cache.ttl" , "0");
+ref : J2SE 1.4 Net properties 
+InetAddress
+
+from: http://itindex.net/blog/2007/01/22/1169462290428.html

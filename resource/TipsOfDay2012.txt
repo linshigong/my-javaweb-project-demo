@@ -12,6 +12,9 @@ test
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 
+* apache common包
+	老版本源码下载，有老版本区：
+		http://archive.apache.org/dist/commons/dbcp/
 * Jetty7 Continuation
 	异步HTTP
 
@@ -5103,6 +5106,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		bg      让工作在后台运行
 		kill    结束进程    kill -9 PID     [9]强制结束,[15]正常结束,[l]列出可用的kill信号
 			kill -9 强制停止进程，kill不了
+			kill -3 PID
+				sudo kill -3 PID获取thread dump log
 		ps aux  查看后台程序   
 		top     查看后台程序   top -d 2    每两秒更新一次        top -d 2 -p10604   观看某个PID
 			top -b -n 2 > /tmp/top.txt ----->將 top 的資訊進行 2 次，然後將結果輸出到 /tmp/top.txt    
@@ -5433,7 +5438,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		rpm -ql  java-1.6.0-openjdk-1.6.0.0-1.16.b17.el5 —— 查询该套件所有的目录
 		
 		查找是否已安装mysql，有则卸载掉
-		# rpm -qa | grep -i  mysql
+		# rpm -qa | grep -i  mysql			   -i : ignore case
 		...
 		# rpm -e xxxx
 
@@ -13691,3 +13696,137 @@ day161 Tuesday, October 30, 2012
 	
 	严重异常问题的提前考虑：
 		目标保证服务可用。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day162 Wednesday, October 31, 2012
+
+1. 
+	* 问题分析
+	* AOne2.0培训
+	* 
+2. 
+
+3. jstack ，kill -3
+	执行sudo kill -3 PID获取thread dump log（PID是第一步获取）。 
+	注意：在不同的linux环境下执行输出的日志的地方可能不同。在IBM的PowerPC小型机上的linux上执行kill -3 pid会在工作目录下产生类似javacore.20100409.161739.7614.0001.txt的文件。JBOSS默认环境下，thread dump log输出到jboss console，所以thread dump信息会输出到个人定义的控制台(如jboss的控制台log)打印log中。 
+	部分示例如下所以：
+
+	man java  jvm通过SIGQUIT信号产生线程dump（来自java的man说明）
+		Sun’s JVM uses SIGQUIT to perform thread dumps
+
+	线程死锁堆栈数据分析：
+	------------
+		"ajp-0.0.0.0-8009-1504" daemon prio=10 tid=0x00007f81a518f800
+		nid=0x6554 waiting for monitor entry [0x00007f8142c29000]
+		   java.lang.Thread.State: BLOCKED (on object monitor)
+			at org.apache.lucene.store.RAMFile.numBuffers(RAMFile.java:79)
+			- waiting to lock <0x000000054b1daa98> (a org.apache.lucene.store.RAMFile)
+			at org.apache.lucene.store.RAMInputStream.switchCurrentBuffer(RAMInputStream.java:87)
+			at org.apache.lucene.store.RAMInputStream.readBytes(RAMInputStream.java:73)
+			at org.apache.lucene.index.TermBuffer.read(TermBuffer.java:82)
+			at org.apache.lucene.index.SegmentTermEnum.next(SegmentTermEnum.java:131)
+			at org.apache.lucene.search.FilteredTermEnum.next(FilteredTermEnum.java:77)
+			at org.apache.lucene.search.MultiTermQueryWrapperFilter.getDocIdSet(MultiTermQueryWrapperFilter.java:131)
+			at org.apache.lucene.search.ConstantScoreQuery$ConstantWeight.scorer(ConstantScoreQuery.java:139)
+			at org.apache.lucene.search.BooleanQuery$BooleanWeight.scorer(BooleanQuery.java:298)
+			at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:524)
+			at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:391)
+			at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:298)
+
+		we have 1172 threads in same state.
+
+		there are two threads which already lock the object:
+
+		"ajp-0.0.0.0-8009-548" daemon prio=10 tid=0x00007f81a510b000
+		nid=0x1c64 waiting for monitor entry [0x00007f81897d5000]
+		   java.lang.Thread.State: BLOCKED (on object monitor)
+			at org.apache.lucene.store.RAMFile.getBuffer(RAMFile.java:75)
+			- locked <0x000000054b1daa98> (a org.apache.lucene.store.RAMFile)
+			at org.apache.lucene.store.RAMInputStream.switchCurrentBuffer(RAMInputStream.java:97)
+			at org.apache.lucene.store.RAMInputStream.readBytes(RAMInputStream.java:73)
+			at org.apache.lucene.index.TermBuffer.read(TermBuffer.java:82)
+			at org.apache.lucene.index.SegmentTermEnum.next(SegmentTermEnum.java:131)
+			at org.apache.lucene.search.FilteredTermEnum.next(FilteredTermEnum.java:77)
+			at org.apache.lucene.search.TermCollectingRewrite.collectTerms(TermCollectingRewrite.java:40)
+			at org.apache.lucene.search.TopTermsRewrite.rewrite(TopTermsRewrite.java:58)
+			at org.apache.lucene.search.MultiTermQuery.rewrite(MultiTermQuery.java:296)
+			at org.apache.lucene.search.BooleanQuery.rewrite(BooleanQuery.java:378)
+			at org.apache.lucene.search.BooleanQuery.rewrite(BooleanQuery.java:378)
+			at org.apache.lucene.search.IndexSearcher.rewrite(IndexSearcher.java:589)
+			at org.apache.lucene.search.Searcher.createNormalizedWeight(Searcher.java:167)
+			at org.apache.lucene.search.IndexSearcher.createNormalizedWeight(IndexSearcher.java:661)
+			at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:298)
+
+
+		"ajp-0.0.0.0-8009-663" daemon prio=10 tid=0x00007f81c503d800
+		nid=0x225b waiting for monitor entry [0x00007f8182462000]
+		   java.lang.Thread.State: BLOCKED (on object monitor)
+			at org.apache.lucene.store.RAMFile.numBuffers(RAMFile.java:79)
+			- locked <0x000000054b1daa98> (a org.apache.lucene.store.RAMFile)
+			at org.apache.lucene.store.RAMInputStream.switchCurrentBuffer(RAMInputStream.java:87)
+			at org.apache.lucene.store.RAMInputStream.readByte(RAMInputStream.java:63)
+			at org.apache.lucene.store.DataInput.readVInt(DataInput.java:105)
+			at org.apache.lucene.index.TermBuffer.read(TermBuffer.java:64)
+			at org.apache.lucene.index.SegmentTermEnum.next(SegmentTermEnum.java:131)
+			at org.apache.lucene.search.FilteredTermEnum.next(FilteredTermEnum.java:77)
+			at org.apache.lucene.search.FilteredTermEnum.setEnum(FilteredTermEnum.java:56)
+			at org.apache.lucene.search.WildcardTermEnum.<init>(WildcardTermEnum.java:65)
+			at org.apache.lucene.search.WildcardQuery.getEnum(WildcardQuery.java:59)
+			at org.apache.lucene.search.MultiTermQueryWrapperFilter.getDocIdSet(MultiTermQueryWrapperFilter.java:103)
+			at org.apache.lucene.search.ConstantScoreQuery$ConstantWeight.scorer(ConstantScoreQuery.java:139)
+			at org.apache.lucene.search.BooleanQuery$BooleanWeight.scorer(BooleanQuery.java:298)
+			at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:524)
+			at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:391)
+			at org.apache.lucene.search.IndexSearcher.search(IndexSearcher.java:298)
+	------------
+	上面第一个线程在等待锁，下面两个线程已经拿到锁。如果拿到锁的一直不释放，则等待锁的线程将BLOCKED在哪里，随着时间推移，线程池中资源将被耗尽~~
+
+4. java.net.socketinputstream.socketread0 hangs thread
+	socket read一直hang住，原因：
+		- 依赖服务不稳定
+		- 数据量太大，处理时候很长。
+	解决方案：
+		- 提升服务稳定性
+		- 调用者设定超时
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day163 Thursday, November 01, 2012
+
+1. 
+	* 6.33搭设ace4j API+6.27master
+		更新api包
+	* slbapi问题
+		db断线后，请求过来，导致too many open files
+		jdbc配置域名，mysql命令行可连上mysql，java程序报 java.net.UnknownHostException
+
+		java dns缓存
+		重启服务OR命令行中配置不缓存
+	* bugfix项目需求讨论
+
+2. 
+
+3. 禁用Java DNS缓存-Disable DNS caching
+	http://itindex.net/blog/2007/01/22/1169462290428.html
+
+	java命令中加上参数：Dsun.net.inetaddr.ttl=0 
+
+
+4. too many open files
+	场景：
+		linux打开大量socket
+		socket没有正常关闭。为了定位问题是否由Java进程引起，通过Java进程号查看当前进程占用文件描述符情况： 
+		Java代码  
+		lsof -p $java_pid 每个文件描述符的具体属性  
+		lsof -p $java_pid | wc -l  当前Java进程file descriptor table中FD的总量  
+
+			分析命令的结果，可判断问题是否由非正常释放资源所引起。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day164 Friday, November 02, 2012
+
+1. 
+	* 
+
+2. 
