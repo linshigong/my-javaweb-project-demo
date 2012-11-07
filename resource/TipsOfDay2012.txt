@@ -12,6 +12,10 @@ test
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 
+* http trunk
+
+* jmonkeyengine
+
 * apache common包
 	老版本源码下载，有老版本区：
 		http://archive.apache.org/dist/commons/dbcp/
