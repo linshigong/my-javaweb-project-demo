@@ -11,7 +11,9 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
-
+* 分布式事务 * distribute transaction
+	例子
+	
 * http trunk
 
 * jmonkeyengine
@@ -1594,6 +1596,13 @@ Storage for Interactive Services
 	  使用VRRP协议，不用改造目前的网络结构，最大限度保护了当前投资，只需最少的管理费用，却大大提升了网络性能，具有重大的应用价值。
 
 * linux
+	- nslookup
+		DNS信息
+		Nslookup is a program to query Internet domain name servers.  Nslookup has two modes: interactive and non-interactive. Interactive
+		       mode allows the user to query name servers for information about various hosts and domains or to print a list of hosts in a domain.
+		       Non-interactive mode is used to print just the name and requested information for a host or domain
+	- lsof
+		查看进程打开文件数
 	- chown -hR admin /home/admin/
 		所属
 	- 账户管理 用户管理
@@ -3796,19 +3805,33 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Assert.assertEquals(map.size(), 2);
 		Set<Entry<String,IMetaData>> set = map.entrySet();
 		for(Entry<String, IMetaData> data:set){
+ * Amoeba
+		Amoeba for MySQL致力于MySQL的分布式数据库前端代理层，它主要在应用层访问MySQL的时候充当query 路由功能，
+	专注 分布式数据库 proxy 开发。座落与Client、DB Server(s)之间。对客户端透明。具有负载均衡、高可用性、Query过滤、读写分离、
+	可路由相关的query到目标数据库、可并发请求多台数据库合并结果。 在Amoeba上面你能够完成多数据源的高可用、负载均衡、数据切片的功能。
+		目前在很多企业的生产线上面使用。
+	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
 	- 读写分离
-		get mysql-proxy: http://mysql.cdpa.nsysu.edu.tw/Downloads/MySQL-Proxy/mysql-proxy-0.8.3-linux-rhel5-x86-64bit.tar.gz
-		lua/lua-devel
-		mysql-devel
-		glib2-devel.x86_64
-		libevent
+		实现方式有2种：
+			1）对应用透明，通过proxy方式（如mysql proxy等代理工具实现）
+				    mysql proxy
+					get mysql-proxy: http://mysql.cdpa.nsysu.edu.tw/Downloads/MySQL-Proxy/mysql-proxy-0.8.3-linux-rhel5-x86-64bit.tar.gz
+					lua/lua-devel
+					mysql-devel
+					glib2-devel.x86_64
+					libevent
 
-		make
-		make install
+					make
+					make install
 
-		/usr/local/bin/mysql-proxy 
+					/usr/local/bin/mysql-proxy 
 
+					lua脚本
+
+				    amoeba
+					座落与Client、DB Server(s)之间。对客户端透明。具有负载均衡、高可用性、Query过滤、读写分离、可路由相关的query到目标数据库、可并发请求多台数据库合并结果
+			2）在应用层实现读写分离（如可以配置多个数据源，按需要注入对应的数据源）
 	- mysqlbinlog
 		二进制日志
 			主从复制，数据恢复。。。通过mysql的binlog
@@ -12060,8 +12083,9 @@ missing by svn revert operation
 	eg：branch合并到trunk
 		将trunk代码check out到本地，在其目录中调用merger命令，选择相应的选项，可先预览合并结果，进行合并；
 		合并好后，通过diff工具(kdiff)对比branch目录，验证合并是否正确。
-		kdiff
+		kdiff 
 			对比时可设置参数，比如忽略的文件或目录等，然后比较。
+	对于2个并行的分支都做了大量交叉的修改的情况，要尽量避免；如果已发生（big region&user reform)通过工具理解2个支的逻辑人肉合并并加全量回归测试。
 
 * 发布步骤整理及演练，发布失败回滚方案设计
 	保证正式发布顺利和优化发布流程
@@ -13827,6 +13851,9 @@ day163 Thursday, November 01, 2012
 			分析命令的结果，可判断问题是否由非正常释放资源所引起。
 
 
+5. nuwa命名服务
+	kfc协议的支持需要同cluster，规模受限，通过proxy方式，跨cluster
+
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day164 Friday, November 02, 2012
 
@@ -13834,3 +13861,46 @@ day164 Friday, November 02, 2012
 	* 
 
 2. 
+
+3. wiki维护
+	API线上问题：
+		http://wiki.ec.alibaba-inc.com/index.php/API/%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98
+4. nslookup
+
+
+5. 域名不能解析，mysql命令行却能访问的问题
+	测试场景：
+		6.33 API
+			JDBC的数据库地址配域名指向6.32
+			启动API,访问正常
+			修改/etc/hosts
+			修改上面指向6.32的域名
+			大量调用API访问数据库，API错误日志再大量请求时会报：Caused by: java.net.UnknownHostException: xxx；但是，请求量小时，不会报上面的错误
+				是因为连接池中，有指向原来域名指向的IP，新建的连接由于域名改变，不能解析，出现的条件是，请求量大到需要再建立连接时报错，对API启动时已
+				创建的连接不影响。
+
+		6.32 DB
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+November 05, 2012 - November 07, 2012
+take some days off
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day165 Thursday, November 08, 2012
+
+1. 
+	* bugfix项目
+		http proxy替换
+		join/leave group接口支持用户体系改造逻辑
+	* /SLB的大region兼容改造&发布计划
+		数据订正check
+	* 
+2. 
+	项目管理从redmine迁移到aone
+		http://aone.alibaba-inc.com/aone2/project/134/task?_token=e18619aa-95f5-4590-9fda-b88be2554147
+	bugfix API branch：
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_bugfix_201211
+	http proxy doc：
+		http://wiki.ec.alibaba-inc.com/index.php/Http_proxy%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0#HA.E6.9C.BA.E5.88.B6.EF.BC.9A
