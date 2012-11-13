@@ -11,8 +11,36 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 缓存 缓存系统 cache 分布式缓存 缓存方案
+	Cacheonix :
+		Cacheonix is an open source clustered cache and distributed data management framework for Java that allows its users to scale Java applications 
+		in a cluster while preserving the simplicity of design and coding in a single Java VM.
+		主要特点：
+			可靠的分布式 Java 缓存
+			通过复制实现高可用性
+			支持泛型的缓存 API
+			可与 ORM 框架集成
+			使用数据分区实现负载均衡
+			支持非多播网络
+			高性能计算
+			快速的本地 Java 缓存
+			分布式锁机制
+		from: http://www.cacheonix.com/
+* 产品
+	产品的管理
+	产品升级（迭代发布OR其他）
+	运维管理
+		产品的发布
+			分级别发布（降低风险）
+	
 * 分布式事务 * distribute transaction
 	例子
+	JTA(java transaction api)
+	JTOM：
+		JOTM is an open source Transaction Manager implemented in java. It supports several transaction models and specifications providing transaction support for clients 
+		using a wide range of middleware platforms (J2EE, CORBA, Web Services, OSGi).
+		http://jotm.ow2.org/xwiki/bin/view/Main/
+
 	
 * http trunk
 
@@ -845,7 +873,9 @@ Storage for Interactive Services
 
 	架构上，总线架构，各种服务通过总线相互通信，消息总线
 
-* 数据库优化，索引
+* 数据库优化，索引 * 数据库相关 
+	- 资源
+		http://www.dbanotes.net
 	 - SQL Server 索引
 		 -------
 			  SQL Server索引进阶第十五篇：索引的最佳实践
@@ -2210,10 +2240,14 @@ search in index find pdf
 	一个好的平台，衍生出多种产品线，构建良好的生态
 * OSGi
 		（OOSGi（Open Service Gateway Initiative）有双重含义。一方面它指OSGi Alliance组织；另一方面指该组织制定的一个基于Java语言的服务（业务）规范——OSGi服务平台（Service Platform）。
-	OSGi Alliance是一个由Sun Microsystems、IBM、爱立信等于1999年3月成立的开放的标准化组织，最初名为Connected Alliance。该组织及其标准原本主要目的在于使服务提供商通过住宅网关，为各种家庭智能设备提供各种服务。目前该平台逐渐成为一个为室内、交通工具、移动电话和其他环境下的所有类型的网络设备的应用程序和服务进行传递和远程管理的开放式服务平台。
-	该规范和核心部分是一个框架 ，其中定义了应用程序的生命周期模式和服务注册。基于这个框架定义了大量的OSGi服务： 日志、配置管理、偏好，HTTP（运行servlet）、XML分析、设备访问、软件包管理、许可管理、星级、用户管理、IO连接、连线管理、Jini和 UPnP。
-	这个框架实现了一个优雅、完整和动态的组件模型。应用程序（称为bundle）无需重新引导可以被远程安装、启动、升级和卸载（其中Java包／类的管理被详细定义）。API中还定义了运行远程下载管理政策的生命周期管理。服务注册允许bundles去检测新服务和取消的服务，然后相应配合。
-	OSGi原先关注于服务网关，其实可用于多个方面。现在OSGi规范已经用于从移动电话到开源的Eclipse（其中包括了与IBM的OSGi框架SMF兼容的开源版本）。 OSGi服务平台的应用包括：服务网关、 汽车、移动电话、 工业自动化、建筑物自动化、 PDA 网格计算、娱乐（如iPronto）、和 IDE。
+	OSGi Alliance是一个由Sun Microsystems、IBM、爱立信等于1999年3月成立的开放的标准化组织，最初名为Connected Alliance。该组织及其标准原本主要目的在于使服务提供商通过住宅网关，
+	为各种家庭智能设备提供各种服务。目前该平台逐渐成为一个为室内、交通工具、移动电话和其他环境下的所有类型的网络设备的应用程序和服务进行传递和远程管理的开放式服务平台。
+	该规范和核心部分是一个框架 ，其中定义了应用程序的生命周期模式和服务注册。基于这个框架定义了大量的OSGi服务： 日志、配置管理、偏好，HTTP（运行servlet）、XML分析、
+	设备访问、软件包管理、许可管理、星级、用户管理、IO连接、连线管理、Jini和 UPnP。
+	这个框架实现了一个优雅、完整和动态的组件模型。应用程序（称为bundle）无需重新引导可以被远程安装、启动、升级和卸载（其中Java包／类的管理被详细定义）。
+	API中还定义了运行远程下载管理政策的生命周期管理。服务注册允许bundles去检测新服务和取消的服务，然后相应配合。
+	OSGi原先关注于服务网关，其实可用于多个方面。现在OSGi规范已经用于从移动电话到开源的Eclipse（其中包括了与IBM的OSGi框架SMF兼容的开源版本）。
+	OSGi服务平台的应用包括：服务网关、 汽车、移动电话、 工业自动化、建筑物自动化、 PDA 网格计算、娱乐（如iPronto）、和 IDE。
 	OSGi规范是由成员通过公开的程序开发，对公众免费而且没有许可证限制。但是OSGi Alliance的兼容性程序只对成员开放，目前有12个兼容的实现。
 	2003年Eclipse选择OSGi作为其插件的底层运行时架构。Equinox project对该理念进行了实验，2004年6月在Eclipse3 R3中发布。ProSyst是面向OSGi开发者的Eclipse插件。
 	2003年10月， 诺基亚、摩托罗拉，ProSyst 和其他OSGi成员组建了Mobile Expert Group (MEG)为下一代智能手机规范业务平台，做为对 MIDP 和CDC的补充。
@@ -4127,6 +4161,11 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- nexus
+		maven本地库搭建
+		http://blog.csdn.net/westkingwy/article/details/7671371
+			nexus-webapp-1.4.1/conf/plexus.properties 此属性文件配置nexus信息
+
 	- mvn clean package -Dmaven.test.skip=true -Dconfig.file=/home/admin/houyi-ace4j/service/config/auto-config.properties
 	- maven 循环依赖问题，依赖交叉
 		可通过将接口抽取到一个模块中，被其他实现模块引用；接口模块自身不依赖或只依赖类似model的中立模块
@@ -4147,6 +4186,20 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		mvn test -Dtest=AppDaoImplTest
 	- maven 打包后，将jar包install到本地库中
 		mvn package install
+
+		maven版本编译问题，若maven版本低，默认会采用jdk1.3编译，需要在pom中指定java版本：
+			-------
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-compiler-plugin</artifactId>
+			    <configuration>
+			      <source>1.6</source>
+			      <target>1.6</target>
+			    </configuration>
+			 </plugin>
+			-------
+		版本不对报：annotations are not supported in -source 1.3
+
 
 	- maven web project ,maven通过选择不同的 Archetype 快速建立对应的项目目录骨架。 maven构建
 	web项目(eg:webx3.0项目)
@@ -4177,6 +4230,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		mvn install:install-file -DgroupId=com.sun.jersey -DartifactId=jersey-servlet -Dversion=1.12 -Dfile=jersey-servlet-1.12.jar -Dpackaging=jar -DgeneratePom=true
 		添加源码到本地库 添加source
 		 mvn install:install-file -DgroupId=org.apache.velocity -DartifactId=velocity -Dversion=1.6.2 -Dpackaging=jar -Dfile=velocity-1.6.2-sources.jar -DgeneratePom=true -Dclassifier=sources 
+
+		从jar导入到maven库与从maven项目源码编译导入到库的区别：若从源码编译导入则jar自身依赖的jar会自动下载（依赖jar的pom文件已定义其自身的依赖）。		
+
+
 	- maven jar包重复问题，可通过
 		mvn dependency:tree 查看依赖关系。
 		配置的jar包，如果存在其他依赖，且jar包里有依赖配置文件，会自动下载附带依赖，不同的jar就可能依赖同一个jar的不同版本导致重复。
@@ -13840,7 +13897,7 @@ day163 Thursday, November 01, 2012
 	java命令中加上参数：Dsun.net.inetaddr.ttl=0 
 
 
-4. too many open files
+4. too many open files 问题
 	场景：
 		linux打开大量socket
 		socket没有正常关闭。为了定位问题是否由Java进程引起，通过Java进程号查看当前进程占用文件描述符情况： 
@@ -13894,7 +13951,7 @@ day165 Thursday, November 08, 2012
 	* bugfix项目
 		http proxy替换
 		join/leave group接口支持用户体系改造逻辑
-	* /SLB的大region兼容改造&发布计划
+	* SLB的大region兼容改造&发布计划
 		数据订正check
 	* 
 2. 
@@ -13904,3 +13961,151 @@ day165 Thursday, November 08, 2012
 		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_bugfix_201211
 	http proxy doc：
 		http://wiki.ec.alibaba-inc.com/index.php/Http_proxy%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0#HA.E6.9C.BA.E5.88.B6.EF.BC.9A
+
+3. resourceChecker
+	instanceServiceImplTest
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day166 Friday, November 09, 2012
+
+1. 
+	* bugfix项目开发
+		
+	* 
+		
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day167 Monday, November 12, 2012
+
+1. 
+	* bugfix项目
+		remove_disk接口使用问题：
+			新增mount,unmount disk接口，并修改查询disk接口的返回值，带上挂载状态便于remove_disk接口确认待删除的盘。
+			mount_disk
+			unmount_disk
+			detail_disk
+	* 双11，线上问题
+	* list_mounted_snapshot
+		返回值中：device_no是原snapshot基于的device
+	* 网络存储
+		并发IO问题(如第一次的读取ISO，有限制)
+
+2. 线上问题
+	-----
+	问题1：创建VM（AY12111011204528c1514），控制系统在执行以下操作时存在deadlock
+	【API收到控制系统返回】：
+	2012-11-11 00:33:00,665  ERROR [ajp-127.0.0.1-8109-25] (ApsaraCommandExecutor.java:79) - failed to call houyi system,command:CreateVm, parameters: {"rackId":"","recoverable":0,"imageUrl":"","isoName":"","vcpus":1,"intranetRx":-1,"canBalloon":0,"baseUrl":"","ioValue":5,"ncId":"","userId":"29629","hostName":"AY12111011204528c1514","deviceId":"","vType":"","imageDeviceId":"70000006","internetRx":-1,"cpuValue":5,"startupMode":"init","imageClusterId":"1007","kernelId":"","ramdiskUrl":"","baseSize":0,"kernelUrl":"","vmName":"AY12111011204528c1514","isBlind":0,"imageVersion":"1","baseVersion":"","vlanId":"","intranetTx":-1,"imageSnapshotId":"259911","imageId":"centos5u4_32_20G_alibase_v01.vhd","mountType":1,"rate":-1,"lbType":"","baseType":0,"ballonEnable":0,"baseId":"","dataAvail":1,"imageSize":20,"internetTx":1024,"memory":1536,"snapshotSize":20,"zoneId":"cn-hangzhou-dg108-a","canMigrate":0,"groupId":"142837","initPasswd":"acff3fd1","pubKey":"","netValue":5,"ramdiskId":"","isoPath":"","imageType":2,"diskSize":40}; result: {"code":  -5025,"desc":  "mysql error","isSuccess":  "FALSE"}.
+
+	【控制系统内部日志】：
+	[2012-11-11 00:33:00.641520] [ERROR] [15519] [build/debug64/houyi/common/houyi_metadata_process.cpp:2700] [method=update MAC]:update MAC fail[sql=update mac set name='AY12111011204528c1514', scope = 2, gmt_modify='2012-11-11 00:33:00' where mac='00:16:3e:12:12:1b']:[mysql error=Deadlock found when trying to get lock; try restarting transaction]
+
+
+	问题2：补偿重试创建VM（AY12111011204528c1514）时，控制系统报存在该VM的数据。
+	PS:该VM第一次创建时，控制系统提示“mysql error“，API收到控制系统创建失败的信息，对该VM记录进行了回滚，但控制系统的VM记录并没有回滚。
+
+	【API收到控制系统返回】：
+	2012-11-11 01:14:13,336  ERROR [ajp-127.0.0.1-8109-3] (ApsaraCommandExecutor.java:79) - failed to call houyi system,command:CreateVm, parameters: {"rackId":"","recoverable":0,"imageUrl":"","isoName":"","vcpus":1,"intranetRx":-1,"canBalloon":0,"baseUrl":"","ioValue":5,"ncId":"","userId":"29629","hostName":"AY12111011204528c1514","deviceId":"","vType":"","imageDeviceId":"70000006","internetRx":-1,"cpuValue":5,"startupMode":"init","imageClusterId":"1007","kernelId":"","ramdiskUrl":"","baseSize":0,"kernelUrl":"","vmName":"AY12111011204528c1514","isBlind":0,"imageVersion":"1","baseVersion":"","vlanId":"","intranetTx":-1,"imageSnapshotId":"259911","imageId":"centos5u4_32_20G_alibase_v01.vhd","mountType":1,"rate":-1,"lbType":"","baseType":0,"ballonEnable":0,"baseId":"","dataAvail":1,"imageSize":20,"internetTx":1024,"memory":1536,"snapshotSize":20,"zoneId":"cn-hangzhou-dg108-a","canMigrate":0,"groupId":"142837","initPasswd":"acff3fd1","pubKey":"","netValue":5,"ramdiskId":"","isoPath":"","imageType":2,"diskSize":40}; result: {"code":  -15017,"desc":  "this vm name already exists","isSuccess":  "FALSE"}. 
+
+	问题3：API后台日志看到存在distributed_flag_lock表的Deadlock异常
+
+	Caused by: com.ibatis.common.jdbc.exception.NestedSQLException:
+	--- The error occurred in ibatis/distributed_flag_lock.xml.
+	--- The error occurred while applying a parameter map.
+	--- Check the distributed_flag_lock.unLockAllLockedRecordsBeforeDate-InlineParameterMap.
+	--- Check the statement (update failed).
+	--- Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction
+		at com.ibatis.sqlmap.engine.mapping.statement.MappedStatement.executeUpdate(MappedStatement.java:107)
+		at com.ibatis.sqlmap.engine.impl.SqlMapExecutorDelegate.update(SqlMapExecutorDelegate.java:457)
+		at com.ibatis.sqlmap.engine.impl.SqlMapSessionImpl.update(SqlMapSessionImpl.java:90)
+		at org.springframework.orm.ibatis.SqlMapClientTemplate$10.doInSqlMapClient(SqlMapClientTemplate.java:413)
+		at org.springframework.orm.ibatis.SqlMapClientTemplate.execute(SqlMapClientTemplate.java:209)
+		... 18 more
+	Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction
+
+	问题4：VM（AY12111112291654c6269）第一次启动失败(失败原因的日志如下)，第二次启动是成功的
+	【NC日志】：
+	[2012-11-11 01:36:06.145832] [DEBUG] [24254] [build/debug64/houyi/nc/nc_firewall.cpp:617] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:AddRule failed ret:-1
+	[2012-11-11 01:36:06.146052] [DEBUG] [24254] [build/debug64/houyi/nc/nc_firewall.cpp:128] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:SetControlIpChain failed ret:-1
+	[2012-11-11 01:36:06.146104] [DEBUG] [24254] [build/debug64/houyi/nc/nc_firewall.cpp:186] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:SetInternetAllFireWall fail
+	[2012-11-11 01:36:06.238157] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2059] config redhat ip 00:16:3e:12:15:7d eth1 42.121.53.76 255.255.252.0 42.121.55.254:0:success
+	[2012-11-11 01:36:06.422903] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2086] config redhat default_gw 42.121.55.254:0:success
+	[2012-11-11 01:36:06.573502] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2114] config redhat route 192.168.0.0 16 10.200.127.254 eth0:0:success
+	[2012-11-11 01:36:06.663574] [INFO] [16733] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:967] Msg:vm[iso-AY12111112291654c6269] stopped 5 second after shutdown
+	[2012-11-11 01:36:06.683631] [ERROR] [16733] [build/debug64/houyi/nc/handlers/nc_vm_handler.cpp:733] [vmname=AY12111112291654c6269]:init vm failed, do not start vm
+	[2012-11-11 01:36:06.693163] [DEBUG] [16733] [build/debug64/houyi/nc/handlers/nc_handler.cpp:29] Msg:succeed to send response:StartVmRsp:sequence:4358921489341223957
+	[2012-11-11 01:36:06.710829] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2114] config redhat route 172.16.0.0 12 10.200.127.254 eth0:0:success
+
+	-----
+
+3. 组件化
+	组件化设计 模块热插拔 模块化 
+		面向统一的接口，热部署组件（功能）
+	OSGI 
+		类似eclipse，可以通过插件的方式增加其功能。
+	openfire
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day168 Tuesday, November 13, 2012
+
+1. 
+	* 
+	* slb v2 
+		cache ，mark in doc
+	* slb v2
+		region_no参数传递问题：定位slb后端地址，是否在api层维护lbId和region_no关系，除创建LbId，其他接口可不传region_no？待分析
+	
+
+2. slb
+	10.250.6.37 
+	sarah.wangq@shterm.aliyun-inc.com
+	slb api
+	slbapi(mysql)
+
+	check
+		update vm region_no to bigRegionNo(1 to 1)
+	原多个vm region对一个lb region，现一个vm big region对应一个lb region
+	
+3. too many open files
+
+	--------
+	2012-10-16 21:05:14,658 ERROR [com.aliyun.slb.api.service.impl.RsServiceImpl] - [error occur] java.net.SocketException: Too many open files
+		at java.net.Socket.createImpl(Socket.java:397)
+		at java.net.Socket.getImpl(Socket.java:460)
+		at java.net.Socket.bind(Socket.java:577)
+		at sun.reflect.GeneratedMethodAccessor59.invoke(Unknown Source)
+		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+		at java.lang.reflect.Method.invoke(Method.java:597)
+		at org.apache.commons.httpclient.protocol.ReflectionSocketFactory.createSocket(ReflectionSocketFactory.java:139)
+		at org.apache.commons.httpclient.protocol.DefaultProtocolSocketFactory.createSocket(DefaultProtocolSocketFactory.java:125)
+		at org.apache.commons.httpclient.HttpConnection.open(HttpConnection.java:707)
+		at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:387)
+		at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+		at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+		at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:323)
+		at com.aliyun.slb.api.util.http.HttpUtil.sendRequest(HttpUtil.java:52)
+		at com.aliyun.slb.api.service.impl.RsServiceImpl.queryIpByName(RsServiceImpl.java:42)
+	--------
+	场景：
+		master服务不可用，并发请求 queryIpByName且超时过长或不超时，导致sock打开过多？ 待验证
+
+		java的socket实现类会根据需要创建TCP或者UDP socket（具体创建由native方法去做）	- 参考 java.net.Socket.createImpl	* 本地方法 JNI (java native interface)JNA(java native access)
+
+		本地方法设置socket超时例子： java.net.PlainSocketImpl private native void socketConnect(InetAddress address, int port, int timeout) 
+
+
+	总结：
+		对于系统依赖部分逻辑，需要考虑超时问题，避免因为第三方服务不稳定影响自身服务的稳定。
+		打开的流要关闭
+		根据并发量配置linux进程打开文件数属性：ulimit -a ；ulimit -n 4096 ；修改/etc/security/limits.conf 添加如下一行：	      * - nofile 1006154 修改/etc/pam.d/login添加如下一行 session required /lib/security/pam_limits.so
+
+4. timeout问题 超时问题 socket超时
+	apache的commons-httpclient-3.1.jar封装的socket默认超时为0，即不会超时，需要显示的设置超时时间。
+	设置超时说明为：Sets the default socket timeout (SO_TIMEOUT) in milliseconds which is the timeout for waiting for data
+
+	比如设置超时30s，在一定的并发下可保证服务的稳定，一旦超过一个阀值，连接池被耗尽，再继续并发，大量socket拥堵达到文件打开数上限（待验证）
+
+	ulimit -a 配置信息
+	ulimit -p $PID 查看PID打开的文件数
