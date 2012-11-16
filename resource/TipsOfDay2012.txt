@@ -11,6 +11,38 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* jvm dump堆栈
+	- java命令行中配置jvm参数
+		* set JVM parameters for head dump when OOM happens
+		 * -XX:+HeapDumpOnOutOfMemoryError
+		 * -XX:HeapDumpPath=d:\\tmp
+		 * 
+		 * set at run configure(+ is add,- is remove ,be care)
+		 * 
+		 * eg output:
+		 * 
+		 * java.lang.OutOfMemoryError: Java heap space
+			Dumping heap to d:\\tmp\java_pid4608.hprof ...
+			Heap dump file created [68393251 bytes in 0.462 secs]
+			Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+				at java.util.HashMap.<init>(HashMap.java:187)
+				at java.util.HashMap.<init>(HashMap.java:199)
+				at test.OOM.testOOM.main(testOOM.java:28)
+	- 主动获取堆栈
+		 jstack dump堆栈信息 （以时间段dump多份便于对比）
+			jstack 1345 > dump1
+* IPMI
+	- 智慧平台管理接口（Intelligent Platform Management Interface）原本是一种Intel架构的企业系统的周边设备所采用的一种工业标准。IPMI亦是一个开放的免费标准，使用者无需支付额外的费用即可使用此标准。
+	IPMI 能够横跨不同的操作系统、固件和硬件平台，可以智慧型的监视、控制和自动回报大量服务器的运作状况，以降低服务器系统成本。
+	from: http://zh.wikipedia.org/wiki/IPMI
+
+	使用 ipmi 的先决条件——想要实现对服务器的 ipmi 管理，必须在硬件、OS、管理工具等几个方面都满足：
+	from: http://www.chinahost.org/page-3490-1-1.html?fw=bipmi IPMI操作指南
+
+* select for update
+	注意锁的级别，尽量减小锁的范围
+	需要在事务中进行
+
 * 缓存 缓存系统 cache 分布式缓存 缓存方案
 	Cacheonix :
 		Cacheonix is an open source clustered cache and distributed data management framework for Java that allows its users to scale Java applications 
@@ -1634,7 +1666,11 @@ Storage for Interactive Services
 	- lsof
 		查看进程打开文件数
 	- chown -hR admin /home/admin/
-		所属
+		修改文件/文件夹所属
+		chown root /u        Change the owner of /u to "root".
+		 chown root:staff /u  Likewise, but also change its group to "staff".
+		 chown -hR root /u    Change the owner of /u and subfiles to "root".
+
 	- 账户管理 用户管理
 		centos用户&组权限&添加删除用户问题详解
 
@@ -3384,6 +3420,20 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
 * test * mock  * jmock		       * 单元测试 * 集成测试
+	- jtester mock 自身方法，私有方法等
+		------
+			new MockUp<AbstractExecuteAction>() {
+						@SuppressWarnings("unused")
+						@Mock
+						public ResultDomain getResourceOwner(){
+							ResultDomain result = ResultDomainVisitor.createSuccessResult();
+							Map<String,Object> map = new HashMap<String, Object>();
+							map.put(GroupParameter.RESOURCE_OWNER.getName(), "1");
+							result.setData(map);
+							return result;
+						}
+					};
+		------
 	- jtester
 		mock时，可通过比较未mock对象和mocked对象的运行状态值（cglib or jdk proxy）来判断是否正确mock了。
 	- 单元测试ok后，可以进行集成测试，以测试集成逻辑调用是否ok，比如各个环节的集成调用。
@@ -4161,6 +4211,24 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- maven clean时，linux中若文件被ln连接引用，需要删除引用（如target中的war包被引用）
+		可重新svn co
+	- 发布jar到nexus
+		发布到中央库需要具有一定权限
+			mvn deploy:deploy-file -DgroupId=com.google.inject.extensions -DartifactId=guice-servlet -Dversion=3.0 -Dpackaging=jar -Dfile=guice-servlet-3.0.jar -Durl=http://www.some-domain.com/some-path -DrepositoryId=nexus
+	- maven依赖jar的下载问题
+		maven下载pom中定义的jar依次从本项目的pom中配置的repository.url>指向的地址下载，若没有则去本地maven的repository列表逐个去下载。
+		由于子pom中没有定义jar的本地repository地址，本地maven配置也没有其地址，从而报jar找不到。
+
+		项目pom中的repository配置方式例子(若项目中没有配置，则本地maven库需要配置)：
+			<repositories>
+				<repository>
+				<id>jtester-maven</id>
+				<name>JTester</name>
+				<url>http://java-tester.googlecode.com/svn/maven2/</url>
+				</repository>
+			</repositories>
+
 	- nexus
 		maven本地库搭建
 		http://blog.csdn.net/westkingwy/article/details/7671371
@@ -4187,7 +4255,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- maven 打包后，将jar包install到本地库中
 		mvn package install
 
-		maven版本编译问题，若maven版本低，默认会采用jdk1.3编译，需要在pom中指定java版本：
+	- maven版本编译问题，若maven版本低，默认会采用jdk1.3编译，需要在pom中指定java版本：
 			-------
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
@@ -4205,7 +4273,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	web项目(eg:webx3.0项目)
 		- 比如 group id 为 org.apache.maven.archetypes 下有多种Archetype。如何自定义Archetype？
 		- 还有pom文件中必须引入servlet，jsp的相关jar包，scope设置为provided，表示它们最终不会打包到war项目中
-	- mvn -Dmaven.surefire.debug=true -Dtest=OpenApplicatonControllerTest test
+	- mvn执行测试时进行debug
+		mvn -Dmaven.surefire.debug=true -Dtest=OpenApplicatonControllerTest test
 	- maven test 
 		test 时需要debug，可以利用测试插件提供的方法，结合ide(eclipse)进行debug
 			比如： Surefire Plugin 测试环节的插件，支持test时，进行debug ，下面为maven的官网说明摘取：
@@ -9573,8 +9642,13 @@ day61 Tuesday, June 12, 2012
 	- 查询虚拟网络信息（list_vlans），修改返回值(vlan_no改成cluster_id-vlan_no)
 		VlanQueryAction
 
-3. mock 测试
-	测试框架提供了部分，常用J2EE框架的mock类 比如 ：HttpServletRequestSimulator ，用于测试struts时模拟request对象。
+3. mock 测试			   * mock
+	测试框架提供了部分，常用J2EE框架的mock类 比如 ：HttpServletRequestSimulator ，用于测试struts时模拟request对象。 mock request对象
+		-------
+			HttpServletRequestSimulator requestMock =new HttpServletRequestSimulator(new ServletContextSimulator());
+			requestMock.addParameter(IpAddressParameter.IP.getName(), "10.1.1.1");
+			ServletActionContext.setRequest(requestMock);
+		-------
 
 4. 设计 ，id，name ，。。。命名统一，或者叫id或者统一name。
 
@@ -13904,6 +13978,8 @@ day163 Thursday, November 01, 2012
 		Java代码  
 		lsof -p $java_pid 每个文件描述符的具体属性  
 		lsof -p $java_pid | wc -l  当前Java进程file descriptor table中FD的总量  
+		ls /proc/$PID/fd | wc -l
+		ls /proc/8633/fd/ -al |grep socket 查看进程打开的socket数
 
 			分析命令的结果，可判断问题是否由非正常释放资源所引起。
 
@@ -14056,6 +14132,9 @@ day168 Tuesday, November 13, 2012
 		cache ，mark in doc
 	* slb v2
 		region_no参数传递问题：定位slb后端地址，是否在api层维护lbId和region_no关系，除创建LbId，其他接口可不传region_no？待分析
+	* kfc拆除c，d，API的instance缓存需要清除（缓存了image_id）
+		
+		
 	
 
 2. slb
@@ -14109,3 +14188,97 @@ day168 Tuesday, November 13, 2012
 
 	ulimit -a 配置信息
 	ulimit -p $PID 查看PID打开的文件数
+5. find . "*.log" | xargs grep -H "UnknownHostException: my3320.mysql.aliyun.com"
+	linux查询字符串，查询文本，查询内容
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day169 Wednesday, November 14, 2012
+
+1. 
+	* bugfix201211
+		release_ip
+		modify_flow_limit
+	* 连调测试
+		
+
+2. log4j配置
+	web.xml
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>file:${user.home}/.houyi/log4j.xml</param-value>
+	</context-param>
+	<!-- 配置重加载 -->
+	<context-param>
+		<param-name>log4jRefreshInterval</param-name>
+		<param-value>10000</param-value>
+	</context-param>
+
+	log4j放在上下文中的属性。其他方式。。
+
+3. log日志不更新小问题 -tip-
+	java web服务以admin起动，但是之前以root启动过，导致log等文件的权限都是root的，这样java服务是ok的，但log始终不会更新，排除了log4j的配置问题和其他可能，最后定为是
+	linux系统文件写权限问题，囧。。。。
+
+	chown -hR admin:admin logs/
+
+	修改后，若不重启java服务，日志还是不会更新（why？），重启即可。
+
+4. 频度控制 -tip-
+	对于API接口的频度控制：基于IP，基于调用者?
+		独立于API之外的服务来控制调用频度/调用频率
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day170 Thursday, November 15, 2012
+
+1. 
+	* bugfix201211连调
+		modify_flow_limit
+			shutted状态问题？
+		query_group_vm 此接口不支持用户体系改造，是否修改？
+			确定修改
+
+	* slb api httpclient连接关闭问题
+2. maven clean时，linux中若文件被ln连接引用，需要删除引用（如target中的war包被引用）
+
+
+3. too many open files错误
+	httpclient的连接别样被关闭？
+		slb v2 设置了连接超时，等待数据超时
+		但是没有关闭connection
+		假设，系统在设定的时间过后，关闭socket
+
+		测试：
+			系统回收socket时间周期内，发送超过操作系统限制的进程打开文件数，抛出异常。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day171 Friday, November 16, 2012
+
+1. 
+	* 连调
+		query_group_vm接口单元测试编写
+2. 
+
+3. CLOSE_WAIT
+	TCP/IP协议说明，由于被动关闭连接会产生CLOSE_WAIT状态。
+	测试httpclient：
+		测试sendRequest方法
+		参数：url=www.baidu.com,method=get
+		循环次数：num=1000
+		执行好后sleep 2min
+		
+		测试2种场景：
+			1）关闭连接
+				HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager(true));
+			2）不关闭连接
+				HttpClient httpClient = new HttpClient();				
+
+		对比上面两种场景的检测数据：
+			ps -ef | grep java 找到当前测试运行的java进程PID
+			netstat -anpc |grep 220.181.111.148 |grep CLOSE_WAIT - 查看CLOSE_WAIT状态的连接
+
+		分析结果：
+			场景1）中，没有CLOSE_WAIT瞬时状态
+				执行好后，没有到www.baidu.com的socket连接	，netstat -anpc |grep 220.181.111.148为空
+			场景2）中保持有170个的CLOSE_WAIT状态的socket，直到测试进程结束才会断开socket。
+			netstat -anpc |grep 220.181.111.148
