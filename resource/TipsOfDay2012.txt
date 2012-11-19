@@ -31,6 +31,10 @@ google 检索 apache： site:*.apache.org 高级搜索
 	- 主动获取堆栈
 		 jstack dump堆栈信息 （以时间段dump多份便于对比）
 			jstack 1345 > dump1
+
+		windows系统
+			tasklist
+			jstack -l $PID
 * IPMI
 	- 智慧平台管理接口（Intelligent Platform Management Interface）原本是一种Intel架构的企业系统的周边设备所采用的一种工业标准。IPMI亦是一个开放的免费标准，使用者无需支付额外的费用即可使用此标准。
 	IPMI 能够横跨不同的操作系统、固件和硬件平台，可以智慧型的监视、控制和自动回报大量服务器的运作状况，以降低服务器系统成本。
@@ -285,14 +289,27 @@ google 检索 apache： site:*.apache.org 高级搜索
 	------
 	from: http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 
-* 代码review辅助工具
-	reviewboard.
-		Take the pain out of code review
-		http://www.reviewboard.org/docs/manual/1.0/
-	python实现：
-	项目主页：
-		http://code.google.com/p/reviewboard/
+* 代码review辅助工具 * review board
+	
+	- 
+		reviewboard.
+			Take the pain out of code review
+			http://www.reviewboard.org/docs/manual/1.0/
+		python实现：
+		项目主页：
+			http://code.google.com/p/reviewboard/
+		
+		使用方法：
+			1)   在飞天reviewboard上注册账号<http://reviewboard.dev.sd.aliyun.com/>
+			2)   通过网页提交review requests或者使用post-review命令行提交(网页有坑，反正我是提交失败了)
 
+
+			Post-review依赖于python2.7，需要设置下环境变量
+			[root@AT-HOUYIDEV-AG]$ unalias  post-review    
+			[root@AT-HOUYIDEV-AG]$ export PATH=/home/tops/bin:/usr/local/bin:$PATH
+			[root@AT-HOUYIDEV-AG]$ cd /apsarapangu/disk4/apsara-0.8.6/ec_flow_billing
+			[root@AT-HOUYIDEV-AG]$ post-review  --server=http://reviewboard.dev.sd.aliyun.com/ReviewBoard --summary='xxxx'  --username=xxx --revision-range=R1:R2
+			会生产一个request链接，贴到浏览器里头，修改review request的相关描述并publish。
 	
 * htttpd
 	apache服务器，指定httpd.cof文件启动，在执行命令的目录下的confi文件夹中的，tpd.conf文件中配置~~。。。
@@ -2221,28 +2238,33 @@ Storage for Interactive Services
 				启动失败了，即服务器是起来了，但应用确没起来，导致访问应用的路径时浏览器没显示任何内容，如果直接去访问后端的tomcat路径会报404（一看就知道路径访问到，确认路径
 				ok的情况下极可能就是应用启动失败）。
 					这种有多个层转发的情况，错误排查可以从原始的端开始，逐一排查。
-* concurrent包 ，java concurrent
-	java concurrent 探秘
-		我们都知道，在JDK1.5之前，Java中要进行业务并发时，通常需要有程序员独立完成代码实现，当然也有一些开源的框架提供了这些功能，
-	但是这些依然没有JDK自带的功能使用起来方便。而当针对高质量Java多线程并发程序设计时,为防止死蹦等现象的出现，比如使用java之前的wait()、notify()和synchronized等，
-	每每需要考虑性能、死锁、公平性、资源管理以及如何避免线程安全性方面带来的危害等诸多因素，往往会采用一些较为复杂的安全策略，加重了程序员的开发负担.万幸的是，
-	在JDK1.5出现之后，Sun大神（Doug Lea）终于为我们这些可怜的小程序员推出了java.util.concurrent工具包以简化并发完成。开发者们借助于此，将有效的减少竞争条件（race conditions）
-	和死锁线程。concurrent包很好的解决了这些问题，为我们提供了更实用的并发程序模型。
 
-	Executor                  ：具体Runnable任务的执行者。
-	ExecutorService           ：一个线程池管理者，其实现类有多种，我会介绍一部分。我们能把Runnable,Callable提交到池中让其调度。
-	Semaphore                 ：一个计数信号量
-	ReentrantLock             ：一个可重入的互斥锁定 Lock，功能类似synchronized，但要强大的多。
-	Future                    ：是与Runnable,Callable进行交互的接口，比如一个线程执行结束后取返回的结果等等，还提供了cancel终止线程。
-	BlockingQueue             ：阻塞队列。
-	CompletionService         : ExecutorService的扩展，可以获得线程执行结果的
-	CountDownLatch            ：一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待。
-	CyclicBarrier             ：一个同步辅助类，它允许一组线程互相等待，直到到达某个公共屏障点
-	Future                    ：Future 表示异步计算的结果。
-	ScheduledExecutorService ：一个 ExecutorService，可安排在给定的延迟后运行或定期执行的命令。
+* concurrent包 ，java concurrent	       * 并发 * 同步 * java并发/同步
+	- 锁
+		synchronized方法（锁定方法所在的实例化对象，若实例化对象不为同一个，则不能同步）
+		synchronized块（以声明的锁对象进行锁定，若锁的实例不同则不能同步）
 
-	接下来逐一介绍
-	from：http://www.cnblogs.com/aurawing/articles/1887056.html
+	- java concurrent 探秘
+			我们都知道，在JDK1.5之前，Java中要进行业务并发时，通常需要有程序员独立完成代码实现，当然也有一些开源的框架提供了这些功能，
+		但是这些依然没有JDK自带的功能使用起来方便。而当针对高质量Java多线程并发程序设计时,为防止死蹦等现象的出现，比如使用java之前的wait()、notify()和synchronized等，
+		每每需要考虑性能、死锁、公平性、资源管理以及如何避免线程安全性方面带来的危害等诸多因素，往往会采用一些较为复杂的安全策略，加重了程序员的开发负担.万幸的是，
+		在JDK1.5出现之后，Sun大神（Doug Lea）终于为我们这些可怜的小程序员推出了java.util.concurrent工具包以简化并发完成。开发者们借助于此，将有效的减少竞争条件（race conditions）
+		和死锁线程。concurrent包很好的解决了这些问题，为我们提供了更实用的并发程序模型。
+
+		Executor                  ：具体Runnable任务的执行者。
+		ExecutorService           ：一个线程池管理者，其实现类有多种，我会介绍一部分。我们能把Runnable,Callable提交到池中让其调度。
+		Semaphore                 ：一个计数信号量
+		ReentrantLock             ：一个可重入的互斥锁定 Lock，功能类似synchronized，但要强大的多。
+		Future                    ：是与Runnable,Callable进行交互的接口，比如一个线程执行结束后取返回的结果等等，还提供了cancel终止线程。
+		BlockingQueue             ：阻塞队列。
+		CompletionService         : ExecutorService的扩展，可以获得线程执行结果的
+		CountDownLatch            ：一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待。
+		CyclicBarrier             ：一个同步辅助类，它允许一组线程互相等待，直到到达某个公共屏障点
+		Future                    ：Future 表示异步计算的结果。
+		ScheduledExecutorService ：一个 ExecutorService，可安排在给定的延迟后运行或定期执行的命令。
+
+		接下来逐一介绍
+		from：http://www.cnblogs.com/aurawing/articles/1887056.html
 * volatile / Java中的volatile关键字	 
 	关于volatile
 		我们知道，在Java中设置变量值的操作，除了long和double类型的变量外都是原子操作，也就是说，对于变量值的简单读写操作没有必要进行同步。这在JVM 1.2之前，Java的内存模型实现
@@ -2275,7 +2297,15 @@ search in index find pdf
 * 平台，产品线，生态
 	一个好的平台，衍生出多种产品线，构建良好的生态
 * OSGi
-		（OOSGi（Open Service Gateway Initiative）有双重含义。一方面它指OSGi Alliance组织；另一方面指该组织制定的一个基于Java语言的服务（业务）规范——OSGi服务平台（Service Platform）。
+	- OSGI练习
+		通过eclipse的plug-in项目，实现采用Equinox来实验
+		一个OSGI框架+N个bundle
+
+		参考：
+			http://www.ibm.com/developerworks/cn/opensource/os-cn-ecl-osgi/index.html		基于 OSGi 的面向服务的组件编程
+			http://www.ibm.com/developerworks/cn/opensource/os-ecl-osgibdev/			利用 Eclipse 开发基于 OSGi 的 Bundle 应用
+
+	- 	（OOSGi（Open Service Gateway Initiative）有双重含义。一方面它指OSGi Alliance组织；另一方面指该组织制定的一个基于Java语言的服务（业务）规范——OSGi服务平台（Service Platform）。
 	OSGi Alliance是一个由Sun Microsystems、IBM、爱立信等于1999年3月成立的开放的标准化组织，最初名为Connected Alliance。该组织及其标准原本主要目的在于使服务提供商通过住宅网关，
 	为各种家庭智能设备提供各种服务。目前该平台逐渐成为一个为室内、交通工具、移动电话和其他环境下的所有类型的网络设备的应用程序和服务进行传递和远程管理的开放式服务平台。
 	该规范和核心部分是一个框架 ，其中定义了应用程序的生命周期模式和服务注册。基于这个框架定义了大量的OSGi服务： 日志、配置管理、偏好，HTTP（运行servlet）、XML分析、
@@ -2289,7 +2319,8 @@ search in index find pdf
 	2003年10月， 诺基亚、摩托罗拉，ProSyst 和其他OSGi成员组建了Mobile Expert Group (MEG)为下一代智能手机规范业务平台，做为对 MIDP 和CDC的补充。
 	
 	eclipse 3.7.2提供了OSGI控制台
-
+	- osgi初探 例子
+		http://www.cnblogs.com/bjzhanghao/archive/2007/11/21/967320.html 利用OSGi DS实现可配置Web应用程序初探
 * IaaS（Infrastructure as a Service），即基础设施即服务
 
 * BVT (Build Verification Test)
@@ -3896,6 +3927,20 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- MySQL查询结果导出到文件
+		选择某些行作为需要的数据
+			SELECT id,dbname FROM `index` into outfile "d://aaa.txt";
+		一般大家都会用 “SELECT INTO OUTFIL”将查询结果导出到文件，但是这种方法不能覆盖或者添加到已经创建的文件，下文为您介绍的这种方法则很好地解决了此问题。
+		一般大家都会用 “SELECT INTO OUTFIL”将查询结果导出到文件，但是这种MySQL查询结果导出到文件方法不能覆盖或者添加到已经创建的文件。例如：
+		mysql> select 1 into outfile '/tmp/t1.txt';  
+			需要有写文件的权限
+			chmod a+rw $DIR_NAME
+			drwxrwxrwx
+			owner group everyone
+
+			Unix permissions concern who can read a file or directory, write to it, and execute it. Permissions are granted or withheld with a magic 3-digit number. 
+			The three digits correspond to the owner (you); the group (?); and the world (everyone else).
+			
 	- 读写分离
 		实现方式有2种：
 			1）对应用透明，通过proxy方式（如mysql proxy等代理工具实现）
@@ -4395,8 +4440,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
-	- 
-
+	-  字符串分组
+		cat tempoutfile20121119.txt | grep "cn-hangzhou-dg-a01" |awk -F"|" '{print $3}' >temmmp3
 	- 
 		#!/bin/bash
 		str=$1
@@ -10809,7 +10854,7 @@ day83 Friday, July 13, 2012
 	* houyi api 接口调用用例编写，便于测试
 	* 
 		
-2. vm状态
+2. vm状态 vm status
 	Pending(1, "待启动") 
 	Starting(2, "启动中") 
 	Running(3, "运行中"), 
@@ -14282,3 +14327,24 @@ day171 Friday, November 16, 2012
 				执行好后，没有到www.baidu.com的socket连接	，netstat -anpc |grep 220.181.111.148为空
 			场景2）中保持有170个的CLOSE_WAIT状态的socket，直到测试进程结束才会断开socket。
 			netstat -anpc |grep 220.181.111.148
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day172 Monday, November 19, 2012
+
+1. 
+	* API事务lock分析
+		pool exhausted ？
+			有慢数据库连接
+	* review代码阅读
+		id=182672 kelude
+		=173658
+2. API事务lock分析
+	pool exhausted ？
+		有慢数据库连接占满pool
+		maxactive数不够
+		pool中的连接有问题
+		工具自身bug
+3. shell
+
+4. starting状态  业务
+	一直处于starting状态的原因之一：master重启，导致状态不一致
