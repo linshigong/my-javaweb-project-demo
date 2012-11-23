@@ -11,6 +11,32 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 网络攻击
+	- DDOS
+
+	- SYN攻击
+		
+* 事务
+	- 事务并发问题：
+		1) 脏读：包含未提交数据的读取。例如，事务1 更改了某行。事务2 在事务1 提交更改之前读取已更改的行。
+			如果事务1 回滚更改，则事务2 便读取了逻辑上从未存在过的行。
+		2) 不可重复读取：当某个事务不止一次读取同一行，并且一个单独的事务在两次（或多次）读取之间修改该行时，
+			因为在同一个事务内的多次读取之间修改了该行，所以每次读取都生成不同值，从而引发不一致问题。
+		3) 幻象：通过一个任务，在以前由另一个尚未提交其事务的任务读取的行的范围中插入新行或删除现有行。
+			带有未提交事务的任务由于该范围中行数的更改而无法重复其原始读取。 
+	- 根据隔离级别的不同，DBMS为并行访问提供不同的互斥保证。在SQL Server数据库中，提供四种隔离级别：
+	未提交读、提交读、可重复读、可串行读。这四种隔离级别可以不同程度地保证并发的数据完整性：
+		隔离级别	脏 读	不可重复读取	幻 像
+		未提交读	是		是				是
+		提交读		否		是				是
+		可重复读	否		否				是
+		可串行读	否		否				否
+		
+* windows下命令格式
+	- netstat -an 1 |grep 220.181.111.148
+	- 
+
+11.18.2012 
 * jvm dump堆栈
 	- java命令行中配置jvm参数
 		* set JVM parameters for head dump when OOM happens
@@ -303,13 +329,15 @@ google 检索 apache： site:*.apache.org 高级搜索
 			1)   在飞天reviewboard上注册账号<http://reviewboard.dev.sd.aliyun.com/>
 			2)   通过网页提交review requests或者使用post-review命令行提交(网页有坑，反正我是提交失败了)
 
-
 			Post-review依赖于python2.7，需要设置下环境变量
 			[root@AT-HOUYIDEV-AG]$ unalias  post-review    
 			[root@AT-HOUYIDEV-AG]$ export PATH=/home/tops/bin:/usr/local/bin:$PATH
 			[root@AT-HOUYIDEV-AG]$ cd /apsarapangu/disk4/apsara-0.8.6/ec_flow_billing
 			[root@AT-HOUYIDEV-AG]$ post-review  --server=http://reviewboard.dev.sd.aliyun.com/ReviewBoard --summary='xxxx'  --username=xxx --revision-range=R1:R2
 			会生产一个request链接，贴到浏览器里头，修改review request的相关描述并publish。
+
+		通过review board页面提交或者通过post-review命令工具实现
+			post-review命令参数说明，查看其.py源码，找到帮助，sudo post-review --help
 	
 * htttpd
 	apache服务器，指定httpd.cof文件启动，在执行命令的目录下的confi文件夹中的，tpd.conf文件中配置~~。。。
@@ -3927,6 +3955,88 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- 事务隔离级别
+		mysql默认事务隔离级别：
+			mysql>help ISOLATION
+			Query global and session transaction isolation levels:
+				mysql>SELECT @@GLOBAL.tx_isolation, @@tx_isolation
+					REPEATABLE-READ
+
+		mysql 事务级别说明：
+		--------
+			The following list describes how MySQL supports the different
+			transaction levels:
+
+			o READ UNCOMMITTED
+
+			  SELECT statements are performed in a nonlocking fashion, but a
+			  possible earlier version of a row might be used. Thus, using this
+			  isolation level, such reads are not consistent. This is also called a
+			  "dirty read." Otherwise, this isolation level works like READ
+			  COMMITTED.
+
+			o READ COMMITTED
+
+			  A somewhat Oracle-like isolation level with respect to consistent
+			  (nonlocking) reads: Each consistent read, even within the same
+			  transaction, sets and reads its own fresh snapshot. See
+			  http://dev.mysql.com/doc/refman/5.1/en/innodb-consistent-read.html.
+
+			  For locking reads (SELECT with FOR UPDATE or LOCK IN SHARE MODE),
+			  InnoDB locks only index records, not the gaps before them, and thus
+			  allows the free insertion of new records next to locked records. For
+			  UPDATE and DELETE statements, locking depends on whether the
+			  statement uses a unique index with a unique search condition (such as
+			  WHERE id = 100), or a range-type search condition (such as WHERE id >
+			  100). For a unique index with a unique search condition, InnoDB locks
+			  only the index record found, not the gap before it. For range-type
+			  searches, InnoDB locks the index range scanned, using gap locks or
+			  next-key (gap plus index-record) locks to block insertions by other
+			  sessions into the gaps covered by the range. This is necessary
+			  because "phantom rows" must be blocked for MySQL replication and
+			  recovery to work.
+
+			  *Note*: In MySQL 5.1, if the READ COMMITTED isolation level is used
+			  or the innodb_locks_unsafe_for_binlog system variable is enabled,
+			  there is no InnoDB gap locking except for foreign-key constraint
+			  checking and duplicate-key checking. Also, record locks for
+			  nonmatching rows are released after MySQL has evaluated the WHERE
+			  condition. As of MySQL 5.1, if you use READ COMMITTED or enable
+			  innodb_locks_unsafe_for_binlog, you must use row-based binary
+			  logging.
+
+			o REPEATABLE READ
+
+			  This is the default isolation level for InnoDB. For consistent reads,
+			  there is an important difference from the READ COMMITTED isolation
+			  level: All consistent reads within the same transaction read the
+			  snapshot established by the first read. This convention means that if
+			  you issue several plain (nonlocking) SELECT statements within the
+			  same transaction, these SELECT statements are consistent also with
+			  respect to each other. See
+			  http://dev.mysql.com/doc/refman/5.1/en/innodb-consistent-read.html.
+
+			  For locking reads (SELECT with FOR UPDATE or LOCK IN SHARE MODE),
+			  UPDATE, and DELETE statements, locking depends on whether the
+			  statement uses a unique index with a unique search condition, or a
+			  range-type search condition. For a unique index with a unique search
+			  condition, InnoDB locks only the index record found, not the gap
+			  before it. For other search conditions, InnoDB locks the index range
+			  scanned, using gap locks or next-key (gap plus index-record) locks to
+			  block insertions by other sessions into the gaps covered by the
+			  range.
+
+			o SERIALIZABLE
+
+			  This level is like REPEATABLE READ, but InnoDB implicitly converts
+			  all plain SELECT statements to SELECT ... LOCK IN SHARE MODE if
+			  autocommit is disabled. If autocommit is enabled, the SELECT is its
+			  own transaction. It therefore is known to be read only and can be
+			  serialized if performed as a consistent (nonlocking) read and need
+			  not block for other transactions. (This means that to force a plain
+			  SELECT to block if other transactions have modified the selected
+			  rows, you should disable autocommit.)
+		  --------
 	- MySQL查询结果导出到文件
 		选择某些行作为需要的数据
 			SELECT id,dbname FROM `index` into outfile "d://aaa.txt";
@@ -14182,7 +14292,7 @@ day168 Tuesday, November 13, 2012
 		
 	
 
-2. slb
+2. slb 生产环境
 	10.250.6.37 
 	sarah.wangq@shterm.aliyun-inc.com
 	slb api
@@ -14348,3 +14458,266 @@ day172 Monday, November 19, 2012
 
 4. starting状态  业务
 	一直处于starting状态的原因之一：master重启，导致状态不一致
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day173 Tuesday, November 20, 2012
+
+1. 
+	* slb api数据检查
+	* houyi api
+		并发add_disk,remove_disk的问题
+		40 (+ 5 + 5 - 5 concurrent) = 45 ？50
+
+		http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9252783
+
+
+	* httpclient3.1
+		CLOST_WAIT过多问题
+	
+		(1) 通过设置请求头参数：
+			httpMethod.setRequestHeader("connection", "close"); //此消息头参数参考：http://www.ietf.org/rfc/rfc2616.txt Hypertext Transfer Protocol -- HTTP/1.1	第14.10节
+				----
+				HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example,
+				Connection: close
+				in either the request or the response header fields indicates that the connection SHOULD NOT be considered `persistent' (section 8.1) after the current request/response is complete.
+				----
+				from: http://www.ietf.org/rfc/rfc2616.txt
+		(2) 通过httpclient中simpleconnnectionmanager的带参构造函数实现，单元测试ok，但运行时计量推送逻辑有问题，报错如下：
+			Caused by: java.lang.NoSuchMethodError: org.apache.commons.httpclient.SimpleHttpConnectionManager.<init>(Z)V
+			at com.aliyun.houyi.util.HttpUtil.sendRequest(HttpUtil.java:48)
+			根据错误，是找不到对应的方法。？
+
+		连接复用与多线程并发问题：
+			可以通过httpclient提供的			
+	* master(java) 无状态 ，多个平级master管理一个多nc的大region
+		选型 
+			Dubbo http://baike.baidu.com/view/6901431.htm
+
+2. slb api数据检查
+	当前slb api数据库，
+	DB地址:	10.242.252.41 slbapi
+	139dc81f48f-cn-hangzhou-dg-a01,10.241.2.118	(rs表没有此lb_id，也没有此ip)
+	13a0a5e12cc-cn-hangzhou-dg-a01,10.200.2.34	(rs表有这个lb_id，但没有这个ip的记录)
+	13ae9d4087f-cn-hangzhou-dg-a01,10.200.115.236	 (rs表没有此lb_id，也没有此ip)
+
+	根据上面的分析，“上述三个lb – rs(ip)的对应关系不存在于api的数据库中”
+
+3. 同时修改同一数据的问题
+	select instance_no,disk from instance where instance_no='mytest2012-11-1' for update;
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day174 Wednesday, November 21, 2012
+
+1. 
+	* slb v2 聚石塔项目slb后端api有变动，api分析是否需要相应的变动，详见邮件
+	* bugfix201211代码review
+	* user_reform后代理商自己的vm的释放问题
+	* slb后端直接配置的vip，现需要通过slb api来配置，对应的slb api数据库订正问题
+	* slb api线上日志分析，add_rule报错
+		
+2.  代码review
+	(1) create_vm的disk参数，如果传入了非空，但却没有校验（大小范围，格式）？	  还是这个值就该废弃，即用户指定disk时会有问题
+		后面有不为空时的参数校验，此处ok
+	(2) 
+3. user_reform后代理商自己的vm的释放问题
+	release_vm时API要做的处理：
+	1) 退出 vm 所在的所有组
+		- 根据instanceId查询出vm所在的groupId列表：
+			SELECT group_id
+			FROM group_instance
+			WHERE instance_id = #instanceId#
+		- 根据group所在的bigRegionNo找到其对应的masterRegion	作为目标regionNo
+			SELECT
+					 id,
+					big_region_no,
+					master_region_no,
+					gmt_create,
+					gmt_modify
+			FROM master_region
+			WHERE big_region_no = #bigRegionNo#
+		- 生成一条设置防火墙规则到api数据库，返回messageId(主键)
+			sfw_command表：event=6(leaveGroup)，data={"groupId":xxx,"instanceId":xxx}，target=xxxRegionNo(instance.getRegionNo())，gmt_create=xxx,gmt_modify=xxx
+			返回 messageId
+		- 构造leaveGroup的RPC请求：
+			ExitGroup 
+			regionNo=上面的目标regionNo
+			messageId，groupId，vmName
+			发送到netc
+		- 上面leaveGroup的RPC成功调用后，删除group_instance表对应的记录
+			delete from group_instance 
+			where group_id = #groupId# 
+			and instance_id = #instanceId#
+		- 构造下发防火墙的RPC请求
+			SetFireWall
+			messageId=xxx（上面的主键ID），type=6，data={groupId=xxx,vmName=xxx}(Map)
+			发送到netc
+			 regionNo=
+				根据bigRegionNo找到其对应的小reginNo列表，依次遍历得到的小region并调用上面的RPC下发防火墙（只记录失败，不回滚操作）			
+	2) 释放IP
+		- RPC查询vm的公网ip列表(List<String>) ，得到公网ip列表
+			GetPublicIpsByName
+			regionNo=instance.getRegionNo()
+			vmName=intance.getIntanceNo()
+
+			结果处理：（是否已有此RPC功能的脚本命令？）
+				取publicIpList对应的内容，ip列表
+		- RPC查询vm的vip列表(List<String>)，得到vip列表和port列表
+			GetMemberInfo
+			vmName=instance.getInstanceNo()
+			port=-1
+			发送到netc
+		-RPC调用释放vm的公网ip和vip
+			RemovePublicIp
+			regionNo=instance.getRegionNo()
+			vmName=instance.getInstanceNo()
+			发送到netc
+	3) 释放VM(兼容处理控制系统是否有此vm)
+		- RPC查询vm，判断vm在控制系统是否存在
+			GetVmInfo
+			regionNo=instance.getRegionNo()
+			vmName=instance.getInstanceNo()
+			发送到master
+		- 若上面的返回成功（取json串的isSuccess的值-true/false），RPC调用控制系统释放vm，(CLC释放？)
+			DestroyVm
+			regionNo=instance.getRegionNo()
+			vmName=instance.getInstanceNo()
+			clearDatabase=0
+			发送到master
+	4) 释放VM后，检出待释放的VIP
+		- RPC遍历查询步骤2)得到的vip地址列表，去掉列表中不存在的vip-port
+			GetVipInfo						
+			vip=xxx
+			vipPort=xxx
+			userId=instance.getUserId()
+			发送到netc
+		- 合并步骤2)得到的ip列表和上面处理过的vip列表（没有使用？）
+	5) 更新API数据库的vip表
+		delete from `vip`
+		where instance_no=#instanceNo#
+	6) 更新API数据库的instance信息
+		instance表：
+			statusComment=""
+			status=8
+			instanceNo=instance.getInstanceNo()
+
+	具体操作的工具实现通过脚本：
+		python		
+
+4. slb后端直接配置的vip，现需要通过slb api来配置，对应的slb api数据库订正问题
+	
+5. slb api线上日志分析，add_rule报错
+	http://10.200.219.250/slb/api?action=add_rule&aliyun_idkp=146&frontend_port=80
+	&lb_id=13a8663a28d-cn-hangzhou-dg-a01%0D%0A&region_no=cn-hangzhou-dg-a01
+	&rule_list=%5B%7B%22domain%22%3A%22tzm123456.aliapp.com%22%2C%22rs_pool_name%22%3A%22tzm123456.aliapp.comace4j%22%7D%5D
+	&session=b9ALSaJIBZaMJd3UwH%2BAFw%3D%3D&timestamp=2012-11-20+19%3A34%3A13&sign=nHwrhyW%2BOUcmCSIr42b%2BVA%3D%3D&sign_type=MD5
+
+	13a8663a28d-cn-hangzhou-dg-a01%0D%0A 
+		这里后面多了个换行符 "\r\n"	utf-8 = %0D%0A
+	
+	请求到slb api时，lb_id作为参数，末尾带了 \r\n 是允许的；但api提供的rest接口，在用lb_id构造uri后，请求此uri时报错。
+		api需要捕获这个异常，即透明构造请求后端的url时，需要做基本的校验，便于用户知道哪里错了？
+			构造uri时需要校验参数，保证uri是合法的。
+
+	http://10.250.8.214/open/services%0D%0A?
+		500 tomcat错误页面
+			需要包装下。
+			比如，上面的uri不合法，是否在nginx层就拦截掉并指向到友好的界面？
+				还是服务器自己定位吧，nginx只转发，职责清晰。
+
+6. 错误处理 -tip-
+	错误重定向，比如对500,503等错误定向到友好的提醒页面（对于uri不合法的错误定向）
+		
+	系统建议
+
+7. slb后端绕过api陪的vip重新从api走，db订正
+	insert into xx (vm_name,ip,rs_pool_name,user_id,lb_id,region_no) values('vmName','10.241.48.113','1313-80-http',39314,'1394c332d0a-cn-hangzhou-dg-a01','cn-hangzhou-dg-a01');
+	...
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day175 Thursday, November 22, 2012
+
+1. 
+	* bugfix201211 review
+	* 事务
+	* api并发接口测试，Full GC导致TPS抖动问题
+
+
+2. 事务 中间状态 并发控制
+	接口操作的事务控制，比如并发去start_vm，release_vm时，并发修改vm的状态需要控制。
+	可以用悲观锁来串行化修改状态的操作，然后释放锁，这个状态在操作完成后再更新。
+
+3. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day176 Friday, November 23, 2012
+
+1. 
+	* TIME_WAIT状态
+	* Full GC问题
+
+
+
+2. 大量TIME_WAIT状态的问题		       * TIME_WAIT
+		客户端与服务器端建立TCP/IP连接后关闭SOCKET后，服务器端连接的端口
+	状态为TIME_WAIT
+	 
+	是不是所有执行主动关闭的socket都会进入TIME_WAIT状态呢？
+	有没有什么情况使主动关闭的socket直接进入CLOSED状态呢？
+	 
+	主动关闭的一方在发送最后一个ack 后
+	就会进入TIME_WAIT 状态 停留2MSL（max segment lifetime）时间
+	这个是TCP/IP必不可少的，也就是“解决”不了的。
+	也就是TCP/IP设计者本来是这么设计的
+
+	通过设置系统socket相关参数，比如linux下：
+		调整内核参数解决，
+		vi /etc/sysctl.conf
+
+		编辑文件，加入以下内容：
+		net.ipv4.tcp_syncookies = 1 表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，默认为0，表示关闭；
+		net.ipv4.tcp_tw_reuse = 1 表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭；
+		net.ipv4.tcp_tw_recycle = 1 表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。
+		net.ipv4.tcp_fin_timeout 修改系統默认的 TIMEOUT 时间
+		 
+		然后执行 /sbin/sysctl -p 让参数生效。
+		
+	TIME_WAIT状态的意义：
+		主动关闭的一方在发送最后一个ack 后
+		就会进入TIME_WAIT 状态 停留2MSL（max segment lifetime）时间
+		这个是TCP/IP必不可少的，也就是“解决”不了的。
+		也就是TCP/IP设计者本来是这么设计的
+		主要有两个原因
+		1。防止上一次连接中的包，迷路后重新出现，影响新连接
+		  （经过2MSL，上一次连接中所有的重复包都会消失）
+		2。可靠的关闭TCP连接
+		  在主动关闭方发送的最后一个ack(fin) ，有可能丢失，这时被动方会重新发
+		  fin, 如果这时主动方处于CLOSED 状态 ，就会响应rst 而不是ack。所以
+		  主动方要处于TIME_WAIT 状态，而不能是CLOSED 。
+		TIME_WAIT 并不会占用很大资源的，除非受到攻击。
+		还有，如果一方send 或recv 超时，就会直接进入CLOSED 状态
+
+3. java DNS缓存 
+	不缓存DNS		
+	-Dsun.net.inetaddr.ttl=0 -Dsun.net.inetaddr.negative.ttl=0
+
+4. agent's vm
+	set its own user_id as agent_id to release vm.
+
+5. Full GC问题
+	目标减少full gc：
+		full gc的触发是由于年轻代被耗尽，中老两代空间也被用完。
+		年轻代，年老代，
+6. nc资源被耗尽
+	xm list
+7. 零拷贝(zero-copy)和环形队列缓存队列问题 队列结构的实现
+	
+8. jetty continuation & servlet3.0(NIO)
+	"Continuations will be replaced by standard Servlet-3.0 suspendable requests once the specification is finalized. Early releases of Jetty-7 are now available that implement the proposed standard suspend/resume API"
+	from: http://docs.codehaus.org/display/JETTY/Continuations
+
+	continuaton缺点，导致编程模型复杂，需要切分io操作。
+	
