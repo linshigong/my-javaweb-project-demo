@@ -1,0 +1,473 @@
+from: http://www.diveintopython.net/toc/index.html
+
+1. Installing Python
+	1.5. Python on RedHat Linux
+	1.8. The Interactive Shell
+		Python leads a double life. It's an interpreter for scripts that you can run from the command line or run like applications, by double-clicking the scripts. 
+		But it's also an interactive shell that can evaluate arbitrary statements and expressions.
+		
+		The Python interactive shell can evaluate arbitrary Python expressions, including any basic arithmetic expression.
+		The interactive shell can execute arbitrary Python statements, including the print statement.
+		You can also assign values to variables, and the values will be remembered as long as the shell is open (but not any longer than that).
+2. Your First Python Program
+	2.2. Declaring Functions
+		2.2.1. How Python's Datatypes Compare to Other Programming Languages
+			- the keyword def starts the function declaration, followed by the function name, followed by the arguments in parentheses. Multiple arguments (not shown here) are separated with commas.
+			- function doesn't define a return datatype.Python functions do not specify the datatype of their return value; they don't even specify whether or not they return a value. In fact, 
+		every Python function returns a value; if the function ever executes a return statement, it will return that value, otherwise it will return None, the Python null value.
+			- The argument, params, doesn't specify a datatype. In Python, variables are never explicitly typed. Python figures out what type a variable is and keeps track of it internally.
+		VBScript and Python are dynamically typed, because they figure out what type a variable is when you first assign it a value. Java and Python are strongly typed. 
+		If you have an integer, you can't treat it like a string without explicitly converting it.
+	2.3. Documenting Functions 文档注释
+		def buildConnectionString(params):
+		    """Build a connection string from a dictionary of parameters.
+
+		    Returns string."""		
+			Triple quotes signify a multi-line string. Everything between the start and end quotes is part of a single string, including carriage returns and other quote characters. You can use them anywhere, 
+		 but you'll see them most often used when defining a doc string.
+	2.4. Everything Is an Object
+		A function, like everything else in Python, is an object.
+		2.4.1. The Import Search Path
+			Python looks in several places when you try to import a module. Specifically, it looks in all the directories defined in sys.path. This is just a list, and you can easily view it or modify it with standard list methods.
+			eg:
+				>>> import sys                 
+				>>> sys.path                   
+				['', '/usr/local/lib/python2.2', '/usr/local/lib/python2.2/plat-linux2', 
+				'/usr/local/lib/python2.2/lib-dynload', '/usr/local/lib/python2.2/site-packages', 
+				'/usr/local/lib/python2.2/site-packages/PIL', '/usr/local/lib/python2.2/site-packages/piddle']
+				>>> sys                        
+				<module 'sys' (built-in)>
+				>>> sys.path.append('/my/new/path') 
+		2.4.2. What's an Object?
+				Everything in Python is an object, and almost everything has attributes and methods. All functions have a built-in attribute __doc__, which returns the doc string defined in the function's source code. 
+			The sys module is an object which has (among other things) an attribute called path. And so forth.
+				Lists are objects. Functions are objects. Even modules are objects.
+	2.5. Indenting Code 代码缩进
+			Python functions have no explicit begin or end, and no curly braces to mark where the function code starts and stops. The only delimiter(定界符) is a colon (:) and the indentation of the code itself.
+			Code blocks are defined by their indentation. By "code block", I mean functions, if statements, for loops, while loops, and so forth. Indenting starts a block and unindenting ends it. 
+		There are no explicit braces, brackets, or keywords. This means that whitespace is significant, and must be consistent.
+		eg:
+			def fib(n):                   
+			    print 'n =', n            
+			    if n > 1:                 
+				return n * fib(n - 1)
+			    else:                     
+				print 'end of the line'
+				return 1
+	2.6. Testing Modules
+			Python modules are objects and have several useful attributes.
+			Here's an example that uses the if __name__ trick.
+				if __name__ == "__main__":
+			Modules are objects, and all modules have a built-in attribute __name__. A module's __name__ depends on how you're using the module. If you import the module, then __name__ is the module's filename, 
+		 without a directory path or file extension. But you can also run the module directly as a standalone program, in which case __name__ will be a special default value, __main__：
+				>>> import odbchelper
+				>>> odbchelper.__name__
+				'odbchelper'.
+		Knowing this, you can design a test suite for your module within the module itself by putting it in this if statement. When you run the module directly, __name__ is __main__, so the test suite executes. 
+		When you import the module, __name__ is something else, so the test suite is ignored. This makes it easier to develop and debug new modules before integrating them into a larger program.
+3. Native Datatypes
+	3.1. Introducing Dictionaries
+		One of Python's built-in datatypes is the dictionary, which defines one-to-one relationships between keys and values.
+		COMMENT: A dictionary in Python is like an instance of the Hashtable class in Java.
+		3.1.1. Defining Dictionaries
+			>>> d = {"server":"mpilgrim", "database":"master"} 
+			>>> d
+			{'server': 'mpilgrim', 'database': 'master'}
+			>>> d["server"]                                    
+			'mpilgrim'
+			>>> d["database"]                                  
+			'master'
+			>>> d["mpilgrim"]         
+			Traceback (innermost last):
+			  File "<interactive input>", line 1, in ?
+			KeyError: mpilgrim			
+				- You can get values by key, but you can't get keys by value. So d["server"] is 'mpilgrim', but d["mpilgrim"] raises an exception, because 'mpilgrim' is not a key.
+				or to use get method,it will return empty than error.
+		3.1.2. Modifying Dictionaries
+			Example 3.2. Modifying a Dictionary
+				>>> d
+				{'server': 'mpilgrim', 'database': 'master'}
+				>>> d["database"] = "pubs" 
+				>>> d
+				{'server': 'mpilgrim', 'database': 'pubs'}
+				>>> d["uid"] = "sa"        
+				>>> d
+				{'server': 'mpilgrim', 'uid': 'sa', 'database': 'pubs'}	
+					- Dictionaries have no concept of order among elements. It is incorrect to say that the elements are “out of order”; they are simply unordered. 
+					This is an important distinction that will annoy you when you want to access the elements of a dictionary in a specific, repeatable order (like alphabetical order by key). 
+					There are ways of doing this, but they're not built into the dictionary.
+
+			When working with dictionaries, you need to be aware that dictionary keys are case-sensitive.
+
+			Example 3.3. Dictionary Keys Are Case-Sensitive
+				>>> d = {}
+				>>> d["key"] = "value"
+				>>> d["key"] = "other value" 
+				>>> d
+				{'key': 'other value'}
+				>>> d["Key"] = "third value" 
+				>>> d
+				{'Key': 'third value', 'key': 'other value'}
+
+			Example 3.4. Mixing Datatypes in a Dictionary
+				>>> d
+				{'server': 'mpilgrim', 'uid': 'sa', 'database': 'pubs'}
+				>>> d["retrycount"] = 3 
+				>>> d
+				{'server': 'mpilgrim', 'uid': 'sa', 'database': 'master', 'retrycount': 3}
+				>>> d[42] = "douglas"   
+				>>> d
+				{'server': 'mpilgrim', 'uid': 'sa', 'database': 'master',
+				42: 'douglas', 'retrycount': 3}
+		3.1.3. Deleting Items From Dictionaries
+			Example 3.5. Deleting Items from a Dictionary
+				>>> d
+				{'server': 'mpilgrim', 'uid': 'sa', 'database': 'master',
+				42: 'douglas', 'retrycount': 3}
+				>>> del d[42] 
+				>>> d
+				{'server': 'mpilgrim', 'uid': 'sa', 'database': 'master', 'retrycount': 3}
+				>>> d.clear() 
+				>>> d
+				{}		
+	3.2. Introducing Lists
+			Lists are Python's workhorse datatype. If your only experience with lists is arrays in Visual Basic or (God forbid) the datastore in Powerbuilder, brace yourself for Python lists.
+			A list in Python is much more than an array in Java (although it can be used as one if that's really all you want out of life). A better analogy would be to the ArrayList class, 
+		which can hold arbitrary objects and can expand dynamically as new items are added.
+		3.2.1. Defining Lists
+			Example 3.6. Defining a List
+				>>> li = ["a", "b", "mpilgrim", "z", "example"] 
+				>>> li
+				['a', 'b', 'mpilgrim', 'z', 'example']
+				>>> li[0]                                       
+				'a'
+				>>> li[4]                                       
+				'example'		
+				- A list is an ordered set of elements enclosed in square brackets.
+				- A list can be used like a zero-based array. The first element of any non-empty list is always li[0].
+				- The last element of this five-element list is li[4], because lists are always zero-based.
+			
+			Example 3.7. Negative List Indices
+				>>> li
+				['a', 'b', 'mpilgrim', 'z', 'example']
+				>>> li[-1] 
+				'example'
+				>>> li[-3] 
+				'mpilgrim'
+					- A negative index accesses elements from the end of the list counting backwards. The last element of any non-empty list is always li[-1].
+					- If the negative index is confusing to you, think of it this way: li[-n] == li[len(li) - n]. So in this list, li[-3] == li[5 - 3] == li[2].
+			
+			Example 3.8. Slicing a List
+				>>> li
+				['a', 'b', 'mpilgrim', 'z', 'example']
+				>>> li[1:3]  
+				['b', 'mpilgrim']
+				>>> li[1:-1] 
+				['b', 'mpilgrim', 'z']
+				>>> li[0:3]  
+				['a', 'b', 'mpilgrim']		
+					- You can get a subset of a list, called a “slice”, by specifying two indices. The return value is a new list containing all the elements of the list, in order, starting with the first slice index (in this case li[1]), up to but not including the second slice index (in this case li[3]).
+					- Slicing works if one or both of the slice indices is negative. If it helps, you can think of it this way: reading the list from left to right, the first slice index specifies the first element you want, and the second slice index specifies the first element you don't want. The return value is everything in between.
+					- Lists are zero-based, so li[0:3] returns the first three elements of the list, starting at li[0], up to but not including li[3].
+				
+			Example 3.9. Slicing Shorthand
+				>>> li
+				['a', 'b', 'mpilgrim', 'z', 'example']
+				>>> li[:3] 
+				['a', 'b', 'mpilgrim']
+				>>> li[3:]  
+				['z', 'example']
+				>>> li[:]  
+				['a', 'b', 'mpilgrim', 'z', 'example']
+					- If the left slice index is 0, you can leave it out, and 0 is implied. So li[:3] is the same as li[0:3] from Example 3.8, “Slicing a List”.
+					- Similarly, if the right slice index is the length of the list, you can leave it out. So li[3:] is the same as li[3:5], because this list has five elements.
+					- Note the symmetry here. In this five-element list, li[:3] returns the first 3 elements, and li[3:] returns the last two elements. In fact, li[:n] will always return the first n elements, and li[n:] will return the rest, regardless of the length of the list.
+					- If both slice indices are left out, all elements of the list are included. But this is not the same as the original li list; it is a new list that happens to have all the same elements. li[:] is shorthand for making a complete copy of a list.					
+		3.2.2. Adding Elements to Lists
+			Example 3.10. Adding Elements to a List
+				>>> li
+				['a', 'b', 'mpilgrim', 'z', 'example']
+				>>> li.append("new")               
+				>>> li
+				['a', 'b', 'mpilgrim', 'z', 'example', 'new']
+				>>> li.insert(2, "new")            
+				>>> li
+				['a', 'b', 'new', 'mpilgrim', 'z', 'example', 'new']
+				>>> li.extend(["two", "elements"]) 
+				>>> li
+				['a', 'b', 'new', 'mpilgrim', 'z', 'example', 'new', 'two', 'elements']
+					- append adds a single element to the end of the list.
+					- insert inserts a single element into a list. The numeric argument is the index of the first element that gets bumped out of position. Note that list elements do not need to be unique; there are now two separate elements with the value 'new', li[2] and li[6].
+					- extend concatenates lists. Note that you do not call extend with multiple arguments; you call it with one argument, a list. In this case, that list has two elements.
+		3.2.3. Searching Lists
+			Example 3.12. Searching a List
+				>>> li
+				['a', 'b', 'new', 'mpilgrim', 'z', 'example', 'new', 'two', 'elements']
+				>>> li.index("example") 
+				5
+				>>> li.index("new")     
+				2
+				>>> li.index("c")       
+				Traceback (innermost last):
+				  File "<interactive input>", line 1, in ?
+				ValueError: list.index(x): x not in list
+				>>> "c" in li           
+				False
+					- index finds the first occurrence of a value in the list and returns the index.
+					- index finds the first occurrence of a value in the list. In this case, 'new' occurs twice in the list, in li[2] and li[6], but index will return only the first index, 2.
+					- If the value is not found in the list, Python raises an exception. This is notably different from most languages, which will return some invalid index. 
+					While this may seem annoying, it is a good thing, because it means your program will crash at the source of the problem, rather than later on when you try to use the invalid index.
+					- To test whether a value is in the list, use in, which returns True if the value is found or False if it is not.
+
+					- Before version 2.2.1, Python had no separate boolean datatype. To compensate for this, Python accepted almost anything in a boolean context (like an if statement), 
+					according to the following rules:
+						0 is false; all other numbers are true.
+						An empty string ("") is false, all other strings are true.
+						An empty list ([]) is false; all other lists are true.
+						An empty tuple (()) is false; all other tuples are true.
+						An empty dictionary ({}) is false; all other dictionaries are true.
+					These rules still apply in Python 2.2.1 and beyond, but now you can also use an actual boolean, which has a value of True or False. Note the capitalization; these values, like everything else in Python, 
+					are case-sensitive.
+		3.2.4. Deleting List Elements
+			Example 3.13. Removing Elements from a List
+				>>> li
+				['a', 'b', 'new', 'mpilgrim', 'z', 'example', 'new', 'two', 'elements']
+				>>> li.remove("z")   
+				>>> li
+				['a', 'b', 'new', 'mpilgrim', 'example', 'new', 'two', 'elements']
+				>>> li.remove("new") 
+				>>> li
+				['a', 'b', 'mpilgrim', 'example', 'new', 'two', 'elements']
+				>>> li.remove("c")   
+				Traceback (innermost last):
+				  File "<interactive input>", line 1, in ?
+				ValueError: list.remove(x): x not in list
+				>>> li.pop()         
+				'elements'
+				>>> li
+				['a', 'b', 'mpilgrim', 'example', 'new', 'two']
+					- remove removes the first occurrence of a value from a list.
+					- remove removes only the first occurrence of a value. In this case, 'new' appeared twice in the list, but li.remove("new") removed only the first occurrence.
+					- If the value is not found in the list, Python raises an exception. This mirrors the behavior of the index method.
+					- pop is an interesting beast. It does two things: it removes the last element of the list, and it returns the value that it removed. Note that this is different from li[-1], 
+					which returns a value but does not change the list, and different from li.remove(value), which changes the list but does not return a value.
+		3.2.5. Using List Operators
+			Example 3.14. List Operators
+				>>> li = ['a', 'b', 'mpilgrim']
+				>>> li = li + ['example', 'new'] 
+				>>> li
+				['a', 'b', 'mpilgrim', 'example', 'new']
+				>>> li += ['two']                
+				>>> li
+				['a', 'b', 'mpilgrim', 'example', 'new', 'two']
+				>>> li = [1, 2] * 3              
+				>>> li
+				[1, 2, 1, 2, 1, 2]
+					- Lists can also be concatenated with the + operator. list = list + otherlist has the same result as list.extend(otherlist). But the + operator returns a new (concatenated) list as a value, 
+					whereas extend only alters an existing list. This means that extend is faster, especially for large lists.
+					- Python supports the += operator. li += ['two'] is equivalent to li.extend(['two']). The += operator works for lists, strings, and integers, and it can be overloaded to work for user-defined classes 
+					as well. (More on classes in Chapter 5.)
+					- The * operator works on lists as a repeater. li = [1, 2] * 3 is equivalent to li = [1, 2] + [1, 2] + [1, 2], which concatenates the three lists into one.
+	3.3. Introducing Tuples
+		A tuple is an immutable list. A tuple can not be changed in any way once it is created.
+
+		Example 3.15. Defining a tuple
+			>>> t = ("a", "b", "mpilgrim", "z", "example") 
+			>>> t
+			('a', 'b', 'mpilgrim', 'z', 'example')
+			>>> t[0]                                       
+			'a'
+			>>> t[-1]                                      
+			'example'
+			>>> t[1:3]                                     
+			('b', 'mpilgrim')
+				- A tuple is defined in the same way as a list, except that the whole set of elements is enclosed in parentheses instead of square brackets.
+				- The elements of a tuple have a defined order, just like a list. Tuples indices are zero-based, just like a list, so the first element of a non-empty tuple is always t[0].
+				- Negative indices count from the end of the tuple, just as with a list.
+				- Slicing works too, just like a list. Note that when you slice a list, you get a new list; when you slice a tuple, you get a new tuple.
+
+		Example 3.16. Tuples Have No Methods
+			>>> t
+			('a', 'b', 'mpilgrim', 'z', 'example')
+			>>> t.append("new")    
+			Traceback (innermost last):
+			  File "<interactive input>", line 1, in ?
+			AttributeError: 'tuple' object has no attribute 'append'
+			>>> t.remove("z")      
+			Traceback (innermost last):
+			  File "<interactive input>", line 1, in ?
+			AttributeError: 'tuple' object has no attribute 'remove'
+			>>> t.index("example") 
+			Traceback (innermost last):
+			  File "<interactive input>", line 1, in ?
+			AttributeError: 'tuple' object has no attribute 'index'
+			>>> "z" in t           
+			True
+				- You can't add elements to a tuple. Tuples have no append or extend method.
+				- You can't remove elements from a tuple. Tuples have no remove or pop method.
+				- You can't find elements in a tuple. Tuples have no index method.
+				- You can, however, use in to see if an element exists in the tuple.
+
+		So what are tuples good for?
+      			- Tuples are faster than lists. If you're defining a constant set of values and all you're ever going to do with it is iterate through it, use a tuple instead of a list.
+			- It makes your code safer if you “write-protect” data that does not need to be changed. Using a tuple instead of a list is like having an implied assert statement 
+			that shows this data is constant, and that special thought (and a specific function) is required to override that.
+			- Remember that I said that dictionary keys can be integers, strings, and “a few other types”? Tuples are one of those types. Tuples can be used as keys in a dictionary, 
+			but lists can't be used this way.Actually, it's more complicated than that. Dictionary keys must be immutable. Tuples themselves are immutable, but if you have a tuple of lists, 
+			that counts as mutable and isn't safe to use as a dictionary key. Only tuples of strings, numbers, or other dictionary-safe tuples can be used as dictionary keys.
+			- Tuples are used in string formatting, as you'll see shortly.
+
+			Tuples can be converted into lists, and vice-versa. The built-in tuple function takes a list and returns a tuple with the same elements, and the list function takes a tuple and returns a list. 
+		In effect, tuple freezes a list, and list thaws a tuple.
+
+	3.4. Declaring variables
+			Python has local and global variables like most other languages, but it has no explicit variable declarations. Variables spring into existence by being assigned a value, 
+		and they are automatically destroyed when they go out of scope.
+
+		Example 3.17. Defining the myParams Variable
+			if __name__ == "__main__":
+			    myParams = {"server":"mpilgrim", \
+					"database":"master", \
+					"uid":"sa", \
+					"pwd":"secret" \
+					}
+			Notice the indentation. An if statement is a code block and needs to be indented just like a function.
+			Also notice that the variable assignment is one command split over several lines, with a backslash (“\”) serving as a line-continuation marker.
+			When a command is split among several lines with the line-continuation marker (“\”), the continued lines can be indented in any manner; Python's normally stringent indentation rules do not apply. 
+		If your Python IDE auto-indents the continued line, you should probably accept its default unless you have a burning reason not to.
+			Python will not allow you to reference a variable that has never been assigned a value; trying to do so will raise an exception.
+		
+		3.4.1. Referencing Variables
+			Example 3.18. Referencing an Unbound Variable
+				>>> x
+				Traceback (innermost last):
+				  File "<interactive input>", line 1, in ?
+				NameError: There is no variable named 'x'
+				>>> x = 1
+				>>> x
+				1
+				You will thank Python for this one day.
+
+		3.4.2. Assigning Multiple Values at Once
+			One of the cooler programming shortcuts in Python is using sequences to assign multiple values at once.
+			Example 3.19. Assigning multiple values at once
+				>>> v = ('a', 'b', 'e')
+				>>> (x, y, z) = v     
+				>>> x
+				'a'
+				>>> y
+				'b'
+				>>> z
+				'e'
+					- v is a tuple of three elements, and (x, y, z) is a tuple of three variables. Assigning one to the other assigns each of the values of v to each of the variables, in order.
+				This has all sorts of uses. I often want to assign names to a range of values. In C, you would use enum and manually list each constant and its associated value, which 
+				seems especially tedious when the values are consecutive(连续的，连贯的). In Python, you can use the built-in range function with multi-variable assignment to quickly assign consecutive values.
+	
+			Example 3.20. Assigning Consecutive Values
+				>>> range(7)                                                                    
+				[0, 1, 2, 3, 4, 5, 6]
+				>>> (MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY) = range(7) 
+				>>> MONDAY                                                                      
+				0
+				>>> TUESDAY
+				1
+				>>> SUNDAY
+				6
+					- The built-in range function returns a list of integers. In its simplest form, it takes an upper limit and returns a zero-based list counting up to but not including the upper limit. 
+					(If you like, you can pass other parameters to specify a base other than 0 and a step other than 1. You can print range.__doc__ for details.)
+					- MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, and SUNDAY are the variables you're defining. (This example came from the calendar module, 
+					a fun little module that prints calendars, like the UNIX program cal. The calendar module defines integer constants for days of the week.)
+					- Now each variable has its value: MONDAY is 0, TUESDAY is 1, and so forth.
+
+       3.5. Formatting Strings
+		Python supports formatting values into strings. Although this can include very complicated expressions, the most basic usage is to insert values into a string with the %s placeholder.
+		Example 3.21. Introducing String Formatting
+			>>> k = "uid"
+			>>> v = "sa"
+			>>> "%s=%s" % (k, v) 
+			'uid=sa'
+				- The whole expression evaluates to a string. The first %s is replaced by the value of k; the second %s is replaced by the value of v. All other characters in the string (
+				in this case, the equal sign) stay as they are.
+		Example 3.22. String Formatting vs. Concatenating
+			>>> uid = "sa"
+			>>> pwd = "secret"
+			>>> print pwd + " is not a good password for " + uid      
+			secret is not a good password for sa
+			>>> print "%s is not a good password for %s" % (pwd, uid) 
+			secret is not a good password for sa
+			>>> userCount = 6
+			>>> print "Users connected: %d" % (userCount, )            
+			Users connected: 6
+			>>> print "Users connected: " + userCount                 
+			Traceback (innermost last):
+			  File "<interactive input>", line 1, in ?
+			TypeError: cannot concatenate 'str' and 'int' objects
+				- + is the string concatenation operator.
+				- In this trivial case, string formatting accomplishes the same result as concatentation.
+				- (userCount, ) is a tuple with one element. Yes, the syntax is a little strange, but there's a good reason for it: it's unambiguously a tuple. In fact, you can always include a comma after 
+				the last element when defining a list, tuple, or dictionary, but the comma is required when defining a tuple with one element. If the comma weren't required, Python wouldn't know whether
+				(userCount) was a tuple with one element or just the value of userCount.
+				- String formatting works with integers by specifying %d instead of %s.
+				- Trying to concatenate a string with a non-string raises an exception. Unlike string formatting, string concatenation works only when everything is already a string.
+		Example 3.23. Formatting Numbers
+			>>> print "Today's stock price: %f" % 50.4625   
+			50.462500
+			>>> print "Today's stock price: %.2f" % 50.4625 
+			50.46
+			>>> print "Change since yesterday: %+.2f" % 1.5 
+			+1.50
+				- The %f string formatting option treats the value as a decimal, and prints it to six decimal places.
+				- The ".2" modifier of the %f option truncates the value to two decimal places.
+				- You can even combine modifiers. Adding the + modifier displays a plus or minus sign before the value. Note that the ".2" modifier is still in place, and is padding the value to exactly two decimal places.
+
+	3.6. Mapping Lists
+		One of the most powerful features of Python is the list comprehension, which provides a compact way of mapping a list into another list by applying a function to each of the elements of the list.
+
+		Example 3.24. Introducing List Comprehensions
+			>>> li = [1, 9, 8, 4]
+			>>> [elem*2 for elem in li]      
+			[2, 18, 16, 8]
+			>>> li                           
+			[1, 9, 8, 4]
+			>>> li = [elem*2 for elem in li] 
+			>>> li
+			[2, 18, 16, 8]
+				- To make sense of this, look at it from right to left. li is the list you're mapping. Python loops through li one element at a time, temporarily assigning the value of each element to the variable elem. Python then applies the function elem*2 and appends that result to the returned list.
+				- Note that list comprehensions do not change the original list.
+				- It is safe to assign the result of a list comprehension to the variable that you're mapping. Python constructs the new list in memory, and when the list comprehension is complete, it assigns the result to the variable.
+			Here are the list comprehensions in the buildConnectionString function that you declared in Chapter 2:
+
+			["%s=%s" % (k, v) for k, v in params.items()]
+			First, notice that you're calling the items function of the params dictionary. This function returns a list of tuples of all the data in the dictionary.
+
+		Example 3.25. The keys, values, and items Functions
+			>>> params = {"server":"mpilgrim", "database":"master", "uid":"sa", "pwd":"secret"}
+			>>> params.keys()   
+			['server', 'uid', 'database', 'pwd']
+			>>> params.values() 
+			['mpilgrim', 'sa', 'master', 'secret']
+			>>> params.items()  
+			[('server', 'mpilgrim'), ('uid', 'sa'), ('database', 'master'), ('pwd', 'secret')]
+				- The keys method of a dictionary returns a list of all the keys. The list is not in the order in which the dictionary was defined (remember that elements in a dictionary are unordered), but it is a list.
+				- The values method returns a list of all the values. The list is in the same order as the list returned by keys, so params.values()[n] == params[params.keys()[n]] for all values of n.
+				- The items method returns a list of tuples of the form (key, value). The list contains all the data in the dictionary.
+		
+		Example 3.26. List Comprehensions in buildConnectionString, Step by Step
+			>>> params = {"server":"mpilgrim", "database":"master", "uid":"sa", "pwd":"secret"}
+			>>> params.items()
+			[('server', 'mpilgrim'), ('uid', 'sa'), ('database', 'master'), ('pwd', 'secret')]
+			>>> [k for k, v in params.items()]                
+			['server', 'uid', 'database', 'pwd']
+			>>> [v for k, v in params.items()]                
+			['mpilgrim', 'sa', 'master', 'secret']
+			>>> ["%s=%s" % (k, v) for k, v in params.items()] 
+			['server=mpilgrim', 'uid=sa', 'database=master', 'pwd=secret']
+	
+	3.7. Joining Lists and Splitting Strings
+		3.7.1. Historical Note on String Methods
+			Example 3.27. Output of odbchelper.py
+				>>> params = {"server":"mpilgrim", "database":"master", "uid":"sa", "pwd":"secret"}
+				>>> ["%s=%s" % (k, v) for k, v in params.items()]
+				['server=mpilgrim', 'uid=sa', 'database=master', 'pwd=secret']
+				>>> ";".join(["%s=%s" % (k, v) for k, v in params.items()])
+				'server=mpilgrim;uid=sa;database=master;pwd=secret'
