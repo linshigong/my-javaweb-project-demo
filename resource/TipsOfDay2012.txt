@@ -11,6 +11,12 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* java dns 缓存
+	%JAVA_HOME/jre/lib/security/java.security
+	dns默认缓存30s，负值表示永久缓存，修改此值可能导致下面攻击：
+		DNS spoofing attack/Cache poisoning attacks DNS欺骗攻击
+		from: http://en.wikipedia.org/wiki/DNS_cache_poisoning
+			
 * 前端
 	js测试工具：testacular	https://github.com/vojtajina/testacular/wiki
 * 服务器端的无阻塞编程
@@ -21,8 +27,10 @@ google 检索 apache： site:*.apache.org 高级搜索
 	实现复杂性与性能的兼顾考虑
 
 * SSL
-	SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
-	TLS与SSL在传输层对网络连接进行加密。
+	- SSL协议详解 http://kb.cnblogs.com/page/162080/
+	- SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
+		TLS与SSL在传输层对网络连接进行加密。
+	
 * 格式化输出
 	java提供工具类方便格式化输出
 
@@ -336,7 +344,60 @@ google 检索 apache： site:*.apache.org 高级搜索
 	from: http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 
 * 代码review辅助工具 * review board
-	
+	- Code Review Tool
+		Install Code Review Tool (only once):
+		Open ​http://reviewboard.dev.sd.aliyun.com/ReviewBoard/ .
+		Register to create your account.
+		Use svn up to sync the latest code. The should be a bin directory under the repository root containing post-review and review.tmpl.
+		Use cp review.tmpl review to create your version of review script. Modify review file by finding --username=your-name and replacing your-name with your account name registered in step 1. NOTE: Don't delete the space right after your name, otherwise you will encounter problem when you run review script with parameters.
+		Modify your ~/.bashrc and add these lines:
+			#export LANG=en_US.UTF-8
+			#export LANGUAGE=en_US.UTF-8
+			#export LC_ALL=en_US.UTF-8
+			export PATH=$PATH:/<your repository path>/bin
+		Open a new console to start using reviewboard.
+		Use su to change to root account
+		rpm -ivh ​http://yum.ops.aliyun-inc.com/application/5Server/x86_64/apsara/python-simplejson-2.0.3-3.el5.x86_64.rpm
+		Use exit back to your account
+		Review steps:
+		Modify code.
+		If there is new file created, type svn add <file-name>. Otherwise, the content will not be covered in the laterly generated diff file.
+		Run review to submit a review item to Review Board.
+		Use browser to login Review Board and find your review item draft.
+		Add summary, reviewers, description for your item and publish.
+		Waiting for review result and check in after approval.
+		Apply diff to your local source tree:
+		Start with a clean source tree. If you are editing some files in the current tree, use "svn co" to create another tree for code review.
+		Click "Download Diff" in the Review Board UI. Save the diff file to your local disk.
+		In the project root directory, use "patch -i diff_file -p2" to apply diff.
+		(Notes: "-p2" will strip 2 leading slashes from each file name found in the diff_file. For example, supposing the file name in the diff_file was "/trunk/include/apsara/common/safeguard.h", setting -p2 gives "include/apsara/common/safeguard.h", -p0 gives the entire file name unmodified.)
+		(Tips: su and apt-get install patch and exit if get 'patch: command not found' prompt)
+		(Tips: please ensure the diff is created under the root directory of Apsara source code)
+		(Tisp: -pNum means skip Num Slashes when do the patch, please refer to "man patch")
+		Now your local source tree is modified according to the diff.
+		When finished, use "svn revert . -R" (Do not doubt there is a flaw on your screen between "revert" and "-R". That is exact a dot indicating where the project root is) to revert changes.
+		NOTE: This removes all your local changes on this patched copy of the project except for those newly created file by patch. So be sure not to do revert on your own working copy !
+		NOTE:
+		When you modified code according to a review comment, please use "add comment" to mark it as "done". If you made a different change or think the comment is wrong, also use "add comment" to take note, e.g. "done using a different implementation: ..." or "this is not a bug, because ...".
+		When you finished modifying code, please update the review request with new code. Please don't create a new review request. Run 'review -r reviewNum' to update the previous request.
+		3. Remember to close review requests (mark as 'submitted') when the code has been checked in.
+
+		Manual steps if you don't use above script
+		cd to your apsara root folder. e.g /home/<alias>/apsara
+		CMD svn diff > mychange.diff
+		login ​http://reviewboard.dev.sd.aliyun.com/ReviewBoard/
+		click "New Review Request"
+		in Base Diff path, input "trunk"
+		in diff, browse and select diff file you just created.
+		click "Create Review Request"
+		in next page, input title for your review request, usually we use [Project]-[component name] as prefix, e.g: AOS-Fuxi ir AUC-XXXX.
+		select people you want to send review to. then publish your review request.
+		How to enable syntax highlighting for your code review
+		Login your review board site.
+		Navigate into my account page by the url ​http://reviewboard.dev.sd.aliyun.com/ReviewBoard/account/preferences/ .
+		Choose the checkbox "Enable syntax highlighting in the diff viewer" and save it. The default status is unchecked.
+		NOTE: If enabled, syntax highlighting will be used in the Diff Viewer. This offers improved readability of diffs, but takes longer time to render.	
+		from: http://wiki.aliyun-inc.com/projects/apsara/wiki/ApsaraDevEnv#no1
 	- 
 		reviewboard.
 			Take the pain out of code review
@@ -370,7 +431,8 @@ google 检索 apache： site:*.apache.org 高级搜索
 * Megastore:
 	Providing Scalable, Highly Available
 Storage for Interactive Services
-* jmx
+* jmx 监控 java监控 性能监控 性能
+	java，javaee程序监控插件：http://code.google.com/p/javamelody/
 
 * tomcat6			 tomcat源码分析
 	- boottrap
@@ -2997,6 +3059,8 @@ search in index find pdf
 		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
  * spring
+	- Log4jConfigListener 
+		log4j配置动态加载，Spring默认刷新Log4j配置文件的间隔,单位为millisecond
 	- spring抽象类注入，spring接口注入有区别
 		抽象类注入，子类需要显示的定义parent属性，指向到抽象类，否则抽象类中注入的属性不能从子类中获取。
 	- spring通过aop拦截器，拦截自定义注解所注解的方法 参考day52
@@ -3498,7 +3562,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		2).使用注解 org.junit.After 修饰用于注销 Fixture 的方法。
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
-* test * mock  * jmock		       * 单元测试 * 集成测试
+* test * mock  * jmock		       * 单元测试 * 集成测试		 * jtester
 	- jtester mock 自身方法，私有方法等
 		------
 			new MockUp<AbstractExecuteAction>() {
@@ -3856,7 +3920,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
-	- mappin文件，标签属性的意义整理：     there is a hole if u ignore this^^ 
+	- mapping文件，标签属性的意义整理：     there is a trick if u ignore this^^ 
 		比如<select></select>标签中：
 			resultMap	  自定义返回结果bean的map映射定义，通过map定义将结果集映射为bean	 ,将查询结果集映射到不同的对象
 				返回对象为自定义的class
@@ -3975,6 +4039,18 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- 用户被拒绝
+		Access denied for user 'test'@'10.1.171.195'
+		注意此处，'test'@'10.1.171.195整个对mysql来说是一个用户标识，不要纠结那个IP而误认为mysql连接到错误的IP上去了(配置都是对的啊???!!!)'
+	- mysql注释
+		create table xxx (
+			xxx varchar(32) NOT NULL COMMENT '@desc xxx',
+			xxx tinyint(1) unsigned DEFAULT '1' NOT NULL COMMENT '@descxxx',
+			PRIMARY KEY(xxx,xxx)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='xxx';
+		字段注释
+		表注释
+
 	- 事务隔离级别
 		mysql默认事务隔离级别：
 			mysql>help ISOLATION
@@ -4391,6 +4467,19 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- maven jvm参数配置 配置jvm    maven运行参数配置
+		maven默认的jvm配置，比如内存不能满足需要，可能导致错误，如：java.lang.OutOfMemoryError: PermGen space问题
+		下面摘自网络，可参考：
+		-------
+		　有时候我们需要设定maven环境下的JVM参数，以便通过maven执行的命令或启动的系统能得到它们需要的参数设定。比如：当我们使用jetty:run启动jetty服务器时，在进行热部署时会经常发生:java.lang.OutOfMemoryError: PermGen space问题,这时我们需要增大JVM参数MaxPermSize的值。再者，当我们需要进行远程调试时，也需要设置监听端口。maven配置jvm参数的地方是%M2_HOME%/bin/mvn.bat文件，这是启动Maven的脚本文件，在该文件中你能看到有一行注释为：@REM set MAVEN_OPTS=-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000．通过添加set MAVEN_OPTS可以为maven设定jvm参数了。比如：
+		　　1.建立远程调试，端口为:4000的设定为：
+		　　set MAVEN_OPTS=-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=4000
+		注意：suspend最好设定为n.设定上述参数后，在eclipse中新建远程调试，设置端口为4000，这样通过jetty:run启动系统时就可以进行远程调试了。
+		　　2.解决自动热部署时java.lang.OutOfMemoryError: PermGen space问题解决这一问题只需要增大PermGen区，默认为 64m，设置方法为：
+		　　set MAVEN_OPTS=-XX:MaxPermSize=128M
+		-------
+		from：http://blog.csdn.net/bluishglc/article/details/6310071
+
 	- maven clean时，linux中若文件被ln连接引用，需要删除引用（如target中的war包被引用）
 		可重新svn co
 	- 发布jar到nexus
@@ -4558,7 +4647,83 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
-	- 
+	- List comprehension
+		python最强大的的特性之一
+			A list comprehension is a syntactic construct available in some programming languages for creating a list based on existing lists. It follows the form of the mathematical 
+		set-builder notation (set comprehension) as distinct from the use of map and filter functions.
+		eg of list comprehension:
+			["%s=%s" % (k, v) for k, v in params.items()]
+
+			>>> li = [1, 9, 8, 4]
+			>>> [elem*2 for elem in li]
+			[2, 18, 16, 8]
+
+	- python类型转换、数值操作
+		类型转换
+		Code highlighting produced by Actipro CodeHighlighter (freeware)http://www.CodeHighlighter.com/--> 1 
+		函数                      描述
+		 int(x [,base ])         将x转换为一个整数
+		 long(x [,base ])        将x转换为一个长整数
+		 float(x )               将x转换到一个浮点数
+		 complex(real [,imag ])  创建一个复数
+		 str(x )                 将对象 x 转换为字符串
+		 repr(x )                将对象 x 转换为表达式字符串
+		 eval(str )              用来计算在字符串中的有效Python表达式,并返回一个对象
+		 tuple(s )               将序列 s 转换为一个元组
+		 list(s )                将序列 s 转换为一个列表
+		 chr(x )                 将一个整数转换为一个字符
+		 unichr(x )              将一个整数转换为Unicode字符
+		 ord(x )                 将一个字符转换为它的整数值
+		 hex(x )                 将一个整数转换为一个十六进制字符串
+		 oct(x )                 将一个整数转换为一个八进制字符串
+
+		序列操作
+		Code highlighting produced by Actipro CodeHighlighter (freeware)http://www.CodeHighlighter.com/--> 1 
+		操作                      描述
+		 s + r                   序列连接
+		 s * n , n * s           s的 n 次拷贝,n为整数
+		 s % d                   字符串格式化(仅字符串)
+		 s[i]                    索引
+		 s[i :j ]                切片
+		 x in s , x not in s     从属关系
+		 for x in s :            迭代
+		 len(s)                  长度
+		 min(s)                  最小元素
+		 max(s)                  最大元素
+		 s[i ] = x               为s[i]重新赋值
+		 s[i :j ] = r            将列表片段重新赋值
+		 del s[i ]               删除列表中一个元素
+		 del s[i :j ]            删除列表中一个片段
+
+		数值操作
+		Code highlighting produced by Actipro CodeHighlighter (freeware)http://www.CodeHighlighter.com/--> 1 
+		x << y                  左移
+		 x >> y                  右移
+		 x & y                   按位与
+		 x | y                   按位或
+		 x ^ y                   按位异或 (exclusive or)
+		 ~x                      按位翻转
+		 x + y                   加
+		 x - y                   减
+		 x * y                   乘
+		 x / y                   常规除
+		 x // y                  地板除
+		 x ** y                  乘方 (xy )
+		 x % y                   取模 (x mod y )
+		 -x                      改变操作数的符号位
+		 +x                      什么也不做
+		 ~x                      ~x=-(x+1)
+		 abs(x )                 绝对值
+		 divmod(x ,y )           返回 (int(x / y ), x % y )
+		 pow(x ,y [,modulo ])    返回 (x ** y ) x % modulo
+		 round(x ,[n])           四舍五入，n为小数点位数
+		 x < y                   小于
+		 x > y                   大于
+		 x == y                  等于
+		 x != y                  不等于(与<>相同)
+		 x >= y                  大于等于
+		 x <= y                  小于等于
+
 	- 教程 快速入门 
 		http://www.diveintopython.net/	Dive Into Python
 
@@ -13200,7 +13365,7 @@ day138 Friday, September 21, 2012
 		数据库部分部分应用读的压力大于写的压力，通过mysql的主从复制，读写分离实现db层的高可用，高并发。
 	* mysql
 		主从复制，
-		主备切换/failover，
+		主备切换/failover，    通过vip漂移（如：keepalived）
 		读写分离
 		
 	
@@ -13709,6 +13874,7 @@ day151 Tuesday, October 16, 2012
 			
 4. BSS 业务
 	快照系统: 虚拟机的快照系统
+	BlockStorageServices
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day152 Wednesday, October 17, 2012
@@ -14525,7 +14691,7 @@ day173 Tuesday, November 20, 2012
 			at com.aliyun.houyi.util.HttpUtil.sendRequest(HttpUtil.java:48)
 			根据错误，是找不到对应的方法。？
 
-		连接复用与多线程并发问题：
+		连接复用与多线程并发问题：连接复用，连接保持，connection persistence
 			可以通过httpclient提供的			
 	* master(java) 无状态 ，多个平级master管理一个多nc的大region
 		选型 
@@ -14737,7 +14903,7 @@ day176 Friday, November 23, 2012
 		TIME_WAIT 并不会占用很大资源的，除非受到攻击。
 		还有，如果一方send 或recv 超时，就会直接进入CLOSED 状态
 
-3. java DNS缓存 
+3. java DNS缓存  java dns * dns缓存
 	不缓存DNS		
 	-Dsun.net.inetaddr.ttl=0 -Dsun.net.inetaddr.negative.ttl=0
 
@@ -14804,7 +14970,7 @@ day177 Monday, November 26, 2012
 
 
 
-3. slbapi启动日志查看及一些warning的排除(tomat+nginx+slbapi)
+3. slbapi启动日志查看及一些warning的排除(tomat+nginx+slbapi)		  * log4j * 日志
 	tomcat日志 开发环境 linux tomcat7
 		- 权限问题导致的某些日志，临时文件夹没有访问权限（修改权限，并以admin来操作）
 		- 报maxThread这个配置找不到对应的属性（属性名错误，应该为maxThreads）
@@ -15143,5 +15309,147 @@ day181 Friday, November 30, 2012
 		UserService
 	* python
 		monitor计量重构
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day182 Monday, December 03, 2012
+
+1. 
+	* DB HA alternate problem
+	* dubbo test
+	* big region extend project
+		go on design and development
+		time to commit to QA at about 20
+	* slb v2 requirement
+
+
+2. DB HA alternate problem
+	
+	What's the problem that cause the HA Switching bettween master DB and backup DB frequently.？
+		HA architecture：
+			2Mysql(1 master,1 backup)
+			vip
+
+3. dubbo test
+	follow by readme
+	svn co http://code.alibabatech.com/svn/dubbo/trunk dubbo
+	mvn clean install -Dmaven.test.skip=false
+	... see readme doc
+	
+4. slb v2 requirement
+	commit to QA at 12/15/2012
+	requirement list: http://aone.alibaba-inc.com/aone2/req/productReq/339?_token=c849d35a-2347-4912-a520-e19b18249dbd
+	- 计量数据接口，SLB后端计量库表名修改，相应API需要修改
+		表名修改
+			这次ospf项目中，计划对monitor库的变动主要在修改表的名称，表结构没变：
+
+			haproxy_stats_${DATE} => proxy_stats_${DATE}
+			haproxy_rule_stats_${DATE} => proxy_rule_stats_${DATE}
+			haproxy_rule_hourly_stats_$DATE_MONTH => proxy_rule_hourly_stats_$DATE_MONTH
+			haproxy_daily_stats_$DATE_YEAR => proxy_daily_stats_$DATE_YEAR
+
+			对于haproxy_rule_stats_xxx的查询也需要改一下表名称了。
+
+	- API使用的httpclient的socket关闭问题。
+		使用不复用connection的方式
+	- 前端调用的参数包含非法字符(如/r/n)，导致API构造出的请求后端的URI不合法，报错：-2001,"msg":"backend service exception"
+		确保请求后端的URI格式合法，验证lb_id值的格式合法性（对lbId进行URL编码，这样）
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day183 Tuesday, December 04, 2012
+
+1. 
+	* slb v2 requirement development
+		httpclient的连接复用问题，若每次都创建连接，耗性能；超时释放
+	* 大region二期
+		设计文档再梳理，
+	* api发布小版本(分布式lock问题)
+
+			
+
+2. slb v2的httpclient3使用MultiThreadedHttpConnectionManager，复用
+	//这种方式，每次都新建连接，如果并发非常大，延迟高时，同一时间有大量请求时，是否会超过socket数上限？待验证
+	//但连接毕竟还是会回收，在达到socket最大值后，那些请求将不能被处理
+	HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager(true));
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day184 Wednesday, December 05, 2012
+
+1. 
+	* slb v2
+		补充加入需求：
+			 java启动参数设置不缓存DNS信息
+				-Dsun.net.inetaddr.ttl=0(地址不缓存) -Dsun.net.inetaddr.negative.ttl=0(域名错误信息不缓存)
+	* 大region二期
+	* python
+	* 灰度发布功能设计
+		相关的表设计，逻辑实现设计，目标为加入配置实现灰度发布。业务强耦合的问题，如何抽象为统一模型？
+
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day185 Thursday, December 06, 2012
+
+1. 
+	* big region二期再kick off
+		流量推送需求取消，在bugfix201211项目中做
+		快照和image都会同步到其他region，这个对快照的跨region使用的影响？
+			了解快照同步，image同步的逻辑：
+				快照同步过后，API到指定的region上去detail_snapshot时，返回的快照的cluster_id应该就是本region的cluster_id？快照同步到各个小region后，对应的
+				cluster_id都为各自region的cluster_id；同步后在不同region的同一个快照，可以视为独立的快照，只是他们的快照内容是一样的；
+			image同步逻辑同快照同步逻辑。
+				image同步后，有src_image_id字段标识image是源image还是由源image同步出来的。
+			
+			按照上面逻辑，说快照不能跨小region使用是ok的。
+
+			在大region下查询某个image_no对应的源image_no时，可能会重？
+				imageNo,userId,bigRegionNok
+				imageNo,userId,region_no,
+
+			需要考虑这个问题		
+			image_no="windows2003cnstdr2.32.20110926.01.vhd" and src_image_id=0; 
+			image_no="windows2008r2stden.64.20110605.01.vhd" and src_image_id=0;
+
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day186 Friday, December 07, 2012
+
+1. 
+	* bigregion二期，将原branch修改merger到基于最新trunk拉的分支上。
+	* 数据库培训
+		taobao数据库演化，自动化运维（自动切换的数据丢失问题，自动扩容，迁移，合并），余量模型
+	* python
+
+
+
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day187 Monday, December 10, 2012
+
+1. 
+	* slb api准备连调测试 8.214
+		10.250.6.45:8088
+	* 大region二期，补充细化控制系统兼容的设计文档及开发
+	* 大region下，imageNo,user_id,bigRegionNo不能唯一确定一个image,这样对外的query_available_imgs接口可能返回2个或以上重名的imageNo，对用户
+	会有歧义；api已保证通过api接口创建的image在大region下唯一，上传工具需要修改，也保证这点。
+
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day188 Tuesday, December 11, 2012
+
+1. 
+	* 大region二期设计评审
+		- list_mounted_snapshot控制系统返回值增加cluster_id，便于api识别其region
+
+	* slb api连调
+
 
 2. 
