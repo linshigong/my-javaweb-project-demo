@@ -11,6 +11,95 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* OS
+	MLXOS
+		Multitask Layered eXecution Operating System
+	What is MLXOS ?
+		MLXOS is a microkernel operating system, including μ-kernel, user space drivers and utilities.
+	from: http://www.mlxos.org/mlxos.html
+
+* HBase * nosql
+	
+* Amazon Virtual Private Cloud (Amazon VPC) 自定义网络
+	允许您在 Amazon Web Services (AWS) 云中预配置一个专用、隔离的部分，让您能够在定义的虚拟网络中启动 AWS 资源。借助 Amazon VPC，
+您可以定义与自己的数据中心运行的传统网络非常相似的虚拟网络拓扑。您可以完全掌控您的虚拟联网环境，包括选择自有的 IP 地址范围、创建子网，以及配置路由表和网关。
+您可以轻松自定义 Amazon VPC 的网络配置。例如，您可以为可访问 Internet 的 Web 服务器创建公有子网，而将数据库或应用程序服务器等后端系统放在不能访问 Internet 的私有子网中。
+您可以利用安全组和网络访问控制列表等多种安全层，帮助对各个子网中 Amazon EC2 实例的访问进行控制。
+此外，您也可以在公司数据中心和 VPC 之间创建硬件虚拟专用网络 (VPN) 连接，将 AWS 云用作公司数据中心的扩展。
+
+
+
+* linux core文件 gdb调试
+	当一个程序崩溃时，在进程当前工作目录的core文件中复制了该进程的存储图像。core文件仅仅是一个内存映象(同时加上调试信息)，主要是用来调试的。
+	ref: http://blog.csdn.net/fengxinze/article/details/6800175
+
+	ulimet -a 查看系统配置
+
+* 
+* 远程调试 jar 远程调试 jar调试
+	远程调试 Java 应用程序
+	如果您还没安装该程序，请下载 Eclipse V3.4（Ganymede）。在 Ganymede 中，套接字（socket）监听连接器被添加到 Remote Java Application 启动配置类型。Eclipse 最新的套接字监听连接器允许您打开 Java 调试器，它能够监听特定套接字上的连接。可以从命令行选项打开被调试的程序，并将其连接到调试器。在 Ganymede 发布之前，仅有一个连接套接字的连接器，被调试的程序所在的机器必须是一个与调试器相连的调试主机。由于受到内存和 CPU 不足的限制，要想让移动设备充当主机是不现实的。
+	为了进行远程调试，必须使用 Java Virtual Machine (JVM) V5.0 或更新版本，比如 IBM® J9 或 Sun Microsystem 的 Java SE Development Kit（JDK）。
+
+	JPDA 简介
+	Sun Microsystem 的 Java Platform Debugger Architecture (JPDA) 技术是一个多层架构，使您能够在各种环境中轻松调试 Java 应用程序。JPDA 由两个接口（分别是 JVM Tool Interface 和 JDI）、
+	一个协议（Java Debug Wire Protocol）和两个用于合并它们的软件组件（后端和前端）组成。它的设计目的是让调试人员在任何环境中都可以进行调试。JPDA 不仅能够用于桌面系统，
+	而且能够在嵌入式系统上很好地工作。
+	JVM Tool Interface (JVMTI) 规定必须为调试提供 VM（编辑注：从 Java V5 开始，将用 JVMTI 代替 Java V1.4 中的 JVMDI）。Java Debug Wire Protocol (JDWP) 描述调试信息的格式，
+	以及在被调试的进程和调试器前端之间传输的请求，调试器前端实现 JDI，比如 Eclipse、Borland JBuilder 等。根据 Sun 的 JPDA 规范，被调试的程序常常称为 debuggee。JDI 是一个高级的接口，
+	它定义用于远程调试的信息和请求。下面给出了调试器的架构。
+
+	常用缩写词
+	JDI — Java 调试接口（Java Debug Interface）
+	JDT — Java 开发工具（Java Development Tools）
+	JDWP — Java 调试网络协议（Java Debug Wire Protocol）
+	JPDA — Java 平台调试器架构（Java Platform Debugger Architecture）
+	JVM — Java 虚拟机（Java Virtual Machine）
+	JVMDI — JVM 调试接口（JVM Debug Interface）
+	JVMTI — JVM 工具接口（JVM Tool Interface）
+	VM — 虚拟机（Virtual Machine）
+
+	JDWP 包含许多参数，用于为远程 Java 应用程序调用所需的程序。以下是本文用到的一些参数。
+	-Xdebug
+		启用调试特性。
+	-Xrunjdwp:<sub-options>
+		在目标 VM 中加载 JDWP 实现。它通过传输和 JDWP 协议与独立的调试器应用程序通信。下面介绍一些特定的子选项。
+		从 Java V5 开始，您可以使用 -agentlib:jdwp 选项，而不是 -Xdebug 和 -Xrunjdwp。但如果连接到 V5 以前的 VM，只能选择 -Xdebug 和 -Xrunjdwp。下面简单描述 -Xrunjdwp 子选项。
+	transport
+		这里通常使用套接字传输。但是在 Windows 平台上也可以使用共享内存传输。
+	server
+		如果值为 y，目标应用程序监听将要连接的调试器应用程序。否则，它将连接到特定地址上的调试器应用程序。
+	address
+		这是连接的传输地址。如果服务器为 n，将尝试连接到该地址上的调试器应用程序。否则，将在这个端口监听连接。
+	suspend
+	如果值为 y，目标 VM 将暂停，直到调试器应用程序进行连接。
+	要获得每个调试设置的详细解释，请参考 JPDA 文档（参见 参考资料）。
+	清单 2 是一个示例，显示如何在调试模式下启动 VM 并监听端口 8765 的套接字连接。
+
+	清单 2. 作为调试服务器的目标 VM
+					
+		-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8765
+
+	清单 3 显示如何使用位于 8000 端口的主机 127.0.0.1 上的套接字连接运行中的调试器应用程序。
+
+	清单 3. 作为调试客户机的目标 VM
+					
+		-Xdebug -Xrunjdwp:transport=dt_socket,address=127.0.0.1:8000
+
+	from: http://www.ibm.com/developerworks/cn/opensource/os-eclipse-javadebug/
+* 
+	http://www.yake.org
+	http://slashdot.org/story/06/04/21/213221/simple-open-source-3d-game-engines
+	Vega Strike
+		开源中国搜索
+		http://zh.wikipedia.org/wiki/Vega_Strike
+			相关链接
+	http://dev.ryzom.com/projects/ryzom/wiki good have 
+		http://www.cnblogs.com/xiaop/
+
+		* ryzom
+			模块化，组件化的设计。核心框架和业务无关，各自发展
+
 * java dns 缓存
 	%JAVA_HOME/jre/lib/security/java.security
 	dns默认缓存30s，负值表示永久缓存，修改此值可能导致下面攻击：
@@ -96,6 +185,8 @@ google 检索 apache： site:*.apache.org 高级搜索
 
 	使用 ipmi 的先决条件——想要实现对服务器的 ipmi 管理，必须在硬件、OS、管理工具等几个方面都满足：
 	from: http://www.chinahost.org/page-3490-1-1.html?fw=bipmi IPMI操作指南
+
+	华为IMana管理程序对许多IPMI的传统功能支持更不在话下，如系统引导、控制台重定向、虚拟介质、传感器监控、电源控制、系统日志等等(eg: Tecal RH2285)
 
 * select for update
 	注意锁的级别，尽量减小锁的范围
@@ -1957,7 +2048,7 @@ Storage for Interactive Services
 		6).重启系统。
 	- 
 
-* 分布式存储
+* 分布式存储 * 云存储
 	http://www.cnblogs.com/jason-one/archive/2008/12/17/1356461.html
 
 * 单点问题，单点故障
@@ -2174,6 +2265,11 @@ Storage for Interactive Services
 	并且在此基础上实现了master-slave(主从)同步。
 
 * jboss
+	- jboss启动失败一例
+		jboss一个jmx相关的mbean注册时，由于identity不能识别，导致启动失败，需要本地回环(127.0.0.1)在/etc/hosts
+		文件中有hostname执行本地回环的定义。
+		如：
+			127.0.0.1 identify-host-name
 	- jboss简介
 		1. Jboss Server 目录结构
 
@@ -2305,7 +2401,12 @@ Storage for Interactive Services
 	Socket classes are used to represent the connection between a client program and a server program. The java.net package provides 
 	two classes--Socket and ServerSocket--that implement the client side of the connection and the server side of the connection, respectively. 
 * log * log4j
-	logger.error(e) vs logger.error("xxx",e)
+	- log4j配置时
+		定义appender，定义logger
+		自定义的appender注意类全路径不要搞错（服务器启动时console会报提示）
+		对于一些未定义的日志可统一在log4j.xml的root标签中记录，去掉报找不到appender的warn
+		sql的日志，需要定义logger指向到java.sql
+	- logger.error(e) vs logger.error("xxx",e)
 	看log4j的error方法说明，直接传对象接收的是message消息对象，如何给的是非message对象，可能没有重写tostring方法，输出的日志内容为对象而不是异常的内容。
 
 * nginx
@@ -2406,7 +2507,7 @@ Storage for Interactive Services
 search in index find pdf 
 * 平台，产品线，生态
 	一个好的平台，衍生出多种产品线，构建良好的生态
-* OSGi
+* OSGi * osgi
 	- OSGI练习
 		通过eclipse的plug-in项目，实现采用Equinox来实验
 		一个OSGI框架+N个bundle
@@ -2981,8 +3082,59 @@ search in index find pdf
 
 		另外,按下v键,可以进入可视模式,这个时候可以更自由更灵活的选取要复制的段落,区块了.
 
-* 一致性hash算法（consistent hashing） hash圆环 ，环形hash robin环 Round Robin round-robin
-	http://www.cnblogs.com/liyulong1982/articles/2497731.html
+* 一致性hash算法（consistent hashing） hash圆环 ，环形hash robin环 Round Robin round-robin    一致性哈希	 （这里以memcached客户端的应用为例子说明）
+	- memcached客户端
+
+	- http://www.cnblogs.com/liyulong1982/articles/2497731.html
+	- 哈希分布与一致性哈希简介  		
+			在我们的日常web应用开发当中memcached可以算作是当今的标准开发配置了。相信memcache的基本原理大家也都了解过了，memcache虽然是分布式的应用服务，
+		但分布的原则是由client端的api来决定的，api根据存储用的key以及已知的服务器列表，根据key的hash计算将指定的key存储到对应的服务器列表上。
+		基本的原理以及分布
+			在这里我们通常使用的方法是根据 key的hash值%服务器数取余数 的方法来决定当前这个key的内容发往哪一个服务器的。这里会涉及到一个hash算法的分布问题，
+		哈希的原理用一句话解释就是两个集合间的映射关系函数，在我们通常的应用中基本上可以理解为 在集合A（任意字母数字等组合，此处为存储用的key）里的一条记录
+		去查找集合B（如0-2^32）中的对应记录。（题外话：md5的碰撞或者说冲突其实就是发生在这里，也就是说多个A的记录映射到了同一个B的记录）
+
+		- 实际应用-
+		显然在我们的应用中集合A的记录应该更均匀的分布在集合B的各个位置，这样才能尽量避免我们的数据被分布发送到单一的服务器上，
+		在danga的memcached的原始版本（perl）中使用的是crc32的算法用java的实现写出来：
+		    private static int origCompatHashingAlg( String key ) {
+			int hash    = 0;
+			char[] cArr = key.toCharArray();
+
+			for ( int i = 0; i < cArr.length; ++i ) {
+			    hash = (hash * 33) + cArr[i];
+			}
+
+			return hash;
+		    }
+		这里还有另一个改进版本的算法：
+		    private static int newCompatHashingAlg( String key ) {
+			CRC32 checksum = new CRC32();
+			checksum.update( key.getBytes() );
+			int crc = (int) checksum.getValue();
+
+			return (crc >> 16) & 0x7fff;
+		    }
+		- 分布率测试 -
+			有人做过测试，随机选择的key在服务器数量为5的时候所有key在服务器群组上的分布概率是：
+			
+			显然使用旧的crc32算法会导致第三个memcached服务的负载更高，但使用新算法会让服务之间的负载更加均衡。
+			其他常用的hash算法还有FNV-1a Hash,RS Hash,JS Hash,PJW Hash,ELF Hash,AP Hash等等。有兴趣的童鞋可以查看这里：
+				http://www.partow.net/programming/hashfunctions/
+				http://hi.baidu.com/algorithms/blog/item/79caabee879ece2a2cf53440.html
+		- 小结 -
+			至此我们了解到了在我们的应用当中要做到尽量让我们的映射更加均匀分布，可以使服务的负载更加合理均衡。
+		- 新问题 -
+			但到目前为止我们依然面对了这样一个问题：就是服务实例本身发生变动的时候，导致服务列表变动从而会照成大量的cache数据请求会miss，
+			几乎大部分数据会需要迁移到另外的服务实例上。这样在大型服务在线时，瞬时对后端数据库/硬盘照成的压力很可能导致整个服务的crash。
+		- 一致性哈希（Consistent Hashing） -
+			在此我们采用了一种新的方式来解决问题，处理服务器的选择不再仅仅依赖key的hash本身而是将服务实例（节点）的配置也进行hash运算。
+				1) 首先求出每个服务节点的hash，并将其配置到一个0~2^32的圆环（continuum）区间上。
+				2) 其次使用同样的方法求出你所需要存储的key的hash，也将其配置到这个圆环（continuum）上。
+				3) 然后从数据映射到的位置开始顺时针查找，将数据保存到找到的第一个服务节点上。如果超过2^32仍然找不到服务节点，就会保存到第一个memcached服务节点上。
+
+	from: http://www.cnblogs.com/liunx/archive/2010/03/24/1693925.html
+
 * API 用户体验
 	开发的api遵循一定的规范：（整齐划一，看着清爽）
 		接口命名
@@ -3577,6 +3729,19 @@ It is also an FTP application platform. We have developed a Java API to let you 
 						}
 					};
 		------
+
+		私有方法，可在mock块中声明为public类型，例如：
+		----
+		...
+			new MockUp<xxxServiceImpl>(){
+				@SuppressWarnings("unused")
+				@Mock
+				public void removeXXX(List<xxx> xxx) {//原方法为private，此处定义为public以免执行时报无access权限
+					//do nothing
+				}
+			};
+		...
+		----
 	- jtester
 		mock时，可通过比较未mock对象和mocked对象的运行状态值（cglib or jdk proxy）来判断是否正确mock了。
 	- 单元测试ok后，可以进行集成测试，以测试集成逻辑调用是否ok，比如各个环节的集成调用。
@@ -3662,6 +3827,22 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			这些类，也需要继承这个接口。
 
 * bat 批处理 不继续执行  (搜素 bat 调用mvn - 对于bat执行好mvn后就不继续执行其他操作的问题解决搜索关键词)
+	- start命令
+		下面是一个小脚本，批量启动开机后需要打开的程序。
+		pre.bat
+		-----
+		...
+			echo day pre...
+			echo chrome
+			start C:\Users\wb_shen.chengs\AppData\Local\Google\Chrome\Application\chrome.exe
+			echo eclipse
+			start D:\eclipse\eclipse.exe
+			echo outlook
+			start outlook.exe /resetnavpane
+			echo wangwang
+			call "D:\PROGRA~1\AliWangWang\AliIM.exe" /run:desktop
+		...
+		------
 	- mavn web project 自动部署启动容器脚本(bat脚本)
 		-------
 			rem Eclipse 开发 maven web project部署脚本，便于部署调试
@@ -3728,6 +3909,49 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	http://redis.io/
 
 * Memcached  
+	- HA的实现
+		Memcached 是什么？
+			Memcached是一种集中式Cache，支持分布式横向扩展。这里需要解释说明一下，很多开发者觉得Memcached是一种分布式缓存系统，
+			但是其实Memcached服务端本身是单实例的，只是在客户端实现过程中可以根据存储的主键做分区存储，而这个区就是Memcached服务端的一个或者多个实例，
+			如果将客户端也囊括到Memcached中，那么可以部分概念上说是集中式的。其实回顾一下集中式的构架，无非两种情况：一是节点均衡的网状（JBoss Tree Cache），
+			利用JGroup的多播通信机制来同步数据；二是Master-Slaves模式（分布式文件系统），由Master来管理Slave，比如如何选择Slave，如何迁移数据等都是由Master来完成，
+			但是Master本身也存在单点问题。下面再总结几个它的特点来理解一下其优点和限制。
+		内存存储：
+			不言而喻，速度快，但对于内存的要求高。这种情况对CPU要求很低，所以常常采用将Memcached服务端和一些CPU高消耗、内存低消耗应用部署在一起。
+			（我们的某个产品正好有这样的环境，我们的接口服务器有多台，它们对CPU要求很高——原因在于WS-Security的使用，但是对于内存要求很低，因此可以
+			用作Memcached的服务端部署机器）。
+		集中式缓存（Cache）：
+			避开了分布式缓存的传播问题，但是需要非单点来保证其可靠性，这个就是后面集成中所作的集群（Cluster）工作，可以将多个Memcached作为一个虚拟的集群，
+			同时对于集群的读写和普通的Memcached的读写性能没有差别。
+		分布式扩展：
+			Memcached很突出的一个优点就是采用了可分布式扩展的模式。可以将部署在一台机器上的多个Memcached服务端或者部署在多个机器上的Memcached服务端组成
+			一个虚拟的服务端，对于调用者来说则是完全屏蔽和透明的。这样做既提高了单机的内存利用率，也提供了向上扩容（Scale Out）的方式。
+		Socket通信：
+			这儿需要注意传输内容的大小和序列化的问题，虽然Memcached通常会被放置到内网作为缓存，Socket传输速率应该比较高（当前支持TCP和UDP两种模式，同时
+			根据客户端的不同可以选择使用NIO的同步或者异步调用方式），但是序列化成本和带宽成本还是需要注意。这里也提一下序列化，对于对象序列化的性能往往
+			让大家头痛，但是如果对于同一类的Class对象序列化传输，第一次序列化时间比较长，后续就会优化，也就是说序列化最大的消耗不是对象序列化，而是类的序列化。
+			如果穿过去的只是字符串，这种情况是最理想的，省去了序列化的操作，因此在Memcached中保存的往往是较小的内容。
+		特殊的内存分配机制：
+			首先要说明的是Memcached支持最大的存储对象为1M。它的内存分配比较特殊，但是这样的分配方式其实也是基于性能考虑的，简单的分配机制可以更容易回收再分配，
+			节省对CPU的使用。这里用一个酒窖做比来说明这种内存分配机制，首先在Memcached启动的时候可以通过参数来设置使用的所有内存——酒窖，然后在有酒进入的时候，
+			首先申请（通常是1M）的空间，用来建酒架，而酒架根据这个酒瓶的大小将自己分割为多个小格子来安放酒瓶，并将同样大小范围内的酒瓶都放置在一类酒架上面。
+			例如20厘米半径的酒瓶放置在可以容纳20-25厘米的酒架A上，30厘米半径的酒瓶就放置在容纳25-30厘米的酒架B上。回收机制也很简单，首先新酒入库，看看酒架是否有
+			可以回收的地方，如果有就直接使用，如果没有则申请新的地方，如果申请不到，就采用配置的过期策略。从这个特点来看，如果要放的内容大小十分离散，同时大小比例
+			相差梯度很明显的话，那么可能对于空间使用来说效果不好，因为很可能在酒架A上就放了一瓶酒，但却占用掉了一个酒架的位置。
+		缓存机制简单：
+			有时候很多开源项目做的面面俱到，但到最后因为过于注重一些非必要的功能而拖累了性能，这里提到的就是Memcached的简单性。首先它没有什么同步，消息分发，
+			两阶段提交等等，它就是一个很简单的缓存，把东西放进去，然后可以取出来，如果发现所提供的Key没有命中，那么就很直白地告诉你，你这个Key没有任何对应的
+			东西在缓存里，去数据库或者其他地方取；当你在外部数据源取到的时候，可以直接将内容置入到缓存中，这样下次就可以命中了。这里介绍一下同步这些数据的两种方式：
+			一种是在你修改了以后立刻更新缓存内容，这样就会即时生效；另一种是说容许有失效时间，到了失效时间，自然就会将内容删除，此时再去取的时候就不会命中，然后
+			再次将内容置入缓存，用来更新内容。后者用在一些实时性要求不高，写入不频繁的情况。
+		客户端的重要性：
+			Memcached是用C写的一个服务端，客户端没有规定，反正是Socket传输，只要语言支持Socket通信，通过Command的简单协议就可以通信。但是客户端设计的合理十分重要，
+			同时也给使用者提供了很大的空间去扩展和设计客户端来满足各种场景的需要，包括容错、权重、效率、特殊的功能性需求和嵌入框架等等。
+		几个应用点：
+			小对象的缓存（用户的Token、权限信息、资源信息）；小的静态资源缓存；SQL结果的缓存（这部分如果用的好，性能提高会相当大，同时由于Memcached自身提供向上扩容，
+			那么对于数据库向上扩容的老大难问题无疑是一剂好药）；ESB消息缓存。
+		from: http://www.cnblogs.com/chenying99/archive/2012/06/29/2568958.html
+
 	- 使用外部缓存框架，对应程序，通过统一接口调用，
 	- memcached的交互接口
 			    memcached的客户端通过TCP连接与服务器通信（UDP协议的接口也可以使用，详细说明请参考”UDP 协议”部分）。一个给定的运行中的memcached服务器在某个（可配置的）端口上监听连接；客户端连接该端口，发送命令给服务器，读取反馈，最后关闭连接。
@@ -3920,6 +4144,16 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- mapping文件语句定义
+		插入数据时，返回其主键（自定义查询的主键）
+		<insert id="insertImage" parameterMap="imageParameter">
+		insert into xxx(id,new_id,name)
+		values(?,?,?)
+		<selectKey resultClass="long" keyProperty="newId">
+			select last_insert_id() as new_id from xxx limit 1
+		</selectKey>
+		</insert>
+
 	- mapping文件，标签属性的意义整理：     there is a trick if u ignore this^^ 
 		比如<select></select>标签中：
 			resultMap	  自定义返回结果bean的map映射定义，通过map定义将结果集映射为bean	 ,将查询结果集映射到不同的对象
@@ -4407,7 +4641,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		- jtester是结合其他框架基础上的，比如@Test 注解用的就是testing框架，此时eclipse插件就下载testing(TestNG )的插件，即可在ide执行测试。ide比如eclipse执行单元
 		测试框架的测试用例是根据框架的注解来解析执行的，找到框架的ide插件即可。
 		下载地址：http://testng.org/doc/index.html 从其jar里找到网站信息
-			http://beust.com/eclipse-old/ 5.14.0.1 新版本有问题，用这个旧版本
+			http://beust.com/eclipse-old/eclipse-5.14.0.1 新版本有问题，用这个旧版本
 		- TestNG is designed to cover all categories of tests:  unit, functional, end-to-end, integration, etc...
 			TestNG is a testing framework inspired from JUnit and NUnit but introducing some new functionalities that make it more powerful and easier to use
 		- 新项目加入jtester步骤：
@@ -10102,6 +10336,11 @@ day64 Friday, June 15, 2012
 			例外情况：
 				手动加region表记录和加monitor_datasource记录是不同步的，或者可以理解2者没关系。
 				所以上面的触发逻辑，分别处理各自在查找cache的逻辑中实现动态更新。
+
+				此需求，在RegionAwareInterceptor中更新CommandExecutorFactory的executors属性逻辑部分，由于采用新的缓存类cacheservice，于是无法触发原更新缓存逻辑(大region项目reversion:487318)，导致加入新region后，
+				调master报region找不到错误。
+					解决方法：
+						在同一cacehservice服务类处理新增region的逻辑中，加上更新endpoint的逻辑即可。
 		
 		monitor_datasource和 region，至少2者有各自的作用：
 			MonitorSqlMapTemplateFactory 的 monitorDatasources 变量
@@ -13659,7 +13898,7 @@ day147 Wednesday, October 10, 2012
 			打包已有部署目录：tar -cvf ../houyi-ace4j/service.tar service/
 			清楚旧项目日志，程序等内容
 			修改，svn地址
-			修改apache配置文件httpd.conf，已本项目的conf文件启动
+			修改apache配置文件httpd.conf，以本项目的conf文件启动
 				配置access_log
 					<IfModule log_config_module>
 					    #
@@ -14133,7 +14372,7 @@ day159 Friday, October 26, 2012
 	* 
 		
 
-2. 看jdk源码一个方法的写法     源码学习
+2. 看jdk源码一个方法的写法     源码学习 方法引用 deprecated
 
 	javax.management.MBeanServerFactory.findMBeanServer(String agentId)
 
@@ -14967,6 +15206,8 @@ day177 Monday, November 26, 2012
 		以确认数据库调用是否正确切换了IP，根据测试结果，加入上述参数后，API能正确切换IP。
 	小节：
 		在切换IP时被坑，原因是不了解java内部处理域名IP映射关系的更新机制，目前来看是在原域名指向的IP服务不可用时才会重新解析域名。
+			这个现象是否与web程序缓存了数据库连接池有关系？
+		另外，若ttl不配置，jvm默认不是永久缓存dns信息，而是缓存30秒（在jdk/jre/lib/java.security文件中有说明）
 
 
 
@@ -14974,7 +15215,7 @@ day177 Monday, November 26, 2012
 	tomcat日志 开发环境 linux tomcat7
 		- 权限问题导致的某些日志，临时文件夹没有访问权限（修改权限，并以admin来操作）
 		- 报maxThread这个配置找不到对应的属性（属性名错误，应该为maxThreads）
-		 - log4j:WARN No appenders could be found for logger (org.springframework.web.context.ContextLoader).
+		 - log4j:WARN No appenders could be found for logger (org.springframework.web.context.ContextLoader). —— 未配置spring的这个装载器的日志项，可以配置在root中，或者专门一个spring的appender。
 			log4j的配置，appender可以有多个（可以定向到文件或标准console），logger定义了实际需要记录日志并使用前面定义的appender
 			（全局logger记录自定义logger未包含的部分的日志输出，比如自定义的logger并没有定义spring的log输出，则可以在root级别定义其日志或其中框架的日志。例子见下面）。
 	
@@ -15433,7 +15674,9 @@ day187 Monday, December 10, 2012
 
 1. 
 	* slb api准备连调测试 8.214
-		10.250.6.45:8088
+		master 10.250.6.45:8088
+		monitor db
+
 	* 大region二期，补充细化控制系统兼容的设计文档及开发
 	* 大region下，imageNo,user_id,bigRegionNo不能唯一确定一个image,这样对外的query_available_imgs接口可能返回2个或以上重名的imageNo，对用户
 	会有歧义；api已保证通过api接口创建的image在大region下唯一，上传工具需要修改，也保证这点。
@@ -15446,10 +15689,139 @@ day187 Monday, December 10, 2012
 day188 Tuesday, December 11, 2012
 
 1. 
-	* 大region二期设计评审
+	* 大region二期设计评审及问题讨论
 		- list_mounted_snapshot控制系统返回值增加cluster_id，便于api识别其region
+		- bucket类型image，以hash_on_kfc类型同步到老region，保证发布过程中bucket类型的imageNo在老region可使用
+			即满足大region下，相同imageNo对应的存储类型bucket和hash_on_kfc可共存
+			大regionNo，userId,imageNo对应的记录可以多条但必须保证为同一个image（其他的为副本）
+		- region调度时，bucket类型返回所有new的region，再加上有hash_on_kfc的region，作为源调度列表
+		- 使用image，优先bucket类型
 
 	* slb api连调
 
+
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day189 Wednesday, December 12, 2012
+
+1. 
+	* 大region二期开发
+		基于C,D的kfc去掉前提，去掉原代码中kfc逻辑
+	* 大region二期，工具评审，与api相关部分的确认
+	* slb连调，表部分改动
+		ok
+	* 系统间交互，超时设置梳理，避免第三方服务影响主要业务的稳定性 -tip-
+
+2. 
+
+	select distinct r_alias.region_no,image.snapshot_type  
+	from region_alias r_alias
+	left join image image on image.region_no=r_alias.region_no
+	where  r_alias.big_region_no='cn-hangzhou2' 
+	and image.image_no = '' 
+	and (image.user_id=0 or image.visibility=1)
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day190 Thursday, December 13, 2012
+
+1. 
+	* 大region二期开发
+		- 基于vm1大的快照snapshot1，挂载到vm2上后，对应vm2上生成新device2，master限制此device2不能再打快照，只能使用。
+		这样clusterId-deviceNo-snapshotId中快照和device有相同的clusterId。
+		- 设计部分修改：新增兼容性接口修改
+		master返回码待定
+
+
+
+2. 设计
+	pojo类设计
+		系统对接的地方pojo类设计，本系统的pojo定义，接收第三方系统的pojo定义，分别定义构成映射，利于扩展。snapshot,snapshotExt
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day191 Friday, December 14, 2012
+
+1. 
+	* 大region二期开发
+		及单元测试用例编写
+		ERROR_SNAPSHOT_TYPE_NOT_SUPPORT = -30005 master快照不支持
+
+	* slb api提测前检查及验证
+
+	* linux生成core文件 -tip-
+		本次由于关闭web服务时，java命令行多指定了远程调试参数，报端口被占用ERROR，ulimit -a 没有关闭core文件，于是每次关闭时生成core文件。
+		core文件可通过gdb命令来查看
+
+2. /etc/hosts文件配置错误，导致jboss启动失败		      -tip-
+	Caused by: java.lang.RuntimeException: Exception creating identity: pangu_master_3: pangu_master_3
+	[MainDeployer] Could not create deployment: file:/home/admin/houyi-ace4j/service/.default-open/conf/jboss-service.xml
+	-------
+	...
+		Caused by: javax.management.MBeanRegistrationException: preRegister() failed: [ObjectName='jboss.remoting:service=NetworkRegistry', Class=org
+	.jboss.remoting.network.NetworkRegistry (org.jboss.remoting.network.NetworkRegistry@23e45a5c)]
+		at org.jboss.mx.server.registry.BasicMBeanRegistry.invokePreRegister(BasicMBeanRegistry.java:713)
+		at org.jboss.mx.server.registry.BasicMBeanRegistry.registerMBean(BasicMBeanRegistry.java:211)
+		at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+		at java.lang.reflect.Method.invoke(Method.java:597)
+		at org.jboss.mx.interceptor.ReflectedDispatcher.invoke(ReflectedDispatcher.java:155)
+		... 51 more
+	Caused by: java.lang.RuntimeException: Exception creating identity: pangu_master_3: pangu_master_3
+		at org.jboss.remoting.ident.Identity.get(Identity.java:211)
+	...
+	-------
+
+	看上面的错误， Exception creating identity: pangu_master_3: pangu_master_3,在创建标识时报错，是因为本地回环(127.0.0.1)没有配置上上面这个hostname（pangu_master_3），
+	配置上如下一项即可：
+		127.0.0.1               pangu_master_3
+
+	ref: https://community.jboss.org/thread/63869?tstart=0		
+
+3. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day192 Monday, December 17, 2012
+
+1. 
+	* 大region二期
+		- 6.33设置开发测试环境，部分连调
+		- 单元测试用例
+		- master多次发布，API是否需要重启的问题验证
+			reload缓存接口
+
+
+	* python
+	* houyi api user 表
+		access_id有unique约束，创建user时有默认值
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day193 Tuesday, December 18, 2012
+
+1. 
+	* 大region二期，自测，连调（master环境未完全ok）
+		create_snapshot
+		create_image
+		...
+	* 2013目标会
+		目标及任务
+			大控制系统重构
+				nc上部分工具用python替换cpp实现，简化复杂度和维护成本（基于对性能要求不高）
+		vpc分享
+			自定义网络，网络层间通过网关交互
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day194 Wednesday, December 19, 2012
+
+1. 
+	* 大region二期，单元测试 ，连调
+	* python
 
 2. 

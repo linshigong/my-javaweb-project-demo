@@ -830,7 +830,410 @@ from: http://www.diveintopython.net/toc/index.html
 		...     return 1
 		>>> 'a' or sidefx()     
 		'a'
-			When using or, values are evaluated in a boolean context from left to right, just like and. If any value is true, or returns that value immediately. In this case, 'a' is the first true value.
-			or evaluates '', which is false, then 'b', which is true, and returns 'b'.
-			If all values are false, or returns the last value. or evaluates '', which is false, then [], which is false, then {}, which is false, and returns {}.
-			Note that or evaluates values only until it finds one that is true in a boolean context, and then it ignores the rest. This distinction is important if some values can have side effects. Here, the function sidefx is never called, because or evaluates 'a', which is true, and returns 'a' immediately.
+			- When using or, values are evaluated in a boolean context from left to right, just like and. If any value is true, or returns that value immediately. In this case, 'a' is the first true value.
+			- or evaluates '', which is false, then 'b', which is true, and returns 'b'.
+			- If all values are false, or returns the last value. or evaluates '', which is false, then [], which is false, then {}, which is false, and returns {}.
+			- Note that or evaluates values only until it finds one that is true in a boolean context, and then it ignores the rest. This distinction is important if some values can have side effects. Here, the function sidefx is never called, because or evaluates 'a', which is true, and returns 'a' immediately.
+		
+		返回的值自身的true或false即为表达式的true或false。
+	
+	4.6.1. Using the and-or Trick
+
+		Example 4.17. Introducing the and-or Trick
+		>>> a = "first"
+		>>> b = "second"
+		>>> 1 and a or b 
+		'first'
+		>>> 0 and a or b 
+		'second'
+			- This syntax looks similar to the bool ? a : b expression in C(ps: they are different). The entire expression is evaluated from left to right, so the and is evaluated first. 1 and 'first' evalutes to 'first', then 'first' or 'second' evalutes to 'first'.
+			- 0 and 'first' evalutes to False, and then 0 or 'second' evaluates to 'second'.	 
+		
+		Example 4.18. When the and-or Trick Fails
+		>>> a = ""
+		>>> b = "second"
+		>>> 1 and a or b         
+		'second'
+
+		Example 4.19. Using the and-or Trick Safely
+		>>> a = ""
+		>>> b = "second"
+		>>> (1 and [a] or [b])[0] 
+		''
+			- Since [a] is a non-empty list, it is never false. Even if a is 0 or '' or some other false value, the list [a] is true because it has one element.
+		
+		By now, this trick may seem like more trouble than it's worth. You could, after all, accomplish the same thing with an if statement, so why go through all this fuss? Well, in many cases, 
+		you are choosing between two constant values, so you can use the simpler syntax and not worry, because you know that the a value will always be true. And even if you need to use the 
+		more complicated safe form, there are good reasons to do so. For example, there are some cases in Python where if statements are not allowed, such as in lambda functions.
+	
+	4.7. Using lambda Functions
+		4.7.1. Real-World lambda Functions
+			Python supports an interesting syntax that lets you define one-line mini-functions on the fly. Borrowed from Lisp, these so-called lambda functions can be used anywhere a function is required.
+
+			Example 4.20. Introducing lambda Functions
+			>>> def f(x):
+			...     return x*2
+			...     
+			>>> f(3)
+			6
+			>>> g = lambda x: x*2  
+			>>> g(3)
+			6
+			>>> (lambda x: x*2)(3) 
+			6
+				- This is a lambda function that accomplishes the same thing as the normal function above it. Note the abbreviated syntax here: there are no parentheses around the argument list, 
+				and the return keyword is missing (it is implied, since the entire function can only be one expression). Also, the function has no name, but it can be called through the variable it is assigned to.
+				- You can use a lambda function without even assigning it to a variable. This may not be the most useful thing in the world, but it just goes to show that a lambda is just an in-line function.
+			
+				To generalize, a lambda function is a function that takes any number of arguments (including optional arguments) and returns the value of a single expression. lambda functions can not contain commands, 
+			and they can not contain more than one expression. Don't try to squeeze too much into a lambda function; if you need something more complex, define a normal function instead and make it as long 
+			as you want.
+				lambda functions are a matter of style. Using them is never required; anywhere you could use them, you could define a separate normal function and use that instead. I use them in places where I want to 
+			encapsulate specific, non-reusable code without littering my code with a lot of little one-line functions.
+
+		4.7.1. Real-World lambda Functions
+			Here are the lambda functions in apihelper.py:
+				processFunc = collapse and (lambda s: " ".join(s.split())) or (lambda s: s)
+			Notice that this uses the simple form of the and-or trick, which is okay, because a lambda function is always true in a boolean context. (That doesn't mean that a lambda function can't return a false value. 
+			The function is always true; its return value could be anything.)
+
+			Example 4.21. split With No Arguments
+			>>> s = "this   is\na\ttest"  
+			>>> print s
+			this   is
+			a   test
+			>>> print s.split()           
+			['this', 'is', 'a', 'test']
+			>>> print " ".join(s.split()) 
+			'this is a test'
+				- This is a multiline string, defined by escape characters instead of triple quotes. \n is a carriage return, and \t is a tab character.
+				- split without any arguments splits on whitespace. So three spaces, a carriage return, and a tab character are all the same.
+				- You can normalize whitespace by splitting a string with split and then rejoining it with join, using a single space as a delimiter. This is what the info function does to collapse multi-line 
+				doc strings into a single line.
+		
+		why this?
+			To do this in a less robust language, like Visual Basic, you would probably create a function that took a string and a collapse argument and used an if statement to decide whether to collapse the whitespace or not, 
+		then returned the appropriate value. This would be inefficient, because the function would need to handle every possible case. Every time you called it, it would need to decide whether to collapse whitespace 
+		before it could give you what you wanted. In Python, you can take that decision logic out of the function and define a lambda function that is custom-tailored to give you exactly (and only) what you want. 
+		This is more efficient, more elegant, and less prone to those nasty oh-I-thought-those-arguments-were-reversed kinds of errors.
+
+	4.8. Putting It All Together
+
+		The next piece of the puzzle is the use of str around the doc string. As you may recall, str is a built-in function that coerces data into a string. But a doc string is always a string, so why bother with the str function? 
+		The answer is that not every function has a doc string, and if it doesn't, its __doc__ attribute is None.
+
+		Example 4.23. Why Use str on a doc string?
+		>>> >>> def foo(): print 2
+		>>> >>> foo()
+		2
+		>>> >>> foo.__doc__     
+		>>> foo.__doc__ == None 
+		True
+		>>> str(foo.__doc__)    
+		'None'
+			- You can easily define a function that has no doc string, so its __doc__ attribute is None. Confusingly, if you evaluate the __doc__ attribute directly, the Python IDE prints nothing at all, which makes sense 
+			if you think about it, but is still unhelpful.
+			- You can verify that the value of the __doc__ attribute is actually None by comparing it directly.
+			- The str function takes the null value and returns a string representation of it, 'None'.
+
+		In SQL, you must use IS NULL instead of = NULL to compare a null value. In Python, you can use either == None or is None, but is None is faster.
+
+		Stepping back even further, you see that you're using string formatting again to concatenate the return value of processFunc with the return value of method's ljust method. This is a new string method that 
+		you haven't seen before.
+
+		Example 4.24. Introducing ljust
+		>>> s = 'buildConnectionString'
+		>>> s.ljust(30) 
+		'buildConnectionString         '
+		>>> s.ljust(20) 
+		'buildConnectionString'
+			- ljust pads the string with spaces to the given length. This is what the info function uses to make two columns of output and line up all the doc strings in the second column.
+			- If the given length is smaller than the length of the string, ljust will simply return the string unchanged. It never truncates the string.
+
+		Example 4.25. Printing a List
+		>>> li = ['a', 'b', 'c']
+		>>> print "\n".join(li) 
+		a
+		b
+		c
+			This is also a useful debugging trick when you're working with lists. And in Python, you're always working with lists.
+		That's the last piece of the puzzle. You should now understand this code.
+
+		    print "\n".join(["%s %s" %
+				      (method.ljust(spacing),
+				       processFunc(str(getattr(object, method).__doc__)))
+				     for method in methodList])
+
+5. Objects and Object-Orientation
+
+	5.1. Diving In
+		Here is a complete, working Python program. Read the doc strings of the module, the classes, and the functions to get an overview of what this program does and how it works. As usual, 
+		don't worry about the stuff you don't understand; that's what the rest of the chapter is for.
+
+		Example 5.1. fileinfo.py
+		If you have not already done so, you can download this and other examples used in this book.
+
+		"""Framework for getting filetype-specific metadata.
+
+		Instantiate appropriate class with filename.  Returned object acts like a
+		dictionary, with key-value pairs for each piece of metadata.
+		    import fileinfo
+		    info = fileinfo.MP3FileInfo("/music/ap/mahadeva.mp3")
+		    print "\\n".join(["%s=%s" % (k, v) for k, v in info.items()])
+
+		Or use listDirectory function to get info on all files in a directory.
+		    for info in fileinfo.listDirectory("/music/ap/", [".mp3"]):
+			...
+
+		Framework can be extended by adding classes for particular file types, e.g.
+		HTMLFileInfo, MPGFileInfo, DOCFileInfo.  Each class is completely responsible for
+		parsing its files appropriately; see MP3FileInfo for example.
+		"""
+		import os
+		import sys
+		from UserDict import UserDict
+
+		def stripnulls(data):
+		    "strip whitespace and nulls"
+		    return data.replace("\00", "").strip()
+
+		class FileInfo(UserDict):
+		    "store file metadata"
+		    def __init__(self, filename=None):
+			UserDict.__init__(self)
+			self["name"] = filename
+
+		class MP3FileInfo(FileInfo):
+		    "store ID3v1.0 MP3 tags"
+		    tagDataMap = {"title"   : (  3,  33, stripnulls),
+				  "artist"  : ( 33,  63, stripnulls),
+				  "album"   : ( 63,  93, stripnulls),
+				  "year"    : ( 93,  97, stripnulls),
+				  "comment" : ( 97, 126, stripnulls),
+				  "genre"   : (127, 128, ord)}
+
+		    def __parse(self, filename):
+			"parse ID3v1.0 tags from MP3 file"
+			self.clear()
+			try:                               
+			    fsock = open(filename, "rb", 0)
+			    try:                           
+				fsock.seek(-128, 2)        
+				tagdata = fsock.read(128)  
+			    finally:                       
+				fsock.close()              
+			    if tagdata[:3] == "TAG":
+				for tag, (start, end, parseFunc) in self.tagDataMap.items():
+				    self[tag] = parseFunc(tagdata[start:end])               
+			except IOError:                    
+			    pass                           
+
+		    def __setitem__(self, key, item):
+			if key == "name" and item:
+			    self.__parse(item)
+			FileInfo.__setitem__(self, key, item)
+
+		def listDirectory(directory, fileExtList):                                        
+		    "get list of file info objects for files of particular extensions"
+		    fileList = [os.path.normcase(f)
+				for f in os.listdir(directory)]           
+		    fileList = [os.path.join(directory, f) 
+			       for f in fileList
+				if os.path.splitext(f)[1] in fileExtList] 
+		    def getFileInfoClass(filename, module=sys.modules[FileInfo.__module__]):      
+			"get file info class from filename extension"                             
+			subclass = "%sFileInfo" % os.path.splitext(filename)[1].upper()[1:]       
+			return hasattr(module, subclass) and getattr(module, subclass) or FileInfo
+		    return [getFileInfoClass(f)(f) for f in fileList]                             
+
+		if __name__ == "__main__":
+		    for info in listDirectory("/music/_singles/", [".mp3"]): 
+			print "\n".join(["%s=%s" % (k, v) for k, v in info.items()])
+			print
+
+			- This program's output depends on the files on your hard drive. To get meaningful output, you'll need to change the directory path to point to a directory of MP3 files on your own machine.
+		
+		This is the output I got on my machine. Your output will be different, unless, by some startling coincidence, you share my exact taste in music.
+
+		album=
+		artist=Ghost in the Machine
+		title=A Time Long Forgotten (Concept
+		genre=31
+		name=/music/_singles/a_time_long_forgotten_con.mp3
+		year=1999
+		comment=http://mp3.com/ghostmachine
+
+		album=Rave Mix
+		artist=***DJ MARY-JANE***
+		title=HELLRAISER****Trance from Hell
+		genre=31
+		name=/music/_singles/hellraiser.mp3
+		year=2000
+		comment=http://mp3.com/DJMARYJANE
+
+		album=Rave Mix
+		artist=***DJ MARY-JANE***
+		title=KAIRO****THE BEST GOA
+		genre=31
+		name=/music/_singles/kairo.mp3
+		year=2000
+		comment=http://mp3.com/DJMARYJANE
+
+		album=Journeys
+		artist=Masters of Balance
+		title=Long Way Home
+		genre=31
+		name=/music/_singles/long_way_home1.mp3
+		year=2000
+		comment=http://mp3.com/MastersofBalan
+
+		album=
+		artist=The Cynic Project
+		title=Sidewinder
+		genre=18
+		name=/music/_singles/sidewinder.mp3
+		year=2000
+		comment=http://mp3.com/cynicproject
+
+		album=Digitosis@128k
+		artist=VXpanded
+		title=Spinning
+		genre=255
+		name=/music/_singles/spinning.mp3
+		year=2000
+		comment=http://mp3.com/artists/95/vxp
+
+	5.2. Importing Modules Using from module import
+		Python has two ways of importing modules. Both are useful, and you should know when to use each. One way, import module, you've already seen in Section 2.4, “Everything Is an Object”. 
+		The other way accomplishes the same thing, but it has subtle and important differences.
+
+		Here is the basic from module import syntax:
+			from UserDict import UserDict
+		This is similar to the import module syntax that you know and love, but with an important difference: the attributes and methods of the imported module types are imported directly into the local namespace, 
+		so they are available directly, without qualification by module name. You can import individual items or use from module import * to import everything.
+			- from module import * in Python is like import module.* in Java; import module in Python is like import module in Java.
+		
+		Example 5.2. import module vs. from module import
+		>>> import types
+		>>> types.FunctionType             
+		<type 'function'>
+		>>> FunctionType                   
+		Traceback (innermost last):
+		  File "<interactive input>", line 1, in ?
+		NameError: There is no variable named 'FunctionType'
+		>>> from types import FunctionType 
+		>>> FunctionType                   
+		<type 'function'>
+			- The types module contains no methods; it just has attributes for each Python object type. Note that the attribute, FunctionType, must be qualified by the module name, types.
+			- FunctionType by itself has not been defined in this namespace; it exists only in the context of types.
+			- This syntax imports the attribute FunctionType from the types module directly into the local namespace.
+			- Now FunctionType can be accessed directly, without reference to types.
+		
+		When should you use from module import?
+			- If you will be accessing attributes and methods often and don't want to type the module name over and over, use from module import.
+			- If you want to selectively import some attributes and methods but not others, use from module import.
+			- If the module contains attributes or functions with the same name as ones in your module, you must use import module to avoid name conflicts.
+			- Other than that, it's just a matter of style, and you will see Python code written both ways.
+		
+		Use from module import * sparingly, because it makes it difficult to determine where a particular function or attribute came from, and that makes debugging and refactoring more difficult.
+
+	5.3. Defining Classes
+	
+		Python is fully object-oriented: you can define your own classes, inherit from your own or built-in classes, and instantiate the classes you've defined.
+		
+		Defining a class in Python is simple. As with functions, there is no separate interface definition. Just define the class and start coding. A Python class starts with the reserved word class, followed by the class name. 
+		Technically, that's all that's required, since a class doesn't need to inherit from any other class.
+
+		Example 5.3. The Simplest Python Class
+
+		class Loaf: 
+		    pass     
+			- The name of this class is Loaf, and it doesn't inherit from any other class. Class names are usually capitalized, EachWordLikeThis, but this is only a convention, not a requirement.
+			- This class doesn't define any methods or attributes, but syntactically, there needs to be something in the definition, so you use pass. This is a Python reserved word that just means “move along, nothing to see here”. It's a statement that does nothing, and it's a good placeholder when you're stubbing out functions or classes.
+			- You probably guessed this, but everything in a class is indented, just like the code within a function, if statement, for loop, and so forth. The first thing not indented is not in the class.
+
+		Of course, realistically, most classes will be inherited from other classes, and they will define their own class methods and attributes. But as you've just seen, there is nothing that a class absolutely must have, 
+		other than a name. In particular, C++ programmers may find it odd that Python classes don't have explicit constructors and destructors. Python classes do have something similar to a constructor: the __init__ method.
+
+		Example 5.4. Defining the FileInfo Class
+
+		from UserDict import UserDict
+
+		class FileInfo(UserDict): 
+			- In Python, the ancestor of a class is simply listed in parentheses immediately after the class name. So the FileInfo class is inherited from the UserDict class (which was imported from the UserDict module). 
+			UserDict is a class that acts like a dictionary, allowing you to essentially subclass the dictionary datatype and add your own behavior. (There are similar classes UserList and UserString which allow you 
+			to subclass lists and strings.) There is a bit of black magic behind this, which you will demystify later in this chapter when you explore the UserDict class in more depth.
+
+		In Python, the ancestor of a class is simply listed in parentheses immediately after the class name. There is no special keyword like extends in Java.
+		
+		Python supports multiple inheritance. In the parentheses following the class name, you can list as many ancestor classes as you like, separated by commas.
+
+		5.3.1. Initializing and Coding Classes
+			This example shows the initialization of the FileInfo class using the __init__ method.
+
+			Example 5.5. Initializing the FileInfo Class
+			class FileInfo(UserDict):
+			    "store file metadata"              
+			    def __init__(self, filename=None):   
+
+				- Classes can (and should) have doc strings too, just like modules and functions.
+				- __init__ is called immediately after an instance of the class is created. It would be tempting but incorrect to call this the constructor of the class. It's tempting, because it looks like 
+				a constructor (by convention, __init__ is the first method defined for the class), acts like one (it's the first piece of code executed in a newly created instance of the class), and even sounds like 
+				one (“init” certainly suggests a constructor-ish nature). Incorrect, because the object has already been constructed by the time __init__ is called, and you already have a valid reference to the 
+				new instance of the class. But __init__ is the closest thing you're going to get to a constructor in Python, and it fills much the same role.
+				- The first argument of every class method, including __init__, is always a reference to the current instance of the class. By convention, this argument is always named self. In the __init__ method, 
+				self refers to the newly created object; in other class methods, it refers to the instance whose method was called. Although you need to specify self explicitly when defining the method, you do not 
+				specify it when calling the method; Python will add it for you automatically.
+				- __init__ methods can take any number of arguments, and just like functions, the arguments can be defined with default values, making them optional to the caller. In this case, filename has a 
+				default value of None, which is the Python null value.
+
+			Example 5.6. Coding the FileInfo Class
+			class FileInfo(UserDict):
+			    "store file metadata"
+			    def __init__(self, filename=None):
+				UserDict.__init__(self)        
+				self["name"] = filename        							       
+					- Some pseudo-object-oriented languages like Powerbuilder have a concept of “extending” constructors and other events, where the ancestor's method is called automatically before 
+					the descendant's method is executed. Python does not do this; you must always explicitly call the appropriate method in the ancestor class.
+					- I told you that this class acts like a dictionary, and here is the first sign of it. You're assigning the argument filename as the value of this object's name key.
+					- Note that the __init__ method never returns a value.
+
+		5.3.2. Knowing When to Use self and __init__
+
+			When defining your class methods, you must explicitly list self as the first argument for each method, including __init__. When you call a method of an ancestor class from within your class, 
+		you must include the self argument. But when you call your class method from outside, you do not specify anything for the self argument; you skip it entirely, and Python automatically adds 
+		the instance reference for you. I am aware that this is confusing at first; it's not really inconsistent, but it may appear inconsistent because it relies on a distinction (between bound and unbound methods) 
+		that you don't know about yet.
+
+		__init__ methods are optional, but when you define one, you must remember to explicitly call the ancestor's __init__ method (if it defines one). This is more generally true: whenever a descendant wants to 
+		extend the behavior of the ancestor, the descendant method must explicitly call the ancestor method at the proper time, with the proper arguments.
+
+	5.4. Instantiating Classes
+		Instantiating classes in Python is straightforward. To instantiate a class, simply call the class as if it were a function, passing the arguments that the __init__ method defines. The return value will be 
+		the newly created object.
+
+		Example 5.7. Creating a FileInfo Instance
+			>>> class FileInfo(UserDict):
+					"""
+					doc
+					"""
+					def __init__(self,fileName=None):
+						UserDict.__init__(self)
+						self["name"]=fileName
+
+			>>> f=FileInfo("abc")
+			>>> f.__class__
+			<class __main__.FileInfo at 0x02802DF8>
+			>>> f.__doc__
+			'\n    doc\n    '
+			>>> f
+			{'name': 'abc'}
+				- You are creating an instance of the FileInfo class (defined in the fileinfo module) and assigning the newly created instance to the variable f. You are passing one parameter, 
+				/music/_singles/kairo.mp3, which will end up as the filename argument in FileInfo's __init__ method.
+				- Every class instance has a built-in attribute, __class__, which is the object's class. (Note that the representation of this includes the physical address of the instance on my machine; 
+				your representation will be different.) Java programmers may be familiar with the Class class, which contains methods like getName and getSuperclass to get metadata information about 
+				an object. In Python, this kind of metadata is available directly on the object itself through attributes like __class__, __name__, and __bases__.
+				- You can access the instance's doc string just as with a function or a module. All instances of a class share the same doc string.
+				- Remember when the __init__ method assigned its filename argument to self["name"]? Well, here's the result. The arguments you pass when you create the class instance get sent right along 
+				to the __init__ method (along with the object reference, self, which Python adds for free).
+
