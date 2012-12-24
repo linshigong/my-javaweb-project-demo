@@ -11,6 +11,60 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* java GC
+	 Java GC 算法
+
+	当一个对象不再被引用的时候，内存回收它占领的空间，以便空间被后来的新对象使用。除了释放没用的对象，垃圾收集也可以清除内存记录碎片。
+
+	1、 引用计数法(Reference Counting Collector)
+
+	    引用计数法是唯一没有使用根集的垃圾回收的法，该算法使用引用计数器来区分存活对象和不再使用的对象。一般来说，堆中的每个对象对应一个引用计数器。当每一次创建一个对象并赋给一个变量时，引用计数器置为1。当对象被赋给任意变量时，引用计数器每次加1当对象出了作用域后(该对象丢弃不再使用)，引用计数器减1，一旦引用计数器为0，对象就满足了垃圾收集的条件。
+	    基于引用计数器的垃圾收集器运行较快，不会长时间中断程序执行，适宜地必须 实时运行的程序。但引用计数器增加了程序执行的开销，因为每次对象赋给新的变量，计数器加1，而每次现有对象出了作用域生，计数器减1。
+	　　
+	ps：用根集的方法（既有向图的方法）进行内存对象管理，可以消除循环引用的问题．就是说如果有三个对象相互引用，只要他们和根集是不可达的，gc也是可以回收他们．根集的方法精度很高，但是效率低．计数器法精度低（无法处理循环引用），但是执行效率高．
+
+	2、tracing算法(Tracing Collector)
+
+	    tracing算法是为了解决引用计数法的问题而提出，它使用了根集的概念。基于tracing算法的垃圾收集器从根集开始扫描，识别出哪些对象可达，哪些对象不可达，并用某种方式标记可达对象，例如对每个可达对象设置一个或多个位。在扫描识别过程中，基于tracing算法的垃圾收集也称为标记和清除 (mark-and-sweep)垃圾收集器。
+
+	3、compacting算法(Compacting Collector)
+
+	    为了解决堆碎片问题，基于tracing的垃圾回收吸收了Compacting算法的思想，在清除的过程中，算法将所有的对象移到堆的一端，堆的另一端就变成了一个相邻的空闲内存区，收集器会对它移动的所有对象的所有引用进行更新，使得这些引用在新的位置能识别原来 的对象。在基于Compacting 算法的收集器的实现中，一般增加句柄和句柄表。
+
+	4、copying算法(Coping Collector)
+
+	    该算法的提出是为了克服句柄的开销和解决堆碎片的垃圾回收。
+	    将内存分为两个区域(from space和to space)。所有的对象分配内存都分配到from space。在清理非活动对象阶段，把所有标志为活动的对象，copy到to space，之后清楚from space空间。然后互换from sapce和to space的身份。既原先的from space变成to sapce，原先的to space变成from space。每次清理，重复上述过程。
+	    优点：copy算法不理会非活动对象，copy数量仅仅取决为活动对象的数量。并且在copy的同时，整理了heap空间，即，to space的空间使用始终是连续的，内存使用效率得到提高。
+	    缺点：划分from space和to space，内存的使用率是1／2。收集器必须复制所有的活动对象，这增加了程序等待时间。
+
+	5、generation算法(Generational Collector)
+
+	    来自IBM的一组统计数据：98％的java对象，在创建之后不久就变成了非活动对象；只有2％的对象，会在长时间一直处于活动状态。
+
+	     (1)young generation
+
+	    年轻代分三个区。一个Eden区，两个Survivor区。大部分对象在 Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当这个Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当这个Survivor区也满了的时候，从第一个Survivor区复制过来的并且此时还存活的对象，将被复制到 tenured generation。需要注意，Survivor的两个区是对称的，没先后关系，所以同一个区中可能同时存在从Eden复制过来对象，和从前一个 Survivor复制过来的对象，而复制到年老区的只有从第一个Survivor去过来的对象。而且，Survivor区总有一个是空的。
+	    young generation的gc称为minor gc。经过数次minor gc，依旧存活的对象，将被移出young generation，移到tenured generation
+
+	    (2)tenured generation
+
+	    生命周期较长的对象，归入到tenured generation。一般是经过多次minor gc，还 依旧存活的对象，将移入到tenured generation。（当然，在minor gc中如果存活的对象的超过survivor的容量，放不下的对象会直接移入到tenured generation）
+	tenured generation的gc称为major gc，就是通常说的full gc。
+	    采用compaction算法。由于tenured generaion区域比较大，而且通常对象生命周期都比较长，compaction需要一定时间。所以这部分的gc时间比较长。
+	    minor gc可能引发full gc。当eden＋from space的空间大于tenured generation区的剩余空间时，会引发full gc。这是悲观算法，要确保eden＋from space的对象如果都存活，必须有足够的tenured generation空间存放这些对象。
+
+	    (3)permanent generation
+
+	    该区域比较稳定，主要用于存放classloader信息，比如类信息和method信息。
+	对于spring hibernate这些需要动态类型支持的框架，这个区域需要足够的空间。(这部分空间应该存在于方法区而不是heap中)。
+
+	6、adaptive算法(Adaptive Collector)
+
+	    在特定的情况下，一些垃圾收集算法会优于其它算法。基于Adaptive算法的垃圾收集器就是监控当前堆的使用情况，并将选择适当算法的垃圾收集器。
+	from: http://blog.csdn.net/salahg/article/details/5912101Molator's Downloads
+
+
 * OS
 	MLXOS
 		Multitask Layered eXecution Operating System
@@ -1678,6 +1732,8 @@ Storage for Interactive Services
 
 		xm list
 		也看查看dom0的内存数
+			xm list -l 116
+			查看domain的详细信息
 
 		free -m 查看dom0的内存使用情况
 
@@ -4144,6 +4200,25 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- 缓存及其扩展
+		比如结合memcached使用(oscache为默认配置)
+		iBatis提供CacheController接口，用于实现第三方缓存架构的扩展
+		http://blog.csdn.net/ecsoftcn/article/details/1777904
+		
+		memcached整合ibatis
+		ibatis自带的本地缓存有FIFO，LRU等，对于分布式缓存也有osCache支持，而最常用的memcached也可以整合到ibatis里滴，这样通过map关系配置，就省了很多硬编码。
+		http://www.cnblogs.com/langke93/archive/2011/03/30/2217387.html
+
+		iBatis整理——EhCache支持扩展
+		http://snowolf.iteye.com/blog/1481969
+
+		目的：
+			ibatis结合memcached实现分布式缓存(比如查询缓存)
+
+		基于上面小节下，ibatis默认没有内置memcached的缓存支持，但是设计上已考虑到缓存实现的不同，提供了CacheController接口用于自定义缓存实现，基于这个接口ibatis内置实现了
+		FIFO,LRU,OSCACHE,MEMERY，现在可以自己实现用于memcached的CacheController实现，再进行相应的配置即可。这里可以学习下ibatis的接口设计，易于扩展，也体现了对于涉及具体
+		实现的地方需要考虑是否需要扩展，从而设计为接口。-tip- * 架构 * 设计 * 扩展
+
 	- mapping文件语句定义
 		插入数据时，返回其主键（自定义查询的主键）
 		<insert id="insertImage" parameterMap="imageParameter">
@@ -4273,6 +4348,18 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- 主备切换 自动切换
+		通过VIP（需要主备库IP在同一网段）
+		通过DNS
+		其他
+	- master HA
+		通过ZK竞选master
+		MHA
+			A primary objective of MHA is automating master failover and slave promotion within short (usually 10-30 seconds) downtime, without suffering from replication consistency problems, 
+			without spending money for lots of new servers, without performance penalty, without complexity (easy-to-install), and without changing existing deployments.
+			
+			ref: http://code.google.com/p/mysql-master-ha
+
 	- 用户被拒绝
 		Access denied for user 'test'@'10.1.171.195'
 		注意此处，'test'@'10.1.171.195整个对mysql来说是一个用户标识，不要纠结那个IP而误认为mysql连接到错误的IP上去了(配置都是对的啊???!!!)'
@@ -4881,6 +4968,28 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- GC
+		mark-and-sweep
+			The mark-and-sweep algorithm is called a tracing garbage collector because is traces out the entire collection of objects that are directly or indirectly accessible by the program.  The objects 
+		that a program can access directly are those objects which are referenced by local variables on the processor stack as well as by any global variables that refer to objects. In the context of garbage 
+		collection, these variables are called the roots .
+
+			The mark-and-sweep algorithm consists of two phases: 
+			1) In the first phase, it finds and marks all accessible objects. The first phase is called the mark phase. 
+			2) In the second phase, the garbage collection algorithm scans through the heap and reclaims all the unmarked objects. The second phase is called the sweep phase.	At the same time, 
+			the marked field on every live object is set back to False in preparation for the next invocation of the mark-and-sweep garbage collection algorithm
+
+			In order to distinguish the live objects from garbage, we record the state of an object in each object. That is, we add a special bool field to each object called, say, marked. By default, 
+		all objects are unmarked when they are created. Thus, the marked field is initially False.
+			The main disadvantage of the mark-and-sweep approach is the fact that that normal program execution is suspended while the garbage collection algorithm runs. In particular, this can be 
+		a problem in a program that interacts with a human user or that must satisfy real-time execution constraints. For example, an interactive application that uses mark-and-sweep garbage collection 
+		becomes unresponsive periodically.
+
+		see for detail: http://www.brpreiss.com/books/opus7/html/page425.html#figgarbage5
+			新建的object状态为默认的false即不会被本次回收 ；从根处开始查找引用树；
+			The Fragmentation Problem 内存碎片问题
+
+
 	- List comprehension
 		python最强大的的特性之一
 			A list comprehension is a syntactic construct available in some programming languages for creating a list based on existing lists. It follows the form of the mathematical 
@@ -4962,6 +5071,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		http://www.diveintopython.net/	Dive Into Python
 
 		深入的话，看python源码剖析（C实现的动态语言）
+
+		这里有不少书籍，比较详细：
+		http://www.brpreiss.com/
+
 	- 
 		Zope - opensource appserver written by python
 		PyDev eclipse python插件 http://www.fabioz.com/pydev/updates
@@ -15823,5 +15936,99 @@ day194 Wednesday, December 19, 2012
 1. 
 	* 大region二期，单元测试 ，连调
 	* python
+		python的GC，与java的GC对比 垃圾回收算法
+			都提供标记-清除算法 mark-and-sweep
+			
+			其他：
+				引用计数回收
+				分代回收
+				等等
+
+				JVM参数设置不同的方式，或者自动根据情况选择GC回收算法
+
+
+	* mysql主备切换，读写分离，一主多备，主库HA 自动切换 （根据现有的业务压力和需求决定是否需要这么做，一般主备切换是基本的）
+		ref: http://code.google.com/p/mysql-master-ha/
 
 2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day195 Thursday, December 20, 2012
+
+1. 
+	* 大region二期连调
+		aliyunIdkp=alisys_vms 用于oss测试环境账号(否则创建bucket失败)
+		mount_snpashot接口，deviceNo传给master保持不变，值来自快照ID
+			-tip- 改进，对master少传参数的情况，可以报错，等待超时返回太耗性能...
+		
+		- 27,28左右新API老master连调结束
+
+	* python
+		mark-and-sweep 有应用短时间不可用和内存碎片问题    GC
+		引出，stop-and-copy回收算法,解决内存碎片问题需要2倍的heap内存且只能真正使用其中的一半(ref: http://www.brpreiss.com/books/opus7/html/page428.html)
+		引出，Mark-and-Compact
+			The mark-and-compact algorithm consists of two phases: In the first phase, it finds and marks all live objects. The first phase is called the mark phase. In the second phase, 
+			the garbage collection algorithm compacts the heap by moving all the live objects into contiguous memory locations. The second phase is called the compaction  phase. 
+	
+		print "\n".join(["%s:%s" % (k,v) for k,v in gc.__dict__.items()])
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day 196 Friday, December 21, 2012
+
+1. 
+	* 大region二期连调
+		快照接口：create_snapshot
+
+2. 大region二期连调
+	快照接口：
+		add_disk,create_snapshot
+		创建系统盘快照
+
+		create_image
+		mount_snapshot 挂自己的快照，挂用户其他vm的快照
+		unmount_snapshot 卸载快照
+
+		retain_snapshot
+		rollback_snapshot
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day197 Monday, December 24, 2012
+
+1. 
+	* houyi api连调
+	* houyi api返回xml格式时，data标签的问题
+		有data时，即使数据为空，标签需要返回；
+		若本就没有data数据，不出现data标签
+	* 数据库切换功能的支持问题
+		rds提供数据库自动切换，需要与应用统一，即应用需要支持数据库动态切换的功能。
+			针对API，清楚数据库动态切换需要做什么工作？DNS缓存
+	* 数据库查询缓存问题	      * 数据库缓存架构	      查询结果进行缓存 查询缓存		       * ibatis结合memcached * ibatis扩展
+		目标：减小数据库load
+		对于大数据查询，重复查询等，考虑加一个查询缓存，减小数据库的load
+			是否考虑用memcached做统一缓存，这其中涉及memcached集群及HA问题
+			or tair系统？
+		
+		解决方法：
+		ibatis提供了CacheController接口，当不满足于内置的缓存实现时，可扩展自定义的缓存实现。
+			CacheController接口的设计
+
+		在web服务各层缓存中，本次考虑的缓存为：
+			数据库查询缓存
+
+		延伸：
+			web服务的各层都可以缓存，最佳实践有哪些？
+
+			再延伸：
+				框架或插件，一般都在设计时针对实现会改变的地方会提供扩展的能力，会用和用好是不同的层次，给我感觉是要熟悉你所使用的东西
+
+2. 
+
+Merry Christmas !
+
+
+
+

@@ -1208,7 +1208,7 @@ from: http://www.diveintopython.net/toc/index.html
 		__init__ methods are optional, but when you define one, you must remember to explicitly call the ancestor's __init__ method (if it defines one). This is more generally true: whenever a descendant wants to 
 		extend the behavior of the ancestor, the descendant method must explicitly call the ancestor method at the proper time, with the proper arguments.
 
-	5.4. Instantiating Classes
+	5.4. Instantiating Classes -tip-
 		Instantiating classes in Python is straightforward. To instantiate a class, simply call the class as if it were a function, passing the arguments that the __init__ method defines. The return value will be 
 		the newly created object.
 
@@ -1236,4 +1236,130 @@ from: http://www.diveintopython.net/toc/index.html
 				- You can access the instance's doc string just as with a function or a module. All instances of a class share the same doc string.
 				- Remember when the __init__ method assigned its filename argument to self["name"]? Well, here's the result. The arguments you pass when you create the class instance get sent right along 
 				to the __init__ method (along with the object reference, self, which Python adds for free).
+		
+		In Python, simply call a class as if it were a function to create a new instance of the class. There is no explicit new operator like C++ or Java. (ps:you need parentheses("()") to execute 
+		method or get instance from class)
 
+		5.4.1. Garbage Collection
+			If creating new instances is easy, destroying them is even easier. In general, there is no need to explicitly free instances, because they are freed automatically when the variables assigned to them 
+			go out of scope. Memory leaks are rare in Python.
+
+			Example 5.8. Trying to Implement a Memory Leak
+			>>> def leakmem():
+			...     f = fileinfo.FileInfo('/music/_singles/kairo.mp3') 
+			...     
+			>>> for i in range(100):
+			...     leakmem()                                          
+				- Every time the leakmem function is called, you are creating an instance of FileInfo and assigning it to the variable f, which is a local variable within the function. Then the function ends 
+				without ever freeing f, so you would expect a memory leak, but you would be wrong. When the function ends, the local variable f goes out of scope. At this point, there are no longer any references 
+				to the newly created instance of FileInfo (since you never assigned it to anything other than f), so Python destroys the instance for us.
+				- No matter how many times you call the leakmem function, it will never leak memory, because every time, Python will destroy the newly created FileInfo class before returning from leakmem.
+
+			The technical term for this form of garbage collection is “reference counting”. Python keeps a list of references to every instance created. In the above example, there was only one 
+			reference to the FileInfo instance: the local variable f. When the function ends, the variable f goes out of scope, so the reference count drops to 0, and Python destroys the instance automatically.
+
+			In previous versions of Python, there were situations where reference counting failed, and Python couldn't clean up after you. If you created two instances that referenced each other (for instance, 
+			a doubly-linked list, where each node has a pointer to the previous and next node in the list), neither instance would ever be destroyed automatically because Python (correctly) believed that there is 
+			always a reference to each instance. Python 2.0 has an additional form of garbage collection called “mark-and-sweep” which is smart enough to notice this virtual gridlock and clean up circular references 
+			correctly.
+			(PS: refer to java's GC)
+			ref for more detail: http://www.brpreiss.com/books/opus7/html/page425.html
+					In order to distinguish the live objects from garbage, we record the state of an object in each object. That is, we add a special bool field to each object called, say, marked. By default, 
+				all objects are unmarked when they are created. Thus, the marked field is initially False.
+					The main disadvantage of the mark-and-sweep approach is the fact that that normal program execution is suspended while the garbage collection algorithm runs. In particular, this can be 
+				a problem in a program that interacts with a human user or that must satisfy real-time execution constraints. For example, an interactive application that uses mark-and-sweep garbage collection 
+				becomes unresponsive periodically.
+
+				The Fragmentation Problem 内存碎片问题(上面的标记-清除算法会有此问题，引出下面的停止-拷贝回收算法)
+
+				Stop-and-Copy Garbage Collection
+					The section describes a garbage collection approach that collects garbage and defragments the heap called stop-and-copy  . When using the stop-and-copy garbage collection algorithm, 
+				the heap is divided into two separate regions. At any point in time, all dynamically allocated object instances reside in only one of the two regions--the active region. The other, inactive region is 
+				unoccupied.
+					When the memory in the active region is exhausted, the program is suspended and the garbage-collection algorithm is invoked. The stop-and-copy algorithm copies all of the live objects 
+				from the active region to the inactive region. As each object is copied, all references contained in that object are updated to reflect the new locations of the referenced objects.
+					After the copying is completed, the active and inactive regions exchange their roles. Since the stop-and-copy algorithm copies only the live objects, the garbage objects are left behind. 
+				In effect, the storage occupied by the garbage is reclaimed all at once when the active region becomes inactive.
+					As the stop-and-copy algorithm copies the live objects from the active region to the inactive region, it stores the objects in contiguous memory locations. Thus, the stop-and-copy algorithm 
+				automatically defragments the heap. This is the main advantage of the stop-and-copy approach over the mark-and-sweep algorithm described in the preceding section.
+					The costs of the stop-and-copy algorithm are twofold: First, the algorithm requires that all live objects be copied every time garbage collection is invoked. If an application program has a 
+				large memory footprint, the time required to copy all objects can be quite significant. A second cost associated with stop-and-copy is the fact that it requires twice as much memory as the program 
+				actually uses. When garbage collection is finished, at least half of the memory space is unused.
+
+				Mark-and-Compact Garbage Collection
+					The mark-and-sweep algorithm described in Section  has the unfortunate tendency to fragment the heap. The stop-and-copy algorithm described in Section  avoids fragmentation at the expense 
+				of doubling the size of the heap. This section describes the mark-and-compact   approach to garbage collection which eliminates fragmentation without the space penalty of stop-and-copy.
+					The mark-and-compact algorithm consists of two phases: In the first phase, it finds and marks all live objects. The first phase is called the mark phase. In the second phase, the garbage collection 
+				algorithm compacts the heap by moving all the live objects into contiguous memory locations. The second phase is called the compaction  phase.
+
+	5.5. Exploring UserDict: A Wrapper Class
+			As you've seen, FileInfo is a class that acts like a dictionary. To explore this further, let's look at the UserDict class in the UserDict module, which is the ancestor of the FileInfo class. 
+		This is nothing special; the class is written in Python and stored in a .py file, just like any other Python code. In particular, it's stored in the lib directory in your Python installation.
+
+		Example 5.9. Defining the UserDict Class
+
+		class UserDict:                                
+		    def __init__(self, dict=None):             
+			self.data = {}                         
+			if dict is not None: self.update(dict)  
+				- Python has no form of function overloading whatsoever. Methods are defined solely by their name, and there can be only one method per class with a given name. 
+				So if a descendant class has an __init__ method, it always overrides the ancestor __init__ method, even if the descendant defines it with a different argument list. And the 
+				same rule applies to any other method.
+				- Always assign an initial value to all of an instance's data attributes in the __init__ method. It will save you hours of debugging later, tracking down AttributeError exceptions 
+				because you're referencing uninitialized (and therefore non-existent) attributes.
+		
+		Example 5.10. UserDict Normal Methods
+
+			def clear(self): self.data.clear()          
+			def copy(self):                             
+				if self.__class__ is UserDict:          
+				    return UserDict(self.data)         
+				import copy                             
+				return copy.copy(self)                 
+			def keys(self): return self.data.keys()     
+			def items(self): return self.data.items()  
+			def values(self): return self.data.values()
+				- The copy method of a real dictionary returns a new dictionary that is an exact duplicate of the original (all the same key-value pairs). But UserDict can't simply redirect to self.data.copy, 
+				because that method returns a real dictionary, and what you want is to return a new instance that is the same class as self.
+				- You use the __class__ attribute to see if self is a UserDict; if so, you're golden, because you know how to copy a UserDict: just create a new UserDict and give it the real dictionary that 
+				you've squirreled away in self.data. Then you immediately return the new UserDict you don't even get to the import copy on the next line.
+				- If self.__class__ is not UserDict, then self must be some subclass of UserDict (like maybe FileInfo), in which case life gets trickier. UserDict doesn't know how to make an exact copy of 
+				one of its descendants; there could, for instance, be other data attributes defined in the subclass, so you would need to iterate through them and make sure to copy all of them. Luckily, Python 
+				comes with a module to do exactly this, and it's called copy. I won't go into the details here (though it's a wicked cool module, if you're ever inclined to dive into it on your own). Suffice it to say 
+				that copy can copy arbitrary Python objects, and that's how you're using it here.
+				- The rest of the methods are straightforward, redirecting the calls to the built-in methods on self.data.
+		
+			In versions of Python prior to 2.2, you could not directly subclass built-in datatypes like strings, lists, and dictionaries. To compensate for this, Python comes with wrapper classes that mimic the behavior 
+		of these built-in datatypes: UserString, UserList, and UserDict. Using a combination of normal and special methods, the UserDict class does an excellent imitation of a dictionary. In Python 2.2 and later, 
+		you can inherit classes directly from built-in datatypes like dict. An example of this is given in the examples that come with this book, in fileinfo_fromdict.py.
+
+		Example 5.11. Inheriting Directly from Built-In Datatype dict
+
+			class FileInfo(dict):                  
+			    "store file metadata"
+			    def __init__(self, filename=None): 
+				self["name"] = filename
+					- The first difference is that you don't need to import the UserDict module, since dict is a built-in datatype and is always available. The second is that you are inheriting from dict directly, 
+					instead of from UserDict.UserDict.
+					- The third difference is subtle but important. Because of the way UserDict works internally, it requires you to manually call its __init__ method to properly initialize its internal data structures. 
+					dict does not work like this; it is not a wrapper, and it requires no explicit initialization.
+
+	5.6. Special Class Methods
+		In addition to normal class methods, there are a number of special methods that Python classes can define. Instead of being called directly by your code (like normal methods), 
+		special methods are called for you by Python in particular circumstances or when specific syntax is used.
+
+		5.6.1. Getting and Setting Items
+
+			Example 5.12. The __getitem__ Special Method
+			    def __getitem__(self, key): return self.data[key]
+			>>> f = fileinfo.FileInfo("/music/_singles/kairo.mp3")
+			>>> f
+			{'name':'/music/_singles/kairo.mp3'}
+			>>> f.__getitem__("name") 
+			'/music/_singles/kairo.mp3'
+			>>> f["name"]             
+			'/music/_singles/kairo.mp3'
+				- The __getitem__ special method looks simple enough. Like the normal methods clear, keys, and values, it just redirects to the dictionary to return its value. But how does it get called? Well, 
+				you can call __getitem__ directly, but in practice you wouldn't actually do that; I'm just doing it here to show you how it works. The right way to use __getitem__ is to get Python to call it for you.
+				- This looks just like the syntax you would use to get a dictionary value, and in fact it returns the value you would expect. But here's the missing link: under the covers, Python has converted this 
+				syntax to the method call f.__getitem__("name"). That's why __getitem__ is a special class method; not only can you call it yourself, you can get Python to call it for you by using the right syntax.

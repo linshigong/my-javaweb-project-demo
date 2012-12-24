@@ -1,0 +1,296 @@
+memcached整合ibatis
+
+ibatis自带的本地缓存有FIFO，LRU等，对于分布式缓存也有osCache支持，而最常用的memcached也可以整合到ibatis里滴，这样通过map关系配置，就省了很多硬编码。
+首先写个实现CacheController接口的MemcachedIbatisController类
+/**
+ * ibatis管理memcache 使用LRU算法
+ * @author langke93
+ * @date 2011-01-17
+ * @usage:
+ *  <cacheModel id="cache-videoinfo" type="com.woyo.upload.kernel.util.MemcachedIbatisController">
+      <flushInterval seconds="3600"/>
+       <flushOnExecute statement="updateVideoInfo" />
+     <flushOnExecute statement="insertVideoInfo" />
+     <flushOnExecute statement="deleteVideoInfo" />
+      <property name="size" value="1000" />
+    </cacheModel>
+    @modify:
+     cacheSize默认为0 ，表示由memcache管理缓存大小，推荐在集群中使用
+ */
+package com.woyo.upload.kernel.util;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+import org.apache.log4j.Logger;
+import com.ibatis.sqlmap.engine.cache.CacheController;
+import com.ibatis.sqlmap.engine.cache.CacheModel;
+public class MemcachedIbatisController implements CacheController {
+    protected final Logger log = Logger.getLogger(this.getClass());
+    private MemCachedManager cache;    
+    private List<String> keyList;//keyList 管理key
+    private int cacheSize;   
+  
+    public MemcachedIbatisController(){
+        this.cacheSize = 0; //默认为0表示不限制缓存大小，不使用LRU
+        this.cache = MemCachedManager.getInstance();
+        this.keyList = getKeyListInstance();
+        log.info("       Enable MemcachedIbatisController !");
+    }   
+    public synchronized List<String> getKeyListInstance(){
+     if(keyList == null){
+      keyList =  Collections.synchronizedList(new LinkedList<String>());
+     }
+     return keyList;
+    }
+    public void flush(CacheModel cacheModel) {
+     String key = null;   
+        try {
+         if(keyList.isEmpty()){
+          //cache.flush(); 目前清除缓存仅依赖于缓存过期，分表/条件清除缓存还需要做扩展
+         }else
+            for (int i=0;i<keyList.size();i++) {
+             key = keyList.get(i);
+          cache.delete(key);
+          keyList.remove(key); 
+            }
+        } catch (Exception e) {   
+            e.printStackTrace();   
+        }
+        //keyList.clear();
+        log.info("       flush memcache!"); 
+    }
+    /**
+     * 实现LRU算法
+     * 把最近取过的数据放到栈顶
+     */
+    public Object getObject(CacheModel cacheModel, Object key) {
+     Object result ;
+        String ckey = getKey(cacheModel, key);
+        try {
+            result = cache.get(ckey);
+            if(cacheSize>0){//如果缓存大小有限制，则使用LRU算法
+                keyList.remove(ckey);
+                if (result != null) {
+                  keyList.add(ckey);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();   
+            return null;   
+        }
+        log.info("       getObject memcache!!");
+        return result ;
+    }   
+  
+    /**
+     * 如果超过缓存大小限制，移出栈底数据
+     */
+    public void putObject(CacheModel cacheModel, Object key, Object object) {   
+        String ckey = getKey(cacheModel, key);   
+        keyList.add(ckey);
+        try {
+         Date expiry = new Date();//过期时间
+         expiry.setTime(expiry.getTime()+cacheModel.getFlushInterval());
+            cache.add(ckey,object,expiry);
+            log.debug("       putObject memcache!"); 
+            log.info("cacheSize:"+cacheSize+",keyListSize:"+keyList.size());
+            if (cacheSize>0 && keyList.size() > cacheSize) {   
+                String oldestKey = keyList.remove(0);   
+                cache.delete(oldestKey);   
+                log.debug("       keyList.oldestKey memcache!"); 
+            }   
+        } catch (Exception e) {   
+            e.printStackTrace();   
+        }   
+  
+    }   
+  
+    public Object removeObject(CacheModel cacheModel, Object key) {
+        log.info("       removeObject memcache!"); 
+        String ckey = getKey(cacheModel, key);   
+        try {   
+            if (keyList.contains(ckey)) {
+             keyList.remove(ckey);
+                log.info("       removeObject memcache!"); 
+                return cache.delete(ckey);   
+            }   
+        } catch (Exception e) {   
+            e.printStackTrace();   
+        }   
+        return null;   
+    }   
+    public void setProperties(Properties props){ 
+        String size = props.getProperty("size");   
+        if (size == null) {
+            size = props.getProperty("cache-size");   
+        }   
+        if (size != null) {
+            cacheSize = Integer.parseInt(size);   
+        }
+        if(cache!=null)
+         cache =  MemCachedManager.getInstance();
+    }
+    
+    public int getCacheSize() {
+        return cacheSize;
+      }
+      public void setCacheSize(int cacheSize) {
+        this.cacheSize = cacheSize;
+      }
+      
+    private String getKey(CacheModel cacheModel, Object cacheKey) {   
+        String key = cacheKey.toString();   
+        int keyhash = key.hashCode();   
+        String cacheId = cacheModel.getId();
+        key = Config.MEMCACHED_PRE + cacheId + "_" + keyhash; 
+        return key;
+    }
+}
+对于分布式/集群环境下，每个实例的key会不一至，也就是说A机器存入的一条SQL的KEY在B机器里算出来的KEY会不一至。原因是ibatis在key的算法里，把statement id的hash码做为key的一部分，所以需要重写CachingStatement类，修改baseCacheKey(下文高亮色的地方)：
+/*
+ *  Copyright 2004 Clinton Begin
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package com.ibatis.sqlmap.engine.mapping.statement;
+import com.ibatis.sqlmap.client.event.RowHandler;
+import com.ibatis.sqlmap.engine.cache.CacheKey;
+import com.ibatis.sqlmap.engine.cache.CacheModel;
+import com.ibatis.sqlmap.engine.mapping.parameter.ParameterMap;
+import com.ibatis.sqlmap.engine.mapping.result.ResultMap;
+import com.ibatis.sqlmap.engine.mapping.sql.Sql;
+import com.ibatis.sqlmap.engine.scope.StatementScope;
+import com.ibatis.sqlmap.engine.transaction.Transaction;
+import java.sql.SQLException;
+import java.util.List;
+/**
+ * 
+ * @modify langnke93
+ * statement.setBaseCacheKey(0);
+ * baseCacheKey使用固定值，保证每个实例的CacheKey一至
+ *
+ */
+public class CachingStatement extends MappedStatement {
+  private MappedStatement statement;
+  private CacheModel cacheModel;
+  public CachingStatement(MappedStatement statement, CacheModel cacheModel) {
+    this.statement = statement;
+    this.cacheModel = cacheModel;
+  }
+  public String getId() {
+    return statement.getId();
+  }
+  public StatementType getStatementType() {
+    return statement.getStatementType();
+  }
+  public Integer getResultSetType() {
+    return statement.getResultSetType();
+  }
+  public Integer getFetchSize() {
+    return statement.getFetchSize();
+  }
+  public ParameterMap getParameterMap() {
+    return statement.getParameterMap();
+  }
+  public ResultMap getResultMap() {
+    return statement.getResultMap();
+  }
+  public int executeUpdate(StatementScope statementScope, Transaction trans, Object parameterObject)
+      throws SQLException {
+    int n = statement.executeUpdate(statementScope, trans, parameterObject);
+    return n;
+  }
+  public Object executeQueryForObject(StatementScope statementScope, Transaction trans, Object parameterObject, Object resultObject)
+      throws SQLException {
+    CacheKey cacheKey = getCacheKey(statementScope, parameterObject);
+    cacheKey.update("executeQueryForObject");
+    Object object = cacheModel.getObject(cacheKey);
+    if (object == CacheModel.NULL_OBJECT){
+     // This was cached, but null
+     object = null;
+    }else if (object == null) {
+       object = statement.executeQueryForObject(statementScope, trans, parameterObject, resultObject);
+       cacheModel.putObject(cacheKey, object);
+    }
+    return object;
+  }
+  public List executeQueryForList(StatementScope statementScope, Transaction trans, Object parameterObject, int skipResults, int maxResults)
+      throws SQLException {
+    CacheKey cacheKey = getCacheKey(statementScope, parameterObject);
+    cacheKey.update("executeQueryForList");
+    cacheKey.update(skipResults);
+    cacheKey.update(maxResults);
+    Object listAsObject = cacheModel.getObject(cacheKey);
+    List list;
+    if(listAsObject == CacheModel.NULL_OBJECT){
+      // The cached object was null
+      list = null;
+    }else if (listAsObject == null) {
+      list = statement.executeQueryForList(statementScope, trans, parameterObject, skipResults, maxResults);
+      cacheModel.putObject(cacheKey, list);
+    }else{
+      list = (List) listAsObject;
+    }
+    return list;
+  }
+  public void executeQueryWithRowHandler(StatementScope statementScope, Transaction trans, Object parameterObject, RowHandler rowHandler)
+      throws SQLException {
+    statement.executeQueryWithRowHandler(statementScope, trans, parameterObject, rowHandler);
+  }
+  public CacheKey getCacheKey(StatementScope statementScope, Object parameterObject) {
+ statement.setBaseCacheKey(0);//去掉取于statement id 动态的baseCacheKey使用固定值，保证每个实例的CacheKey一至，用于集群环境
+    CacheKey key = statement.getCacheKey(statementScope, parameterObject);
+    if (!cacheModel.isReadOnly() && !cacheModel.isSerialize()) {
+      key.update(statementScope.getSession());
+    }
+    return key;
+  }
+  public void setBaseCacheKey(int base) {
+    statement.setBaseCacheKey(base);
+  }
+  public void addExecuteListener(ExecuteListener listener) {
+    statement.addExecuteListener(listener);
+  }
+  public void notifyListeners() {
+    statement.notifyListeners();
+  }
+  public void initRequest(StatementScope statementScope) {
+    statement.initRequest(statementScope);
+  }
+  public Sql getSql() {
+    return statement.getSql();
+  }
+  public Class getParameterClass() {
+    return statement.getParameterClass();
+  }
+  public Integer getTimeout() {
+    return statement.getTimeout();
+  }
+  public boolean hasMultipleResultMaps() {
+    return statement.hasMultipleResultMaps();
+  }
+  public ResultMap[] getAdditionalResultMaps() {
+    return statement.getAdditionalResultMaps();
+  }
+}
+好了，这样就可以在map配置里引用刚才的cache实现类
+ <cacheModel id="CacheVideoInfo"  readOnly="false" serialize="true" type="com.woyo.upload.kernel.util.MemcachedIbatisController">
+      <flushInterval seconds="3600"/>
+      <property name="size" value="1000" />
+    </cacheModel>
+ <statement id="updateVideoInfo" parameterClass="com.woyo.upload.kernel.entity.VideoInfo" cacheModel="CacheVideoInfo">  ....
+目前清除缓存仅依赖于缓存过期，分实例/条件清除缓存还需要做扩展
+
+from: http://www.cnblogs.com/langke93/archive/2011/03/30/2217387.html
