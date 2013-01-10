@@ -11,6 +11,61 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 文档
+	http://www.ishare.sina.com.cn
+	http://www.slideshare.net/
+* 红黑树 Red-Black tree
+	TreeMap基于红黑树实现 jdk1.6
+	
+	A red–black tree is a type of self-balancing binary search tree, a data structure used in computer science, typically used to implement associative arrays.
+	from: http://en.wikipedia.org/wiki/Red%E2%80%93black_tree	 
+
+	相关点：
+	Binary tree 二叉树
+			In computer science, a binary tree is a tree data structure in which each node has at most two child nodes, usually distinguished as "left" and "right". Nodes with children are parent nodes, and child nodes may contain references to their parents. Outside the tree, there is often a reference to the "root" node (the ancestor of all nodes), if it exists. Any node in the data structure can be reached by starting at root node and repeatedly following references to either the left or right child. A tree which does not have any node other than root node is called a null tree. In a binary tree a degree of every node is maximum two. A tree with n nodes has exactly n−1 branches or degree.
+		Binary trees are used to implement binary search trees and binary heaps.
+		from: http://en.wikipedia.org/wiki/Binary_tree
+
+* tair
+	-
+	Tair是什么
+　　	Tair是一个分布式的key/value系统。
+
+　　Tair有四种引擎：
+		mdb, rdb, kdb和ldb。分别基于四种开源的key/value数据库：memcached, Redis, Kyoto Cabinet和leveldb。Tair可以让你更方便地使用这些KV数据库。比如Redis没有提供sharding操作，
+		如果有多个Redis Server，你需要自己写代码实现sharding，Tair帮你封装了这些。
+
+　　Tair有以下优点：
+　　1) 统一的API。无论底层使用何种引擎，上层的API是一样的。
+　　2) Tair将集群操作封装起来，解放了开发者。淘宝内部在使用Tair时，一般都是双机房双集群容错，利用invalid server保证两个集群间的一致性，这些对于开发者都是透明的。
+
+	Tair使用场景
+	1.) 非持久化(mdb,rdb)
+		数据可以以key/value的形式存储
+		数据可以接受丢失
+		访问速度要求很高
+		单个数据大小不是很大，一般在KB级别
+		数据量很大，并且有较大的增长可能性
+		数据更新不频繁
+	2) 持久化(kdb,ldb)
+		数据可以以key/value的形式存储
+		数据需要持久化
+		单个数据大小不是很大，一般在KB级别
+		数据量很大，并且有较大的增长可能性
+		数据的读写比例较高
+	
+	Tair的架构
+	　　Tair是Master/Slave结构。Config Server管理Data Server节点、维护Data Server的状态信息；Data Server负责数据存储，按照Config Server的指示完成数据复制和迁移工作，
+		并定时给Config Server发送心跳信息。Config Server是单点，采用一主一备的方式保证可靠性
+
+	Tair的功能
+	1) 动态增加或减少data server
+	　　Config Server使用Hash算法将数据桶均匀分布到不同的Data Server。当某个Data Server发生故障时，Config Server会察觉这一情况，重新计算一张数据桶的分布表，并将到故障Data Server的访问转到别的DataServer上。这个过程中，有可能因为负载平衡出现数据迁移。Config Server会检查Data Server的负载，将数据迁移到负载较小的节点上。迁移过程中，Config Server会保证路由表的正确性，使得客户端能够得到数据。
+	　　客户端连接Config Server时，会下载最新的路由表。如果连接某个Data Server不成功（可能宕机了），客户端会重新连接Config Server以获得最新的路由表。
+	2) 数据桶分布策略
+	　　数据桶的分布策略有两种：负载平衡优先和位置安全优先。负载平衡不用说。安全位置优先是指同一个桶的两个duplication要分布在不同的机房。
+	3)客户端
+	　　Tair Server使用C++编写，利用socket通信。原则上只要支持socket的语言都可以连接，目前只提供Java和C++客户端。
 * java GC
 	 Java GC 算法
 
@@ -153,6 +208,7 @@ google 检索 apache： site:*.apache.org 高级搜索
 
 		* ryzom
 			模块化，组件化的设计。核心框架和业务无关，各自发展
+			http://blog.sina.com.cn/s/articlelist_1850874464_0_4.html
 
 * java dns 缓存
 	%JAVA_HOME/jre/lib/security/java.security
@@ -187,7 +243,7 @@ google 检索 apache： site:*.apache.org 高级搜索
 
 	- SYN攻击
 		
-* 事务
+* 事务 数据库事务 
 	- 事务并发问题：
 		1) 脏读：包含未提交数据的读取。例如，事务1 更改了某行。事务2 在事务1 提交更改之前读取已更改的行。
 			如果事务1 回滚更改，则事务2 便读取了逻辑上从未存在过的行。
@@ -202,7 +258,28 @@ google 检索 apache： site:*.apache.org 高级搜索
 		提交读		否		是				是
 		可重复读	否		否				是
 		可串行读	否		否				否
-		
+	
+	解决办法：
+		原则，能不用数据库锁就不用
+		1) 若只是简单的更新，可直接在update语句中完成，而不是读出来修改后再写进去(如：update test set sum=sum+1)
+		2) 若更新操作简单，在关键的更新处做是否成功判断来解决并发问题，如：
+			问题：要抽出20个奖，可是最后并发多抽出了30个
+			if (有未中奖的名额)  {
+			    update(奖品状态为中奖);
+			    insert(写入中奖列表);
+			    echo(你中奖了！);
+			} 
+			
+			修改为：
+			if (有未中奖的名额)  {
+			    if (update(奖品状态为中奖)) {
+				insert(写入中奖列表);
+				echo(你中奖了！);
+			    }
+			}
+		3) 数据库锁
+
+
 * windows下命令格式
 	- netstat -an 1 |grep 220.181.111.148
 	- 
@@ -941,17 +1018,84 @@ Storage for Interactive Services
 		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
 
 * zookeeper
-	解决hadoop的单点故障(single point of failure of Name Node)，ZooKeeper能够用来leader选举,配置信息维护等。在一个分布式的环境中，
-	我们需要一个Master实例或存储一些配置信息，确保文件写入的一致性等。目前ZooKeeper解决Hadoop的单点故障实现的是主备机方式。
+	- 解决hadoop的单点故障(single point of failure of Name Node)，ZooKeeper能够用来leader选举,配置信息维护等。在一个分布式的环境中，
+		我们需要一个Master实例或存储一些配置信息，确保文件写入的一致性等。目前ZooKeeper解决Hadoop的单点故障实现的是主备机方式。
 
-	leader-follower模式
+		leader-follower模式
 
-	Master选举
-		-动态
-		主备切换，一旦某个机器A挂了，马上能够通知到slave，然后slave能够在ZK挃定节点上获取master最后的运行状态，然后就可以把自己标识为master了。
+		Master选举
+			-动态
+			主备切换，一旦某个机器A挂了，马上能够通知到slave，然后slave能够在ZK挃定节点上获取master最后的运行状态，然后就可以把自己标识为master了。
 
-	ZooKeeper是Hadoop的正式子项目，它是一个针对大型分布式系统的可靠协调系统，提供的功能包括：配置维护、名字服务、分布式同步、组服务等。
-	ZooKeeper的目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。
+		ZooKeeper是Hadoop的正式子项目，它是一个针对大型分布式系统的可靠协调系统，提供的功能包括：配置维护、命名服务、分布式同步、组服务等。
+		ZooKeeper的目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。
+
+	- ZooKeeper 典型的应用场景
+		Zookeeper 从设计模式角度来看，是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生 变化，
+		Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式，关于 Zookeeper 的详细架构等内部细节可以阅读 Zookeeper
+		的源码
+
+		下面详细介绍这些典型的应用场景，也就是 Zookeeper 到底能帮我们解决那些问题？下面将给出答案。
+
+		1) 统一命名服务（Name Service）
+
+		分布式应用中，通常需要有一套完整的命名规则，既能够产生唯一的名称又便于人识别和记住，通常情况下用树形的名称结构是一个理想的选择，树形 的名称结构是一个有层次的目录结构，
+		既对人友好又不会重复。说到这里你可能想到了 JNDI，没错 Zookeeper 的 Name Service 与 JNDI 能够完成的功能是差不多的，它们都是将有层次的目录结构关联到一定资源上，但是 Zookeeper 
+		的 Name Service 更加是广泛意义上的关联，也许你并不需要将名称关联到特定资源上，你可能只需要一个不会重复名称，就像数据库中产生一个唯一的数字主键一样。
+
+		Name Service 已经是 Zookeeper 内置的功能，你只要调用 Zookeeper 的 API 就能实现。如调用 create 接口就可以很容易创建一个目录节点。
+
+		2) 配置管理（Configuration Management） 发布&订阅服务
+
+		配置的管理在分布式应用环境中很常见，例如同一个应用系统需要多台 PC Server 运行，但是它们运行的应用系统的某些配置项是相同的，如果要修改这些相同的配置项，
+		那么就必须同时修改每台运行这个应用系统的 PC Server，这样非常麻烦而且容易出错。
+
+		像这样的配置信息完全可以交给 Zookeeper 来管理，将配置信息保存在 Zookeeper 的某个目录节点中，然后将所有需要修改的应用机器监控配置信息的状态，一旦配置信息发生变化，
+		每台应用机器就会收到 Zookeeper 的通知，然后从 Zookeeper 获取新的配置信息应用到系统中。
+
+		3) 集群管理（Group Membership）
+
+		Zookeeper 能够很容易的实现集群管理的功能，如有多台 Server 组成一个服务集群，那么必须要一个“总管”知道当前集群中每台机器的服务状态，一旦有机器不能提供服务，
+		集群中其它集群必须知道，从而做出调整重新分配服 务策略。同样当增加集群的服务能力时，就会增加一台或多台 Server，同样也必须让“总管”知道。
+
+		Zookeeper 不仅能够帮你维护当前的集群中机器的服务状态，而且能够帮你选出一个“总管”，让这个总管来管理集群，这就是 Zookeeper 的另一个功能 Leader Election。
+
+		它们的实现方式都是在 Zookeeper 上创建一个 EPHEMERAL 类型的目录节点，然后每个 Server 在它们创建目录节点的父目录节点上调用 getChildren (String  path, boolean watch) 方法并
+		设置 watch 为 true，由于是 EPHEMERAL 目录节点，当创建它的 Server 死去，这个目录节点也随之被删除，所以 Children 将会变化，这时getChildren 上的 Watch 将会被调用，所以
+		其它 Server 就知道已经有某台 Server 死去了。新增 Server 也是同样的原理。
+
+		Zookeeper 如何实现 Leader Election，也就是选出一个 Master Server。和前面的一样每台 Server 创建一个 EPHEMERAL 目录节点，不同的是它还是一个 SEQUENTIAL 目录节点，所以
+		它是个 EPHEMERAL_SEQUENTIAL 目录节点。之所以它是 EPHEMERAL_SEQUENTIAL 目录节点，是因为我们可以给每台 Server 编号，我们可以选择当前是最小编号的 Server 为 Master，
+		假如这个最小编号的 Server 死去，由于是 EPHEMERAL 节点，死去的 Server 对应的节点也被删除，所以当前的节点列表中又出现一个最小编号的节点，我们就选择这个节点为当前 Master。
+		这样就实现了动态选择 Master，避免了传统意义上单 Master 容易出现单点故障的问题。
+
+		4) 共享锁（Locks）
+
+		共享锁在同一个进程中很容易实现，但是在跨进程或者在不同 Server 之间就不好实现了。Zookeeper 却很容易实现这个功能，实现方式也是需要获得锁的 Server 创建一个 
+		EPHEMERAL_SEQUENTIAL 目录节点，然后调用 getChildren 方法获取当前的目录节点列表中最小的目录节点是不是就是自己创建的目录节点，如果正是自己创建的，
+		那么它就获得了这个锁，如果不是那么它就调用 exists (String  path, boolean watch) 方法并监控 Zookeeper 上目录节点列表的变化，一直到自己创建的节点是列表中最小编号的目录节点，
+		从而获得锁，释放锁很简单，只要删除前面它自己所创建的目录节点就行了。
+
+		5) 队列管理
+
+		Zookeeper 可以处理两种类型的队列：
+
+		当一个队列的成员都聚齐时，这个队列才可用，否则一直等待所有成员到达，这种是同步队列。
+		队列按照 FIFO 方式进行入队和出队操作，例如实现生产者和消费者模型。
+		同步队列用 Zookeeper 实现的实现思路如下：
+
+		创建一个父目录 /synchronizing，每个成员都监控标志（Set Watch）位目录 /synchronizing/start 是否存在，然后每个成员都加入这个队列，加入队列的方式就是
+		创建 /synchronizing/member_i 的临时目录节点，然后每个成员获取 / synchronizing 目录的所有目录节点，也就是 member_i。判断 i 的值是否已经是成员的个数，
+		如果小于成员个数等待 /synchronizing/start 的出现，如果已经相等就创建 /synchronizing/start。
+
+		用下面的流程图更容易理解：
+
+		FIFO 队列用 Zookeeper 实现思路如下：
+
+		实现的思路也非常简单，就是在特定的目录下创建 SEQUENTIAL 类型的子目录 /queue_i，这样就能保证所有成员加入队列时都是有编号的，出队列时通过 getChildren( ) 方法
+		可以返回当前所有的队列中的元素，然后消费其中最小的一个，这样就能保证 FIFO。
+
+		下面是生产者和消费者这种队列形式的示例代码，完整的代码请看附件：		
 	
 * ssh
 	- key登陆,公钥认证登陆
@@ -1707,6 +1851,41 @@ Storage for Interactive Services
 
 	from: http://www.linuxsky.org/doc/admin/200712/213.html
 
+* libvirt libvirt库 虚拟化库
+	- 统一抽象虚拟化操作接口，避免不同hypervistor的学习成本
+		比如，封装了xen API，这样通过统一的libvirt API即可管理xen hypervistor
+	- 简介
+		The virtualization API
+
+		libvirt is:
+		- A toolkit to interact with the virtualization capabilities of recent versions of Linux (and other OSes), see our project goals for details.
+		- Free software available under the GNU Lesser General Public License.
+		- A long term stable C API
+		- A set of bindings for common languages
+		- A CIM provider for the DMTF virtualization schema
+		- A QMF agent for the AMQP/QPid messaging system
+		
+		libvirt supports:
+		- The KVM/QEMU Linux hypervisor
+		- The Xen hypervisor on Linux and Solaris hosts.
+		- The LXC Linux container system
+		- The OpenVZ Linux container system
+		- The User Mode Linux paravirtualized kernel
+		- The VirtualBox hypervisor
+		- The VMware ESX and GSX hypervisors
+		- The VMware Workstation and Player hypervisors
+		- The Microsoft Hyper-V hypervisor
+		- Virtual networks using bridging, NAT, VEPA and VN-LINK.
+		- Storage on IDE/SCSI/USB disks, FibreChannel, LVM, iSCSI, NFS and filesystems
+		
+		libvirt provides:
+		- Remote management using TLS encryption and x509 certificates
+		- Remote management authenticating with Kerberos and SASL
+		- Local access control using PolicyKit
+		- Zero-conf discovery using Avahi multicast-DNS
+		- Management of virtual machines, virtual networks and storage
+		- Portable client API for Linux, Solaris and Windows
+
 * xen 
 	- vhd (virtual hard disk)
 		Blktap2：Xen 4.0中所采用新的虚拟硬盘(VHD)提供了高性能虚拟机快照和克隆功能，此外还可以在不停止虚拟机处理的情况下做实时虚拟磁盘快照
@@ -1781,7 +1960,11 @@ Storage for Interactive Services
 	源码编译安装
 		如果需要打patch，则打好相应的patch后再编译安装
 	第三方源安装
-* linux c 开发			linux c/c++ c++
+* linux c 开发			linux c/c++ c++ cpp
+	- eclipse集成cpp开发环境，下载CDT版本的eclipse，或者安装CDT插件
+		CDT插件：http://download.eclipse.org/tools/cdt/releases/helios
+		eclipse for javaee版本，安装插件，再安装minGW
+
 	- 以简单的c/c++例子学习
 		http://www.oschina.net/code/list/2/cpp?show=month
 		源码中国等技术网站，有用户上传的各类源码程序，是一个好的学习资源
@@ -1791,6 +1974,117 @@ Storage for Interactive Services
 		patch	- svn更新patch
 		source	- 源码包
 		spec - 用于制作rpm包
+	* cpp
+		 - 引用 参数值传递与址传递
+			概念：
+			引用引入了对象的一个同义词。定义引用的表示方法与定义指针相似，只是用&代替了*。引用（reference）是c++对c语言的重要扩充。
+			引用就是某一变量（目标）的一个别名，对引用的操作与对变量直接操作完全一样。引用的声明方法：类型标识符 &引用名=目标变量名；　
+			说明：
+			（1）&在此不是求地址运算，而是起标识作用。
+		　　（2）类型标识符是指目标变量的类型。
+		　　（3）声明引用时，必须同时对其进行初始化。
+		　　（4）引用声明完毕后，相当于目标变量名有两个名称，即该目标原名称和引用名，且不能再把该引用名作为其他变量名的别名。
+			　　int a,&ra=a;
+			　　a为目标原名称，ra为目标引用名。给ra赋值：ra=1; 等价于 a=1;
+		　　（5）声明一个引用，不是新定义了一个变量，它只表示该引用名是目标变量名的一个别名，它本身不是一种数据类型，因此引用本身不占存储单元，系统也不给引用分配存储单元。故：对引用求地址，就是对目标变量求地址。&ra与&a相等。
+		　　（6）不能建立数组的引用。因为数组是一个由若干个元素所组成的集合，所以无法建立一个数组的别名。
+			
+			引用参数：
+				1) 传递可变参数
+			　　传统的c中，函数在调用时参数是通过值来传递的，这就是说函数的参数不具备返回值的能力。
+			　　所以在传统的c中，如果需要函数的参数具有返回值的能力，往往是通过指针来实现的
+				2) 给函数传递大型对象
+			　　当大型对象被传递给函数时，使用引用参数可使参数传递效率得到提高，因为引用并不产生对象的
+			　　副本，也就是参数传递时，对象无须复制。
+
+			引用返回值：只有类里面的方法可以返回引用，并且引用对象为类成员变量；对于一般的函数调用,返回引用将导致编译出错
+
+			常引用：常引用声明方式：const 类型标识符&引用名=目标变量名；用这种方式声明的引用，不能通过引用对目标变量的值进行修改,从而使引用的目标成为const，
+				达到了引用的安全性。
+
+			引用和多态：引用是除指针外另一个可以产生多态效果的手段。这意味着，一个基类的引用可以指向它的派生类实例
+
+		- 继承
+			一个派生类可以从一个基类派生，也可以从多个基类派生。从一个基类派生的继承称为单继承；从多个基类派生的继承称为多继承。
+			　　派生类的定义格式
+			　　单继承的定义格式如下：
+			　　class <派生类名>:<继承方式><基类名>
+			　　{
+			　　<派生类新定义成员>
+			　　};
+			　　其中，<派生类名>是新定义的一个类的名字，它是从<基类名>中派生的，并且按指定的<继承方式>派生的。<继承方式>常使用如下三种关键字给予表示：
+			　　public 表示公有基类；
+			　　private 表示私有基类；
+			　　protected 表示保护基类；
+			　　多继承的定义格式如下：
+			　　class <派生类名>:<继承方式1><基类名1>,<继承方式2><基类名2>,…
+			　　{
+			　　<派生类新定义成员>
+			　　};
+			　　可见，多继承与单继承的区别从定义格式上看，主要是多继承的基类多于一个。
+			　　如果省略继承方式，对'class'将采用私有继承，对'struct'将采用公有继承。
+
+				from: http://baike.baidu.com/view/2129194.htm
+		- 虚函数 virtual
+			定义：在某基类中声明为 virtual 并在一个或多个派生类中被重新定 义的成员函数[1]
+			语法：virtual 函数返回类型 函数名（参数表） { 函数体 }
+			用途：实现多态性，通过指向派生类的基类指针，访问派生类中同名覆盖成员函数
+			虚函数必须是基类的非静态成员函数，其访问权限可以是protected或public，在基类的类定义中定义虚函数的一般形式：
+			　　class 基类名{
+			　　.......
+			　　virtual 返回值类型 将要在派生类中重载的函数名（参数列表）；
+			　　}；
+		
+			动态联编规定，只能通过指向基类的指针或基类对象的引用来调用虚函数，其格式：
+		　　1) 指向基类的指针变量名->虚函数名（实参表）
+		　　2) 基类对象的引用名. 虚函数名（实参表）
+
+		　　使用虚函数，我们可以灵活的进行动态绑定，当然是以一定的开销为代价。如果父类的函数（方法）根本没有必要或者无法实现，完全要依赖子类去实现的话，可以把此函数（方法）设为virtual 函数名=0 我们把这样的函数（方法）称为纯虚函数。
+		　　如果一个类包含了纯虚函数，称此类为抽象类。
+		- 简介
+			美国AT&T贝尔实验室的本贾尼·斯特劳斯特卢普（Bjarne Stroustrup）博士在20世纪80年代初期发明并实现了C++（最初这种语言被称作“C with Classes”）。 
+			一开始C++是作为C语言的增强版出现的，从给C语言增加类开始，不断的增加新特性。虚函数（virtual function）、运算符重载（operator overloading）、
+			多重继承（multiple inheritance）、模板（template）、异常（exception）、RTTI、命名空间（name space）逐渐被加入标准。 
+			
+			1998年国际标准组织（ISO）颁布了C++程序设计语言的国际标准ISO/IEC 1988-1998。C++是具有国际标准的编程语言，通常称作ANSI/ISOC++
+		- prototype define /function define /call function
+		- 
+			access names in a given namespace. The simplest way is to use
+			::, the scope-resolution operator, to qualify a name with its namespace:
+			Jack::pail = 12.34; // use a variable
+			Jill::Hill mole; // create a type Hill structure
+			Jack::fetch(); // use a function
+		- prototype一般定义在头文件中，在cpp文件中具体实现；命名空间及其下面的类名字空间；
+		- ->与::
+			首先介绍一下C语言中的结构。对于一个结构来说， 
+			struct MyStruct { 
+			int member_a; 
+			}; 
+			如果有个变量MyStruct s，那么使用其中的成员元素时可以用 
+			s.member_a = 1； 
+			如果采用指针方法访问，比如MyStruct * ps，那么同样的访问必须用箭头号： 
+			ps->member_a = 1; 
+
+			::只用在类成员函数和类成员变量中。比如，声明一个类： 
+			class CA { 
+			public: 
+			int ca_var; 
+			int add(int a, int b); 
+			int add(int a); 
+			}; 
+			那么在实现这个函数时，必须这样书写： 
+			int CA::add(int a, int b) 
+			{ 
+			return a + b; 
+			} 
+			另外，双冒号也常常用于在类变量内部作为当前类实例的元素进行表示，比如: 
+			int CA::add(int a) 
+			{ 
+			return a + ::ca_var; 
+			} 
+			表示当前类实例中的变量ca_var。
+
+	* CEGUI
 
 * 打开outlook的时候，错误提示“无法启动Microsoft Office Outlook。无法打开Outlook窗口”	* 修复 *系统修复　* 自修复
 	    重启机器仍无法解决问题。
@@ -1932,6 +2226,27 @@ Storage for Interactive Services
 	  使用VRRP协议，不用改造目前的网络结构，最大限度保护了当前投资，只需最少的管理费用，却大大提升了网络性能，具有重大的应用价值。
 
 * linux
+	- linux挂载硬盘	    * linux挂载硬盘
+		添加磁盘
+		找到磁盘
+			fdisk -l
+		分区
+			fidsk /dev/xxx
+			n
+			w
+			...
+		格式化
+			mkfs -t ext3 /dev/xxx
+		创建目录，并挂载上面的分区
+			mkdir /disk
+			mount /dev/xxx /disk
+		验证挂载情况
+			df -k
+		设置开机自动挂载
+			vi /etc/fstab
+			/dev/xxx               /disk                 ext3    defaults        0 0
+		from: http://blog.csdn.net/tianlesoftware/article/details/5642883
+
 	- nslookup
 		DNS信息
 		Nslookup is a program to query Internet domain name servers.  Nslookup has two modes: interactive and non-interactive. Interactive
@@ -2689,7 +3004,8 @@ search in index find pdf
 	lvm howto：http://blog.haohtml.com/archives/10298
 
 * VNC
-	VNC (Virtual Network Computing)是虚拟网络计算机的缩写。VNC是一款优秀的远程控制工具软件，由著名的AT&T的欧洲研究实验室开发的。
+	
+	- VNC (Virtual Network Computing)是虚拟网络计算机的缩写。VNC是一款优秀的远程控制工具软件，由著名的AT&T的欧洲研究实验室开发的。
 	VNC是在基于UNIX和Linux操作系统的免费的开放源码软件，远程控制能力强大，高效实用，其性能可以和Windows和MAC中的任何远程控制软件媲美。 
 	在Linux中，VNC包括以下四各命令：vncserver，vncviewer，vncpasswd，和vncconnect。大多数情况下我只需要其中的两个命令：vncserver和vncviewer。
 	
@@ -2697,6 +3013,38 @@ search in index find pdf
 	　　应用平台： Win9x/NT/2000/XP/2003 Linux/unix
 	　　自由软件，遵循GPL条款，源代码开源，个人、企业使用均无任何限制。
 		vnc的加强，短小精悍，功能强大。
+	- 配置vnc访问xen的vm
+		有时需要通过主机hvc0登录到虚拟机中，有时需要借助vnc登录虚拟机进行管理，这样就需要有相应的配置保证两者都能正常输出。具体的配置如下文。
+		
+		hvc是Xen虚拟化技术引入的对虚拟机进行控制的虚拟console，在虚拟机的配置中自动完成；VNC显示VGA硬件输出，可以完成对虚拟机的管理。
+		在Xen虚拟化技术中hvc则是自带的，而VNC的输出需要借助qemu-dm来模拟VGA硬件。		
+		
+		hvc0的输出不需要调整，只需要在虚拟机中配置串口输出，就能够使得hvc0在串口输出；而tty1通过VGA输出，用VNC显示。具体配置如下，
+
+		在虚拟机中完成：
+
+		#vi  /boot/grub/menu.lst    视虚拟机的启动文件而变动
+
+		serial --unit=0 --speed=38400 --word=8 --parity=no --stop=1
+
+		在内核行添加如下的参数
+
+		console=ttyS0,38400n8
+
+		在/etc/securetty 中保证有ttyS0
+
+		#echo ‘ttyS0’ >> /etc/securetty
+
+		修改/etc/inittab保证有以下的内容
+
+		#vi /etc/inittab
+
+		1:2345:respawn:/sbin/getty 38400 hvc0
+
+		2:2345:respawn:/sbin/getty 38400 tty1
+
+		然后将虚拟机重启，就可以同时在VNC和host主机中访问虚拟机了。
+
 * RPC
 	 - 通过socket进行RPC调用
 		 --------
@@ -3139,6 +3487,8 @@ search in index find pdf
 		另外,按下v键,可以进入可视模式,这个时候可以更自由更灵活的选取要复制的段落,区块了.
 
 * 一致性hash算法（consistent hashing） hash圆环 ，环形hash robin环 Round Robin round-robin    一致性哈希	 （这里以memcached客户端的应用为例子说明）
+	- 一致性哈希算法最大程度的避免了key在服务节点列表上的重新分布，其他附带的改进就是有的一致性哈希算法还增加了虚拟服务节点的方法，也就是一个服务节点在环上有多个映射点，
+	这样就能抑制分布不均匀，最大限度地减小服务节点增减时的缓存重新分布。
 	- memcached客户端
 
 	- http://www.cnblogs.com/liyulong1982/articles/2497731.html
@@ -3274,6 +3624,8 @@ search in index find pdf
 	- spring通过aop拦截器，拦截自定义注解所注解的方法 参考day52
 		参考：http://raulraja.com/2009/06/13/aop-spring-intercepting-method-calls-using-annotations/
 	- ioc时注意，有些ioc是直接通过注解注入的，故在配置文件中找不到，这个细节要注意
+		作用：1）管理对象关系，避免了直接new实现，更符合接口编程 2）对象生命周期管理
+
 		@Autowired(required = true)
 		public void setXX(@Qualifier("xx") xx xx) {
 			//
@@ -3771,6 +4123,10 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
 * test * mock  * jmock		       * 单元测试 * 集成测试		 * jtester
+	- 定义期望执行expectation时，如果步骤多，不易于定位那里不对			  -tip-
+		可以通过化整为零方式，去掉所有的期望，从第一个执行开始，结合debug逐步补充上执行过程中需要的expectation。
+		需要什么就mock或expect什么
+				
 	- jtester mock 自身方法，私有方法等
 		------
 			new MockUp<AbstractExecuteAction>() {
@@ -3869,6 +4225,9 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			...
 			-----
 * struts
+	- struts2的返回
+		根据action的result的配置，定义返回值，可自定义一个result继承框架的result接口接口，在返回给client前进行特殊处理。
+
 	- ValueStack valueStack = con.getValueStack();
 			ResultDomain result = (ResultDomain)valueStack.findValue(ResultDomainVisitor.RESULT_KEY, ResultDomain.class);
 	- ActionContext
@@ -4158,6 +4517,16 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			如果启动memcached服务时用了其他端口，在将你的端口号代替11211. 
 		-------
 	- 用了gwhalin 的Memcached-Java-Client  api，基本操作ok
+
+	这个java版本的memcached客户端，实现了多memcached集群实例的存取支持(需要避免热点cache)。
+		参看：SockIOPool类
+			提供3种hash方式，不同的方法对缓存分布是否均匀有影响以及是否支持多client。说明如下：
+				- SockIOPool.NATIVE_HASH (0)     - native String.hashCode() - fast (cached) but not compatible with other clients
+				- SockIOPool.OLD_COMPAT_HASH (1)	- original compatibility hashing alg (works with other clients)
+				- SockIOPool.NEW_COMPAT_HASH (2)	- new CRC32 based compatibility hashing algorithm (fast and works with other clients)
+				- SockIOPool.CONSISTENT_HASH(3)	- MD5 Based -- Stops thrashing when a server added or removed
+				以及consistent hash的实现，避免了key在服务节点列表上的重新分布，有的还实现了虚拟节点让缓存发布更加均匀。
+
 	------
 		public class test {
 
@@ -4663,11 +5032,20 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- eclipse 的 type hierarchy 面板应用
 		在测试时，比如jtester测试，如果只想执行某一个方法的测试，可以在这个视图的方法上右击执行（通过反射执行，不用执行每个用例）
 
-	* Source Insight
+* Source Insight
+	- 
 		Source Insight是一个面向项目开发的程序编辑器和代码浏览器，它拥有内置的对C/C++, C#和Java等程序的分析。Source Insight能分析你的源代码并在你工作的同时动态维护
-		它自己的符号数据库，并自动为你显示有用的上下文信息。 Source Insight不仅仅是一个强大的程序编辑器，它还能显示reference trees，class inheritance diagrams和call trees。
-		Source Insight提供了最快速的对源代码的导航和任何程序编辑器的源信  息。 Source Insight提供了快速和革新的访问源代码和源信息的能力。与众多其它编辑器产品不同，
-		Source Insight能在你编辑的同时分析你的源代码，为你提供实用的信息并立即进行分析。
+	它自己的符号数据库，并自动为你显示有用的上下文信息。 Source Insight不仅仅是一个强大的程序编辑器，它还能显示reference trees，class inheritance diagrams和call trees。
+	Source Insight提供了最快速的对源代码的导航和任何程序编辑器的源信  息。 Source Insight提供了快速和革新的访问源代码和源信息的能力。与众多其它编辑器产品不同，
+	Source Insight能在你编辑的同时分析你的源代码，为你提供实用的信息并立即进行分析。
+	- 快捷键
+		alt+,/. 回退/前进
+		ctrl+= 进入方法定义
+		shift+F8 高亮显示选中内容
+	- 导入工程方法
+		project->new project>选泽源码所在目录>...
+
+
 * php 
 	 Discuz
 	 开源bug管理系统bugfree：
@@ -4968,6 +5346,31 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- python异常分析，异常日志由上到下，为异常的入口点，直到报错的地方；java是由下而上，日志前面是具体出错的地方
+		------
+			[root@AT-HOUYIDEV_AG]$ python houyiapi_bigregion2new_update_regionstatus.py 
+			Before update houyi.region_status, houyi.region_status has 0 records
+			Traceback (most recent call last):
+			  File "houyiapi_bigregion2new_update_regionstatus.py", line 46, in <module>
+			    main()
+			  File "houyiapi_bigregion2new_update_regionstatus.py", line 42, in main
+			    import_region_status_into_houyi()
+			  File "houyiapi_bigregion2new_update_regionstatus.py", line 31, in import_region_status_into_houyi
+			    houyidb.execute(sql)
+			  File "/usr/local/lib/python2.5/site-packages/pypet/common/database.py", line 103, in execute
+			    return self.cursor.execute(_format(sql), args)
+			  File "build/bdist.linux-x86_64/egg/MySQLdb/cursors.py", line 174, in execute
+			  File "build/bdist.linux-x86_64/egg/MySQLdb/connections.py", line 36, in defaulterrorhandler
+			_mysql_exceptions.OperationalError: (1054, "Unknown column 'AT' in 'field list'")
+		------
+	- eclipse开发python
+		在pyconsole中导入module时，需要设置项目的pydev-PYTHONPATH（设置PATH）
+
+	- 文件头部的预处理语句说明
+		#!/usr/bin/python是告诉操作系统执行这个脚本的时候，调用/usr/bin下的python解释器；
+		#!/usr/bin/env python这种用法是为了防止操作系统用户没有将python装在默认的/usr/bin路径里。当系统看到这一行的时候，首先会到env设置里查找python的安装路径，再调用对应路径下的解释器程序完成操作。
+		#!/usr/bin/python相当于写死了python路径;
+		#!/usr/bin/env python会去环境设置寻找python目录,推荐这种写法
 	- GC
 		mark-and-sweep
 			The mark-and-sweep algorithm is called a tracing garbage collector because is traces out the entire collection of objects that are directly or indirectly accessible by the program.  The objects 
@@ -5087,6 +5490,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		配置python命令到环境变量中
 		cmd or shell中执行：python xxx.py即可；参数传递 --key=xxx,--name=xxx
 	
+	- __init__.py在目录下，代表module包；一般为空，也可初始化值
 
 * Google App Engine 
 		虽然GAE有很多限制和缺陷，但是我对GAE还是喜爱有加的。GAE是免费的，任何人都可以很轻松的通过GAE实现自己的Web应用。比如，做一些实用的小工具，
@@ -7942,7 +8346,13 @@ day16 Friday, April 06, 2012
 		自动查询数据库得出 or 配置文件配置初始抽取时间点 or 两者都支持
 	* 
 
-4. MS 改为 OMS 参看其文档
+4. MS 改为 OMS 参看其文档 * OMS open metering service
+	 OMS简介
+		阿里云 计量 服务（ Open Metering Service ，简称 OMS），是阿里云对外提供 ），是阿里云对外提供 用户在阿里云平台上使各个服务（如 用户在阿里云平台上
+		使各个服务（如 用户在阿里云平台上使各个服务（如 用户在阿里云平台上使各个服务（如 用户在阿里云平台上使各个服务（如 用户在阿里云平台上使各个
+		服务（如 用户在阿里云平台上使各个服务（如 用户在阿里云平台上使各个服务（如 OSS OSS，OTS ，ODPS ，RDS ，VM ，ACE ）产生 的计量数据存储和查询
+		服务。用户可以通过简单的 REST 接口 ，获取格式化的 ，获取格式化的 自 己
+	
 	开放计量服务(OMS)的数据模型包括以下几个概念:
 		 Object
 		 Domain
@@ -12925,6 +13335,8 @@ missing by svn revert operation
 		合并好后，通过diff工具(kdiff)对比branch目录，验证合并是否正确。
 		kdiff 
 			对比时可设置参数，比如忽略的文件或目录等，然后比较。
+		合并好后，svn commit
+		QA测试(提测)
 	对于2个并行的分支都做了大量交叉的修改的情况，要尽量避免；如果已发生（big region&user reform)通过工具理解2个支的逻辑人肉合并并加全量回归测试。
 
 * 发布步骤整理及演练，发布失败回滚方案设计
@@ -14847,11 +15259,11 @@ day168 Tuesday, November 13, 2012
 		
 	
 
-2. slb 生产环境
+2. slb 生产环境 slb api
 	10.250.6.37 
 	sarah.wangq@shterm.aliyun-inc.com
 	slb api
-	slbapi(mysql)
+	slbapi(mysql)		       go2
 
 	check
 		update vm region_no to bigRegionNo(1 to 1)
@@ -16029,6 +16441,404 @@ day197 Monday, December 24, 2012
 
 Merry Christmas !
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day198 Tuesday, December 25, 2012
+
+1. 
+	* 大region二期连调
+		detail_snapshot接口snapshot_id的deviceNo检查问题？
+			API不检查，给master只有snapshot_id无法检查，master都返回200，只是snapshot_id是否为空的不同。
+			API是否需要校验deviceNo来判断snapshot是否存在，或者交给master校验？
+	* memcached java客户端gwhalin实现分析
+		cosistent hash 一致性哈希
+			避免key在服务节点列表上的重新发分布；
+			部分算法还实现了虚拟节点，缓存在节点间的分布更加均匀
+			tree-map实现，Entry的left，right属性用于在环中定位相邻Entry
+				基于Red-Black tree实现
+		socket pool
+		health check
+		server weight
+				   
+		目标：* 设计
+			许多Web 应用程序都将数据保存到RDBMS中，应用服务器从中读取数据并在浏览器中显示。但随着数据量的增大，访问的集中，就会出现REBMS的负担加重，
+			数据库响应恶化，网站显示延迟等重大影响。  Memcached是高性能的分布式内存缓存服务器。一般的使用目的是通过缓存数据库查询结果，减少数据库的访问次数，
+			以提高动态Web 应用的速度、提高扩展性。
+	
+	* vm信息收集推送逻辑预整理
+		原逻辑实现：master->nc->vm_info_catcher.cpp
+
+2. 连调问题？
+	快照ID中deviceNo校验问题，大region遗留问题
+	
+	影响接口：(需要传入snapshot_id到API)
+		mount_snapshot
+		unmount_snapshot
+		add_disk(传snapshot_id时)
+		remove_snapshot
+		rollback_snapshot
+		cancel_create_snapshot
+		retain_snapshot
+		create_image
+
+	解决方案：
+		1）API传入必要参数给master，master来判断快照是否存在(master自身查询唯一快照的必要参数)，对应API映射到一个错误码即可
+		2）API使用快照的接口，查询出快照后，比对deviceNo的一致性，判断快照是否存在
+	
+	还有一个相关的问题，同时有device_no和snapshot_id时，还需比较deviceNo一致性，涉及接口如下：
+		rollback_snapshot
+		remove_snapshot  直接将deviceNo给master，没查询快照；若API校验，API自身接口需要变动
+		retain_snapshot
+
+3. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day199 Wednesday, December 26, 2012
+
+1. 
+	* 大region二期连调
+		- add_disk			  (补单元测试)
+			指定snapshot_id
+		- detail_snapshot接口API到master接口变动
+			增加传入快照的clusterId和所基于的deviceNO，master判断快照是否存在（并新快照不存在的错误码）
+
+			上面修改，API需要兼容新老master的情况
+
+		- 同时传deviceNO,snapshot_id给API的接口，API需要比较2个devieNO是否一致，否则报快照不存在：
+			-910, "snapshot id not exists" (master错误码为：-30006,snapshot not exist)
+
+			确认增加上面的校验，不会影响老master（没做兼容处理）
+		- 查询快照的逻辑，零散发布，改为统一调用快照service层 待？
+			
+
+	* slb api
+		去掉alisoft-xplatform-asf-cache.jar，没有使用，也没找到反射的引用
+		xmlsec.jar修改，从：
+			<dependency>
+				<groupId>org.apache</groupId>
+				<artifactId>xmlsec</artifactId>
+				<version>1.4.3</version>
+			</dependency>
+		改为：
+			<dependency>
+				<groupId>org.apache.santuario</groupId>
+				<artifactId>xmlsec</artifactId>
+				<version>1.4.3</version>
+			</dependency>
+		houyi api已替换。
+	
+	* slb api并发性能优化问题
+		以list_loadbalancers接口为例
+			1）http连接保持，多线程并发
+
+2. mount_iso问题
+	running mount_iso (bug),shutted mount_iso
+	for fix use
+3. 整理deviceNO校验需求变动，更新到设计文档
+
+4. API问题 ？？
+	查询快照逻辑，统一接口调用，不应该各处有独立的实现
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day200 Thursday, December 27, 2012
+
+1. 
+	* deviceNo校验问题
+		影响的接口，单元测试的修改
+		连调
+
+	* remove_snapshot接口，判断快照是否能删除问题
+		若快照被自定义为image，则不能删除(可先删除image，再去删除快照)
+		API的判断快照是否为image逻辑有问题：
+			1) snapshot_id在大region内不唯一，会查出其他集群的snapshot
+			2) image 可以update的,image.snapshot_id可以upadte,如果之前的 snapshot_id已经在VM上使用了，删除该快照，下次reset_vm会有问题
+
+	* 拉末日曙光项目代码，与大region二期比较，评估合并代码风险	
+	* SLB API兼容新老SLB后端问题
+		除去本次流量接口修改不兼容，保证其他接口都兼容（master有2个版本）
+	* SLB API并发性能问题 待？
+		节后分析
+		从压测的某些接口入手，找到原因以及优化方案：
+			需要：
+				压测环境（SLB API + MASTER）开发集成环境
+			slb api通过拦截器，记录了请求进来到处理结束的时间差记录，便于分析性能瓶颈
+	* master环境切换
+		/apsarapangu/disk4/apsara-0.8.6/houyi-bigregion
+		sh ../build-deploy-start-houyi.sh
+	* houyi api打包名改变，对应提测模板改变，大region二期提测时需注意（若在末日曙光项目提测之后提测则没问题）
+	* houyi api空指针问题 -tip-										 ？待修复
+		platform数据有问题时，没有判断null
+			如：数据库记录了错误的类型值，程序找不到对应的类型。
+
+		程序对于空指针的判断需要处理好，对于存在空指针可能的逻辑都需要做判断，保证程序的健壮性。
+	
+	* jetty环境熟悉
+		配置
+		性能
+
+			
+
+
+2. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day201 Friday, December 28, 2012
+
+1. 
+	* 大region二期连调，单元测试修改提交
+	* 通过vnc登陆到VM
+		ip:port
+		username
+		password
+
+		进入vm检查add_disk
+			df -a
+			df -k
+				显示挂载到的位置
+			mount
+			fdisk -l
+
+	* 状态同步
+		主动同步(显示调用更新状态)
+		被动同步（通过消息机制，如MQ）
+	* vm磁盘挂载，mount add_disk	    * linux挂载硬盘
+		添加磁盘
+		找到磁盘
+			fdisk -l
+		分区
+			fidsk /dev/xxx
+			n
+			w
+			...
+		格式化
+			mkfs -t ext3 /dev/xxx
+		创建目录，并挂载上面的分区
+			mkdir /disk
+			mount /dev/xxx /disk
+		验证挂载情况
+			df -k
+		设置开机自动挂载
+			vi /etc/fstab
+			/dev/xxx               /disk                 ext3    defaults        0 0
+	
+	* 大region二期与末日曙光项目合并风险检查
+		检出末日曙光代码
+		将大region二期代码merger到上面的代码中
+		test
+		
+		测试合并结果，冲突不多
+		
+		
+2. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day202 Saturday, January 04, 2013
+
+1. 
+	大雪，在家办公
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day203 Saturday, January 05, 2013
+
+1. 
+	* slb api性能问题
+		slb api + slb后端
+		针对个别接口，通过slbapi日志分析性能瓶颈
+		性能测试方案
+
+	* 看master关于vm监控数据部分逻辑
+		source insight
+		cpp
+		namespace
+			class
+				
+
+2. slb api集成测试环境
+	10.250.6.32
+	ssh root@10.230.130.1
+	go2v2api
+
+3. 缓存框架，缓存系统，缓存模块
+	应用自身设计缓存接口，包含各种缓存操作
+	根据接口，针对不同的缓存实现提供各自的接口实现
+
+4. 使用image的条件，imageNo+userId+bigRegonNo 唯一
+	api
+	image工具
 
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day204 Sunday, January 06, 2013
+
+1. 
+	* nc上vm监控数据工具逻辑
+		VmWrapper -> VmXenWrapper -> connect to Xen Supervisitor(libvirt库virConnectPtr) -> get info
+		通过libvirt API来访问xen hypervistor，libvirt库为统一抽象的虚拟化API，支持多种不同hypervistor，对外提供统一API管理接口
+		这样，通过libvirt API对应的python sdk调用即可？
+			根据libvirt官网说明：
+				Bindings for other languages: Libvirt supports C and C++ directly, and has bindings available for other languages:
+
+				Python: Libvirt comes with direct support for the Python language.
+					If your libvirt is installed as packages, rather than compiled by you from source code, ensure you have the appropriate package installed.
+					This is named libvirt-python on RHEL/Fedora, python-libvirt on Ubuntu, and may be named differently on others.
+				直接支持python，但需要安装 libvirt-python 包(RHEL/Fedora系统上)，当然也提供了其他语言的调用支持。
+
+				For usage information：http://libvirt.org/python.html 使用说明
+				There is not much to comment about it, it really is a straight mapping from the C API, the only points to notice are:
+					1) the import of the module called libvirt
+					2) getting a connection to the hypervisor, in that case using the openReadOnly function allows the code to execute as a normal user.
+					3) getting an object representing the Domain 0 using lookupByName
+					4) if the domain is not found a libvirtError exception will be raised
+					5) extracting and printing some information about the domain using various methods associated to the virDomain class.
+			
+			libvirt-python包
+
+
+
+2. zookeeper
+	应用
+		命名服务
+		集群管理
+		配置管理   发布&订阅服务
+		共享锁服务
+		队列管理
+
+	实践
+
+3. python访问libvirt API
+	需要 libvirt-python 包
+	例子：
+	--------
+		import libvirt
+		import sys
+
+		conn = libvirt.openReadOnly(None)
+		if conn == None:
+		    print 'Failed to open connection to the hypervisor'
+		    sys.exit(1)
+
+		try:
+		    dom0 = conn.lookupByName("Domain-0")
+		except:
+		    print 'Failed to find the main domain'
+		    sys.exit(1)
+
+		print "Domain 0: id %d running %s" % (dom0.ID(), dom0.OSType())
+		print dom0.info()
+	--------
+
+	安装libvirt-python包，安装时注意选择正确的python版本，可能同时存在多个python版本，需要指定安装位置到要使用的版本上，比如python2.7
+
+	yum install libvirt-python.x86_64 --installroot=/user/xxx
+	安装好，对应的python版本即可导入 libvirt
+		import libvirt
+
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day205 Monday, January 07, 2013
+
+1. 
+	* 大region二期上线步骤准备及数据订正脚本
+	* python访问libvirt API
+	* 周四kickoff MSS改造
+		目标：替换agent取监控数据上报所有逻辑
+			API只是调用者
+			嫦娥系统也需要查询监控数据
+		要做的工作
+			原业务-永生，祥云
+
+		时间安排
+			
+		
+2. 上线订正脚本
+	参考：http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/tools/trunk/fix_data/ec_big_region2
+	用python实现订正脚本，完成订正过程：
+		订正数据  （订正脚本只涉及插入数据/更新数据，表结构修改或增加由DBA执行订正脚本不负责这个）
+		验证
+
+	导入已有python库的db封装: pypet库，地址：http://svn.simba.taobao.com/svn/luban/houyiops/pet/trunk/lib/pypet
+		from pypet.houyi import db
+
+3. python访问lbivirt API
+	正确安装好 libvirt-python 包后
+	import libvirt
+	参考API说明，编写逻辑
+
+4. 根据API代码规范编写		   改进
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day206 Tuesday, January 08, 2013
+
+1. 
+	* 大region二期，数据订正脚本完善，需要review
+		发布相关问题，参考：末日曙光项目上线步骤	
+		
+
+	* MSS项目kick off文档整理
+		时间规划图，visio->项目日程->时间线
+		需求整理
+		任务整理
+
+	* 原nc agent采集上报monitor，monitor写入库的逻辑分析
+	* MSS将VM监控数据推送到OTS可行性分析
+		读写性能要求
+		查询要求
+		OTS文档？
+		从OTS存入的数据，是否可以通过OMS获取？
+
+		* OTS Open Table Service
+
+	* 大region二期，sql相关修改整理，需要DBAreview ？ 待
+	* 大region二期，上线步骤分析 ，API不重启
+		API目前不允许region表的region是不可用，即关闭的；这样调用到关闭的region时会等超时。？待解决
+		解决：
+			API在根据imageNO找可用region时（ImageService的listRegionsByImageNo方法），排除掉关闭的region再做调度。
+		
+2. nc采集vm监控数据逻辑分析
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day207 Wednesday, January 09, 2013
+
+1. 
+	* 大region二期发布步骤
+		API不重启，Master一个个单独发布
+		订正脚本放到：http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/tools/trunk/fix_data/ec_big_region2/API
+		需要注意：
+			用到pypet库，具体执行时确认所使用的python的版本已安装此库
+				python xxx.py
+			有2个订正脚本，一个更新image表：订正所有的image的snapshot_type为1，即都为老hash类型image
+				w-image
+			另一个插入region_status表
+
+	* MSS重构
+		OTS文档说明
+		OTS Python SDK
+		与PE确认VM监控数据的调用方式&频率：
+			万网，portal
+		存入OTS的数据，不能从OMS直接读取，如何处理？待
+	* 大region二期API代码review
+		整理review结果
+		处理review结果
+			ImageServiceImplTest
+			代码修改	 doing
+			单元测试修改 doing
+
+2. 大region二期发布步骤
+	- API Proxy来拦截小region发布时，对应此region的调用直接返回友好提示；
+	- 对于个别错误的跨region调用的情况(vmName所在region是运行的，但操作的其他资源的region已关闭的情况)，	还是会报系统错误，只在少数
+	- HouyiAPI在create_vm接口调度region时，在待调度region列表中去掉status=0即状态不可用的region。  （保证create_vm接口允许某个或某些region关闭）
+	- 调用Master的接口处，初始化region endpoint时，已保证region状态为可用
+		但对于status=0即状态不可用的region直接抛异常不合适，可以细化为region找不到，还是region状态不可用。？待
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day208 Thursday, January 10, 2013
+
+1. 
+	* 大region二期review结果处理
+		
+
+2. 

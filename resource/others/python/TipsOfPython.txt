@@ -1197,7 +1197,10 @@ from: http://www.diveintopython.net/toc/index.html
 					the descendant's method is executed. Python does not do this; you must always explicitly call the appropriate method in the ancestor class.
 					- I told you that this class acts like a dictionary, and here is the first sign of it. You're assigning the argument filename as the value of this object's name key.
 					- Note that the __init__ method never returns a value.
-
+		
+		实例化：
+			instanceName = YourClassName();
+			
 		5.3.2. Knowing When to Use self and __init__
 
 			When defining your class methods, you must explicitly list self as the first argument for each method, including __init__. When you call a method of an ancestor class from within your class, 
@@ -1302,11 +1305,22 @@ from: http://www.diveintopython.net/toc/index.html
 		    def __init__(self, dict=None):             
 			self.data = {}                         
 			if dict is not None: self.update(dict)  
-				- Python has no form of function overloading whatsoever. Methods are defined solely by their name, and there can be only one method per class with a given name. 
-				So if a descendant class has an __init__ method, it always overrides the ancestor __init__ method, even if the descendant defines it with a different argument list. And the 
-				same rule applies to any other method.
-				- Always assign an initial value to all of an instance's data attributes in the __init__ method. It will save you hours of debugging later, tracking down AttributeError exceptions 
-				because you're referencing uninitialized (and therefore non-existent) attributes.
+				- Note that UserDict is a base class, not inherited from any other class.
+				- This is the __init__ method that you overrode in the FileInfo class. Note that the argument list in this ancestor class is different than the descendant. That's okay; each subclass can have its own set 
+				of arguments, as long as it calls the ancestor with the correct arguments. Here the ancestor class has a way to define initial values (by passing a dictionary in the dict argument) which the FileInfo does 
+				not use.
+				- Python supports data attributes (called “instance variables” in Java and Powerbuilder, and “member variables” in C++). Data attributes are pieces of data held by a specific instance of a class. 
+				In this case, each instance of UserDict will have a data attribute data. To reference this attribute from code outside the class, you qualify it with the instance name, instance.data, in the same way that 
+				you qualify a function with its module name. To reference a data attribute from within the class, you use self as the qualifier. By convention, all data attributes are initialized to reasonable values in the 
+				__init__ method. However, this is not required, since data attributes, like local variables, spring into existence when they are first assigned a value.
+				- The update method is a dictionary duplicator: it copies all the keys and values from one dictionary to another. This does not clear the target dictionary first; if the target dictionary already has some 
+				keys, the ones from the source dictionary will be overwritten, but others will be left untouched. Think of update as a merge function, not a copy function.
+				- This is a syntax you may not have seen before (I haven't used it in the examples in this book). It's an if statement, but instead of having an indented block starting on the next line, there is just a 
+				single statement on the same line, after the colon. This is perfectly legal syntax, which is just a shortcut you can use when you have only one statement in a block. (It's like specifying a single statement 
+				without braces in C++.) You can use this syntax, or you can have indented code on subsequent lines, but you can't do both for the same block.
+							
+		Always assign an initial value to all of an instance's data attributes in the __init__ method. It will save you hours of debugging later, tracking down AttributeError exceptions because you're referencing 
+		uninitialized (and therefore non-existent) attributes.
 		
 		Example 5.10. UserDict Normal Methods
 
@@ -1348,6 +1362,10 @@ from: http://www.diveintopython.net/toc/index.html
 		In addition to normal class methods, there are a number of special methods that Python classes can define. Instead of being called directly by your code (like normal methods), 
 		special methods are called for you by Python in particular circumstances or when specific syntax is used.
 
+		As you saw in the previous section, normal methods go a long way towards wrapping a dictionary in a class. But normal methods alone are not enough, because there are a lot of things you can do with 
+		dictionaries besides call methods on them. For starters, you can get and set items with a syntax that doesn't include explicitly invoking methods. This is where special class methods come in: they provide 
+		a way to map non-method-calling syntax into method calls. 特殊类方法映射到非方法调用的操作，比如符合某种格式的赋值(程序代码并没有显式调用赋值方法)方式。
+
 		5.6.1. Getting and Setting Items
 
 			Example 5.12. The __getitem__ Special Method
@@ -1363,3 +1381,88 @@ from: http://www.diveintopython.net/toc/index.html
 				you can call __getitem__ directly, but in practice you wouldn't actually do that; I'm just doing it here to show you how it works. The right way to use __getitem__ is to get Python to call it for you.
 				- This looks just like the syntax you would use to get a dictionary value, and in fact it returns the value you would expect. But here's the missing link: under the covers, Python has converted this 
 				syntax to the method call f.__getitem__("name"). That's why __getitem__ is a special class method; not only can you call it yourself, you can get Python to call it for you by using the right syntax.
+			
+			Example 5.13. The __setitem__ Special Method
+				 def __setitem__(self, key, item): self.data[key] = item
+			>>> f
+			{'name':'/music/_singles/kairo.mp3'}
+			>>> f.__setitem__("genre", 31) 
+			>>> f
+			{'name':'/music/_singles/kairo.mp3', 'genre':31}
+			>>> f["genre"] = 32            
+			>>> f
+			{'name':'/music/_singles/kairo.mp3', 'genre':32}
+				- Like the __getitem__ method, __setitem__ simply redirects to the real dictionary self.data to do its work. And like __getitem__, you wouldn't ordinarily call it directly like this; Python calls 
+				__setitem__ for you when you use the right syntax.
+				- This looks like regular dictionary syntax, except of course that f is really a class that's trying very hard to masquerade as a dictionary, and __setitem__ is an essential part of that masquerade. 
+				This line of code actually calls f.__setitem__("genre", 32) under the covers.
+			
+			__setitem__ is a special class method because it gets called for you, but it's still a class method. Just as easily as the __setitem__ method was defined in UserDict, you can redefine it in the descendant 
+			class to override the ancestor method. This allows you to define classes that act like dictionaries in some ways but define their own behavior above and beyond the built-in dictionary.
+
+			This concept is the basis of the entire framework you're studying in this chapter. Each file type can have a handler class that knows how to get metadata from a particular type of file. Once some attributes 
+			(like the file's name and location) are known, the handler class knows how to derive other attributes automatically. This is done by overriding the __setitem__ method, checking for particular keys, and adding 
+			additional processing when they are found. 
+			(PS:重写父类方法，实现自定义的行为，满足需要。比如file类型，只要提供文件地址，就可以获得文件的其他信息，就是因为file类型重写了__setitem__方法。)
+
+			Example 5.14. Overriding __setitem__ in MP3FileInfo
+			def __setitem__(self, key, item):         
+				if key == "name" and item:            
+				    self.__parse(item)                
+				FileInfo.__setitem__(self, key, item) 
+					- Notice that this __setitem__ method is defined exactly the same way as the ancestor method. This is important, since Python will be calling the method for you, and it expects it to be defined 
+					with a certain number of arguments. (Technically speaking, the names of the arguments don't matter; only the number of arguments is important.)
+					- Here's the crux of the entire MP3FileInfo class: if you're assigning a value to the name key, you want to do something extra.
+					- The extra processing you do for names is encapsulated in the __parse method. This is another class method defined in MP3FileInfo, and when you call it, you qualify it with self. Just calling 
+					__parse would look for a normal function defined outside the class, which is not what you want. Calling self.__parse will look for a class method defined within the class. This isn't anything new; 
+					you reference data attributes the same way.
+					- After doing this extra processing, you want to call the ancestor method. Remember that this is never done for you in Python; you must do it manually. Note that you're calling the immediate 
+					ancestor, FileInfo, even though it doesn't have a __setitem__ method. That's okay, because Python will walk up the ancestor tree until it finds a class with the method you're calling, so this line 
+					of code will eventually find and call the __setitem__ defined in UserDict.
+
+			When accessing data attributes within a class, you need to qualify the attribute name: self.attribute. When calling other methods within a class, you need to qualify the method name: self.method.
+
+	5.7. Advanced Special Class Methods
+		Python has more special methods than just __getitem__ and __setitem__. Some of them let you emulate functionality that you may not even know about.
+
+		This example shows some of the other special methods in UserDict.
+
+		Example 5.16. More Special Methods in UserDict
+		    def __repr__(self): return repr(self.data)     
+		    def __cmp__(self, dict):                       
+			if isinstance(dict, UserDict):            
+			    return cmp(self.data, dict.data)      
+			else:                                     
+			    return cmp(self.data, dict)           
+		    def __len__(self): return len(self.data)       
+		    def __delitem__(self, key): del self.data[key] 
+			- __repr__ is a special method that is called when you call repr(instance). The repr function is a built-in function that returns a string representation of an object. It works on any object, not 
+			just class instances. You're already intimately familiar with repr and you don't even know it. In the interactive window, when you type just a variable name and press the ENTER key, Python uses 
+			repr to display the variable's value. Go create a dictionary d with some data and then print repr(d) to see for yourself.
+			- __cmp__ is called when you compare class instances. In general, you can compare any two Python objects, not just class instances, by using ==. There are rules that define when built-in datatypes 
+			are considered equal; for instance, dictionaries are equal when they have all the same keys and values, and strings are equal when they are the same length and contain the same sequence of characters. 
+			For class instances, you can define the __cmp__ method and code the comparison logic yourself, and then you can use == to compare instances of your class and Python will call your __cmp__ special 
+			method for you.	 -tip- 比较运算
+			- __len__ is called when you call len(instance). The len function is a built-in function that returns the length of an object. It works on any object that could reasonably be thought of as having a length. 
+			The len of a string is its number of characters; the len of a dictionary is its number of keys; the len of a list or tuple is its number of elements. For class instances, define the __len__ method and code the 
+			length calculation yourself, and then call len(instance) and Python will call your __len__ special method for you.
+			- __delitem__ is called when you call del instance[key], which you may remember as the way to delete individual items from a dictionary. When you use del on a class instance, Python calls the __delitem__ 
+			special method for you.
+	
+		In Java, you determine whether two string variables reference the same physical memory location by using str1 == str2. This is called object identity, and it is written in Python as str1 is str2. 
+		To compare string values in Java, you would use str1.equals(str2); in Python, you would use str1 == str2. Java programmers who have been taught to believe that the world is a better place 
+		because == in Java compares by identity instead of by value may have a difficult time adjusting to Python's lack of such “gotchas”. 
+		PS: python中比较内存地址用is，比较字符串相同用==，区别去java的方式
+
+		Special methods mean that any class can store key/value pairs like a dictionary, just by defining the __setitem__ method. Any class can act like a sequence, just by defining the __getitem__ method. 
+		Any class that defines the __cmp__ method can be compared with ==. And if your class represents something that has a length, don't define a GetLength method; define the __len__ method and use len(instance).
+
+		While other object-oriented languages only let you define the physical model of an object (“this object has a GetLength method”), Python's special class methods like __len__ allow you to define the logical 
+		model of an object (“this object has a length”).
+
+		Python has a lot of other special methods. There's a whole set of them that let classes act like numbers, allowing you to add, subtract, and do other arithmetic operations on class instances. (The canonical example 
+		of this is a class that represents complex numbers, numbers with both real and imaginary components.) The __call__ method lets a class act like a function, allowing you to call a class instance directly. And there are 
+		other special methods that allow classes to have read-only and write-only data attributes; you'll talk more about those in later chapters.
+
+	5.8. Introducing Class Attributes
+		
