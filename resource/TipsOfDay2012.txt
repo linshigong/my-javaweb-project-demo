@@ -11,6 +11,9 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 服务总线 消息总线 ESB EMB
+* 化整为零 -tip-
+	太多太杂，晕头转向？试试化整为零
 * 文档
 	http://www.ishare.sina.com.cn
 	http://www.slideshare.net/
@@ -1975,6 +1978,123 @@ Storage for Interactive Services
 		source	- 源码包
 		spec - 用于制作rpm包
 	* cpp
+		 - vector
+			vector容器类型
+			vector容器是一个模板类，可以存放任何类型的对象（但必须是同一类对象）。vector对象可以在运行时高效地添加元素，并且vector中元素是连续存储的。
+			vector的构造
+
+			函数原型：
+			template<typename T>
+			explicit vector();                                 // 默认构造函数，vector对象为空
+			explicit vector(size_type n, const T& v = T());    // 创建有n个元素的vector对象
+			vector(const vector& x);
+			vector(const_iterator first, const_iterator last);
+
+			注：vector容器内存放的所有对象都是经过初始化的。如果没有指定存储对象的初始值，那么对于内置类型将用0初始化，对于类类型将调用其默认构造函数进行初始化
+			（如果有其它构造函数而没有默认构造函数，那么此时必须提供元素初始值才能放入容器中）。
+
+			举例：
+			vector<string> v1;         // 创建空容器，其对象类型为string类
+			vector<string> v2(10);     // 创建有10个具有初始值（即空串）的string类对象的容器
+			vector<string> v3(5, "hello"); // 创建有5个值为“hello”的string类对象的容器
+			vector<string> v4(v3.begin(), v3.end());  // v4是与v3相同的容器（完全复制）
+
+			vector的操作（下面的函数都是成员函数）
+
+			bool empty() const;                    // 如果为容器为空，返回true；否则返回false
+			size_type max_size() const;            // 返回容器能容纳的最大元素个数
+			size_type size() const;                // 返回容器中元素个数  
+			size_type capacity() const;            // 容器能够存储的元素个数，有：capacity() >= size()  
+			void reserve(size_type n);             // 确保capacity() >= n
+			void resize(size_type n, T x = T());   // 确保返回后，有：size() == n；如果之前size()<n，那么用元素x的值补全。
+
+			reference front();                     // 返回容器中第一个元素的引用（容器必须非空）
+			const_reference front() const;                   
+			reference back();                      // 返回容器中最后一个元素的引用（容器必须非空）
+			const_reference back() const;
+
+			reference operator[](size_type pos);   // 返回下标为pos的元素的引用（下标从0开始；如果下标不正确，则属于未定义行为。
+			const_reference operator[](size_type pos) const; 
+			reference at(size_type pos);           // 返回下标为pos的元素的引用；如果下标不正确，则抛出异常out_of_range
+			const_reference at(size_type pos) const;
+			    
+			void push_back(const T& x);            // 向容器末尾添加一个元素          
+			void pop_back();                       // 弹出容器中最后一个元素（容器必须非空）
+
+			// 注：下面的插入和删除操作将发生元素的移动（为了保持连续存储的性质），所以之前的迭代器可能失效
+			iterator insert(iterator it, const T& x = T());        // 在插入点元素之前插入元素（或者说在插入点插入元素）
+			void insert(iterator it, size_type n, const T& x);     // 注意迭代器可能不再有效（可能重新分配空间）
+			void insert(iterator it, const_iterator first, const_iterator last);
+
+			iterator erase(iterator it);           // 删除指定元素，并返回删除元素后一个元素的位置（如果无元素，返回end()）
+			iterator erase(iterator first, iterator last); // 注意：删除元素后，删除点之后的元素对应的迭代器不再有效。
+
+			void clear() const;                    // 清空容器，相当于调用erase( begin(), end())
+
+			void assign(size_type n, const T& x = T());   // 赋值，用指定元素序列替换容器内所有元素
+			void assign(const_iterator first, const_iterator last);
+
+			const_iterator begin() const;          // 迭代序列
+			iterator begin();
+			const_iterator end() const;
+			iterator end();
+
+			const_reverse_iterator rbegin() const;
+			reverse_iterator rbegin();
+			const_reverse_iterator rend() const; 
+			reverse_iterator rend();
+
+			vector对象的比较（非成员函数）
+
+			针对vector对象的比较有六个比较运算符：operator==、operator!=、operator<、operator<=、operator>、operator>=。
+
+			其中，对于operator==和operator!=，如果vector对象拥有相同的元素个数，并且对应位置的元素全部相等，则两个vector对象相等；否则不等。
+			对于operator<、operator<=、operator>、operator>=，采用字典排序策略比较。
+
+			注：其实只需要实现operator==和operator!=就可以了，其它可以根据这两个实现。因为，operator!= (lhs, rhs) 就是 !(lhs == rhs)，operator<=(lhs, rhs) 就是 !(rhs < lhs)，operator>(lhs, rhs) 
+			就是 (rhs < lhs)，operator>=（lhs, rhs) 就是 !(lhs, rhs)。
+
+			vector类的迭代器
+
+			vector类的迭代器除了支持通用的前缀自增运算符外，还支持算术运算：it + n、it - n、it2 - it1。注意it2 - it1返回值为difference_type（signed类型）。
+
+			注意，任何改变容器大小的操作都可能造成以前的迭代器失效。
+		 - header file 头文件
+				在C语言家族程序中，头文件被大量使用。一般而言，每个C++/C程序通常由头文件(header files)和定义文件(definition files)组成。头文件作为一种包含功能函数、
+			数据接口声明的载体文件，用于保存程序的声明(declaration)，而定义文件用于保存程序的实现 (implementation)。而且 .c就是你写的程序文件。
+				一般在一个应用开发体系中，功能的真正逻辑实现是以硬件层为基础，在驱动程序、功能层程序以及用户的应用程序中完成的。头文件的主要作用在于调用库功能，
+			对各个被调用函数给出一个描述，其本身不包含程序的逻辑实现代码，它只起描述性作用，告诉应用程序通过相应途径寻找相应功能函数的真正逻辑实现代码。用户程序
+			只需要按照头文件中的接口声明来调用库功能，编译器会从库中提取相应的代码。
+				从以上结构图来看，头文件是用户应用程序和函数库之间的桥梁和纽带。在整个软件中，头文件不是最重要的部分，但它是C语言家族中不可缺少的组成部分。
+			做一个不算很恰当的比喻，头文件就像是一本书中的目录，读者(用户程序)通过目录，可以很方便就查阅其需要的内容(函数库)。在一本书中，目录固然重要，但绝对
+			不是一本书的核心的、最重要的部分。
+
+		 - destructor 与构造器对应，用于过期时清理对应构造器未释放的对象
+				When you use a constructor to create an object, the program undertakes the responsibility of
+			tracking that object until it expires. At that time, the program automatically calls a special
+			member function bearing the formidable title destructor. The destructor should clean up any
+			debris, so it actually serves a useful purpose. For example, if your constructor uses new to allocate
+			memory, the destructor should use delete to free that memory. The Stock constructor
+			doesn’t do anything fancy like using new, so the Stock class destructor doesn’t really have any
+			tasks to perform. In such a case, you can simply let the compiler generate an implicit, donothing
+			destructor, which is exactly what the first version of the Stock class does.
+
+			Unlike a constructor,
+			a destructor must have no arguments. Thus, the prototype for a Stock destructor must be this:
+			~Stock();
+			Because a Stock destructor has no vital duties, you can code it as a do-nothing function:
+			Stock::~Stock()
+			{
+			}
+			However, just so that you can see when the destructor is called, you can code it this way:
+			Stock::~Stock() // class destructor
+			{
+			cout << “Bye, “ << company << “!\n”;
+			}
+
+		 - 源码结合教程，快速看懂逻辑
+			ClassName::~DestructorMethodName(){
+			}
 		 - 引用 参数值传递与址传递
 			概念：
 			引用引入了对象的一个同义词。定义引用的表示方法与定义指针相似，只是用&代替了*。引用（reference）是c++对c语言的重要扩充。
@@ -5346,6 +5466,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- python命令行参数处理
+		测试命令行参数问题时，可通过run as命令来配置运行参数，从而测试参数
+
 	- python异常分析，异常日志由上到下，为异常的入口点，直到报错的地方；java是由下而上，日志前面是具体出错的地方
 		------
 			[root@AT-HOUYIDEV_AG]$ python houyiapi_bigregion2new_update_regionstatus.py 
@@ -14670,7 +14793,9 @@ day153 Thursday, October 18, 2012
 
 2. create_vm
 	若没有指定zone创建vm：
-		原有逻辑是查询出image_no可以被使用的region列表，然后根据算法得出最优的region以及其对应的zone（此为已有大region调度逻辑），
+		原有逻辑是查询出image_no可以被使用的region列表，然后根据算法得出最优的region以及其对应的zone，若没资源或不可用则选择下一梯度，
+		直到找到可用的zone（此为已有大region调度逻辑）
+
 		然后从选出的这个最优region中查询（先从本地找，若没有则从KFC找）出对应的image作为启动vm的image	
 
 	能否在image表增加存储类型字段，标识image存储类型，避免跨系统查询。
@@ -14760,7 +14885,7 @@ day155 Monday, October 22, 2012
 		参看，开源系统
 4. sql修改
 	image表：
-		alter table image add snapshot_type int(4) NOT NULL COMMENT '@desc 快照存储类型 1-hash_on_kfc;2-bucket_on_kfc';
+		alter table image add snapshot_type int(4) NOT NULL COMMENT DEFAULT 1 '@desc 快照存储类型 1-hash_on_kfc;2-bucket_on_kfc';
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day156 Tuesday, October 23, 2012
@@ -16840,5 +16965,164 @@ day208 Thursday, January 10, 2013
 1. 
 	* 大region二期review结果处理
 		
+	* 大region二期，开发测试环境搭建及新老master兼容测试工作		  测试环境
+		从QA处借用一个老region，结合开发自用的新region，组成一个集成环境
+			regionNo=AT03-HOUYI2
+			AG:
+				6.27		
+				go2houyi1
+				go2houyi2		
+			
+		api配置数据库信息
 
+	* rabbitmp
+		6.33
+		配置
+		启动
+	* 下周一 MSS项目kick off
+		预定会议室
+		人员
+
+2. 新老master兼容测试
+	使用image
+	使用snpashot
+
+3. create_vm
+	原调度region逻辑，在查询region资源时，若发生错误将不会将此region及其zone加入调度；大region二期，加上region状态判断，不可用时直接移出待调度列表。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day209 Friday, January 11, 2013
+
+1. 
+	* 发布脚本review处理
+	* 大region连调
+	* 集群安装，批量部署，批量更新方法 ？待
+	* MSS重构与OTS确认性能是否满足？
+		
+
+
+2. 大region连调
+	环境：
+		2个已升级的region
+		大regin二期API
+	测试场景：
+		VM调度场景
+		1) 验证create_vm逻辑调度时排除status=0的region
+			修改region表，关闭一个region
+			更新缓存 PASS
+			create_vm，不指定zone
+			观察日志，应该查询到可用的master，不应该去查询status=0的master PASS
+			结果应该为创建成功 PASS
+
+		2) region状态从不可用更新为正常后，create_vm会将其加入待调度列表中
+			更新region表
+			更新缓存
+			create_vm，不指定zone
+			观察API日志，到master查询此region的资源信息 PASS
+
+		快照使用场景（注意：create_vm时，保证使用本region的image，开发测试环境底层lazyload可能有问题，不影响测试跨region使用snapshot）			
+		1) mount_snapshot接口-新region不能挂载其他region的老快照，否则报找不到
+			新region，用老image创建vm（对于2个region都升级时，可修改region_status表来强制使用老imge），add_disk（先更新region状态为已升级后）后打一个新快照 (前置条件A)
+
+
+	问题：
+		master开发测试环境，使用远程的image时，lazyload会有问题，先通过使用本地的image方式继续测试
+			更新region状态为未升级
+			更新缓存
+			指定老zone，会使用本地image
+		
+
+3. 终端小tip 测试环境
+	MySql,API,AG(可临时跳到Nc等其他地方),Master
+		go2nc
+		go2houyi
+		go2xxx
+
+4. python的output/input,file python输入与输出，命令行参数
+					
+	Command-Line Arguments
+		sys.argv is the list of command-line arguments
+		len(sys.argv) is the number of command-line arguments(aka argc)
+	from: core python programming.2nd,edition
+
+5. 快照类型与image新老没关系 业务
+	只有升级前的为老，后面都为新快照。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day210 Monday, January 14, 2013
+
+1. 
+	* 大region二期API发布步骤wiki整理				  
+	* MSS重构monitor逻辑
+		cpp
+		vm_xen_wrapper.cpp
+			DoGetAllVmInfo方法
+				连接hypervisitor；从API获取所有domain的id数组；遍历domId数组并根据id调用API查询domain；若domain存在则再调用API获取其info；
+				调用API取得domain的name
+
+	* MSS重构OTS表的设计
+	* 大region二期兼容性连调
+		环境
+			新master打老快照，修改device的状态为old即可
+
+	* 大region二期，API发布不停机方案
+		通过转移访问流量的方式，实现API热部署，分析可行性；对于一套API不同版本不能同时提供服务，比如必选参数不一致的情况。
+	* 大region二期，开发测试环境，新增一个二期版本的region
+		AG=10.250.8.211
+		region，region_alias，region_status,zone
+		regon_no=atdev (可取与集群名称一致)
+		cluster_id=15
+		zone_no=cn-qd-aa-a,cn-qd-aa-b
+		nuwa=10.250.8.211
+
+2. 大region二期API发布步骤wiki整理
+	http://wiki.ec.alibaba-inc.com/index.php/%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B#.E5.9B.9E.E6.BB.9A.E6.96.B9.E6.A1.88
+	准备工作：
+		修改imge表结构
+		创建region_status表，并初始化数据
+	发布
+		xxx		
+	
+3. MSS重构OTS表的设计
+	查询场景：
+		1) 流量计费，如定时任务，查询条件为：
+			定时(每隔一小时)查询一个时间段所有记录的部分列(vm流量相关的几个列)，以时间(time_stamp)作为范围条件，并根据name分组
+		2) 监控数据，有业务方会定时(3~10min)调用API来获取指定时间点vm的所有监控数据
+			- 万网目前为10min取一次(后续可能调整为3min)，取上一个10min对应时间点vm的所有监控数据；
+			- portal 是5分钟取一次监控数据，每次取的是前一个5min对应时间点vm产生的所有监控数据。
+		查询条件为：
+			query_monitor_vms接口：
+				查询指定时间点当前用户下所有vm监控数据的记录，并按照某些列进行排序name,cores,mem
+			monitor_vm_topn接口：
+				查询指定时间点根据TOPn的排序指标排序(参数值可以为：cpu、memory、tx_intranet、rx_intranet、tx_internet、rx_internet、flow、bandwidth)后，位于排序
+				前几名的vm的监控数据。
+			monitor_vm接口
+				查询指定时间点当前用户下某个vm监控数据的记录，并按照某些列进行排序name,cores,mem
+		上面的查询，由于有多种排序方式，考虑用OTS的视图来加速查询速度，根据OTS的文档，需要将待排序的列加入主键的列中方可成为视图主键
+
+		结合OTS提供的查询功能，根据其API中的GetRowsByRange，GetRow方法说明，传入对应的主键列进行数据过滤及查询;
+		GetRowsByRange调用返回的最大数据量	1MB	一次GetRowsByRange请求如果返回超过1MB的用户数据，OTS会返回错误给应用。如果应用需要读取超过1MB的数据，
+		请升级Java/Python SDK的版本改用带NextToken的GetRowsByRange接口分多次读取数据。
+
+		与业务方邮件确定调用方式后，在OTS邮件中确认表设计讨论 ？ 待
+	数据分片键：
+		time_stamp	不合适，所有VM在某个时间点的数据都在一个数据分片中，达不到分片的目的
+		name	建议采用，vmName为字符串varchar(80)，且唯一
+		user_id	不合适（目前就几个（2个）用户）
+		选择name作为分片键
+	主键：
+		time_stamp
+		name
+		user_id
+		3个列的联合主键
+
+4. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day211 Tuesday, January 15, 2013
+
+1. 
+	* MSS重构表设计
+		如果查询VM监控数据的业务方需要根据region来查询，则表中需要增加region_no/cluster_id字段，以及nc如何获取此字段？
 2. 
