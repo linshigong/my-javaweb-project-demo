@@ -11,6 +11,60 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* http chunk
+	
+	http1.1支持
+	----------
+		Chunked Transfer Coding
+
+		The chunked encoding modifies the body of a message in order to transfer it as a series of chunks, each with its own size indicator, followed by an OPTIONAL trailer 
+		containing entity-header fields. This allows dynamically produced content to be transferred along with the information necessary for the recipient to verify that it has 
+		received the full message.
+
+		       Chunked-Body   = *chunk
+					last-chunk
+					trailer
+					CRLF
+		       chunk          = chunk-size [ chunk-extension ] CRLF
+					chunk-data CRLF
+		       chunk-size     = 1*HEX
+		       last-chunk     = 1*("0") [ chunk-extension ] CRLF
+		       chunk-extension= *( ";" chunk-ext-name [ "=" chunk-ext-val ] )
+		       chunk-ext-name = token
+		       chunk-ext-val  = token | quoted-string
+		       chunk-data     = chunk-size(OCTET)
+		       trailer        = *(entity-header CRLF)
+		The chunk-size field is a string of hex digits indicating the size of the chunk. The chunked encoding is ended by any chunk whose size is zero, followed by the trailer, which is terminated 
+		by an empty line.
+
+		The trailer allows the sender to include additional HTTP header fields at the end of the message. The Trailer header field can be used to indicate which header fields are included 
+		in a trailer (see section 14.40).
+
+		A server using chunked transfer-coding in a response MUST NOT use the trailer for any header fields unless at least one of the following is true:
+
+		a)the request included a TE header field that indicates "trailers" is acceptable in the transfer-coding of the response, as described in section 14.39; or,
+
+		b)the server is the origin server for the response, the trailer fields consist entirely of optional metadata, and the recipient could use the message (in a manner acceptable to the origin server) 
+		without receiving this metadata. In other words, the origin server is willing to accept the possibility that the trailer fields might be silently discarded along the path to the client.
+
+		This requirement prevents an interoperability failure when the message is being received by an HTTP/1.1 (or later) proxy and forwarded to an HTTP/1.0 recipient. It avoids a situation 
+		where compliance with the protocol would have necessitated a possibly infinite buffer on the proxy.
+
+		An example process for decoding a Chunked-Body is presented in appendix 19.4.6.
+
+		All HTTP/1.1 applications MUST be able to receive and decode the "chunked" transfer-coding, and MUST ignore chunk-extension extensions they do not understand.
+	----------
+	from: http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html rfc2616 Hypertext Transfer Protocol -- HTTP/1.1
+
+* IOPS (Input/Output Operations Per Second)
+	即每秒进行读写（I/O）操作的次数，多用于数据库等场合，衡量随机访问的性能。存储端的IOPS性能和主机端的IO是不同的，
+	IOPS是指存储每秒可接受多少次主机发出的访问，主机的一次IO需要多次访问存储才可以完成。例如，主机写入一个最小的数据块，
+	也要经过“发送写入请求、写入数据、收到写入确认”等三个步骤，也就是3个存储端访问。
+	from: http://baike.baidu.com/view/2302083.htm
+* bps
+	byte per second
+* linux kernel
+	http://www.makelinux.net/kernel_map/
 * 服务总线 消息总线 ESB EMB
 * 化整为零 -tip-
 	太多太杂，晕头转向？试试化整为零
@@ -1978,6 +2032,15 @@ Storage for Interactive Services
 		source	- 源码包
 		spec - 用于制作rpm包
 	* cpp
+		 - 查看头文件的定义方法的具体实现时，可以从其new出来的实现类中查看对应方法的实现逻辑
+		 - 内存分配方式
+			内存的三种分配方式：
+			1) 从静态存储区分配：此时的内存在程序编译的时候已经分配好，并且在程序的整个运行期间都存在。全局变量，static变量等在此存储。
+			2) 在栈区分配：相关代码执行时创建，执行结束时被自动释放。局部变量在此存储。栈内存分配运算内置于处理器的指令集中，效率高，但容量有限。
+			3) 在堆区分配：动态分配内存。用new/malloc时开辟，delete/free时释放。生存期由用户指定，灵活。但有内存泄露等问题。
+
+			struts中属性的初始化，将引用的地址赋给结构体的成员
+
 		 - vector
 			vector容器类型
 			vector容器是一个模板类，可以存放任何类型的对象（但必须是同一类对象）。vector对象可以在运行时高效地添加元素，并且vector中元素是连续存储的。
@@ -2999,6 +3062,11 @@ search in index find pdf
 * 平台，产品线，生态
 	一个好的平台，衍生出多种产品线，构建良好的生态
 * OSGi * osgi
+	- bundle之间接口调用前，需要在MANIFEST.MF中导入要使用的bundle（根据发布bundle的MANIFEST.MF文件描述来确定）。
+		Bundle-SymbolicName: example
+		Export-Package: example.service
+
+		Require-Bundle: example
 	- OSGI练习
 		通过eclipse的plug-in项目，实现采用Equinox来实验
 		一个OSGI框架+N个bundle
@@ -3006,7 +3074,11 @@ search in index find pdf
 		参考：
 			http://www.ibm.com/developerworks/cn/opensource/os-cn-ecl-osgi/index.html		基于 OSGi 的面向服务的组件编程
 			http://www.ibm.com/developerworks/cn/opensource/os-ecl-osgibdev/			利用 Eclipse 开发基于 OSGi 的 Bundle 应用
-
+				bundle间的引用关系，需要在manifest,mf文件中定义
+				将bundle打成jar包，便于osgi框架安装：osgi>install file:///c:\osgi\exampleclient.jar
+				此例子中，client启动后需要接受console的输入，故不要自动启动，否则可能使用不了console；可以先启动example的nameservice服务后，再手动启动client，此时
+				console即可接收输入。
+								       
 	- 	（OOSGi（Open Service Gateway Initiative）有双重含义。一方面它指OSGi Alliance组织；另一方面指该组织制定的一个基于Java语言的服务（业务）规范——OSGi服务平台（Service Platform）。
 	OSGi Alliance是一个由Sun Microsystems、IBM、爱立信等于1999年3月成立的开放的标准化组织，最初名为Connected Alliance。该组织及其标准原本主要目的在于使服务提供商通过住宅网关，
 	为各种家庭智能设备提供各种服务。目前该平台逐渐成为一个为室内、交通工具、移动电话和其他环境下的所有类型的网络设备的应用程序和服务进行传递和远程管理的开放式服务平台。
@@ -4837,6 +4909,29 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- 导数据
+		select into from	 (mysql不支持)
+		insert into from
+			eg:
+				insert into Table1(field1,field2) select field1,1 from Table2;
+		------
+			如何在mysql从多个表中组合字段然后插入到一个新表中，通过一条sql语句实现。具体情形是：有三张表a、b、c，现在需要从表b和表c中
+			分别查几个字段的值插入到表a中对应的字段。对于这种情况，我们可以使用如下的语句来实现：
+
+			1) INSERT INTO db1_name(field1,field2) SELECT field1,field2 FROM db2_name
+			      当然，上面的语句比较适合两个表的数据互插，如果多个表就不适应了。对于多个表，我们可以先将需要查询的字段join起来，然后组成一个视图后再select from就可以了：
+
+			2) INSERT INTO a(field1,field2) SELECT * FROM(SELECT f1,f2 FROM b JOIN c) AS tb
+			      其中f1是表b的字段，f2是表c的字段，通过join查询就将分别来自表b和表c的字段进行了组合，然后再通过select嵌套查询插入到表a中，这样就满足了我们这个场景了，如果需要不止2个表，那么可以多个join的形式来组合字段。需要注意的是嵌套查询部分最后一定要有设置表别名，如下：
+
+			3) SELECT * FROM(SELECT f1,f2 FROM b JOIN c) AS tb
+			      即最后的as tb是必须的（当然tb这个名称可以随意取），即指定一个别名，否则在mysql中会报如下错误：
+
+			ERROR 1248 (42000): Every derived TABLE must have its own alias
+			      即每个派生出来的新表都必须指定别名才可以的。
+		------
+		注：不同数据库支持的语法不同，可参考对应的使用说明
+
 	- 主备切换 自动切换
 		通过VIP（需要主备库IP在同一网段）
 		通过DNS
@@ -5466,6 +5561,73 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- edit plue开发python
+		
+		运行python文件，需要参数时，可以配置对应tool的argument选项，如：配置为 $(FileName) $(Prompt) ，这样在运行时允许指定参数
+
+		语法高亮，换行等
+		运行python
+		-----
+			EditPlus开发python 编辑器环境的配置
+
+			Python也可以使用编辑器进行开发。例如，文本编辑软件EditPlus也能成为Python的编辑、执行环境，甚至可以用于调试程序。EditPlus具备语法加亮、
+			代码自动缩进等功能。本节介绍一下如何配置EditPlus编辑器的开发环境。
+
+			1)添加Python群组
+
+			首先启动EditPlus，然后单击【工具】|【配置用户工具】命令，打开【参数】对话框。在【参数】对话框中单击【添加工具】按钮，在弹出的菜单中选择【程序】命令。
+			新建的群组名称命名为“Python”，分别在【菜单文本】文本框中输入“python”，在【命令】文本框中输入Python的安装路径，在【参数】文本框中输入“$(FileName)”，
+			在【起始目录】文本框中输入“$(FileDir) ”。勾选【捕获输出】选项，Python程序运行后的输出结果将显示在Edit Plus的输出栏中，否则，运行Python程序后将弹出命令行窗口，
+			并把结果输出到命令行中。
+
+			设置完成后的对话框如图1-10所示。单击【确定】按钮，新建一个Python文件，【工具】菜单下将会出现【python】选项。单击【python】选项或按快捷键Ctrl＋1，
+			就可以运行Python程序。
+
+			2)设置Python高亮和自动完成
+
+			EditPlus不仅可以作为Python的开发环境，还支持Java、C#、PHP、HTML等其他类型的语言。不同语言的语法高亮显示和自动完成的特征各不相同。为了实现语法加亮
+			和自动完成功能，需要下载python.acp和python.stx这两个特征文件。下载地址为http://www.editplus.com/files/pythonfiles.zip。下载后把文件python.acp和python.stx解压到EditPlus
+			的安装目录下。acp后缀的文件表示自动完成的特征文件，stx后缀的文件表示语法加亮的特征文件。在编写Python代码之前，需要先在EditPlus中设置这些特征文件。
+
+			（1）选择【文件】|【设置与语法】选项，在【文件类型】列表中选择【python】选项，【描述】文本框中输入“python”，【扩展名】文本框中输入“py”，如图1-11所示。
+
+			图1-10  在EditPlus中添加对Python的支持图1-11  设置Python的特征文件
+
+			（2）在【设置与语法】选项卡中，在【语法文件】文本框中输入python.stx的路径，在【自动完成】文本框中输入python.acp的路径。
+
+			 
+
+			（3）Python的语法中没有使用begin、end或{}区分代码块，而是使用冒号和代码缩进的方式区分代码之间的层次关系。单击【制表符/缩进】按钮，打开【制表符与缩进】
+			对话框。设置Python代码的缩进方式，如图1-12所示。在使用IDE工具时，输入冒号代码会自动缩进，EditPlus也可以设置该功能。在【制表符】和【缩进】文本框中分别
+			输入空格的个数，一般设置为“4”。把【启用自动缩进】选项选中，在【自动缩进开始】文本框中输入“:”。单击【确定】按钮保存设置。
+
+			（4）单击【函数模型】按钮，打开【函数模型】对话框，如图1-13所示。在【函数模型正则表达式】文本框中输入“/[ //t/]*def/[ //t/].+:”。单击【确定】按钮保存设置。
+
+			图1-12  Python代码的缩进方式
+
+			图1-13  设置函数模型
+
+			至此，EditPlus的Python开发环境就设置完成了。EditPlus还可以建立Python文件的模板，以后每次新建Python文件都可以在模板的基础上编写代码。编写Python代码经常要
+			使用中文，同时也要考虑跨平台的功能，因此可以建立名为“template.py”的模板文件。template.py的内容如下所示。
+
+			 
+
+			#!/usr/bin/python
+
+			# -*- coding: UTF-8 -*-
+
+			  第1行代码使Python程序可以在UNIX平台上运行。
+
+			  第2行代码设置编码集为UTF-8，使Python代码可以支持中文。
+
+			注意在EditPlus中通过快捷键Ctrl＋F11可以查看当前python文件中的函数列表。
+
+			 
+
+			    运行Python程序前，需要先保存Python程序。下面使用EditPlus编写一段Python程序并输出结果，如图1-14所示。
+		-----
+		参考：http://blog.csdn.net/hendyyou/article/details/4694973
+
 	- python命令行参数处理
 		测试命令行参数问题时，可通过run as命令来配置运行参数，从而测试参数
 
@@ -16780,7 +16942,7 @@ day203 Saturday, January 05, 2013
 			class
 				
 
-2. slb api集成测试环境
+2. slb api集成测试环境	      slb测试环境
 	10.250.6.32
 	ssh root@10.230.130.1
 	go2v2api
@@ -17125,4 +17287,99 @@ day211 Tuesday, January 15, 2013
 1. 
 	* MSS重构表设计
 		如果查询VM监控数据的业务方需要根据region来查询，则表中需要增加region_no/cluster_id字段，以及nc如何获取此字段？
+	* API发布脚本，模板化，可定制
+		--prepare
+			sub task
+		--deploy
+			sub task
+	* 大region二期API发布步骤整理
+		
+2. 大region二期API发布步骤整理 go on
+	二期wiki：http://wiki.ec.alibaba-inc.com/index.php/%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B#API.E5.87.86.E5.A4.87.E5.B7.A5.E4.BD.9C	
+	参考：http://wiki.ec.alibaba-inc.com/index.php/AY13B%E5%8D%87%E7%BA%A7API/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F#.E5.8F.91.E5.B8.83.E9.98.B6.E6.AE.B5
+	流程：
+		1) 发布中心
+			取所有需要的包
+		2) 准备阶段
+			数据订正
+				region_status表数据导入
+				region表status字段修改（Master后续发布时，API不停，Master停）
+
+		3) 发布阶段
+			备份
+			部署
+		4) 回滚方案
+			回滚
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day212 Wednesday, January 16, 2013
+
+1. 
+	* 大region二期发布步骤
+		增加更新region表status字段的python脚本
+			用于master发布前，修改对应region的状态为不可用，master发布完成后修改状态为可用
+	* MSS重构
+		整理监控参数及其获取方式
+	* deploy.py根据之前发布的项目使用
+	有svn地址
+
+2. 大region二期发布步骤
+	设置maserRegion，reloadCache都通过go2houyiapi来执行
+
+3. fuxi上的http_proxy作为桥梁
+	可到fuxi机器查看proxy的状态（me）
+4. osgi
+	
+5. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day213 Thursday, January 17, 2013
+
+1. 
+	* 大region二期提测
+		其他项目修改了API的pom，本项目配管打包时找不到包，对应修改pom即可
+	* MSS重构
+		pync：一个python实现的框架，
+			提供服务注册（定时任务注册，注册一个定时器，并配置触发策略）、
+				心跳服务
+				采集推送服务
+			方法调用（master调用nc）
+		OTS多机房部署问题确认？
+			以及关联到的定时任务多机房部署&安全数据是否多机房部署&OMS是否需要多机房部署
+			
+			问题源于：
+				OTS是否需要多机房部署，如果需要
+
+	* 大region二期API发布步骤
+		杭州云配置目录:http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20121129/outer-pro-env
+		测试环境配置目录：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20121129/test-env
+		双开环境配置目录：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20121129/inner-pro-env
+		参考：http://wiki.ec.alibaba-inc.com/index.php/Bugfix11%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%BA%BF%E6%AD%A5%E9%AA%A4
+
+2. 
+
+3. edit plus开发python的配置
+	参考：http://blog.csdn.net/hendyyou/article/details/4694973
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day214 Friday, January 18, 2013
+
+1. 
+	* MSS重构
+		监控项及其生成逻辑整理
+	* fab发布工具
+		6.27
+		/home/admin/fabdeploy
+	* 新项目
+		工信部数据上报项目，houyi API提供符合要求的VM数据给数据上报中心，由数据上报中心负责将数据给工信部。
+
+2. http chunk
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day215 Monday, January 21, 2013
+
+1. 
+	* http chunk (http1.1 protocal)
+
 2. 
