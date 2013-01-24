@@ -11,9 +11,55 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
-* http chunk
-	
-	http1.1支持
+* 代码合并    svn merger merger代码 * svn
+	- 基于trunk拉分支并提交修改到分支后，若中间没有并行项目，分支合并到主干时，可拉最新的trunk，将分支修改合并进来，再提交即可
+	- 基于trunk拉分支并提交修改到分支后，若中间有其他项目发布且已合并到trunk，可在每次trunk修改后，将trunk修改合并到分支上，避免后面合并多个
+	项目的多处修改冲突的风险。
+		此方法不能避免并行项目做了大量修改导致其他分支合并到trunk时出现大量冲突的问题。需要在项目启动时考虑到这些问题。尽量避开交叉修改的项目并行
+		进行。
+
+* RX TX TX RX
+	TX: transmit 传送
+	RX: receive 接收 
+
+	tx是发送（transport），rx是接收(receive)。以ros为中心。   比如你的外网网卡，wan,rx是wan接受ISP的
+	传输数据， 即下载速度。wan的tx,是工作站经ros wan网卡向isp上传的速度，既上传速度。
+	内网网卡lan的rx，应该是ros接受来之内网工作站的上传，既是上传速度。tx是lan网卡传给工作站的速
+	度，即工作站经内网网卡下载的速度 （以ros为中心）。
+	有没有分啊
+	tx rx 每个版本都不一样的啊
+	而且相对于外网和内网的解释又是相反的
+	你就记住一般RX外网指的是下载，TX指的是上传
+	而内网相反就行了
+	from: http://www.ubooo.com/rou/2009/0324/111.html
+
+* http chunk http chunked
+	- 优势
+		能一边接受数据一边处理已接收的数据，如果只是一次性取到所有的再去处理，则体现不出chunked的优势
+
+	- 对于返回内容不能立即取到大小，返回是一个过程时，每次只返回可用数据的一块（完整可解析的一个块）。
+	参考：http://www.cnblogs.com/jcli/archive/2012/10/19/2730440.html
+
+		一般http通信时会使用content_length头信息来表示服务器发送的文档内容长度，该头信息定义域http1.0协议RFC 1945 10.4章节中，浏览器接收到此头信息后
+	接受完content_length中定义的产度字节后开始解析页面，但是如果服务器端有部分数据延迟发送则会出现浏览器白屏，用户体验差。
+		解决方案是在http1.1协议中EFC 2616中14.41章节中定义的Transfer_encoding：chunked的头信息。chunked编码定义在3.6.1中，所有HTTP1.1都应该支持使用
+	chunked编码动态的提供body内容的长度的方式。进行chunked编码传输的http数据要在消息头部设置transfer_encoding：chunked表示content body将用chunked编码
+	传输内容。根据定义，浏览器不需要等到内容字节全部下载完成，只要接收到一个chunked块就可以解析页面，并可以下载html中定义的页面内容，包括js，
+	css，image等
+		
+		采用chunked编码有两种选择一种是设定server的IO buffer长度让server自动flush buffer中的内容另一种是手动调用IO中的flush函数，不同的语言IO中都有flush功能：
+		
+		php：ob_flush();flush()
+		perl:STDOUT->autoflush(1);
+		java:out.flush()
+		python:sys.stout.flush()
+		ruby:stdout.flush
+		
+		采用http1.1的transfer_encoding：chunked并且把IO的buffer flush下来，一遍浏览器更早的下载页面配套资源，不可能在头中包含content_length域来指明报文体长度，
+	此时就需要通过transfer_encoding域来确定报文体长度
+	from: http://blog.csdn.net/ruby1098/article/details/6730424
+
+	- http1.1支持
 	----------
 		Chunked Transfer Coding
 
@@ -266,6 +312,7 @@ google 检索 apache： site:*.apache.org 高级搜索
 		* ryzom
 			模块化，组件化的设计。核心框架和业务无关，各自发展
 			http://blog.sina.com.cn/s/articlelist_1850874464_0_4.html
+		* doom3 engine开源
 
 * java dns 缓存
 	%JAVA_HOME/jre/lib/security/java.security
@@ -1075,7 +1122,9 @@ Storage for Interactive Services
 		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
 
 * zookeeper
-	- 解决hadoop的单点故障(single point of failure of Name Node)，ZooKeeper能够用来leader选举,配置信息维护等。在一个分布式的环境中，
+	 - 实例
+		ref: http://www.cnblogs.com/zhangzhang/archive/2013/01/16/2863339.html
+	\- 解决hadoop的单点故障(single point of failure of Name Node)，ZooKeeper能够用来leader选举,配置信息维护等。在一个分布式的环境中，
 		我们需要一个Master实例或存储一些配置信息，确保文件写入的一致性等。目前ZooKeeper解决Hadoop的单点故障实现的是主备机方式。
 
 		leader-follower模式
@@ -1088,9 +1137,10 @@ Storage for Interactive Services
 		ZooKeeper的目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。
 
 	- ZooKeeper 典型的应用场景
-		Zookeeper 从设计模式角度来看，是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生 变化，
-		Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式，关于 Zookeeper 的详细架构等内部细节可以阅读 Zookeeper
-		的源码
+			Zookeeper 从设计模式角度来看，是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，
+		一旦这些数据的状态发生 变化，
+			Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式，关于 Zookeeper 的详细架构等
+		内部细节可以阅读 Zookeeper的源码
 
 		下面详细介绍这些典型的应用场景，也就是 Zookeeper 到底能帮我们解决那些问题？下面将给出答案。
 
@@ -2409,6 +2459,190 @@ Storage for Interactive Services
 	  使用VRRP协议，不用改造目前的网络结构，最大限度保护了当前投资，只需最少的管理费用，却大大提升了网络性能，具有重大的应用价值。
 
 * linux
+	- Linux调试工具strace和gdb常用命令小结
+		---------
+				strace（用来跟踪任何程序的系统调用）和 GDB 调试工具（用来在受控的环境中运行程序的功能齐全的调试工具）
+				strace 专注于监控一个程序系统调用和它接受到的所有信号（与Unix系统上的truss是一样的），使用的是内核系统调用ptrace。另外，还有类似的ltrace（同样是
+			基于ptrace的），它功能是能够跟踪进程的库函数调用。
+				gdb比starce能做的事情更多，比如gdb可以获得堆栈跟踪信息，堆栈跟踪不仅会告诉你程序当前正在做什么，有底层的信息（如等待网络套接字），也有较高
+			级别的信息（如正在执行什么类型的网络操作）。
+			下面是使用过程中一些命令小结:
+			
+			strace调试工具
+				strace工具用于跟踪进程执行时的系统调用和所接收的信号，包括参数、返回值、执行时间。在Linux中，用户程序要访问系统设备，必须由用户态切换到
+			内核态，这是通过系统调用发起并完成的。
+			strace常用参数：
+			-c　　统计每种系统调用执行的时间、调用次数、出错次数，程序退出时给出报告
+			-p pid　　跟踪指定的进程，可以使用多个-p同时跟踪多个进程
+			-o filename　　strace默认输出到stdout，-o可以将输出写入到指定的文件
+			-f　　跟踪由fork产生的子进程的系统调用
+			-ff　　常与-o选项一起使用，不同进程(子进程)产生的系统调用输出到各个filename.pid文件中
+			-F　　尝试跟踪vfork子进程系统调用，注意：与-f同时使用时, vfork不被跟踪
+			-e expr　　输出过滤表达式，可以过滤掉不想输出的strace结果
+			-e trace=set　　指定跟踪set中的系统调用
+			-e trace=network　　跟踪与网络有关的所有系统调用
+			-e strace=signal　　跟踪所有与系统信号有关的系统调用
+			-e trace=ipc　　跟踪所有与进程通讯有关的系统调用
+			-e signal=set　　指定跟踪set中的信号
+			-e read=set　　输出从指定文件中读出的数据，例如-e read=3,5
+			-e write=set　　输出写入到指定文件中的数据，例如-e write=1
+			-r　　打印每一个系统调用的相对时间
+			-t　　在输出中的每一行前加上时间信息
+			-tt　　在输出中的每一行前加上时间信息，时间精确到微秒级
+			-ttt　　在输出中的每一行前加上时间信息，输出为相对时间
+			-s　　指定每一行输出字符串的长度（默认为32）
+			strace使用举例：
+			strace -t whoami  #跟踪whoami可执行程序，每行输出结果前打印执行的时间
+			strace -p 17151 -p 17152 -p 17153  #同时跟踪进程17151、17152、17153
+			strace -f -e trace=read,write -p 17151 -o log  #跟踪进程17151及子进程中read和write系统调用，输出到log文件
+			gdb调试工具
+			GDB是GNU开源组织发布的一个强大的UNIX下的程序调试工具。gcc编译时加上-g参数，可以使可执行程序加上gdb调试信息。
+			（1）info
+			简写：i，列出gdb子命令的信息，如info break，info variables，info stack等。
+			（2）list [file:]function
+			简写：l，查看当前行的上下文，默认为10行，也可以设置在某个函数处列出源码。
+			（3）edit [file:]function
+			简写：e，编辑当前所在的行，也可以编辑某个函数的源码。
+			（4）break [file:]function
+			简写：b，设置断点，可以设置在某行或某个函数处。
+			（5）run [arglist]
+			简写：r，运行程序至断点处停住，run命令之后可以加上调试程序需要的参数。
+			（6）next
+			简写：n，单条语句执行。
+			（7）continue
+			简写：c，继续运行程序至下一个断点。
+			（8）print
+			简写：p，打印变量的值。
+			（9）bt
+			查看函数堆栈信息。
+			（10）enter
+			回车键，重复上一次调试命令。
+			（11）help [name]
+			显示指定的gdb命令的帮助信息。
+			（12）quit
+			简写：q，退出gdb。
+			from: http://www.cnblogs.com/zhangzhang/archive/2013/01/07/2850355.html
+		---------
+	- strace命令
+		---------
+				strace 是一个非常简单的工具，用来跟踪可执行程序的系统调用(system call)。最简单的使用是，它追踪可行程序运行时的整个生命周期，输出每一个系统调用的名字，参数和返回值。 
+			但是它还可以做更多的事情：
+			 
+			它可以基于系统调用或者系统调用组来过滤
+			它可以通过计算制定系统调用的次数，花费的时间以及成功和失败的次数来描述系统调用的使用
+			它可以追踪发送给进程的信号(signal)
+			它可以通过进程id(pid)号加入到任意正在运行的进程上
+			 
+			如何使用
+			 
+			找出一个程序启动时读取了哪个配置文件
+			 
+			有的时候，你发发现，无论你如何修改配置文件，应用程序并没有按照你的思路去运行，这是什么原因？一个浅显但容易忽视的考虑是，应用程序启动时读取了你认为要读取的配置文件了吗？看下面的例子：
+			 
+			 $ strace php 2>&1 | grep php.ini          open("/usr/local/bin/php.ini", O_RDONLY) = -1 ENOENT (No such file or directory)          open("/usr/local/lib/php.ini", O_RDONLY) = 4          lstat64("/usr/local/lib/php.ini", {st_mode=S_IFLNK|0777, st_size=27,        ...}) = 0          readlink("/usr/local/lib/php.ini", "/usr/local/Zend/etc/php.ini",        4096) = 27          lstat64("/usr/local/Zend/etc/php.ini", {st_mode=S_IFREG|0664,st_size=40971, ...}) = 0    
+			上述php程序程序会首先从/usr/local/bin/下读取php.ini文件，也许不是你想的首先从/usr/local/lib/下读取。
+			上述的输出会很多，我们甚至可以通过参数来指定只追踪我们关心的系统调用，类似如下：
+			 
+			  $ strace -e open php 2>&1 | grep php.ini           open("/usr/local/bin/php.ini", O_RDONLY) = -1 ENOENT (No such file or         directory)           open("/usr/local/lib/php.ini", O_RDONLY) = 4  
+			为什么程序没有打开我的文件？
+			 
+			每一个可执行程序读取文件时，如果权限不够，则会遭拒绝。而如果文件找不到，也并不会报错，除非你在程序里设置了错误处理，So，如果程序没有读取我的文件，我该如何跟踪呢？
+			 
+			 $ strace -e open,access 2>&1 |grep your-filename
+			检查open()和access()系统调用的输出结果，看看是什么原因
+			 
+			进程此刻正在做什么？
+			 
+			你的程序突然消耗了大量的CPU，或者程序似乎被挂起了，那么我们通过进程的pid号看看此刻它正在做什么
+			 
+			 root@dev:~# strace -p 15427           Process 15427 attached - interrupt to quit           futex(0x402f4900, FUTEX_WAIT, 2, NULL           Process 15427 detached  
+			通过跟踪，你知道程序挂起的原因是正在调用futex()。
+			 
+			程序的时间花在什么地方
+			 
+			你总是希望程序能够按照你的意愿去工作，也希望它能在正确的时间做正确的事情，甚至希望它是最优的，尽可能在程序运行的周期内，消耗的90%以上的资源都是在做需要做的事情，而不是简单的等待。也许，下面的这个指令可以帮上你的忙:
+			 
+			 root@dev:~# strace -c -p 11084
+			 Process 11084 attached - interrupt to quit
+			 Process 11084 detached
+			 % time     seconds  usecs/call     calls    errors syscall
+			 ------ ----------- ----------- --------- --------- ----------------
+			  94.59    0.001014          48        21           select
+			   2.89    0.000031           1        21           getppid
+			   2.52    0.000027           1        21           time
+			 ------ ----------- ----------- --------- --------- ----------------
+			 100.00    0.001072                    63           total
+			 root@dev:~# 
+			如果你是跟踪的后台守护进程，可以通过上面的指令跟踪一段时间，然后按ctrl+c退出，strace会根据获得信息描述出上面的结果。
+			上述的例子说明当前进程(postmaster)最要的时间花在等待select()函数上，在每调用一次select函数后，它分别调用getpid函数和time函数. 如果是非后台守护进程，那strace可以跟踪进程的开始至结束，类似下面这样：
+			 
+			 root@dev:~# strace -c >/dev/null ls
+			 % time     seconds  usecs/call     calls    errors syscall
+			 ------ ----------- ----------- --------- --------- ----------------
+			  23.62    0.000205         103         2           getdents64
+			  18.78    0.000163          15        11         1 open
+			  15.09    0.000131          19         7           read
+			  12.79    0.000111           7        16           old_mmap
+			   7.03    0.000061           6        11           close
+			   4.84    0.000042          11         4           munmap
+			   4.84    0.000042          11         4           mmap2
+			   4.03    0.000035           6         6         6 access
+			   3.80    0.000033           3        11           fstat64
+			   1.38    0.000012           3         4           brk
+			   0.92    0.000008           3         3         3 ioctl
+			   0.69    0.000006           6         1           uname
+			   0.58    0.000005           5         1           set_thread_area
+			   0.35    0.000003           3         1           write
+			   0.35    0.000003           3         1           rt_sigaction
+			   0.35    0.000003           3         1           fcntl64
+			   0.23    0.000002           2         1           getrlimit
+			   0.23    0.000002           2         1           set_tid_address
+			   0.12    0.000001           1         1           rt_sigprocmask
+			 ------ ----------- ----------- --------- --------- ----------------
+			 100.00    0.000868                    87        10 total
+			ls程序大部分时间花在读取目录条目上面。
+			 
+			为什么我不能连接到服务器？
+			 
+			调试进程不能连接到服务器是一个痛苦的事情，因为原因很多，比如DNS失效啦，连接被挂起啦，服务器返回异常数据啦，服务器本身异常啦，等等。一般网络调试方面，很多人会想到另外一个非常不错的工具-tcpdump。但它的参数太多了，而且你要从上百个连接进程中找出其中一个进程为什么不能连接恐怕是一件非常费力的工作。strace 其实也能在这种情景下帮上你的忙，它仅仅输出与系统调用相关的数据，从而可以让我们的注意力更集中。类似下面这样：
+			 
+			 $ strace -e poll,select,connect,recvfrom,sendto nc www.news.com 80
+			 sendto(3, "\24\0\0\0\26\0\1\3\255\373NH\0\0\0\0\0\0\0\0", 20, 0, {sa_family=AF_NETLINK, pid=0, groups=00000000}, 12) = 20
+			 connect(3, {sa_family=AF_FILE, path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+			 connect(3, {sa_family=AF_FILE, path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+			 connect(3, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("62.30.112.39")}, 28) = 0
+			 poll([{fd=3, events=POLLOUT, revents=POLLOUT}], 1, 0) = 1
+			 sendto(3, "\213\321\1\0\0\1\0\0\0\0\0\0\3www\4news\3com\0\0\34\0\1", 30, MSG_NOSIGNAL, NULL, 0) = 30
+			 poll([{fd=3, events=POLLIN, revents=POLLIN}], 1, 5000) = 1
+			 recvfrom(3, "\213\321\201\200\0\1\0\1\0\1\0\0\3www\4news\3com\0\0\34\0\1\300\f"..., 1024, 0, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("62.30.112.39")}, [16]) = 153
+			 connect(3, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("62.30.112.39")}, 28) = 0
+			 poll([{fd=3, events=POLLOUT, revents=POLLOUT}], 1, 0) = 1
+			 sendto(3, "k\374\1\0\0\1\0\0\0\0\0\0\3www\4news\3com\0\0\1\0\1", 30, MSG_NOSIGNAL, NULL, 0) = 30
+			 poll([{fd=3, events=POLLIN, revents=POLLIN}], 1, 5000) = 1
+			 recvfrom(3, "k\374\201\200\0\1\0\2\0\0\0\0\3www\4news\3com\0\0\1\0\1\300\f"..., 1024, 0, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("62.30.112.39")}, [16]) = 106
+			 connect(3, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("62.30.112.39")}, 28) = 0
+			 poll([{fd=3, events=POLLOUT, revents=POLLOUT}], 1, 0) = 1
+			 sendto(3, "\\\2\1\0\0\1\0\0\0\0\0\0\3www\4news\3com\0\0\1\0\1", 30, MSG_NOSIGNAL, NULL, 0) = 30
+			 poll([{fd=3, events=POLLIN, revents=POLLIN}], 1, 5000) = 1
+			 recvfrom(3, "\\\2\201\200\0\1\0\2\0\0\0\0\3www\4news\3com\0\0\1\0\1\300\f"..., 1024, 0, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("62.30.112.39")}, [16]) = 106
+			 connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=inet_addr("216.239.122.102")}, 16) = -1 EINPROGRESS (Operation now in progress)
+			 select(4, NULL, [3], NULL, NULL)        = 1 (out [3])
+			那么，上述的输出，说明进程发生了什么呢？
+			注意到这个进程尝试连接/var/run/nscd/socket连接了吗？这意味着nc程序首先会去连接NSCD- Name Service Cache Daemon - 它通常用于设置和NIS，YP，LDAP或者类似目录协议相关的域名查询配置上。在上述例子中，连接失败了。
+			 
+			接下来进程开始连接到DNS，这点可以从sin_port=htons(53)输出可以看出。你可以看到，它接着做了一个sendto()的调用，发出了一个包含www.news.com信息的DNS包。然后读取返回的包数据，不知什么原因，它做了三次这样的尝试。一个可能的原因是www.news.com是一条CNAME记录。多次请求可能是nc程序处理的一种方式。
+			 
+			最后，它总算是发起了connect()操作，注意这个操作的返回结果是EINPROGRESS，这意味着这个连接是非阻塞式的，nc希望继续，于是它调用了select()。
+			 
+			增加read,write调用到strace跟踪的系统调用列表里，可以让我们看到下面的一些结果：
+			 
+			 read(0, "test\n", 1024)                 = 5
+			 write(3, "test\n", 5)                   = 5
+			 poll([{fd=3, events=POLLIN, revents=POLLIN}, {fd=0, events=POLLIN}], 2, -1) = 1
+			 read(3, "
+			上述表示它从读取”test” + 标准输入的一行信息，然后写入网络连接，接着调用poll来等待回应，然后读取网络反馈的信息并写到标准输出。
+			from: http://5iwww.blog.51cto.com/856039/771031
+		---------
 	- linux挂载硬盘	    * linux挂载硬盘
 		添加磁盘
 		找到磁盘
@@ -2950,10 +3184,24 @@ Storage for Interactive Services
 
 		from:http://kerry.blog.51cto.com/172631/161179
 
-* What Is a Socket
+* What Is a Socket	  * socket socket http socket与http
 		A socket is one end-point of a two-way communication link between two programs running on the network. 
 	Socket classes are used to represent the connection between a client program and a server program. The java.net package provides 
 	two classes--Socket and ServerSocket--that implement the client side of the connection and the server side of the connection, respectively. 
+
+	socket与http关系
+		http基于socket
+			socket是点对点通讯的基础，一个抽象接口层；http是在socket层上面在封装，根据http协议定义的编码要求来收发；即也可自行根据socket实现自定义的通讯协议
+			比如定义 nuwa://xxx协议，迅雷的thunder://，电驴ed2k://|file|
+			·例子：http://www.cnblogs.com/sunwei2012/archive/2010/04/06/1705634.html 自定义应用层通信协议
+				通信协议精确地定义了双方通信控制信息和解释信息：发送方能将特定信息（文本、图片、音频、视频）按协议封装成指定格式的数据包，最终以串行化比特流在网络上传输；接收方接收到数据包后，根据协议将比特流解析为本地化数据，从而获取对方发送过来的原始信息。
+				通信协议包括三个要素：
+				（1）语法：规定了信息的结构和格式；
+				（2）语义：表明信息要表达的内容；
+				（3）同步：规则涉及双方的交互关系和事件顺序。
+				整个计算机网络的实现体现为协议的实现，TCP/IP协议是Internet互联网的核心协议。
+		
+
 * log * log4j
 	- log4j配置时
 		定义appender，定义logger
@@ -5381,6 +5629,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- maven web项目 maven项目 部署 测试 ，可通过bat或shell的方式来自动化编译打包部署，方便web项目的调试
+		搜索本文件内容：mavn web project 自动部署启动容器脚本(bat脚本)
 	- maven jvm参数配置 配置jvm    maven运行参数配置
 		maven默认的jvm配置，比如内存不能满足需要，可能导致错误，如：java.lang.OutOfMemoryError: PermGen space问题
 		下面摘自网络，可参考：
@@ -17375,11 +17625,119 @@ day214 Friday, January 18, 2013
 		工信部数据上报项目，houyi API提供符合要求的VM数据给数据上报中心，由数据上报中心负责将数据给工信部。
 
 2. http chunk
+	http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
+	http://www.cnblogs.com/jcli/archive/2012/10/19/2730440.html http协议之Transfer-Encoding及HttpCore实现
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day215 Monday, January 21, 2013
 
 1. 
-	* http chunk (http1.1 protocal)
+	* MSS重构暂停，优先上报项目
+	* 工信部上报项目，上报数据项整理以及是否需要增加与master的接口分析      doing	
+	* 工信部上报项目，拉分支基于1/22/2013号发布的项目 待
+	* 工信部上报项目，增加系统维护中状态，对应region关闭状态（涉及调用到关闭region的情况，报状态）
+		若需求调整，则时间不定	
+	* 工信部上报项目，增加缓存重构需求
+		将regionNo对应控制系统地址的缓存重构，使之支持reload缓存接口
+	* http chunk (http1.1 protocol) 方式实现接口提供大量数据
+	* 与上报中心确认houyi api提供的接口？
+		邮件已发出，待确认
+	* 需要变的配置，需要从项目部署包中拉出来，发布都是以war包或jar包为单位，不便于修改配置
 
+2. 工信部上报项目，上报数据项整理以及是否需要增加与master的接口分析
+	尽快确定houyi api给出的接口是否满足要求？
+	评估API取数据对Master的变化需求？
+
+3. 通过socket实现简单的http server与http client来测试http chunked
+	
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day216 Tuesday, January 22, 2013
+
+1. 
+	* httpclient文档说明，支持chunked
+		socket模拟http server，测试chunked
+
+	* 上报中心项目基于
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_bandwidth_fix 发布后从trunk啦分支
+
+2. httpclient
+	StringEntity entity = new StringEntity("important message",
+	"text/plain; charset=\"UTF-8\"");
+	entity.setChunked(true);
+	HttpPost httppost = new HttpPost("http://localhost/acrtion.do");
+	httppost.setEntity(entity);
+
+3. http响应
+	一个简单的HTTP响应体：
+	"HTTP/1.0 200 OK[\r][\n]"
+	"Server: a simple java httpServerContent-type: text/html[\r][\n]"
+	"Content-Length: 24[\r][\n]"
+	"[\r][\n]"
+	"<html>hello world</html>"	
+
+	也可基于servlet来返回chunked响应
+		根据maven内置archtype中的java web类型创建maven支持的web project
+			创建servlet，配置servlet，访问测试
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day217 Wednesday, January 23, 2013
+
+1. 
+	* DCISP数据上报项目新开分支申请
+	* DCISP数据上报项目，数据项逻辑整理
+		
+	* MSS重构
+		定时任务，嫦娥等查询VM监控数据都为统计用，数据量打，请求频繁；只有API的查询监控数据接口，是只返回原始数据不做统计，
+		这样是否考虑采用RDS或其他支持简单统计功能的存储产品？
+	* SLB API聚石塔项目发布 (新搭集群)
+		1.24号发布支持， API改动，数据库表初始化及更新(青岛slb master地址改动)
+		发布wiki：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9256383
+		环境：ssh sarah.wangq@shterm.aliyun-inc.com
+	* 大region二期，周五前合并代码，周五再次提测
+		API合并代码 merger代码 代码merger
+			将trunk上的改动合并到branch上，最好是每一个版本发布改动都及时合如branch
+			步骤：
+				1）拉后续发布的trunk代码
+				2）将trunk上的变化合并到当前branch上
+				3）提交合入当前branch的修改到当前branch支上
+				
+				合入的其他项目的修改，在再次合并到trunk上时会有冲突，这种方式不合适，可基于最新的trunk再开一个分支，
+				将本branch的修改合并入此新分支，后续基于此新分支继续开发。
+			
+			后面，此分支再merger到trunk时，步骤为：
+				1）拉trunk最新代码
+				2）将当前branch变化merger到上面的trunk上    （对于trunk上已删除的内容？）
+				3）提交修改后的trunk代码到trunk上
+
+			从trunk拉个分支，带上当时trunk的reversion，不好？
+				根据邮件时间来猜分支基于trunk那个revision拉的，结合比较工具，重新拉下来比较
+
+			方案3，合并时，拉最新的trunk，将当前branch修改合并到trunk上，前提是冲突不多的情况。
+2. 
+
+3. 标签 ，tag
+	归类内容
+
+4. chunked
+	边接收边处理
+	对于xml，html服务端如何分解chunk以及客户端如何一个个chunk去处理？
+		每个chunk都是一个完整的文档格式，比如xml格式，每个chunk都是标准的xml格式，有头和尾。带来的问题，处理chunk数据ok，但
+		所有chunk的汇总数据是格式不可用的。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day218 Thursday, January 24, 2013
+
+1. 
+	* 确认工信部上报项目分支
+		对已确认需求的进行修改
+	* MSS重构项目
+		与OTS分析适用场景，并与RDS讨论是否可用RDS来方便调用方的统计需求（分布式RDS？）
+	* 大region二期
+		对于API，如果后续有项目对trunk做大量改动，和二期的版本有大量冲突，可以考虑现在基于最新trunk再拉一个分支，
+		将二期的修改合入新分支中，后续基于此新分支提交。？
+	* SLB API聚石塔发布 在线支持
+		SLB API 目前管理不同版本的后端，对于表名的修改，在老库上以别名方式来兼容API的修改。
+	
 2. 
