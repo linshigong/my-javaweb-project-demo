@@ -21,6 +21,10 @@ public enum EnumTest {
 		for(Object o:EnumTest.values()){
 			System.out.println((Enum)o);
 		}
+		
+		//test equal method of enum
+		System.out.println(EnumTest.ADDRESS == EnumTest.ADDRESS);//true
+		
 	}
 	
 }
