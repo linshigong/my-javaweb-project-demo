@@ -11,6 +11,138 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+
+* virtual host
+	- 介绍
+		The term Virtual Host refers to the practice of running more than one web site (such as company1.example.com and company2.example.com) on a single machine. 
+		Virtual hosts can be "IP-based", meaning that you have a different IP address for every web site, or "name-based", meaning that you have multiple names running on each IP address. 
+		The fact that they are running on the same physical server is not apparent to the end user.
+	- apache支持virtual host：
+		Apache was one of the first servers to support IP-based virtual hosts right out of the box. Versions 1.1 and later of Apache support both IP-based and name-based virtual 
+		hosts (vhosts). The latter variant of virtual hosts is sometimes also called host-based or non-IP virtual hosts.
+		
+* rewrite技术 伪静态技术	URL rewrite技术	 URL重写
+	- URL rewrite
+		URL 重写是截取传入 Web 请求并自动将请求重定向到其他 URL 的过程 
+			将http://www.new.com/work/index.php?action=list&para1=test&para2=test2
+			转换为：
+			http://work.new.com/list/para1/test/para2/test2
+	参考：http://www.itlearner.com/code/apache2.2/rewrite/rewrite_guide.html  初级URL重写指南
+		http://www.baidu.com/link?url=jCVVGJqjJ4zBBpC8yDF8xDhgsCi-AJZjCGkIr62EKcS52ktxVCl-tMokRHKqpDjN4om
+	静态技术，便于搜索引擎收录页面。
+	。。。
+	
+* apache apache2
+	- virtual host配置
+		httpd.conf
+		--------
+			Listen 80
+
+			<VirtualHost *:80> 
+			#   General setup for the virtual host
+			DefaultType text/xml
+
+			DocumentRoot "/home/admin/houyi_directory_backup/houyi/service/"
+
+			ErrorLog /home/admin/houyi_directory_backup/houyi/service/logs/openapi/error_log
+
+			<Directory />
+			    Options FollowSymLinks
+			#    Options None
+			    AllowOverride None
+			    Order allow,deny
+			    Allow from all
+			</Directory>
+
+			<Directory "/home/admin/houyi_directory_backup/houyi/service/">
+			    Options FollowSymLinks
+			#    Options None
+			    AllowOverride None
+			    Order allow,deny
+			    Allow from all
+			</Directory>
+
+			<FilesMatch "^\.ht">
+			    Order allow,deny
+			    Deny from all
+			</FilesMatch>
+			AccessFileName .htaccess
+			</VirtualHost>
+		--------
+		建议单独配置virtual host到httpd-vhost.conf中。
+
+	- apache作为反向代理后端为jetty配置
+		参考：http://blog.csdn.net/zhuying_linux/article/details/6600071   Apache +Jetty的负载均衡与集群配置（上）
+
+		例子：
+		原来apache与jboss通过ajp协议，现在nginx与jetty通过http or what others?	   在httpd.conf中配置 apache+jetty 负载均衡			
+			1) 暂且直接配置为http方式通讯：
+				<IfModule proxy_module>
+					ProxyPass /open http://127.0.0.1:8080/open #静态文件的请求不需要转发，由apache直接返回，需要配置DocumentRoot 为程序目录(为防止冲突，建议配虚拟机)
+				</IfModule> 
+			2) 若需要，也可以配置为ajp方式通讯，主要配置如下：
+				加载需要的模块：
+					LoadModule proxy_module modules/mod_proxy.so
+					LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
+					LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
+				配置httpd.conf：
+					<IfModule proxy_ajp_module>
+						ProxyPass open ajp://127.0.0.1:8190/open
+						#ProxyPassReverse /open ajp://127.0.0.1:8080/open/api #rewrite if need
+					</IfModule>
+				确保backend的ajp端口与上面配置的一致（8190）。
+	- proxy_ajp_module 模块
+		apache的httpd.conf文件配置module信息，proxy_ajp_module模块用于ajp协议的通讯，需要mod_proxy模块，即proxy_ajp_module模块是一个
+		AJP support module for mod_proxy。
+		摘自官网的usage：
+		-------
+			Usage
+
+			This module is used to reverse proxy to a backend application server (e.g. Apache Tomcat) using the AJP13 protocol. The usage is similar to an HTTP reverse proxy, 
+			but uses the ajp:// prefix:
+
+			#Simple Reverse Proxy
+			ProxyPass /app ajp://backend.example.com:8009/app		 //简单配置
+			Balancers may also be used:
+
+			#Balancer Reverse Proxy
+			<Proxy balancer://cluster>								      //根据权重负载均衡，可用性考虑？	    mok_jk?
+				BalancerMember ajp://app1.example.com:8009 loadfactor=1
+				BalancerMember ajp://app2.example.com:8009 loadfactor=2
+				ProxySet lbmethod=bytraffic
+			</Proxy>
+			ProxyPass /app balancer://cluster/app
+
+			Note that usually no ProxyPassReverse directive is necessary. The AJP request includes the original host header given to the proxy, and the application server can be 
+			expected to generate self-referential headers relative to this host, so no rewriting is necessary.	  //ProxyPassReverse配置说明，只有当proxy接收的url与后端的不一致时才需要配置此项，否则不建议
+
+			The main exception is when the URL path on the proxy differs from that on the backend. In this case, a redirect header can be rewritten relative to the original host URL (
+			not the backend ajp:// URL), for example:
+
+			Rewriting Proxied Path
+
+			ProxyPass /apps/foo ajp://backend.example.com:8009/foo
+			ProxyPassReverse /apps/foo http://www.example.com/foo
+			However, it is usually better to deploy the application on the backend server at the same path as the proxy rather than to take this approach.
+		-------
+		详见官网的module说明：http://httpd.apache.org/docs/2.2/mod/mod_proxy_ajp.html
+
+	
+* InfoQ ArchSummit全球架构师峰会 腾讯大讲堂 PPT 
+	
+* 数据仓库 data warehouse
+	数据分析
+	数据统计 数据统计方案 数据汇总分析 数据汇总分析方案
+	数据挖掘
+	BI 商业智能
+ 
+* 统计需求 月统计 天统计
+	通过提前归并的方式，避免即时扫描，对于大量数据的情况尤其需要考虑
+	如果是关系型数据库，大量表扫描也耗性能，需要归并，分布式RDS即DRDS？
+	如果是nosql数据量大的统计也代价高，需要归并，支持水平扩展
+* google code svn
+	google code 提供svn服务，但页面上不便于svn操作，比如添加分支，添加目录等，可通过svn工具来操作，如 TortoiseSVN，来建立新目录等等。
+
 * 代码合并    svn merger merger代码 * svn
 	- 基于trunk拉分支并提交修改到分支后，若中间没有并行项目，分支合并到主干时，可拉最新的trunk，将分支修改合并进来，再提交即可
 	- 基于trunk拉分支并提交修改到分支后，若中间有其他项目发布且已合并到trunk，可在每次trunk修改后，将trunk修改合并到分支上，避免后面合并多个
@@ -465,6 +597,31 @@ google 检索 apache： site:*.apache.org 高级搜索
 * apache common包
 	老版本源码下载，有老版本区：
 		http://archive.apache.org/dist/commons/dbcp/
+
+* jetty
+	- jetty支持ajp协议，加载jetty-ajp.xml配置即可，实现jetty外面一层反向代理层。如apache+jetty
+		or haproxy+jetty ,nginx+jetty
+	- jetty web结构及部署实践
+		jetty-maven-plugin
+		1）下载jetty7或更高版本
+		2）解压
+		3）mv到安装目录，并用ln -s命令起个连接
+		jetty安装完毕
+		通过bin下的脚本来执行启动关闭等操作
+
+		下载api的jetty运行目录，里面配置了基本信息，通过此目录来起停api
+			etc目录自己管理，start.ini配置启动项
+
+
+	- jetty介绍
+		Jetty provides an HTTP server, HTTP client, and javax.servlet container. These components are open source and available for commercial use and distribution.
+		Jetty is used in a wide variety of projects and products. Jetty can be embedded in devices, tools, frameworks, application servers, and clusters. See the Jetty Powered page 
+	for more uses of Jetty.
+		The core Jetty project is hosted by the Eclipse Foundation. The codehaus provides Jetty accessories , integrations, and extensions, as well as hosting older versions of Jetty. 
+	See the About page for information about the project structure.
+	from: http://jetty.codehaus.org/jetty/
+
+
 * Jetty7 Continuation
 	异步HTTP
 
@@ -4176,12 +4333,15 @@ search in index find pdf
 		软件负载均衡一般通过两种方式来实现：基于操作系统的软负载实现和基于第三方应用的软负载实现。LVS就是基于Linux操作系统实现的一种软负载，
 		HAProxy就是开源的并且基于第三应用实现的软负载。
 	
-	HAProxy相比LVS的使用要简单很多，功能方面也很丰富。当 前，HAProxy支持两种主要的代理模式:"tcp"也即4层（大多用于邮件服务器、内部协议通信服务器等），和7层（HTTP）。在4层模式 下，HAProxy仅在客户端和服务器之间转发双向流量。7层模式下，HAProxy会分析协议，并且能通过允许、拒绝、交换、增加、修改或者删除请求 (request)或者回应(response)里指定内容来控制协议，这种操作要基于特定规则。
+	HAProxy相比LVS的使用要简单很多，功能方面也很丰富。当 前，HAProxy支持两种主要的代理模式:"tcp"也即4层（大多用于邮件服务器、内部协议通信服务器等），
+	和7层（HTTP）。在4层模式 下，HAProxy仅在客户端和服务器之间转发双向流量。7层模式下，HAProxy会分析协议，并且能通过允许、拒绝、交换、增加、修改
+	或者删除请求 (request)或者回应(response)里指定内容来控制协议，这种操作要基于特定规则。
 	
 	---------
 	我现在用HAProxy主要在于它有以下优点，这里我总结下：
 		一、免费开源，稳定性也是非常好，这个可通过我做的一些小项目可以看出来，单Haproxy也跑得不错，稳定性可以与LVS相媲美；
-		二、根据官方文档，HAProxy可以跑满10Gbps-New benchmark of HAProxy at 10 Gbps using Myricom's 10GbE NICs (Myri-10G PCI-Express)，这个作为软件级负载均衡，也是比较惊人的；
+		二、根据官方文档，HAProxy可以跑满10Gbps-New benchmark of HAProxy at 10 Gbps using Myricom's 10GbE NICs (Myri-10G PCI-Express)，这个作为软件级负载均衡，
+		也是比较惊人的；
 		三、HAProxy可以作为MySQL、邮件或其它的非web的负载均衡，我们常用于它作为MySQL(读)负载均衡；
 		四、自带强大的监控服务器状态的页面，实际环境中我们结合Nagios进行邮件或短信报警，这个也是我非常喜欢它的原因之一；
 		五、HAProxy支持虚拟主机。
@@ -6036,6 +6196,19 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- 遍历指定目录下所有文件
+		for i in $(find .)
+		do
+		    echo $i
+		done
+	- 根据shell命令行参数执行对应的方法
+		
+	- 判断当前执行shell的用户
+		if [ $USER != "admin" ]
+		then
+			echo "****** ERROR: only user admin can execute this script!"
+			exit 2
+		fi		
 	-  字符串分组
 		cat tempoutfile20121119.txt | grep "cn-hangzhou-dg-a01" |awk -F"|" '{print $3}' >temmmp3
 	- 
@@ -14025,6 +14198,8 @@ day119 Tuesday, August 28, 2012
 	k-v
 	rds
 
+	写入速度快，保证写入成功，除非
+
 9. 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -17730,14 +17905,201 @@ day217 Wednesday, January 23, 2013
 day218 Thursday, January 24, 2013
 
 1. 
-	* 确认工信部上报项目分支
-		对已确认需求的进行修改
+	* 工信部上报IDCISP项目
 	* MSS重构项目
-		与OTS分析适用场景，并与RDS讨论是否可用RDS来方便调用方的统计需求（分布式RDS？）
-	* 大region二期
-		对于API，如果后续有项目对trunk做大量改动，和二期的版本有大量冲突，可以考虑现在基于最新trunk再拉一个分支，
-		将二期的修改合入新分支中，后续基于此新分支提交。？
-	* SLB API聚石塔发布 在线支持
-		SLB API 目前管理不同版本的后端，对于表名的修改，在老库上以别名方式来兼容API的修改。
+	* 大region二期	
+	* SLB API聚石塔项目	
+	* 线上SLB API的nginx access log中有大量空的日志，分析产生原因？
+		100.100.100.2 - - [27/Jun/2012:02:10:52 +0800] "-" 400 0 "-" "-" "-"
 	
-2. 
+2. 大region二期
+	- 对于API，如果后续有项目对trunk做大量改动，和二期的版本有大量冲突，可以考虑现在基于最新trunk再拉一个分支，
+		将二期的修改合入新分支中，后续基于此新分支提交。？
+
+2. MSS重构项目
+	- 与OTS分析适用场景，并与RDS讨论是否可用RDS来方便调用方的统计需求（分布式RDS？），与RDS人员评估使用RDS做为存储
+	VM监控数据的源是否合适
+	- RDS对于大量短连接并发会有压力，需要加个中间层，也不建议每次都查询原始数据来扫描，而是有个数据归并功能，来自动归并数据，便于统计类的查询。
+		
+	这样若选择OTS，也可以另外起个归并任务来归并数据并再存入OTS中供统计查询用
+	
+3. 工信部上报IDCISP项目
+	- 确认工信部上报IDCISP项目分支
+	- 并对已确认需求的进行修改
+	- PD确认上报中心与API的需求 今天？
+		邮件已确认并增加2个字段nc.hostname,nc.ip，修改好接口文档后，再邮件发出
+	- 以http chunked方式提供数据返回接口，只提供json格式，不提供xml格式（涉及xml头和尾的问题）
+
+4. SLB API聚石塔项目
+	 -  在线支持 晚11:30
+		发布步骤wiki：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9256383
+		SLB API 目前管理不同版本的后端，对于表名的修改，在老库上以别名方式来兼容API的修改。
+
+		聚石塔slb后端升级，slb api现管2个后端，另一个不升级，对于表名改动通过别名来兼容。？这里应该是视图，即通过创建视图来兼容来的表名的查询
+		注意修改启动脚本，加入java参数：-Dsun.net.inetaddr.ttl=5 -Dsun.net.inetaddr.negative.ttl=5
+			由于线上脚本和api svn上的配置有不同的地方，为减小不同点，此处发布可以在发布时修改线上的脚本，在tomcatctl脚本的export JAVA_OPTS="xxxx"内容下增加
+			一行：export JAVA_OPTS="$JAVA_OPTS -Dsun.net.inetaddr.ttl=0 -Dsun.net.inetaddr.negative.ttl=0"
+
+	- API运维wiki整理		
+		http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9251044
+		相应的简要发布步骤整理
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day219 Friday, January 25, 2013
+
+1. 
+	* MSS重构		
+		OTS归并 统计需求
+	* IDCISP项目
+		
+
+	* 提测模板介绍
+		项目，脚本，sql变化都有对应的项可填
+		项目发布完，通知配管，更新发布信息
+		弹性计算-后羿-提测模板介绍 http://wiki.qa.aliyun-inc.com/index.php?title=弹性计算-后羿-提测模板介绍
+		
+2. MSS重构
+	选择OTS作为数据源来存储VM监控数据，对监控数据的查询场景主要有2种：
+		一种是根据条件比如vmName，timestamp，返回相应的记录（内容和原始数据基本一致，不需要再做统计，如API的计量查询接口）；
+		另一种，是根据小时，或天查询出需要的数据来做统计，比如定时任务，嫦娥。
+	对于第一种场景，与OTS同学确认是可以支持的；对第二种场景，由于频繁的查询出大量的数据且只为做统计用，消耗大量OTS和调用者的性能及带宽。
+	为此，与大家讨论后建议可以增加一个归并任务，根据业务需要从OTS取出原始数据按小时、或天或更大周期做归并，然后再存回OTS中。这样，对于
+	统计类的查询，直接查询归并的数据即可无需几时查询大量数据做统计用。
+		根据上面说明，这个归并任务适合由那个角色来担当，即由谁来做这个工作，请大家献策 
+
+3. IDCISP项目
+	   邮件确认接口定义 done
+	   部分开发工作可以进行
+	   接口确认过后，设计与Master的接口定义
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day220 Monday, January 28, 2013
+
+1. 
+	* MSS重构
+		数据存储到OTS后，houyi定时任务采集回去并整合进安全的数据，	再推送到OMS，OMS在归并推到BOSS；这里也有个归并过程，
+		是否和MSS所需的归并连同考虑
+	* IDCISP上报项目
+		开发，单元测试，jetty容器调试
+	* java.net.SocketException: Software caused connection abort: recv failed
+		httpclient请求错误
+		curl请求ok
+
+
+2. MSS重构
+	确认数据调用方
+		houyi任务，嫦娥，houyi api，（boss，portal？）
+	从而确认归并的问题
+
+3. IDCISP项目
+	GlobalErrorMessage系统对外错误码定义
+	CLCErrorCode系统与Master交互内部错误码定义
+	通过ErrorMessageUtils将内部错误码映射为对外错误码
+		
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day221 Tuesday, January 29, 2013
+
+1. 
+	* IDCISP上报
+	* 大region二期
+		
+2. IDCISP上报
+	测试环境部署，调试
+	任务开发
+	region查询时，若region没有设置任何属性，则ibatis的动态构造where时将会带入int的默认值0，注意这点。
+
+3. 大region二期
+	拉出新分支，将二期的API修改合并入此新分支中，？待
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day222 Wednesday, January 30, 2013
+
+1. 
+	* IDCISP项目
+		加入user缓存支持reload功能
+	* 大region二期
+
+2. IDCISP项目
+	开发
+
+
+3. 大region二期
+	- 加入需求，指定imageNo去reset_vm时，保证所使用的image所在的集群为可用状态，尽量保证reset_vm成功  待分析？
+		region已升级，使用bucket类型image时，需要判断image所在的region是否可用，若不可用则找本地hash类型image。
+	- 将二期修改合入新branch：
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_bigregion2_base0102upgrade
+		并测试基本功能是否ok
+		开发测试环境部署（换容器jetty）
+
+		原来apache与jboss通过ajp协议，现在nginx与jetty通过http or what others?	   在httpd.conf中配置			
+			1) 暂且直接配置为http方式通讯：
+				<IfModule proxy_module>
+					ProxyPass /open http://127.0.0.1:8080/open #静态文件的请求不需要转发，由apache直接返回，需要配置DocumentRoot 为程序目录(为防止冲突，建议配虚拟机)
+				</IfModule> 
+			2) 若需要，也可以配置为ajp方式通讯，主要配置如下：
+				加载需要的模块：
+					LoadModule proxy_module modules/mod_proxy.so
+					LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
+					LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
+				配置httpd.conf：
+					<IfModule proxy_ajp_module>
+						ProxyPass open ajp://127.0.0.1:8190/open
+						#ProxyPassReverse /open ajp://127.0.0.1:8080/open/api #rewrite if need
+					</IfModule>
+				确保backend的ajp端口与上面配置的一致（8190）。
+
+4. 
+
+5. URL rewrite URL重写 伪静态页
+	apache的rewrite module，jboss，....
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day223 Thursday, January 31, 2013
+
+1. 
+	* IDCISP上报
+		开发
+	* 大region二期
+		测试
+	* OTS培训
+2. IDCISP上报
+	idcisp pojo 类 -> instance扩展信息service类 -> Dao类 -> command类 ->IP段等处理工具类 ->  action类 -> spring配置 -> 单元测试
+
+
+3. OTS培训 pangu	* OTS
+	内存写，多份内存数据保证可靠（多份ok，才能成功），不考虑小概率事件
+	写比读快
+	REDO Log
+		全量Data
+	Shard
+
+	web portal展示监控数据，以及统计图表展示
+	预发环境
+
+	表，视图，需要在开始时创建，可动态加普通列，不能动态加主键列
+
+	分片键设计，均匀分摊到多个分片，减少热点，也利于并发查询。
+
+	倒入大量数据，建议多线程并发，调用者保证每个线程只操作一个分片来加快导入速度
+	
+	建议大数据表；不建议小表
+
+	架构：
+		基于飞天(pangu存储，nuwa命名，fuxi调度,shennong监控)
+
+	与mongodb比较
+		内存数据，与disk数据不一致问题
+
+	+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	day224 Friday, February 01, 2013
+
+	1. 
+		* IDCISP上报
+			2/20/2013号连调
+			与Master连调，在开发测试环境临时部署此版本来测试
+		* 
+	2. 
+
