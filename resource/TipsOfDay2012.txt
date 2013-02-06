@@ -11,6 +11,41 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* new 
+	http://www.aliway.com/read.php?fid=73&tid=188016
+	做一个名医的病人，相关的事可以咨询
+
+* IP IP转换 IP地址 IP段 IP Segment
+	- 所谓IP地址就是给每个连接在Internet上的主机分配的一个32bit地址。按照TCP/IP协议规定，IP地址用二进制来表示，每个IP地址长32bit，比特换算成字节，
+	就是4个字节。例如一个采用二进制形式的IP地址是“00001010000000000000000000000001”，这么长的地址，人们处理起来也太费劲了。为了方便人们的使用，
+	IP地址经常被写成十进制的形式，中间使用符号“.”分开不同的字节。于是，上面的IP地址可以表示为“10.0.0.1”。IP地址的这种表示法叫做“点分十进制表示法”，
+	这显然比1和0容易记忆得
+	from: http://zhidao.baidu.com/question/282553232.html
+	PS: 也可转换为16进制、长整型等
+
+	C0-A8-0A-11  是IPArr转换为string类型时的输出结果，也是192 168 10 17 的16进制285911232 是IPArr转换为整数的结果,C0是最低位，也就是说该整数是由 
+	11-0A-A8-C0转换成10进制的来的
+	
+	- IP转换为long的例子：
+		------
+		IPV4 {
+					public Long ip2Long(String strIP) {
+						long[] ip = new long[4];
+						int position1 = strIP.indexOf(".");
+						int position2 = strIP.indexOf(".", position1 + 1);
+						int position3 = strIP.indexOf(".", position2 + 1);
+						ip[0] = Long.parseLong(strIP.substring(0, position1));
+						ip[1] = Long.parseLong(strIP
+								.substring(position1 + 1, position2));
+						ip[2] = Long.parseLong(strIP
+								.substring(position2 + 1, position3));
+						ip[3] = Long.parseLong(strIP.substring(position3 + 1));
+						Long ip2Long = (ip[0] << 24) + (ip[1] << 16) + (ip[2] << 8)
+								+ ip[3];
+						return ip2Long;
+					}
+		------
+		每个IP用二进制表示，长度为32bit，
 
 * virtual host
 	- 介绍
@@ -165,7 +200,41 @@ google 检索 apache： site:*.apache.org 高级搜索
 	而内网相反就行了
 	from: http://www.ubooo.com/rou/2009/0324/111.html
 
-* http chunk http chunked
+* http chunk http chunked	
+	- servlet返回chunked响应例子
+		------
+		@Override
+			protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+					throws ServletException, IOException {
+				resp.setHeader("Pragma", "No-cache");
+				resp.setHeader("Cache-Control", "no-cache");
+				resp.setDateHeader("Expires", 0);
+				
+				resp.setHeader("Transfer-Encoding", "chunked");
+				
+				OutputStream out = resp.getOutputStream();//与使用write的区别，少了流转换的开销？
+				String trunk1 = "chunk1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+				String trunk2 = "chunk2";
+				//size of first chunk
+				out.write(Integer.toHexString(trunk1.length()*2).getBytes());
+				out.write(CRLF);
+				//send first chunk
+				out.write(trunk1.getBytes());
+				out.write(trunk1.getBytes());
+				out.write(CRLF);
+				//size of second chunk
+				out.write(Integer.toHexString(trunk2.length()).getBytes());
+				out.write(CRLF);
+				//send second chunk
+				out.write(trunk2.getBytes());
+				out.write(CRLF);
+				//send chunked data end flag
+				out.write(ZERO);
+				out.write(CRLF);
+				//send CRLF
+				out.write(CRLF);
+			}
+		------
 	- 优势
 		能一边接受数据一边处理已接收的数据，如果只是一次性取到所有的再去处理，则体现不出chunked的优势
 
@@ -11380,6 +11449,10 @@ day59 Friday, June 08, 2012
 			ActionContext.setContext(new ActionContext(params));
 	
 			ActionContext.getContext().setParameters(params);
+
+			mock代码：
+				Map<String,Object> params = new HashMap<String, Object>();
+				ActionContext.setContext(new ActionContext(params));
 	
 	* 下面2个方法的声明，就关于params参数的设置，看哪个好测试？
 	（1）
@@ -18103,3 +18176,64 @@ day223 Thursday, January 31, 2013
 		* 
 	2. 
 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day225 Monday, February 04, 2013
+
+1. 
+	* IDCISP上报
+		
+	* 
+
+2. IDCISP上报
+	- IP转换
+		IP转为long类型 整型
+		IP段
+	- 返回值对象的设计 设计 返回值设计 return object design * 设计 返回值设计 pojo设计
+		既要返回正常情况下的数据流，
+		又要返回下层各个调用发生错误时，错误结果的返回、
+
+		这时，需要设计一个综合的结果类，返回对象，来封装正确的数据返回和异常的错误返回，上层根据是否成功来判断结果是数据结果还是异常结果并
+		做相应处理即可。
+
+		Result<R>
+			code
+			isSuccess
+			resultData
+			...
+		
+		还有一种方式，通过方法的返回值来封装正确的数据调用返回；通过地址的参数传递方式来获取方法的其他返回信息（比如讲错误信息放到对象参数中返回）。
+	- 返回view的设计
+		可以在resultdomain中加上一个viewtype属性来标识action需要指向到的result
+
+3. abstract action可以多做些公用的逻辑 建议
+	比如使用struts框架时，获取request对象，请求参数等，这些逻辑在一个抽象类里搞定即可，无需再侵入到子类中。	
+
+4. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day226 Tuesday, February 05, 2013
+
+1. 
+	* IDCISP项目
+
+2. IDCISP项目
+	20号提测
+		自测，与Master连调
+	单元测试，自测
+		API一些配置信息都移到env.properties文件，且API源码中无此文件，需要在测试环境或其他环境中拷贝一份下来 ，源码中有test.env.properties只是一个测试用的，内容为空？
+
+	service ，action，dao，util工具类单元测试
+
+	zone访问的权限控制？
+		user角色
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day227 Wednesday, February 06, 2013
+
+1. 
+	* IDCISP项目
+
+2. IDCISP项目
+	API调用计量库部分缓存支持reload，或被动reload
