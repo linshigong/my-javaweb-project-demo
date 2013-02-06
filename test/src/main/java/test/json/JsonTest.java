@@ -88,6 +88,16 @@ public class JsonTest {
 		String str12 = "{\"code\":200,\"data\":{\"total\":32,\"page_size\":10,\"end_time\":\"2012-05-06 23:10:10\",\"start_time\":\"2012-05-06 05:10:10\",\"page_no\":1,\"loadbalancers\":[{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"1\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"2\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"3\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"4\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"5\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"6\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"7\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"8\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"9\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0},{\"http_internet_bandwidth\":0,\"http_internet_rx\":0,\"http_internet_tx\":0,\"loadbalancer_id\":\"10\",\"tcp_internet_bandwidth\":0,\"tcp_internet_rx\":0,\"tcp_internet_tx\":0}]},\"msg\":\"successful\"}";
 		System.out.println(JSONObject.fromObject(str12));
 		
+		//
+		String str13 = "[{},{}]";
+		System.out.println(JSONArray.fromObject(str13));
+		
+		String str14 = "[1,2,3,4,5,6]";
+		JSONArray arr14 = JSONArray.fromObject(str14);
+		System.out.println("arr14="+arr14);//[1,2,3,4,5,6]
+		System.out.println(arr14.subList(0, 2));//[1, 2]
+		System.out.println(arr14.subList(1, 2));//[2]
+		
 	}
 	
 }

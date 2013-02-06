@@ -48,7 +48,19 @@ public class test {
 		//
 		System.out.println("2 pow 32="+NumberFormat.getInstance().format(Math.pow(2, 32)));//2 pow 32=4,294,967,296
 		
+		//
+		String testStr="abcsdfsdfefghisel122ksdfjkjd.jkdfi12kjlk_)_fsdfz";
+		char[] charArr = testStr.toCharArray();
+		char[] newArr = new char[charArr.length];
+		int length = newArr.length;
+		for(int i=0;i<newArr.length;i++){
+			newArr[length-1] = charArr[i];
+			length--;
+		}
+		System.out.println(new String(newArr));
 		
+		//左移运算
+		System.out.println("左移运算,10<<24="+(10L << 24));//167772160
 	}
 
 	
