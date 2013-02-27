@@ -11,6 +11,269 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 取模 模运算
+	取模运算即模运算，模运算即求余运算。“模”是“Mod”的音译，模运算多应用于程序编写中。 Mod的含义为求余。模运算在数论和程序设计中
+	都有着广泛的应用，从奇偶数的判别到素数的判别，
+	ref: http://baike.baidu.com/view/4887065.htm
+* 位运算 << 左移运算 >> 右移运算
+	ref：http://www.cnblogs.com/highriver/archive/2011/08/15/2139600.html
+
+	
+* java hashcode equal方法
+	java中hashcode方法的引入，是为了集合数据结构而出现，比如Map结构，用来计算哈希值并作为键以提高性能
+	下面是JDK包中HashMap类的put方法部分：
+	------
+
+	------
+	
+* 发布
+	在AG执行
+* java 集合数据结构的适用场景
+	----
+		1) ArrayList
+
+	　　基于数组方式实现，无容量的限制。
+
+	　　在执行插入元素时可能要扩容，在删除元素时并不会减少数组的容量。
+
+	　　如果希望相应的缩小数组容量，可以调用trimToSize()
+
+	　　在查找元素时要遍历数组，对于非null的元素采取equals的方式寻找。
+
+	　　非线程安全。
+
+	　　2) LinkedList
+
+	　　基于双向链表机制实现。
+
+	　　元素的插入、移动较快。
+
+	　　非线程安全。
+
+	　　3) Vector
+
+	　　基于Object数组的方式来实现的。
+
+	　　基于synchronized实现的线程安全的ArrayList。
+
+	　　在插入元素时容量扩充的机制和ArrayList稍有不同：
+
+	　　如果capcacityIncrement > 0, 则Object数组的大小扩大为现有size加上capcacityIncrement；
+
+	　　如果capcacityIncrement < 0, 则Object数组的大小扩大为现有size的两倍；
+
+	　　4) Stack
+
+	　　基于Vector实现，支持LIFO。
+
+	　　5) HashSet
+
+	　　基于HashMap实现，无容量限制。
+
+	　　不允许元素重复。
+
+	　　非线程安全。
+
+	　　6) TreeSet
+
+	　　基于TreeMap实现，支持排序。
+
+	　　非线程安全。
+
+	　　7) HashMap
+
+	　　采用数组方式存储key、value构成的Entry对象，无容量限制。
+
+	　　基于key hash寻找Entry对象存放到数组的位置，对于hash冲突采用链表的方式来解决。
+
+	　　在插入元素时可能会扩大数组的容量，在扩大容量时会重新计算hash，并复制对象到新的数组中。
+
+	　　非线程安全。
+
+	　　8) TreeMap
+
+	　　基于红黑树实现，无容量限制。
+
+	　　非线程安全。
+
+	　　-----------------------------------
+
+	　　适用场景：
+
+	　　对于查找和删除较为频繁，且元素数量较多的应用，Set或Map是更好的选择；
+
+	　　ArrayList适用于通过为位置来读取元素的场景；
+
+	　　LinkedList 适用于要头尾操作或插入指定位置的场景；
+
+	　　Vector 适用于要线程安全的ArrayList的场景；
+
+	　　Stack 适用于线程安全的LIFO场景；
+
+	　　HashSet 适用于对排序没有要求的非重复元素的存放；
+
+	　　TreeSet 适用于要排序的非重复元素的存放；
+
+	　　HashMap 适用于大部分key-value的存取场景；
+
+	　　TreeMap 适用于需排序存放的key-value场景。
+	----
+* 项目管理工具
+	项目构建
+		maven
+		ant
+	版本控制
+		svn
+	bugfree
+		缺陷跟踪系统
+	wiki系统
+		mediawiki
+		页面自身的连接地址修改在移动标签功能中。
+	项目管理
+		redmine
+	
+* nginx
+		nginx不单可以作为强大的web服务器，也可以作为一个反向代理服务器，而且nginx还可以按照调度规则实现动态、静态页面的分离，可以按照轮询、ip哈希、
+	URL哈希、权重等多种方式对后端服务器做负载均衡，同时还支持后端服务器的健康检查。
+
+	如果只有一台服务器时,这个服务器挂了,那么对于网站来说是个灾难.因此，这时候的负载均衡就会大显身手了,它会自动剔除挂掉的服务器.
+
+	下面简单的介绍下我使用Nginx做负载的体会
+
+	下载---安装Nginx这些不介绍了,前篇有介绍.
+
+	windows和Linux下配置Nginx负载的写法一样,故不分开介绍.
+
+	Nginx负载均衡一些基础知识:
+
+	nginx 的 upstream目前支持 4 种方式的分配 
+	1)、轮询（默认） 
+		每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。 
+	2)、weight 
+		指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。 
+	2)、ip_hash 
+		每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。  
+	3)、fair（第三方） 
+		按后端服务器的响应时间来分配请求，响应时间短的优先分配。  
+	4)、url_hash（第三方）
+
+	配置nginx实现负载均衡
+	以下面nginx.conf为例
+		--------
+		Xml代码  
+		#user  nobody;  
+		worker_processes  1;  
+		  
+		error_log  logs/error.log;  
+		  
+		events {  
+		    worker_connections  1024;  
+		}  
+		  
+		  
+		http {  
+		    include       mime.types;  
+		    default_type  application/octet-stream;  
+		  
+		    sendfile        on;  
+		    keepalive_timeout  65;  
+		  
+		    #gzip  on;  
+		    upstream  www.docyeah.com   {  
+			      server   192.168.1.11:8080;  
+			      server   192.168.1.101:8080;  
+		    }  
+		    server {  
+			listen       80;  
+			server_name  www.docyeah.com;  
+			charset utf-8;  
+			location / {  
+			    root   html;  
+			    index  index.html index.htm;  
+			    proxy_pass        http://www.docyeah.com;  
+			    proxy_set_header  X-Real-IP  $remote_addr;  
+			    client_max_body_size  100m;  
+			}  
+		  
+		  
+			location ~ ^/(WEB-INF)/ {   
+			deny all;   
+			}   
+		  
+			error_page   500 502 503 504  /50x.html;  
+			location = /50x.html {  
+			    root   html;  
+			}  
+		  
+		    }  
+		}  
+		--------
+
+* RSS
+		RSS是在互联网上被广泛采用的内容包装和投递协议。网络用户可以在客户端借助于支持RSS的新闻工具软件，在不打开网站内容页面的情况下，
+	阅读支持RSS输出的网站内容。
+	1) RSS文件结构
+		示例：
+	<?xml version="1.0" encoding="gb2312" ?> 
+	<rss version="2.0">　
+	<channel> 
+	　　<title>我的Blog</title>                 //channel的标题
+	　　<description>与我自己的技术Blog相关联</description>   //channel的介绍
+	　　<link>http://counter.csdn.net/pv.aspx?id=72</link>     //channel的url
+	　　<item> 
+	　　<title><!-- 项标题 --></title>           //item的标题
+	　　<link><!-- 项 URL --></link>           //item的url
+	　　<description><!-- 简要描述 --></description>        //item的介绍
+	　　<!-- 可选的/可扩展的元素 -->        //item的其他属性，比如更新时间
+	　　</item> 
+	　　<item>
+	　　<!-- 可多个<item>项目-->           //一个channel有多个item
+	　　</item>
+	</channel>
+	</rss>
+		RSS是两级结构，第一级结构是channel，相当于blog系统中某人的blog，第二级结构是item，相当于blog中的文章。属性中最重要的是title、description和link，
+	title是标题，description是介绍，link是与其相关的url。 
+
+	2) RSS的使用
+		有的网站提供了RSS自动发现机制，可以很方便地把RSS的URL添加到RSS阅读器中。如果没有自动发现，那么可以手动把RSS链接的URL添加到RSS阅读器中，
+	这样就加入了一个用户订阅的频道。在RSS阅读器中可以更新频道列表或点击一个item链接打开该item的页面。 
+
+	3) RSS的工作机制
+			内容提供者在其网站上添加RSS的链接，以提供RSS订阅功能，当打开这个链接时，传送过去了一些频道信息，比如：blog的作者名。
+			一种做法是，RSS链接URL指向的是一个空内容的页面，该页面后台程序通过传过来的频道信息访问数据库，获取频道列表，用Response.Write向该空页面
+		写出XML格式的文件。
+			另一种做法是，RSS链接URL指向的是一个xml文件，该文件由服务器的程序事先生成好的，放在服务器上，访问时静态获取，服务器在作者每添加一个频道列表
+		时自动更新该xml文件。
+			第一种做法的优点是管理方便，因为不需要为每个频道生成xml文件，所有的RSS请求都由一个后台页面处理，接口统一，但每次访问RSS链接时，都要动态地
+		写出RSS频道列表，访问效率相对较低，第二种做法的优点是访问时，只是返回一个静态的xml文件，不需要访问数据库来临时生成，所以访问效率相对较高，但
+		每更新一次频道列表中的项时，就要自动地重新生成xml文件以保证RSS文件的最新，这样就降低了更新的效率。本系统中采用的是第一种方法。 
+
+	4) RSS的实现
+	RSS有两大部件：RSS链接和RSS阅读器
+
+* google reader
+	rss订阅
+		将outlook的rss源或google reader中的rss源导出为OPML文件，这样其他rss工具就可直接导入
+* 泛型
+	泛型（Generic type 或者 generics）是对 Java 语言的类型系统的一种扩展，以支持创建可以按类型进行参数化的类。可以把类型参数看作是使用
+	参数化类型时指定的类型的一个占位符，就像方法的形式参数是运行时传递的值的占位符一样。
+
+	可以在集合框架（Collection framework）中看到泛型的动机。例如，Map 类允许您向一个 Map 添加任意类的对象，即使最常见的情况是在给定映射
+	（map）中保存某个特定类型（比如 String）的对象。
+
+	因为 Map.get() 被定义为返回 Object，所以一般必须将 Map.get() 的结果强制类型转换为期望的类型，如下面的代码所示：
+
+	Map m = new HashMap();
+	m.put("key", "blarg");
+	String s = (String) m.get("key");
+
+	要让程序通过编译，必须将 get() 的结果强制类型转换为 String，并且希望结果真的是一个 String。但是有可能某人已经在该映射中保存了不是 String 的东西，
+	这样的话，上面的代码将会抛出 ClassCastException。
+
+	理想情况下，您可能会得出这样一个观点，即 m 是一个 Map，它将 String 键映射到 String 值。这可以让您消除代码中的强制类型转换，同时获得一个附加的
+	类型检查层，该检查层可以防止有人将错误类型的键或值保存在集合中。这就是泛型所做的工作。
+	from: http://www.cnblogs.com/panjun-Donet/archive/2008/09/27/1300609.html
+
 * ICMP协议
 	简介
 		ICMP是（Internet Control Message Protocol）Internet控制报文协议。它是TCP/IP协议族的一个子协议，用于在IP主机、路由器之间传递控制消息。
@@ -220,6 +483,9 @@ google 检索 apache： site:*.apache.org 高级搜索
 	google code 提供svn服务，但页面上不便于svn操作，比如添加分支，添加目录等，可通过svn工具来操作，如 TortoiseSVN，来建立新目录等等。
 
 * 代码合并    svn merger merger代码 * svn
+	- branch上的多次修改要合并到新拉的branch上
+		直接merger branch方便，用patch后续有冲突，merger时使用场景为：
+			对一个branch有多个版本的修改，现在需要对这多个版本的修改合并到其他branch上
 	- 基于trunk拉分支并提交修改到分支后，若中间没有并行项目，分支合并到主干时，可拉最新的trunk，将分支修改合并进来，再提交即可
 	- 基于trunk拉分支并提交修改到分支后，若中间有其他项目发布且已合并到trunk，可在每次trunk修改后，将trunk修改合并到分支上，避免后面合并多个
 	项目的多处修改冲突的风险。
@@ -242,6 +508,11 @@ google 检索 apache： site:*.apache.org 高级搜索
 	from: http://www.ubooo.com/rou/2009/0324/111.html
 
 * http chunk http chunked	 * chunked
+	- 例子：
+		https://github.com/netty/netty/tree/3.5/src/main/java/org/jboss/netty/example/http/snoop
+		
+		git clone https://github.com/mar200851/netty.git sign in first
+
 	- 测试chunked输出
 		通过线程的睡眠模拟大量数据按块发送和处理的过程。例子如下：
 			------
@@ -372,6 +643,32 @@ google 检索 apache： site:*.apache.org 高级搜索
 
 		All HTTP/1.1 applications MUST be able to receive and decode the "chunked" transfer-coding, and MUST ignore chunk-extension extensions they do not understand.
 	----------
+
+	下面为对chunked编码的decode方式说明：
+	----------
+		19.4.6 Introduction of Transfer-Encoding
+
+		HTTP/1.1 introduces the Transfer-Encoding header field (section 14.41). Proxies/gateways MUST remove any transfer-coding prior to forwarding a message via a MIME-compliant protocol.
+
+		A process for decoding the "chunked" transfer-coding (section 3.6) can be represented in pseudo-code as:
+
+		       length := 0
+		       read chunk-size, chunk-extension (if any) and CRLF
+		       while (chunk-size > 0) {
+			  read chunk-data and CRLF
+			  append chunk-data to entity-body
+			  length := length + chunk-size
+			  read chunk-size and CRLF
+		       }
+		       read entity-header
+		       while (entity-header not empty) {
+			  append entity-header to existing header fields
+			  read entity-header
+		       }
+		       Content-Length := length
+		       Remove "chunked" from Transfer-Encoding
+	----------
+
 	from: http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html rfc2616 Hypertext Transfer Protocol -- HTTP/1.1
 
 * IOPS (Input/Output Operations Per Second)
@@ -613,6 +910,10 @@ google 检索 apache： site:*.apache.org 高级搜索
 	时间复杂度	
 		　算法复杂度分为时间复杂度和空间复杂度。其作用： 时间复杂度是度量算法执行的时间长短；而空间复杂度是度量算法所需存储空间的大小
 	随机存取（相对于顺序存取）
+		是随机存储结构，意思就是你想找第几个数可以用下标直接找到
+		而链式存储就不行，你想找第几个数必须一个一个地数过去，所以不是随机存储
+	硬盘连续读写与随机读写
+		
 
 * 网络攻击
 	- DDOS
@@ -739,6 +1040,10 @@ google 检索 apache： site:*.apache.org 高级搜索
 		http://archive.apache.org/dist/commons/dbcp/
 
 * jetty
+	- 架构
+		connector,handler,threadpool
+	- 起多个jetty实例用于web服务，设置不同端口
+		
 	- 配置远程调试时，应用启动错误
 		JAVA_OPTIONS="$JAVA_OPTIONS -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y"	
 		suspend=y 表示启动时进入调试
@@ -767,7 +1072,9 @@ google 检索 apache： site:*.apache.org 高级搜索
 
 
 * Jetty7 Continuation
-	异步HTTP
+	- API注释中对continuation的说明：
+		Continuation. A continuation is a mechanism by which a HTTP Request can be suspended and restarted after a timeout or an asynchronous event has occurred. 
+	- 异步HTTP
 
 自行车 钢货架
 * code source code
@@ -3547,11 +3854,11 @@ Storage for Interactive Services
 	---------
 	部署一个nginx对外监听80端口，通过转发实现代理多个应用的访问（以uri区分请求的应用）：
 			
-			小结：
-					当nginx正确启动后，某个应用启动后能正常访问，另一个uri的访问确是空（没任何内容，这个是因为中间多了proxy层处理），可能原因就是后端应用（比如tomcat）
-				启动失败了，即服务器是起来了，但应用确没起来，导致访问应用的路径时浏览器没显示任何内容，如果直接去访问后端的tomcat路径会报404（一看就知道路径访问到，确认路径
-				ok的情况下极可能就是应用启动失败）。
-					这种有多个层转发的情况，错误排查可以从原始的端开始，逐一排查。
+	小结：
+			当nginx正确启动后，某个应用启动后能正常访问，另一个uri的访问确是空（没任何内容，这个是因为中间多了proxy层处理），可能原因就是后端应用（比如tomcat）
+		启动失败了，即服务器是起来了，但应用却没起来，导致访问应用的路径时浏览器没显示任何内容，如果直接去访问后端的tomcat路径会报404（一看就知道路径访问到，确认路径
+		ok的情况下极可能就是应用启动失败）。
+			这种有多个层转发的情况，错误排查可以从原始的端开始，逐一排查。
 
 * concurrent包 ，java concurrent	       * 并发 * 同步 * java并发/同步
 	- 锁
@@ -3833,7 +4140,13 @@ search in index find pdf
 * xml
 	- <![CDATA[]]>
 
-* 测试 
+* 测试  Cucumber			 性能测试
+	- tengine+tair性能测试
+		
+		ref: http://baike.corp.taobao.com/index.php/Cache_compare#.E6.80.A7.E8.83.BD.E6.AF.94.E8.BE.83	统一Web接入之静态化cache方案对比
+	- 自动化测试
+		Cucumber的目录结构和执行过程
+
 	- 性能测试工具 ab	   (ApacheBench)  
 		-----------
 		简介
@@ -4228,6 +4541,7 @@ search in index find pdf
 		另外,按下v键,可以进入可视模式,这个时候可以更自由更灵活的选取要复制的段落,区块了.
 
 * 一致性hash算法（consistent hashing） hash圆环 ，环形hash robin环 Round Robin round-robin    一致性哈希	 （这里以memcached客户端的应用为例子说明）
+	- 与加入/移除结点时缓存重新发布的关系
 	- 一致性哈希算法最大程度的避免了key在服务节点列表上的重新分布，其他附带的改进就是有的一致性哈希算法还增加了虚拟服务节点的方法，也就是一个服务节点在环上有多个映射点，
 	这样就能抑制分布不均匀，最大限度地减小服务节点增减时的缓存重新分布。
 	- memcached客户端
@@ -4327,7 +4641,7 @@ search in index find pdf
 	2、 当读数据或者写数据的时候，所有的方法都阻塞了，能不能有一种办法当我们写数据或者接收数据的时候不用阻塞，而是直接返回，这样就明显提高了线程的使用率了。
 	    值得我们庆幸的是，在Java的JDK1.4之后的版本，提供了NIO包，这里提出了事件驱动的I/O编程模式和非阻塞信道的概念，NIO里面的Selector对象解决了上面提出分发
 	    和轮询的问题，Channel接口解决了阻塞读写的问题。我相信这些组件能够帮我们解决上面所提出的所有问题。所以下面有很大一部分篇幅来介绍NIO的使用和一些底层的机制。
-	from: http://www.cnblogs.com/phoebus0501/archive/2010/12/05/1897245.html
+	from: http://www.cnblogs.com/cpcpc/archive/2011/09/05/2167931.html
 
 * visio
 	- 输出图片格式
@@ -4870,6 +5184,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
 * test * mock  * jmock		       * 单元测试 * 集成测试		 * jtester
+	- jtest用unitils的@SpringBeanByName注解时注意，注解的属性可以不在spring里配置，需要通过其他类注入了此属性来测试
 	- 定义期望执行expectation时，如果步骤多，不易于定位那里不对			  -tip-
 		可以通过化整为零方式，去掉所有的期望，从第一个执行开始，结合debug逐步补充上执行过程中需要的expectation。
 		需要什么就mock或expect什么
@@ -5071,6 +5386,11 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	http://redis.io/
 
 * Memcached  
+	- 缓存系统MemCached的Java客户端优化历程 http://www.infoq.com/cn/articles/memcached-java
+		参考
+			用concurrent包替换原先synchronize关键字
+			
+
 	- HA的实现
 		Memcached 是什么？
 			Memcached是一种集中式Cache，支持分布式横向扩展。这里需要解释说明一下，很多开发者觉得Memcached是一种分布式缓存系统，
@@ -5334,7 +5654,8 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		基于上面小节下，ibatis默认没有内置memcached的缓存支持，但是设计上已考虑到缓存实现的不同，提供了CacheController接口用于自定义缓存实现，基于这个接口ibatis内置实现了
 		FIFO,LRU,OSCACHE,MEMERY，现在可以自己实现用于memcached的CacheController实现，再进行相应的配置即可。这里可以学习下ibatis的接口设计，易于扩展，也体现了对于涉及具体
 		实现的地方需要考虑是否需要扩展，从而设计为接口。-tip- * 架构 * 设计 * 扩展
-
+	- ibatis也支持简单的内置对象返回
+		比如用queryList方法返回resultClass="hashmap"的List<Map>数据结构
 	- mapping文件语句定义
 		插入数据时，返回其主键（自定义查询的主键）
 		<insert id="insertImage" parameterMap="imageParameter">
@@ -6120,6 +6441,123 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- pythobn脚本
+		使用库时，尽量使用内置的库，避免依赖问题，比如:
+			from _pyio import open
+			直接使用内置的:open即可
+		
+	- 异常捕获
+		抛出异常：
+			raise errorclass, errorvalue
+
+		捕获异常
+		try:
+			xxx
+		except xxxException:
+			xxx
+
+	-----
+		Python的异常处理能力是很强大的，可向用户准确反馈出错信息。在Python中，异常也是对象，可对它进行操作。所有异常都是基类Exception的成员。所有异常都从基类Exception继承，而且都在exceptions模块中定义。Python自动将所有异常名称放在内建命名空间中，所以程序不必导入exceptions模块即可使用异常。一旦引发而且没有捕捉SystemExit异常，程序执行就会终止。如果交互式会话遇到一个未被捕捉的SystemExit异常，会话就会终止。
+
+		方式一:try语句:
+
+		1使用try和except语句来捕获异常
+
+		try:
+		   block
+		except [exception,[data…]]:
+		   block
+
+		try:
+		block
+		except [exception,[data...]]:
+		   block
+		else:
+		   block
+
+		该种异常处理语法的规则是：
+
+		·   执行try下的语句，如果引发异常，则执行过程会跳到第一个except语句。
+
+		·   如果第一个except中定义的异常与引发的异常匹配，则执行该except中的语句。
+
+		·   如果引发的异常不匹配第一个except，则会搜索第二个except，允许编写的except数量没有限制。
+
+		·   如果所有的except都不匹配，则异常会传递到下一个调用本代码的最高层try代码中。
+
+		·   如果没有发生异常，则执行else块代码。
+
+		例:
+
+		try:
+
+		   f = open(“file.txt”,”r”)
+		except IOError, e:
+		   print e
+
+		捕获到的IOError错误的详细原因会被放置在对象e中,然后运行该异常的except代码块
+
+		捕获所有的异常
+
+		try:
+		   a=b
+		   b=c
+		except Exception,ex:
+		   print Exception,":",ex
+
+		使用except子句需要注意的事情，就是多个except子句截获异常时，如果各个异常类之间具有继承关系，则子类应该写在前面，否则父类将会直接截获子类异常。放在后面的子类异常也就不会执行到了。
+
+		2 使用try跟finally:
+
+		语法如下:
+
+		try:
+		   block
+		finally:
+		   block
+
+		该语句的执行规则是：
+
+		·   执行try下的代码。
+
+		·   如果发生异常，在该异常传递到下一级try时，执行finally中的代码。
+
+		·   如果没有发生异常，则执行finally中的代码。
+
+		第二种try语法在无论有没有发生异常都要执行代码的情况下是很有用的。例如我们在python中打开一个文件进行读写操作，我在操作过程中不管是否出现异常，最终都是要把该文件关闭的。
+
+		这两种形式相互冲突，使用了一种就不允许使用另一种，而功能又各异
+
+		2. 用raise语句手工引发一个异常:
+
+		raise [exception[,data]]
+
+		在Python中，要想引发异常，最简单的形式就是输入关键字raise，后跟要引发的异常的名称。异常名称标识出具体的类：Python异常是那些类的对象。执行raise语句时，Python会创建指定的异常类的一个对象。raise语句还可指定对异常对象进行初始化的参数。为此，请在异常类的名称后添加一个逗号以及指定的参数（或者由参数构成的一个元组）。
+
+		例:
+
+		try:
+		    raise MyError #自己抛出一个异常
+		except MyError:
+		    print 'a error'
+
+		raise ValueError,’invalid argument’
+		捕捉到的内容为:
+
+		type = VauleError
+		message = invalid argument
+	-----
+	from: http://blog.csdn.net/JINXINXIN_BEAR_OS/archive/2011/02/23/6202784.aspx
+
+	- 定义编码格式 Defining Python Source Code Encodings
+		支持中文，需要在源文件中定义字符编码格式，比如：
+			#coding=utf-8
+		ref: http://www.python.org/dev/peps/pep-0263/
+
+
+	- pytest
+		python测试工具
+		scales from simple unit to complex functional testing
 	- edit plue开发python
 		
 		运行python文件，需要参数时，可以配置对应tool的argument选项，如：配置为 $(FileName) $(Prompt) ，这样在运行时允许指定参数
@@ -8490,7 +8928,8 @@ day6 Wednesday, March 21, 2012
 	根据登记在消息服务器上的订阅节点信息，进行push
 
 2. python nodejs 
-	python yaml模块 - YAML是一种直观的能够被电脑识别的的数据序列化格式，容易被人类阅读，并且容易和脚本语言交互。YAML类似于XML，但是语法比XML简单得多，对于转化成数组或可以hash的数据时是很简单有效的。
+	python yaml模块 - YAML是一种直观的能够被电脑识别的的数据序列化格式，容易被人类阅读，并且容易和脚本语言交互。YAML类似于XML，但是语法比XML简单得多，
+	对于转化成数组或可以hash的数据时是很简单有效的。
 
 3.  wget 从vmware中的centso访问本机的rest服务
 	取得返回内容，cat查看
@@ -14191,6 +14630,10 @@ missing by svn revert operation
 补加：
 
 * svn 代码合并(tortoiseSVN)
+	- 打patch，合并patch
+		通过svn工具将原来此bugId的修改保存为patch/diff，然后apply patch到新项目中 apply patch
+			打patch时注意，若patch生成时所基于的版本与将要apply到的版本不同，即中间不一致则apply时会有冲突，需要手工解决。
+	- 
 	eg：branch合并到trunk
 		将trunk代码check out到本地，在其目录中调用merger命令，选择相应的选项，可先预览合并结果，进行合并；
 		合并好后，通过diff工具(kdiff)对比branch目录，验证合并是否正确。
@@ -17955,9 +18398,62 @@ day214 Friday, January 18, 2013
 1. 
 	* MSS重构
 		监控项及其生成逻辑整理
-	* fab发布工具
+	* fab发布工具 fab 					  * fab
 		6.27
 		/home/admin/fabdeploy
+		svn:
+			http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/fabdeploy
+		发布工具fab作者：鱼总
+		使用步骤：
+			source env_profile && fab houyiapi.api_prepare:url=http://xx,md5=xxx
+				备份原API部署目录，并拉取待发布的API包并校验MD5值
+			source env_profile && fab -H 10.249.243.62 houyiapi.api_stop
+				停API
+			source env_profile && fab -H 10.249.243.62 houyiapi.api_deploy
+				部署新API包
+			source env_profile && fab -H xx.xx.xx.xx houyiapi.api_start
+				启动API
+		
+		帮助查看：
+			先source env_profile
+			然后 fab --list
+			Avaliable command:
+				apiproxy.first_install  first full install, example: "fab -R [ROLE] apiproxy.first_install"
+				apiproxy.proxy_deploy   proxy deploy, example: "fab -R [ROLE] apiproxy.proxy_deploy:branch=[BRANCH],version=[VERSION]"
+				apiproxy.proxy_reload   proxy reload, example: "fab -R [ROLE] apiproxy.proxy_reload"
+				apiproxy.proxy_start    proxy start, example: "fab -R [ROLE] apiproxy.proxy_start"
+				apiproxy.proxy_stop     proxy stop, example: "fab -R [ROLE] apiproxy.proxy_stop"
+				apitask.deploy          apitask deploy, example: "fab -R [ROLE] apitask.deploy"
+				apitask.prepare         download zip into local, example: "fab apitask.prepare:url=[URL],md5=[MD5]"
+				apitask.start           apitask start, example: "fab -R [ROLE] apitask.start"
+				apitask.stop            apitask start, example: "fab -R [ROLE] apitask.stop"
+				houyiapi.api_deploy     push open.war to houyiapi server, example: "fab -R [ROLE] houyiapi.api_deploy"
+				houyiapi.api_prepare    download tar.gz into local, example: "fab houyiapi.api_prepare:url=[URL],md5=[MD5]"
+				houyiapi.api_rollback   rollback open.war, example: "fab -R [ROLE] houyiapi.api_rollback:[WAR]"
+				houyiapi.api_start      start houyiapi service, example: "fab -R [ROLE] houyiapi.api_start"
+				houyiapi.api_stop       stop houyiapi, example: "fab -R [ROLE] houyiapi.api_stop"
+		
+		prepare的输出如下：
+		-------
+			--2013-02-27 10:13:21--  http://jenkins.aliyun-inc.com/package/houyi/ec/openapi_trunk-1.0.19.1457720/openapi_trunk-1.0.19.1457720.tar.gz
+			正在解析主机 jenkins.aliyun-inc.com... 10.230.226.113
+			正在连接 jenkins.aliyun-inc.com|10.230.226.113|:80... 已连接。
+			已发出 HTTP 请求，正在等待回应... 200 OK
+			长度： 20584872 (20M) [application/x-gzip]
+			正在保存至: “openapi_trunk-1.0.19.1457720.tar.gz”
+
+			100%[=================================================================================================>] 20,584,872  11.2M/s   花时 1.8s  
+
+			 
+			2013-02-27 10:13:22 (11.2 MB/s) - 已保存 “openapi_trunk-1.0.19.1457720.tar.gz” [20584872/20584872])
+
+			[localhost] local: md5sum openapi_trunk-1.0.19.1457720.tar.gz | awk '{print $1}'
+			[localhost] local: mv open.war open.war.20130227101322
+			[localhost] local: tar zxf openapi_trunk-1.0.19.1457720.tar.gz
+			[localhost] local: mv openapi_trunk-1.0.19.1457720 open.war
+
+			Done. 
+		-------
 	* 新项目
 		工信部数据上报项目，houyi API提供符合要求的VM数据给数据上报中心，由数据上报中心负责将数据给工信部。
 
@@ -18328,7 +18824,7 @@ day227 Wednesday, February 06, 2013
 	- API调用计量库部分缓存支持reload，或被动reload
 		从而支持动态添加region时，无需重启API
 			关闭region时，计量数据查询？
-	 - jetty continuration方式增加region状态判断，可在request请求对象的参数中传递信息。
+	 - jetty continuation方式增加region状态判断，可在request请求对象的参数中传递信息。
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -18356,7 +18852,325 @@ day229 Saturday, February 16, 2013
 	* IDCISP
 
 2. IDCISP
+	-
 	chunked输出测试，输出时设定等待时间来达到一块块的给	
 	httpclient在获取输出流时，以chunked方式来处理
 	若输出流为非chunked方式则需要读取到流结束才能解析，由于未说明content-length
+	 - continuation方式的region状态判断 参考day227第2条
+	VmDetailExecuteAction类的execute方法处独立判断region状态？
+	- spring的AOP方法执行拦截，通过suspend注解避免显式的suspend
+		<aop:config>
+			<aop:pointcut id="continuation"
+			<aop:advisor advice-ref="continuationBeforeAdvice"
+			...
+		Continuation处理步骤	* Continuation	jetty Continuation
+		1）Proxy Action处设置当前线程的Continuation对象
+		2）进入Action
+		3）调用Service方法(方法有Suspend注解且Service类已实现ContinuationListener类)，并处理Advice
+			spring配置此注解需要在Service方法执行前执行，以suspend请求及其他操作，如下：
+			continuation.addContinuationListener(listener);
+			continuation.setTimeout(getTimeout(target));//Service类实现ContinuationTimeoutHolder接口设置
+			continuation.suspend();//挂起并等待异步响应事件
+				Service类和Listener合并是否合适？易误解
+		4）上述Advice处理好后，请求挂起，进入Service方法体逻辑
+			处理业务并在完成时调用Continuation的complete方法以通知处理完成
+				判断是否完成通过在Continuation中设置键来判断
+			Service业务逻辑处理ok后（通过回调实现业务逻辑调用处理），触发Continuation的complete方法
+		5）Continuation的complete方法触发后，Service的onComplete方法监听到此事件并处理
+			（之前spring AOP的MethodBeforeAdvice类中已经将Service类这个Listener设置到Continuation的监听器属性中）
+		6）在onComplete方法中向Response写入返回结果
+
+		确定Continuation方式下判断region状态的方案：
+			在ApsaraCommandExecutor2的类中增加判断region状态，并将错误结果放到回调函数的onException方法中，Service中处理回调逻辑时，判断异常的类型，若为CLC异常
+			则在Continuation中设置错误结果；然后在onComplete方法中取到此结果输出给用户。
+		
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day230 Sunday, February 17, 2013
+
+1. 
+	* IDCISP
+	* MSS
+
+2. IDCISP
+	- 在Service逻辑中判断region状态，若为不可用则将错误信息放到Continuation中，在Continuation注册的Listener的onComplete方法中
+		返回给用户。	
+		每个按照当前Continuation方式实现的Service处都需要判断region的状态。
+
+	- 连调环境确定，确保有环境可用于连调，邮件确认
+	- 连调后准备提测
+		
+	- 开始准备发布步骤
+		参考最新项目的发布步骤：（svn log）
+			api_bugfix_201212
+				双开发布步骤：http://wiki.ec.alibaba-inc.com/index.php/%E5%8F%8C%E5%BC%80%E5%8F%91%E5%B8%83%E6%AD%A5%E9%AA%A4
+				Bugfix12项目上线步骤：http://wiki.ec.alibaba-inc.com/index.php/Bugfix12%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%BA%BF%E6%AD%A5%E9%AA%A4
+		步骤整理地址：
+			http://wiki.ec.alibaba-inc.com/index.php/IDCISP%E6%95%B0%E6%8D%AE%E4%B8%8A%E6%8A%A5%E9%A1%B9%E7%9B%AE
+
+
+
+3. MSS
+		青岛OTS有计划部署，但北京OTS可能需要到，2012年4,5月的样子，这样，会存在杭州，青岛都是OTS提供监控数据查询，北京还是原有的数据库的方式，这样涉及到查询监控数据的
+	调用方（如：houyi api，定时任务，嫦娥等）需要处理北京云的数据源还是老的数据源方式的逻辑。
+
+4. java事务
+	本地事务
+	分布式事务
+		MQ，分布式锁
+	http://www.cnblogs.com/CloudTeng/archive/2013/02/16/2913694.html Java事务处理全解析（一）——Java事务处理的基本问题
+5. java concurrent包
+	与原有的同步方式相比较	
+	切入点：memcached java客户端的优化
+		http://www.infoq.com/cn/articles/memcached-java
+		通过jprofiler分析性能
+
+6. rss的实现
+
+7. java NIO
+	
+8. struts2的interceptor部分异常问题
+	可能导致无log输出·
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day231 Monday, February 18, 2013
+
+1. 
+	* IDCISP上线步骤
+	* python
+
+2. IDCISP
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day232 Tuesday, February 19, 2013
+
+1. 
+	* IDCISP
+	* python
+	* HouyiAPI增加根据小regionNo和控制系统命令名称来判断调用是否允许
+
+2. IDCISP上线步骤
+	
+	发布工具+项目发布脚本
+	
+	发布工具：	
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/fabdeploy
+
+	Master的python发布脚本位置：
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_controller/
+	HouyiAPI的python发布脚本位置：
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/
+
+3. HouyiAPI增加根据小regionNo和控制系统命令名称来判断调用是否允许
+	若为不允许，则返回维护中状态码
+	需求场景：
+		飞天升级，涉及region中OSS相关操作将不可用（影响创建快照和lazyload），但其他操作允许以减小影响时间
+	控制系统影响到的接口如下：
+		CreateSnapshot
+		RollbackSnapshot
+		MountSnapshot
+		ResetVm
+	根据上面控制系统影响到的接口整理出影响到的API接口如下：
+		create_snapshot
+		rollback_snapshot
+		mount_snapshot
+		reset_vm
+	实现方式：
+		- PD给出那些region的那些控制系统命令不可调用，HouyiAPI在数据库中维护这个(regionNo,Command名称)关系，表示
+		某个小region下某些接口不可用，调用时报维护中状态码
+		- region增加升级中这个状态，只有这个状态的调用才去过滤哪些接口不能调（性能考虑）
+		- region状态为关闭时，所有接口调用都返回维护中状态码
+	配置方式：
+		- 升级某个或某几个小region时，若要过滤某些接口不可调用但其他接口可调用，则需要将哪些region的哪些接口不能调用的黑名单记录记录到HouyiAPI
+		数据库中，然后调用接口reload对应的cache以生效。；
+		- 升级结束，黑名单中的命令可调用时，需要从数据库中去掉这些记录，然后调用接口reload对应的cache以生效。
+			
+	项目Aone：
+		http://aone.alibaba-inc.com/aone2/project/701/portal
+
+	问题确认：PD
+		
+
+
+4. HouyiAPI返回json格式data键的值为null的缺陷 QA记录
+	{"code":-95,"data":null,"msg":"invoke houyi system error"}
+5. 
+		
+		
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day233 Wednesday, February 20, 2013
+
+1. 
+	* IDCISP
+		原-100,no small region改为-131
+	* 开路先锋项目
+
+2. 开路先锋项目 2.28发布
+	- 合并原IDCISP项目中加入维护中状态的代码修改到此新项目中（提前发布）
+		（通过svn工具将原来此bugId的修改保存为patch/diff，然后apply patch到新项目中 apply patch；）不推荐
+		直接merger branch方便，用patch后续有冲突，merger时使用场景为：
+		对一个branch有多个版本的修改，现在需要对这多个版本的修改合并到其他branch上 -tips-
+			打patch时注意，若patch生成时所基于的版本与将要apply到的版本不同，即中间不一致则apply时会有冲突，需要手工解决。
+				打patch时的版本要与应用patch到的版本一致即可无冲突
+					从打patch的原理来理解
+			
+	- 由于region增加维护中状态，需要调用Master那部分的region缓存可更新，故需要合入调Master缓存支持reload的代码patch
+		merger tow different trees
+	- 需要屏蔽的控制系统命令根据邮件继续更新
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day234 Thursday, February 21, 2013
+
+1. 
+	* 开路先锋项目
+	* IDCISP连调时间
+		下下周
+	* SLB朝阳门项目API设计文档阅读
+		
+2. 开路先锋项目
+	开发+自测
+	2.28号发布于前端涅槃项目冲突，暂定在其后面发，具体时间PD先确认涅槃项目发布结束时间点。
+	6.33部署测试 部分
+
+list_vm_status接口这样跨多个region查询的情况，有一个在维护中，则返回维护中。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day235 Friday, February 22, 2013
+
+1. 
+	* IDCISP
+	* 开路先锋
+	* 确保开路先锋项目早于IDCISP项目先发布，然后在发IDCISP项目
+2. IDCISP项目
+	- 去掉已移到开路先锋项目发布的需求
+		调用Master部分的cache支持reload
+		访问关闭的region时，返回-100维护中错误码
+	- 协助连调
+
+3. 开路先锋项目
+	- 2.28号发布延迟，安排在前端涅槃项目之后
+		2.29周五紧急发布
+
+	- 脚本工具提供
+		python
+	- 发布
+		wiki地址：http://wiki.ec.alibaba-inc.com/index.php/开路先锋项目
+		确认将要发布的集群
+			所有集群？
+			顺序，双开环境飞天已经升级，可排到后面发布，飞天升级到的region，API对应都需要升级。
+
+		 参考：http://wiki.ec.alibaba-inc.com/index.php/%E5%8F%8C%E5%8D%87%E9%A1%B9%E7%9B%AE 简单通用API发布步骤
+		 线上发布AY32C_AG、双开发布采用AY03NEW_AG
+
+		分内部生产、线上生产。
+
+		数据订正工具：
+			svn地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/
+				在这里提交工具文件
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day236 Monday, February 25, 2013
+
+1. 
+	* 开路先锋
+	* IDCISP
+2. 开路先锋
+	- 集群发布计划
+		此计划，PE周五会整理，作为下周发布计划，PM需要在发布前一周整理好
+		http://wiki.ec.alibaba-inc.com/index.php/集群发布计划
+			发布开始时间，结束时间与PE确认
+	- 上线步骤整理
+		脚本编写自测
+			svn：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20130228trailbreaker
+				根据已有的工具所放地址来参考
+	- 邮件确认建表语句和SQL
+	- 提测（提前自测）
+		邮件提测
+			
+		代码合并，合并到trunk
+			修改少且可控可直接合Trunk来测试，否则先Branch，然后合入Thunk回归。
+				本次合并入Trunk来测试
+	- 发布相关
+		周一提测
+			提测好后，配管会对应给出出包说明的wiki，build地址：   http://scm.aliyun-inc.com/view/builds/
+			发布步骤中的包信息来自配管的wiki
+		周一到周三完成脚本
+			PE负责reload cache
+			脚本负责更新DB
+		周四发双开 21:00
+		周五发线上 21:00 （此时间点与涅槃项目错开，涅槃项目是否周四发布待确认）
+	- 代码Review
+		周三 2.27 定会议室
+		邮件发布Review申请 待？
+	- 数据订正工具
+		依赖pypet来访问数据库（MySql）
+		在不同集群发布时，需要确认好对应的pypet
+
+
+3. IDCISP
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day237 Tuesday, February 26, 2013
+
+1. 
+	* 开路先锋项目
+	* IDCISP项目
+	* 大region二期
+	* 周五，工作周报
+
+2. 开路先锋项目
+	- 脚本工具
+		pypet如何切换不同集群的数据库？
+			线上集群AG,内部集群AG，各自选取一个AG，在此AG上执行，pypet库保证其连接到正确的houyi库
+				选择AY03-NEW-AG作为内部集群发布操作houyi库的AG
+				选择AY41A-AG作为线上集群发布操作houyi库的AG
+		工具开发及自测
+		脚本不允许关闭Region或设置Region在升级中状态，提示Master region不能修改状态，需要切换其他Region为Master region，然后再修改此Region的状态。
+			切换Master region的工具？地址
+
+	- 代码Review邮件
+	- 实现步骤整理好后
+		DBA
+			PE将表结构变动及新增通过窗口提交给DBA，作为数据订正工单处理
+		PE
+		相关人员代码Review
+			会议室
+		邮件确认
+
+3. IDCISP项目
+	- regionNo返回为大regionNo
+		修改并提交
+	- 去掉已移入开路先锋项目的需求部分代码修改
+		houyi.console.service/src/test/java/com/aliyun/houyi/service/support/MasterEndpointCacheManageTest.java	D
+		houyi.console.service/src/main/java/com/aliyun/houyi/service/support/MasterEndpointCacheManage.java	D	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day238 Wednesday, February 27, 2013
+
+1. 
+	* 开路先锋项目
+	* IDCISP项目
+
+
+2. 开路先锋项目
+	- 确认飞天升级延期到3.14，确认涅槃项目在3.28，确认上面的过后，开路先锋项目建议3.4号发布
+	- 代码Review
+	- 本周四双开
+	下周2，线上及其他内部集群
+
+3. IDCISP项目
+	提测准备
+
+
+4. concurrent包，NIO
+	- concurrent包
+		-  ReentrantLock
+		   A reentrant mutual exclusion Lock with the same basic behavior and semantics as the implicit monitor lock accessed using synchronized methods and statements, but with extended capabilities. 
+5. jetty,tomcat
+	架构
+	使用NIO等的剖析
+6. java对象的hashcode方法
+	与集合类的关系
+7. 一致性hash
 	

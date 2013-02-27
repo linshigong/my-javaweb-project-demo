@@ -1312,7 +1312,14 @@ from: http://www.diveintopython.net/toc/index.html
 				- Python supports data attributes (called “instance variables” in Java and Powerbuilder, and “member variables” in C++). Data attributes are pieces of data held by a specific instance of a class. 
 				In this case, each instance of UserDict will have a data attribute data. To reference this attribute from code outside the class, you qualify it with the instance name, instance.data, in the same way that 
 				you qualify a function with its module name. To reference a data attribute from within the class, you use self as the qualifier. By convention, all data attributes are initialized to reasonable values in the 
-				__init__ method. However, this is not required, since data attributes, like local variables, spring into existence when they are first assigned a value.
+				__init__ method. However, this is not required, since data attributes, like local variables, spring into existence when they are first assigned a value.-tip-
+				Python支持实例变量，实例变量都在__init__方法中初始化，类变量在class体中定义
+				PS:
+					>>aa = UserDict()
+					>>aa.data
+					{}
+
+
 				- The update method is a dictionary duplicator: it copies all the keys and values from one dictionary to another. This does not clear the target dictionary first; if the target dictionary already has some 
 				keys, the ones from the source dictionary will be overwritten, but others will be left untouched. Think of update as a merge function, not a copy function.
 				- This is a syntax you may not have seen before (I haven't used it in the examples in this book). It's an if statement, but instead of having an indented block starting on the next line, there is just a 
@@ -1364,7 +1371,7 @@ from: http://www.diveintopython.net/toc/index.html
 
 		As you saw in the previous section, normal methods go a long way towards wrapping a dictionary in a class. But normal methods alone are not enough, because there are a lot of things you can do with 
 		dictionaries besides call methods on them. For starters, you can get and set items with a syntax that doesn't include explicitly invoking methods. This is where special class methods come in: they provide 
-		a way to map non-method-calling syntax into method calls. 特殊类方法映射到非方法调用的操作，比如符合某种格式的赋值(程序代码并没有显式调用赋值方法)方式。
+		a way to map non-method-calling syntax into method calls. 特殊类方法映射到非显式方法调用的操作，比如符合某种格式的赋值(程序代码并没有显式调用赋值方法)方式。
 
 		5.6.1. Getting and Setting Items
 
@@ -1415,7 +1422,7 @@ from: http://www.diveintopython.net/toc/index.html
 					- Here's the crux of the entire MP3FileInfo class: if you're assigning a value to the name key, you want to do something extra.
 					- The extra processing you do for names is encapsulated in the __parse method. This is another class method defined in MP3FileInfo, and when you call it, you qualify it with self. Just calling 
 					__parse would look for a normal function defined outside the class, which is not what you want. Calling self.__parse will look for a class method defined within the class. This isn't anything new; 
-					you reference data attributes the same way.
+					you reference data attributes the same way. -tip-
 					- After doing this extra processing, you want to call the ancestor method. Remember that this is never done for you in Python; you must do it manually. Note that you're calling the immediate 
 					ancestor, FileInfo, even though it doesn't have a __setitem__ method. That's okay, because Python will walk up the ancestor tree until it finds a class with the method you're calling, so this line 
 					of code will eventually find and call the __setitem__ defined in UserDict.
@@ -1434,7 +1441,7 @@ from: http://www.diveintopython.net/toc/index.html
 			    return cmp(self.data, dict.data)      
 			else:                                     
 			    return cmp(self.data, dict)           
-		    def __len__(self): return len(self.data)       
+		    def __len__(self): return len(self.data)
 		    def __delitem__(self, key): del self.data[key] 
 			- __repr__ is a special method that is called when you call repr(instance). The repr function is a built-in function that returns a string representation of an object. It works on any object, not 
 			just class instances. You're already intimately familiar with repr and you don't even know it. In the interactive window, when you type just a variable name and press the ENTER key, Python uses 
@@ -1465,4 +1472,118 @@ from: http://www.diveintopython.net/toc/index.html
 		other special methods that allow classes to have read-only and write-only data attributes; you'll talk more about those in later chapters.
 
 	5.8. Introducing Class Attributes
-		
+		You already know about data attributes（实例变量）, which are variables owned by a specific instance of a class. Python also supports class attributes, which are variables owned by the class itself.
+		相比于java的实例变量与类变量
+
+		Example 5.17. Introducing Class Attributes
+
+		class MP3FileInfo(FileInfo):
+		    "store ID3v1.0 MP3 tags"
+		    tagDataMap = {"title"   : (  3,  33, stripnulls),
+				  "artist"  : ( 33,  63, stripnulls),
+				  "album"   : ( 63,  93, stripnulls),
+				  "year"    : ( 93,  97, stripnulls),
+				  "comment" : ( 97, 126, stripnulls),
+				  "genre"   : (127, 128, ord)}
+		>>> import fileinfo
+		>>> fileinfo.MP3FileInfo            
+		<class fileinfo.MP3FileInfo at 01257FDC>
+		>>> fileinfo.MP3FileInfo.tagDataMap 
+		{'title': (3, 33, <function stripnulls at 0260C8D4>), 
+		'genre': (127, 128, <built-in function ord>), 
+		'artist': (33, 63, <function stripnulls at 0260C8D4>), 
+		'year': (93, 97, <function stripnulls at 0260C8D4>), 
+		'comment': (97, 126, <function stripnulls at 0260C8D4>), 
+		'album': (63, 93, <function stripnulls at 0260C8D4>)}
+		>>> m = fileinfo.MP3FileInfo()      
+		>>> m.tagDataMap
+		{'title': (3, 33, <function stripnulls at 0260C8D4>), 
+		'genre': (127, 128, <built-in function ord>), 
+		'artist': (33, 63, <function stripnulls at 0260C8D4>), 
+		'year': (93, 97, <function stripnulls at 0260C8D4>), 
+		'comment': (97, 126, <function stripnulls at 0260C8D4>), 
+		'album': (63, 93, <function stripnulls at 0260C8D4>)}
+			- MP3FileInfo is the class itself, not any particular instance of the class.
+			- tagDataMap is a class attribute: literally, an attribute of the class. It is available before creating any instances of the class.
+			- Class attributes are available both through direct reference to the class and through any instance of the class.
+
+			In Java, both static variables (called class attributes in Python) and instance variables (called data attributes in Python) are defined immediately after the class definition (
+		one with the static keyword, one without). In Python, only class attributes can be defined here; data attributes are defined in the __init__ method. -tip-
+		Python里只有类变量可以这样定义，实例变量在__init__方法中定义
+			
+			Class attributes can be used as class-level constants (which is how you use them in MP3FileInfo), but they are not really constants. You can also change them.
+
+			There are no constants in Python. Everything can be changed if you try hard enough. This fits with one of the core principles of Python: bad behavior should be discouraged 
+		but not banned. If you really want to change the value of None, you can do it, but don't come running to me when your code is impossible to debug 
+		Python没有常量，任何东西都可以被修改。
+		Python核心法则之一：不建议错误的行为但并不禁止
+
+		Example 5.18. Modifying Class Attributes
+		>>> class counter:
+		...     count = 0                     
+		...     def __init__(self):
+		...         self.__class__.count += 1 
+		...     
+		>>> counter
+		<class __main__.counter at 010EAECC>
+		>>> counter.count                     
+		0
+		>>> c = counter()
+		>>> c.count                           
+		1
+		>>> counter.count
+		1
+		>>> d = counter()                     
+		>>> d.count
+		2
+		>>> c.count
+		2
+		>>> counter.count
+		2			
+		修改类变量，
+
+	5.9. Private Functions
+	Like most languages, Python has the concept of private elements:
+		- Private functions, which can't be called from outside their module	私有函数
+		- Private class methods, which can't be called from outside their class	 私有类方法
+		- Private attributes, which can't be accessed from outside their class	私有属性
+	
+	Unlike in most languages, whether a Python function, method, or attribute is private or public is determined entirely by its name. -tip-
+
+	If the name of a Python function, class method, or attribute starts with (but doesn't end with) two underscores, it's private; everything else is public. Python has no concept of protected class 
+	methods (accessible only in their own class and descendant classes). Class methods are either private (accessible only in their own class) or public (accessible from anywhere). -tip-
+	以2个下划线开头，表示此函数或类方法或属性为私有。
+
+	In Python, all special methods (like __setitem__) and built-in attributes (like __doc__) follow a standard naming convention: they both start with and end with two underscores. Don't name 
+	your own methods and attributes this way, because it will only confuse you (and others) later.
+	注意与Python中的特殊方法以及内部属性区分，虽然它们也是2个下划线开头。
+	
+	Example 5.19. Trying to Call a Private Method
+	>>> import fileinfo
+	>>> m = fileinfo.MP3FileInfo()
+	>>> m.__parse("/music/_singles/kairo.mp3") 
+	Traceback (innermost last):
+	  File "<interactive input>", line 1, in ?
+	AttributeError: 'MP3FileInfo' instance has no attribute '__parse'
+
+	If you try to call a private method, Python will raise a slightly misleading exception, saying that the method does not exist. Of course it does exist, but it's private, so it's not accessible outside the 
+	class.Strictly speaking, private methods are accessible outside their class, just not easily accessible. Nothing in Python is truly private; internally, the names of private methods and attributes are 
+	mangled and unmangled on the fly to make them seem inaccessible by their given names. You can access the __parse method of the MP3FileInfo class by the name _MP3FileInfo__parse. 
+	Acknowledge that this is interesting, but promise to never, ever do it in real code. Private methods are private for a reason, but like many other things in Python, their privateness is ultimately a matter of 
+	convention, not force.
+	Python里没有严格私有的概念，通过一些方式也能访问，但不建议这样去做。
+	
+
+
+
+
+
+
+
+
+
+
+
+#############
+说明：
+-tip- 表示重要标记点；
