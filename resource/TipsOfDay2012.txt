@@ -11,6 +11,35 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 性能调优
+	log系统调优，如log4j
+		log4j.appender.monitorAppender.BufferedIO=true
+		log4j.appender.monitorAppender.BufferSize=8192
+		这 个选项用于告诉log4j输出日志的时候采用缓冲的方式，而不是即时flush方式，并且设定了缓冲为8K，8K是默认值，可以根据日志输出的情况来修 改。
+		这个选项很重要，在测试中发现，当并发访问很高，例如每一秒100个并发以上，使用缓存跟不使用缓冲差距很大。具体数字我这里就不列出来了。
+		另外我想说的是，log4j输出缓冲日志是以8K为单位的，因为磁盘的一个block为8K，这样可以减少碎片，也就是说假设你设置缓存为18K，log4j在
+		16K（8K*2)的时候就会输出），而不是18K。
+		ref: http://www.blogjava.net/conans/articles/345083.html
+
+
+
+* 学习的载体 -tip-
+	如tomcat源码：NIO，Servlet3.0，comet,classloader，服务器编程，JMX and etc.
+* 编码
+	ref: http://baike.corp.taobao.com/index.php/编码规范最佳实践
+		
+* Comet技术
+	适用场景：
+		适合事件驱动的 Web 应用，以及对交互性和实时性要求很强的应用，如股票交易行情分析、聊天室和 Web 版在线游戏等。
+	起源：
+		AJAX应用中存在一个致命的缺陷无法满足传统桌面系统的需求。那就是“服务器发起的消息传递(Server-Initiated Message Delivery)”。
+		B/S架构中由于HTTP的无状态，只能通过轮询(Polling)技术不断刷新页面来获得最新的数据(见图18-5)。这种方式不但浪费服务器的资源，最重要的是每次建立(或关闭)新的HTTP连接
+		都有一定的延迟，这种延迟使得频繁信息传递的应用无法忍受。于是就产生了“服务器推送技术”。
+	实现：
+		下面将介绍两种 Comet 应用的实现模型。
+		1）基于 AJAX 的长轮询（long-polling）方式	
+		2）基于 Iframe 及 htmlfile 的流（streaming）方式
+
 * 取模 模运算
 	取模运算即模运算，模运算即求余运算。“模”是“Mod”的音译，模运算多应用于程序编写中。 Mod的含义为求余。模运算在数论和程序设计中
 	都有着广泛的应用，从奇偶数的判别到素数的判别，
@@ -129,6 +158,7 @@ google 检索 apache： site:*.apache.org 高级搜索
 	wiki系统
 		mediawiki
 		页面自身的连接地址修改在移动标签功能中。
+		删除重定向页这个对象，即可删除重定向到的页面
 	项目管理
 		redmine
 	
@@ -508,6 +538,11 @@ google 检索 apache： site:*.apache.org 高级搜索
 	from: http://www.ubooo.com/rou/2009/0324/111.html
 
 * http chunk http chunked	 * chunked
+	- httpclient读取chunked输出时，根据/r/n来判断chunk结束，根据读取开始位置到读到/r/n所读的长度作为chunked的长度。将协议中chunkSize作为了chunk内容的
+	一部分。
+	验证上面的分析：
+		
+
 	- 例子：
 		https://github.com/netty/netty/tree/3.5/src/main/java/org/jboss/netty/example/http/snoop
 		
@@ -1369,7 +1404,77 @@ Storage for Interactive Services
 	java，javaee程序监控插件：http://code.google.com/p/javamelody/
 
 * tomcat6			 tomcat源码分析
-	- boottrap
+	- Comet support tomcat6
+		Comet support allows a servlet to process IO asynchronously, receiving events when data is available for reading on the connection (rather than always 
+		using a blocking read), and writing data back on connections asynchronously (most likely responding to some event raised from some other source).
+		ref: http://localhost:8080/docs/aio.html
+	- tomcat架构，组件层次
+		最外层是Server，内部有多个Service，每个Service内部有多个Connector和多个Engine，每个Engine中可以有多个Host和，每个Host中可以有多个Context即webapp
+
+		这个层次结构从tomcat的server.xml文件的层次中能看出，在其自带的文档关于架构部分也有说明。
+
+
+		Apache Tomcat Architecture　ref: http://localhost:8080/docs/architecture/index.html 自带Doc中有关于架构的说明
+			Overview - An overview of the Tomcat server architecture with key terms and concepts.
+			Server Startup - A detailed description, with sequence diagrams, of how the Tomcat server starts up.
+			Request Process Flow - A detailed description of how Tomcat handles a request.
+
+	- tomcat6类加载器层次
+		Bootstrap->System->Common-->Webapp1
+								|->Webapp2
+		说明：					
+			Bootstrap — This class loader contains the basic runtime classes provided by the Java Virtual Machine, plus any classes from JAR files present in the System Extensions 
+						directory ($JAVA_HOME/jre/lib/ext). Note: some JVMs may implement this as more than one class loader, or it may not be visible (as a class loader) at all.
+			System — This class loader is normally initialized from the contents of the CLASSPATH environment variable. All such classes are visible to both Tomcat internal classes, 
+						and to web applications. However, the standard Tomcat startup scripts ($CATALINA_HOME/bin/catalina.sh or %CATALINA_HOME%\bin\catalina.bat) totally ignore 
+						the contents of the CLASSPATH environment variable itself, and instead build the System class loader from the following repositories:
+				- $CATALINA_HOME/bin/bootstrap.jar — Contains the main() method that is used to initialize the Tomcat server, and the class loader implementation classes it depends on.
+				- $CATALINA_BASE/bin/tomcat-juli.jar and $CATALINA_HOME/bin/tomcat-juli.jar — Logging implementation classes. These include enhancement classes to java.util.logging API, 
+				known as Tomcat JULI, and a package-renamed copy of Apache Commons Logging library used internally by Tomcat. See logging documentation for more details.
+				- $CATALINA_HOME/bin/commons-daemon.jar — The classes from Apache Commons Daemon project.
+
+				The tomcat-juli.jar and commons-daemon.jar JARs in $CATALINA_HOME/bin are not present in the CLASSPATH built by catalina.bat|.sh scripts, but are referenced from 
+				the manifest file of bootstrap.jar.
+
+				If $CATALINA_BASE and $CATALINA_HOME do differ and $CATALINA_BASE/bin/tomcat-juli.jar does exist, the startup scripts will add it to CLASSPATH before bootstrap.jar, 
+				so that Java will look into $CATALINA_BASE/bin/tomcat-juli.jar for classes before it will look into $CATALINA_HOME/bin/tomcat-juli.jar referenced by bootstrap.jar. It should work 
+				in most cases but, if you are using such configuration, it might be recommended to remove tomcat-juli.jar from $CATALINA_HOME/bin so that only one copy of the file is present on the 
+				classpath. The next version of Tomcat, Tomcat 7, takes different approach here.
+			Common — This class loader contains additional classes that are made visible to both Tomcat internal classes and to all web applications.
+				Normally, application classes should NOT be placed here. The locations searched by this class loader are defined by the common.loader property in 
+				$CATALINA_BASE/conf/catalina.properties. The default setting will search the following locations in the order they are listed:
+					- unpacked classes and resources in $CATALINA_BASE/lib
+					- JAR files in $CATALINA_BASE/lib
+					- unpacked classes and resources in $CATALINA_HOME/lib
+					- JAR files in $CATALINA_HOME/lib
+			WebappX — A class loader is created for each web application that is deployed in a single Tomcat instance. All unpacked classes and resources in the /WEB-INF/classes 
+				directory of your web application, plus classes and resources in JAR files under the /WEB-INF/lib directory of your web application, are made visible to this web application, 
+				but not to other ones.
+
+		ref: http://localhost:8080/docs/class-loader-howto.html
+	- 结合tomcat使用NIO来理解
+		---------
+			在web服务器上阻塞IO(BIO)与NIO一个比较重要的不同是，我们使用BIO的时候往往会为每一个web请求引入多线程，每个web请求一个单独的线程，
+			所以并发量一旦上去了，线程数就上去了，CPU就忙着线程切换，所以BIO不合适高吞吐量、高可伸缩的web服务器；而NIO则是使用单线程(单个CPU)或者
+			只使用少量的多线程(多CPU)来接受Socket，而由线程池来处理堵塞在pipe或者队列里的请求.这样的话，只要OS可以接受TCP的连接，web服务器就可以处理该请求。
+			大大提高了web服务器的可伸缩性。
+
+			从Tomcat6.0以后, Java开发者很容易就可以是用NIO的技术来提升tomcat的并发处理能力。
+
+			<Connector port="8080" protocol="HTTP/1.1"
+			connectionTimeout="20000"
+			redirectPort="8443" />
+			修改成：
+
+			<Connector port="8080" protocol="org.apache.coyote.http11.Http11NioProtocol"
+			connectionTimeout="20000"
+			redirectPort="8443" />
+			然后启动服务器，你会看到org.apache.coyote.http11.Http11NioProtocol start的信息，表示NIO已经启动
+		---------
+		ref: http://www.cnblogs.com/killbug/archive/2012/11/25/2787717.html
+
+	- bootstrap
+		org.apache.catalina.startup.Bootstrap
 		main方法的：daemon.load(args); daemon.start(); 为主要启动过程，前面是初始化等工作
 		
 	-
@@ -3808,9 +3913,30 @@ Storage for Interactive Services
 				（2）语义：表明信息要表达的内容；
 				（3）同步：规则涉及双方的交互关系和事件顺序。
 				整个计算机网络的实现体现为协议的实现，TCP/IP协议是Internet互联网的核心协议。
-		
 
 * log * log4j
+	- log4j调优
+		log4j输出log到文件时，使用缓冲输出
+			log4j.appender.monitorAppender.BufferedIO=true
+			log4j.appender.monitorAppender.BufferSize=8192
+		组装输出内容之前可对logger的输出级别先进行判断而不要完全依赖log4j控制，因为组装输出日志内容也是要损耗效率的。
+			//若log4j并未开启info级日志记录，直接返回
+			if(!monitorLogger.isInfoEnabled()){
+				return;
+			}
+			StringBuilder log = new StringBuilder();
+			logSql.append(logPk+" ");
+		ref: http://www.blogjava.net/conans/articles/345083.html
+
+
+	- isDebugEnabled()的判断什么时候需要？
+		if (replace && log.isDebugEnabled())
+			log.debug("Expanded " + before + " to " + repository);
+		这个时候，需要判断isDebugEnabled()，可以减少字符串拼接的操作；
+
+		log.debug("Failed to operate")
+		此时不需要，debug()方法中已判断了日志级别，不过还是会进入debug()方法处理一下再出来，若性能要求高，还是和上面一样，判断isDebugEnabled()再输出log。
+
 	- log4j配置时
 		定义appender，定义logger
 		自定义的appender注意类全路径不要搞错（服务器启动时console会报提示）
@@ -4618,6 +4744,9 @@ search in index find pdf
 	代码
 
 * NIO 非阻塞操作/ 阻塞操作 消息驱动
+	- 输入和输出都经过Buffer层，数据以块的方式处理（区别老IO以字节流的方式处理）
+
+	-
 	上图就是这个项目的总体结构图，从图中可以看出该程序分为这几大块：连接侦听线程、连接对象队列、发送线程池、接收线程池、分发线程、
 	事件处理对象、监控处理对象。下面我将描述下整个连接处理过程：
 	1、 连接侦听线程循环接收一个连接请求，如果有连接请求过来，则返回一个连接Socket对象，否则该线程就阻塞等待，直到有一个连接请求过来。
@@ -6441,6 +6570,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- 终端输入，命令行输入，用户输入 用raw_input([prompt])
+		var = raw_input("Enter something: ")
+		print "you entered ", var
 	- pythobn脚本
 		使用库时，尽量使用内置的库，避免依赖问题，比如:
 			from _pyio import open
@@ -17020,6 +17152,9 @@ day176 Friday, November 23, 2012
 	continuaton缺点，导致编程模型复杂，需要切分io操作。
 	
 	continuation and servlet3.0 ：http://webtide.intalio.com/2009/07/continuations-to-continue-2/
+	
+	Servlet3.0
+		Tomcat7支持
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day177 Monday, November 26, 2012
@@ -19163,14 +19298,53 @@ day238 Wednesday, February 27, 2013
 	提测准备
 
 
-4. concurrent包，NIO
+4. concurrent包，NIO ,Servlet3.0,Comet
 	- concurrent包
 		-  ReentrantLock
 		   A reentrant mutual exclusion Lock with the same basic behavior and semantics as the implicit monitor lock accessed using synchronized methods and statements, but with extended capabilities. 
 5. jetty,tomcat
 	架构
 	使用NIO等的剖析
+	tomcat架构：
+		ref： http://www.cnblogs.com/tinylittlebunny/archive/2012/08/24/2654705.html
 6. java对象的hashcode方法
 	与集合类的关系
 7. 一致性hash
-	
+	解决某些场景下hash重新计算问题
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day239 Thursday, February 28, 2013
+
+1. 
+	* 开路先锋项目
+
+2. 开路先锋项目
+	19:00发布
+
+3. tomcat ,nio,comet
+	结合tomcat源码分析NIO
+		Http11NioProtocol
+
+4. nginx做反向代理
+	转发规则：轮询
+5. jprofiler
+	http://yufeimen.iteye.com/blog/70721 利用JProfiler对应用服务器内存泄漏问题诊断一例（转）
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day240 Friday, March 01, 2013
+
+1. 
+	* 大region二期
+	* IDCISP项目
+	* 开路先锋
+
+2. IDCISP项目
+	提测 时间点定于开路先锋线上发布过后，避免冲突
+		用户缓存支持reload
+
+3. 大region二期
+	上线步骤整理：
+		http://wiki.ec.alibaba-inc.com/index.php/Bigregion2%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B#.E5.8D.87.E7.BA.A7.E6.80.BB.E4.BD.93.E6.80.9D.E8.B7.AF
+
+4. 开路先锋
+	设置region状态和黑名单的工具，在关闭Master Region时不是强制不允许关闭，而是给出警告，并提示是否继续操作。
