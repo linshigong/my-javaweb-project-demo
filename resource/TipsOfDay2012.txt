@@ -11,6 +11,87 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 
+杭州市西湖区文三路398号东方通信大厦1724室
+* 622848 032323 8928010
+* 耀江广厦 a 6#
+* 有专精有覆盖面 -tip-
+	special skill
+* 问题排查 * 运维
+	- 问题排查，性能查看 相关命令和工具
+	
+		gdb 
+		top - Display Linux tasks
+		free - Display amount of free and used memory in the system
+		sar - system active report
+		df/du
+			查看各分区使用情况:  df -h
+			查看指定目录的大小: du -sh
+		ulimit
+		
+		java相关：
+			- Memory Map
+			---------
+			观察运行中的jvm物理内存的占用情况。
+			参数如下：
+			-heap：打印jvm heap的情况
+			-histo：打印jvm heap的直方图。其输出信息包括类名，对象数量，对象占用大小。
+			-histo：live ：同上，但是只答应存活对象的情况
+			-permstat：打印permanent generation heap情况
+
+			命令使用：
+			jmap -heap 2083
+			可以观察到New Generation（Eden Space，From Space，To Space）,tenured generation,Perm Generation的内存使用情况
+
+			jmap -histo 2083 ｜ jmap -histo:live 2083
+			可以观察heap中所有对象的情况（heap中所有生存的对象的情况）。包括对象数量和所占空间大小。
+			注意：使用了histo:live选项后，JVM会进行FGC，这是为了得到更清晰的结果(从jmap的java源码分析可看到)。
+
+			写个脚本，可以很快把占用heap最大的对象找出来，对付内存泄漏特别有效。
+			---------
+			from: http://www.blogjava.net/stone2083/archive/2008/02/25/182081.html	JVM监控工具介绍
+				jps - Java Virtual Machine Process Status Tool
+					列出所有的jvm实例
+					实例：
+					jps
+					列出本机所有的jvm实例
+
+					jps 192.168.0.77
+					列出远程服务器192.168.0.77机器所有的jvm实例，采用rmi协议，默认连接端口为1099
+					（前提是远程服务器提供jstatd服务）
+				jinfo
+					观察运行中的java程序的运行环境参数：参数包括Java System属性和JVM命令行参数
+				jstat - Java Virtual Machine Statistics Monitoring Tool
+					最后要重点介绍下这个命令。
+					这是jdk命令中比较重要，也是相当实用的一个命令，可以观察到classloader，compiler，gc相关信息
+					具体参数如下：
+					-class：统计class loader行为信息
+					-compile：统计编译行为信息
+					-gc：统计jdk gc时heap信息
+					-gccapacity：统计不同的generations（不知道怎么翻译好，包括新生区，老年区，permanent区）相应的heap容量情况
+					-gccause：统计gc的情况，（同-gcutil）和引起gc的事件
+					-gcnew：统计gc时，新生代的情况
+					-gcnewcapacity：统计gc时，新生代heap容量
+					-gcold：统计gc时，老年区的情况
+					-gcoldcapacity：统计gc时，老年区heap容量
+					-gcpermcapacity：统计gc时，permanent区heap容量
+					-gcutil：统计gc时，heap情况
+					-printcompilation：不知道干什么的，一直没用过。
+				
+				visual vm / visualvm
+				ref: http://visualvm.java.net/download.html
+				设置jdk路径，再启动(etc/visualvm.conf)
+					通过jstatd或jmx连接到远程jvm上
+						jstatd - Virtual Machine jstat Daemon
+						jstatd xxx xxx.policy
+
+
+
+		jstack - 打印java线程堆栈信息
+
+	
+
+
 * 性能调优
 	log系统调优，如log4j
 		log4j.appender.monitorAppender.BufferedIO=true
@@ -22,6 +103,8 @@ google 检索 apache： site:*.apache.org 高级搜索
 		ref: http://www.blogjava.net/conans/articles/345083.html
 
 
+* user
+ftian20130102
 
 * 学习的载体 -tip-
 	如tomcat源码：NIO，Servlet3.0，comet,classloader，服务器编程，JMX and etc.
@@ -162,8 +245,52 @@ google 检索 apache： site:*.apache.org 高级搜索
 	项目管理
 		redmine
 	
-* nginx
-		nginx不单可以作为强大的web服务器，也可以作为一个反向代理服务器，而且nginx还可以按照调度规则实现动态、静态页面的分离，可以按照轮询、ip哈希、
+* nginx	
+	- nginx常用操作命令
+		------
+		#!/bin/sh
+
+		cd `dirname $0`/..
+		BASE_HOME=`pwd`
+		NGINX_HOME=/usr/ali/nginx
+
+		ARGV="$@"
+
+		# the path to your nginx binary, including options if necessary
+		NGINXD=$NGINX_HOME/sbin/nginx
+
+		ERROR=0
+		if [ "x$ARGV" = "x" ] ; then
+		    ARGV="-h"
+		fi
+
+		case $ARGV in
+		#指定nginx home位置启动
+		start)
+		    $NGINXD -p $BASE_HOME/
+		    ;;
+		stop)
+		    $NGINXD -s quit  -p $BASE_HOME/
+		    ;;
+		restart|graceful)
+		     $NGINXD -s quit -p $BASE_HOME/
+		     $NGINXD -p $BASE_HOME/
+		    ;;
+		start|stop|graceful-stop)
+		    $NGINXD   $ARGV  -p $BASE_HOME/
+		    ERROR=$?
+		    ;;
+		configtest)
+		    testconfig
+		    ;;
+		*)
+		    $NGINXD $OPTIONS $ARGV
+		    ERROR=$?
+		esac
+
+		exit $ERROR
+		------
+	-	nginx不单可以作为强大的web服务器，也可以作为一个反向代理服务器，而且nginx还可以按照调度规则实现动态、静态页面的分离，可以按照轮询、ip哈希、
 	URL哈希、权重等多种方式对后端服务器做负载均衡，同时还支持后端服务器的健康检查。
 
 	如果只有一台服务器时,这个服务器挂了,那么对于网站来说是个灾难.因此，这时候的负载均衡就会大显身手了,它会自动剔除挂掉的服务器.
@@ -538,6 +665,57 @@ google 检索 apache： site:*.apache.org 高级搜索
 	from: http://www.ubooo.com/rou/2009/0324/111.html
 
 * http chunk http chunked	 * chunked
+	- web服务器通过输出流来写入chunked格式的数据，若中间存在代理时，需要注意验证代理是否支持chunked输出。比如nginx默认不支持chunked输出，导致
+	测试时，误认为chunked输出有问题（在简单的servlet测试时，chunked输出却正常）。-tip-
+		查找不支持chunked输出时，确认输出流已经flush，那么web服务应该直接输出了数据，但chunked客户端却读取不到。开始还猜测是struts2框架还是容器的
+		那个部分还在继续缓存而没有真正将输出流输出到客户端，
+	- jetty client处理chunked输出
+		---------
+			HttpClient client = new HttpClient();
+			client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
+			try {
+				client.start();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// create the exchange object, which lets you define where you want to
+			// go
+			// and what you want to do once you get a response
+			ContentExchange exchange = new ContentExchange() {
+				// define the callback method to process the response when you get
+				// it back
+				protected void onResponseComplete() throws IOException {
+					// super.onResponseComplete();
+					String responseContent = this.getResponseContent();
+
+					// do something with the response content
+					System.out.println(responseContent);
+				}
+
+				@Override
+				protected synchronized void onResponseContent(Buffer content)
+						throws IOException {
+
+					System.out.println(content);
+				}
+			};
+			String url = "http://localhost:8080/javaweb/chunked";
+			exchange.setMethod("GET");
+			exchange.setURL(url);
+
+			// start the exchange
+			try {
+				client.send(exchange);
+				exchange.waitForDone();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		---------
+		from: http://aliali.iteye.com/blog/405444
+
+	- chunked服务端
+		边处理边返回。
 	- httpclient读取chunked输出时，根据/r/n来判断chunk结束，根据读取开始位置到读到/r/n所读的长度作为chunked的长度。将协议中chunkSize作为了chunk内容的
 	一部分。
 	验证上面的分析：
@@ -917,6 +1095,8 @@ google 检索 apache： site:*.apache.org 高级搜索
 			模块化，组件化的设计。核心框架和业务无关，各自发展
 			http://blog.sina.com.cn/s/articlelist_1850874464_0_4.html
 		* doom3 engine开源
+	sourceforge
+		game category
 
 * java dns 缓存
 	%JAVA_HOME/jre/lib/security/java.security
@@ -951,10 +1131,105 @@ google 检索 apache： site:*.apache.org 高级搜索
 		
 
 * 网络攻击
+	- TMD = Theatre Missile Defense System (战区导弹防御系统)
+		
+	- CC攻击
+	原理：
+		CC攻击的原理就是攻击者控制某些主机不停地发大量数据包给对方服务器造成服务器资源耗尽，一直到宕机崩溃。CC主要是用来攻击页面的，
+	每个人都有这样的体验：当一个网页访问的人数特别多的时候，打开网页就慢了，CC就是模拟多个用户（多少线程就是多少用户）不停地进行
+	访问那些需要大量数据操作（就是需要大量CPU时间）的页面，造成服务器资源的浪费，CPU长时间处于100%，永远都有处理不完的连接直至
+	就网络拥塞，正常的访问被中止。
+		CC攻击可以归为DDoS攻击的一种。他们之间的原理都是一样的，即发送大量的请求数据来导致服务器拒绝服务，是一种连接攻击。
+	CC攻击又可分为代理CC攻击，和肉鸡CC攻击。代理CC攻击是黑客借助代理服务器生成指向受害主机的合法网页请求，实现DOS，和伪装就叫：
+	cc（Challenge Collapsar）。而肉鸡CC攻击是黑客使用CC攻击软件，控制大量肉鸡，发动攻击，相比来后者比前者更难防御。因为肉鸡可以模拟正常
+	用户访问网站的请求。伪造成合法数据包。
+
+	防御CC攻击可以通过多种方法，禁止网站代理访问，尽量将网站做成静态页面，限制连接数量等。
+	from: http://baike.baidu.com/view/662394.htm
+
 	- DDOS
 
-	- SYN攻击
+	- 慢连接攻击 HTTP慢速连接攻击 Slowloris  HTTP POST Attack
+		通过nginx等反向代理工具，防御部分慢连接攻击
 		
+		这个攻击的基本原理如下：
+		针对任意HTTP Server，建立一个连接，指定一个比较大的content-length，然后以很低的速度发包，比如10-100s发一个字节，hold住这个连接不断开。
+		如果客户端持续建立这样的连接，那么服务器上可用的连接将很快被占满，从而导致DOS.
+		这一攻击引起我注意的原因有这几点：
+		1) 它可以针对任意Web服务。HTTP协议在接收到request之前是无法对请求内容作校验的，所以即使你的Web应用没有可用form表单，这个攻击一样有效。
+		2) 廉价。在客户端以单线程方式建立较大数量的无用连接，并保持持续发包的代价非常低廉。实际试验中一台普通PC可以建立的Socket连接在3000个以上。
+		这对一台普通的web server，将是致命的打击。更不用说结合肉鸡群做分布式DOS了。
+		http://blog.csdn.net/dcsno1/article/details/7180863 HTTP POST慢速DOS攻击初探
+		
+		http://lwn.net/Articles/418017/ Using HTTP POST for denial of service
+
+	- SYN攻击	 SYN Flood	
+		1) 原理
+			在黑客攻击事件中，SYN攻击是最常见又最容易被利用的一种攻击手法。
+		SYN攻击属于DoS攻击的一种，它利用TCP协议缺陷，通过发送大量的半连接请求，耗费CPU和内存资源。SYN攻击除了能影响主机外，还可以危害路由器、
+		防火墙等网络系统，事实上SYN攻击并不管目标是什么系统，只要这些系统打开TCP服务就可以实施。服务器接收到连接请求（syn= j），将此信息加入未连接队列，
+		并发送请求包给客户（syn=k,ack=j+1），此时进入SYN_RECV状态。当服务器未收到客户端的确认包时，重发请求包，一直到超时，才将此条目从未连接队列删除。
+		配合IP欺骗，SYN攻击能达到很好的效果，通常，客户端在短时间内伪造大量不存在的IP地址，向服务器不断地发送syn包，服务器回复确认包，并等待客户的确认，
+		由于源地址是不存在的，服务器需要不断的重发直至超时，这些伪造的SYN包将长时间占用未连接队列，正常的SYN请求被丢弃，目标系统运行缓慢，严重者引起
+		网络堵塞甚至系统瘫痪。	
+
+		2) 检测syn攻击
+
+		检测SYN攻击非常的方便，当你在服务器上看到大量的半连接状态时，特别是源IP地址是随机的，基本上可以断定这是一次SYN攻击。
+		我们使用系统自带的netstat 工具来检测SYN攻击：
+		# netstat -n -p TCP
+		tcp　0　 0 10.11.11.11:23　124.173.152.8:25882　 SYN_RECV　-
+		tcp　0　 0 10.11.11.11:23　236.15.133.204:2577　 SYN_RECV　-
+		tcp　0　 0 10.11.11.11:23　127.160.6.129:51748　 SYN_RECV　-
+		...
+		上面是在LINUX系统中看到的，很多连接处于SYN_RECV状态（在WINDOWS系统中是SYN_RECEIVED状态），源IP地址都是随机的，
+		表明这是一种带有IP欺骗的SYN攻击。
+		我们也可以通过下面的命令直接查看在LINUX环境下某个端囗的未连接队列的条目数：
+		#netstat -n -p TCP | grep SYN_RECV | grep :22 | wc -l
+		324
+		显示TCP端囗22的未连接数有324个，虽然还远达不到系统极限，但应该引起管理员的注意。
+		from: http://baike.baidu.com/view/488528.htm
+
+		3) 防范技术
+		关于SYN攻击防范技术，人们研究得比较早。归纳起来，主要有两大类，一类是通过防火墙、路由器等过滤网关防护，另一类是通过加固TCP/IP协议栈防范.
+		但必须清楚的是，SYN攻击不能完全被阻止，我们所做的是尽可能的减轻SYN攻击的危害，除非将TCP协议重新设计。
+
+	　　(1)过滤网关防护
+
+		　　这里，过滤网关主要指明防火墙，当然路由器也能成为过滤网关。防火墙部署在不同网络之间，防范外来非法攻击和防止保密信息外泄，它处于客户端和服务器
+		之间，利用它来防护SYN攻击能起到很好的效果。过滤网关防护主要包括超时设置，SYN网关和SYN代理三种。
+
+		　　■网关超时设置：防火墙设置SYN转发超时参数（状态检测的防火墙可在状态表里面设置），该参数远小于服务器的timeout时间。当客户端发送完SYN包，服务端
+		发送确认包后（SYN＋ACK），防火墙如果在计数器到期时还未收到客户端的确认包（ACK），则往服务器发送RST包，以使服务器从队列中删去该半连接。值得注意的是，
+		网关超时参数设置不宜过小也不宜过大，超时参数设置过小会影响正常的通讯，设置太大，又会影响防范SYN攻击的效果，必须根据所处的网络应用环境来设置此参数。
+
+		　　■SYN网关：SYN网关收到客户端的SYN包时，直接转发给服务器；SYN网关收到服务器的SYN/ACK包后，将该包转发给客户端，同时以客户端的名义给服务器发ACK确认包。
+		此时服务器由半连接状态进入连接状态。当客户端确认包到达时，如果有数据则转发，否则丢弃。事实上，服务器除了维持半连接队列外，还要有一个连接队列，如果发生SYN攻击
+		时，将使连接队列数目增加，但一般服务器所能承受的连接数量比半连接数量大得多，所以这种方法能有效地减轻对服务器的攻击。
+
+		　　■SYN代理：当客户端SYN包到达过滤网关时，SYN代理并不转发SYN包，而是以服务器的名义主动回复SYN/ACK包给客户，如果收到客户的ACK包，表明这是正常的访问，
+		此时防火墙向服务器发送ACK包并完成三次握手。SYN代理事实上代替了服务器去处理SYN攻击，此时要求过滤网关自身具有很强的防范SYN攻击能力。
+		 　
+		　　(2)加固tcp/ip协议栈
+							                                                                    
+		　　防范SYN攻击的另一项主要技术是调整tcp/ip协议栈，修改tcp协议实现。主要方法有SynAttackProtect保护机制、SYN cookies技术、增加最大半连接和缩短超时时间等。tcp/ip协议栈
+		的调整可能会引起某些功能的受限，管理员应该在进行充分了解和测试的前提下进行此项工作。
+
+		　　■SynAttackProtect机制
+
+		　　为防范SYN攻击，win2000系统的tcp/ip协议栈内嵌了SynAttackProtect机制，Win2003系统也采用此机制。SynAttackProtect机制是通过关闭某些socket选项，增加额外的连接指示和
+		减少超时时间，使系统能处理更多的SYN连接，以达到防范SYN攻击的目的。默认情况下，Win2000操作系统并不支持SynAttackProtect保护机制，需要在注册表以下位置增加
+		SynAttackProtect键值：
+
+		　　HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+
+		　　当SynAttackProtect值（如无特别说明，本文提到的注册表键值都为十六进制）为0或不设置时，系统不受SynAttackProtect保护。
+
+		　　当SynAttackProtect值为1时，系统通过减少重传次数和延迟未连接时路由缓冲项（route cache entry）防范SYN攻击。
+	from: http://www.yesky.com/SoftChannel/72356665495650304/20040202/1764824_2.shtml
+
+		
+
 * 事务 数据库事务 
 	- 事务并发问题：
 		1) 脏读：包含未提交数据的读取。例如，事务1 更改了某行。事务2 在事务1 提交更改之前读取已更改的行。
@@ -1115,6 +1390,9 @@ google 检索 apache： site:*.apache.org 高级搜索
 * code source code
 	http://www.codeproject.com/
 * jprofiler ,MAT, 内存分析工具，性能分析工具，检测工具
+	- jprofiler测试
+		可通过模拟场景来使用JProfiler分析，比如模拟内存溢出，模拟死锁等各种情况。	    反向方式来学习JProfiler的使用
+		
 	- Memory Analyzer (MAT)
 		The Eclipse Memory Analyzer is a fast and feature-rich Java heap analyzer that helps you find memory leaks and reduce memory consumption.
 			Use the Memory Analyzer to analyze productive heap dumps with hundreds of millions of objects, quickly calculate the retained sizes of objects, 
@@ -3032,7 +3310,7 @@ Storage for Interactive Services
 
 	* CEGUI
 
-* 打开outlook的时候，错误提示“无法启动Microsoft Office Outlook。无法打开Outlook窗口”	* 修复 *系统修复　* 自修复
+* 打开outlook的时候，错误提示“无法启动Microsoft Office Outlook。无法打开Outlook窗口”	* 修复 *系统修复　* 自修复		* outlook
 	    重启机器仍无法解决问题。
 	    解决办法：
 	    Win7：开始> 搜索程序和文件夹里》输入“Outlook.exe /resetnavpane”回车
@@ -3042,6 +3320,12 @@ Storage for Interactive Services
 
 	ps：
 		这个自修复功能还是蛮不错的
+
+	- outlook配置
+		邮箱账户类型有 Exchange，POP3，IMAP或HTTP（M），对于exchange类型的邮箱账户配置方式与POP3等的不同，可见outlook配置时的提示操作。
+		对于邮箱类型，可以看账户信息。
+		如xxx@alibaba-inc.com账户为exchange类型。
+
 
 * IP转发 * ip forward ,在Linux中使能IP转发
 	
@@ -3317,7 +3601,9 @@ Storage for Interactive Services
 			 
 			为什么我不能连接到服务器？
 			 
-			调试进程不能连接到服务器是一个痛苦的事情，因为原因很多，比如DNS失效啦，连接被挂起啦，服务器返回异常数据啦，服务器本身异常啦，等等。一般网络调试方面，很多人会想到另外一个非常不错的工具-tcpdump。但它的参数太多了，而且你要从上百个连接进程中找出其中一个进程为什么不能连接恐怕是一件非常费力的工作。strace 其实也能在这种情景下帮上你的忙，它仅仅输出与系统调用相关的数据，从而可以让我们的注意力更集中。类似下面这样：
+			调试进程不能连接到服务器是一个痛苦的事情，因为原因很多，比如DNS失效啦，连接被挂起啦，服务器返回异常数据啦，服务器本身异常啦，等等。
+			一般网络调试方面，很多人会想到另外一个非常不错的工具-tcpdump。但它的参数太多了，而且你要从上百个连接进程中找出其中一个进程为什么不能连接
+			恐怕是一件非常费力的工作。strace 其实也能在这种情景下帮上你的忙，它仅仅输出与系统调用相关的数据，从而可以让我们的注意力更集中。类似下面这样：
 			 
 			 $ strace -e poll,select,connect,recvfrom,sendto nc www.news.com 80
 			 sendto(3, "\24\0\0\0\26\0\1\3\255\373NH\0\0\0\0\0\0\0\0", 20, 0, {sa_family=AF_NETLINK, pid=0, groups=00000000}, 12) = 20
@@ -3990,6 +4276,8 @@ Storage for Interactive Services
 	- 锁
 		synchronized方法（锁定方法所在的实例化对象，若实例化对象不为同一个，则不能同步）
 		synchronized块（以声明的锁对象进行锁定，若锁的实例不同则不能同步）
+	- concurrenthashmap的实现
+		将map划分到不同的segment中，通过hash到指定的segment（继承了ReentrantLock）从而只锁定部分数据。
 
 	- java concurrent 探秘
 			我们都知道，在JDK1.5之前，Java中要进行业务并发时，通常需要有程序员独立完成代码实现，当然也有一些开源的框架提供了这些功能，
@@ -4183,6 +4471,7 @@ search in index find pdf
 	VNC是在基于UNIX和Linux操作系统的免费的开放源码软件，远程控制能力强大，高效实用，其性能可以和Windows和MAC中的任何远程控制软件媲美。 
 	在Linux中，VNC包括以下四各命令：vncserver，vncviewer，vncpasswd，和vncconnect。大多数情况下我只需要其中的两个命令：vncserver和vncviewer。
 	
+	VNC Viewer
 	TightVNC
 	　　应用平台： Win9x/NT/2000/XP/2003 Linux/unix
 	　　自由软件，遵循GPL条款，源代码开源，个人、企业使用均无任何限制。
@@ -7022,7 +7311,6 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		装载声卡模块
 		设置系统时钟
 		等等。
-
 
 		/etc/rc.d/rc则根据其参数指定的运行模式(运行级别，你在inittab文件中可以设置)来执行相应目录下的脚本。凡是以Kxx开头的
 		，都以stop为参数来调用；凡是以Sxx开头的，都以start为参数来调用。调用的顺序按xx
@@ -10264,7 +10552,7 @@ day23 Tuesday, April 17, 2012
 		siteId是之前跟王永生约定好的，调用方的标识ID
 	- com.aliyun.cloudengine.service.openapi.OpenApiFacadeService(定义在spring-base-service.xml中) 处理openapi请求
 		需要将请求参数转换为json格式传递
-	- 日志查询需要用到ols ？待
+	- 日志查询需要用到ols ？待		 * OLS
 		集合jce openapi文档参考ols文档
 		关于ACE OpenAPI的日志查询接口说明
 			1、操作接口是query_app_log，日志类型是manipulateLog和appRunningLog 
@@ -16078,6 +16366,18 @@ day151 Tuesday, October 16, 2012
 	快照系统: 虚拟机的快照系统
 	BlockStorageServices
 
+	eg:
+		blkfront：Dommain U 前端驱动。
+		blkback：Dommain 0 后端驱动。
+		blktap：转发blkback IO请求的虚拟块设备驱动。
+		tapdisk：转发blkback IO请求的用户态进程。
+		tdc：也即td connector，将VM的IO请求转发到分布式存储。
+		apsara：飞天，分布式平台系统。
+		pangu：飞天的一个组件，实现分布式存储。
+		BSS： Block Storage System，块存储系统，也即镜像存储系统。
+		OSS： Open Storage System, 开放存储系统，也即快照存储系统。
+
+
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day152 Wednesday, October 17, 2012
 
@@ -16602,7 +16902,7 @@ day165 Thursday, November 08, 2012
 		http://wiki.ec.alibaba-inc.com/index.php/Http_proxy%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0#HA.E6.9C.BA.E5.88.B6.EF.BC.9A
 		http proxy的功能 http proxy http_proxy kuafu 
 			取代并兼容目前kfc内置的http服务器	
-				kuafu协议支持的集群规模有限，通过proxy层来实现跨集群访问
+				kuafu协议支持的集群规模有限,不能跨cluster，通过proxy层来实现跨集群访问
 			从houyiAPI接收http请求，转化为kfc request
 
 3. resourceChecker
@@ -18977,6 +19277,11 @@ day228 Thursday, February 07, 2013
 3. API到Master的通讯
 	API-(rpc)-Http Proxy-(kuafu)-Nuwa-(kuafu)-Master-(kuafu)-Nuwa-(kuafu)-cc-...
 
+	每个小region一个http proxy，proxy将API的请求转发给kfc，kfc agent去访问nuwa并处理请求
+	kfc每个小region独立
+	
+	API->HTTP Proxy-over KFC protocol>KFC agent->Nuwa agent
+
 
 4. command，要具体执行到那个region，可以将目标regionNo作为Command的属性，这样工具类就可以从这里获取，而无需一层层传递regionNo。
 
@@ -19348,3 +19653,517 @@ day240 Friday, March 01, 2013
 
 4. 开路先锋
 	设置region状态和黑名单的工具，在关闭Master Region时不是强制不允许关闭，而是给出警告，并提示是否继续操作。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day241 Monday, March 04, 2013
+
+1. 
+	* IDCISP
+
+2. IDCISP
+	连调
+	数据写入，也是查询一个region写入一个region，从而充分发挥chunked方式的优势：
+		边处理边返回，不然需要缓存大量的数据。	目前是传入zone_id，一次性拿到所有数据再分块输出。待优化？
+		
+
+3. hashtable与concurrenthashmap
+	切入点：改进的点，为什么存在，有什么优点？
+	通过细粒度化锁来实现最大化的并发操作
+	ref: http://www.iteye.com/topic/1103980
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day242 Tuesday, March 05, 2013
+
+1. 
+	* IDCISP
+	* 开路先锋项目发布
+
+2. IDCISP
+	chunked编码输出的边处理边输出实现方式？	struts2 chunked			  -tip-
+	Action中启动线程循环整理数据并放到Struts的ValueStack中并返回View，程序执行到Result的处理部分，Resutl从ValueStack中取到队列并消费其中的
+	对象以chunk输出，直到消费结束，Result处理结束响应用户请求结束。
+	
+	生产者消费者模式中，队列的选择 数据结构的选择 -tip-
+		数组实现的队列
+			根据下标访问（random access）快，增加删除可能慢
+		链表实现的队列
+			查找需要遍历，按顺序访问速度快，增加删除方便
+		
+		类似 ArrayList与LinkedList的区别
+			从内部基于数组实现和基于链表的基本数据结构看区别
+				从内存中的发布看本质
+
+		对上面两种队列的性能测试
+
+		上面这种场景下，增加删除操作频繁，对访问可以顺序访问不要求随机访问，链表实现的队列相对更合适
+
+		生产者生产完毕，通知消费者。这样处理结束信号。
+
+3. 性能测试
+	比如程序突然加载大量内容，对内存的占用
+	GC的观察
+		
+4. 通过SLB API为某个应用加上loadbalance服务的过程
+
+5.  开路先锋项目发布
+	线上环境QA无法回归关闭Region等会影响API操作的功能；只能通过侧面的detail_vm；验证版本正确；数据库正确来尽量保证发布ok。
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day243 Wednesday, March 06, 2013
+
+1. 
+	* IDCISP
+	* 
+		
+2. IDCISP
+	chunked
+	边处理边输出
+
+	另外，配置文件的路径改从java启动参数中取：jetty容器替换时做的变动
+		BASE_HOME=/home/xxx/xxx
+		JAVA_OPTIONS=" -Dapp.config.dir=$BASE_HOME/conf $JAVA_OPTIONS "
+	用jetty-client来处理chunked输出：
+	ref: http://aliali.iteye.com/blog/405444
+
+3. jstat jinfo jps
+
+D:\workspace2\api_dcisp\houyi.console.openapi\target\open.war
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day244 Thursday, March 07, 2013
+
+1. 
+	* IDCISP
+
+2. IDCISP
+	nginx默认不支持chunked输出，测试时从jetty返回的内容结果nginx就不支持chunked输出，而直接访问jetty web响应支持chunked输出。 -tip-
+	问题描述：
+		本机的一个javaweb应用，通过Servlet来输出chunked数据，作为测试样例
+			通过apache的http client和jetty client测试ok
+		API测试环境，通过访问nginx来访问jetty下的web服务
+			通过apache的http client和jetty client测试都无法按chunked读取，只能读到所有数据才输出
+
+	排查的场景：
+	
+	结论：
+		此问题需要在连调时，模拟线上的场景来测试。QA会覆盖此问题
+		nginx需要升级到支持chunked编码的版本(eg:1.2.xx)
+
+3. 运维
+	API提供了建表sql，还需要提供最小可运行数据初始化sql，搭建新api，新集群，自动化运维时需要考虑 -tip-
+
+4. java代码优化 -tip-
+	对于大集合对象，确认不在使用时，显式的clear掉，便于GC回收
+		GC触发机制
+			jmap -heap pid
+
+	可通过
+		jps
+		jmap -histo:live pid | grep xxx 来确认那些没用的对象还在内存中
+	比如cacheServiceImpl在spring中配置为prototype，则使用了几个就会有几个实例在内存中：
+	#jmap -histo:live 18470 | grep com.aliyun | grep CacheServiceImpl
+	705:             4            192  com.aliyun.xxx.xxx.CacheServiceImpl
+5. python
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day245 Friday, March 08, 2013
+
+1. 
+	* IDCISP
+	* MSS
+
+2. IDCISP
+	提测
+		提测项：user缓存支持reload
+		基于branch提测，待确定发布日期后合入主干再回归
+
+		控制系统提测时，build失败，由于Master的trunk上有了新的变动，需要基于trunk拉一个新分支，将IDCISP控制系统的变动合入新分支
+		后续基于此新分支发布。
+
+	8.214开发自测环境，升级nginx到1.2以支持chunked编码传输 * nginx
+		下载1.2.7版本源码包并安装：
+		wget http://nginx.org/download/nginx-1.2.7.tar.gz /usr
+		cd /usr
+		tar -xvf nginx-1.2.7.tar.gz
+		cd nginx-1.2.7
+		./configuration --prefix=/usr/nginx1.2.7
+		make
+		make install
+
+		修改nginx.conf
+		启动
+		/usr/nginx1.2.7/sbin/nginx
+
+
+3. MSS
+	python
+	样例程序
+
+3. 创建userd的key和id例子	       access key access id
+	--------
+		@Test
+		public void createUser() throws Exception{
+			UserHolder.setCurrentUser(new User());
+			//
+			UserService userService = new UserServiceImpl();
+			Method m = UserServiceImpl.class.getDeclaredMethod("initUser", User.class);
+			User user = new User();
+			user.setEmail("ecscreate_test@aliyun.com");
+			user.setUserName("aliyuncom_test");
+			m.setAccessible(true);
+			User newUser = (User)m.invoke(userService, user);
+			System.out.println("id:"+newUser.getServiceAccessId()+"\nkey:"+newUser.getServiceSecretKey());
+			Assert.assertTrue(true);
+			
+		}
+	--------
+
+4. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day246 Monday, March 11, 2013
+
+1. 
+	* IDCIPS
+	* MSS
+
+2. IDCISP
+	- user缓存
+		QA问题
+		144下的子用户259,
+		修改259用户的accessId为其他accessId，is_agent为非agent，agent_id为空
+		reload用户缓存
+		使用144的id、key用259的idkp访问259的vm能访问？
+			问题
+
+	- nginx支持chunked输出
+	关闭buffer？
+		配置nginx.conf：
+			proxy_buffering off;
+		上面这种配置方式，会导致所有proxy的转发都禁用buffer，影响性能。
+
+		如果只是个别接口需要关闭buffer来支持chunked输出，可以在发送方设置一个请求头X-Accel-Buffering : no来告诉
+		nginx此请求不进行buffer即可。
+		此请求头，只出现在应用服务器与nginx之间，不暴露给用户
+
+	关于nginx升级：
+		由于使用了chunked编码；nginx需要支持此编码格式就需要支持HTTP1.1协议，故nginx需要升级。
+
+3. release_ip接口
+	释放公网IP时报 ip not exists，由于zone_ip表未正确初始化
+		释放SLB 使用的vm的时候，释放公网IP报错：ip not exists
+
+		ip_address_with_zone
+
+		根据ip初始化regionNo时会报ip not exists
+			查询ZoneIp表
+				where条件为IP转为Long类型，判断是否在区间内
+	每个Zone分配那些ip及其段的记录，应该每个Region的每个Zone有单独的段。
+	
+	wiki描述：http://ops.ecs.alibaba-inc.com/wiki/%E5%BC%B9%E6%80%A7%E8%AE%A1%E7%AE%97EC/%E6%97%A5%E5%B8%B8%E8%BF%90%E7%BB%B4%E6%93%8D%E4%BD%9C/2013.03.11_SLB_%E5%85%AC%E7%BD%91%E5%9C%B0%E5%9D%80%E5%88%9D%E5%A7%8B%E5%8C%96%E5%9C%A8houyiapi%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E7%9A%84%E6%95%B4%E7%90%86
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day247 Tuesday, March 12, 2013
+
+1. 
+	* IDCISP上报项目
+
+2. IDCISP上报项目
+	与QA一起确定nginx版本与测试方案
+
+3. 飞天
+	component
+	http://10.202.66.27/apsara_release/apsara0.10.2/
+
+4. loadbalance
+	
+5. 去中心化
+
+http://baike.baidu.com/view/5784548.htm
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day248 Monday, March 18, 2013
+
+1. 
+	* 大region二期
+
+
+2. 大region二期
+	oss 以lvs做为前端对外作为http服务入口
+	考虑到下面的场景，API在使用image的调度逻辑在双11推广高峰时会有问题，需要调整：
+		一个大region的小region跨2个机房(3-1,4-1)分布，当只有4-1机房的某个region有资源创建vm，但image却在3-1机房的某个region上（没有使用
+		本地hash类型的image是因为后面将去掉这种类型的image的使用），这样image加载就需要通过lvs进行跨机房传输，高峰期流量时可能会打垮lvs
+		。
+	解决方案：
+		bucket类型image支持多个，在需要使用此bucket image的region中再上传一份bucket类型image。image调度逻辑调整为：
+		本地bucket类型image -> 大region范围内bucket类型image -> 本地hash类型image
+
+		对于原逻辑，为了避免跨region加载image，将bucket类型image通过image工具同步为hash类型的方案？暂不用？
+
+	评估变动：
+		原来大region下只有一个bucket类型image，现在支持每个region都上传一个
+			相关的sql，逻辑判断需要修改
+	
+	基于二期API的新分支修改并提交：
+		
+	- 使用Image的逻辑，涉及create_vm，reset_vm接口
+		查找image逻辑修改为：
+			本地bucket类型image -> 大region范围内bucket类型image -> 本地hash类型image
+	
+	改动提测时间：
+		3.21	
+
+3. 迭代开发，不是一口吃成胖子
+
+4. 深入java虚拟机
+
+5. zk test
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day249 Tuesday, March 19, 2013
+
+1. 
+	* 大region二期
+	* MSS重构
+	* IDCISP项目
+	* SLB API交接
+
+
+2.  大region二期
+	修改
+	自测
+
+3. MSS重构
+	OTS表初步设计稿（考虑HouyiAPI，Houyi定时任务，未考虑嫦娥的查询业务支持）
+		关于嫦娥的查询需求，未确定由谁负责提供支持？
+4. IDCISP项目
+	QA测试完毕，测试通过，待确定发布日期后，合入trunk，QA测试API支持动态增加region功能，基于trunk发布
+	waiting
+4. dubbo
+	dubbo了解
+	SLB API暴露dubbo服务
+
+5. 飞天升级步骤参看
+	http://wiki.aliyun-inc.com/projects/apsara/wiki/VMOnlineUpgradeNew
+
+6. houyi重构
+	region master暴露dubbo服务，由前端来路由请求到具体的region master。
+	wiki: http://wiki.ec.alibaba-inc.com/index.php/%E5%A4%A7%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E9%87%8D%E6%9E%84#.E7.AE.80.E5.8C.96.E6.8E.A5.E5.8F.A3
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day250 Wednesday, March 20, 2013
+
+1. 
+	* MSS重构
+	* 大region二期
+	* 了解SLB API集成dubbo
+		   后续ec服务也需要暴露dubbo服务
+	* IDCISP项目
+2. MSS重构
+	表初步设计，依据OTS说明文档以及业务查询需求
+
+3. 大region二期
+	API到控制系统查询一个不存在的snapshotId，控制系统返回成功？根据snapshotId是否存在来来判断快照是否存在？		      910 912
+		对于已删除的快照，控制系统200返回本次不修改，否则unmount已挂载上但随后快照就被删除的情况，无法unmount -tip-
+		本次不修
+	create_image查找母盘信息时，selectCustomImage中的sql错误，影响创建自定义image
+
+4. IDCISP项目
+	- 发布步骤完善
+		发布前准备
+	- 
+	上报中心与各个业务系统大连调，需要提供生成环境的数据以与其他业务系统的数据能正确对应上，
+	目前有2种方案提供大连调数据：
+		1) 使用QA环境（更接近线上环境）从线上导入部分数据
+		2) 提前线上发布
+
+5. HTTP慢连接攻击    慢速连接攻击 Slowloris 
+		
+
+6. 云计算 安全团队 攻击防范
+	从服务器防范攻击保证服务稳定上分析云服务器的优势
+		传统的IDC对防御网络攻击的能力有限
+		小型站点，受限于硬件资源，防御攻击能力有限
+
+7. 控制系统角色
+	monitor
+	master
+	nc_controll
+	netc
+	cc
+
+	依赖AOS ，飞天
+		fuxi
+		nuwa
+		pangu
+
+8. linux负荷，负载
+	w
+	top
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day251 Thursday, March 21, 2013
+
+1. 
+	* IDCISP项目
+	* 大region二期
+
+2. IDCISP项目
+	控制系统发布二个版本（一个基于0.8.0.6，一个基于0.10.2），以解决飞天升级过程中，每个大region的控制系统版本不一致问题
+	计划3.27发
+	4.20为与工信部连调的deadline
+
+3. 大region二期
+	bugfix
+	明天提测：多个小region允许都上传同一份bucket image
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day252 Friday, March 22, 2013
+
+1. 
+	* 大region二期
+	* IDCISP项目
+	* MSS
+
+2. 大region二期
+	bugfix
+		create_image查找母盘信息时，selectCustomImage中的sql错误，影响创建自定义image
+		create_image
+			查询母盘信息（根据创建image所基于的快照的信息，拿到母盘Image的imageNo，若拿不到则为非可启动Image，不允许创建Image；这是由控制系统在打快照时
+			对系统盘的快照存入了对应的imageNo，而数据盘的快照imageNo列是空的）
+			DB查询是否重名imageNo
+	
+	提测
+
+	发布
+		API一次性发布，控制系统分批次在飞天已升级到0.10.2的region上发布（API兼容新老版本控制系统）
+
+
+3. IDCISP项目
+	
+	与QA确认测试资源（测试0.8.6,0.10.2二个版本的控制系统），
+	确定发布日期    3.28
+		并填写到发布计划中（周五）
+	合入trunk	 
+	并基于trunk提测		
+		控制系统也从new分支合入trunk与api的trunk一起提测
+		紧急patch在上面之前先单独提测
+
+	deadline 4.20 与工信部连调
+
+	发布
+		API一次性发布，API Proxy一次性发布（提前发布，降低风险）
+		控制系统根据飞天版本不同分别基于支持10.2的trunk上和原来8.6版本的trunk发布，QA需要进行控制系统基于新老飞天2个版本的回归
+		后续，基于0.8.6飞天的控制系统升级时，需要将控制系统基于0.10.2飞天再编译后发布（飞天升级时需要做的步骤）
+	
+	配管基于0.8.6的线上版本控制系统拉一个紧急patch，作为老飞天region的升级版本，出包
+
+	发布计划：
+		API Proxy提前发布，发双开，发线上部分集群（观察），发其他所有集群
+		3.25 21:00双开Proxy发布
+		3.26 23:00线上Proxy发布
+		3.28 21:00双开
+		3.29 21:00北京云(0.10.2)，AY41C(0.8.6)
+		4.2 21:00其他所有集群
+	
+	新增一个内部集群：AY03B
+	10.125.250.49，10.125.250.48
+ay03b的api机器
+AG:10.125.251.1
+c_api:http://10.249.0.101/open/services
+api的地址如上
+
+
+
+4. MSS
+	监控数据存储产品选择：
+	OTS
+		不提供汇总，统计功能；无法满足类似嫦娥这样统计查询较多的业务方
+
+	SLS(Simple Log Service)
+		底层基于OTS实现，并提供自定义的数据汇总功能（利用ODPS汇总），出入口都为SLS服务。
+		支持统计，归并
+
+		http://olsweb.aliyun-inc.com，需要了解的地方可以咨询我们的PM 荣惠。
+		wiki: http://wiki.aliyun-inc.com/projects/apsara/wiki/ShennongOpenService
+		
+5. 落日弓项目，需要API将每次版本的sql变动都放入统一的sql文件中 比如houyi_ddl.sql
+	将用户体系改造中的sql变动加入上面的sql文件中
+
+6. svn权限重新分配
+	read only
+	过期？
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day253 Monday, March 25, 2013
+
+1. 
+	* IDCISP项目
+	* 大region二期
+	* MSS重构
+
+2. IDCISP项目
+	QA测试接口，连调无法保证数据正确性
+		控制系统接口漏掉SLB使用的vm的信息，sql关联问题
+	双开API Proxy发布
+		proxy执行关闭命令后，加上检查是否已关闭的步骤，wiki步骤添加 
+		check out文件时，svn账号需要输入 
+		/usr/ali/nginx1.2.7/sbin/nginx -v检查version
+
+
+3. 大region二期
+	create_image
+		查询快照
+		查询快照所基于的源Image信息，并设置给新生成的Image
+			尽管同imageNo对应多条记录，region不同，snapshotType不用，但只获取Image自身信息，limit 1是可以的。
+		在API库的image表增加一条image记录
+
+	API提测
+	query_avaliable_img接口的逻辑，抄送下邮件，imageNo返回多条记录的情况
+		另外，snapshotId需要处理为三段式（记录缺陷，后续项目修复）
+
+
+4. MSS重构
+	SLS熟悉，作为监控数据的存储源
+
+5. HTTP POST Attack
+	测试
+
+6. 设计 架构 -tip-
+	产品只关注自己应该关注的侧重点
+	对于那些依附逻辑可以解耦到上层业务层处理。
+
+	如用户体系与基础ECS服务
+	ECS只有userId标识资源所属，至于角色，权限，账户间关系等逻辑，可以交由上层业务去封装。这样，将易变的东西与产品核心服务分离，
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day254 Tuesday, March 26, 2013
+
+1. 
+	* IDCISP项目
+	* MSS重构
+
+2. IDCISP项目
+	控制系统接口漏掉SLB使用的vm的信息，sql关联问题
+		已修改后提测
+	API Proxy包多打了pid文件，重新打包，修改wiki步骤
+
+	线上API Proxy发布 23:00
+
+3. MSS重构
+	SLS熟悉
+	python
+
+
+
+6. TMD
+	C/S
+	tmd server / tmd client
+	与机器学习

@@ -1572,9 +1572,86 @@ from: http://www.diveintopython.net/toc/index.html
 	Acknowledge that this is interesting, but promise to never, ever do it in real code. Private methods are private for a reason, but like many other things in Python, their privateness is ultimately a matter of 
 	convention, not force.
 	Python里没有严格私有的概念，通过一些方式也能访问，但不建议这样去做。
+
+6. Exceptions and File Handling
+
+	6.1. Handling Exceptions
+
+	Like many other programming languages, Python has exception handling via try...except blocks.
+	Python uses try...except to handle exceptions and raise to generate them.
 	
+	Example 6.1. Opening a Non-Existent File
+	>>> fsock = open("/notthere", "r")      
+	Traceback (innermost last):
+	  File "<interactive input>", line 1, in ?
+	IOError: [Errno 2] No such file or directory: '/notthere'
+	>>> try:
+	...     fsock = open("/notthere")       
+	... except IOError:                     
+	...     print "The file does not exist, exiting gracefully"
+	... print "This line will always print" 
+	The file does not exist, exiting gracefully
+	This line will always print
+		- Using the built-in open function, you can try to open a file for reading (more on open in the next section). But the file doesn't exist, so this raises the IOError exception. 
+		Since you haven't provided any explicit check for an IOError exception, Python just prints out some debugging information about what happened and then gives up.
+	
+		6.1.1. Using Exceptions For Other Purposes
+		There are a lot of other uses for exceptions besides handling actual error conditions. A common use in the standard Python library is to try to import a module, and then check whether it worked. 
+		You can also define your own exceptions by creating a class that inherits from the built-in Exception class, and then raise your exceptions with the raise command. 
 
+		The next example demonstrates how to use an exception to support platform-specific functionality. This code comes from the getpass module, a wrapper module for getting a password from 
+		the user. Getting a password is accomplished differently on UNIX, Windows, and Mac OS platforms, but this code encapsulates all of those differences.
 
+		Example 6.2. Supporting Platform-Specific Functionality
+		  # Bind the name getpass to the appropriate function
+		  try:
+		      import termios, TERMIOS                     
+		  except ImportError:
+		      try:
+			  import msvcrt                           
+		      except ImportError:
+			  try:
+			      from EasyDialogs import AskPassword 
+			  except ImportError:
+			      getpass = default_getpass           
+			  else:                                   
+			      getpass = AskPassword
+		      else:
+			  getpass = win_getpass
+		  else:
+		      getpass = unix_getpass
+			- termios is a UNIX-specific module that provides low-level control over the input terminal. If this module is not available (because it's not on your system, or your system doesn't support it), 
+			the import fails and Python raises an ImportError, which you catch.
+			- OK, you didn't have termios, so let's try msvcrt, which is a Windows-specific module that provides an API to many useful functions in the Microsoft Visual C++ runtime services. 
+			If this import fails, Python will raise an ImportError, which you catch.
+			- If the first two didn't work, you try to import a function from EasyDialogs, which is a Mac OS-specific module that provides functions to pop up dialog boxes of various types. Once again, 
+			if this import fails, Python will raise an ImportError, which you catch.
+			- None of these platform-specific modules is available (which is possible, since Python has been ported to a lot of different platforms), so you need to fall back on a default password input 
+			function (which is defined elsewhere in the getpass module). Notice what you're doing here: assigning the function default_getpass to the variable getpass. If you read the official getpass documentation, 
+			it tells you that the getpass module defines a getpass function. It does this by binding getpass to the correct function for your platform. Then when you call the getpass function, you're really calling a 
+			platform-specific function that this code has set up for you. You don't need to know or care which platform your code is running on -- just call getpass, and it will always do the right thing.
+			- A try...except block can have an else clause, like an if statement. If no exception is raised during the try block, the else clause is executed afterwards. In this case, that means that the from 
+			EasyDialogs import AskPassword import worked, so you should bind getpass to the AskPassword function. Each of the other try...except blocks has similar else clauses to bind getpass to 
+			the appropriate function when you find an import that works.The next example demonstrates how to use an exception to support platform-specific functionality. This code comes from the getpass 
+			module, a wrapper module for getting a password from the user. Getting a password is accomplished differently on UNIX, Windows, and Mac OS platforms, but this code encapsulates all of those 
+			differences.
+
+	6.2. Working with File Objects
+	Python has a built-in function, open, for opening a file on disk. open returns a file object, which has methods and attributes for getting information about and manipulating the opened file.
+
+	Example 6.3. Opening a File
+	>>> f = open("/music/_singles/kairo.mp3", "rb") 
+	>>> f                                           
+	<open file '/music/_singles/kairo.mp3', mode 'rb' at 010E3988>
+	>>> f.mode                                      
+	'rb'
+	>>> f.name                                      
+	'/music/_singles/kairo.mp3'
+		- The open method can take up to three parameters: a filename, a mode, and a buffering parameter. Only the first one, the filename, is required; the other two are optional. If not specified, 
+		the file is opened for reading in text mode. Here you are opening the file for reading in binary mode. (print open.__doc__ displays a great explanation of all the possible modes.)
+		- The open function returns an object (by now, this should not surprise you). A file object has several useful attributes.
+		- The mode attribute of a file object tells you in which mode the file was opened.
+		- The name attribute of a file object tells you the name of the file that the file object has open.
 
 
 
