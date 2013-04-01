@@ -17,6 +17,25 @@ google 检索 apache： site:*.apache.org 高级搜索
 * 耀江广厦 a 6#
 * 有专精有覆盖面 -tip-
 	special skill
+* dubbo
+	wiki: http://code.alibabatech.com/wiki/display/dubbo/Home-zh
+	svn co http://code.alibabatech.com/svn/dubbo/trunk dubbo
+	See README file in the source code directory
+
+	- 简介
+		那么，Dubbo是什么？
+		Dubbo[]是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。
+
+		其核心部分包含:
+
+		远程通讯: 提供对多种基于长连接的NIO框架抽象封装，包括多种线程模型，序列化，以及“请求-响应”模式的信息交换方式。
+		集群容错: 提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。
+		自动发现: 基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。
+		Dubbo能做什么？
+		透明化的远程方法调用，就像调用本地方法一样调用远程方法，只需简单配置，没有任何API侵入。
+		软负载均衡及容错机制，可在内网替代F5等硬件负载均衡器，降低成本，减少单点。
+		服务自动注册与发现，不再需要写死服务提供方地址，注册中心基于接口名查询服务提供者的IP地址，并且能够平滑添加或删除服务提供者。
+
 * 问题排查 * 运维
 	- 问题排查，性能查看 相关命令和工具
 	
@@ -238,6 +257,7 @@ ftian20130102
 		svn
 	bugfree
 		缺陷跟踪系统
+		new > open > fixed > closed
 	wiki系统
 		mediawiki
 		页面自身的连接地址修改在移动标签功能中。
@@ -2113,24 +2133,89 @@ Storage for Interactive Services
 		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
 
 * zookeeper
+	 - 脑裂/假死问题
+		Zookeeper和分布式环境中的假死脑裂问题  
+
+		最近和同事聊天无意间发现他们的系统也存在脑裂的问题。想想当初在我们的系统中为了解决脑裂花了非常大的功夫，现在和大家一起讨论下脑裂，
+		假死等等这些问题和解决的方法。
+		在一个大集群中往往会有一个master存在，在长期运行过程中不可避免的会出现宕机等问题导致master不可用，在出现这样的情况以后往往会对系统产生很大的影响，
+		所以一般的分布式集群中的master都采用了高可用的解决方案来避免这样的情况发生。
+		master-slaver方式，存在一个master节点，平时对外服务，同时有一个slaver节点，监控着master，同时有某种方式来进行数据的同步。如果在master挂掉以后slaver能很快获知
+		并迅速切换成为新的master。在以往master-slaver的监控切换是个很大的难题，但是现在有了Zookeeper的话能比较优雅的解决这一类问题。
+											   master-slaver结构
+		master-slaver实现起来非常简单，而且在master上面的各种操作效率要较其他HA解决方案要高，早期的时候监控和切换很难控制，但是后来zookeeper出现了，他的watch和
+		分布式锁机制很好的解决了这一类问题。
+		我们的系统和同事的系统都是这种模式，但是后来都发现由于ZooKeeper使用上的问题存在脑裂的问题。
+		记得很久以前参加一个大牛的技术交流会他就提到过在集群中假死问题是一个非常让人头痛的问题，假死也是导致脑裂的根源。
+		根据一个什么样的情况能判断一个节点死亡了down掉了，人可能很容易判断，但是对于在分布式系统中这些是有监控者来判断的，对于监控者来说很难判定其他的节点的状态，
+		唯一可靠点途径的就是心跳，包括ZooKeeper就是使用心跳来判断客户端是否仍然活着的，使用ZooKeeper来做master HA基本都是同样的方式，每个节点都尝试注册一个
+		象征master的临时节点其他没有注册成功的则成为slaver，并且通过watch机制监控着master所创建的临时节点，Zookeeper通过内部心跳机制来确定master的状态，一旦master出现
+		意外Zookeeper能很快获悉并且通知其他的slaver，其他slaver在之后作出相关反应。这样就完成了一个切换。这种模式也是比较通用的模式，基本大部分都是这样实现的，但是
+		这里面有个很严重的问题，如果注意不到会导致短暂的时间内系统出现脑裂，因为心跳出现超时可能是master挂了，但是也可能是master，zookeeper之间网络出现了问题，也同样
+		可能导致。这种情况就是假死，master并未死掉，但是与ZooKeeper之间的网络出现问题导致Zookeeper认为其挂掉了然后通知其他节点进行切换，这样slaver中就有一个成为了master，
+		但是原本的master并未死掉，这时候client也获得master切换的消息，但是仍然会有一些延时，zookeeper需要通讯需要一个一个通知，这时候整个系统就很混乱可能有一部分client已经
+		通知到了连接到新的master上去了，有的client仍然连接在老的master上如果同时有两个client需要对master的同一个数据更新并且刚好这两个client此刻分别连接在新老的master上，就会出现很严重问题。
+		出现这种情况的主要原因在与Zookeeper集群和Zookeeperclient判断超时并不能做到完全同步（这些还依赖于操作系统调度等，很难保证），也就是说可能一前一后，
+		如果是集群先于client发现那就会
+		出现上面的情况了。同时在发现并切换后通知各个客户端也有先后快慢。出现这种情况的几率很小，需要master与zookeeper集群网络断开但是与其他集群角色之间的网络没有问题，
+		还要满足上面那些条件，但是一旦出现就会引发很严重的后果，数据不一致了。
+		避免这种情况其实也很简单，在slaver切换的时候不在检查到老的master出现问题后马上切换，而是在休眠一段足够的时间，确保老的master已经获知变更并且做了相关
+		的shutdown清理工作了然后再注册成为master就能避免这类问题了，这个休眠时间一般定义为与zookeeper定义的超时时间就够了，但是这段时间内系统可能是不可用的，
+		但是相对于数据不一致的后果我想还是值得的。
+		当然最彻底的解决这类问题的方案是将master HA集群做成peer2peer的，屏蔽掉外部Zookeeper的依赖。每个节点都是对等的没有主次，这样就不会存在脑裂的问题，
+		但是这种ha解决方案需要使用两阶段，paxos这类数据一致性保证协议来实现，不可避免的会降低系统数据变更的系统，如果系统中主要是对master的读取操作很少更新就很适合了。
+		from: http://backend.blog.163.com/blog/static/20229412620128911939110/
+
+	 - zookeeper HA
+		
+	 - dubbo使用zookeeper registry   (安装好zookeeper后，dubbo的jar中有zookeeper registry模块来基于zookeeper实现registry)
+		Install the zookeeper registry:
+
+		cd ~
+		wget http://www.apache.org/dist/zookeeper/zookeeper-3.3.5/zookeeper-3.3.5.tar.gz
+		tar zxvf zookeeper-3.3.3.tar.gz
+		cd zookeeper-3.3.3/conf
+		cp zoo_sample.cfg zoo.cfg
+		vi zoo.cfg
+		- edit: dataDir=/home/xxx/data
+		cd ../bin
+		./zkServer.sh start
+
+		cd ~/dubbo/dubbo-demo-provider/conf
+		vi dubbo.properties
+		- edit: dubbo.registry.adddress=zookeeper://127.0.0.1:2181
+		cd ../bin
+		./restart.sh
+
+		cd ~/dubbo/dubbo-demo-consumer/conf
+		vi dubbo.properties
+		- edit: dubbo.registry.adddress=zookeeper://127.0.0.1:2181
+		cd ../bin
+		./restart.sh
+
+		cd ~/dubbo/dubbo-simple-monitor/conf
+		vi dubbo.properties
+		- edit: dubbo.registry.adddress=zookeeper://127.0.0.1:2181
+		cd ../bin
+		./restart.sh
+
 	 - 实例
 		ref: http://www.cnblogs.com/zhangzhang/archive/2013/01/16/2863339.html
-	\- 解决hadoop的单点故障(single point of failure of Name Node)，ZooKeeper能够用来leader选举,配置信息维护等。在一个分布式的环境中，
-		我们需要一个Master实例或存储一些配置信息，确保文件写入的一致性等。目前ZooKeeper解决Hadoop的单点故障实现的是主备机方式。
+	- 解决hadoop的单点故障(single point of failure of Name Node)，ZooKeeper能够用来leader选举,配置信息维护等。在一个分布式的环境中，
+		我们需要一个Master实例或存储一些配置信息，确保文件写入的一致性等。目前ZooKeeper解决Hadoop的单点故障实现的是主备机方式（一主多备）。
 
 		leader-follower模式
 
 		Master选举
 			-动态
-			主备切换，一旦某个机器A挂了，马上能够通知到slave，然后slave能够在ZK挃定节点上获取master最后的运行状态，然后就可以把自己标识为master了。
+			主备切换，一旦某个机器A挂了，马上能够通知到slave，然后slave能够在ZK指定节点上获取master最后的运行状态，然后就可以把自己标识为master了。
 
 		ZooKeeper是Hadoop的正式子项目，它是一个针对大型分布式系统的可靠协调系统，提供的功能包括：配置维护、命名服务、分布式同步、组服务等。
 		ZooKeeper的目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。
 
 	- ZooKeeper 典型的应用场景
 			Zookeeper 从设计模式角度来看，是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，
-		一旦这些数据的状态发生 变化，
-			Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式，关于 Zookeeper 的详细架构等
+		一旦这些数据的状态发生 变化，Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式，关于 Zookeeper 的详细架构等
 		内部细节可以阅读 Zookeeper的源码
 
 		下面详细介绍这些典型的应用场景，也就是 Zookeeper 到底能帮我们解决那些问题？下面将给出答案。
@@ -2158,7 +2243,7 @@ Storage for Interactive Services
 
 		Zookeeper 不仅能够帮你维护当前的集群中机器的服务状态，而且能够帮你选出一个“总管”，让这个总管来管理集群，这就是 Zookeeper 的另一个功能 Leader Election。
 
-		它们的实现方式都是在 Zookeeper 上创建一个 EPHEMERAL 类型的目录节点，然后每个 Server 在它们创建目录节点的父目录节点上调用 getChildren (String  path, boolean watch) 方法并
+		它们的实现方式都是在 Zookeeper 上创建一个 EPHEMERAL 类型的目录节点(Ephemeral Nodes)，然后每个 Server 在它们创建目录节点的父目录节点上调用 getChildren (String  path, boolean watch) 方法并
 		设置 watch 为 true，由于是 EPHEMERAL 目录节点，当创建它的 Server 死去，这个目录节点也随之被删除，所以 Children 将会变化，这时getChildren 上的 Watch 将会被调用，所以
 		其它 Server 就知道已经有某台 Server 死去了。新增 Server 也是同样的原理。
 
@@ -2561,6 +2646,10 @@ Storage for Interactive Services
 
 	from: http://baike.baidu.com/view/16102.htm
 * lvs DR			slb
+	- 单臂
+		lvs服务中，进流量走lvs，出流量不走lvs，俗称单臂
+		区别FullNAT
+	- 
 	测试版本
 		centos5 32 
 			2.6.18-194.el5
@@ -5033,6 +5122,51 @@ search in index find pdf
 	代码
 
 * NIO 非阻塞操作/ 阻塞操作 消息驱动
+	- 
+		JAVA使用EPoll来进行NIO处理的方法
+		JDK 6.0 以及JDK 5.0 update 9 的 nio支持epoll （仅限 Linux 系统 ），对并发idle connection会有大幅度的性能提升，这就是很多网络服务器应用程序需要的。
+
+		启用的方法如下：
+		-Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider
+
+		例如在 Linux 下运行的 Tomcat 使用 NIO Connector ，那么启用 epoll 对性能的提升会有帮助。
+
+		而 Tomcat 要启用这个选项的做法是在 catalina.sh 的开头加入下面这一行
+		CATALINA_OPTS='-Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider' 
+	- 5种IO模式 epool
+		epoll 是Linux内核为处理大批量句柄而作了改进的poll，是Linux下多路复用IO接口select/poll的增强版本，它能显著减少程序在大量并发连接中只有
+		少量活跃的情况下的系统CPU利用率。
+
+		简介
+
+		使用epoll进行高性能网络编程
+		epoll是Linux下多路复用IO接口select/poll的增强版本，它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统CPU利用率，因为它会复用文件描述符集合
+		来传递结果而不用迫使开发者每次等待事件之前都必须重新准备要被侦听的文件描述符集合，另一点原因就是获取事件的时候，它无须遍历整个被侦听的描述符集，
+		只要遍历那些被内核IO事件异步唤醒而加入Ready队列的描述符集合就行了。epoll除了提供select/poll那种IO事件的电平触发（Level Triggered）外，还提供了边沿触发
+		（Edge Triggered），这就使得用户空间程序有可能缓存IO状态，减少epoll_wait/epoll_pwait的调用，提高应用程序效率。
+	
+		优点
+
+		支持一个进程打开大数目的socket描述符
+		select 最不能忍受的是一个进程所打开的FD是有一定限制的，由FD_SETSIZE设置，默认值是1024。对于那些需要支持的上万连接数目的IM服务器来说显然太少了。
+		这时候你一是可以选择修改这个宏然后重新编译内核，不过资料也同时指出这样会带来网络效率的下降，二是可以选择多进程的解决方案（传统的Apache方案），不过
+		虽然linux上面创建进程的代价比较小，但仍旧是不可忽视的，加上进程间数据同步远比不上线程间同步的高效，所以也不是一种完美的方案。不过 epoll则没有这个限制，
+		它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048,举个例子，在1GB内存的机器上大约是10万左右，具体数目可以cat /proc/sys/fs/file-max察看，一般来说
+		这个数目和系统内存关系很大。
+		IO效率不随FD数目增加而线性下降
+		传统的select/poll另一个致命弱点就是当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分的socket是“活跃”的，但是select/poll每次调用都会线性扫描全部的集合，
+		导致效率呈现线性下降。但是epoll不存在这个问题，它只会对“活跃”的socket进行操作---这是因为在内核实现中epoll是根据每个fd上面的callback函数实现的。那么，只有“活跃”的
+		socket才会主动的去调用 callback函数，其他idle状态socket则不会，在这点上，epoll实现了一个“伪”AIO，因为这时候推动力在os内核。在一些 benchmark中，如果所有的socket基本上
+		都是活跃的---比如一个高速LAN环境，epoll并不比select/poll有什么效率，相反，如果过多使用epoll_ctl,效率相比还有稍微的下降。但是一旦使用idle connections模拟WAN环境，epoll
+		的效率就远在select/poll之上了。
+
+		使用mmap加速内核与用户空间的消息传递
+
+		这点实际上涉及到epoll的具体实现了。无论是select,poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存拷贝就很重要，在这点上，
+		epoll是通过内核于用户空间mmap同一块内存实现的。而如果你像我一样从2.5内核就关注epoll的话，一定不会忘记手工 mmap这一步的。
+
+		from: http://baike.baidu.com/view/1385104.htm
+
 	- 输入和输出都经过Buffer层，数据以块的方式处理（区别老IO以字节流的方式处理）
 
 	-
@@ -17854,7 +17988,7 @@ day182 Monday, December 03, 2012
 	follow by readme
 	svn co http://code.alibabatech.com/svn/dubbo/trunk dubbo
 	mvn clean install -Dmaven.test.skip=false
-	... see readme doc
+	... see readme doc	   OR README file
 	
 4. slb v2 requirement
 	commit to QA at 12/15/2012
@@ -18496,7 +18630,7 @@ day205 Monday, January 07, 2013
 1. 
 	* 大region二期上线步骤准备及数据订正脚本
 	* python访问libvirt API
-	* 周四kickoff MSS改造
+	* 周四kickoff MSS(Monitor Storage Service)改造
 		目标：替换agent取监控数据上报所有逻辑
 			API只是调用者
 			嫦娥系统也需要查询监控数据
@@ -19103,6 +19237,8 @@ day221 Tuesday, January 29, 2013
 	测试环境部署，调试
 	任务开发
 	region查询时，若region没有设置任何属性，则ibatis的动态构造where时将会带入int的默认值0，注意这点。
+	API新接口修复zone找不到时的空指针错误
+		再提测
 
 3. 大region二期
 	拉出新分支，将二期的API修改合并入此新分支中，？待
@@ -20153,9 +20289,20 @@ day254 Tuesday, March 26, 2013
 2. IDCISP项目
 	控制系统接口漏掉SLB使用的vm的信息，sql关联问题
 		已修改后提测
+		修改wiki
 	API Proxy包多打了pid文件，重新打包，修改wiki步骤
+	API修复
+		zone_id找不到zone的判断
+		region_id的判断（原为interceptor拦截region_no）
+		chunk分块时，末尾vm重复
+		region_id,zone_id两者存在zone_id即可，待
+
+		已有bug：
+			format传入错误时，api空指针
 
 	线上API Proxy发布 23:00
+	
+	QA对新增接口的质量保证，自测无法覆盖质量的各个方面
 
 3. MSS重构
 	SLS熟悉
@@ -20167,3 +20314,174 @@ day254 Tuesday, March 26, 2013
 	C/S
 	tmd server / tmd client
 	与机器学习
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day255 Wednesday, March 27, 2013
+
+1. 
+	* IDCISP项目
+	* MSS重构
+
+2. IDCISP项目
+	上报中心同学需要双开的key，以便于明天发布后测试 
+		双开环境借QA的测试账号，提醒只进行读取操作
+		问PE，线上账号？上报中心已经有账号
+	query_unasigned_ip接口
+		修改default region和default zone时，代理商身份未reload cache直接返回中已生效，但end user需要reload cache生效，原因？
+
+3. MSS重构
+	SLS
+	Python
+
+4. dubbo
+	了解
+
+5. 团队
+	定位
+	晋升
+	区别
+
+6. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day256 Thursday, March 28, 2013
+
+1. 
+	* IDCISP项目
+
+2. IDCISP项目
+	双开发布
+		控制系统发布前检查状态，双开出现扩容导致多个master的问题，tubo配置conf有问题，重启后问题出现；控制系统发布nc，monitor，houyi，引用同一套库
+		CC启动有延时，后续可提供可视化的web界面，以形象的呈现各个角色的服务状态
+
+
+3. 
+	单个region规模有限(xx)
+	结构复杂,外部依赖多，导致单个region运维成本很高,无法快速扩容
+	手动搭建一个新region需要两周事件，而且交付质量无法保证
+	随着规模的增长，region数过多，管理维护成本高
+	配置数据分散在houyidb/apidb/regiondb 三个层次几十个db instance中，层次不清，结构复杂
+	vm运行数据分散在每个region的monitor db中，管理利用非常不方便，运维成本也高
+	数据流与控制流并行，对系统处理能力产生过大压力
+	vm管理/网络管理）等业务管理的接口消息量并不大；
+	前端定时查询所有vm运行状态，流量非常大，而且随着vm的增长而增长；
+	nc和vm的心跳消息量也很大，也随vm增长而增长；
+	缺乏消息发布/订阅模型，无法主动推送数据，应用实现复杂
+	开发效率较低，难以即时响应业务需求
+	发布代价大，经常要白天发布
+
+4. instance缓存
+	RegionAwareIntercept.getCurrentRegion() > ResultMessage resultMesseage = resourceRegionLocator.getResourceRegionNo(params, regionNoHolder);
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day257 Friday, March 29, 2013
+
+1. 
+	* IDCISP项目
+
+2. IDCISP项目
+	线上部分集群发布
+		一个大region的API发布过后，下次某个小region升级前，通过根据设置region的状态为关闭后再发布，API无需关闭。发布步骤补充
+	AY03B发布
+
+3.
+	rpc - > rpc.jar > kfc
+
+4. 内网冒头代码review
+	http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_politics
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day258 Monday, April 01, 2013
+
+1. 
+	* 广渠门项目
+	* IDCISP项目
+
+2. IDCISP项目
+	所有未发布的集群发布
+	API合入bugfix分支的修改，一起发布？
+		未发布的集群用新API包，其他不变；已发的集群重新发布API包即可；
+	
+3. 广渠门项目
+	4.15提测
+	与dubbo集成是否冲突？
+
+	API的HA方案，参考master的方案：
+		keepalived
+		lvs agent 接受控制指令
+		参考wiki: http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9248400
+
+		slb api ha方案wiki: http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9260270
+
+	SLB syn攻击防御，让lvs具有防御syn-flood ddos攻击的能力：
+		lvs上为每个vip新增两个计数项: syn包的数目, SYN_RECV状态的连接数
+		lvs agent采集这两个计数项上报给master
+		master定时对vip的这些计数项进行检查, 判断是否需要打开或者关闭synproxy
+
+	让lvs具有防御syn-flood ddos攻击的能力。当syn-flood攻击发生时，lvs自动对攻击进行检测，并且采取一定机制进行防御，保证lvs不会被syn-flooding打垮；
+	当flood结束后，lvs切换回正常状态。
+
+	设计要点：
+	1)LVS上对DDoS的防护策略是，首先保障LVS本身不受DDoS影响，并保护LVS上的VIP业务，其次要尽量保护被攻击VIP业务不受影响。
+	2)DNAT的单臂模式不具备Full-NAT中syn-proxy完美的[SYN-Cookie+TCP Proxy]防护能力，DNAT是单臂(只有进流量经过lvs，出流量不经过lvs)模式，
+	只能选择功能有局限的防护方案。
+	3)由于DNAT是单臂模式，DNAT在LVS避免受到CC流量攻击有天然成本优势。(注:只是LVS系统业务本身不受影响，并未考虑攻击带来的带宽成本因素)
+	4)在非攻击场景下，DNAT的设备成本优势明显(目前SLB的流量统计，in:out = 1:8-10)
+	5)本方案同OSPF Cluster方案组合效果最佳
+
+4. dubbo	
+	zookeeper registry
+
+	dubbo项目的pom文件中定义了assemble逻辑，打包时去掉了demo，simple等测试用的模块，并将dubbo正式各个模块打为一个jar包（含registry，common等模块），这样
+	在样例的demo，simple项目中引入此dubbo依赖包，即可去实现dubbo的服务和功能。-tip-
+
+	对zookeeper是透明的，通过registry模块来使用zookeeper作为registry。
+
+	Install the zookeeper registry:
+
+	cd ~
+	wget http://www.apache.org/dist/zookeeper/zookeeper-3.3.5/zookeeper-3.3.5.tar.gz
+	tar zxvf zookeeper-3.3.3.tar.gz
+	cd zookeeper-3.3.3/conf
+	cp zoo_sample.cfg zoo.cfg
+	vi zoo.cfg
+	- edit: dataDir=/home/xxx/data
+	cd ../bin
+	./zkServer.sh start
+
+	cd ~/dubbo/dubbo-demo-provider/conf
+	vi dubbo.properties
+	- edit: dubbo.registry.adddress=zookeeper://127.0.0.1:2181
+	cd ../bin
+	./restart.sh
+
+	cd ~/dubbo/dubbo-demo-consumer/conf
+	vi dubbo.properties
+	- edit: dubbo.registry.adddress=zookeeper://127.0.0.1:2181
+	cd ../bin
+	./restart.sh
+
+	cd ~/dubbo/dubbo-simple-monitor/conf
+	vi dubbo.properties
+	- edit: dubbo.registry.adddress=zookeeper://127.0.0.1:2181
+	cd ../bin
+	./restart.sh
+
+
+5. API并发问题
+	在2台API上并发add_disk
+	横向扩展的集群系统，在并发操作一个资源时，需要一个全局锁来解决并发问题
+
+	目前group相关接口通过唯一的数据库记录作为全局锁
+	zookeeper？
+
+6. 向阳花木易为春 -tip-
+	谈团队中长你的工作所处的位置
+
+7. java分布式系统
+	hadoop？
+	
