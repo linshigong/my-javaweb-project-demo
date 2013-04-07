@@ -310,81 +310,84 @@ ftian20130102
 
 		exit $ERROR
 		------
-	-	nginx不单可以作为强大的web服务器，也可以作为一个反向代理服务器，而且nginx还可以按照调度规则实现动态、静态页面的分离，可以按照轮询、ip哈希、
-	URL哈希、权重等多种方式对后端服务器做负载均衡，同时还支持后端服务器的健康检查。
+	-  nginx实现负载均衡
+		nginx不单可以作为强大的web服务器，也可以作为一个反向代理服务器，而且nginx还可以按照调度规则实现动态、静态页面的分离，可以按照轮询、ip哈希、
+		URL哈希、权重等多种方式对后端服务器做负载均衡，同时还支持后端服务器的健康检查。
 
-	如果只有一台服务器时,这个服务器挂了,那么对于网站来说是个灾难.因此，这时候的负载均衡就会大显身手了,它会自动剔除挂掉的服务器.
+		如果只有一台服务器时,这个服务器挂了,那么对于网站来说是个灾难.因此，这时候的负载均衡就会大显身手了,它会自动剔除挂掉的服务器.
 
-	下面简单的介绍下我使用Nginx做负载的体会
+		下面简单的介绍下我使用Nginx做负载的体会
 
-	下载---安装Nginx这些不介绍了,前篇有介绍.
+		下载---安装Nginx这些不介绍了,前篇有介绍.
 
-	windows和Linux下配置Nginx负载的写法一样,故不分开介绍.
+		windows和Linux下配置Nginx负载的写法一样,故不分开介绍.
 
-	Nginx负载均衡一些基础知识:
+		Nginx负载均衡一些基础知识:
 
-	nginx 的 upstream目前支持 4 种方式的分配 
-	1)、轮询（默认） 
-		每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。 
-	2)、weight 
-		指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。 
-	2)、ip_hash 
-		每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。  
-	3)、fair（第三方） 
-		按后端服务器的响应时间来分配请求，响应时间短的优先分配。  
-	4)、url_hash（第三方）
+		nginx 的 upstream目前支持 4 种方式的分配 
+		1)、轮询（默认） 
+			每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。 
+		2)、weight 
+			指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。 
+		2)、ip_hash 
+			每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。  
+		3)、fair（第三方） 
+			按后端服务器的响应时间来分配请求，响应时间短的优先分配。  
+		4)、url_hash（第三方）
 
-	配置nginx实现负载均衡
-	以下面nginx.conf为例
-		--------
-		Xml代码  
-		#user  nobody;  
-		worker_processes  1;  
-		  
-		error_log  logs/error.log;  
-		  
-		events {  
-		    worker_connections  1024;  
-		}  
-		  
-		  
-		http {  
-		    include       mime.types;  
-		    default_type  application/octet-stream;  
-		  
-		    sendfile        on;  
-		    keepalive_timeout  65;  
-		  
-		    #gzip  on;  
-		    upstream  www.docyeah.com   {  
-			      server   192.168.1.11:8080;  
-			      server   192.168.1.101:8080;  
-		    }  
-		    server {  
-			listen       80;  
-			server_name  www.docyeah.com;  
-			charset utf-8;  
-			location / {  
-			    root   html;  
-			    index  index.html index.htm;  
-			    proxy_pass        http://www.docyeah.com;  
-			    proxy_set_header  X-Real-IP  $remote_addr;  
-			    client_max_body_size  100m;  
+		配置nginx实现负载均衡
+		以下面nginx.conf为例
+			--------
+			Xml代码  
+			#user  nobody;  
+			worker_processes  1;  
+			  
+			error_log  logs/error.log;  
+			  
+			events {  
+			    worker_connections  1024;  
 			}  
-		  
-		  
-			location ~ ^/(WEB-INF)/ {   
-			deny all;   
-			}   
-		  
-			error_page   500 502 503 504  /50x.html;  
-			location = /50x.html {  
-			    root   html;  
+			  
+			  
+			http {  
+			    include       mime.types;  
+			    default_type  application/octet-stream;  
+			  
+			    sendfile        on;  
+			    keepalive_timeout  65;  
+			  
+			    #gzip  on;  
+			    upstream  www.docyeah.com   {  
+				      server   192.168.1.11:8080 down;  
+				      server   192.168.1.101:8080 weight=2;  
+      				      server   192.168.1.102:8080 backup;  
+			    }  
+			    server {  
+				listen       80;  
+				server_name  www.docyeah.com;  
+				charset utf-8;  
+				location / {  
+				    root   html;  
+				    index  index.html index.htm;  
+				    proxy_pass        http://www.docyeah.com;  
+				    proxy_set_header  X-Real-IP  $remote_addr;  
+				    client_max_body_size  100m;  
+				}  
+			  
+			  
+				location ~ ^/(WEB-INF)/ {   
+				deny all;   
+				}   
+			  
+				error_page   500 502 503 504  /50x.html;  
+				location = /50x.html {  
+				    root   html;  
+				}  
+			  
+			    }  
 			}  
-		  
-		    }  
-		}  
-		--------
+			--------
+			from: http://www.cnblogs.com/xiaogangqq123/archive/2011/03/04/1971002.html
 
 * RSS
 		RSS是在互联网上被广泛采用的内容包装和投递协议。网络用户可以在客户端借助于支持RSS的新闻工具软件，在不打开网站内容页面的情况下，
@@ -1702,6 +1705,9 @@ Storage for Interactive Services
 	java，javaee程序监控插件：http://code.google.com/p/javamelody/
 
 * tomcat6			 tomcat源码分析
+	- 配置远程debug
+		call "%EXECUTABLE%" start %CMD_LINE_ARGS%
+		call "%EXECUTABLE%" jpda start %CMD_LINE_ARGS%
 	- Comet support tomcat6
 		Comet support allows a servlet to process IO asynchronously, receiving events when data is available for reading on the connection (rather than always 
 		using a blocking read), and writing data back on connections asynchronously (most likely responding to some event raised from some other source).
@@ -2133,6 +2139,38 @@ Storage for Interactive Services
 		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
 
 * zookeeper
+	 - zookeeper集群部署
+		在HA集群中，ZooKeeper集群的压力一般不大，部署3~5个节点的集群就够用了。
+		在此部署3个节点的ZooKeeper集群，假设三个节点分别为：host1、host2、host3。
+		部署流程：
+			解压zookeeper-3.4.5.tar.gz到自己指定的目录；
+			创建配置文件：在zookeeper-3.4.5/conf/中创建zoo.cfg文件。在里面加上：
+				tickTime=2000
+				dataDir=/home/dir/zookeeper
+				clientPort=30305
+				initLimit=5
+				syncLimit=2
+			注：上述值可以根据自己需求修改。
+			
+			由ZooKeepe集群中每个节点都需要知道其他节点的信息，因此需要配置所有ZooKeeper Server的地址信息，在zookeeper-3.4.5/conf/zoo.cfg文件中加上所有Server的信息，
+		格式： server.id=host:port:port
+			其中个server.id这个参数由用户分配给每个ZooKeeper节点并放置在dataDir目录下的myid文件中（dataDir在zoo.cfg中配置的）。myid文件只有一行，里面是一个1-255的数字，
+		必须保证唯一。
+		如server 1的myid文件内保存“1”就够了。
+		本例中，我们部署3个节点，因此在zookeeper-3.4.5/conf/zoo.cfg文件中加上如下信息：
+			server.1 = host1:30306:30307
+			server.2 = host2:30306:30307
+			server.3 = host3:30306:30307
+		注：端口号自己指定，只要所有节点一致并且不冲突就行。
+		
+		创建ZooKeeper的log目录：$ mkdir -p /home/dir/zookeeper/logs，然后在系统配置文件中加上$export ZOO_LOG_DIR=/home/dir/zookeeper/logs。
+		注：也可以将配置写到bin/zkServer.sh文件中。
+		3个节点都部署完成后就可以启动ZooKeeper了，在3个节点上执行：
+		$bin/zkServer.sh start
+		这样ZooKeeper就启动了，可以使用命令：$sh bin/zkServer.sh status来查看ZooKeeper状态，如果启动正确，则有2个节点状态为follower，一个为leader。
+		可以在任一节点上使用命令$sh bin/zkCli.sh -server 127.0.0.1:30305 （端口是在zoo.cfg文件中配置的）来使用ZooKeeper文件系统。
+		from: http://zhangjie.me/zookeeper_deploy/
+
 	 - 脑裂/假死问题
 		Zookeeper和分布式环境中的假死脑裂问题  
 
@@ -5612,6 +5650,71 @@ search in index find pdf
 		of traffic arrives directed to a particular page via a web link from another site, as the caching efficiency for that page will be nearly 100%. " - Wikimedia Deployment Information. 
 	ref: http://www.squid-cache.org/Intro/
 * hadoop
+	- HDFS HA部署相关	  VIP部署 NFS部署
+	1) HDFS HA部署之VIP(Virtual IP Address)部署
+		在HA中会有2个NameNode：Active NameNode 和Standby NameNode，刚启动时2个NN都处于Standby状态，然后手动（或自动：ZooKeeper自动选举）将一个NN变成Active状态。
+		Client端有几种方法进行Failover：
+		向ZooKeeper询问：
+		Client每次访问NN时，先向ZooKeeper询问当前的Active NameNode，这样就能得到正确地址，如果期间发生Failover，则Client可以再向ZooKeeper询问一次，并和新的Active NameNode进行通信。貌似fb就是采用这种方式。
+		使用Smart Client：
+		Client端配置2个NameNode的地址信息，Client每次连接时先选择一个NN的地址信息，并和其建立联系，如果该NN是Standby NameNode，则Client会收到一个StandbyException，然后Client换一个NN进行尝试。这样最后经过2次尝试，Client就可以建立和Active NameNode的通信。社区版的代码使用这种方式。
+		使用VIP：
+		虽然在HA中，有2个NN，但是对于Client，只需要Active NameNode的信息。因此可以使用VIP（Virtual IP Address）方式来进行Failover。
+		•	方法：
+		1.	给Active NameNode指定一个VIP;
+		2.	Client端只配置一个VIP地址信息，即Active NameNode的地址;
+		3.	当一个NameNode变成Active 状态时，同时在该节点上配置VIP;
+		4.	当发生Failover时，不光进行NN的状态切换，还停用Standby上的VIP，启用Active上的VIP;
+		5.	当Client和Active NameNode通信出现异常时会进行尝试，一直等到Failover完成。
+		这种方法和Smart Client相似，不同之处在于现在只在一个VIP上进行尝试，不用切换。这样升级时，Client不用修改配置文件，当集群规模大，Client很多时，这种方式代价小。
+		VIP部署
+		接着介绍如何部署VIP
+		假设VIP为10.220.99.120,部署在网卡0上，网关为10.220.99.254：
+		1.	将VIP：10.220.99.120绑定到网卡0上;
+		2.	通知网关，这一步是必须的，这样Client可以立即感知该VIP;
+		3.	挂载fstab下所有选项;
+		4.	执行命令如下所示，需要root权限：
+		sudo ifconfig bond0:0 10.220.99.120 netmask 255.255.255.0 up
+
+		sudo arping -c 1 -s 10.220.99.120 10.220.99.254
+
+		sudo mount -a
+		如果要停用VIP，则需要执行：
+		sudo /sbin/ifconfig bond0:0 down
+		如何自动输入密码：
+		由于执行VIP相关命令需要root权限，如果当前用户不是root则需要输入密码，此时可以使用，来自动输入密码。
+		•	假设用户root密码为：123456;
+		•	并且节点上已经安装expect，如果没有安装，则可以下载软件包安装，或使用yum install来安装，这里不详述;
+		启用VIP的shell脚本：
+		#!/usr/bin/expect
+
+		spawn sudo /sbin/ifconfig bond0:0 10.220.99.120 netmask 255.255.255.0 up
+		expect {
+			"Password:"   {send -- "123456\r"}
+			}
+		expect "#"
+		spawn sudo /sbin/arping -c 1 -s 10.220.99.120 10.220.99.254
+		expect {
+			"Password:"   {send -- "123456\r"}
+			}
+
+		expect "#"
+		spawn sudo /bin/mount -a
+		expect {
+			"Password:"   {send -- "123456\r"}
+			}
+
+		expect "#"
+		停用VIP的shell脚本：
+		#!/usr/bin/expect
+		spawn sudo /sbin/ifconfig bond0:0 down
+
+		expect {
+			"Password:"   {send -- "123456\r"}
+			}
+		expect "#"
+		from: http://zhangjie.me/ha_vip/
+
 	- 提供暴露rest方式的service
 		rest实现应该用了jersey(jersey jar)
 	- sbin/hadoop-setup-hdfs.sh
@@ -5839,6 +5942,8 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			...
 			-----
 * struts
+	- 拦截器直接返回
+		设置结果到valueStack中，返回view
 	- struts2的返回
 		根据action的result的配置，定义返回值，可自定义一个result继承框架的result接口接口，在返回给client前进行特殊处理。
 
@@ -5855,7 +5960,46 @@ It is also an FTP application platform. We have developed a Java API to let you 
 				要想找某个接口是否有现成的mock类供使用，可以查看接口的所有实现，查找是否存在框架已提供的mock类，要点就是框架提供一些类的mock类时，
 			这些类，也需要继承这个接口。
 
-* bat 批处理 不继续执行  (搜素 bat 调用mvn - 对于bat执行好mvn后就不继续执行其他操作的问题解决搜索关键词)
+* bat 批处理 不继续执行  (搜素 bat 调用mvn - 对于bat执行好mvn后就不继续执行其他操作的问题解决搜索关键词) 脚本
+	- bat自动化脚本
+	停止多个RS，编译新包，替换新包，并启动所有RS
+		-----
+			echo deploy...
+
+			echo ---------shutdown rs...
+			cd D:\apache-tomcat-6.0.35\bin
+			call shutdown.bat
+			cd D:\apache-tomcat-6.0.35-2\bin
+			call shutdown.bat
+
+			echo ---------rmove old file...
+			if exist D:\apache-tomcat-6.0.35\webapps\javaweb rd /s /q "D:\apache-tomcat-6.0.35\webapps\javaweb"
+
+			if exist D:\apache-tomcat-6.0.35\webapps\javaweb.war rm -rf "D:\apache-tomcat-6.0.35\webapps\javaweb.war"
+
+			if exist D:\apache-tomcat-6.0.35-2\webapps\javaweb rd /s /q "D:\apache-tomcat-6.0.35-2\webapps\javaweb"
+
+			if exist D:\apache-tomcat-6.0.35-2\webapps\javaweb.war rm -rf "D:\apache-tomcat-6.0.35-2\webapps\javaweb.war"
+
+			echo ---------build new package...
+			cd D:\workspace2\javaweb-maven
+			call mvn clean package
+
+			echo ---------copy...
+			cd target
+			if exist javaweb.war cp javaweb.war D:\apache-tomcat-6.0.35\webapps
+
+			if exist javaweb.war cp javaweb.war D:\apache-tomcat-6.0.35-2\webapps
+
+			echo ---------starting rs
+			cd D:\apache-tomcat-6.0.35\bin
+			call startup.bat
+			cd D:\apache-tomcat-6.0.35-2\bin
+			call startup.bat
+
+			exit 0
+		-----
+		在一些命令前加判断，避免因为异常导致脚本退出
 	- start命令
 		下面是一个小脚本，批量启动开机后需要打开的程序。
 		pre.bat
@@ -20485,3 +20629,111 @@ day258 Monday, April 01, 2013
 7. java分布式系统
 	hadoop？
 	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day259 Tuesday, April 02, 2013
+
+1. 
+	* IDCISP项目
+	* 大region二期项目
+	* 内网冒头项目
+	* 广渠门项目
+
+2. IDCISP项目
+	合入谭总的修改分支，用最新包先发布已发集群的API，然后发布剩下的其他集群
+	控制系统发布前，停止API，修改发布步骤wiki
+
+
+3. 大region二期项目
+	API与控制系统的错误码细化和修改，具体见邮件
+
+4. 广渠门项目
+	SLB API的HA方案，涉及SLB API的部署架构？
+
+5. 内网冒头项目API代码review
+	VlanQueryAction2中获取idkp的逻辑应该从userholder中取出，用户角色是什么？
+	
+6. 代码email
+	设计模式
+	优雅
+7. SLB API数据库切换 晚上23:00
+	一台API机器的access.log日志不正确
+	data的日期正确
+
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day260 Wednesday, April 03, 2013
+
+1. 
+	* 广渠门项目
+
+2. 广渠门项目 SLB API
+	check out分支
+		注意，SLB这边Master和API是在同一个svn路径下的，即时一个整体，这样每次迭代拉分支时，2者提交到同样的分支上。
+
+	设计文档编写
+
+	API的HA方案有待后续讨论确定？
+
+3. CM6机房
+	dg的AY41系统集群
+	参考wiki说明：http://wiki.ec.alibaba-inc.com/index.php/Xen虚拟化/线上常用信息
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day261 Sunday, April 07, 2013
+
+1. 
+	* 广渠门项目
+
+2. 广渠门项目
+	QA建立keluda项目
+	细分需求到独立的任务
+	开发
+		slb api支持部分region关闭时，返回维护中错误码
+		struts2 拦截器中直接返回结果	* struts struts2
+			将结果设置到ValueStack中，然后在interceptor方法中直接返回View名称即可。
+			-------
+			public class RegionAwareInterceptor implements Interceptor {
+				...
+				@Override
+				public String intercept(ActionInvocation invocation) throws Exception {
+					...
+					if(targetRegion != null && targetRegion.getStatus() == GlobalConstants.REGION_STATUS_UNAVAILIABLE){
+						ResultDomainVisitor.setResultDomain(ServletActionContext.getContext().getValueStack(), 
+								GlobalErrorMessage.SLB_SYSTEM_MAINTAINING);
+						return Action.SUCCESS;
+					}
+					return invocation.invoke();
+				}
+			...
+			-------
+			拦截器层加判断，会导致一些只涉及API操作的接口也会受影响，是否可以下沉到具体的接口操作时再去判断region状态，从而对应
+			相应处理逻辑。？即，处理逻辑只放在需要关心的层中处理 -tip-
+				如，找到访问后端的逻辑入口，在哪里判断region状态。
+				如此，一些维护接口，比如clear_cache就可以继续使用，只有真正调用到后端时才会提示维护中错误。
+				
+
+3. struts2封装表单参数到bean中，对于web service这种普通get请求是否提供拦截器辅助处理
+
+4. HouyiAPI的zone_id表修改，是否使用了缓存？比如IP扩容时
+	待确认
+
+5. 测试
+	apache + tomcat集群配置
+	ref: http://www.iteye.com/topic/1017961
+
+	多个tomcat实例
+	配置好 jvmroute，端口
+	应用的web.xml文件中，配置<distributeable/>标签 —— 如此session才会被复制到集群到其他tomcat上
+	log里打印出 Manager session state send xxx received in xx ms
+	测试session复制
+
+	tomcat集群搭建好，然后配置前端proxy来实现负载均衡
+		配置apache2或者nginx
+			转发规则？轮询，权重
+			健康检查
+	新加节点
+		添加新tomcat服务器
+	下线节点
+		下线tomat服务器
+
