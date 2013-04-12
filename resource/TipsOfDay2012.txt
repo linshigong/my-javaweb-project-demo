@@ -11,6 +11,107 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* 线程协作 wait&notify wait notify
+	使用wait()与notify()/notifyAll()可以使得多个任务之间彼此协作。
+	1) wait()与notify()/notifyAll()
+		调用sleep()和yield()的时候锁并没有被释放，而调用wait()将释放锁。这样另一个任务（线程）可以获得当前对象的锁，从而进入它的synchronized方法中。
+	可以通过notify()/notifyAll()，或者时间到期，从wait()中恢复执行。
+		只能在同步控制方法或同步块中调用wait()、notify()和notifyAll()。如果在非同步的方法里调用这些方法，在运行时会抛出IllegalMonitorStateException异常。
+	2) 模拟单个线程对多个线程的唤醒
+		模拟线程之间的协作。Game类有2个同步方法prepare()和go()。标志位start用于判断当前线程是否需要wait()。Game类的实例首先启动所有的Athele类实例，
+	使其进入wait()状态，在一段时间后，改变标志位并notifyAll()所有处于wait状态的Athele线程。
+	ref: http://zhangjunhd.blog.51cto.com/113473/71387/
+
+* 动名词
+	network networking
+	ref: http://baike.baidu.com/view/26625.htm
+* OpenGrok
+	OpenGrok is a source code search and cross reference engine. It helps programmers to search, cross-reference and navigate source code trees.
+	It can understand various program file formats and version control histories like Monotone, SCCS, RCS, CVS, Subversion, Mercurial, Git, Clearcase and Bazaar.[1]
+	The name comes from the term grok, a jargon term used in computing to mean "profoundly understand".
+	OpenGrok is being developed mainly by Oracle Corporation (former Sun Microsystems) engineers with help from its community. OpenGrok is released under the terms of the Common Development and Distribution License (CDDL).
+* web爬虫
+	- heritrix http://sourceforge.net/projects/archive-crawle
+	下载
+	解压
+	配置环境变量
+		% export HERITRIX_HOME=/PATH/TO/BUILT/HERITRIX
+	执行
+		% chmod u+x $HERITRIX_HOME/bin/heritrix
+		% $HERITRIX_HOME/bin/heritrix --help
+	[admin@pangu_master.3]$sh bin/heritrix --admin=admin:123
+	Wed Apr 10 14:32:20 CST 2013 Starting heritrix.....
+	Heritrix 1.14.4 is running.
+	Web console is at: http://127.0.0.1:8080
+	Web console login and password: admin/123
+
+	设置JMX需要的password文件密码
+	/etc/hosts文件要ok，否则报：Local host name unknown: java.net.UnknownHostException: pangu_master.3: pangu_master.3
+		
+* hibernate
+	复习
+
+* JDK
+	1.6
+		JDK1.6的新特性集中在网络操作和性能方面方面。如增加了对WebService的支持、线程调度、HttpServer等
+		JAX-RS
+		JAXB2
+		StAX(DOM,SAX)
+
+		一：Desktop类和SystemTray类
+
+		在JDK6中 ,AWT新增加了两个类:Desktop和SystemTray。
+
+		前者可以用来打开系统默认浏览器浏览指定的URL,打开系统默认邮件客户端给指定的邮箱发邮件,用默认应用程序打开或编辑文件(比如,用记事本打开以txt为后缀名的文件),用系统默认的打印机打印文档;后者可以用来在系统托盘区创建一个托盘程序.
+
+		二:使用JAXB2来实现对象与XML之间的映射
+
+		JAXB是Java Architecture for XML Binding的缩写，可以将一个Java对象转变成为XML格式，反之亦然。
+
+		我们把对象与关系数据库之间的映射称为ORM, 其实也可以把对象与XML之间的映射称为OXM(Object XML Mapping). 原来JAXB是Java EE的一部分，在JDK6中，SUN将其放到了Java SE中，这也是SUN的一贯做法。JDK6中自带的这个JAXB版本是2.0, 比起1.0(JSR 31)来，JAXB2(JSR 222)用JDK5的新特性Annotation来标识要作绑定的类和属性等，这就极大简化了开发的工作量。
+
+		实际上，在Java EE 5.0中，EJB和Web Services也通过Annotation来简化开发工作。另外,JAXB2在底层是用StAX(JSR 173)来处理XML文档。除了JAXB之外，我们还可以通过XMLBeans和Castor等来实现同样的功能。
+
+		三:理解StAX
+
+		StAX(JSR 173)是JDK6.0中除了DOM和SAX之外的又一种处理XML文档的API。
+
+		StAX 的来历 ：在JAXP1.3(JSR 206)有两种处理XML文档的方法:DOM(Document Object Model)和SAX(Simple API for XML).
+
+		由于JDK6.0中的JAXB2(JSR 222)和JAX-WS 2.0(JSR 224)都会用到StAX所以Sun决定把StAX加入到JAXP家族当中来，并将JAXP的版本升级到1.4(JAXP1.4是JAXP1.3的维护版本). JDK6里面JAXP的版本就是1.4. 。
+
+		StAX是The Streaming API for XML的缩写，一种利用拉模式解析(pull-parsing)XML文档的API.StAX通过提供一种基于事件迭代器(Iterator)的API让程序员去控制xml文档解析过程,程序遍历这个事件迭代器去处理每一个解析事件，解析事件可以看做是程序拉出来的，也就是程序促使解析器产生一个解析事件然后处理该事件，之后又促使解析器产生下一个解析事件，如此循环直到碰到文档结束符；
+		SAX也是基于事件处理xml文档，但却是用推模式解析，解析器解析完整个xml文档后，才产生解析事件，然后推给程序去处理这些事件；DOM采用的方式是将整个xml文档映射到一颗内存树，这样就可以很容易地得到父节点和子结点以及兄弟节点的数据，但如果文档很大，将会严重影响性能。
+
+		四:使用Compiler API
+
+		现在我 们可以用JDK6 的Compiler API(JSR 199)去动态编译Java源文件，Compiler API结合反射功能就可以实现动态的产生Java代码并编译执行这些代码，有点动态语言的特征。
+
+		这个特性对于某些需要用到动态编译的应用程序相当有用， 比如JSP Web Server，当我们手动修改JSP后，是不希望需要重启Web Server才可以看到效果的，这时候我们就可以用Compiler API来实现动态编译JSP文件，当然，现在的JSP Web Server也是支持JSP热部署的，现在的JSP Web Server通过在运行期间通过Runtime.exec或ProcessBuilder来调用javac来编译代码，这种方式需要我们产生另一个进程去做编译工作，不够优雅而且容易使代码依赖与特定的操作系统；Compiler API通过一套易用的标准的API提供了更加丰富的方式去做动态编译,而且是跨平台的。
+
+		五:轻量级Http Server API
+		 
+		JDK6 提供了一个简单的Http Server API,据此我们可以构建自己的嵌入式Http Server,它支持Http和Https协议,提供了HTTP1.1的部分实现，没有被实现的那部分可以通过扩展已有的Http Server API来实现,程序员必须自己实现HttpHandler接口,HttpServer会调用HttpHandler实现类的回调方法来处理客户端请求,在这里,我们把一个Http请求和它的响应称为一个交换,包装成HttpExchange类,HttpServer负责将HttpExchange传给 HttpHandler实现类的回调方法.
+
+		六:插入式注解处理API(Pluggable Annotation Processing API)
+
+		插入式注解处理API(JSR 269)提供一套标准API来处理Annotations(JSR 175)
+
+		实际上JSR 269不仅仅用来处理Annotation,我觉得更强大的功能是它建立了Java 语言本身的一个模型,它把method, package, constructor, type, variable, enum, annotation等Java语言元素映射为Types和Elements(两者有什么区别?), 从而将Java语言的语义映射成为对象, 我们可以在javax.lang.model包下面可以看到这些类. 所以我们可以利用JSR 269提供的API来构建一个功能丰富的元编程(metaprogramming)环境.
+
+		JSR 269用Annotation Processor在编译期间而不是运行期间处理Annotation, Annotation Processor相当于编译器的一个插件,所以称为插入式注解处理.如果Annotation Processor处理Annotation时(执行process方法)产生了新的Java代码,编译器会再调用一次Annotation Processor,如果第二次处理还有新代码产生,就会接着调用Annotation Processor,直到没有新代码产生为止.每执行一次process()方法被称为一个"round",这样整个Annotation processing过程可以看作是一个round的序列.
+
+		JSR 269主要被设计成为针对Tools或者容器的API. 举个例子,我们想建立一套基于Annotation的单元测试框架(如TestNG),在测试类里面用Annotation来标识测试期间需要执行的测试方法。
+
+		七:用Console开发控制台程序
+
+		JDK6中提供了java.io.Console 类专用来访问基于字符的控制台设备. 你的程序如果要与Windows下的cmd或者Linux下的Terminal交互,就可以用Console类代劳. 但我们不总是能得到可用的Console, 一个JVM是否有可用的Console依赖于底层平台和JVM如何被调用. 如果JVM是在交互式命令行(比如Windows的cmd)中启动的,并且输入输出没有重定向到另外的地方,那么就可以得到一个可用的Console实例.
+
+		八:对脚本语言的支持如: ruby, groovy, javascript.
+
+		九:Common Annotations
+	1.7新特性
+
 * 
 杭州市西湖区文三路398号东方通信大厦1724室
 * 622848 032323 8928010
@@ -47,6 +148,9 @@ google 检索 apache： site:*.apache.org 高级搜索
 			查看各分区使用情况:  df -h
 			查看指定目录的大小: du -sh
 		ulimit
+
+		iostat IO状态查看
+			Report Central Processing Unit (CPU) statistics and input/output statistics for devices and partitions.
 		
 		java相关：
 			- Memory Map
@@ -81,6 +185,10 @@ google 检索 apache： site:*.apache.org 高级搜索
 				jinfo
 					观察运行中的java程序的运行环境参数：参数包括Java System属性和JVM命令行参数
 				jstat - Java Virtual Machine Statistics Monitoring Tool
+
+					jstat -gccause -t 28323 100 3
+						-t 时间 100毫秒间隔 打印3次
+
 					最后要重点介绍下这个命令。
 					这是jdk命令中比较重要，也是相当实用的一个命令，可以观察到classloader，compiler，gc相关信息
 					具体参数如下：
@@ -145,6 +253,12 @@ ftian20130102
 * 取模 模运算
 	取模运算即模运算，模运算即求余运算。“模”是“Mod”的音译，模运算多应用于程序编写中。 Mod的含义为求余。模运算在数论和程序设计中
 	都有着广泛的应用，从奇偶数的判别到素数的判别，
+
+	求余的结果小于等于被乘数
+
+	2%3=2
+	10%3=1
+
 	ref: http://baike.baidu.com/view/4887065.htm
 * 位运算 << 左移运算 >> 右移运算
 	ref：http://www.cnblogs.com/highriver/archive/2011/08/15/2139600.html
@@ -266,6 +380,46 @@ ftian20130102
 		redmine
 	
 * nginx	
+	- nginx转发配置
+		 ---------
+		  ...
+			   server {
+				listen       80;
+				server_name  openapi.aliyun.com;
+
+				charset UTF-8;
+
+				proxy_connect_timeout 600;
+				proxy_read_timeout 600;
+				proxy_send_timeout 600;
+
+				#access_log  logs/host.access.log  main;
+
+				if ( $host ~* (.*)\.(.*)\.(.*)\.(.*)) 
+				{ 
+				  set $domain $1; 
+				  set $new_uri /openapi/$domain$request_uri;
+				} 
+
+				location /{
+				    proxy_set_header        X-Real-IP $remote_addr;
+				    proxy_set_header        Host $host;
+				    proxy_pass http://127.0.0.1:8080$new_uri;
+				
+				}
+
+			       location /slb/api{
+					   proxy_set_header        X-Real-IP $remote_addr;
+					   proxy_set_header        Host $host;
+		...
+		---------
+		部署一个nginx对外监听80端口，通过转发实现代理多个应用的访问（以uri区分请求的应用）：
+				
+		小结：
+				当nginx正确启动后，某个应用启动后能正常访问，另一个uri的访问确是空（没任何内容，这个是因为中间多了proxy层处理），可能原因就是后端应用（比如tomcat）
+			启动失败了，即服务器是起来了，但应用却没起来，导致访问应用的路径时浏览器没显示任何内容，如果直接去访问后端的tomcat路径会报404（一看就知道路径访问到，确认路径
+			ok的情况下极可能就是应用启动失败）。
+				这种有多个层转发的情况，错误排查可以从原始的端开始，逐一排查。
 	- nginx常用操作命令
 		------
 		#!/bin/sh
@@ -992,12 +1146,17 @@ ftian20130102
 
 	3、compacting算法(Compacting Collector)
 
-	    为了解决堆碎片问题，基于tracing的垃圾回收吸收了Compacting算法的思想，在清除的过程中，算法将所有的对象移到堆的一端，堆的另一端就变成了一个相邻的空闲内存区，收集器会对它移动的所有对象的所有引用进行更新，使得这些引用在新的位置能识别原来 的对象。在基于Compacting 算法的收集器的实现中，一般增加句柄和句柄表。
+	    为了解决堆碎片问题，基于tracing的垃圾回收吸收了Compacting算法的思想，在清除的过程中，算法将所有的对象移到堆的一端，
+	    堆的另一端就变成了一个相邻的空闲内存区，收集器会对它移动的所有对象的所有引用进行更新，使得这些引用在新的位置能识别原来 的对象。
+	    在基于Compacting 算法的收集器的实现中，一般增加句柄和句柄表。
 
 	4、copying算法(Coping Collector)
 
 	    该算法的提出是为了克服句柄的开销和解决堆碎片的垃圾回收。
-	    将内存分为两个区域(from space和to space)。所有的对象分配内存都分配到from space。在清理非活动对象阶段，把所有标志为活动的对象，copy到to space，之后清楚from space空间。然后互换from sapce和to space的身份。既原先的from space变成to sapce，原先的to space变成from space。每次清理，重复上述过程。
+	    将内存分为两个区域(from space和to space)。所有的对象分配内存都分配到from space。在清理非活动对象阶段，把所有标志为活动的对象，
+	    copy到to space，之后清楚from space空间。然后互换from sapce和to space的身份。既原先的from space变成to sapce，原先的to space变成from space。
+	    每次清理，重复上述过程。
+
 	    优点：copy算法不理会非活动对象，copy数量仅仅取决为活动对象的数量。并且在copy的同时，整理了heap空间，即，to space的空间使用始终是连续的，内存使用效率得到提高。
 	    缺点：划分from space和to space，内存的使用率是1／2。收集器必须复制所有的活动对象，这增加了程序等待时间。
 
@@ -3517,8 +3676,11 @@ Storage for Interactive Services
 		If the result is 1 then the Linux system will start forwarding IP packets even if they are not destined to any of its own network interfaces.
 		ps. I was setting up a VPN dial-in server when I wrote this post 
 
-* keepalived是VRRP的完美实现，因此在介绍keepalived之前，先介绍一下VRRP的原理。
+* keepalived是VRRP的完美实现，因此在介绍keepalived之前，先介绍一下VRRP的原理。	    * VRRP
 	VRRP协议简介
+	
+	虚拟路由冗余协议 (Virtual Router Redundancy Protocol，简称VRRP)
+
 	在现实的网络环境中，两台需要通信的主机大多数情况下并没有直接的物理连接。对于这样的情况，它们之间路由怎样选择？主机如何选定到达目的主机的下一跳路由，
 	这个问题通常的解决方法有二种：
 	·        在主机上使用动态路由协议(RIP、OSPF等)
@@ -3531,11 +3693,16 @@ Storage for Interactive Services
 
 	工作机制
 
-	在一个VRRP虚拟路由器中，有多台物理的VRRP路由器，但是这多台的物理的机器并不能同时工作，而是由一台称为MASTER的负责路由工作，其它的都是BACKUP，MASTER并非一成不变，VRRP让每个VRRP路由器参与竞选，最终获胜的就是MASTER。MASTER拥有一些特权，比如 拥有虚拟路由器的IP地址，我们的主机就是用这个IP地址作为静态路由的。拥有特权的MASTER要负责转发发送给网关地址的包和响应ARP请求。
+	在一个VRRP虚拟路由器中，有多台物理的VRRP路由器，但是这多台的物理的机器并不能同时工作，而是由一台称为MASTER的负责路由工作，其它的都是BACKUP，
+	MASTER并非一成不变，VRRP让每个VRRP路由器参与竞选，最终获胜的就是MASTER。MASTER拥有一些特权，比如 拥有虚拟路由器的IP地址，我们的主机就是
+	用这个IP地址作为静态路由的。拥有特权的MASTER要负责转发发送给网关地址的包和响应ARP请求。
 
-	VRRP通过竞选协议来实现虚拟路由器的功能，所有的协议报文都是通过IP多播(multicast)包(多播地址 224.0.0.18)形式发送的。虚拟路由器由VRID(范围0-255)和一组IP地址组成，对外表现为一个周知的MAC地址。所以，在一个虚拟路由 器中，不管谁是MASTER，对外都是相同的MAC和IP(称之为VIP)。客户端主机并不需要因为MASTER的改变而修改自己的路由配置，对他们来 说，这种主从的切换是透明的。
+	VRRP通过竞选协议来实现虚拟路由器的功能，所有的协议报文都是通过IP多播(multicast)包(多播地址 224.0.0.18)形式发送的。虚拟路由器由VRID(范围0-255)和一组IP地址组成，
+	对外表现为一个周知的MAC地址。所以，在一个虚拟路由 器中，不管谁是MASTER，对外都是相同的MAC和IP(称之为VIP)。客户端主机并不需要因为MASTER的改变而
+	修改自己的路由配置，对他们来 说，这种主从的切换是透明的。
 
-	在一个虚拟路由器中，只有作为MASTER的VRRP路由器会一直发送VRRP广告包(VRRPAdvertisement message)，BACKUP不会抢占MASTER，除非它的优先级(priority)更高。当MASTER不可用时(BACKUP收不到广告包)， 多台BACKUP中优先级最高的这台会被抢占为MASTER。这种抢占是非常快速的(<1s)，以保证服务的连续性。
+	在一个虚拟路由器中，只有作为MASTER的VRRP路由器会一直发送VRRP广告包(VRRPAdvertisement message)，BACKUP不会抢占MASTER，除非它的优先级(priority)更高。
+	当MASTER不可用时(BACKUP收不到广告包)， 多台BACKUP中优先级最高的这台会被抢占为MASTER。这种抢占是非常快速的(<1s)，以保证服务的连续性。
 
 	由于安全性考虑，VRRP包使用了加密协议进行加密。
 
@@ -3649,7 +3816,9 @@ Storage for Interactive Services
 		---------
 	- strace命令
 		---------
-				strace 是一个非常简单的工具，用来跟踪可执行程序的系统调用(system call)。最简单的使用是，它追踪可行程序运行时的整个生命周期，输出每一个系统调用的名字，参数和返回值。 
+				strace 是一个非常简单的工具，用来跟踪可执行程序的系统调用(system call)。最简单的使用是，它追踪可行程序运行时的整个生命周期，
+			输出每一个系统调用的名字，参数和返回值。  
+			
 			但是它还可以做更多的事情：
 			 
 			它可以基于系统调用或者系统调用组来过滤
@@ -3661,7 +3830,8 @@ Storage for Interactive Services
 			 
 			找出一个程序启动时读取了哪个配置文件
 			 
-			有的时候，你发发现，无论你如何修改配置文件，应用程序并没有按照你的思路去运行，这是什么原因？一个浅显但容易忽视的考虑是，应用程序启动时读取了你认为要读取的配置文件了吗？看下面的例子：
+			有的时候，你发发现，无论你如何修改配置文件，应用程序并没有按照你的思路去运行，这是什么原因？一个浅显但容易忽视的考虑是，
+			应用程序启动时读取了你认为要读取的配置文件了吗？看下面的例子：
 			 
 			 $ strace php 2>&1 | grep php.ini          open("/usr/local/bin/php.ini", O_RDONLY) = -1 ENOENT (No such file or directory)          open("/usr/local/lib/php.ini", O_RDONLY) = 4          lstat64("/usr/local/lib/php.ini", {st_mode=S_IFLNK|0777, st_size=27,        ...}) = 0          readlink("/usr/local/lib/php.ini", "/usr/local/Zend/etc/php.ini",        4096) = 27          lstat64("/usr/local/Zend/etc/php.ini", {st_mode=S_IFREG|0664,st_size=40971, ...}) = 0    
 			上述php程序程序会首先从/usr/local/bin/下读取php.ini文件，也许不是你想的首先从/usr/local/lib/下读取。
@@ -3670,7 +3840,8 @@ Storage for Interactive Services
 			  $ strace -e open php 2>&1 | grep php.ini           open("/usr/local/bin/php.ini", O_RDONLY) = -1 ENOENT (No such file or         directory)           open("/usr/local/lib/php.ini", O_RDONLY) = 4  
 			为什么程序没有打开我的文件？
 			 
-			每一个可执行程序读取文件时，如果权限不够，则会遭拒绝。而如果文件找不到，也并不会报错，除非你在程序里设置了错误处理，So，如果程序没有读取我的文件，我该如何跟踪呢？
+			每一个可执行程序读取文件时，如果权限不够，则会遭拒绝。而如果文件找不到，也并不会报错，除非你在程序里设置了错误处理，So，
+			如果程序没有读取我的文件，我该如何跟踪呢？
 			 
 			 $ strace -e open,access 2>&1 |grep your-filename
 			检查open()和access()系统调用的输出结果，看看是什么原因
@@ -3684,7 +3855,8 @@ Storage for Interactive Services
 			 
 			程序的时间花在什么地方
 			 
-			你总是希望程序能够按照你的意愿去工作，也希望它能在正确的时间做正确的事情，甚至希望它是最优的，尽可能在程序运行的周期内，消耗的90%以上的资源都是在做需要做的事情，而不是简单的等待。也许，下面的这个指令可以帮上你的忙:
+			你总是希望程序能够按照你的意愿去工作，也希望它能在正确的时间做正确的事情，甚至希望它是最优的，尽可能在程序运行的周期内，
+			消耗的90%以上的资源都是在做需要做的事情，而不是简单的等待。也许，下面的这个指令可以帮上你的忙:
 			 
 			 root@dev:~# strace -c -p 11084
 			 Process 11084 attached - interrupt to quit
@@ -3698,7 +3870,8 @@ Storage for Interactive Services
 			 100.00    0.001072                    63           total
 			 root@dev:~# 
 			如果你是跟踪的后台守护进程，可以通过上面的指令跟踪一段时间，然后按ctrl+c退出，strace会根据获得信息描述出上面的结果。
-			上述的例子说明当前进程(postmaster)最要的时间花在等待select()函数上，在每调用一次select函数后，它分别调用getpid函数和time函数. 如果是非后台守护进程，那strace可以跟踪进程的开始至结束，类似下面这样：
+			上述的例子说明当前进程(postmaster)最要的时间花在等待select()函数上，在每调用一次select函数后，它分别调用getpid函数和time函数. 如果是非后台守护进程，
+			那strace可以跟踪进程的开始至结束，类似下面这样：
 			 
 			 root@dev:~# strace -c >/dev/null ls
 			 % time     seconds  usecs/call     calls    errors syscall
@@ -3795,7 +3968,7 @@ Storage for Interactive Services
 		Nslookup is a program to query Internet domain name servers.  Nslookup has two modes: interactive and non-interactive. Interactive
 		       mode allows the user to query name servers for information about various hosts and domains or to print a list of hosts in a domain.
 		       Non-interactive mode is used to print just the name and requested information for a host or domain
-	- lsof
+	- lsof (list open files)
 		查看进程打开文件数
 	- chown -hR admin /home/admin/
 		修改文件/文件夹所属
@@ -4358,48 +4531,10 @@ Storage for Interactive Services
 	- logger.error(e) vs logger.error("xxx",e)
 	看log4j的error方法说明，直接传对象接收的是message消息对象，如何给的是非message对象，可能没有重写tostring方法，输出的日志内容为对象而不是异常的内容。
 
-* nginx
-	  ---------
-	  ...
-		   server {
-			listen       80;
-			server_name  openapi.aliyun.com;
-
-			charset UTF-8;
-
-			proxy_connect_timeout 600;
-			proxy_read_timeout 600;
-			proxy_send_timeout 600;
-
-			#access_log  logs/host.access.log  main;
-
-			if ( $host ~* (.*)\.(.*)\.(.*)\.(.*)) 
-			{ 
-			  set $domain $1; 
-			  set $new_uri /openapi/$domain$request_uri;
-			} 
-
-			location /{
-			    proxy_set_header        X-Real-IP $remote_addr;
-			    proxy_set_header        Host $host;
-			    proxy_pass http://127.0.0.1:8080$new_uri;
-			
-			}
-
-		       location /slb/api{
-				   proxy_set_header        X-Real-IP $remote_addr;
-				   proxy_set_header        Host $host;
-	...
-	---------
-	部署一个nginx对外监听80端口，通过转发实现代理多个应用的访问（以uri区分请求的应用）：
-			
-	小结：
-			当nginx正确启动后，某个应用启动后能正常访问，另一个uri的访问确是空（没任何内容，这个是因为中间多了proxy层处理），可能原因就是后端应用（比如tomcat）
-		启动失败了，即服务器是起来了，但应用却没起来，导致访问应用的路径时浏览器没显示任何内容，如果直接去访问后端的tomcat路径会报404（一看就知道路径访问到，确认路径
-		ok的情况下极可能就是应用启动失败）。
-			这种有多个层转发的情况，错误排查可以从原始的端开始，逐一排查。
-
 * concurrent包 ，java concurrent	       * 并发 * 同步 * java并发/同步
+	- continuration部分类用ReentrantLock实现同步
+	countdown
+
 	- 锁
 		synchronized方法（锁定方法所在的实例化对象，若实例化对象不为同一个，则不能同步）
 		synchronized块（以声明的锁对象进行锁定，若锁的实例不同则不能同步）
@@ -5160,6 +5295,75 @@ search in index find pdf
 	代码
 
 * NIO 非阻塞操作/ 阻塞操作 消息驱动
+	- NIO包
+		CLASS
+		--------
+		ServerSocketChannel
+			DOC comment
+			----------------
+			A selectable channel for stream-oriented listening sockets. 
+
+			Server-socket channels are not a complete abstraction of listening network sockets. Binding and the manipulation of socket options must be done through an associated java.net.ServerSocket 
+			object obtained by invoking the socket method. It is not possible to create a channel for an arbitrary, pre-existing server socket, nor is it possible to specify the java.net.SocketImpl object to be 
+			used by a server socket associated with a server-socket channel. 
+
+			A server-socket channel is created by invoking the open method of this class. A newly-created server-socket channel is open but not yet bound. An attempt to invoke the accept method of an 
+			unbound server-socket channel will cause a NotYetBoundException to be thrown. A server-socket channel can be bound by invoking one of the bind methods of an associated server socket. 
+
+			Server-socket channels are safe for use by multiple concurrent threads. 
+				
+				METHOD
+				-----------
+					open
+						DOC comment
+						----------------
+						Opens a server-socket channel. 
+
+						The new channel is created by invoking the openServerSocketChannel method of the system-wide default java.nio.channels.spi.SelectorProvider object. 
+
+						The new channel's socket is initially unbound; it must be bound to a specific address via one of its socket's bind methods before connections can be accepted. 
+
+					socket (通过此方法获取一个ServerSocket对象，并与此channel绑定)
+						DOC comment
+						----------------
+						Retrieves a server socket associated with this channel. 
+
+						The returned object will not declare any public methods that are not declared in the java.net.ServerSocket class. 
+
+						Returns:
+						A server socket associated with this channel
+
+					accept
+						DOC comment
+						----------------
+						Accepts a connection made to this channel's socket. 
+
+						If this channel is in non-blocking mode then this method will immediately return null if there are no pending connections. Otherwise it will block indefinitely until a new connection is 
+						available or an I/O error occurs. 
+
+						The socket channel returned by this method, if any, will be in blocking mode regardless of the blocking mode of this channel. 
+
+						This method performs exactly the same security checks as the accept method of the java.net.ServerSocket class. That is, if a security manager has been installed then for each new 
+						connection this method verifies that the address and port number of the connection's remote endpoint are permitted by the security manager's checkAccept method. 
+
+						Returns:
+						The socket channel for the new connection, or null if this channel is in non-blocking mode and no connection is available to be accepted
+
+
+
+
+			
+		SocketChannel
+	
+	To be contiue...
+
+	- NIO深入
+		NIO通常采用Reactor模式，AIO通常采用Proactor模式。AIO简化了程序的编写，stream的读取和写入都有OS来完成，不需 要像NIO那样子遍历Selector。
+		Windows基于IOCP实现AIO，Linux只有eppoll模拟实现了AIO。
+	
+		Java7之前的JDK只支持NIO和BIO，从7开始支持AIO。
+		你说的IO应该指BIO，这种模式需要阻塞线程，一个IO需要一个线程，NIO由一个thread来监听connect事件，另外多个thread来监听读写事件，带来性能上很大提高。
+	- java1.4加入的NIO
 	- 
 		JAVA使用EPoll来进行NIO处理的方法
 		JDK 6.0 以及JDK 5.0 update 9 的 nio支持epoll （仅限 Linux 系统 ），对并发idle connection会有大幅度的性能提升，这就是很多网络服务器应用程序需要的。
@@ -5262,6 +5466,129 @@ search in index find pdf
 		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
  * spring
+	- spring对ibatis的整合，提供SqlMapClientCallback回调接口实现spring与ibatis结合，以回调的方式将操作封装给ibatis的SqlMapExecutor执行。
+		org.springframework.orm.ibatis.SqlMapClientTemplate
+		------
+
+		private SqlMapClient sqlMapClient;
+
+		public Object queryForObject(final String statementName, final Object parameterObject)
+				throws DataAccessException {
+
+			return execute(new SqlMapClientCallback() {
+				public Object doInSqlMapClient(SqlMapExecutor executor) throws SQLException {
+					return executor.queryForObject(statementName, parameterObject);
+				}
+			});
+		}
+
+		public Object execute(SqlMapClientCallback action) throws DataAccessException {
+			Assert.notNull(action, "Callback object must not be null");
+			Assert.notNull(this.sqlMapClient, "No SqlMapClient specified");
+
+			// We always needs to use a SqlMapSession, as we need to pass a Spring-managed
+			// Connection (potentially transactional) in. This shouldn't be necessary if
+			// we run against a TransactionAwareDataSourceProxy underneath, but unfortunately
+			// we still need it to make iBATIS batch execution work properly: If iBATIS
+			// doesn't recognize an existing transaction, it automatically executes the
+			// batch for every single statement...
+
+			SqlMapSession session = this.sqlMapClient.openSession();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Opened SqlMapSession [" + session + "] for iBATIS operation");
+			}
+			Connection ibatisCon = null;
+
+			try {
+				Connection springCon = null;
+				DataSource dataSource = getDataSource();
+				boolean transactionAware = (dataSource instanceof TransactionAwareDataSourceProxy);
+
+				// Obtain JDBC Connection to operate on...
+				try {
+					ibatisCon = session.getCurrentConnection();
+					if (ibatisCon == null) {
+						springCon = (transactionAware ?
+								dataSource.getConnection() : DataSourceUtils.doGetConnection(dataSource));
+						session.setUserConnection(springCon);
+						if (logger.isDebugEnabled()) {
+							logger.debug("Obtained JDBC Connection [" + springCon + "] for iBATIS operation");
+						}
+					}
+					else {
+						if (logger.isDebugEnabled()) {
+							logger.debug("Reusing JDBC Connection [" + ibatisCon + "] for iBATIS operation");
+						}
+					}
+				}
+				catch (SQLException ex) {
+					throw new CannotGetJdbcConnectionException("Could not get JDBC Connection", ex);
+				}
+
+				// Execute given callback...
+				try {
+					return action.doInSqlMapClient(session);
+				}
+				catch (SQLException ex) {
+					throw getExceptionTranslator().translate("SqlMapClient operation", null, ex);
+				}
+				finally {
+					try {
+						if (springCon != null) {
+							if (transactionAware) {
+								springCon.close();
+							}
+							else {
+								DataSourceUtils.doReleaseConnection(springCon, dataSource);
+							}
+						}
+					}
+					catch (Throwable ex) {
+						logger.debug("Could not close JDBC Connection", ex);
+					}
+				}
+
+				// Processing finished - potentially session still to be closed.
+			}
+			finally {
+				// Only close SqlMapSession if we know we've actually opened it
+				// at the present level.
+				if (ibatisCon == null) {
+					session.close();
+				}
+			}
+		}
+		------
+
+		spring提供了一个工厂类，便于注入ibatis的SqlMapClient到spring context中
+		spring-datasource.xml
+		------
+		<bean id="sqlMapTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+			<property name="sqlMapClient">
+				<bean class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+					<property name="dataSource">
+						<ref bean="dataSource" />
+					</property>
+					<property name="configLocation" value="classpath:spring/slbapi-ibatis-config.xml" />
+				</bean>
+			</property>
+		</bean>
+		------
+		public class SqlMapClientFactoryBean implements FactoryBean, InitializingBean {
+		SqlMapClientFactoryBean实现了FactoryBean接口以返回spring能取到的对象，实现了InitializingBean来根据spring配置初始化成员变量sqlMapClient（ibatis的sqlMapClient）
+
+
+	- spring对DAO层异常的封装与spring事务管理	Action,DAO,Service层， DataAccessException 异常应该在那一层捕获？
+		
+		spring事务配置在service层
+
+		1）spring在进行声明时事务管理时，通过捕获Service层方法的DataAccessException来提交和回滚事务的，而Service层方法的DataAccessException
+		又是来自调用DAO层方法所产生的异常． 
+		2）我们一般在写DAO层代码时，如果继承JdbcDaoSupport 类，并使用此类所实现的JdbcTemplate来执行数据库操作，此类会自动把低层的SQLException转化成
+		DataAccessException以及DataAccessException 
+		的子类． 
+		3）一般在Service层我们可以自己捕获DAO方法所产成的DataAccessException，然后再抛出一个业务方法有意义的异常(ps:此异常最好继承DataAccessException)，然后
+		在Web层捕获，这样我们就可以手动编码的灵活实现通过业务方法执行的成功和失败来向用户转发不同的页面．
 	- Log4jConfigListener 
 		log4j配置动态加载，Spring默认刷新Log4j配置文件的间隔,单位为millisecond
 	- spring抽象类注入，spring接口注入有区别
@@ -5839,6 +6166,84 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
 * test * mock  * jmock		       * 单元测试 * 集成测试		 * jtester
+	- jtester抽象类方法的测试, mock一个抽象类实现
+		写一个mock类继承抽象类，并在spring测试配置中注入
+		<bean id="abstractService" class="com.aliyun.slb.api.service.impl.AbstractServiceMockImpl">
+			<property name="rsService" ref="rsService" />
+		</bean>
+
+		测试类
+			---------
+			@SpringBeanByName
+			AbstractService abstractService;
+
+			@Test
+			public void testName2ipInLocal() throws Exception{
+				/* json格式1 */
+				final String jsonStr = "[\"vm1\",\"vm2\"]";
+				final String expected = "10.1.1.1";
+				final String expected2 = "10.1.1.2";
+				
+				RequestContextHolder.getContext().setRegion(new Region());
+				RequestContextHolder.getContext().setUser(new User());
+				
+				new MockUp<AbstractService>(){
+					@Mock
+					public Map<String, Object> getParamsMap() {
+						Map<String,Object> map = new HashMap<String, Object>();
+						map.put("rs_list", new String[]{jsonStr});
+						return map;
+					}
+				};
+				
+				new Expectations(){
+					@Mocked(methods={"queryInstanceIp"})
+					RsServiceImpl rsService;
+					{
+						when(rsService.queryInstanceIp(anyString, anyString, anyString)).thenReturn(expected);
+						when(rsService.queryInstanceIp(anyString, anyString, anyString)).thenReturn(expected2);
+					}
+				};
+				
+				Result<Object> actual = abstractService.name2ipInLocal("rs_list");
+				List<Rs> rsList = (List<Rs>)actual.getResultInfo();
+				
+				Assert.assertEquals(rsList.get(0).getIp(),expected);
+				Assert.assertEquals(rsList.get(1).getIp(),expected2);
+				
+				/* json格式2 */
+				final String jsonStr2 = "[{\"vm_name\":\"vm1\",\"weight\":100},{\"vm_name\":\"vm2\",\"weight\":100}]";
+				final String expected3 = "10.1.1.1";
+				final String expected4 = "10.1.1.2";
+				
+				RequestContextHolder.getContext().setRegion(new Region());
+				RequestContextHolder.getContext().setUser(new User());
+				
+				new MockUp<AbstractService>(){
+					@Mock
+					public Map<String, Object> getParamsMap() {
+						Map<String,Object> map = new HashMap<String, Object>();
+						map.put("rs_list", new String[]{jsonStr2});
+						return map;
+					}
+				};
+				
+				new Expectations(){
+					@Mocked(methods={"queryInstanceIp"})
+					RsServiceImpl rsService;
+					{
+						when(rsService.queryInstanceIp(anyString, anyString, anyString)).thenReturn(expected3);
+						when(rsService.queryInstanceIp(anyString, anyString, anyString)).thenReturn(expected4);
+					}
+				};
+				
+				Result<Object> actual2 = abstractService.name2ipInLocal("rs_list");
+				List<Rs> rsList2 = (List<Rs>)actual.getResultInfo();
+				
+				Assert.assertEquals(rsList2.get(0).getIp(),expected);
+				Assert.assertEquals(rsList2.get(1).getIp(),expected2);
+			}
+			---------
 	- jtest用unitils的@SpringBeanByName注解时注意，注解的属性可以不在spring里配置，需要通过其他类注入了此属性来测试
 	- 定义期望执行expectation时，如果步骤多，不易于定位那里不对			  -tip-
 		可以通过化整为零方式，去掉所有的期望，从第一个执行开始，结合debug逐步补充上执行过程中需要的expectation。
@@ -5961,6 +6366,8 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			这些类，也需要继承这个接口。
 
 * bat 批处理 不继续执行  (搜素 bat 调用mvn - 对于bat执行好mvn后就不继续执行其他操作的问题解决搜索关键词) 脚本
+	- 用pause命令实现 按任意键继续
+		确认是否继续执行
 	- bat自动化脚本
 	停止多个RS，编译新包，替换新包，并启动所有RS
 		-----
@@ -5971,6 +6378,8 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			call shutdown.bat
 			cd D:\apache-tomcat-6.0.35-2\bin
 			call shutdown.bat
+			
+			pause
 
 			echo ---------rmove old file...
 			if exist D:\apache-tomcat-6.0.35\webapps\javaweb rd /s /q "D:\apache-tomcat-6.0.35\webapps\javaweb"
@@ -6332,13 +6741,29 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- spring对ibatis的支持
+		提供模板类 SqlMapClientTemplate ，对于批量操作需要使用其SqlMapClientCallback回调类来实现。
+		下面是模板类的部分doc说明：
+		It is generally recommended to use the convenience methods on this template for plain query/insert/update/delete operations. However, for more complex operations 
+		like batch updates, a custom SqlMapClientCallback must be implemented, usually as anonymous inner class. For example: 
+
+		 getSqlMapClientTemplate().execute(new SqlMapClientCallback() {
+			 public Object doInSqlMapClient(SqlMapExecutor executor) throws SQLException {
+				 executor.startBatch();
+				 executor.update("insertSomething", "myParamValue");
+				 executor.update("insertSomethingElse", "myOtherParamValue");
+				 executor.executeBatch();
+				 return null;
+			 }
+		 });
+
 	- 缓存及其扩展
 		比如结合memcached使用(oscache为默认配置)
 		iBatis提供CacheController接口，用于实现第三方缓存架构的扩展
 		http://blog.csdn.net/ecsoftcn/article/details/1777904
 		
 		memcached整合ibatis
-		ibatis自带的本地缓存有FIFO，LRU等，对于分布式缓存也有osCache支持，而最常用的memcached也可以整合到ibatis里滴，这样通过map关系配置，就省了很多硬编码。
+		ibatis自带的本地缓存有FIFO，LRU(Least Recently Used)等，对于分布式缓存也有osCache支持，而最常用的memcached也可以整合到ibatis里滴，这样通过map关系配置，就省了很多硬编码。
 		http://www.cnblogs.com/langke93/archive/2011/03/30/2217387.html
 
 		iBatis整理——EhCache支持扩展
@@ -6481,6 +6906,19 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- 查看表空间信息
+		如果想知道MySQL数据库中每个表占用的空间、表记录的行数的话，可以打开MySQL的 information_schema 数据库。在该库中有一个 TABLES 表，这个表主要字段分别是：
+		TABLE_SCHEMA : 数据库名
+		TABLE_NAME：表名
+		ENGINE：所使用的存储引擎
+		TABLES_ROWS：记录数
+		DATA_LENGTH：数据大小 单位为字节
+		INDEX_LENGTH：索引大小
+		其他字段请参考MySQL的手册，我们只需要了解这几个就足够了。
+		所以要知道一个表占用空间的大小，那就相当于是 数据大小 + 索引大小 即可。
+		SQL:
+		SELECT TABLE_NAME,DATA_LENGTH+INDEX_LENGTH,TABLE_ROWS FROM TABLES WHERE TABLE_SCHEMA='数据库名' AND TABLE_NAME='表名'
+
 	- 导数据
 		select into from	 (mysql不支持)
 		insert into from
@@ -6519,6 +6957,9 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- 用户被拒绝
 		Access denied for user 'test'@'10.1.171.195'
 		注意此处，'test'@'10.1.171.195整个对mysql来说是一个用户标识，不要纠结那个IP而误认为mysql连接到错误的IP上去了(配置都是对的啊???!!!)'
+
+
+
 	- mysql注释
 		create table xxx (
 			xxx varchar(32) NOT NULL COMMENT '@desc xxx',
@@ -6840,6 +7281,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	 开源bug管理系统bugfree：
 		 http://www.bugfree.org.cn/blog/?page_id=9
 * 测试，测试框架，测试插件
+	* testng
+		BeforeTest
+		AfterTest
+		使用这些注解配合自动执行测试用例
 	* jtester
 		- 不便于全局mock，需要细粒度到方法mock时，注意被mock属性的定义，需要定义到实现类，而不能是接口类型（否则不会被mock），正确例子如下：
 			new Expectations(){
@@ -6943,6 +7388,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			Caused by: java.io.FileNotFoundException: C:\Users\wb_shen.chengs\.houyi\jdbc.properties (系统找不到指定的路径。)
 				查找jtester抽象父类，导入的配置文件中，是否那个配置文件引用了错误的路径；如果原配置文件不能动，可以再test包下的resource中对其
 			做个拷贝，修改相应值，替代原配置文件导入。
+		- jtester配置数据库时，要配置应用的jdbc和jtester自身的jtester.properties文件中的数据库配置 
+			以免报数据库连接被拒绝等连接问题
+			
 
 * 简称
 	 业务运营支撑系统(BOSS) 
@@ -7156,7 +7604,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			xxx
 
 	-----
-		Python的异常处理能力是很强大的，可向用户准确反馈出错信息。在Python中，异常也是对象，可对它进行操作。所有异常都是基类Exception的成员。所有异常都从基类Exception继承，而且都在exceptions模块中定义。Python自动将所有异常名称放在内建命名空间中，所以程序不必导入exceptions模块即可使用异常。一旦引发而且没有捕捉SystemExit异常，程序执行就会终止。如果交互式会话遇到一个未被捕捉的SystemExit异常，会话就会终止。
+		Python的异常处理能力是很强大的，可向用户准确反馈出错信息。在Python中，异常也是对象，可对它进行操作。所有异常都是基类Exception的成员。
+		所有异常都从基类Exception继承，而且都在exceptions模块中定义。Python自动将所有异常名称放在内建命名空间中，所以程序不必导入exceptions模块即可使用异常。
+		一旦引发而且没有捕捉SystemExit异常，程序执行就会终止。如果交互式会话遇到一个未被捕捉的SystemExit异常，会话就会终止。
 
 		方式一:try语句:
 
@@ -7482,6 +7932,16 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- shell将执行结果赋值给一个变量
+		shell赋值语句，等号两边不能有空格
+		
+		var1=`ls -al |head -n1`
+		echo $var1
+
+	- 暂停 按任意键继续
+		使用 read 命令暂停，等待用户输入，不作任何后续判断即可，这样任意键都可以继续
+		read -p "Press any key to continue." var
+
 	- 遍历指定目录下所有文件
 		for i in $(find .)
 		do
@@ -11170,6 +11630,9 @@ day28 Tuesday, April 24, 2012
 			    action处理类，启动时以bean names as keys and the corresponding bean instances as values初始化到map中。
 			- 需要用的参数，拦截器处理好放到threadlocal实现的RequestContextHolder对象中，提供了静态方法，供service调用slb后端
 			   时调用
+	* SLB API
+		业务
+
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day29 Wednesday, April 25, 2012
@@ -17724,7 +18187,8 @@ day176 Friday, November 23, 2012
 	参考：http://www.cnblogs.com/wanderxjtu/archive/2009/04/25/1443518.html Zero Copy I: User-Mode Perspective
 	
 8. jetty continuation & servlet3.0(NIO)
-	"Continuations will be replaced by standard Servlet-3.0 suspendable requests once the specification is finalized. Early releases of Jetty-7 are now available that implement the proposed standard suspend/resume API"
+	"Continuations will be replaced by standard Servlet-3.0 suspendable requests once the specification is finalized. Early releases of Jetty-7 
+	are now available that implement the proposed standard suspend/resume API"
 	from: http://docs.codehaus.org/display/JETTY/Continuations
 
 	continuaton缺点，导致编程模型复杂，需要切分io操作。
@@ -19554,13 +20018,16 @@ day228 Thursday, February 07, 2013
 		新增region时，更新region缓存，调用到计量查询逻辑时，应该触发cache更新操作，可查看日志验证
 
 
-3. API到Master的通讯
+3. API到Master的通讯 HTTP Proxy
 	API-(rpc)-Http Proxy-(kuafu)-Nuwa-(kuafu)-Master-(kuafu)-Nuwa-(kuafu)-cc-...
 
 	每个小region一个http proxy，proxy将API的请求转发给kfc，kfc agent去访问nuwa并处理请求
 	kfc每个小region独立
 	
-	API->HTTP Proxy-over KFC protocol>KFC agent->Nuwa agent
+	API-over HTTP protocol->HTTP Proxy-over KFC protocol>KFC agent->Nuwa agent
+
+	region表的proxy ip地址，以http方式与proxy交互，proxy得到请求角色的nuwa地址，proxy与KFC agent交互，KFC agent与nuwa agent交互
+		nuwa://localcluster:10240/sys/houyi/master
 
 
 4. command，要具体执行到那个region，可以将目标regionNo作为Command的属性，这样工具类就可以从这里获取，而无需一层层传递regionNo。
@@ -20730,10 +21197,269 @@ day261 Sunday, April 07, 2013
 
 	tomcat集群搭建好，然后配置前端proxy来实现负载均衡
 		配置apache2或者nginx
-			转发规则？轮询，权重
-			健康检查
+			转发规则？轮询，权重，健康检查			
+			nginx轮询 done 见 * nginx nginx实现负载均衡
+				
+			apache2
+	
+	tomcat集群session复制方式：
+		1）all-to-all复制方式（DeltaManager ），打开下面的注释即可
+			<Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
+			缺点：session会复制到集群的每个节点（包含没有部署相应应用的节点上），集群规模不能大
+		3）BackupManager
+			This manager only replicates the session data to one backup node, and only to nodes that have the application deployed. Downside of the BackupManager: not quite as battle tested 
+			as the delta manager. From doc of tomcat
+			
+
 	新加节点
 		添加新tomcat服务器
 	下线节点
 		下线tomat服务器
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day262 Monday, April 08, 2013
+
+1. 
+	* 广渠门项目
+
+2. 广渠门项目
+	keluda在slb产品线下
+	单元自测
+	详细设计添加到设计文档中
+
+3. hashcode与hashtable
+	hashtable capacity·最后能提前预估，避免扩容时的再次hash代价和分配空间代价
+	hashtable中有个modCount成员变量，记录此table修改的次数，比如增加，删除都会修改，用于iterator的fail-fast机制。
+	rehash的触发：This method is called automatically when the number of keys in the hashtable exceeds this hashtable's capacity and load factor(capacity * loadFactor).
+
+	数组+链表的数据结构
+		每个entry以数组存放，以取模定位下标；
+		每个bucket中的entry以链表存放
+
+4. SLB API的rs表
+	select ip,lb_id from rs where lb_id is not NULL 这条语句，从slb api的数据库获取数据，是否需要去重？	
+	select ip,count(lb_id) from rs where lb_id is not NULL group by ip having count(lb_id)>1;
+	163 rows in set (0.01 sec)
+
+	select ip,lb_id,count(*) from rs where lb_id is not NULL group by ip,lb_id having count(*)>1;
+	8 rows in set (0.05 sec)
+	存在完全一样的表记录，排查原因？待
+	select * from rs where ip='10.241.220.70'; 3条记录
+
+	
+5. hibernate?
+	sucks
+
+	观察者模式 jdk实现
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day263 Tuesday, April 09, 2013
+
+1. 
+	* 广渠门项目
+
+2. 广渠门项目
+	明确VM的内网IP不变，从而从缓存的RS表中根据vmName取到IP，不再去HouyiAPI查询
+	下面的sql查询现有rs表，检查是否有vmName对应对个IP的记录：
+		select t1.vm_name,count(t1.vm_name) from (select vm_name from rs group by vm_name,ip) t1 group by t1.vm_name having count(t1.vm_name)>1;
+		Empty set (0.05 sec)
+
+		即还是满足上面的一个vmName与内网IP一一对应，可以用：select distinct vm_name,ip from rs where vm_name='xxx' 来取到vmName对应的IP结果。
+	
+3. Service层的DaoAccessException异常捕获
+	spring+ibatis
+	spring事务管理
+
+4. Service层，DAO层
+	对于那些简单DAO原子操作，在Service层很薄，没有业务逻辑，是否臃肿？
+		网络讨论结果不一，保持thin的Service层以备业务增加之需。
+
+5. 围绕xen虚拟化基础 ecs服务
+	在xen的基础上提供产品服务，需要做哪些工作
+	硬件
+		硬件的支持和投资
+	软件
+		封装xen的API，以规范易用的API对外
+		解决vm的存储问题，使用分布式存储（IO稳定与IO效率高低，备份与恢复问题）
+		解决vm的网络问题（zone，VLAN等，集群规范大了，网络如何设计以适应更大的集群，更多的vm，以及变化的业务）
+		镜像/快照管理，与存储相关，但需要细分管理
+		底层分布式集群系统的支持（nc规模上去后，nc宕机将是常态，如何提供稳定的服务集群）
+		周边服务的提供（负载均衡，安全，存储等）
+		运维
+
+6. spring与ibatis结合分析
+	spring通过工厂类返回sqlmapclient对象（通过ibatis的SqlMapConfigParser和SqlMapParser实现）
+	然后注入到spring的template类中
+	template类通过回调执行dao操作
+	ibatis的session通过SqlMapExecutorDelegate执行具体sql
+
+7. interview
+	最近在研究啥，看啥书？
+		JVM
+		NIO
+		设计模式
+		SLB
+		HA
+	MQ
+	alipay
+		hibernate准备好，都忘的差不多了吧。。。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day264 Wednesday, April 10, 2013
+
+1. 
+	* 广渠门项目
+	* 助力申牌项目
+
+2. 广渠门项目
+	自测，HA方案
+3. 助力申牌项目
+	上报中心连调发现部分VM的数据有问题，nc_host_name为空
+	经确认，控制系统的vm表没有对应vm记录，但ip表有vm的记录，sql查询不是以vm为主表，导致一些数据丢失并返回给API。
+		确认解决方案
+		确认垃圾数据产生原因及如何避免
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day265 Thursday, April 11, 2013
+
+1. 
+	* 广渠门项目
+
+2. 广渠门项目
+	连调
+		add_vm	ok
+		delete_vm		ok
+		add_rs	ok
+		delete_rs	ok
+	SLB后端也有采集监控数据的逻辑（python实现），可以参考 * python
+
+	从API到后端，源码级别梳理add_vm所操作的流程，分析SLB作用的机制
+		add_rs
+		xuanyuan-plugin-slb-RestRsPool
+
+	LB类型
+		compact 类型：类似Amazon方式设置LB，一个LB对应一个LbId，一个VIP，可以执行addVm操作（内部对于rsPool/vmPool的操作对用户透明，方便操作）
+		hybird类型：V1版的LB，一个LB对应一个LbId，一个VIP，对VIP可以设置Rule（内部为对rsPool的操作）；有rsPool的概念，用户可以自行addRs（用户需要自己管理）
+		http类型：为ACE用户简化的LB类型
+	
+3. lsof 
+	lsof -p 123 查看123进程打开的文件
+	lsof -i:3306
+		查看3306端口被谁占用
+		结合netstat使用
+
+4. NIO技术原理
+	Reactor
+	AIO
+
+5. JVM GC
+	分配大对象时，如果超出了eden space大小，则会分配到old spance，这样容易导致年老代占满，触发FullGC
+
+	
+6. mytest mavenlize	项目导入 导项目 导maven项目 eclipse项目导入
+	error
+	project properties
+		java compile
+			annotation processing disable
+			factory path disable
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+day266 Friday, April 12, 2013
+
+1. 
+	* 广渠门项目
+	* 助力申牌项目
+		接口“垃圾”数据过滤
+
+2. 广渠门项目
+	HA方案
+
+3. SLB API-SLB MASTER
+	add_rs流程梳理
+	xuanyuan-plugin-slb-RestRsPool
+		
+		
+
+4. NIO
+	IBM developerworks
+		NIO
+	sun对ServerSocketChannel的实现：sun.nio.ch.ServerSocketChannelImpl 源码分析
+		socket方法分析：获取server socket对象
+			判断连接是否关闭
+			判断是否bound
+			创建FileDescriptor（FD）
+			调用本地方法Accepts a new connection
+				setting the given file descriptor to refer to the new socket
+				Returns 1 on success, or IOStatus.UNAVAILABLE (if non-blocking and no connections are pending) or IOStatus.INTERRUPTED
+
+
+5. thinking in java
+	16.2 观察者模式 JDK的实现
+		java.util包
+		Observable
+			This class represents an observable object, or "data" in the model-view paradigm. It can be subclassed to represent an object that the application wants to have observed. 
+			
+			An observable object can have one or more observers. An observer may be any object that implements interface Observer. After an observable instance changes, 
+			an application calling the Observable's notifyObservers method causes all of its observers to be notified of the change by a call to their update method. 
+		Observer
+			A class can implement the Observer interface when it wants to be informed of changes in observable objects.
+
+6. network networking
+
+7. hibernate in action
+	first level cache
+		session cache
+			load,get.etc cache objects
+	second level cache
+
+9. JDK1.6源码		
+	C:\Users\wb_shen.chengs\Documents\j2se\src\windows\classes
+
+10. design patten
+	Provider
+	Factory
+	Visitor
+	Adaptor
+	Observer
+
+11. Freedom
+	
+12. Thread类的interrupt方法
+	中断线程
+	JSR-51 DOC comment
+
+	Thread.interrupt()
+	--------
+	Interrupts this thread. 
+
+	Unless the current thread is interrupting itself, which is always permitted, the checkAccess method of this thread is invoked, which may cause a SecurityException to be thrown. 
+
+	If this thread is blocked in an invocation of the wait(), wait(long), or wait(long, int) methods of the Object class, or of the join(), join(long), join(long, int), sleep(long), or sleep(long, int), 
+	methods of this class, then its interrupt status will be cleared and it will receive an InterruptedException. 
+
+	If this thread is blocked in an I/O operation upon an interruptible channel then the channel will be closed, the thread's interrupt status will be set, and the thread will receive a java.nio.channels.
+	ClosedByInterruptException. 
+
+	If this thread is blocked in a java.nio.channels.Selector then the thread's interrupt status will be set and it will return immediately from the selection operation, possibly with a non-zero value, 
+	just as if the selector's wakeup method were invoked. 
+
+	If none of the previous conditions hold then this thread's interrupt status will be set. 
+
+	Interrupting a thread that is not alive need not have any effect.
+	--------
+
+	
+13. 复习的一些小得	-tip-
+	用不到的东西，光靠主动学习，终不深刻，纵知其所以然，也不免假以时日，所剩无几。
+	纸上谈兵终觉浅，谙熟于心要躬行
+	何以躬行？
+
+	有刻意的准备，才有效果。只得闲暇之余继续苦读 ~~
+
+	与所处的环境对成长直接有关，只搭过鸡窝，那来盖大厦的心得。不过略有耳闻所见罢了。
+
+14. 工作虽苦，一直很愉快，下个目标，继续前行
 
