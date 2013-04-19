@@ -11,6 +11,29 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+* Paxos	分布式选举算法	Paxos最大的用途就是保持多个节点数据的一致性
+	
+	- google chubby
+		
+		http://blog.csdn.net/historyasamirror/article/details/3870168	Google利器之Chubby
+	- 介绍
+			Paxos 算法解决的问题是一个分布式系统如何就某个值（决议）达成一致。一个典型的场景是，在一个分布式数据库系统中，如果各节点的初始状态一致，
+		每个节点都执行相同的操作序列，那么他们最后能得到一个一致的状态。为保证每个节点执行相同的命令序列，需要在每一条指令上执行一个“一致性算法
+		”以保证每个节点看到的指令一致。一个通用的一致性算法可以应用在许多场景中，是分布式计算中的重要问题。因此从20世纪80年代起对于一致性算法的
+		研究就没有停止过。节点通信存在两种模型：共享内存（Shared memory）和消息传递（Messages passing）。Paxos 算法就是一种基于消息传递模型的一致性算法。
+
+			不仅只用在分布式系统，凡是多个过程需要达成某种一致性的都可以用到Paxos 算法。一致性方法可以通过共享内存（需要锁）或者消息传递实现，
+		Paxos 算法采用的是后者。下面是Paxos 算法适用的几种情况：一台机器中多个进程/线程达成数据一致；分布式文件系统或者分布式数据库中多客户端并发读写数据；
+		分布式存储中多个副本响应读写请求的一致性。
+
+			Lamport 最初Paxos 算法的论文The Part-Time Parliament 在理解起来比较有挑战性，个人认为部分原因是Lamport 通过故事的方式来表述、解释这个问题，所以在阅读文章
+		的时候读者需要透过故事讲的本身看到作者想说明什么。比如文章中会有很多讲到Paxon 文明没有被发现和考证的，这些映射到实际系统中往往是简单、大家都
+		心知肚明的基础，但如果读者苦于想知道这些内容是什么时，就上当了。下面章节安排如下：第二节对应原文的1.1-2.1。第三节对应原文2.2-3.2。[1]
+	- ZooKeeper并不是遵循Paxos协议，而是基于自身设计并优化的一个2 phase commit的协议
+		因此它的理论[6]并未经过完全证明。但由于ZooKeeper在Yahoo!内部已经成功应用在HBase, Yahoo! Message Broker, Fetch Service of Yahoo! crawler等系统上，
+		因此完全可以放心采用。
+		from: http://www.cnblogs.com/ychellboy/archive/2009/12/28/1634443.html
+
 * 线程协作 wait&notify wait notify
 	使用wait()与notify()/notifyAll()可以使得多个任务之间彼此协作。
 	1) wait()与notify()/notifyAll()
@@ -91,7 +114,10 @@ google 检索 apache： site:*.apache.org 高级搜索
 
 		五:轻量级Http Server API
 		 
-		JDK6 提供了一个简单的Http Server API,据此我们可以构建自己的嵌入式Http Server,它支持Http和Https协议,提供了HTTP1.1的部分实现，没有被实现的那部分可以通过扩展已有的Http Server API来实现,程序员必须自己实现HttpHandler接口,HttpServer会调用HttpHandler实现类的回调方法来处理客户端请求,在这里,我们把一个Http请求和它的响应称为一个交换,包装成HttpExchange类,HttpServer负责将HttpExchange传给 HttpHandler实现类的回调方法.
+		JDK6 提供了一个简单的Http Server API,据此我们可以构建自己的嵌入式Http Server,它支持Http和Https协议,提供了HTTP1.1的部分实现，
+		没有被实现的那部分可以通过扩展已有的Http Server API来实现,程序员必须自己实现HttpHandler接口,HttpServer会调用HttpHandler实现类
+		的回调方法来处理客户端请求,在这里,我们把一个Http请求和它的响应称为一个交换,包装成HttpExchange类,HttpServer负责将HttpExchange
+		传给 HttpHandler实现类的回调方法.
 
 		六:插入式注解处理API(Pluggable Annotation Processing API)
 
@@ -168,7 +194,7 @@ google 检索 apache： site:*.apache.org 高级搜索
 
 			jmap -histo 2083 ｜ jmap -histo:live 2083
 			可以观察heap中所有对象的情况（heap中所有生存的对象的情况）。包括对象数量和所占空间大小。
-			注意：使用了histo:live选项后，JVM会进行FGC，这是为了得到更清晰的结果(从jmap的java源码分析可看到)。
+			注意：使用了histo:live选项后，JVM会进行FGC(full gc)，这是为了得到更清晰的结果(从jmap的java源码分析可看到)。
 
 			写个脚本，可以很快把占用heap最大的对象找出来，对付内存泄漏特别有效。
 			---------
@@ -817,6 +843,9 @@ ftian20130102
 	google code 提供svn服务，但页面上不便于svn操作，比如添加分支，添加目录等，可通过svn工具来操作，如 TortoiseSVN，来建立新目录等等。
 
 * 代码合并    svn merger merger代码 * svn
+	- svn合并代码特殊场景之一
+		从A点的trunk拉出新branch B1开发，在B点时trunk上合入了其他项目的代码，在C点时B1合并trunk的修改到本branch，在D点时B1需要合入trunk，此时会有冲突
+		通过merge a range of revisions方式合并，并手工解决冲突（trunk和branch有相同的修改，只要保留trunk上的即可）
 	- branch上的多次修改要合并到新拉的branch上
 		直接merger branch方便，用patch后续有冲突，merger时使用场景为：
 			对一个branch有多个版本的修改，现在需要对这多个版本的修改合并到其他branch上
@@ -1070,6 +1099,9 @@ ftian20130102
 	byte per second
 * linux kernel
 	http://www.makelinux.net/kernel_map/
+
+	- 
+
 * 服务总线 消息总线 ESB EMB
 * 化整为零 -tip-
 	太多太杂，晕头转向？试试化整为零
@@ -1492,6 +1524,15 @@ ftian20130102
 	注意锁的级别，尽量减小锁的范围
 	需要在事务中进行
 
+	一个事物开启后，对记录进行了select for update查询
+	另一个事物也需要进行select for update操作时需要等待前面一个事物的提交；或者等待锁超时，报：
+	mysql> select * from region where region_no='test-region' for update;
+	ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
+
+	尽可能让所有数据检索都通过索引来完成，从而避免InnoDB因为无法通过索引键加锁而升级为表级锁定。
+
+	用乐观锁来实现数据库锁会锁定表的场景（非索引查询）；
+
 * 缓存 缓存系统 cache 分布式缓存 缓存方案
 	Cacheonix :
 		Cacheonix is an open source clustered cache and distributed data management framework for Java that allows its users to scale Java applications 
@@ -1532,6 +1573,9 @@ ftian20130102
 		http://archive.apache.org/dist/commons/dbcp/
 
 * jetty
+	- jetty http client
+		ref: http://blog.csdn.net/pwlazy/article/details/7389204
+		
 	- 架构
 		connector,handler,threadpool
 	- 起多个jetty实例用于web服务，设置不同端口
@@ -2362,6 +2406,12 @@ Storage for Interactive Services
 		当然最彻底的解决这类问题的方案是将master HA集群做成peer2peer的，屏蔽掉外部Zookeeper的依赖。每个节点都是对等的没有主次，这样就不会存在脑裂的问题，
 		但是这种ha解决方案需要使用两阶段，paxos这类数据一致性保证协议来实现，不可避免的会降低系统数据变更的系统，如果系统中主要是对master的读取操作很少更新就很适合了。
 		from: http://backend.blog.163.com/blog/static/20229412620128911939110/
+
+		PS:
+			多个master的实现方案，通过Paxos协议
+			
+			更多见：* Paxos
+	
 
 	 - zookeeper HA
 		
@@ -3345,6 +3395,22 @@ Storage for Interactive Services
 		如果需要打patch，则打好相应的patch后再编译安装
 	第三方源安装
 * linux c 开发			linux c/c++ c++ cpp
+	- fork函数
+			一个进程，包括代码、数据和分配给进程的资源。fork()函数通过系统调用创建一个与原来进程几乎完全相同的进程，也就是两个进程可以做完全相同的事，
+		但如果初始参数或者传入的变量不同，两个进程也可以做不同的事。
+　　		一个进程调用fork()函数后，系统先给新的进程分配资源，例如存储数据和代码的空间。然后把原来的进程的所有值都复制到新的新进程中，只有少数值与原来
+		的进程的值不同。相当于克隆了一个自己。
+
+			也就是说，在Linux下一个进程在内存里有三部分的数据，就是"代码段"、"堆栈段"和"数据段"。"代码段"，顾名思义，就是存放了程序代码的数据，假如机器中有数个进程运行相同的一个程序，那么它们就可以使用相同的代码段。"堆栈段"存放的就是子程序的返回地址、子程序的参数以及程序的局部变量。而数据段则存放程序的全局变量，常数以及动态数据分配的数据空间（比如用malloc之类的函数取得的空间）。系统如果同时运行数个相同的程序，它们之间就不能使用同一个堆栈段和数据段。
+	　　仔细分析后，我们就可以知道：
+	　　一个程序一旦调用fork函数，系统就为一个新的进程准备了前述三个段，首先，系统让新的进程与旧的进程使用同一个代码段，因为它们的程序还是相同的，对于数据段和堆栈段，系统则复制一份给新的进程，这样，父进程的所有数据都可以留给子进程，但是，子进程一旦开始运行，虽然它继承了父进程的一切数据，但实际上数据却已经分开，相互之间不再有影响了，也就是说，它们之间不再共享任何数据了。
+	　　fork()不仅创建出与父进程代码相同的子进程，而且父进程在fork执行点的所有上下文场景也被自动复制到子进程中，包括：
+	　　——全局和局部变量
+	　　——打开的文件句柄
+	　　——共享内存、消息等同步对象
+	　　而如果两个进程要共享什么数据的话，就要使用另一套函数（shmget，shmat，shmdt等）来操作。现在，已经是两个进程了，对于父进程，fork函数返回了子程序的进程号，而对于子程序，fork函数则返回零，这样，对于程序，只要判断fork函数的返回值，就知道自己是处于父进程还是子进程中。
+		from: http://www.dzsc.com/data/html/2009-9-10/78615.html
+
 	- eclipse集成cpp开发环境，下载CDT版本的eclipse，或者安装CDT插件
 		CDT插件：http://download.eclipse.org/tools/cdt/releases/helios
 		eclipse for javaee版本，安装插件，再安装minGW
@@ -4501,6 +4567,22 @@ Storage for Interactive Services
 				整个计算机网络的实现体现为协议的实现，TCP/IP协议是Internet互联网的核心协议。
 
 * log * log4j
+	- log4j热加载
+	通过spring配置log4j的热加载：
+		web.xml
+		<context-param>
+			<param-name>log4jConfigLocation</param-name>
+			<param-value>file:${app.config.dir}/log4j.xml</param-value>
+		</context-param>
+		<context-param>
+			<param-name>log4jRefreshInterval</param-name>
+			<param-value>10000</param-value>
+		</context-param>
+		<listener>
+			<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+		</listener>
+	- log4j通过配置，将log append到远程地址或日志存储服务中以便于查询和管理
+		配置appender
 	- log4j调优
 		log4j输出log到文件时，使用缓冲输出
 			log4j.appender.monitorAppender.BufferedIO=true
@@ -4532,6 +4614,102 @@ Storage for Interactive Services
 	看log4j的error方法说明，直接传对象接收的是message消息对象，如何给的是非message对象，可能没有重写tostring方法，输出的日志内容为对象而不是异常的内容。
 
 * concurrent包 ，java concurrent	       * 并发 * 同步 * java并发/同步
+	- CountDownLatch
+
+		await()方法调用后，需要等到计数为0时线程才继续执行；await方法还能指定超时时间，避免一直等待；
+		一般使用场景为，批量任务执行时，定义2个latch，一个标识是否都做完了，另一个标识是否都成功了，实现多线程间的同步。
+
+		一个同步辅助类，在完成一组正在其他线程中执行的操作之前，它允许一个或多个线程一直等待
+		DOC说明：
+		-------
+		A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes. 
+
+		A CountDownLatch is initialized with a given count. The await methods block until the current count reaches zero due to invocations of the countDown method, 
+		after which all waiting threads are released and any subsequent invocations of await return immediately. This is a one-shot phenomenon -- the count cannot be reset. 
+		If you need a version that resets the count, consider using a CyclicBarrier. 
+
+		A CountDownLatch is a versatile synchronization tool and can be used for a number of purposes. A CountDownLatch initialized with a count of one serves as a simple on/off latch, 
+		or gate: all threads invoking await wait at the gate until it is opened by a thread invoking countDown. A CountDownLatch initialized to N can be used to make one thread wait 
+		until N threads have completed some action, or some action has been completed N times. 
+
+		A useful property of a CountDownLatch is that it doesn't require that threads calling countDown wait for the count to reach zero before proceeding, it simply prevents any 
+		thread from proceeding past an await until all threads could pass. 
+
+		Sample usage: Here is a pair of classes in which a group of worker threads use two countdown latches: 
+
+		The first is a start signal that prevents any worker from proceeding until the driver is ready for them to proceed; 
+		The second is a completion signal that allows the driver to wait until all workers have completed. 
+		 class Driver { // ...
+		   void main() throws InterruptedException {
+		     CountDownLatch startSignal = new CountDownLatch(1);
+		     CountDownLatch doneSignal = new CountDownLatch(N);
+
+		     for (int i = 0; i < N; ++i) // create and start threads
+		       new Thread(new Worker(startSignal, doneSignal)).start();
+
+		     doSomethingElse();            // don't let run yet
+		     startSignal.countDown();      // let all threads proceed
+		     doSomethingElse();
+		     doneSignal.await();           // wait for all to finish
+		   }
+		 }
+
+		 class Worker implements Runnable {
+		   private final CountDownLatch startSignal;
+		   private final CountDownLatch doneSignal;
+		   Worker(CountDownLatch startSignal, CountDownLatch doneSignal) {
+		      this.startSignal = startSignal;
+		      this.doneSignal = doneSignal;
+		   }
+		   public void run() {
+		      try {
+			startSignal.await();
+			doWork();
+			doneSignal.countDown();
+		      } catch (InterruptedException ex) {} // return;
+		   }
+
+		   void doWork() { ... }
+		 }
+
+		 
+		Another typical usage would be to divide a problem into N parts, describe each part with a Runnable that executes that portion and counts down on the latch, and queue all the Runnables to an Executor. When all sub-parts are complete, the coordinating thread will be able to pass through await. (When threads must repeatedly count down in this way, instead use a CyclicBarrier.) 
+
+		 class Driver2 { // ...
+		   void main() throws InterruptedException {
+		     CountDownLatch doneSignal = new CountDownLatch(N);
+		     Executor e = ...
+
+		     for (int i = 0; i < N; ++i) // create and start threads
+		       e.execute(new WorkerRunnable(doneSignal, i));
+
+		     doneSignal.await();           // wait for all to finish
+		   }
+		 }
+
+		 class WorkerRunnable implements Runnable {
+		   private final CountDownLatch doneSignal;
+		   private final int i;
+		   WorkerRunnable(CountDownLatch doneSignal, int i) {
+		      this.doneSignal = doneSignal;
+		      this.i = i;
+		   }
+		   public void run() {
+		      try {
+			doWork(i);
+			doneSignal.countDown();
+		      } catch (InterruptedException ex) {} // return;
+		   }
+
+		   void doWork() { ... }
+		 }
+
+		 
+		Memory consistency effects: Actions in a thread prior to calling countDown() happen-before actions following a successful return from a corresponding await() in another thread.
+
+
+		-------
+
 	- continuration部分类用ReentrantLock实现同步
 	countdown
 
@@ -5466,6 +5644,16 @@ search in index find pdf
 		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
  * spring
+	- 加入spring支持
+		pom配置spring依赖包
+		创建application
+		若为web项目，在web.xml中配置spring 的listener用于启动时初始化spring容器
+			<listener>
+				<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+			</listener>
+
+	- spring整合hibernate
+		
 	- spring对ibatis的整合，提供SqlMapClientCallback回调接口实现spring与ibatis结合，以回调的方式将操作封装给ibatis的SqlMapExecutor执行。
 		org.springframework.orm.ibatis.SqlMapClientTemplate
 		------
@@ -8177,7 +8365,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		lsof -i:3306
 		查看3306端口被谁占用
 		lsof简介
-		lsof（list open files）是一个列出当前系统打开文件的工具。在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。所以如传输控制协议 (tcp) 和用户数据报协议 (udp) 套接字等，系统在后台都为该应用程序分配了一个文件描述符，无论这个文件的本质如何，该文件描述符为应用程序与基础操作系统之间的交互提供了通用接口。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能够查看这个列表对系统监测以及排错将是很有帮助的。
+		lsof（list open files）是一个列出当前系统打开文件的工具。在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，
+		还可以访问网络连接和硬件。所以如传输控制协议 (tcp) 和用户数据报协议 (udp) 套接字等，系统在后台都为该应用程序分配了一个文件描述符，
+		无论这个文件的本质如何，该文件描述符为应用程序与基础操作系统之间的交互提供了通用接口。因为应用程序打开文件的描述符列表提供了大量
+		关于这个应用程序本身的信息，因此通过lsof工具能够查看这个列表对系统监测以及排错将是很有帮助的。
 		lsof使用
 		lsof输出信息含义
 		在终端下输入lsof即可显示系统打开的文件，因为 lsof 需要访问核心内存和各种文件，所以必须以 root 用户的身份运行它才能够充分地发挥其功能。
@@ -21295,6 +21486,7 @@ day263 Tuesday, April 09, 2013
 	ibatis的session通过SqlMapExecutorDelegate执行具体sql
 
 7. interview
+	带出来的都是积极的，太诚实了就是伤自己，厚黑学
 	最近在研究啥，看啥书？
 		JVM
 		NIO
@@ -21304,6 +21496,17 @@ day263 Tuesday, April 09, 2013
 	MQ
 	alipay
 		hibernate准备好，都忘的差不多了吧。。。
+	DB
+		mysql
+		oracle
+		sql server
+	前端
+		jquery
+		Jsp
+			struts2标签
+			EL表达式
+		session管理
+
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -21404,6 +21607,11 @@ day266 Friday, April 12, 2013
 			
 			An observable object can have one or more observers. An observer may be any object that implements interface Observer. After an observable instance changes, 
 			an application calling the Observable's notifyObservers method causes all of its observers to be notified of the change by a call to their update method. 
+
+			notifyxxx
+			addObserver
+				Vector实现监听者列表
+
 		Observer
 			A class can implement the Observer interface when it wants to be informed of changes in observable objects.
 
@@ -21461,5 +21669,296 @@ day266 Friday, April 12, 2013
 
 	与所处的环境对成长直接有关，只搭过鸡窝，那来盖大厦的心得。不过略有耳闻所见罢了。
 
-14. 工作虽苦，一直很愉快，下个目标，继续前行
+14. 工作虽苦却很愉快，视野也长了不少；愉快的开始，也就让它愉快的结束，该继续赶路了，继续前行
+	专业，深层次
+	业务，大数据，高并发
+
+15. 优势在哪里
+	全能选手 lol
+
+	劣势在哪里
+		分工细化背景下找不到特别突出的地方
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day267 Monday, April 15, 2013
+
+1. 
+	* 广渠门项目
+
+2. 广渠门项目
+	提测
+		1) SLB API增加逻辑，对于已关闭的region，API不去调用，返回集群维护中错误
+		2) 删除，切换vm或者rs时，slb api不需要再去houyi db查询vm信息，而是直接在slb api数据库查询
+		3) slb api 支持只关闭对某个region下slb的调用，而不影响对其他region下slb的调用
+	HA方案预设计
+
+	SLB API的svn分支包含在SLB Master的分支下，是否单独拉出来比较合适，开发时互不影响？
+
+3. 大表，大数据
+	
+4. 实践、沉淀 -tip-
+		
+5. 大二层网络定义
+	OSI网络模型中，二层为链路层（MAC，ARP）
+	跨数据中心的二层，不可避免需要走三层网络，通过路由到达目的端，为了实现此目的，隧道技术的采用是不可避免的
+
+6. SLB API-SLB MASTER
+	create_loadbalance
+		接受API参数并处理
+		查询可用eip(for update查询)
+			没有找到则抛异常（可设计优化为返回错误码而不是以异常来做为返回，不以异常做为逻辑分支）
+		创建LB
+		绑定eip到lb instance上
+		将LB加入上下文缓存中
+
+		注：全程DB操作
+	
+	add_vm
+		接受API参数并处理
+		调用service层进行addVm操作
+		service层以Command模式将必须的参数传递给addVm操作类并调用process()以执行,参数有lbId,user_id,lvs_realserver_task,proxy_realserver_task,vm_list
+			注意：这里传入了addLvsRealServerTask, addProxyRealServerTask这2个对象封装了add_lvs,add_proxy的操作。定义代码如下：
+			-------
+			LvsRealServerTask addLvsRealServerTask;
+			ProxyRealServerTask addProxyRealServerTask;
+			LvsRealServerTask deleteLvsRealServerTask;
+			ProxyRealServerTask deleteProxyRealServerTask;
+			LvsRealServerTask switchLvsRealServerTask;
+			ProxyRealServerTask switchProxyRealServerTask;
+			-------
+		到rs_pool表找到lbId对应的所有RsPool	 （如果有则认为是add_rs操作）
+			如果没有rsPool与此lbId对应：
+				则将本次vm和lbId信息，插入到vm (ip_addr, weight, lb_id, gmt_create)表中
+				执行成功，返回结果
+
+			如果有rsPool记录：
+				将本次vm和lbId信息，插入到vm (ip_addr, weight, lb_id, gmt_create)表中
+				根据vmList和rsPoolId，到real_server(ip_addr,weight,rs_pool_id,gmt_create,gmt_modify)表创建记录
+				因为lbId有对应的rsPool记录，查询对应的vip（select * from vip where lb_id=）
+					若lbId对应的vip存在，则add rs hc status ，参数为vmList,vip对应的rspoolId，vipId	 ，rs_hc_status(ip_addr,vip_id,rs_pool_id,gmt_create,gmt_modify)
+					检查并设置vip的状态，CheckVipList(vipList, Action.CONFIG,lbDo.getUserId(), tcpVipList, httpVipList) ，（vip状态：NONE("none"), CONFIG("config"), ACTIVE("active"), INACTIVE("inactive"), UPDATE("update"), SUCCESS("success"), ERROR("error");）
+						遍历vip列表，调用service修改vip状态，
+							根据vip当前状态获得下一个状态的操作方法枚举对象，并将action传递过去，返回下一个vip状态值（CONFIGURING("configuring")）；
+							同样获取下一个action对象（Action.CONFIG）
+								------
+									RUNNING	STOPPED   STOPPING    STARTING    CONFIGURING    STARTING_FAIL    STOPPING_FAIL    CONFIGURING_FAIL
+									===================================================================================================
+									------------------------------------------------ vip的状态机 -------------------------------------------------------------------
+									CONFIGURING     -         -           -             -               -                -                   -       |   config
+									-          STARTING     -           -             -               -                -                   -       |   active
+									STOPPING        -         -           -             -          STOPPING         STOPPING            STOPPING     |   inactive
+									-             -         -           -             -          STARTING         STOPPING           CONFIGURING   |   update
+									-             -       STOPPED     RUNNING      RUNNING            -                -                   -       |   success
+									-             -     STOPPING_FAIL STARTING_FAIL  CONFIGURING_FAIL  -               -                   -       |   error
+									----------------------------------------------- 对vip操作的迁移图  --------------------------------------------------------------
+									config         none       -           -             -               -                -                   -       |   config
+									-           active      -           -             -               -                -                   -       |   active
+									inactive        -         -           -             -            inactive         inactive            inactive   |   inactive
+									none          none       -           -             -            update           inactive            update     |   update
+									none          none      none         none        none           none              none                none      |   success
+									none          none      none         none        none           none              none                none      |   error
+									====================================================================================================
+								------
+							如果nextAction为None且netStatus不为null，不成立，则将vip的状态更新到vip表中
+							返回Action对象
+						如果返回的Action与传入的相同，则跳过不处理
+						判断vip的类型，HTTP or TCP 并加入对应参数中的tcpVipList, httpVipList)中
+						根据上面列表，检查instance和proxy
+							根据lbId查询lbInstance，若未找到，日志打no lb instance bound to lb
+							若有lbInstance则遍历
+								调用service检查lbInstance（checkInstance(lbInstance.getId(), action)）
+					判断tcpVipList, httpVipList两者那个有值，对应的调用lvsRealServerTask或proxyRealServerTask执行process(vipMap)方法,参数类型为：Map<List<RealServerDo>, List<VipDo>>
+						Task调用lvsMessageService或者proxyMessageService根据vip和rs构造消息
+							根据lbId找对应的ip记录（select ip_addr from ip where lb_id =），得到eip列表
+							遍历eip列表
+								根据ip的lbInstance属性，查找lbInstance
+								若未找到，则log记录 ip xxx not bound to instance，跳过不处理
+								为单个vip构建ips字段
+								根据lbIntanceId找到lbNode列表
+								遍历lbNode列表，将ipList消息映射到某个lvs上
+								组装lbNodesMap
+						返回lbNodesMap
+					调用common service发送事件给agent（具体事件在子类的getEvent方法中，如AddLvsRealServerTaskImpl，DeleteLvsRealServerTaskImpl etc.）, Event定义了各事件对应的操作码
+						sendParallelly(lbNodesMap, event,Constants.LVS_AGENT_TYPE, Constants.SEND_LVS_TIMEOUT)
+							异步RPC调用到agent（lvs_agent,proxy_agent），传入回调函数处理异步返回值
+							------
+							rpcPoint.asynCall(address, port, event, 1, RestUtil.getJsonValue(data), new ResponseHook() {
+											
+											public void onResponse(Message response) {
+												if (response != null) {
+													String rspBody = new String(response.getBuffer(),
+															Charset.forName("utf-8"));
+
+													logger.info("sendMessage to agent, event : " + event
+															+ ", agent address : " + address + ", response : "
+															+ rspBody + ", sequence: " + response.getSequence());
+													if(MessageUtil.checkResponse(rspBody))
+														successCountDL.countDown();
+												} else {
+													logger.warn("sendMessage to agent, request timeout, event : "
+															+ event + ", agent address : " + address);
+												}
+												countDL.countDown();
+											}
+										});	
+							------
+							PS:
+								异步回调或者消息传递方式实现异步操作。
+
+							
+					操作成功，更新vip状态的DB中
+						
+					
+									
+
+							
+		根据task返回值，构造结果，返回
+
+
+
+				
+
+
+	add_rs流程梳理
+		xuanyuan-plugin-slb-RestRsPool
+	
+	=Spring JDBC=
+	使用spring提供的jdbctemplate类使用jdbc操作数据库（spring jdbc模块）
+	使用spring编程式事务
+		PlatformTransactionManager
+		----
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
+		...
+		TransactionStatus tstatus = transactionManager.getTransaction(def);
+		...
+		transactionManager.commit(tstatus);
+		...
+		transactionManager.rollback(tstatus);
+		...
+		----
+
+		----
+		<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource"></property>
+		</bean>
+		----
+
+	对于固定句型的sql（比如insert语句），可以用PreparedStatement来优化
+		----
+		This method is optimized for handling parametric SQL statements that benefit from precompilation. If the driver supports precompilation, the method prepareStatement 
+		will send the statement to the database for precompilation. Some drivers may not support precompilation. In this case, the statement may not be sent to the database until 
+		the PreparedStatement object is executed. This has no direct effect on users; however, it does affect which methods throw certain SQLException objects. 
+		----
+	
+	org.springframework.jdbc.support.KeyHolder
+		Interface for retrieving keys, typically used for auto-generated keys as potentially returned by JDBC insert statements. 
+
+	org.springframework.jdbc.support.GeneratedKeyHolder
+		Default implementation of the KeyHolder interface, to be used for holding auto-generated keys (as potentially returned by JDBC insert statements). 
+	
+	在jdbcTemplate类下面这个方法中用到：
+		public int update(final PreparedStatementCreator psc, final KeyHolder generatedKeyHolder)
+
+
+7. 了解云磁盘项目
+
+8. command模式
+
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day268 Tuesday, April 16, 2013
+
+1. 
+	* MSS重构
+
+2. MSS重构
+	存储产品选型，云监控？待评估
+	数据及时性是否满足
+	数据归并汇总是否满足
+	读写性能是否满足
+	如何部署
+
+	云监控的产品进度不一定能跟上本项目，故暂以SLS作为设计时的存储
+	云监控作为所有产品监控数据的存放源？产品总体规划
+
+	SLB
+		SDK?
+		APIVersion	服务版本号 多服务版本 version dubbo？ -tip-
+			指定需要访问API的版本，支持不同版本API的访问
+
+	pync了解
+	
+	参考SLB xuanyuan agent的实现，将python版的monitor agent作为xuanyuan的一个agent运行。
+
+
+
+
+3. 24种设计模式复习
+	head first design patten
+
+4. spring validation
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day269 Wednesday, April 17, 2013
+
+1. 
+	* MSS
+
+
+2. slb流程梳理
+	changlaobang
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day270 Thursday, April 18, 2013
+
+1. 
+	* MSS
+	* 大region二期
+
+2. 大region二期
+	bugfix
+	image.status=0为可用
+
+	根据image查询可用region时，if语句只执行一次而不是跳出for语句。
+	
+	存储结构：
+		lvs每个region一套（主备）-> OSS Master -> pangu多个Master -> kv存储（一个region多份拷贝）
+		region间通过lvs访问各自OSS服务
+	
+	23号合代码到trunk
+
+
+
+3. zookeeper分布式锁应用
+
+4. slb流程梳理
+
+5. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day271 Friday, April 19, 2013
+
+1. 
+	* MSS
+
+
+2. MSS
+	数据写入方案暂讨论为：写入云监控同时，也写入到monitor库
+	API暂时还是从monitor库取，后续改为从云监控取数据（或建议用户直接走云监控接口，减小API数据流的访问流量）
+
+3. 装饰器模式
+	chunked输出可以重构为使用装饰器模式，继承自DataOutputStream或者FilterOutputStream
+4. SLB流程梳理
+	RPC调用部分（如master到lvs agent或其他），异步RPC调用的实现（回调函数）
+
+	The HttpExchange class is intended to be used by a developer wishing to have close asynchronous interaction with the the exchange.
+
+	jetty http client分析
+	ref: http://blog.csdn.net/pwlazy/article/details/7389204
+
+	apsa2的rpc采用blocking模式，回调函数处理返回，使用jetty client的NIO机制
+
 

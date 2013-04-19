@@ -1,0 +1,104 @@
+1. Head first设计模式
+Tuesday, April 16, 2013 
+p8	
+委托模式，将一些变化的部分抽取出来，定义成接口并实现，引用到这些变化的类通过接口引用。面向接口和抽象编程
+在运行时通过set方法动态设定接口的实现，从而可以动态变化
+
+p53&67
+观察者模式 - 交互对象之间的松耦合设计
+
+在对象间定义一对多的依赖关系
+
+主题不关心观察者的动作，只需通知它即可；双方的修改互不耦合，都面向接口编程
+松耦合的设计建立有弹性的OO系统，能够应对变化，是因为对象间的互相依赖降到了最低
+
+JDK对观察者模式的支持，Observer，Observable并可自定义拉pull或推push（具体是只把可观察对象传递给观察者，如果关心则自己拉去；
+还是把可观察者及其数据一起给观察者，不论观察者是否关心都推过去）；缺点：Observable是一个类而不是接口，违反了多用组合少用集成的设计
+原则，毕竟java不支持多重继承
+
+
+有多个观察者时，不可以依赖特定的通知次序
+
+swing中也大量使用观察者模式
+
+
+Wednesday, April 17, 2013
+
+p59&74
+第二章总结
+
+OO基础：抽象
+OO原则：
+	封装变化
+	多用组合，少用继承
+	针对接口编程，不针对实现编程
+	为交互对象间的松耦合而努力
+
+p64&79
+装饰器模式	Decorator	 Decoration
+
+PS:
+	看一个apache类的说明：
+	org.apache.commons.collections.collection.AbstractCollectionDecorator
+
+	Decorates another Collection to provide additional behaviour. 
+
+	Each method call made on this Collection is forwarded to the decorated Collection. This class is used as a framework on which to build to extensions such as synchronized 
+	and unmodifiable behaviour. The main advantage of decoration is that one decorator can wrap any implementation of Collection, whereas sub-classing requires a new class 
+	to be written for each implementation. 
+
+	This implementation does not perform any special processing with iterator(). Instead it simply returns the value from the wrapped collection. This may be undesirable, for example 
+	if you are trying to write an unmodifiable implementation it might provide a loophole.
+
+	public abstract class AbstractCollectionDecorator implements Collection {
+
+	继承这个抽象类，并对被装饰的对象的方法外层再做包装以实现组合的方式扩展类的功能（比如同步集合、不可修改的集合类等）；
+	注：优点是，一个Collection接口的decorator可以装饰此接口的多个实现类，而通过继承的话需要为每个实现类写一个子类来达到装饰的目的。	       -tip-
+
+p71&86
+
+开放-关闭原则
+设计原则：
+	类应该对扩展开放，对修改关闭
+
+装饰器模式，完全遵循开放-关闭原则
+
+设计的每个部分都遵循开放-关闭原则？
+你办不到。要让OO设计同时具备开放性和关闭性，又不修改现有的代码，需要花费许多时间和努力。一般来说，我们实在没有闲工夫把设计的每
+个部分都这么设计（而且，就算做得到，也可能只是一种浪费）。遵循开放-关闭原则，通常会引入新的抽象层次，增加代码
+的复杂度。你需要把注意力集中在设计中最有可能改变的地方，然后应用开放-关闭原则。
+
+p73&87
+装饰器模式
+	
+	模式说明：装饰者模式动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。
+
+	- 装饰者和被装饰对象有相同的超类型
+	- 可以用一个或多个装饰者包装一个对象
+	- 因为装饰者和被装饰者有相同的超类型（接口或抽象类），所以在任何需要原始对象（被包装的）的场合，	可以用装饰过的对象代替它
+	- 装饰者可以在委托被装饰者的行为之前与/或之后，加上自己的行为，以达到特定的目的
+	- 对象可以在任何时候被装饰，所以可以在运行时动态地、不限量的用你喜欢的裝饰者来装饰对象
+
+	比如双份咖啡，装饰器再装饰一次即可。
+
+	有更好的方式建立被装饰者对象，装饰者通常是用其他类似于工厂或生成器这样的模式创建的。
+
+	java.io包内多种流的设计就是用到了装饰器模式，比如在基础对象FileInputStream外面有Buffer额定InputStream等装饰类提供辅助功能
+	BufferedInputStream及LineNumberInputStream都扩展自FilterInputStream，而FilterInputStream是一个抽象的装饰类(貌似是类，而非抽象类)。
+
+	java.io.FilterInputStream
+		DOC
+		A FilterInputStream contains some other input stream, which it uses as its basic source of data, possibly transforming the data along the way or 
+		providing additional functionality. The class FilterInputStream itself simply overrides all methods of InputStream with versions that pass all requests 
+		to the contained input stream. Subclasses of FilterInputStream may further override some of these methods and may also provide additional methods
+		and fields.
+
+	chunked输出，可以使用此模式，继承自DataOutputStream或者FilterOutputStream，以chunk为单位输出。
+
+
+
+
+
+
+
+
