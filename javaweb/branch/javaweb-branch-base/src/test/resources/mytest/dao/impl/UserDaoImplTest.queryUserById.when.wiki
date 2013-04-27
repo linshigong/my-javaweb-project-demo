@@ -1,0 +1,5 @@
+|connect|
+|clean table|`user`|
+|insert|`user`|
+|user_id|user_name|service_secret_key|service_access_id|status|is_admin|
+|1001|1001|s_key|s_id|1|1|

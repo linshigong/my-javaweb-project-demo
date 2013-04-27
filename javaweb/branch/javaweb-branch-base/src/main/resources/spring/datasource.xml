@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="byName">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="testOnBorrow" value="true" />
+		<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+		<property name="driverClassName" value="${db.source.driver}" />
+		<property name="url" value="${db.source.url}" />
+		<property name="username" value="${db.source.username}" />
+		<property name="password" value="${db.source.password}" />
+		<property name="minIdle" value="${db.source.min.idle}" />
+		<property name="maxActive" value="${db.source.max.active}" />
+		<property name="maxIdle" value="${db.source.max.idle}" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+
+	<bean id="transactionTemplate"
+		class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+	<bean id="mySessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingResources">
+			<list>
+				<value>hibernate/User.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+			</value>
+		</property>
+	</bean>
+
+	<!-- use jndi datasource 
+	<beans> 
+		<jee:jndi-lookup id="myDataSource" jndi-name="java:comp/env/jdbc/myds"/> 
+	</beans> 
+	-->
+
+
+</beans>
