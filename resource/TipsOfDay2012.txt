@@ -23229,4 +23229,6 @@ day277 Sunday, April 28, 2013
 
 1. 
 	* 
-2. 
+2. failed to load the jni shared library
+JDK是32位，下载的eclipse也需要是32位的；如果是64位的eclipse，则JDK也需要64位 -tip-
+因为你的jdk装的是32位的，而eclipse装的是64位的，换个eclipse就好了
