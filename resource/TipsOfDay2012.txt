@@ -11,6 +11,398 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+tmp
+ft2013-04-22
+* 日志切割 access_log文件过大
+	- nginx的日志切割
+		Nginx产生的日志都是存在一个文件，随着网站运行时间越长，日志文件的大小也在不断增长，这对我们想分析当天日志非常的不方便，
+		所以需要每天把日志文件分割出来，并以时间命名。
+
+		创建日志分割脚本
+
+		1、登录SSH，创建cut_logs.sh文件
+
+		vi /root/cut_logs.sh
+		2、粘贴下面代码到cut_logs.sh，并保存
+
+		#!/bin/bash
+		# The Nginx logs path
+		logs_path="/home/wwwlogs/"
+		mkdir -p ${logs_path}$(date -d "yesterday" +"%Y")/$(date -d "yesterday" +"%m")/
+		mv ${logs_path}www.juzihc.com.log ${logs_path}$(date -d "yesterday" +"%Y")/$(date -d "yesterday" +"%m")/juzihc_$(date -d "yesterday" +"%Y%m%d").log
+		kill -USR1 $(cat /usr/local/nginx/logs/nginx.pid)
+		3、添加cut_logs.sh执行权限
+
+		chmod +x /root/cut_logs.sh
+		设置cut_logs.sh启动时间
+
+		执行命令crontab -e进入编辑状态
+		添加如下代码,每天0点01分启动。
+
+		01 00 * * * /root/cut_logs.sh
+		这样每天定时分割日志文件就设置成功了。当然如果你担心日志文件占太多空间，还可以执行压缩tar,并设置删除多少天前的日志文件。
+		from: http://www.centos.bz/2011/03/split-nginx-logfile-eveyday/
+* 站点
+	http://www.beej.us/ 技术站点
+
+* Ethernet,internet,intranet,extranet 
+	THE INTERNET
+	The Internet is a new world. The Internet is not only "The Big Picture," it also offers a global perspective. By providing connectivity to anyone with a computer and a telephone line, 
+	the Internet is the networking breakthrough of our lifetime. It includes everything from universal e-mail to transactions between individuals and between companies. Of course, 
+	this now includes commerce as well as information exchanges and new directories (such as search engines) that provide phone book-style accessibility for digital communications. 
+
+	Some of the most important results of this networking revolution are new forms of marketing and outreach, new connections between customers and collaborators, new sources 
+	for news and research, and opportunities for new kinds of distribution of products (as well as of information). But because the Internet is the broadest information super-highway, 
+	it lacks some of the security and privacy that's needed for the internal workings of business organizations. Advanced features like multimedia are also more likely to be limited because 
+	most individuals are still using dial-up connections and, as a result, have very limited data bandwidth. 
+
+	INTRANETS
+	Intranets are new kinds of internal networks. Think of "Intra" as it is used in Intramural sports. Intranets tend to resemble the architecture of a closed-circuit video network as 
+	opposed to the Internet which is more like broadcasting in terms of its reach. Intranets are used for more private communications, connectivity among work groups and larger 
+	organizations. For example, some companies use Intranets to offer corporate services such as benefits programs and other kinds of corporate communications. Also, Intranets 
+	enable information sharing that empowers employees who might otherwise be left "out of the loop." (See "Groupware" below.) 
+
+	Because of their limited geographic range, Intranets offer more bandwidth, frequently Ethernet's 10Kbps or better. As a result of this bandwidth and the "closed loop" structure, 
+	more advanced networking features such as video and multimedia, as well as more technological control, are possible. For example, a company can specify that a specific web 
+	browser and even a specific version of that browser (licensed by the company) be used on its network. This enables a consistent and more dependable user experience than is 
+	possible on the Internet. Even Internet related services such as Pointcast can be customized for a particular company and its Intranet. 
+
+	EXTRANETS
+	Extranets are a more complex implementation of the wired world. Just because an employee is telecommuting doesn't mean she shouldn't have access to the company Intranet. 
+	Sales people on the road are just as critical to a corporation's success as those who sit behind desks. And in today's world of virtual work groups, suppliers and other vendors 
+	are frequently critical members of the team and they may need an insider's degree of access. Extranet's provide these important networking "bridges" by combining the Internet 
+	with the Intranet. 
+
+	By extending the corporate network to include the Internet, team members get the best of both worlds -- mobility with exclusivity. Because of the necessary security involved, 
+	Extranets frequently require the development of custom applications. For example, in order to give a remote sales person access to corporate sales statistics, the user needs 
+	remote access to a database that cannot be made visible to the competition. Most often, for something this sensitive, encryption is involved because password protection is not sufficient. 
+
+	In most cases, Extranets do not involve high bandwidth applications like video and multimedia because of the limited bandwidth of remote users who most frequently use dial 
+	up connections. 
+
+	Ethernet is the most widely-installed local area network ( LAN) technology. Specified in a standard, IEEE 802.3, Ethernet was originally developed by Xerox from an earlier 
+	specification called Alohanet (for the Palo Alto Research Center Aloha network) and then developed further by Xerox, DEC, and Intel. An Ethernet LAN typically uses coaxial 
+	cable or special grades of twisted pair wires. Ethernet is also used in wireless LANs. The most commonly installed Ethernet systems are called 10BASE-T and provide transmission 
+	speeds up to 10 Mbps. Devices are connected to the cable and compete for access using a Carrier Sense Multiple Access with Collision Detection (CSMA/CD ) protocol. 
+	Fast Ethernet or 100BASE-T provides transmission speeds up to 100 megabits per second and is typically used for LAN backbone systems, supporting workstations with 
+	10BASE-T cards. Gigabit Ethernet provides an even higher level of backbone support at 1000 megabits per second (1 gigabit or 1 billion bits per second). 10-Gigabit Ethernet 
+	provides up to 10 billion bits per second. 
+
+	Ethernet was named by Robert Metcalfe, one of its developers, for the passive substance called "luminiferous (light-transmitting) ether" that was once thought to pervade the universe, 
+	carrying light throughout. Ethernet was so- named to describe the way that cabling, also a passive medium, could similarly carry data everywhere throughout the network.
+
+* TCP_NODELAY (disable/enable Nagle's algorithm)
+	- 介绍
+			在网络拥塞控制领域，我们知道有一个非常有名的算法叫做Nagle算法（Nagle algorithm），这是使用它的发明人John Nagle的名字来命名的，
+		John Nagle在1984年首次用这个算法来尝试解决福特汽车公司的网络拥塞问题（RFC 896），该问题的具体描述是：如果我们的应用程序一次
+		产生1个字节的数据，而这个1个字节数据又以网络数据包的形式发送到远端服务器，那么就很容易导致网络由于太多的数据包而过载。比如，
+		当用户使用Telnet连接到远程服务器时，每一次击键操作就会产生1个字节数据，进而发送出去一个数据包，所以，在典型情况下，传送一个只
+		拥有1个字节有效数据的数据包，却要发费40个字节长包头（即ip头20字节+tcp头20字节）的额外开销，这种有效载荷（payload）利用率极其低下
+		的情况被统称之为愚蠢窗口症候群（Silly Window Syndrome）。可以看到，这种情况对于轻负载的网络来说，可能还可以接受，但是对于重负载的
+		网络而言，就极有可能承载不了而轻易的发生拥塞瘫痪。
+			针对上面提到的这个状况，Nagle算法的改进在于：如果发送端欲多次发送包含少量字符的数据包（一般情况下，后面统一称长度小于MSS的数据包
+		为小包，与此相对，称长度等于MSS的数据包为大包，为了某些对比说明，还有中包，即长度比小包长，但又不足一个MSS的包），则发送端会
+		先将第一个小包发送出去，而将后面到达的少量字符数据都缓存起来而不立即发送，直到收到接收端对前一个数据包报文段的ACK确认、或当前字符
+		属于紧急数据，或者积攒到了一定数量的数据（比如缓存的字符数据已经达到数据包报文段的最大长度）等多种情况才将其组成一个较大的数据包
+		发送出去，具体有哪些情况，我们来看看内核实现：
+		from: http://bbs.chinaunix.net/thread-3767363-1-1.html
+
+	- channel.socket().setTcpNoDelay(true);
+	
+* Servlet
+	- servlet3.0异步支持
+		------------
+		异步处理支持
+			Servlet 3.0 之前，一个普通 Servlet 的主要工作流程大致如下：首先，Servlet 接收到请求之后，可能需要对请求携带的数据进行一些预处理；接着，
+		调用业务接口的某些方法，以完成业务处理；最后，根据处理的结果提交响应，Servlet 线程结束。其中第二步的业务处理通常是最耗时的，这主要体现在数据库操作，
+		以及其它的跨网络调用等，在此过程中，Servlet 线程一直处于阻塞状态，直到业务方法执行完毕。在处理业务的过程中，Servlet 资源一直被占用而得不到释放，
+		对于并发较大的应用，这有可能造成性能的瓶颈。对此，在以前通常是采用私有解决方案来提前结束 Servlet 线程，并及时释放资源。
+			Servlet 3.0 针对这个问题做了开创性的工作，现在通过使用 Servlet 3.0 的异步处理支持，之前的 Servlet 处理流程可以调整为如下的过程：首先，Servlet 接收到请求
+		之后，可能首先需要对请求携带的数据进行一些预处理；接着，Servlet 线程将请求转交给一个异步线程来执行业务处理，线程本身返回至容器，此时 Servlet 还没有
+		生成响应数据，异步线程处理完业务以后，可以直接生成响应数据（异步线程拥有 ServletRequest 和 ServletResponse 对象的引用），或者将请求继续转发给其它 Servlet。
+		如此一来， Servlet 线程不再是一直处于阻塞状态以等待业务逻辑的处理，而是启动异步线程之后可以立即返回。
+			异步处理特性可以应用于 Servlet 和过滤器两种组件，由于异步处理的工作模式和普通工作模式在实现上有着本质的区别，因此默认情况下，Servlet 和过滤器并没有
+		开启异步处理特性，如果希望使用该特性，则必须按照如下的方式启用：
+			对于使用传统的部署描述文件 (web.xml) 配置 Servlet 和过滤器的情况，Servlet 3.0 为 <servlet> 和 <filter> 标签增加了 <async-supported> 子标签，该标签的默认取值为 false，
+		要启用异步处理支持，则将其设为 true 即可。以 Servlet 为例，其配置方式如下所示：
+		<servlet> 
+		    <servlet-name>DemoServlet</servlet-name> 
+		    <servlet-class>footmark.servlet.Demo Servlet</servlet-class> 
+		    <async-supported>true</async-supported> 
+		</servlet> 
+
+		对于使用 Servlet 3.0 提供的 @WebServlet 和 @WebFilter 进行 Servlet 或过滤器配置的情况，这两个注解都提供了 asyncSupported 属性，默认该属性的取值为 false，要启用异步处理支持，只需将该属性设置为 true 即可。以 @WebFilter 为例，其配置方式如下所示：
+		@WebFilter(urlPatterns = "/demo",asyncSupported = true) 
+		public class DemoFilter implements Filter{...} 
+
+		一个简单的模拟异步处理的 Servlet 示例如下：
+		@WebServlet(urlPatterns = "/demo", asyncSupported = true)
+		public class AsyncDemoServlet extends HttpServlet {
+		    @Override
+		    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+		    throws IOException, ServletException {
+			resp.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = resp.getWriter();
+			out.println("进入Servlet的时间：" + new Date() + ".");
+			out.flush();
+
+			//在子线程中执行业务调用，并由其负责输出响应，主线程退出
+			AsyncContext ctx = req.startAsync();
+			new Thread(new Executor(ctx)).start();
+
+			out.println("结束Servlet的时间：" + new Date() + ".");
+			out.flush();
+		    }
+		}
+
+		public class Executor implements Runnable {
+		    private AsyncContext ctx = null;
+		    public Executor(AsyncContext ctx){
+			this.ctx = ctx;
+		    }
+
+		    public void run(){
+			try {
+			    //等待十秒钟，以模拟业务方法的执行
+			    Thread.sleep(10000);
+			    PrintWriter out = ctx.getResponse().getWriter();
+			    out.println("业务处理完毕的时间：" + new Date() + ".");
+			    out.flush();
+			    ctx.complete();
+			} catch (Exception e) {
+			    e.printStackTrace();
+			}
+		    }
+		}
+
+		除此之外，Servlet 3.0 还为异步处理提供了一个监听器，使用 AsyncListener 接口表示。它可以监控如下四种事件：
+		异步线程开始时，调用 AsyncListener 的 onStartAsync(AsyncEvent event) 方法；
+		异步线程出错时，调用 AsyncListener 的 onError(AsyncEvent event) 方法；
+		异步线程执行超时，则调用 AsyncListener 的 onTimeout(AsyncEvent event) 方法；
+		异步执行完毕时，调用 AsyncListener 的 onComplete(AsyncEvent event) 方法；
+		要注册一个 AsyncListener，只需将准备好的 AsyncListener 对象传递给 AsyncContext 对象的 addListener() 方法即可，如下所示：
+		AsyncContext ctx = req.startAsync(); 
+		ctx.addListener(new AsyncListener() { 
+		    public void onComplete(AsyncEvent asyncEvent) throws IOException { 
+			// 做一些清理工作或者其他
+		    } 
+		    ... 
+		}); 
+
+		...
+
+		@MultipartConfig
+		该注解主要是为了辅助 Servlet 3.0 中 HttpServletRequest 提供的对上传文件的支持。该注解标注在 Servlet 上面，以表示该 Servlet 希望处理的请求的 MIME 类型
+		是 multipart/form-data。另外，它还提供了若干属性用于简化对上传文件的处理。具体如下：
+
+		表 5. @MultipartConfig 的常用属性
+		属性名	类型	是否可选	描述
+		fileSizeThreshold	int	是	当数据量大于该值时，内容将被写入文件。
+		location	String	是	存放生成的文件地址。
+		maxFileSize	long	是	允许上传的文件最大值。默认值为 -1，表示没有限制。
+		maxRequestSize	long	是	针对该 multipart/form-data 请求的最大数量，默认值为 -1，表示没有限制。
+
+		可插性支持
+			如果说 3.0 版本新增的注解支持是为了简化 Servlet/ 过滤器 / 监听器的声明，从而使得 web.xml 变为可选配置， 那么新增的可插性 (pluggability) 支持则将 Servlet 配置
+		的灵活性提升到了新的高度。熟悉 Struts2 的开发者都知道，Struts2 通过插件的形式提供了对包括 Spring 在内的各种开发框架的支持，开发者甚至可以自己为 Struts2 
+		开发插件，而 Servlet 的可插性支持正是基于这样的理念而产生的。使用该特性，现在我们可以在不修改已有 Web 应用的前提下，只需将按照一定格式打成的 JAR 包
+		放到 WEB-INF/lib 目录下，即可实现新功能的扩充，不需要额外的配置。
+			Servlet 3.0 引入了称之为“Web 模块部署描述符片段”的 web-fragment.xml 部署描述文件，该文件必须存放在 JAR 文件的 META-INF 目录下，该部署描述文件可以
+		包含一切可以在 web.xml 中定义的内容。JAR 包通常放在 WEB-INF/lib 目录下，除此之外，所有该模块使用的资源，包括 class 文件、配置文件等，只需要能够
+		被容器的类加载器链加载的路径上，比如 classes 目录等。
+			现在，为一个 Web 应用增加一个 Servlet 配置有如下三种方式 ( 过滤器、监听器与 Servlet 三者的配置都是等价的，故在此以 Servlet 配置为例进行讲述，过滤器和监听器
+		具有与之非常类似的特性 )：
+			编写一个类继承自 HttpServlet，将该类放在 classes 目录下的对应包结构中，修改 web.xml，在其中增加一个 Servlet 声明。这是最原始的方式；
+			编写一个类继承自 HttpServlet，并且在该类上使用 @WebServlet 注解将该类声明为 Servlet，将该类放在 classes 目录下的对应包结构中，无需修改 web.xml 文件。
+			编写一个类继承自 HttpServlet，将该类打成 JAR 包，并且在 JAR 包的 META-INF 目录下放置一个 web-fragment.xml 文件，该文件中声明了相应的 Servlet 配置。
+			web-fragment.xml 文件示例如下：
+		<?xml version="1.0" encoding="UTF-8"?>
+		<web-fragment 
+		    xmlns=http://java.sun.com/xml/ns/javaee
+		    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0"
+		    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		    http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
+		    metadata-complete="true">
+		    <servlet>
+			<servlet-name>fragment</servlet-name>
+			<servlet-class>footmark.servlet.FragmentServlet</servlet-class>
+		    </servlet>
+		    <servlet-mapping>
+			<servlet-name>fragment</servlet-name>
+			<url-pattern>/fragment</url-pattern>
+		    </servlet-mapping>
+		</web-fragment>
+
+		从上面的示例可以看出，web-fragment.xml 与 web.xml 除了在头部声明的 XSD 引用不同之外，其主体配置与 web.xml 是完全一致的。
+			由于一个 Web 应用中可以出现多个 web-fragment.xml 声明文件，加上一个 web.xml 文件，加载顺序问题便成了不得不面对的问题。Servlet 规范的专家组
+		在设计的时候已经考虑到了这个问题，并定义了加载顺序的规则。
+			web-fragment.xml 包含了两个可选的顶层标签，<name> 和 <ordering>，如果希望为当前的文件指定明确的加载顺序，通常需要使用这两个标签，<name> 主要
+		用于标识当前的文件，而 <ordering> 则用于指定先后顺序。一个简单的示例如下：
+		<web-fragment...>
+		    <name>FragmentA</name>
+		    <ordering>
+			<after>
+			    <name>FragmentB</name>
+			    <name>FragmentC</name>
+			</after>
+		    <before>
+			<others/>
+		    </before>
+		    </ordering>
+		    ...
+		</web-fragment>
+
+		如上所示， <name> 标签的取值通常是被其它 web-fragment.xml 文件在定义先后顺序时引用的，在当前文件中一般用不着，它起着标识当前文件的作用。
+			在 <ordering> 标签内部，我们可以定义当前 web-fragment.xml 文件与其他文件的相对位置关系，这主要通过 <ordering> 的 <after> 和 <before> 子标签来实现的。
+		在这两个子标签内部可以通过 <name> 标签来指定相对应的文件。比如：
+		<after> 
+		    <name>FragmentB</name> 
+		    <name>FragmentC</name> 
+		</after> 
+
+		以上片段则表示当前文件必须在 FragmentB 和 FragmentC 之后解析。<before> 的使用于此相同，它所表示的是当前文件必须早于 <before> 标签里所列出的 web-fragment.xml 文件。
+			除了将所比较的文件通过 <name> 在 <after> 和 <begin> 中列出之外，Servlet 还提供了一个简化的标签 <others/>。它表示除了当前文件之外的其他
+		所有的 web-fragment.xml 文件。该标签的优先级要低于使用 <name> 明确指定的相对位置关系。
+
+		ServletContext 的性能增强
+			除了以上的新特性之外，ServletContext 对象的功能在新版本中也得到了增强。现在，该对象支持在运行时动态部署 Servlet、过滤器、监听器，
+			以及为 Servlet 和过滤器增加 URL 映射等。以 Servlet 为例，过滤器与监听器与之类似。ServletContext 为动态配置 Servlet 增加了如下方法：
+			ServletRegistration.Dynamic addServlet(String servletName,Class<? extends Servlet> servletClass)
+			ServletRegistration.Dynamic addServlet(String servletName, Servlet servlet)
+			ServletRegistration.Dynamic addServlet(String servletName, String className)
+			<T extends Servlet> T createServlet(Class<T> clazz)
+			ServletRegistration getServletRegistration(String servletName)
+			Map<String,? extends ServletRegistration> getServletRegistrations()
+			其中前三个方法的作用是相同的，只是参数类型不同而已；通过 createServlet() 方法创建的 Servlet，通常需要做一些自定义的配置，然后使用 addServlet() 方法
+		来将其动态注册为一个可以用于服务的 Servlet。两个 getServletRegistration() 方法主要用于动态为 Servlet 增加映射信息，这等价于在 web.xml( 抑或 web-fragment.xml) 
+		中使用 <servlet-mapping> 标签为存在的 Servlet 增加映射信息。
+			以上 ServletContext 新增的方法要么是在 ServletContextListener 的 contexInitialized 方法中调用，要么是在 ServletContainerInitializer 的 onStartup() 方法中调用。
+			ServletContainerInitializer 也是 Servlet 3.0 新增的一个接口，容器在启动时使用 JAR 服务 API(JAR Service API) 来发现 ServletContainerInitializer 的实现类，
+		并且容器将 WEB-INF/lib 目录下 JAR 包中的类都交给该类的 onStartup() 方法处理，我们通常需要在该实现类上使用 @HandlesTypes 注解来指定希望被处理的类，
+		过滤掉不希望给 onStartup() 处理的类。
+
+		HttpServletRequest 对文件上传的支持
+			此前，对于处理上传文件的操作一直是让开发者头疼的问题，因为 Servlet 本身没有对此提供直接的支持，需要使用第三方框架来实现，
+		而且使用起来也不够简单。如今这都成为了历史，Servlet 3.0 已经提供了这个功能，而且使用也非常简单。为此，HttpServletRequest 提供了
+		两个方法用于从请求中解析出上传的文件：
+		Part getPart(String name)
+		Collection<Part> getParts()
+		前者用于获取请求中给定 name 的文件，后者用于获取所有的文件。每一个文件用一个 javax.servlet.http.Part 对象来表示。该接口提供了处理文件的简易方法，
+		比如 write()、delete() 等。至此，结合 HttpServletRequest 和 Part 来保存上传的文件变得非常简单，如下所示：
+		Part photo = request.getPart("photo"); 
+		photo.write("/tmp/photo.jpg"); 
+		// 可以将两行代码简化为 request.getPart("photo").write("/tmp/photo.jpg") 一行。
+
+			另外，开发者可以配合前面提到的 @MultipartConfig 注解来对上传操作进行一些自定义的配置，比如限制上传文件的大小，以及保存文件的路径等。
+		其用法非常简单，故不在此赘述了。
+		需要注意的是，如果请求的 MIME 类型不是 multipart/form-data，则不能使用上面的两个方法，否则将抛异常。
+
+		总结
+			Servlet 3.0 的众多新特性使得 Servlet 开发变得更加简单，尤其是异步处理特性和可插性支持的出现，必将对现有的 MVC 框架产生深远影响。
+		虽然我们通常不会自己去用 Servlet 编写控制层代码，但是也许在下一个版本的 Struts 中，您就能切实感受到这些新特性带来的实质性改变。
+		------------
+		from: http://www.ibm.com/developerworks/cn/java/j-lo-servlet30/index.html?ca=drs-cn-0423	Servlet 3.0 新特性详解
+
+	- The Java Servlet API v.3.0 is a required API of the Java Platform, Enterprise Edition,v.61.
+		servlet是javaee的一部分
+	- servlet处理流程
+		--------
+		1) A client (e.g., a Web browser) accesses a Web server and makes an HTTP request.
+		2) The request is received by the Web server and handed off to the servlet container.
+		The servlet container can be running in the same process as the host Web server,
+		in a different process on the same host, or on a different host from the Web server
+		for which it processes requests.
+		3) The servlet container determines which servlet to invoke based on the
+		configuration of its servlets, and calls it with objects representing the request and
+		response.
+		4) The servlet uses the request object to find out who the remote user is, what HTTP
+		POST parameters may have been sent as part of this request, and other relevant
+		data. The servlet performs whatever logic it was programmed with, and generates
+		data to send back to the client. It sends this data back to the client via the
+		response object.
+		5) Once the servlet has finished processing the request, the servlet container ensures
+		that the response is properly flushed, and returns control back to the host Web
+		server.
+		--------
+		from: servlet-3_0-final-spec
+
+	- Java Servlet Technology Overview
+	------------------------------------
+	Servlets are the Java platform technology of choice for extending and enhancing Web servers. Servlets provide a component-based, platform-independent method for building 
+	Web-based applications, without the performance limitations of CGI programs. And unlike proprietary server extension mechanisms (such as the Netscape Server API or Apache modules), 
+	servlets are server- and platform-independent. This leaves you free to select a "best of breed" strategy for your servers, platforms, and tools. 
+
+	Servlets have access to the entire family of Java APIs, including the JDBC API to access enterprise databases. Servlets can also access a library of HTTP-specific calls and receive 
+	all the benefits of the mature Java language, including portability, performance, reusability, and crash protection. 
+
+	Today servlets are a popular choice for building interactive Web applications. Third-party servlet containers are available for Apache Web Server, Microsoft IIS, and others. Servlet 
+	containers are usually a component of Web and application servers, such as BEA WebLogic Application Server, IBM WebSphere, Sun Java System Web Server, Sun Java System 
+	Application Server, and others. 
+
+	You might want to check out the latest information on JavaServer Pages (JSP) technology. JSP technology is an extension of the servlet technology created to support authoring of HTML 
+	and XML pages. It makes it easier to combine fixed or static template data with dynamic content. Even if you're comfortable writing servlets, there are several compelling reasons to investigate 
+	JSP technology as a complement to your existing work.
+	------------------------------------
+	from: oracle website
+
+	PS: Servlet是一个规范，定义了一个提供web服务的描述，内部有多个部分的定义，其中servlet是其中一个构件，接收上层包装好的对象来处理，并调用业务逻辑，然后输出（还会经过
+	规范定义的其他部分，比如Filter等，可以看servlet API规范）
+
+	- 
+	------
+	A servlet is a Java™ technology-based Web component, managed by a container,
+	that generates dynamic content. Like other Java technology-based components,
+	servlets are platform-independent Java classes that are compiled to platform-neutral
+	byte code that can be loaded dynamically into and run by a Java technology-enabled
+	Web server. Containers, sometimes called servlet engines, are Web server extensions
+	that provide servlet functionality. Servlets interact with Web clients via a
+	request/response paradigm implemented by the servlet container.
+	------
+	from: servlet-3_0-final-spec
+	PS: Servlet通过规范定义的request/response paradigm与servlet容器交互，容器负责连接接收和相应，servlet负责逻辑
+
+* java
+	- 注释DOC
+		 * @see {@link ChunkedOutputStream} and {@link ChunkedInputStream}
+		 <br>
+		 <p>
+		 etc
+
+* java 数组 tomact nio实现
+	pollers = new Poller[getPollerThreadCount()];
+	pollers[i] = new Poller();		
+* java assert jdk1.4
+	源自：sun.nio.ch.WindowsSelectorImpl类的implDereg方法，判断： assert (i >= 0);
+
+	 J2SE 1.4在语言上提供了一个新特性，就是assertion功能，它是该版本在Java语言方面最大的革新。 
+	 从理论上来说，通过 assertion方式可以证明程序的正确性，但是这是一项相当复杂的工作，目前还没有太多的实践意义。 
+	 在实现中，assertion就是在程序中的一条语句，它对一个boolean表达式进行检查，一个正确程序必须保证这个boolean表达式的值为true；如果该值为false，
+	 说明程序已经处于不正确的状态下，系统将给出警告或退出。一般来说，assertion用于保证程序最基本、关键的正确性。assertion检查通常在开发和测试时开启。
+	 为了提高性能，在软件发布后，assertion检查通常是关闭的。
+	 <p>
+	 参数 -esa和 -dsa：<br>
+	 
+	 它们含义为开启(关闭)系统类的assertion功能。由于新版本的Java的系统类中，也使了assertion语句，因此如果用户需要观察它们的运行情况，
+	 就需要打开系统类的assertion功能 ，我们可使用-esa参数打开，使用 -dsa参数关闭。 -esa和-dsa的全名为-enablesystemassertions和
+	 -disenablesystemassertions，全名和缩写名有同样的功能。
+	 <p>
+	 参数 -ea和 -ea：<br>
+	 
+	 它们含义为开启(关闭)用户类的assertion功能：通过这个参数，用户可以打开某些类或包的assertion功能，同样用户也可以关闭某些类和包的assertion功能。
+	 打开assertion功能参数为-ea;如果不带任何参数，表示打开所有用户类;如果带有包名称或者类名称，表示打开这些类或包;如果包名称后面跟有三个点，代表这个包及其子包;
+	 如果只有三个点，代表无名包。关闭assertion功能参数为-da，使用方法与-ea类似。
+	 -ea和-da的全名为-enableassertions和-disenableassertions，全名和缩写名有同样的功能。
+	 下面表格表示了参数及其含义，并有例子说明如何使用。
+	 -ea java -ea 打开所有用户类的assertion
+	 <p>
+	 EG:<br>
+	   java -dsa:MyClass1:pkg1 关闭MyClass1和pkg1包的assertion 
+	   java -esa:MyClass1:pkg1 开启MyClass1和pkg1包的assertion 
+	   
+	   java -da:MyClass1:pkg1 关闭MyClass1和pkg1包的assertion 
+	   java -ea:MyClass1:pkg1 开启MyClass1和pkg1包的assertion 
+	 
+	 From: http://zhidao.baidu.com/question/355255108.html
 * Paxos	分布式选举算法	Paxos最大的用途就是保持多个节点数据的一致性
 	
 	- google chubby
@@ -615,6 +1007,9 @@ ftian20130102
 	rss订阅
 		将outlook的rss源或google reader中的rss源导出为OPML文件，这样其他rss工具就可直接导入
 * 泛型
+	- java 泛型的使用 ，抽象类和接口都这样表达继承&实现的关系: Class<? extends ICake> cakeClass ,Class<? extends AbstractDuck>
+		少去了类型转换的代码
+	- 
 	泛型（Generic type 或者 generics）是对 Java 语言的类型系统的一种扩展，以支持创建可以按类型进行参数化的类。可以把类型参数看作是使用
 	参数化类型时指定的类型的一个占位符，就像方法的形式参数是运行时传递的值的占位符一样。
 
@@ -1572,10 +1967,149 @@ ftian20130102
 	老版本源码下载，有老版本区：
 		http://archive.apache.org/dist/commons/dbcp/
 
-* jetty
-	- jetty http client
-		ref: http://blog.csdn.net/pwlazy/article/details/7389204
+* jetty http client	jetty httpclient
+	- client的可配置项及其作用
+	1）setConnectorType,设置client使用的connector类型，有socket和select两种
+		SocketConnector
+		SelectConnector
+	- ref: http://blog.csdn.net/pwlazy/article/details/7389204
+	- 介绍
+		--------
+		Introduction
+			HttpClient is the Jetty component that allows to make requests and interpret responses to HTTP servers.
+			This tutorial takes you through the steps necessary to use the HttpClient in the most effective way.
+
+		Details
+			The HttpClient is by its nature asynchronous. This means that the code that sends the request does not wait for the response to arrive before continuing. Instead, 
+		the request is sent concurrently to your code, and the response is interpreted also concurrently with your code.
+			The HttpClient API offers you callbacks to interact with the request-response lifecycle. These callbacks will be called by the HttpClient implementation to allow further 
+		actions to be performed during each request-response event.
 		
+		A request-response unit is called exchange, and represent the exchange of information with the HTTP server.
+		
+		There are two main classes in the HttpClient API:
+			org.eclipse.jetty.client.HttpClient, which manages the thread pooling, the proxy setting, the authentication settings, the connector type (blocking or non-blocking), the SSL 
+		settings and the timeouts. HttpClient manages the configuration that does not depend on a particular exchange.
+			org.eclipse.jetty.client.HttpExchange, which is the base class that you normally have to subclass that represent the exchange with the HTTP server, and manages HTTP 
+		method, the request URI, HTTP headers, request content, HTTP response code, HTTP response headers and response content.
+		
+		HttpClient Setup
+
+		Before exchanging requests/responses with the HTTP server, you need to setup the HttpClient and then start it:
+
+		HttpClient client = new HttpClient();
+		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
+		client.start();
+		You can also choose to setup the maximum number of connections per address (connections are pooled up to that maximum number), or to specify the thread pool, or the timeout:
+
+		HttpClient client = new HttpClient();
+		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
+		client.setMaxConnectionsPerAddress(200); // max 200 concurrent connections to every address
+		client.setThreadPool(new QueuedThreadPool(250)); // max 250 threads
+		client.setTimeout(30000); // 30 seconds timeout; if no server reply, the request expires
+		client.start();
+		Remember to configure the HttpClient before starting it, or the settings will not have effect.
+
+		Since HttpClient does not have any settings related to a particular address, it can be used to exchange requests/responses with several HTTP servers. You normally 
+		need one HttpClient instance for all your needs, even if you plan to connect to multiple HTTP servers.
+
+		Asynchronous Exchanges
+
+		Once the HttpClient has been setup, exchanges may be initiated by using the HttpClient.send(HttpExchange exchange) method.
+
+		The exchange must be configured with two mandatory fields: the address to connect to, and the request URI, or equivalently with an absolute URL:
+
+		HttpExchange exchange = new HttpExchange();
+		 
+		// Optionally set the HTTP method
+		exchange.setMethod("POST");
+		 
+		exchange.setAddress(new Address("ping.host.com", 80));
+		exchange.setURI("/ping");
+		// Or, equivalently, this:
+		exchange.setURL("http://ping.host.com/ping");
+		 
+		client.send(exchange);
+		 
+		System.out.println("Exchange sent");
+
+			The most important thing to remember is that the send() method returns immediately after dispatching the exchange to a thread pool for execution, so the System.out is executed 
+		immediately after the send() method. It may be well true that the System.out is executed well before the exchange is actually executed, as well as it may be well true that the 
+		System.out is executed after the exchange is completely executed (when even the request has been received).
+
+		Beware of not assuming anything about the status of the exchange just because you called send().
+
+		Controlling the Exchange Progress
+
+		Because we used the HttpExchange class directly, without subclassing it, we have neither control nor notifications about the status of the exchange. The HttpExchange class exposes the following 
+		callback methods to be overridden to be notified of the status of the exchange:
+
+		onRequestCommitted(), called when the request line and the request headers have been sent to the HTTP server.
+		onRequestComplete(), called when the request content has been sent to the HTTP server.
+		onResponseStatus(Buffer httpVersion, int statusCode, Buffer statusMessage), called when the response line has been processed; the three parameters hold, respectively, 
+			the HTTP version string (e.g. "HTTP/1.1"), the response status code (e.g. 200) and the response status message (e.g. "OK").
+		onResponseHeader(Buffer name, Buffer value), called for each response header that has been processed; the parameters hold the name of the header (e.g. "Content-Length") 
+			and the value of the header (e.g. "16384").
+		onResponseHeaderComplete(), called when all response headers have been processed.
+		onResponseContent(Buffer content), called multiple times for each chunk of the response content; the parameter holds the chunk of the content that has been received.
+		onResponseComplete(), called when the response content has been completely received.
+		Additionally four more methods can be overridden to be notified of non-normal conditions:
+
+		onConnectionFailed(Throwable x), called when it is not possible to connect to the address specified in the exchange; the parameter holds the exception received while trying to connect.
+		onException(Throwable x), called when a connection was possible, but an error happened later; the parameter holds the exception happened.
+		onExpire(), called when the server did not respond before the timeout configured in the HttpClient.
+		onRetry(), called when the exchange is resent (e.g. after an attempt to authenticate with no credentials).
+		
+		You can of course extend HttpExchange directly, but it's probably best to use Jetty's built-in class org.eclipse.jetty.client.ContentExchange. This class overrides most of the callback
+		methods above to allow easy retrieval of the response status code, response headers and response body.
+
+		Most of the times, you want to override onResponseComplete() to allow your business logic to read the response information (e.g. response status code or response body) and perform additional operations:
+
+		ContentExchange exchange = new ContentExchange(true)
+		{
+		    protected void onResponseComplete() throws IOException
+		    {
+			int status = getResponseStatus();
+			if (status == 200)
+			    doSomething();
+			else
+			    handleError();
+		    }
+		};
+		Synchronous Exchanges
+
+		While asynchronous exchanges offer the most in term of performances, sometimes it is necessary to perform a synchronous exchange without the hassle of overriding methods to be 
+		notified of response completion. This is possible by using the HttpExchange.waitForDone() method:
+
+		HttpClient client = new HttpClient();
+		client.start();
+		 
+		ContentExchange exchange = new ContentExchange(true);
+		exchange.setURL("http://foobar.com/baz");
+		 
+		client.send(exchange);
+		 
+		// Waits until the exchange is terminated
+		int exchangeState = exchange.waitForDone();
+		 
+		if (exchangeState == HttpExchange.STATUS_COMPLETED)
+		    doSomething();
+		else if (exchangeState == HttpExchange.STATUS_EXCEPTED)
+		    handleError();
+		else if (exchangeState == HttpExchange.STATUS_EXPIRED)
+		    handleSlowServer();
+		The waitForDone() method waits until the exchange state is in a "final" state, which could be that the exchange terminated successfully, or an exception was thrown or it expired.
+
+		SSL Connections
+
+		In order to configure HttpClient to validate SSL certificates and/or to supply a client certificate to the server, follow the instructions in SSL Connectors Reference to configure a 
+		SslContextFactory object and pass it as a parameter to the HttpClient's constructor.
+		--------
+		from: http://wiki.eclipse.org/Jetty/Tutorial/HttpClient	jetty http client tutorial
+
+
+
+* jetty
 	- 架构
 		connector,handler,threadpool
 	- 起多个jetty实例用于web服务，设置不同端口
@@ -2570,6 +3104,8 @@ Storage for Interactive Services
 		然后你会发现不需要输入密码就可以建立ssh连接了，恭喜你，配置成功了
 		不过，别忘了测试本机ssh  dbrg-1
 * pssh
+	- 通过pssh或pscp工具操作时，对于维护的ip列表可以放到AG上，或一个统一的地方查询出来
+	-
 	pssh  is  a program for executing ssh in parallel on a number of hosts.  It provides features such as sending input to all of the pro-
 	cesses, passing a password to ssh, saving output to files, and timing out.
 
@@ -3745,6 +4281,28 @@ Storage for Interactive Services
 		If the result is 1 then the Linux system will start forwarding IP packets even if they are not destined to any of its own network interfaces.
 		ps. I was setting up a VPN dial-in server when I wrote this post 
 
+* ospf vrrp instance切换时, 通过ospf更新路由信息来切换, 而不是通过发送arp
+	------
+	开放式最短路径优先（英文：Open Shortest Path First，OSPF）是对链路状态路由协议的一种实现，隶属内部网关协议（IGP），故运作于自治系统内部。
+	著名的迪克斯加算法被用来计算最短路径树。它使用“代价（Cost）”作为路由度量。链路状态数据库（LSDB）用来保存当前网络拓扑结构，它在同一区域
+	中的所有路由器上是相同的。OSPF分为OSPFv2和OSPFv3两个版本,其中OSPFv2用在IPv4网络，OSPFv3用在IPv6网络。OSPFv2是由RFC 2328定义的，
+	OSPFv3是由RFC 5340定义的。
+	
+	OSPF协议是大中型网络上使用最为广泛的IGP（Interior Gateway Protocol）协议。节点在建立邻接，接受链路状态通告（Link-state Advertisement，LSA）时，
+	可以通过MD5或者明文进行安全验证。
+	
+	OSPF提出了“区域（Area）”的概念，一个网络可以由单一区域或者多个区域组成。其中，一个特别的区域被称为骨干区域（Backbone Area），该区域是整个
+	OSPF网络的核心区域，并且所有其他的区域都与之直接连接。所有的内部路由都通过骨干区域传递到其他非骨干区域。所有的区域都必须直接连接到骨干区域，
+	如果不能建立直接连接，那么可以通过虚拟链路（Virtual-link）和骨干区域建立虚拟连接。
+	
+	同一个广播域（Broadcast Domain）的路由器或者一个点对点（Point To Point）连接的两端的路由器，在发现彼此的时候，建立邻接（Adjacencies）[1]。多路访问网络
+	以及非广播多路访问网络的路由器会选举指定路由器（Designated Router, DR）和备份指定路由器（Backup Designated Router, BDR），DR和BDR作为网络的中心负责
+	路由器之间的信息交换从而降低了网络中的信息流量。OSPF协议同时使用单播（Unicast）和组播（Multicast）来发送Hello包和链路状态更新（Link State Updates），
+	使用的组播地址为224.0.0.5和224.0.0.6。与RIP和BGP不同的是，OSPF协议不使用TCP或者UDP协议而是承载在IP协议之上，IP协议号为89，工作在OSI模型的传输层。
+	------
+	from: http://zh.wikipedia.org/wiki/OSPF
+
+
 * keepalived是VRRP的完美实现，因此在介绍keepalived之前，先介绍一下VRRP的原理。	    * VRRP
 	VRRP协议简介
 	
@@ -4553,11 +5111,12 @@ Storage for Interactive Services
 		from:http://kerry.blog.51cto.com/172631/161179
 
 * What Is a Socket	  * socket socket http socket与http
-		A socket is one end-point of a two-way communication link between two programs running on the network. 
+	
+	-	A socket is one end-point of a two-way communication link between two programs running on the network. 
 	Socket classes are used to represent the connection between a client program and a server program. The java.net package provides 
 	two classes--Socket and ServerSocket--that implement the client side of the connection and the server side of the connection, respectively. 
 
-	socket与http关系
+	- socket与http关系
 		http基于socket
 			socket是点对点通讯的基础，一个抽象接口层；http是在socket层上面在封装，根据http协议定义的编码要求来收发；即也可自行根据socket实现自定义的通讯协议
 			比如定义 nuwa://xxx协议，迅雷的thunder://，电驴ed2k://|file|
@@ -4617,6 +5176,26 @@ Storage for Interactive Services
 	看log4j的error方法说明，直接传对象接收的是message消息对象，如何给的是非message对象，可能没有重写tostring方法，输出的日志内容为对象而不是异常的内容。
 
 * concurrent包 ，java concurrent	       * 并发 * 同步 * java并发/同步
+	- java.util.concurrent.CopyOnWriteArrayList
+
+	- 原子对象，
+		在concurrent包的atomic子包下，提供了几个原子操作对象：AtomicBoolean,AtomicIntegerArray,AtomicLong,AtomicLongArray
+		-----
+		public static final int STATUS_START = 0;
+
+		private AtomicInteger _status = new AtomicInteger(STATUS_START);
+
+		public int waitForDone() throws InterruptedException
+		    {
+			synchronized (this)
+			{
+			    while (!isDone())
+				this.wait();
+			    return _status.get();
+			}
+		    }
+		-----
+		PS: 在设置HTTP状态时，使用了Concurrent包中的AtomicInteger对象来实现状态修改的原子操作
 	- CountDownLatch
 
 		await()方法调用后，需要等到计数为0时线程才继续执行；await方法还能指定超时时间，避免一直等待；
@@ -4721,6 +5300,31 @@ Storage for Interactive Services
 		synchronized块（以声明的锁对象进行锁定，若锁的实例不同则不能同步）
 	- concurrenthashmap的实现
 		将map划分到不同的segment中，通过hash到指定的segment（继承了ReentrantLock）从而只锁定部分数据。
+
+		DOC
+		-------
+		A hash table supporting full concurrency of retrievals and adjustable expected concurrency for updates. This class obeys the same functional specification as 
+		java.util.Hashtable, and includes versions of methods corresponding to each method of Hashtable. However, even though all operations are thread-safe, retrieval operations 
+		do not entail locking, and there is not any support for locking the entire table in a way that prevents all access. This class is fully interoperable with Hashtable in programs that 
+		rely on its thread safety but not on its synchronization details. 
+
+		Retrieval operations (including get) generally do not block, so may overlap with update operations (including put and remove). Retrievals reflect the results of the most 
+		recently completed update operations holding upon their onset. For aggregate operations such as putAll and clear, concurrent retrievals may reflect insertion or removal 
+		of only some entries. Similarly, Iterators and Enumerations return elements reflecting the state of the hash table at some point at or since the creation of the iterator/enumeration. 
+		They do not throw ConcurrentModificationException. However, iterators are designed to be used by only one thread at a time. 
+
+		The allowed concurrency among update operations is guided by the optional concurrencyLevel constructor argument (default 16), which is used as a hint for internal sizing. 
+		The table is internally partitioned to try to permit the indicated number of concurrent updates without contention. Because placement in hash tables is essentially random, the 
+		actual concurrency will vary. Ideally, you should choose a value to accommodate as many threads as will ever concurrently modify the table. Using a significantly higher value 
+		than you need can waste space and time, and a significantly lower value can lead to thread contention. But overestimates and underestimates within an order of magnitude do 
+		not usually have much noticeable impact. A value of one is appropriate when it is known that only one thread will modify and all others will only read. Also, resizing this or any 
+		other kind of hash table is a relatively slow operation, so, when possible, it is a good idea to provide estimates of expected table sizes in constructors. 
+
+		This class and its views and iterators implement all of the optional methods of the Map and Iterator interfaces. 
+
+		Like Hashtable but unlike HashMap, this class does not allow null to be used as a key or value. 
+		-------
+		PS: 
 
 	- java concurrent 探秘
 			我们都知道，在JDK1.5之前，Java中要进行业务并发时，通常需要有程序员独立完成代码实现，当然也有一些开源的框架提供了这些功能，
@@ -4952,6 +5556,10 @@ search in index find pdf
 		然后将虚拟机重启，就可以同时在VNC和host主机中访问虚拟机了。
 
 * RPC
+	 - 同步RPC call 异步RPCcall RPC调用
+		同步RPC调用，可以在异步RPC调用基础上加锁来实现。比如java中用CountDownLatch同步锁实现异步RPC的同步调用
+
+
 	 - 通过socket进行RPC调用
 		 --------
 		 ...
@@ -5476,6 +6084,61 @@ search in index find pdf
 	代码
 
 * NIO 非阻塞操作/ 阻塞操作 消息驱动
+	- SelectionKey
+		DOC
+		--------
+		 java.nio.channels.SelectionKey
+
+
+		A token representing the registration of a SelectableChannel with a Selector. 
+
+		A selection key is created each time a channel is registered with a selector. A key remains valid until it is cancelled by invoking its cancel method, by closing its channel, or by 
+		closing its selector. Cancelling a key does not immediately remove it from its selector; it is instead added to the selector's cancelled-key set for removal during the next selection operation. 
+		The validity of a key may be tested by invoking its isValid method. 
+
+		A selection key contains two operation sets represented as integer values. Each bit of an operation set denotes a category of selectable operations that are supported by the key's channel. 
+
+		The interest set determines which operation categories will be tested for readiness the next time one of the selector's selection methods is invoked. The interest set is initialized with the value 
+		given when the key is created; it may later be changed via the interestOps(int) method. 
+
+		The ready set identifies the operation categories for which the key's channel has been detected to be ready by the key's selector. The ready set is initialized to zero when the key is created; it 
+		may later be updated by the selector during a selection operation, but it cannot be updated directly. 
+
+		That a selection key's ready set indicates that its channel is ready for some operation category is a hint, but not a guarantee, that an operation in such a category may be performed by a thread 
+		without causing the thread to block. A ready set is most likely to be accurate immediately after the completion of a selection operation. It is likely to be made inaccurate by external events and 
+		by I/O operations that are invoked upon the corresponding channel. 
+
+		This class defines all known operation-set bits, but precisely which bits are supported by a given channel depends upon the type of the channel. Each subclass of SelectableChannel defines an 
+		validOps() method which returns a set identifying just those operations that are supported by the channel. An attempt to set or test an operation-set bit that is not supported by a key's channel 
+		will result in an appropriate run-time exception. 
+
+		It is often necessary to associate some application-specific data with a selection key, for example an object that represents the state of a higher-level protocol and handles readiness notifications 
+		in order to implement that protocol. Selection keys therefore support the attachment of a single arbitrary object to a key. An object can be attached via the attach method and then later retrieved 
+		via the attachment method. 
+
+		Selection keys are safe for use by multiple concurrent threads. The operations of reading and writing the interest set will, in general, be synchronized with certain operations of the selector. Exactly 
+		how this synchronization is performed is implementation-dependent: In a naive implementation, reading or writing the interest set may block indefinitely if a selection operation is already in progress; 
+		in a high-performance implementation, reading or writing the interest set may block briefly, if at all. In any case, a selection operation will always use the interest-set value that was current at the 
+		moment that the operation began. 
+		--------
+
+		实现类的部分方法代码：
+		sun.nio.ch.SelectorImpl
+		--------
+		private int lockAndDoSelect(long timeout) throws IOException {
+			synchronized (this) {
+				if (!isOpen())
+					throw new ClosedSelectorException();
+				synchronized (publicKeys) {
+					synchronized (publicSelectedKeys) {
+						return doSe-lect(timeout);
+					}
+				}
+			}
+		}
+		--------
+		同步相关的key集合对象及自身
+
 	- SelectorProvider提供select的实现
 		provider()方法说明
 		DOC
@@ -5792,7 +6455,9 @@ search in index find pdf
 
 		而 Tomcat 要启用这个选项的做法是在 catalina.sh 的开头加入下面这一行
 		CATALINA_OPTS='-Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider' 
-	- 5种IO模式 epool
+		PS: linux环境下默认select用epoll的实现，selector provider=sun.nio.ch.EPollSelectorProvider
+
+	- 5种IO模式 epoll	* epoll	select/poll(多路复用IO接口)
 		epoll 是Linux内核为处理大批量句柄而作了改进的poll，是Linux下多路复用IO接口select/poll的增强版本，它能显著减少程序在大量并发连接中只有
 		少量活跃的情况下的系统CPU利用率。
 
@@ -5826,7 +6491,50 @@ search in index find pdf
 
 		from: http://baike.baidu.com/view/1385104.htm
 
-	- 输入和输出都经过Buffer层，数据以块的方式处理（区别老IO以字节流的方式处理）
+		epoll的实现：
+			epoll的实现代码在 fs/EventPoll.c下，
+			由于epoll涉及到几个系统调用，这里不逐个分析了，仅仅分析几个关键点，
+			第一个关键点在
+			static int ep_insert(struct eventpoll *ep, struct epoll_event *event,
+				     struct file *tfile, int fd) 
+			这是在我们调用sys_epoll_ctl 添加一个被管理socket的时候调用的函数，关键的几行如下：
+			epq.epi = epi;
+			    init_poll_funcptr(&epq.pt, ep_ptable_queue_proc);
+
+			    /*
+			     * Attach the item to the poll hooks and get current event bits.
+			     * We can safely use the file* here because its usage count has
+			     * been increased by the caller of this function. Note that after
+			     * this operation completes, the poll callback can start hitting
+			     * the new item.
+			     */
+			    revents = tfile->f_op->poll(tfile, &epq.pt); 
+			这里也是调用文件系统的poll函数，不过这次初始化了一个结构，这个结构会带有一个poll函数的callback函数：ep_ptable_queue_proc，
+			在调用poll函数的时候，会执行这个callback，这个callback的功能就是将当前进程添加到 socket的等待进程上。
+			static void ep_ptable_queue_proc(struct file *file, wait_queue_head_t *whead,
+					 poll_table *pt)
+			{
+			    struct epitem *epi = ep_item_from_epqueue(pt);
+			    struct eppoll_entry *pwq;
+
+			    if (epi->nwait >= 0 && (pwq = kmem_cache_alloc(pwq_cache, GFP_KERNEL))) {
+				init_waitqueue_func_entry(&pwq->wait, ep_poll_callback);
+				pwq->whead = whead;
+				pwq->base = epi;
+				add_wait_queue(whead, &pwq->wait);
+				list_add_tail(&pwq->llink, &epi->pwqlist);
+				epi->nwait++;
+			    } else {
+				/* We have to signal that an error occurred */
+				epi->nwait = -1;
+			    }
+			}  
+			注意到参数 whead 实际上是 sk->sleep，其实就是将当前进程添加到sk的等待队列里，当该socket收到数据或者其他事件触发时，会调用
+			sock_def_readable 或者sock_def_write_space 通知函数来唤醒等待进程，这2个函数都是在socket创建的时候填充在sk结构里的。
+			从前面的分析来看，epoll确实是比select聪明的多、轻松的多，不用再苦哈哈的去轮询了。
+			from: http://www.cnblogs.com/xuxm2007/archive/2011/08/15/2139809.html
+
+	- 输入和输出都经过Buffer层，数据以块的方式处理（区别老IO以字节流的方式处理）利用操作系统的IO特性（如linux的epoll，mmap减少内存拷贝）
 
 	-
 	上图就是这个项目的总体结构图，从图中可以看出该程序分为这几大块：连接侦听线程、连接对象队列、发送线程池、接收线程池、分发线程、
@@ -6774,6 +7482,29 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			...
 			-----
 * struts
+	- struts2一些线程对象的访问是通过ThreadLocal来实现线程共享的，如
+		 org.apache.struts2.ServletActionContext
+		 DOC
+		 ---------
+		Web-specific context information for actions. This class subclasses ActionContext which provides access to things like the action name, value stack, etc. 
+		This class adds access to web objects like servlet parameters, request attributes and things like the HTTP session.
+
+	- struts2请求处理流程
+		一个请求在Struts2框架中的处理大概分为以下几个步骤：
+		1 客户端初始化一个指向Servlet容器（例如Tomcat）的请求；
+		2 这个请求经过一系列的过滤器（Filter）（这些过滤器中有一个叫做ActionContextCleanUp的可选过滤器，这个过滤器对于Struts2和其他框架的集成很有帮助，例如：SiteMesh Plugin）
+		3 接着FilterDispatcher被调用，FilterDispatcher询问ActionMapper来决定这个请是否需要调用某个Action
+		4 如果ActionMapper决定需要调用某个Action，FilterDispatcher把请求的处理交给ActionProxy
+		5 ActionProxy通过Configuration Manager询问框架的配置文件，找到需要调用的Action类
+		6 ActionProxy创建一个ActionInvocation的实例。
+		7 ActionInvocation实例使用命名模式来调用，在调用Action的过程前后，涉及到相关拦截器（Intercepter）的调用。
+		8 一旦Action执行完毕，ActionInvocation负责根据struts.xml中的配置找到对应的返回结果。返回结果通常是（但不总是，也可 能是另外的一个Action链）一个需要被表示的JSP或者FreeMarker的模版。在表示的过程中可以使用Struts2 框架中继承的标签。在这个过程中需要涉及到ActionMapper
+
+		在上述过程中所有的对象（Action，Results，Interceptors，等）都是通过ObjectFactory来创建的。
+
+		Struts2的目标很简单--使Web开发变得更加容易。为了达成这一目标，Struts2中提供了很多新特性，比如智能的默认设置、annotation的使用以及"惯例重于配置"原则的应用，而这一切都大大减少了XML配置。Struts2中的Action都是POJO，这一方面增强了Action本身的可测试性，另一方面也减小了框架内部的耦合度，而HTML表单中的输入项都被转换成了恰当的类型以供action使用。开发人员还可以通过拦截器（可以自定义拦截器或者使用Struts2提供的拦截器）来对请求进行预处理和后处理，这样一来，处理请求就变得更加模块化，从而进一步减小耦合度。模块化是一个通用的主题--可以通过插件机制来对框架进行扩展；开发人员可以使用自定义的实现来替换掉框架的关键类，从而获得框架本身所不具备的功能；可以用标签来渲染多种主题（包括自定义的主题）；Action执行完毕以后，可以有多种结果类型--包括渲染JSP页面，Velocity和Freemarker模板，但并不仅限于这些。最后，依赖注入也成了Struts2王国中的一等公民，这项功能是通过Spring框架的插件和Plexus共同提供的，与PicoContainer的结合工作还正在进行中
+		from: http://blog.csdn.net/zhangxu3739/article/details/4028656
+
 	- 拦截器直接返回
 		设置结果到valueStack中，返回view
 	- struts2的返回
@@ -7770,7 +8501,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			http://beust.com/eclipse-old/eclipse-5.14.0.1 新版本有问题，用这个旧版本
 		- TestNG is designed to cover all categories of tests:  unit, functional, end-to-end, integration, etc...
 			TestNG is a testing framework inspired from JUnit and NUnit but introducing some new functionalities that make it more powerful and easier to use
-		- 新项目加入jtester步骤：
+		- 新项目加入jtester步骤：整合Jtester测试框架
 			1）加入依赖
 				<repositories>
 					<repository>
@@ -7787,7 +8518,24 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 					<scope>test</scope>
 				</dependency>				
 			2）添加jtester.properties配置文件到classpath
-				
+				-----
+				database.type=mysql
+				database.url=jdbc:mysql://localhost:3306/slbapi
+				database.userName=root
+				database.password=abc123
+
+				database.driverClassName=com.mysql.jdbc.Driver
+				DatabaseModule.Transactional.value.default=rollback
+				#rollback, commit
+				database.only.testdb.allowing=true
+
+				tracer.database=false
+				tracer.springbean=false
+				#unitils.modules=database,dbunit,dbfit,inject,spring,tracer
+				unitils.modules=dbunit,inject,tracer	
+				-----
+				PS: 注意这里的unitils.modules属性的配置，如果要用到spring，值中应该包含，否则不会初始化spring容器！！！，其他组件也是一样的
+					
 			3）创建抽象父类，进行测试前的资源初始化操作
 				@SpringApplicationContext({
 					"classpath:houyi-spring-test.xml",
@@ -16356,19 +17104,97 @@ day119 Tuesday, August 28, 2012
 	tcp        0      0 10.250.8.214:3306           10.250.6.33:45378           ESTABLISHED
 	表示一个打开的连接
 
-* TCP/IP
-	tcp状态：
-	LISTEN：侦听来自远方的TCP端口的连接请求
-	SYN-SENT：再发送连接请求后等待匹配的连接请求
-	SYN-RECEIVED：再收到和发送一个连接请求后等待对方对连接请求的确认
-	ESTABLISHED：代表一个打开的连接
-	FIN-WAIT-1：等待远程TCP连接中断请求，或先前的连接中断请求的确认
-	FIN-WAIT-2：从远程TCP等待连接中断请求
-	CLOSE-WAIT：等待从本地用户发来的连接中断请求
-	CLOSING：等待远程TCP对连接中断的确认
-	LAST-ACK：等待原来的发向远程TCP的连接中断请求的确认
-	TIME-WAIT：等待足够的时间以确保远程TCP接收到连接中断请求的确认
-	CLOSED：没有任何连接状态
+* TCP/IP(Transmission Control Protocol/Internet Protocol) * UDP(User Datagram Protocol)
+	- TCP建立连接三次握手
+		Client								Server
+				SYN=j
+		SYN_SENT
+							SYN=k,ACK=j+1
+											SYN_RECV
+				ACK=k+1
+		ESTABLISHED						
+											ESTABLISHED
+	- TCP关闭连接四次握手
+		Client								Server
+				FIN=m
+		FIN_WAIT_1
+							ACK=m+1
+											CLOSE_WAIT
+							FIN=n
+											LAST_ACK
+		TIME_WAIT
+				ACK=n+1
+											CLOSED	
+
+		异常场景：
+			
+
+	- UDP
+		
+		UDP处于IP层之上
+
+		UDP 是User Datagram Protocol的简称， 中文名是用户数据报协议，是 OSI 参考模型中一种无连接的传输层协议，提供面向事务的
+		简单不可靠信息传送服务，IETF RFC 768是UDP的正式规范。
+		
+		在选择使用协议的时候，选择UDP必须要谨慎。在网络质量令人不十分满意的环境下，UDP协议数据包丢失会比较严重。但是由于UDP的特性：
+		它不属于连接型协议，因而具有资源消耗小，处理速度快的优点，所以通常音频、视频和普通数据在传送时使用UDP较多，因为它们即使偶尔
+		丢失一两个数据包，也不会对接收结果产生太大影响。比如我们聊天用的ICQ和QQ就是使用的UDP协议。
+
+		虽然UDP是一个不可靠的协议，但它是分发信息的一个理想协议。例如，在屏幕上报告股票市场、在屏幕上显示航空信息等等。
+		UDP也用在路由信息协议RIP（Routing Information Protocol）中修改路由表。在这些应用场合下，如果有一个消息丢失，在几秒之后
+		另一个新的消息就会替换它。UDP广泛用在多媒体应用中，例如，Progressive Networks公司开发的RealAudio软件，它是在因特网上
+		把预先录制的或者现场音乐实时传送给客户机的一种软件，该软件使用的RealAudio audio-on-demand protocol协议就是运行在UDP之上
+		的协议，大多数因特网电话软件产品也都运行在UDP之上。
+
+			既然UDP是一种不可靠的网络协议，那么还有什么使用价值或必要呢？其实不然，在有些情况下UDP协议可能会变得非常有用。
+		因为UDP具有TCP所望尘莫及的速度优势。虽然TCP协议中植入了各种安全保障功能，但是在实际执行的过程中会占用大量的系统开销，
+		无疑使速度受到严重的影响。反观UDP由于排除了信息可靠传递机制，将安全和排序等功能移交给上层应用来完成，极大降低了执行时间，
+		使速度得到了保证。
+			关于UDP协议的最早规范是RFC768，1980年发布。尽管时间已经很长，但是UDP协议仍然继续在主流应用中发挥着作用。包括视频
+		电话会议系统在内的许多应用都证明了UDP协议的存在价值。因为相对于可靠性来说，这些应用更加注重实际性能，所以为了获得
+		更好的使用效果（例如，更高的画面帧刷新速率）往往可以牺牲一定的可靠性（例如，画面质量）。这就是UDP和TCP两种协议的
+		权衡之处。根据不同的环境和特点，两种传输协议都将在今后的网络世界中发挥更加重要的作用。
+
+		-------
+		Datagram sockets also use IP for routing, but they don't use TCP; they use the "User Datagram Protocol", or "UDP" 
+
+		Why are they connectionless? Well, basically, it's because you don't have to maintain an open connection as you do with stream sockets. 
+		You just build a packet, slap an IP header on it with destination information, and send it out. No connection needed. They are generally used 
+		either when a TCP stack is unavailable or when a few dropped packets here and there don't mean the end of the Universe. Sample applications: 
+		tftp (trivial file transfer protocol, a little brother to FTP), dhcpcd (a DHCP client), multiplayer games, streaming audio, video conferencing, etc.
+
+		"Wait a minute! tftp and dhcpcd are used to transfer binary applications from one host to another! Data can't be lost if you expect the application 
+		to work when it arrives! What kind of dark magic is this?"
+
+		Well, my human friend, tftp and similar programs have their own protocol on top of UDP. For example, the tftp protocol says that for each packet that 
+		gets sent, the recipient has to send back a packet that says, "I got it!" (an "ACK" packet.) If the sender of the original packet gets no reply in, say, five seconds, 
+		he'll re-transmit the packet until he finally gets an ACK. This acknowledgment procedure is very important when implementing reliable SOCK_DGRAM applications.
+
+		For unreliable applications like games, audio, or video, you just ignore the dropped packets, or perhaps try to cleverly compensate for them. (Quake players 
+		will know the manifestation this effect by the technical term: accursed lag. The word "accursed", in this case, represents any extremely profane utterance.)
+		-------
+		from: http://www.beej.us/guide/bgnet/output/html/multipage/theory.html
+		PS: UDP虽不可靠，但处理效率高，对应某些确实需要可靠传输的场景，可以在应用层面保证可靠；对于类似视频，game的场景由于后续消息会马上补偿
+		故也没什么影响。
+
+	- TCP/IP详解
+		书籍
+
+	- They use a protocol called "The Transmission Control Protocol", otherwise known as "TCP" (see RFC 793 for extremely detailed info on TCP.) TCP makes sure your 
+		data arrives sequentially and error-free. You may have heard "TCP" before as the better half of "TCP/IP" where "IP" stands for "Internet Protocol" (see RFC 791.) IP 
+		deals primarily with Internet routing and is not generally responsible for data integrity.
+	- tcp状态：
+		LISTEN：侦听来自远方的TCP端口的连接请求
+		SYN-SENT：再发送连接请求后等待匹配的连接请求
+		SYN-RECEIVED：再收到和发送一个连接请求后等待对方对连接请求的确认
+		ESTABLISHED：代表一个打开的连接
+		FIN-WAIT-1：等待远程TCP连接中断请求，或先前的连接中断请求的确认
+		FIN-WAIT-2：从远程TCP等待连接中断请求
+		CLOSE-WAIT：等待从本地用户发来的连接中断请求
+		CLOSING：等待远程TCP对连接中断的确认
+		LAST-ACK：等待原来的发向远程TCP的连接中断请求的确认
+		TIME-WAIT：等待足够的时间以确保远程TCP接收到连接中断请求的确认
+		CLOSED：没有任何连接状态
 
 6. 网络性能监控
 	netperf
@@ -17475,6 +18301,9 @@ day150 Monday, October 15, 2012
 	kfc
 		 is the communication component in ApsaraOS. It is the fundamental communication layer of Apsara services like Fuxi, Pangu, Nuwa, etc. 
 		It provides a remote procedure call (RPC) interface and enables developers to easily build network-distributed applications.
+
+		有重试机制
+		jetty httpclient也有重试机制
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day151 Tuesday, October 16, 2012
@@ -21745,6 +22574,9 @@ day263 Tuesday, April 09, 2013
 			struts2标签
 			EL表达式
 		session管理
+	
+	深入基础
+
 
 
 
@@ -22219,6 +23051,8 @@ day272 Tuesday, April 23, 2013
 		新的修改需要加入api，暂不合入代码
 	发布步骤补充完整
 
+	由于新插入项目，延期合代码到trunk
+
 4. SLB bug查看
 	id=290300
 	-2003出现场景
@@ -22235,3 +23069,164 @@ day272 Tuesday, April 23, 2013
 7. nio
 	selector
 		nio实现所基于操作系统底层的支持方式
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day273 Wednesday, April 24, 2013
+
+1. 
+	* 大region二期
+
+2. 大region二期
+	发布前演练
+
+3. 
+
+4. nio
+	selector基于不同操作系统平台有相应的实现
+	select方法在收到事件前会blocking
+
+	selectorImpl类继承nio的抽象selector类，实现公有逻辑后（参数判断、同步等），将变化的部分交给抽象方法doSelect，由底层的实现类去实现。
+
+	sun.nio.ch.NativeDispatcher的本地实现调用本地方法执行操作
+
+5. 根深蒂固
+	不可缘木求鱼
+	才能开枝散叶
+
+6. servlet
+	servlet3.0>servlet>struts2流程
+
+7. struts2框架
+	研究框架，学习设计、设计模式的应用等 -tip-
+	servlet？
+		被Filter，Action取代
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day274 Thursday, April 25, 2013
+
+1. 
+	* 大region二期
+	* MSS重构
+
+2. 大region二期
+	QA环境演练，api包未被正确替换（sql日志中无snapshot_type字段打出），查找原因
+		PE再执行一次观察发布过程，确定原因，确认为QA houyi2的AG发布工具版本过低，导致api未发布
+	houyi2,houyi1组成一个大region
+
+3. MSS重构
+	参考slb的xuanyuan_agent的python实现的agent
+	http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/xuanyuan_agent
+
+4. aps2类同步rpc与异步rpc的实现
+	异步rpc基于jetty http client的异步调用
+		
+	同步rpc在异步基础上加了同步锁实现
+		或者使用jetty http client的waitForDone()方法
+			源码如下：
+			-----
+			public static final int STATUS_START = 0;
+
+			private AtomicInteger _status = new AtomicInteger(STATUS_START);
+
+			public int waitForDone() throws InterruptedException
+			    {
+				synchronized (this)
+				{
+				    while (!isDone())
+					this.wait();
+				    return _status.get();
+				}
+			    }
+			-----
+			PS: 在设置HTTP状态时，使用了Concurrent包中的AtomicInteger对象来实现状态修改的原子操作
+
+	jetty http client的client.setConnectBlocking(true)，属性的作用？ * jetty http client jetty client
+		HttpClient的 startConnection 方法org.eclipse.jetty.client.SocketConnector实现类的部分逻辑
+		-----
+		if (_httpClient.isConnectBlocking())
+		{
+			channel.socket().connect(address.toSocketAddress(), _httpClient.getConnectTimeout());
+			channel.configureBlocking(false);
+			_selectorManager.register( channel, destination );
+		}
+		else
+		{
+			channel.configureBlocking(false);
+			channel.connect(address.toSocketAddress());
+			_selectorManager.register(channel,destination);
+			ConnectTimeout connectTimeout = new ConnectTimeout(channel,destination);
+			_httpClient.schedule(connectTimeout,_httpClient.getConnectTimeout());
+			_connectingChannels.put(channel,connectTimeout);
+		}
+		-----
+		PS: 无论setConnectBlocking是否为true，通道都是非阻塞的；区别在于上面这段代码的分支中，建立连接是否会阻塞
+		如果为false，则connect方法立即返回，由应用去保证连接已建立以及获取结果的逻辑处理
+
+4. QA测试环境
+	10.250.6.27
+	ssh 10.230.204.19
+	go2houyi2
+	api: 10.230.226.146
+
+5. apsa
+	pangu/disk1
+
+6. TCP/IP详解
+	socket > 2 types of socket > TCP/IP,UDP > book
+7. 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day275 Friday, April 26, 2013
+
+1. 
+	* 
+2. 
+
+4.jetty http client
+
+5. design patten的例子整理
+	chunked输出采用decorator模式重构
+		流输出jdk已经提供了类，此场景需要再做包装以支持chunk输出，故可利用此模式以扩展jdk自带类的功能
+		apache的org.apache.commons.httpclient.ChunkedOutputStream/ChunkedInputStream也是这样实现的，可以参考或直接使用
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day276 Saturday, April 27, 2013
+
+1. 
+	* 广渠门项目
+
+
+2. 广渠门项目
+	bugfix	298458
+	是因为根据master返回值中的ip无法找到vmName，log中打印result is null，并发的去调用delete_rs和delete_rs_pool，会不会
+	在delete_rs_pool 后端成功返回但api还没根据ip得到vmName前，调用了delete_rs操作，将rs表中记录删除，导致delete_rs_pool无法根据ip找到vmName
+
+	access_log
+	30330 10.230.130.1 - - [22/Apr/2013:14:12:44 +0800] "GET /slb/api?aliyun_idkp=1234567890&timestamp=2013-04-22%2014%3A19%3A27&sign=5t2Rvo0AI5N      d5wFVnWVgzA%3D%3D&session=0nyJ6lBPsku1F2TALWdFMA%3D%3D&rs_pool_name=czPerformTest_Thread-57&action=delete_rs&region_no=fake-vrrp-houyi-      region&rs_list=%5B%7B%22vm_name%22%3A%22slb-vrrp-01%24%2410.230.138.245%22%7D%5D HTTP/1.1" 200 148 "-" "-" "-"
+	30331 10.230.130.1 - - [22/Apr/2013:14:12:44 +0800] "GET /slb/api?aliyun_idkp=1234567890&timestamp=2013-04-22%2014%3A19%3A27&sign=vF8r0nqty%2      BH8qiU95icXww%3D%3D&session=0nyJ6lBPsku1F2TALWdFMA%3D%3D&rs_pool_name=czPerformTest_Thread-57&action=delete_rs_pool&region_no=fake-vrrp      -houyi-region HTTP/1.1" 200 172 "-" "-" "-"
+	
+	事务问题及解决方案：
+			由于涉及slb后端和slb api的表关联操作，本质上是一个跨应用的数据库事务问题，即在slb后端删除rspool时，要开启事务保证此时rspool以及
+		其上面的rs不被其他事务修改，这样delete_rs需要等待delete_rs_pool的事务完成才能进行（因为rspool被删除delete_rs会报rspool不存在错误）
+	
+
+4. slb api
+	对返回结果需要统一处理的，可以用decorator模式来设计
+
+5.crontab
+	定时任务执行，比如切割应用的日志
+
+6. 一次配置jtester的例子 -tip-
+	jtester与spring配合时，如果配置了jtester.properties配置文件，则需要启用spring module，否则spring不会被加载，更不会打印spring加载的log；出错了可以借助错误分析哪里
+	出的问题，一点信息都没有时，要思考是否哪里最基本的设置有问题，因为错误都没触发。
+
+	如果已熟悉unitils.modules可以配置是否启用相应的模块时，此问题也不复存在。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day277 Sunday, April 28, 2013
+
+1. 
+	* 
+2. 

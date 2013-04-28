@@ -1,44 +1,46 @@
-1. Head first���ģʽ
+1. Head first设计模式
+------------------------
 Tuesday, April 16, 2013 
+
 p8	
-ί��ģʽ����һЩ�仯�Ĳ��ֳ�ȡ����������ɽӿڲ�ʵ�֣����õ���Щ�仯����ͨ���ӿ����á�����ӿںͳ�����
-������ʱͨ��set������̬�趨�ӿڵ�ʵ�֣��Ӷ����Զ�̬�仯
+委托模式，将一些变化的部分抽取出来，定义成接口并实现，引用到这些变化的类通过接口引用。面向接口和抽象编程
+在运行时通过set方法动态设定接口的实现，从而可以动态变化
 
 p53&67
-�۲���ģʽ - ��������֮�����������
+观察者模式 - 交互对象之间的松耦合设计
 
-�ڶ���䶨��һ�Զ��������ϵ
+在对象间定义一对多的依赖关系
 
-���ⲻ���Ĺ۲��ߵĶ�����ֻ��֪ͨ�����ɣ�˫�����޸Ļ�����ϣ�������ӿڱ��
-����ϵ���ƽ����е��Ե�OOϵͳ���ܹ�Ӧ�Ա仯������Ϊ�����Ļ����������������
+主题不关心观察者的动作，只需通知它即可；双方的修改互不耦合，都面向接口编程
+松耦合的设计建立有弹性的OO系统，能够应对变化，是因为对象间的互相依赖降到了最低
 
-JDK�Թ۲���ģʽ��֧�֣�Observer��Observable�����Զ�����pull����push��������ֻ�ѿɹ۲���󴫵ݸ��۲��ߣ�����������Լ���ȥ��
-���ǰѿɹ۲��߼�������һ����۲��ߣ����۹۲����Ƿ���Ķ��ƹ�ȥ����ȱ�㣺Observable��һ��������ǽӿڣ�Υ���˶���������ü��ɵ����
-ԭ�򣬱Ͼ�java��֧�ֶ��ؼ̳�
-
-
-�ж���۲���ʱ�������������ض���֪ͨ����
-
-swing��Ҳ����ʹ�ù۲���ģʽ
+JDK对观察者模式的支持，Observer，Observable并可自定义拉pull或推push（具体是只把可观察对象传递给观察者，如果关心则自己拉去；
+还是把可观察者及其数据一起给观察者，不论观察者是否关心都推过去）；缺点：Observable是一个类而不是接口，违反了多用组合少用集成的设计
+原则，毕竟java不支持多重继承
 
 
+有多个观察者时，不可以依赖特定的通知次序
+
+swing中也大量使用观察者模式
+
+------------------------
 Wednesday, April 17, 2013
 
 p59&74
-�ڶ����ܽ�
+第二章总结
 
-OO����������
-OOԭ��
-	��װ�仯
-	������ϣ����ü̳�
-	��Խӿڱ�̣������ʵ�ֱ��
-	Ϊ��������������϶�Ŭ��
+OO基础：抽象
+OO原则：
+	封装变化
+	多用组合，少用继承
+	针对接口编程，不针对实现编程
+	为交互对象间的松耦合而努力
 
 p64&79
-װ����ģʽ	Decorator	 Decoration
+装饰器模式	Decorator	 Decoration
 
 PS:
-	��һ��apache���˵����
+	看一个apache类的说明：
 	org.apache.commons.collections.collection.AbstractCollectionDecorator
 
 	Decorates another Collection to provide additional behaviour. 
@@ -52,39 +54,39 @@ PS:
 
 	public abstract class AbstractCollectionDecorator implements Collection {
 
-	�̳���������࣬���Ա�װ�εĶ���ķ������������װ��ʵ����ϵķ�ʽ��չ��Ĺ��ܣ�����ͬ�����ϡ������޸ĵļ�����ȣ���
-	ע���ŵ��ǣ�һ��Collection�ӿڵ�decorator����װ�δ˽ӿڵĶ��ʵ���࣬��ͨ���̳еĻ���ҪΪÿ��ʵ����дһ���������ﵽװ�ε�Ŀ�ġ�	       -tip-
+	继承这个抽象类，并对被装饰的对象的方法外层再做包装以实现组合的方式扩展类的功能（比如同步集合、不可修改的集合类等）；
+	注：优点是，一个Collection接口的decorator可以装饰此接口的多个实现类，而通过继承的话需要为每个实现类写一个子类来达到装饰的目的。	       -tip-
 
 p71&86
 
-����-�ر�ԭ��
-���ԭ��
-	��Ӧ�ö���չ���ţ����޸Ĺر�
+开放-关闭原则
+设计原则：
+	类应该对扩展开放，对修改关闭
 
-װ����ģʽ����ȫ��ѭ����-�ر�ԭ��
+装饰器模式，完全遵循开放-关闭原则
 
-��Ƶ�ÿ�����ֶ���ѭ����-�ر�ԭ��
-��첻����Ҫ��OO���ͬʱ�߱������Ժ͹ر��ԣ��ֲ��޸����еĴ��룬��Ҫ��������ʱ���Ŭ����һ����˵������ʵ��û���й������Ƶ�ÿ
-�����ֶ���ô��ƣ����ң��������õ���Ҳ����ֻ��һ���˷ѣ�����ѭ����-�ر�ԭ��ͨ���������µĳ����Σ����Ӵ���
-�ĸ��Ӷȡ�����Ҫ��ע������������������п��ܸı�ĵط���Ȼ��Ӧ�ÿ���-�ر�ԭ��
+设计的每个部分都遵循开放-关闭原则？
+你办不到。要让OO设计同时具备开放性和关闭性，又不修改现有的代码，需要花费许多时间和努力。一般来说，我们实在没有闲工夫把设计的每
+个部分都这么设计（而且，就算做得到，也可能只是一种浪费）。遵循开放-关闭原则，通常会引入新的抽象层次，增加代码
+的复杂度。你需要把注意力集中在设计中最有可能改变的地方，然后应用开放-关闭原则。
 
 p73&87
-װ����ģʽ
+装饰器模式
 	
-	ģʽ˵����װ����ģʽ��̬�ؽ����θ��ӵ������ϡ���Ҫ��չ���ܣ�װ�����ṩ�˱ȼ̳и��е��Ե����������
+	模式说明：装饰者模式动态地将责任附加到对象上。若要扩展功能，装饰者提供了比继承更有弹性的替代方案。
 
-	- װ���ߺͱ�װ�ζ�������ͬ�ĳ�����
-	- ������һ������װ���߰�װһ������
-	- ��Ϊװ���ߺͱ�װ��������ͬ�ĳ����ͣ��ӿڻ�����ࣩ���������κ���Ҫԭʼ���󣨱���װ�ģ��ĳ��ϣ�	������װ�ι��Ķ��������
-	- װ���߿�����ί�б�װ���ߵ���Ϊ֮ǰ��/��֮�󣬼����Լ�����Ϊ���Դﵽ�ض���Ŀ��
-	- ����������κ�ʱ��װ�Σ����Կ���������ʱ��̬�ء�������������ϲ�����b������װ�ζ���
+	- 装饰者和被装饰对象有相同的超类型
+	- 可以用一个或多个装饰者包装一个对象
+	- 因为装饰者和被装饰者有相同的超类型（接口或抽象类），所以在任何需要原始对象（被包装的）的场合，	可以用装饰过的对象代替它
+	- 装饰者可以在委托被装饰者的行为之前与/或之后，加上自己的行为，以达到特定的目的
+	- 对象可以在任何时候被装饰，所以可以在运行时动态地、不限量的用你喜欢的裝饰者来装饰对象
 
-	����˫�ݿ��ȣ�װ������װ��һ�μ��ɡ�
+	比如双份咖啡，装饰器再装饰一次即可。
 
-	�и��õķ�ʽ������װ���߶���װ����ͨ���������������ڹ�����������������ģʽ�����ġ�
+	有更好的方式建立被装饰者对象，装饰者通常是用其他类似于工厂或生成器这样的模式创建的。
 
-	java.io���ڶ���������ƾ����õ���װ����ģʽ�������ڻ�������FileInputStream������Buffer�InputStream��װ�����ṩ��������
-	BufferedInputStream��LineNumberInputStream����չ��FilterInputStream����FilterInputStream��һ�������װ����(ò�����࣬���ǳ�����)��
+	java.io包内多种流的设计就是用到了装饰器模式，比如在基础对象FileInputStream外面有Buffer额定InputStream等装饰类提供辅助功能
+	BufferedInputStream及LineNumberInputStream都扩展自FilterInputStream，而FilterInputStream是一个抽象的装饰类(貌似是类，而非抽象类)。
 
 	java.io.FilterInputStream
 		DOC
@@ -93,7 +95,157 @@ p73&87
 		to the contained input stream. Subclasses of FilterInputStream may further override some of these methods and may also provide additional methods
 		and fields.
 
-	chunked���������ʹ�ô�ģʽ���̳���DataOutputStream����FilterOutputStream����chunkΪ��λ�����
+	chunked输出，可以使用此模式，继承自DataOutputStream或者FilterOutputStream，以chunk为单位输出。
+
+------------------------
+Thursday, April 25, 2013
+p73&88
+认识装饰者模式
+	够了！你们这些“面向对象
+	设计俱乐部”的家伙。快来解决真
+	正的问题吧！还记得我们吗？星巴
+	兹咖啡？你认为这些设计原则有实
+	质的帮助吗？
+	好了，我们已经了解利用继承无法完全解决问题，在星巴兹遇到的问
+	题有：类数量爆炸、设计死板，以及基类加入的新功能并不适用于所
+	有的子类。
+	所以，在这里要采用不一样的做法：我们要以饮料为主体，然后在运
+	行时以调料来“装饰”（decorate）饮料。
+
+装饰器模式与代理模式的区别
+	装饰器模式关注于在一个对象上动态的添加方法，然而代理模式关注于控制对对象的访问。换句话 说，用代理模式，代理类（proxy class）
+	可以对它的客户隐藏一个对象的具体信息。因此，当使用代理模式的时候，我们常常在一个代理类中创建一个对象的实例。并且，当我们使用装饰器模 式的时候，
+	我们通常的做法是将原始对象作为一个参数传给装饰者的构造器。
+
+        我们可以用另外一句话来总结这些差别：使用代理模式，代理和真实对象之间的的关系通常在编译时就已经确定了，而装饰者能够在运行时递归地被构造。  
+	from: http://www.cnblogs.com/jaredlam/archive/2011/11/08/2241089.html
+
+------------------------
+Friday, April 26, 2013
+p90&104
+装饰器模式的注意点：
+	采用装饰者在实例化组件时，将增加代码的复杂度。一旦使用装饰者模式，不只需要实例化组件，还要把此组件包装进装饰者。工厂（Factory）模式和生成器（Builder）模式，
+	对这个问题有很大的帮助
+
+第三章总结
+	¸ 继承属于扩展形式之一，但不见得是达到弹性设计的最佳方式。
+	¸ 在我们的设计中，应该允许行为可以被扩展，而无须修改现有的代码。
+	¸ 组合和委托可用于在运行时动态地加上新的行为。
+	¸ 除了继承，装饰者模式也可以让我们扩展行为。
+	¸ 装饰者模式意味着一群装饰者类， 这些类用来包装具体组件。
+	¸ 装饰者类反映出被装饰的组件类型（事实上，他们具有相同的类型，都经过接口或继承实现）。
+	¸ 装饰者可以在被装饰者的行为前面与/或后面加上自己的行为， 甚至将被装饰者的行为整个取代掉，而达到特定的目的。
+	¸ 你可以用无数个装饰者包装一个组件。
+	¸ 装饰者一般对组件的客户是透明的，除非客户程序依赖于组件的具体类型。
+	¸ 装饰者会导致设计中出现许多小对象，如果过度使用，会让程序变得很复杂。
+
+p93&108
+使用模式最好的方式是：
+	「把模式装进脑子中，然后在你的设计和已有的应用中，寻找何处可以使用这些模式。」以往是代码复用，现在是经验复用
+
+p109&121
+Factory Patten
+	You’ll learn that instantiation is an activity that shouldn’t always be done in public and can often lead to coupling problems.
+	直接实例化并不推荐而且对象实例化可能带来耦合问题
+
+	通过直接new实现类的方式实例化，导致程序碎片化且不易扩展；当要修改或扩展时，必须再次打开并修改，且分散在代码的各个角落
+	维护和更新风险大，并可能带来新的问题。
+
+	“open for extension but closed for modification”  设计原则上，对扩展开放，对修改关闭
+
+	举一个OrderPizza类，任务就是根据传入的pizza类型，返回对应的pizza对象,如果通过普通new的方式，则
+	需要修改orderPizza方法，没增加一个类型，就要在里面的if分支里判断并new一个对象返回，添加或删除时都需要修改
+	orderPizza方法，违反了对“修改关闭”的准则，下面进行优化：
+		原来代码：
+			Pizza orderPizza(String type) {
+				Pizza pizza;
+				if (type.equals(“cheese”)) {
+					pizza = new CheesePizza();
+				} else if (type.equals(“greek”) {
+					pizza = new GreekPizza();
+				} else if (type.equals(“pepperoni”) {
+					pizza = new PepperoniPizza();
+				}
+				pizza.prepare();
+				pizza.bake();
+				pizza.cut();
+				pizza.box();
+				return pizza;
+			}
+		首先，将if判断的变化逻辑移出orderPizza方法 ：
+		代码为：
+			Pizza orderPizza(String type) {
+				Pizza pizza;
+				
+				//对象创建部分逻辑被抽取(变化的部分)
+
+				pizza.prepare();
+				pizza.bake();
+				pizza.cut();
+				pizza.box();
+				return pizza;
+			}			
+		
+		上面创建部分，我们用一个Factory对象来完成，它专门处理创建对象细节的工作，比如命名为： SimplePizzaFactory
+		这样orderPizza这个client每次需要一个pizza对象时，可以通过SimplePizzaFactory创建一个。
+
+		工厂类代码实现如下：
+			public class SimplePizzaFactory {
+				public Pizza createPizza(String type) {
+					Pizza pizza = null;
+					if (type.equals(“cheese”)) {
+						pizza = new CheesePizza();
+					} else if (type.equals(“pepperoni”)) {
+						pizza = new PepperoniPizza();
+					} else if (type.equals(“clam”)) {
+						pizza = new ClamPizza();
+					} else if (type.equals(“veggie”)) {
+						pizza = new VeggiePizza();
+					}
+					return pizza;
+				}
+			}
+		上面这个工厂：
+			1）是否将问题抛给了另一个对象，问题依旧？SimplePizzaFactory的client可能不止一个，有多个，这样如果创建过程修改了，程序只要修改SimplePizzaFactory这一处就行。
+			2）有些地方用的是static声明的方法，有什么区别？static的创建方法，工厂对象无需实例化，但却无法通过继承来修改static方法的行为（静态方法都是各自独立的）。
+
+		在PizzaStore类引入SimplePizzaFactory，如下：
+			public class PizzaStore {
+				SimplePizzaFactory factory;
+				public PizzaStore(SimplePizzaFactory factory) {
+					this.factory = factory;
+				}
+				public Pizza orderPizza(String type) {
+					Pizza pizza;
+					//用工厂方法替代，去掉了concrete instantiaton
+					pizza = factory.createPizza(type);
+					pizza.prepare();
+					pizza.bake();
+					pizza.cut();
+					pizza.box();
+					return pizza;
+				}
+				// other methods here
+			}
+		
+				
+		The Simple Factory isn’t actually a Design Pattern; it’s more of a programming idiom. But it is commonly used, so we’ll give it a Head First Pattern Honorable Mention.
+		Some developers do mistake this idiom for the “Factory Pattern,” so the next time there is an awkward silence between you and another developer, you’ve got a nice topic 
+		to break the ice.
+		上面这个工厂模式算不上真正的工厂模式
+
+		Think of Simple Factory as a warm up. Next, we’ll explore two heavy duty patterns that are both factories. But don’t worry, there’s more pizza to come!
+		上面只是热身，后面将介绍二个重量级的工厂模式...
+
+		上面的pizza工厂，如何适应各个地区的风俗，风味，毕竟各个地方的做法不是一致的，可能有各自的特色。
+		PizzaStore - NYPizzaFactory : One franchise wants a factory that makes NY style pizzas:thin crust, tasty sauce and just a little cheese.
+				 - ChicagoPizzaFactory : Another franchise wants a factory that makes Chicago style pizzas; their customers like pizzas with thick crust, rich sauce, and tons of cheese.
+		
+		So you test marketed the SimpleFactory idea, and what you found was that the franchises were using your factory to create pizzas, but starting to employ their own home grown
+		procedures for the rest of the process: they’d bake things a little differently, they’d forget to cut the pizza and they’d use third-party boxes.
+		对于创建pizza的过程不同的franchises会有不同的步骤...
+
+		我们需要一个framework来处理所有这些变化以及创建过程
 
 
 
@@ -102,3 +254,50 @@ p73&87
 
 
 
+
+	
+
+
+
+
+
+
+
+
+
+
+
+2. Java NIO
+------------------------
+Wednesday, April 23, 2013
+p28&32
+
+Nio实现的socket，channel，buffer，selector
+
+
+
+3. Servlet3.0 final Specification
+
+------------------------
+Wednesday, April 24, 2013
+p2
+servlet处理简单流程
+
+The following is a typical sequence of events:
+	1) A client (e.g., a Web browser) accesses a Web server and makes an HTTP request.
+	2) The request is received by the Web server and handed off to the servlet container.
+	The servlet container can be running in the same process as the host Web server,
+	in a different process on the same host, or on a different host from the Web server
+	for which it processes requests.
+	3) The servlet container determines which servlet to invoke based on the
+	configuration of its servlets, and calls it with objects representing the request and
+	response.
+	4) The servlet uses the request object to find out who the remote user is, what HTTP
+	POST parameters may have been sent as part of this request, and other relevant
+	data. The servlet performs whatever logic it was programmed with, and generates
+	data to send back to the client. It sends this data back to the client via the
+	response object.
+	5) Once the servlet has finished processing the request, the servlet container ensures
+	that the response is properly flushed, and returns control back to the host Web
+	server.
+	
