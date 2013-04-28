@@ -15,7 +15,7 @@
 	</logger>
 
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="stdout" />
 		<!-- 此处可定义一个指向日志文件的路径，日志将也会写入到文件中
 		<appender-ref ref="fileout" />

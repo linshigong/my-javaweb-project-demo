@@ -13,11 +13,11 @@ public class test {
 		}
 		
 		//
-		System.out.println(1%2);
-		System.out.println(2%2);
+		System.out.println("1%2="+1%2);//1%2=1
+		System.out.println("2%2="+2%2);//2%2=0
 		System.out.println(1f/2);
 		System.out.println(3d/9);
-		System.out.println("1%50="+1%50);
+		System.out.println("1%50="+1%50);//1%50=1
 		
 		System.out.println(Integer.MAX_VALUE);
 		
@@ -61,6 +61,9 @@ public class test {
 		
 		//左移运算
 		System.out.println("左移运算,10<<24="+(10L << 24));//167772160
+		
+		//
+		System.out.println("radix:"+Integer.toString(10, 16)+"\n"+Integer.toHexString(10));
 	}
 
 	

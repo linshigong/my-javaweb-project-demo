@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>   
+	<modelVersion>4.0.0</modelVersion>
 	<groupId>test</groupId>
 	<artifactId>test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -13,7 +13,20 @@
 			<name>JTester</name>
 			<url>http://java-tester.googlecode.com/svn/maven2/</url>
 		</repository>
+		<repository>
+			<id>central_prod</id>
+			<url>http://mvn.test.alipay.net:8080/artifactory/repo</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jetty.version>7.6.7.v20120910</jetty.version>
+		<netty.version>3.5.7.Final</netty.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -179,6 +192,32 @@
 			<groupId>org.jboss.netty</groupId>
 			<artifactId>netty</artifactId>
 			<version>3.2.8.Final</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>${jetty.version}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-client</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty</artifactId>
+			<version>${netty.version}</version>
+		</dependency> -->
+
+		<dependency>
+			<groupId>com.alipay.avatar</groupId>
+			<artifactId>validation</artifactId>
+			<version>1.0.0.20120104</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>${jetty.version}</version>
 		</dependency>
 	</dependencies>
 

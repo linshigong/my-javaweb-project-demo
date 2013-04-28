@@ -21,11 +21,16 @@ public class MyServer {
 		try {
 			ServerSocketChannel sc = ServerSocketChannel.open();
 			sc.configureBlocking(false);
-			sc.socket().bind(new InetSocketAddress("localhost", 2012));
+			sc.socket().bind(new InetSocketAddress("localhost", 55555));
 			Selector s = Selector.open();
+			System.out.println("selector provider="+s.provider());
 			sc.register(s, SelectionKey.OP_ACCEPT);
 			while (true) {
-				sc.accept();
+				int keyNums = s.select(1000 * 1);
+				if(keyNums == 0){
+					continue;
+				}
+//				sc.accept();
 				//get date	
 				ByteBuffer bBuffer = ByteBuffer.allocate(100);
 				bBuffer.put(new Date().toString().getBytes());
@@ -39,7 +44,7 @@ public class MyServer {
 					c.write(bBuffer);
 					bBuffer.flip();
 				}
-				System.out.println(s.provider());
+//				System.out.println(s.provider());
 
 			}
 
