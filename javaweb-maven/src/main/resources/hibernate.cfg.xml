@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+        <property name="myeclipse.connection.profile">
+            mysql5.5-jdbc5.0.8
+        </property>
+        <property name="connection.driver_class">
+            com.mysql.jdbc.Driver
+        </property>
+        <property name="dialect">
+            org.hibernate.dialect.MySQL5Dialect
+        </property>
+        <property name="connection.url">
+            jdbc:mysql://localhost:3306/slbapi
+        </property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">abc123</property>
+        
+        
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">false</property>
+        
+        <property name="connection.pool_size">10</property>
+        <property name="current_session_context_class">thread</property>
+        
+        <!--<property name="cache.provider_class">
+            org.hibernate.cache.NoCacheProvider
+        </property>
+        -->
+        
+        <!--use_second_level_cache -->
+        <property name="cache.use_second_level_cache">true</property>
+        <property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+        <property name="cache.use_query_cache">true</property>
+        
+        <!--
+        <mapping resource="com/anllin/model/Student.hbm.xml" />
+        <mapping resource="com/anllin/model/Student2.hbm.xml" />
+        <mapping resource="com/anllin/model/StuIdCard.hbm.xml" />
+        <mapping resource="com/anllin/one2many/Person.hbm.xml" />-->
+        <mapping resource="User.hbm.xml" />
+        
+        
+        <!--
+        <mapping class="com.anllin.model.Teacher" />
+        <mapping class="com.anllin.model.Teacher2" />
+        <mapping class="com.anllin.model.Husband" />
+        <mapping class="com.anllin.model.Wife" />
+        <mapping class="com.anllin.component.Person" />
+        <mapping class="com.anllin.many2one.Person" />
+        <mapping class="com.anllin.many2one.Address" />
+        <mapping class="com.anllin.one2many.Person" />
+        <mapping class="com.anllin.one2many.Address" />
+        <mapping class="com.anllin.many2many.Teacher" />
+        <mapping class="com.anllin.many2many.Student" />
+        <mapping class="com.anllin.tree.Organization" />
+        
+        -->
+
+       <!--  
+       <mapping class="com.anllin.studentmgr.Student" />
+        <mapping class="com.anllin.studentmgr.Score" />
+        <mapping class="com.anllin.studentmgr.Course" /> -->
+    </session-factory>
+
+</hibernate-configuration>

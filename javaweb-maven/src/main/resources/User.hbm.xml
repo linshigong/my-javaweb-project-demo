@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="mytest.model.User" table="user">
+		<id name="userId" column="user_id">
+			<generator class="increment" />
+		</id>
+		<property name="username" column="user_name" />
+		<property name="serviceKey" column="service_secret_key" />
+		<property name="serviceId" column="service_access_id" />
+		<property name="status" column="status" />
+		<property name="isAdmin" column="is_admin" />
+		
+		<!-- 
+		<many-to-one name="nextMessage" cascade="all" column="NEXT_MESSAGE_ID" />
+		 -->
+	</class>
+</hibernate-mapping>

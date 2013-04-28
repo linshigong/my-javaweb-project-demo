@@ -1,7 +1,8 @@
 package mytest.servlet;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,41 +18,77 @@ public class ChunkedResponseServlet extends HttpServlet {
 	private static final long serialVersionUID = -4486688450887394215L;
 
 	private static final byte CRLF[] = new byte[] { (byte) 13, (byte) 10 };
-	 private static final byte ZERO[] = new byte[] {(byte) '0'};
+	private static final byte ZERO[] = new byte[] { (byte) '0' };
 
-	@Override
+	private final static String CRLF2 = "\r\n";
+	private final static String ZERO2 = Integer.toHexString(0);
+
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		
-		
 		resp.setHeader("Pragma", "No-cache");
 		resp.setHeader("Cache-Control", "no-cache");
+//		resp.setHeader("Content-Type", "text/plain");
 		resp.setDateHeader("Expires", 0);
 		
-		resp.setHeader("Transfer-Encoding", "chunked");
+		resp.setHeader("Transfer-Encoding", "chunked");//设置Chunked标识
+		resp.setHeader("X-Accel-Buffering", "no");
 		
-		OutputStream out = resp.getOutputStream();//与使用write的区别，少了流转换的开销？但不能利用buffer的好处
-		String trunk1 = "chunk1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-		String trunk2 = "chunk2";
+		String trunk1 = "chunk11";
+		String trunk2 = "chunk22";
+		
+		/* 1) Write by byte  */
+		BufferedOutputStream out = new BufferedOutputStream(resp.getOutputStream());
 		//size of first chunk
-		out.write(Integer.toHexString(trunk1.length()*2).getBytes());
+		String header = Integer.toHexString(trunk1.length());
+		out.write(header.getBytes());
 		out.write(CRLF);
 		//send first chunk
 		out.write(trunk1.getBytes());
-		out.write(trunk1.getBytes());
 		out.write(CRLF);
+		out.flush();
+		sleep();
 		//size of second chunk
 		out.write(Integer.toHexString(trunk2.length()).getBytes());
 		out.write(CRLF);
 		//send second chunk
 		out.write(trunk2.getBytes());
 		out.write(CRLF);
+		out.flush();
+		sleep();
 		//send chunked data end flag
 		out.write(ZERO);
 		out.write(CRLF);
 		//send CRLF
-		out.write(CRLF);
+//		out.write(CRLF);
+		
+		out.flush();
+		out.close();
+		
+		
+		/* 2) Write by String ,写好一个chunk需要flush下 ，outputstream和writer两者输出效果一样
+		BufferedWriter writer = new BufferedWriter(resp.getWriter());
+		
+		//size of first chunk
+		writer.write(Integer.toHexString(trunk1.length()+2));
+		writer.write(CRLF2);
+		//send first chunk
+		writer.write(trunk1);
+		writer.flush();
+		sleep();
+		//size of second chunk
+		writer.write(Integer.toHexString(trunk2.length()));
+		writer.write(CRLF2);
+		//send second chunk
+		writer.write(trunk2);
+		writer.flush();
+		sleep();
+		//send chunked data end flag
+		writer.write(Integer.toBinaryString(0));
+		writer.write(CRLF2);
+		writer.flush();
+		*/
+		
 	}
 
 	@Override
@@ -60,4 +97,12 @@ public class ChunkedResponseServlet extends HttpServlet {
 	 super.doGet(req, resp);
 	 }
 
+	private void sleep(){
+		try {
+			Thread.sleep(2 * 1000);//sleep 5 seconds
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
