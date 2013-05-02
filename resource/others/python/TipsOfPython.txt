@@ -1,4 +1,5 @@
-from: http://www.diveintopython.net/toc/index.html
+from: http://www.diveintopython.net/toc/index.html	   
+OR from book: Dive Into Python 20 May 2004
 
 1. Installing Python
 	1.5. Python on RedHat Linux
@@ -18,7 +19,7 @@ from: http://www.diveintopython.net/toc/index.html
 			- The argument, params, doesn't specify a datatype. In Python, variables are never explicitly typed. Python figures out what type a variable is and keeps track of it internally.
 		VBScript and Python are dynamically typed, because they figure out what type a variable is when you first assign it a value. Java and Python are strongly typed. 
 		If you have an integer, you can't treat it like a string without explicitly converting it.
-	2.3. Documenting Functions Œƒµµ◊¢ Õ
+	2.3. Documenting Functions ÊñáÊ°£Ê≥®Èáä
 		def buildConnectionString(params):
 		    """Build a connection string from a dictionary of parameters.
 
@@ -47,8 +48,8 @@ from: http://www.diveintopython.net/toc/index.html
 				Everything in Python is an object, and almost everything has attributes and methods. All functions have a built-in attribute __doc__, which returns the doc string defined in the function's source code. 
 			The sys module is an object which has (among other things) an attribute called path. And so forth.
 				Lists are objects. Functions are objects. Even modules are objects.
-	2.5. Indenting Code ¥˙¬ÎÀıΩ¯
-			Python functions have no explicit begin or end, and no curly braces to mark where the function code starts and stops. The only delimiter(∂®ΩÁ∑˚) is a colon (:) and the indentation of the code itself.
+	2.5. Indenting Code ‰ª£Á†ÅÁº©Ëøõ
+			Python functions have no explicit begin or end, and no curly braces to mark where the function code starts and stops. The only delimiter(ÂÆöÁïåÁ¨¶) is a colon (:) and the indentation of the code itself.
 			Code blocks are defined by their indentation. By "code block", I mean functions, if statements, for loops, while loops, and so forth. Indenting starts a block and unindenting ends it. 
 		There are no explicit braces, brackets, or keywords. This means that whitespace is significant, and must be consistent.
 		eg:
@@ -64,7 +65,7 @@ from: http://www.diveintopython.net/toc/index.html
 			Here's an example that uses the if __name__ trick.
 				if __name__ == "__main__":
 			Modules are objects, and all modules have a built-in attribute __name__. A module's __name__ depends on how you're using the module. If you import the module, then __name__ is the module's filename, 
-		 without a directory path or file extension. But you can also run the module directly as a standalone program, in which case __name__ will be a special default value, __main__£∫
+		 without a directory path or file extension. But you can also run the module directly as a standalone program, in which case __name__ will be a special default value, __main__Ôºö
 				>>> import odbchelper
 				>>> odbchelper.__name__
 				'odbchelper'.
@@ -98,7 +99,7 @@ from: http://www.diveintopython.net/toc/index.html
 				>>> d["uid"] = "sa"        
 				>>> d
 				{'server': 'mpilgrim', 'uid': 'sa', 'database': 'pubs'}	
-					- Dictionaries have no concept of order among elements. It is incorrect to say that the elements are °∞out of order°±; they are simply unordered. 
+					- Dictionaries have no concept of order among elements. It is incorrect to say that the elements are ‚Äúout of order‚Äù; they are simply unordered. 
 					This is an important distinction that will annoy you when you want to access the elements of a dictionary in a specific, repeatable order (like alphabetical order by key). 
 					There are ways of doing this, but they're not built into the dictionary.
 
@@ -171,7 +172,7 @@ from: http://www.diveintopython.net/toc/index.html
 				['b', 'mpilgrim', 'z']
 				>>> li[0:3]  
 				['a', 'b', 'mpilgrim']		
-					- You can get a subset of a list, called a °∞slice°±, by specifying two indices. The return value is a new list containing all the elements of the list, in order, starting with the first slice index (in this case li[1]), 
+					- You can get a subset of a list, called a ‚Äúslice‚Äù, by specifying two indices. The return value is a new list containing all the elements of the list, in order, starting with the first slice index (in this case li[1]), 
 					up to but not including the second slice index (in this case li[3]).
 					- Slicing works if one or both of the slice indices is negative. If it helps, you can think of it this way: reading the list from left to right, the first slice index specifies the first element you want, 
 					and the second slice index specifies the first element you don't want. The return value is everything in between.
@@ -186,7 +187,7 @@ from: http://www.diveintopython.net/toc/index.html
 				['z', 'example']
 				>>> li[:]  
 				['a', 'b', 'mpilgrim', 'z', 'example']
-					- If the left slice index is 0, you can leave it out, and 0 is implied. So li[:3] is the same as li[0:3] from Example 3.8, °∞Slicing a List°±.
+					- If the left slice index is 0, you can leave it out, and 0 is implied. So li[:3] is the same as li[0:3] from Example 3.8, ‚ÄúSlicing a List‚Äù.
 					- Similarly, if the right slice index is the length of the list, you can leave it out. So li[3:] is the same as li[3:5], because this list has five elements.
 					- Note the symmetry here. In this five-element list, li[:3] returns the first 3 elements, and li[3:] returns the last two elements. In fact, li[:n] will always return the first n elements, and li[n:] 
 					will return the rest, regardless of the length of the list.
@@ -320,9 +321,9 @@ from: http://www.diveintopython.net/toc/index.html
 
 		So what are tuples good for?
       			- Tuples are faster than lists. If you're defining a constant set of values and all you're ever going to do with it is iterate through it, use a tuple instead of a list.
-			- It makes your code safer if you °∞write-protect°± data that does not need to be changed. Using a tuple instead of a list is like having an implied assert statement 
+			- It makes your code safer if you ‚Äúwrite-protect‚Äù data that does not need to be changed. Using a tuple instead of a list is like having an implied assert statement 
 			that shows this data is constant, and that special thought (and a specific function) is required to override that.
-			- Remember that I said that dictionary keys can be integers, strings, and °∞a few other types°±? Tuples are one of those types. Tuples can be used as keys in a dictionary, 
+			- Remember that I said that dictionary keys can be integers, strings, and ‚Äúa few other types‚Äù? Tuples are one of those types. Tuples can be used as keys in a dictionary, 
 			but lists can't be used this way.Actually, it's more complicated than that. Dictionary keys must be immutable. Tuples themselves are immutable, but if you have a tuple of lists, 
 			that counts as mutable and isn't safe to use as a dictionary key. Only tuples of strings, numbers, or other dictionary-safe tuples can be used as dictionary keys.
 			- Tuples are used in string formatting, as you'll see shortly.
@@ -342,8 +343,8 @@ from: http://www.diveintopython.net/toc/index.html
 					"pwd":"secret" \
 					}
 			Notice the indentation. An if statement is a code block and needs to be indented just like a function.
-			Also notice that the variable assignment is one command split over several lines, with a backslash (°∞\°±) serving as a line-continuation marker.
-			When a command is split among several lines with the line-continuation marker (°∞\°±), the continued lines can be indented in any manner; Python's normally stringent indentation rules do not apply. 
+			Also notice that the variable assignment is one command split over several lines, with a backslash (‚Äú\‚Äù) serving as a line-continuation marker.
+			When a command is split among several lines with the line-continuation marker (‚Äú\‚Äù), the continued lines can be indented in any manner; Python's normally stringent indentation rules do not apply. 
 		If your Python IDE auto-indents the continued line, you should probably accept its default unless you have a burning reason not to.
 			Python will not allow you to reference a variable that has never been assigned a value; trying to do so will raise an exception.
 		
@@ -371,7 +372,7 @@ from: http://www.diveintopython.net/toc/index.html
 				'e'
 					- v is a tuple of three elements, and (x, y, z) is a tuple of three variables. Assigning one to the other assigns each of the values of v to each of the variables, in order.
 				This has all sorts of uses. I often want to assign names to a range of values. In C, you would use enum and manually list each constant and its associated value, which 
-				seems especially tedious when the values are consecutive(¡¨–¯µƒ£¨¡¨π·µƒ). In Python, you can use the built-in range function with multi-variable assignment to quickly assign consecutive values.
+				seems especially tedious when the values are consecutive(ËøûÁª≠ÁöÑÔºåËøûË¥ØÁöÑ). In Python, you can use the built-in range function with multi-variable assignment to quickly assign consecutive values.
 	
 			Example 3.20. Assigning Consecutive Values
 				>>> range(7)                                                                    
@@ -491,14 +492,14 @@ from: http://www.diveintopython.net/toc/index.html
 			['server=mpilgrim', 'uid=sa', 'database=master', 'pwd=secret']
 			>>> s.split(";", 1) 
 			['server=mpilgrim', 'uid=sa;database=master;pwd=secret']
-				- split reverses join by splitting a string into a multi-element list. Note that the delimiter (°∞;°±) is stripped out completely; it does not appear in any of the elements of the returned list.
-				- split takes an optional second argument, which is the number of times to split. (°∞"Oooooh, optional arguments...°± You'll learn how to do this in your own functions in the next chapter.)
+				- split reverses join by splitting a string into a multi-element list. Note that the delimiter (‚Äú;‚Äù) is stripped out completely; it does not appear in any of the elements of the returned list.
+				- split takes an optional second argument, which is the number of times to split. (‚Äú"Oooooh, optional arguments...‚Äù You'll learn how to do this in your own functions in the next chapter.)
 
 			anystring.split(delimiter, 1) is a useful technique when you want to search a string for a substring and then work with everything before the substring (which ends up in the first element of the returned list) 
 			and everything after it (which ends up in the second element).
 
 			ps:
-				""" ¿‡–Õ◊™ªª
+				""" Á±ªÂûãËΩ¨Êç¢
 				"-".join([str(x) for x in li])
 				li=[1,2,3]
 				[str(x) for x in li] = ['1','2','3']
@@ -571,8 +572,8 @@ from: http://www.diveintopython.net/toc/index.html
 				- Here you are naming the collapse argument explicitly and specifying its value. spacing still gets its default value of 10.
 				- Even required arguments (like object, which has no default value) can be named, and named arguments can appear in any order.
 			
-			This looks totally whacked until you realize that arguments are simply a dictionary. The °∞normal°± method of calling functions without argument names is actually just a shorthand 
-		where Python matches up the values with the argument names in the order they're specified in the function declaration. And most of the time, you'll call functions the °∞normal°± way, 
+			This looks totally whacked until you realize that arguments are simply a dictionary. The ‚Äúnormal‚Äù method of calling functions without argument names is actually just a shorthand 
+		where Python matches up the values with the argument names in the order they're specified in the function declaration. And most of the time, you'll call functions the ‚Äúnormal‚Äù way, 
 		but you always have the additional flexibility if you need it.
 	
 	4.3. Using type, str, dir, and Other Built-In Functions
@@ -668,7 +669,7 @@ from: http://www.diveintopython.net/toc/index.html
 							
 	       4.3.3. Built-In Functions
 				type, str, dir, and all the rest of Python's built-in functions are grouped into a special module called __builtin__. (That's two underscores before and after.) If it helps, 
-			you can think of Python automatically executing from __builtin__ import * on startup, which imports all the °∞built-in°± functions into the namespace so you can use them directly.
+			you can think of Python automatically executing from __builtin__ import * on startup, which imports all the ‚Äúbuilt-in‚Äù functions into the namespace so you can use them directly.
 			
 				The advantage of thinking like this is that you can access all the built-in functions and attributes as a group by getting information about the __builtin__ module. And guess what, Python has a function 
 			called info. Try it yourself and skim through the list now.
@@ -769,7 +770,7 @@ from: http://www.diveintopython.net/toc/index.html
 			As you can see, getattr is quite powerful. It is the heart of introspection, and you'll see even more powerful examples of it in later chapters.
 		
 	4.5. Filtering Lists
-		As you know, Python has powerful capabilities for mapping lists into other lists, via list comprehensions (Section 3.6, °∞Mapping Lists°±). This can be combined with a filtering mechanism, 
+		As you know, Python has powerful capabilities for mapping lists into other lists, via list comprehensions (Section 3.6, ‚ÄúMapping Lists‚Äù). This can be combined with a filtering mechanism, 
 		where some elements in the list are mapped while others are skipped entirely.
 		
 		Here is the list filtering syntax:
@@ -835,7 +836,7 @@ from: http://www.diveintopython.net/toc/index.html
 			- If all values are false, or returns the last value. or evaluates '', which is false, then [], which is false, then {}, which is false, and returns {}.
 			- Note that or evaluates values only until it finds one that is true in a boolean context, and then it ignores the rest. This distinction is important if some values can have side effects. Here, the function sidefx is never called, because or evaluates 'a', which is true, and returns 'a' immediately.
 		
-		∑µªÿµƒ÷µ◊‘…ÌµƒtrueªÚfalseº¥Œ™±Ì¥Ô ΩµƒtrueªÚfalse°£
+		ËøîÂõûÁöÑÂÄºËá™Ë∫´ÁöÑtrueÊàñfalseÂç≥‰∏∫Ë°®ËææÂºèÁöÑtrueÊàñfalse„ÄÇ
 	
 	4.6.1. Using the and-or Trick
 
@@ -1104,7 +1105,7 @@ from: http://www.diveintopython.net/toc/index.html
 		comment=http://mp3.com/artists/95/vxp
 
 	5.2. Importing Modules Using from module import
-		Python has two ways of importing modules. Both are useful, and you should know when to use each. One way, import module, you've already seen in Section 2.4, °∞Everything Is an Object°±. 
+		Python has two ways of importing modules. Both are useful, and you should know when to use each. One way, import module, you've already seen in Section 2.4, ‚ÄúEverything Is an Object‚Äù. 
 		The other way accomplishes the same thing, but it has subtle and important differences.
 
 		Here is the basic from module import syntax:
@@ -1149,7 +1150,7 @@ from: http://www.diveintopython.net/toc/index.html
 		class Loaf: 
 		    pass     
 			- The name of this class is Loaf, and it doesn't inherit from any other class. Class names are usually capitalized, EachWordLikeThis, but this is only a convention, not a requirement.
-			- This class doesn't define any methods or attributes, but syntactically, there needs to be something in the definition, so you use pass. This is a Python reserved word that just means °∞move along, nothing to see here°±. It's a statement that does nothing, and it's a good placeholder when you're stubbing out functions or classes.
+			- This class doesn't define any methods or attributes, but syntactically, there needs to be something in the definition, so you use pass. This is a Python reserved word that just means ‚Äúmove along, nothing to see here‚Äù. It's a statement that does nothing, and it's a good placeholder when you're stubbing out functions or classes.
 			- You probably guessed this, but everything in a class is indented, just like the code within a function, if statement, for loop, and so forth. The first thing not indented is not in the class.
 
 		Of course, realistically, most classes will be inherited from other classes, and they will define their own class methods and attributes. But as you've just seen, there is nothing that a class absolutely must have, 
@@ -1179,7 +1180,7 @@ from: http://www.diveintopython.net/toc/index.html
 				- Classes can (and should) have doc strings too, just like modules and functions.
 				- __init__ is called immediately after an instance of the class is created. It would be tempting but incorrect to call this the constructor of the class. It's tempting, because it looks like 
 				a constructor (by convention, __init__ is the first method defined for the class), acts like one (it's the first piece of code executed in a newly created instance of the class), and even sounds like 
-				one (°∞init°± certainly suggests a constructor-ish nature). Incorrect, because the object has already been constructed by the time __init__ is called, and you already have a valid reference to the 
+				one (‚Äúinit‚Äù certainly suggests a constructor-ish nature). Incorrect, because the object has already been constructed by the time __init__ is called, and you already have a valid reference to the 
 				new instance of the class. But __init__ is the closest thing you're going to get to a constructor in Python, and it fills much the same role.
 				- The first argument of every class method, including __init__, is always a reference to the current instance of the class. By convention, this argument is always named self. In the __init__ method, 
 				self refers to the newly created object; in other class methods, it refers to the instance whose method was called. Although you need to specify self explicitly when defining the method, you do not 
@@ -1193,12 +1194,12 @@ from: http://www.diveintopython.net/toc/index.html
 			    def __init__(self, filename=None):
 				UserDict.__init__(self)        
 				self["name"] = filename        							       
-					- Some pseudo-object-oriented languages like Powerbuilder have a concept of °∞extending°± constructors and other events, where the ancestor's method is called automatically before 
+					- Some pseudo-object-oriented languages like Powerbuilder have a concept of ‚Äúextending‚Äù constructors and other events, where the ancestor's method is called automatically before 
 					the descendant's method is executed. Python does not do this; you must always explicitly call the appropriate method in the ancestor class.
 					- I told you that this class acts like a dictionary, and here is the first sign of it. You're assigning the argument filename as the value of this object's name key.
 					- Note that the __init__ method never returns a value.
 		
-		 µ¿˝ªØ£∫
+		ÂÆû‰æãÂåñÔºö
 			instanceName = YourClassName();
 			
 		5.3.2. Knowing When to Use self and __init__
@@ -1258,12 +1259,12 @@ from: http://www.diveintopython.net/toc/index.html
 				to the newly created instance of FileInfo (since you never assigned it to anything other than f), so Python destroys the instance for us.
 				- No matter how many times you call the leakmem function, it will never leak memory, because every time, Python will destroy the newly created FileInfo class before returning from leakmem.
 
-			The technical term for this form of garbage collection is °∞reference counting°±. Python keeps a list of references to every instance created. In the above example, there was only one 
+			The technical term for this form of garbage collection is ‚Äúreference counting‚Äù. Python keeps a list of references to every instance created. In the above example, there was only one 
 			reference to the FileInfo instance: the local variable f. When the function ends, the variable f goes out of scope, so the reference count drops to 0, and Python destroys the instance automatically.
 
 			In previous versions of Python, there were situations where reference counting failed, and Python couldn't clean up after you. If you created two instances that referenced each other (for instance, 
 			a doubly-linked list, where each node has a pointer to the previous and next node in the list), neither instance would ever be destroyed automatically because Python (correctly) believed that there is 
-			always a reference to each instance. Python 2.0 has an additional form of garbage collection called °∞mark-and-sweep°± which is smart enough to notice this virtual gridlock and clean up circular references 
+			always a reference to each instance. Python 2.0 has an additional form of garbage collection called ‚Äúmark-and-sweep‚Äù which is smart enough to notice this virtual gridlock and clean up circular references 
 			correctly.
 			(PS: refer to java's GC)
 			ref for more detail: http://www.brpreiss.com/books/opus7/html/page425.html
@@ -1273,7 +1274,7 @@ from: http://www.diveintopython.net/toc/index.html
 				a problem in a program that interacts with a human user or that must satisfy real-time execution constraints. For example, an interactive application that uses mark-and-sweep garbage collection 
 				becomes unresponsive periodically.
 
-				The Fragmentation Problem ƒ⁄¥ÊÀÈ∆¨Œ Ã‚(…œ√Êµƒ±Íº«-«Â≥˝À„∑®ª·”–¥ÀŒ Ã‚£¨“˝≥ˆœ¬√ÊµƒÕ£÷π-øΩ±¥ªÿ ’À„∑®)
+				The Fragmentation Problem ÂÜÖÂ≠òÁ¢éÁâáÈóÆÈ¢ò(‰∏äÈù¢ÁöÑÊ†áËÆ∞-Ê∏ÖÈô§ÁÆóÊ≥ï‰ºöÊúâÊ≠§ÈóÆÈ¢òÔºåÂºïÂá∫‰∏ãÈù¢ÁöÑÂÅúÊ≠¢-Êã∑Ë¥ùÂõûÊî∂ÁÆóÊ≥ï)
 
 				Stop-and-Copy Garbage Collection
 					The section describes a garbage collection approach that collects garbage and defragments the heap called stop-and-copy  . When using the stop-and-copy garbage collection algorithm, 
@@ -1309,11 +1310,11 @@ from: http://www.diveintopython.net/toc/index.html
 				- This is the __init__ method that you overrode in the FileInfo class. Note that the argument list in this ancestor class is different than the descendant. That's okay; each subclass can have its own set 
 				of arguments, as long as it calls the ancestor with the correct arguments. Here the ancestor class has a way to define initial values (by passing a dictionary in the dict argument) which the FileInfo does 
 				not use.
-				- Python supports data attributes (called °∞instance variables°± in Java and Powerbuilder, and °∞member variables°± in C++). Data attributes are pieces of data held by a specific instance of a class. 
+				- Python supports data attributes (called ‚Äúinstance variables‚Äù in Java and Powerbuilder, and ‚Äúmember variables‚Äù in C++). Data attributes are pieces of data held by a specific instance of a class. 
 				In this case, each instance of UserDict will have a data attribute data. To reference this attribute from code outside the class, you qualify it with the instance name, instance.data, in the same way that 
 				you qualify a function with its module name. To reference a data attribute from within the class, you use self as the qualifier. By convention, all data attributes are initialized to reasonable values in the 
 				__init__ method. However, this is not required, since data attributes, like local variables, spring into existence when they are first assigned a value.-tip-
-				Python÷ß≥÷ µ¿˝±‰¡ø£¨ µ¿˝±‰¡ø∂º‘⁄__init__∑Ω∑®÷–≥ı ºªØ£¨¿‡±‰¡ø‘⁄classÃÂ÷–∂®“Â
+				PythonÊîØÊåÅÂÆû‰æãÂèòÈáèÔºåÂÆû‰æãÂèòÈáèÈÉΩÂú®__init__ÊñπÊ≥ï‰∏≠ÂàùÂßãÂåñÔºåÁ±ªÂèòÈáèÂú®class‰Ωì‰∏≠ÂÆö‰πâ
 				PS:
 					>>aa = UserDict()
 					>>aa.data
@@ -1371,7 +1372,7 @@ from: http://www.diveintopython.net/toc/index.html
 
 		As you saw in the previous section, normal methods go a long way towards wrapping a dictionary in a class. But normal methods alone are not enough, because there are a lot of things you can do with 
 		dictionaries besides call methods on them. For starters, you can get and set items with a syntax that doesn't include explicitly invoking methods. This is where special class methods come in: they provide 
-		a way to map non-method-calling syntax into method calls. Ãÿ ‚¿‡∑Ω∑®”≥…‰µΩ∑«œ‘ Ω∑Ω∑®µ˜”√µƒ≤Ÿ◊˜£¨±»»Á∑˚∫œƒ≥÷÷∏Ò Ωµƒ∏≥÷µ(≥Ã–Ú¥˙¬Î≤¢√ª”–œ‘ Ωµ˜”√∏≥÷µ∑Ω∑®)∑Ω Ω°£
+		a way to map non-method-calling syntax into method calls. ÁâπÊÆäÁ±ªÊñπÊ≥ïÊò†Â∞ÑÂà∞ÈùûÊòæÂºèÊñπÊ≥ïË∞ÉÁî®ÁöÑÊìç‰ΩúÔºåÊØîÂ¶ÇÁ¨¶ÂêàÊüêÁßçÊ†ºÂºèÁöÑËµãÂÄº(Á®ãÂ∫è‰ª£Á†ÅÂπ∂Ê≤°ÊúâÊòæÂºèË∞ÉÁî®ËµãÂÄºÊñπÊ≥ï)ÊñπÂºè„ÄÇ
 
 		5.6.1. Getting and Setting Items
 
@@ -1410,7 +1411,7 @@ from: http://www.diveintopython.net/toc/index.html
 			This concept is the basis of the entire framework you're studying in this chapter. Each file type can have a handler class that knows how to get metadata from a particular type of file. Once some attributes 
 			(like the file's name and location) are known, the handler class knows how to derive other attributes automatically. This is done by overriding the __setitem__ method, checking for particular keys, and adding 
 			additional processing when they are found. 
-			(PS:÷ÿ–¥∏∏¿‡∑Ω∑®£¨ µœ÷◊‘∂®“Âµƒ––Œ™£¨¬˙◊„–Ë“™°£±»»Áfile¿‡–Õ£¨÷ª“™Ã·π©Œƒº˛µÿ÷∑£¨æÕø…“‘ªÒµ√Œƒº˛µƒ∆‰À˚–≈œ¢£¨æÕ «“ÚŒ™file¿‡–Õ÷ÿ–¥¡À__setitem__∑Ω∑®°£)
+			(PS:ÈáçÂÜôÁà∂Á±ªÊñπÊ≥ïÔºåÂÆûÁé∞Ëá™ÂÆö‰πâÁöÑË°å‰∏∫ÔºåÊª°Ë∂≥ÈúÄË¶Å„ÄÇÊØîÂ¶ÇfileÁ±ªÂûãÔºåÂè™Ë¶ÅÊèê‰æõÊñá‰ª∂Âú∞ÂùÄÔºåÂ∞±ÂèØ‰ª•Ëé∑ÂæóÊñá‰ª∂ÁöÑÂÖ∂‰ªñ‰ø°ÊÅØÔºåÂ∞±ÊòØÂõ†‰∏∫fileÁ±ªÂûãÈáçÂÜô‰∫Ü__setitem__ÊñπÊ≥ï„ÄÇ)
 
 			Example 5.14. Overriding __setitem__ in MP3FileInfo
 			def __setitem__(self, key, item):         
@@ -1449,7 +1450,7 @@ from: http://www.diveintopython.net/toc/index.html
 			- __cmp__ is called when you compare class instances. In general, you can compare any two Python objects, not just class instances, by using ==. There are rules that define when built-in datatypes 
 			are considered equal; for instance, dictionaries are equal when they have all the same keys and values, and strings are equal when they are the same length and contain the same sequence of characters. 
 			For class instances, you can define the __cmp__ method and code the comparison logic yourself, and then you can use == to compare instances of your class and Python will call your __cmp__ special 
-			method for you.	 -tip- ±»Ωœ‘ÀÀ„
+			method for you.	 -tip- ÊØîËæÉËøêÁÆó
 			- __len__ is called when you call len(instance). The len function is a built-in function that returns the length of an object. It works on any object that could reasonably be thought of as having a length. 
 			The len of a string is its number of characters; the len of a dictionary is its number of keys; the len of a list or tuple is its number of elements. For class instances, define the __len__ method and code the 
 			length calculation yourself, and then call len(instance) and Python will call your __len__ special method for you.
@@ -1458,22 +1459,22 @@ from: http://www.diveintopython.net/toc/index.html
 	
 		In Java, you determine whether two string variables reference the same physical memory location by using str1 == str2. This is called object identity, and it is written in Python as str1 is str2. 
 		To compare string values in Java, you would use str1.equals(str2); in Python, you would use str1 == str2. Java programmers who have been taught to believe that the world is a better place 
-		because == in Java compares by identity instead of by value may have a difficult time adjusting to Python's lack of such °∞gotchas°±. 
-		PS: python÷–±»Ωœƒ⁄¥Êµÿ÷∑”√is£¨±»Ωœ◊÷∑˚¥Æœ‡Õ¨”√==£¨«¯±»•javaµƒ∑Ω Ω
+		because == in Java compares by identity instead of by value may have a difficult time adjusting to Python's lack of such ‚Äúgotchas‚Äù. 
+		PS: python‰∏≠ÊØîËæÉÂÜÖÂ≠òÂú∞ÂùÄÁî®isÔºåÊØîËæÉÂ≠óÁ¨¶‰∏≤Áõ∏ÂêåÁî®==ÔºåÂå∫Âà´ÂéªjavaÁöÑÊñπÂºè
 
 		Special methods mean that any class can store key/value pairs like a dictionary, just by defining the __setitem__ method. Any class can act like a sequence, just by defining the __getitem__ method. 
 		Any class that defines the __cmp__ method can be compared with ==. And if your class represents something that has a length, don't define a GetLength method; define the __len__ method and use len(instance).
 
-		While other object-oriented languages only let you define the physical model of an object (°∞this object has a GetLength method°±), Python's special class methods like __len__ allow you to define the logical 
-		model of an object (°∞this object has a length°±).
+		While other object-oriented languages only let you define the physical model of an object (‚Äúthis object has a GetLength method‚Äù), Python's special class methods like __len__ allow you to define the logical 
+		model of an object (‚Äúthis object has a length‚Äù).
 
 		Python has a lot of other special methods. There's a whole set of them that let classes act like numbers, allowing you to add, subtract, and do other arithmetic operations on class instances. (The canonical example 
 		of this is a class that represents complex numbers, numbers with both real and imaginary components.) The __call__ method lets a class act like a function, allowing you to call a class instance directly. And there are 
 		other special methods that allow classes to have read-only and write-only data attributes; you'll talk more about those in later chapters.
 
 	5.8. Introducing Class Attributes
-		You already know about data attributes£® µ¿˝±‰¡ø£©, which are variables owned by a specific instance of a class. Python also supports class attributes, which are variables owned by the class itself.
-		œ‡±»”⁄javaµƒ µ¿˝±‰¡ø”Î¿‡±‰¡ø
+		You already know about data attributesÔºàÂÆû‰æãÂèòÈáèÔºâ, which are variables owned by a specific instance of a class. Python also supports class attributes, which are variables owned by the class itself.
+		Áõ∏ÊØî‰∫éjavaÁöÑÂÆû‰æãÂèòÈáè‰∏éÁ±ªÂèòÈáè
 
 		Example 5.17. Introducing Class Attributes
 
@@ -1509,14 +1510,14 @@ from: http://www.diveintopython.net/toc/index.html
 
 			In Java, both static variables (called class attributes in Python) and instance variables (called data attributes in Python) are defined immediately after the class definition (
 		one with the static keyword, one without). In Python, only class attributes can be defined here; data attributes are defined in the __init__ method. -tip-
-		Python¿Ô÷ª”–¿‡±‰¡øø…“‘’‚—˘∂®“Â£¨ µ¿˝±‰¡ø‘⁄__init__∑Ω∑®÷–∂®“Â
+		PythonÈáåÂè™ÊúâÁ±ªÂèòÈáèÂèØ‰ª•ËøôÊ†∑ÂÆö‰πâÔºåÂÆû‰æãÂèòÈáèÂú®__init__ÊñπÊ≥ï‰∏≠ÂÆö‰πâ
 			
 			Class attributes can be used as class-level constants (which is how you use them in MP3FileInfo), but they are not really constants. You can also change them.
 
 			There are no constants in Python. Everything can be changed if you try hard enough. This fits with one of the core principles of Python: bad behavior should be discouraged 
 		but not banned. If you really want to change the value of None, you can do it, but don't come running to me when your code is impossible to debug 
-		Python√ª”–≥£¡ø£¨»Œ∫Œ∂´Œ˜∂ºø…“‘±ª–ﬁ∏ƒ°£
-		Python∫À–ƒ∑®‘Ú÷Æ“ª£∫≤ªΩ®“È¥ÌŒÛµƒ––Œ™µ´≤¢≤ªΩ˚÷π
+		PythonÊ≤°ÊúâÂ∏∏ÈáèÔºå‰ªª‰Ωï‰∏úË•øÈÉΩÂèØ‰ª•Ë¢´‰øÆÊîπ„ÄÇ
+		PythonÊ†∏ÂøÉÊ≥ïÂàô‰πã‰∏ÄÔºö‰∏çÂª∫ËÆÆÈîôËØØÁöÑË°å‰∏∫‰ΩÜÂπ∂‰∏çÁ¶ÅÊ≠¢
 
 		Example 5.18. Modifying Class Attributes
 		>>> class counter:
@@ -1540,23 +1541,23 @@ from: http://www.diveintopython.net/toc/index.html
 		2
 		>>> counter.count
 		2			
-		–ﬁ∏ƒ¿‡±‰¡ø£¨
+		‰øÆÊîπÁ±ªÂèòÈáèÔºå
 
 	5.9. Private Functions
 	Like most languages, Python has the concept of private elements:
-		- Private functions, which can't be called from outside their module	ÀΩ”–∫Ø ˝
-		- Private class methods, which can't be called from outside their class	 ÀΩ”–¿‡∑Ω∑®
-		- Private attributes, which can't be accessed from outside their class	ÀΩ”– Ù–‘
+		- Private functions, which can't be called from outside their module	ÁßÅÊúâÂáΩÊï∞
+		- Private class methods, which can't be called from outside their class	 ÁßÅÊúâÁ±ªÊñπÊ≥ï
+		- Private attributes, which can't be accessed from outside their class	ÁßÅÊúâÂ±ûÊÄß
 	
 	Unlike in most languages, whether a Python function, method, or attribute is private or public is determined entirely by its name. -tip-
 
 	If the name of a Python function, class method, or attribute starts with (but doesn't end with) two underscores, it's private; everything else is public. Python has no concept of protected class 
 	methods (accessible only in their own class and descendant classes). Class methods are either private (accessible only in their own class) or public (accessible from anywhere). -tip-
-	“‘2∏ˆœ¬ªÆœﬂø™Õ∑£¨±Ì æ¥À∫Ø ˝ªÚ¿‡∑Ω∑®ªÚ Ù–‘Œ™ÀΩ”–°£
+	‰ª•2‰∏™‰∏ãÂàíÁ∫øÂºÄÂ§¥ÔºåË°®Á§∫Ê≠§ÂáΩÊï∞ÊàñÁ±ªÊñπÊ≥ïÊàñÂ±ûÊÄß‰∏∫ÁßÅÊúâ„ÄÇ
 
 	In Python, all special methods (like __setitem__) and built-in attributes (like __doc__) follow a standard naming convention: they both start with and end with two underscores. Don't name 
 	your own methods and attributes this way, because it will only confuse you (and others) later.
-	◊¢“‚”ÎPython÷–µƒÃÿ ‚∑Ω∑®“‘º∞ƒ⁄≤ø Ù–‘«¯∑÷£¨À‰»ªÀ¸√«“≤ «2∏ˆœ¬ªÆœﬂø™Õ∑°£
+	Ê≥®ÊÑè‰∏éPython‰∏≠ÁöÑÁâπÊÆäÊñπÊ≥ï‰ª•ÂèäÂÜÖÈÉ®Â±ûÊÄßÂå∫ÂàÜÔºåËôΩÁÑ∂ÂÆÉ‰ª¨‰πüÊòØ2‰∏™‰∏ãÂàíÁ∫øÂºÄÂ§¥„ÄÇ
 	
 	Example 5.19. Trying to Call a Private Method
 	>>> import fileinfo
@@ -1571,7 +1572,7 @@ from: http://www.diveintopython.net/toc/index.html
 	mangled and unmangled on the fly to make them seem inaccessible by their given names. You can access the __parse method of the MP3FileInfo class by the name _MP3FileInfo__parse. 
 	Acknowledge that this is interesting, but promise to never, ever do it in real code. Private methods are private for a reason, but like many other things in Python, their privateness is ultimately a matter of 
 	convention, not force.
-	Python¿Ô√ª”–—œ∏ÒÀΩ”–µƒ∏≈ƒÓ£¨Õ®π˝“ª–©∑Ω Ω“≤ƒ‹∑√Œ £¨µ´≤ªΩ®“È’‚—˘»•◊ˆ°£
+	PythonÈáåÊ≤°Êúâ‰∏•Ê†ºÁßÅÊúâÁöÑÊ¶ÇÂøµÔºåÈÄöËøá‰∏Ä‰∫õÊñπÂºè‰πüËÉΩËÆøÈóÆÔºå‰ΩÜ‰∏çÂª∫ËÆÆËøôÊ†∑ÂéªÂÅö„ÄÇ
 
 6. Exceptions and File Handling
 
@@ -1742,7 +1743,7 @@ from: http://www.diveintopython.net/toc/index.html
 			even if an exception is raised by the seek or read methods. That's what a try...finally block is for: code in the finally block will always be executed, even if something 
 			in the try block raises an exception. Think of it as code that gets executed on the way out, regardless of what happened before.
 			@ At last, you handle your IOError exception. This could be the IOError exception raised by the call to open, seek, or read. Here, you really don't care, because all you're 
-			going to do is ignore it silently and continue. (Remember, pass is a Python statement that does nothing.) That's perfectly legal; °∞handling°± an exception can mean explicitly doing nothing. 
+			going to do is ignore it silently and continue. (Remember, pass is a Python statement that does nothing.) That's perfectly legal; ‚Äúhandling‚Äù an exception can mean explicitly doing nothing. 
 			It still counts as handled, and processing will continue normally on the next line of code after the try...except block.
 
 		6.2.4. Writing to Files
@@ -1845,52 +1846,86 @@ from: http://www.diveintopython.net/toc/index.html
 	6.4. Using sys.modules
 	Modules, like everything else in Python, are objects. Once imported, you can always get a reference to a module through the global dictionary sys.modules.
 
-	Example 6.12. Introducing sys.modules
-	>>> import sys                          @
-	>>> print '\n'.join(sys.modules.keys()) @
-	win32api
-	os.path
-	os
-	exceptions
-	__main__
-	ntpath
-	nt
-	sys
-	__builtin__
-	site
-	signal
-	UserDict
-	stat
-		@ The sys module contains system-level information, such as the version of Python you're running (sys.version or sys.version_info), and system-level options 
-		such as the maximum allowed recursion depth (sys.getrecursionlimit() and sys.setrecursionlimit()).
-		@ sys.modules is a dictionary containing all the modules that have ever been imported since Python was started; the key is the module name, the value is the 
-		module object. Note that this is more than just the modules your program has imported. Python preloads some modules on startup, and if you're using a Python IDE, 
-		sys.modules contains all the modules imported by all the programs you've run within the IDE.
+		Example 6.12. Introducing sys.modules
+		>>> import sys                          @
+		>>> print '\n'.join(sys.modules.keys()) @
+		win32api
+		os.path
+		os
+		exceptions
+		__main__
+		ntpath
+		nt
+		sys
+		__builtin__
+		site
+		signal
+		UserDict
+		stat
+			@ The sys module contains system-level information, such as the version of Python you're running (sys.version or sys.version_info), and system-level options 
+			such as the maximum allowed recursion depth (sys.getrecursionlimit() and sys.setrecursionlimit()).
+			@ sys.modules is a dictionary containing all the modules that have ever been imported since Python was started; the key is the module name, the value is the 
+			module object. Note that this is more than just the modules your program has imported. Python preloads some modules on startup, and if you're using a Python IDE, 
+			sys.modules contains all the modules imported by all the programs you've run within the IDE.
 
-	Example 6.13. Using sys.modules
-	>>> import fileinfo         
-	>>> print '\n'.join(sys.modules.keys())
-	win32api
-	os.path
-	os
-	fileinfo
-	exceptions
-	__main__
-	ntpath
-	nt
-	sys
-	__builtin__
-	site
-	signal
-	UserDict
-	stat
-	>>> fileinfo
-	<module 'fileinfo' from 'fileinfo.pyc'>
-	>>> sys.modules["fileinfo"] 
-	<module 'fileinfo' from 'fileinfo.pyc'>
-		As new modules are imported, they are added to sys.modules. This explains why importing the same module twice is very fast: Python has already loaded and cached the module 
-		in sys.modules, so importing the second time is simply a dictionary lookup.
-		Given the name (as a string) of any previously-imported module, you can get a reference to the module itself through the sys.modules dictionary.	
+		Example 6.13. Using sys.modules
+		>>> import fileinfo         
+		>>> print '\n'.join(sys.modules.keys())
+		win32api
+		os.path
+		os
+		fileinfo
+		exceptions
+		__main__
+		ntpath
+		nt
+		sys
+		__builtin__
+		site
+		signal
+		UserDict
+		stat
+		>>> fileinfo
+		<module 'fileinfo' from 'fileinfo.pyc'>
+		>>> sys.modules["fileinfo"] 
+		<module 'fileinfo' from 'fileinfo.pyc'>
+			@ As new modules are imported, they are added to sys.modules. This explains why importing the same module twice is very fast: Python has already loaded and cached the module 
+			in sys.modules, so importing the second time is simply a dictionary lookup.
+			@ Given the name (as a string) of any previously-imported module, you can get a reference to the module itself through the sys.modules dictionary.	
+	
+	The next example shows how to use the __module__ class attribute with the sys.modules dictionary to get a reference to the module in which a class is defined.
+
+		Example 6.14. The __module__ Class Attribute
+		>>> from fileinfo import MP3FileInfo
+		>>> MP3FileInfo.__module__
+		'fileinfo'
+		>>> sys.modules[MP3FileInfo.__module__]
+		<module 'fileinfo' from 'fileinfo.pyc'>
+			@ Every Python class has a built‚àíin class attribute __module__, which is the name of the module in which the class is defined.
+			@ Combining this with the sys.modules dictionary, you can get a reference to the module in which a class is defined.
+	
+		Example 6.15. sys.modules in fileinfo.py
+			def getFileInfoClass(filename, module=sys.modules[FileInfo.__module__]):	@
+				"get file info class from filename extension"
+				subclass = "%sFileInfo" % os.path.splitext(filename)[1].upper()[1:]	@
+				return hasattr(module, subclass) and getattr(module, subclass) or FileInfo	@
+					@ This is a function with two arguments; filename is required, but module is optional and defaults to
+					the module that contains the FileInfo class. This looks inefficient, because you might expect Python
+					to evaluate the sys.modules expression every time the function is called. In fact, Python evaluates
+					default expressions only once, the first time the module is imported. As you'll see later, you never call
+					this function with a module argument, so module serves as a function‚àílevel constant.
+					@ You'll plow through this line later, after you dive into the os module. For now, take it on faith that
+					subclass ends up as the name of a class, like MP3FileInfo.
+					@ You already know about getattr, which gets a reference to an object by name. hasattr is a
+					complementary function that checks whether an object has a particular attribute; in this case, whether a
+					module has a particular class (although it works for any object and any attribute, just like getattr).
+					In English, this line of code says, "If this module has the class named by subclass then return it,
+					otherwise return the base class FileInfo."
+
+	6.5. Working with Directories
+	The os.path module has several functions for manipulating files and directories. Here, we're looking at handling pathnames and listing the contents of a directory.
+
+
 
 
 
@@ -1899,5 +1934,5 @@ from: http://www.diveintopython.net/toc/index.html
 
 
 #############
-Àµ√˜£∫
--tip- ±Ì æ÷ÿ“™±Íº«µ„£ª
+ËØ¥ÊòéÔºö
+-tip- Ë°®Á§∫ÈáçË¶ÅÊ†áËÆ∞ÁÇπÔºõ

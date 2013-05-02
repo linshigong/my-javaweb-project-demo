@@ -245,7 +245,61 @@ Factory Patten
 		procedures for the rest of the process: they’d bake things a little differently, they’d forget to cut the pizza and they’d use third-party boxes.
 		对于创建pizza的过程不同的franchises会有不同的步骤...
 
+p120&132
 		我们需要一个framework来处理所有这些变化以及创建过程
+
+		pizza有地区风格，地区上又有品种风格，重构上面的pizzaStore为：
+
+			public abstract class PizzaStore {
+				public Pizza orderPizza(String type) {
+					Pizza pizza;
+					pizza = createPizza(type);//替代工厂为自身的抽象方法
+					pizza.prepare();
+					pizza.bake();
+					pizza.cut();
+					pizza.box();
+					return pizza;
+				}
+				abstract Pizza createPizza(String type);//工厂的调用在这里体现
+			}
+			PS: 各个地区的pizzaStore可以继承上面的抽象PizzaStore，并实现自己的pizza创建逻辑，上面抽象类中制作pizza的主要步骤已经定义
+			好（如果不想被子类修改，可以定义为final），唯一改变的是pizza的风格
+		
+		Now, to take this a little further, the orderPizza() method does a lot of things with a Pizza object (like prepare, bake, cut, box), but because Pizza is abstract, orderPizza() has 
+		no idea what real concrete classes are involved. In other words, it’s decoupled!
+		将orderPizza过程与createPizza过程解耦
+
+
+------------------------
+Thursday, May 02, 2013
+
+p131&143
+	回顾工厂模式
+	All factory patterns encapsulate object creation. The Factory Method Pattern encapsulates object creation by letting subclasses decide what objects to create. Let’s check out these class 
+	diagrams to see who the player s are in this pattern:
+		The creator classes
+			abstact PizzaStroe
+				abstract createPizza();
+				public orderPizza();
+			
+			ChicagoPizzaStore extends PizzaStore
+				createPizza()
+
+			NYPizzaStore extends PizzaStore
+				createPizza()
+
+		The product classes
+			NYStyleCheesePizza extends Pizza
+			NYStylePepperoniPizza extends Pizza
+	
+	工厂模式定义：
+	The Factory Method Pattern defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+
+
+
+
+
+
 
 
 
@@ -301,3 +355,9 @@ The following is a typical sequence of events:
 	that the response is properly flushed, and returns control back to the host Web
 	server.
 	
+
+
+4. Java_Concurrency_in_Practice
+
+
+5. hibernate3
