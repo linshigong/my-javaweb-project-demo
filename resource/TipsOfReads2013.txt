@@ -427,3 +427,84 @@ The following is a typical sequence of events:
 
 
 5. hibernate3
+
+
+6. ant review
+	
+------------------------
+2013年5月6日
+
+	from: Agile java development with spring ,hibernate and eclipse
+
+
+p92	part2-chapter4-ant
+
+	- Ant简单介绍
+
+	1) basic build.xml
+		<?xml version="1.0"?>
+		<project name="HelloTest" default="printmessage">
+			<target name="printmessage">
+				<echo message="Hello world"/>
+			</target>
+		</project>
+
+		#ant
+		Buildfile: E:\workspace\testant\build.xml
+
+		printmessage:
+		     [echo] Hello world
+
+		BUILD SUCCESSFUL
+		Total time: 1 second		
+	2) 属性配置
+		<property name="appname" value="timex" />
+		<property name="lib.dir" value="lib" />
+		<property name="war.dir" value="build/timex" />
+		<property name="war.file" value="${dist.dir}/${appname}.war" />
+		<property name="webinf.dir" value="${war.dir}/WEB-INF" />
+	3) 设置classpath，文件为lib下的所有jar和WEB-INF/classes下编译后的class文件
+		<path id="master-classpath" description="Master CLASSPATH for this script">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<pathelement location="build/timex/WEB-INF/classes/" />
+		</path>
+	4) 定义一些初始化target目标，供其他target执行前执行，它们依赖这些初始化target
+		<target name="init" description="Setup for build script">
+			<mkdir dir="${class.dir}" />
+			<mkdir dir="${libs.dir}" />
+			<mkdir dir="${jsp.dir}" />
+		</target>		
+	5) 现在开始说下compile target
+		<target name="compile" description="Compiles .java files to WAR directory">
+			<javac srcdir="${src.dir}" destdir="${class.dir}" debug="true"	failonerror="true" classpathref="master-classpath" />
+		</target>	
+	6) 打war包，涉及Ant Type名词,此处用到war task和fileset element
+		<war destfile="${war.file}" webxml="${src.dir}/conf/web.xml">
+			<fileset dir="${war.dir}">
+				<include name="**/*.*" />
+				<exclude name="**/web.xml" />
+				<exclude name="**/test/*.class" />
+				<exclude name="**/*mock*.jar" />
+			</fileset>
+		</war>
+		
+		其他一些常用的target，有deploy（部署war包），clean（删除目标目录的文件）和test
+	
+	- Ant task的类别
+		1）打包类的task，比如war
+		2）编译类的task，比如javac
+		3）文件操作类的task，比如copy，delete，move等
+		4）其他各种tasks，比如echo task
+		5）属性类task用来设置内部环境变量
+		其他一些值得去发掘的内置task
+		6）Audit/coverage tasks
+		7）Deployment tasks
+		8）Documentation tasks
+		9）Execution tasks
+		10）Mail tasks
+		11）Preprocess tasks
+		12）Property tasks
+		13）	Remote tasks
+	
