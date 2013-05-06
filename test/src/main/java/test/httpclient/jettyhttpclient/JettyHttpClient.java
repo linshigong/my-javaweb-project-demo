@@ -39,19 +39,22 @@ public class JettyHttpClient {
 		}
 		
 		ContentExchange exchange = new ContentExchange();
-		exchange.setURL("http://93.46.8.89");//93.46.8.89 facebook ^^
+		String url = "93.46.8.89";//93.46.8.89 facebook ^^
+		String url2 = "10.250.8.214";
+		exchange.setURL("http://"+url2);
 		
 		String response = null;
 		try {
 			client.send(exchange);
+			Thread.sleep(60 * 1000);
 //			exchange.waitForDone();
 			response = exchange.getResponseContent();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-//		catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println(response);
 		

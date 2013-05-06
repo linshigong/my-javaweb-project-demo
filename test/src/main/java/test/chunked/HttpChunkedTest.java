@@ -51,9 +51,13 @@ public class HttpChunkedTest {
 		String url6 = "http://10.250.8.214/javaweb/chunked";
 		
 		
-		GetMethod  postMethod = new GetMethod(url6);
+		GetMethod  postMethod = new GetMethod(url2);
 		client.executeMethod(postMethod);
 		
+		for(Header header: postMethod.getRequestHeaders()){
+			System.out.println(header.getName()+":"+header.getValue());
+		}
+		System.out.println();
 		for(Header header: postMethod.getResponseHeaders()){
 			System.out.println(header.getName()+":"+header.getValue());
 		}
