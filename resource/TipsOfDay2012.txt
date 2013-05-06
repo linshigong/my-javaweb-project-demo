@@ -13,6 +13,9 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* ivy * apache ivy
+	apache Ivy™ is a popular dependency manager focusing on flexibility and simplicity.
+
 *  WeakReference java.lang.ref.WeakReference<ThreadLocal>
 	DOC
 	--------
@@ -4321,7 +4324,7 @@ Storage for Interactive Services
 		可以在任一节点上使用命令$sh bin/zkCli.sh -server 127.0.0.1:30305 （端口是在zoo.cfg文件中配置的）来使用ZooKeeper文件系统。
 		from: http://zhangjie.me/zookeeper_deploy/
 
-	 - 脑裂/假死问题
+	 - 脑裂/假死问题 avoid split brain split-brain
 		Zookeeper和分布式环境中的假死脑裂问题  
 
 		最近和同事聊天无意间发现他们的系统也存在脑裂的问题。想想当初在我们的系统中为了解决脑裂花了非常大的功夫，现在和大家一起讨论下脑裂，
@@ -4358,6 +4361,8 @@ Storage for Interactive Services
 			多个master的实现方案，通过Paxos协议
 			
 			更多见：* Paxos
+		
+		http://stackoverflow.com/questions/1106984/avoiding-split-brain-votes-and-quorum Avoiding split-brain, votes and quorum
 	
 
 	 - zookeeper HA
@@ -9837,6 +9842,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		再不行，可以尝试重启eclipse再debug
 	- eclipse 的 type hierarchy 面板应用
 		在测试时，比如jtester测试，如果只想执行某一个方法的测试，可以在这个视图的方法上右击执行（通过反射执行，不用执行每个用例）
+	- eclipse插件
+		1）IvyIDE的eclipse插件在线安装：http://www.apache.org/dist/ant/ivyde/updatesite
 
 * Source Insight
 	- 
@@ -11897,7 +11904,7 @@ day2 2012年3月15日
 		...houyi/console
 			branches-api...-requirement 
 
-3. houyi 异步通知
+3. houyi 异步通知 * houyi api open api
 	
 	异步通知是后羿系统提供的一套基于HTTP协议主动向客户系统发送VM操作结果状态的基础服务。其基本流程如下：
 	 
@@ -11906,6 +11913,8 @@ day2 2012年3月15日
 	2. 客户系统接到通知请求，根据签名信息验证通知真实性。
 	3. 客户系统处理通知。
 	摘自：houyi api 说明doc
+	
+	该说明书主要提供给后羿系统的终端用户，用户可以开发自己的系统访问后羿API完成有关虚拟机等其他后羿资源的管理和查询。
 
 4. 通过svn checkout 部分houyi项目 熟悉 【配置 svn】
 	svn插件拉下项目代码 (svn 项目绑定到对应的svn库上，(对于eclipse，如果绑定错误，先删除原有svn库，从team里重新绑定即可))
@@ -24731,3 +24740,20 @@ day278 Thursday, May 02, 2013
 	Note that there is hardly any need to implement this callback interface, as JndiTemplate provides all usual JNDI operations via convenience methods.
 
 	PS: callback接口的设计，简化异常的捕获；spring有大量模板类使用这种模式，比如JdbcTemplate也是这样，集中捕获/转换异常，关闭连接等操作。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day279 Friday, May 03, 2013
+
+1. 
+	* mss python
+
+2. 
+
+3. 
+
+4. zookeeper paxos
+	http://zookeeper.apache.org/doc/r3.1.2/zookeeperInternals.html
+
+5. factory patten
+	

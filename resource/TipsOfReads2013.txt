@@ -291,27 +291,93 @@ p131&143
 		The product classes
 			NYStyleCheesePizza extends Pizza
 			NYStylePepperoniPizza extends Pizza
-	
+
+------------------------
+Friday, May 03, 2013
+
+p134&146	
 	工厂模式定义：
-	The Factory Method Pattern defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+	The Factory Method Pattern defines an interface for creating an object, but lets subclasses decide(decided purely by the choice of the subclass that is used) 
+	which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+	
+	Q: What’s the advantage of the Factory Method Pattern when you only have one ConcreteCreator
+	A: Decoupling the implementation of the product from its use. If you add additional products or change a product’s implementation, it will not affect your Creator 
+	(because the Creator is not tightly coupled to any ConcreteProduct).
+	通过工厂模式将使用者与创建过程解耦，便于扩展
 
+	Q: I’m still a bit confused about the difference between Simple Factory and Factory Method. They look very similar, except that in Factory Method, the class 
+	that returns the pizza is a subclass. Can you 	explain?
+	A: You’re right that the subclasses do look a lot like Simple Factory, however think of Simple Factory as a one shot deal, while with Factory Method you are 
+	creating a framework that let’s the subclasses decide which implementation will be used. For example, the orderPizza() method in the Factory Method provides a
+	general framework for creating pizzas that relies on a factory method to actually create the concrete classes that go into making a pizza. By subclassing the PizzaStore class, 
+	you decide what concrete products go into making the pizza that orderPizza() returns.	Compare that with SimpleFactory, which gives you a way to encapsulate 
+	object creation, but doesn’t give you the flexibility of the Factory Method because there is no way to vary the products you’re creating.
+	此处工厂实现类的工厂方法与简单工厂看起来相似，但简单工厂不便于扩展
 
+p139&151
 
+	Dependency Inversion Principle （依赖反转原则）PS: 即IOC（Inversion Of Control）控制反转原则
+	设计原则：
+		Depend upon abstractions. Do not depend upon concrete classes.
+		依赖于抽象，不依赖于具体
+	
+		比如，抽象工厂依赖于抽象Pizza，pizzas也只依赖抽象Pizza
 
+	After applying the Factory Method, you’ll notice that our high-level component,the PizzaStore, and our low-level components, the pizzas, both depend on Pizza,
+	the abstraction. Factory Method is not the only technique for adhering to the Dependency Inversion Principle, but it is one of the more powerful ones.
+	通过工厂方法将上层组件PizzaStroe与具体的pizzas都只依赖Pizza抽象类，改变了原来的PizzaStore与pizzas依赖的问题，工厂方法不是唯一的遵循
+	DI原则的技术，但却是很有效中的一个技术。
 
+	Dependency Inversion Principle中“Inversion”的解释：
+		The “inversion” in the name Dependency Inversion Principle is there because it inverts the way you typically might think about your OO design. Look at the diagram 
+		on the previous page, notice that the low-level components now depend on a higher level abstraction. Likewise, the high-level component is also tied to the same abstraction. 
+		So, the top-to-bottom dependency chart we drew a couple of pages back has inverted itself, with both high-level and lowlevel modules now depending on the abstraction.
+		原来OO设计是，自上而下的依赖，现在PizzaStroe和pizzas都只依赖上层抽象的Pizza，即依赖的反向反转了。
 
+	遵循DI设计准则的指导方针：
+		1）No variable should hold a reference to a concrete class. 变量不保存指向具体实现类的引用，只对抽象引用，可通过工厂模式来实现
+		2）No class should derive from a concrete class. 不从具体实现类中衍生子类，可基于抽象来衍生类，比如抽象类或接口
+		3）No method should override an implemented method of any of its base classes. 子类不重写基类的具体方法，这些基类方法是与所有其他子类共享的
 
+		PS: 上面只是指导方针，并不是规定，否则程序无法实现，只是应该尽量在设计时多考虑到（String类在代码中经常new，因为它一般不变，故可以这样去做
+		；反之，若碰到易变的部分，就应该考虑用一些好的技术比如工厂方法来封装这些变化）
+	
+	继续：prepare过程，要准备原料，上面的实现每个实现类自定义原料，不仅变化大且无法控制（比如掺入劣质的原料），下面通过工厂方法提供原料集合。(
+		    形象一点就是工厂配送以保证原料一致性)
+		
+	pizza的prepare过程，需要用到各种原料，这些原料随着pizza种类的不同而不同，故设计为抽象方法，通过原料工厂类来提供原料以解耦，Pizza不关心
+	原料的实现，通过相应的工厂获取原料即可。
 
+p156&168
 
+抽象工厂模式定义：Abstract Factory Patten
+	provides an interface for creating families of related or dependent objects without specifying their concrete classes.
+	抽象工厂模式提供一个接口来创建一组相关或独立的对象而无需关心实际生产出的对象
 
+p159&171
+	抽象工厂与工厂方法的区别和联系：
+	Abstract Factory: Thanks. Remember me, Abstract Factory, and use me whenever you have families of products you need to create and you want to make sure 
+		your clients create products that belong together.
+	Factory Method: And I’m Factory Method; use me to decouple your client code from the concrete classes you need to instantiate, or if you don’t know ahead of time 
+		all the concrete classes you are going to need. To use me, just subclass me and implement my factory method!
+	
+	工厂方法模式：
+	一个抽象产品类，可以派生出多个具体产品类。   
+	一个抽象工厂类，可以派生出多个具体工厂类。   
+	每个具体工厂类只能创建一个具体产品类的实例。
 
+	抽象工厂模式：
+	多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。   
+	一个抽象工厂类，可以派生出多个具体工厂类。   
+	每个具体工厂类可以创建多个具体产品类的实例。   
+	    
+	区别：
+	工厂方法模式只有一个抽象产品类，而抽象工厂模式有多个。   
+	工厂方法模式的具体工厂类只能创建一个具体产品类的实例，而抽象工厂模式可以创建多个。
 
-
-
+	所以说抽象工厂就像工厂，而工厂方法则像是工厂的一种产品生产线
 
 	
-
-
 
 
 
