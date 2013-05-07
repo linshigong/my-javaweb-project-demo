@@ -426,10 +426,23 @@ The following is a typical sequence of events:
 4. Java_Concurrency_in_Practice
 
 
-5. hibernate3
+5. hibernate in action (GAVIN KING @2005)
+
+------------------------
+Monday, May 06, 2013
+
+p7&30
+	1.2 The paradigm mismatch	Domain模型与关系模型的不对称
+
+6. hibernate3源码
+	Session的概念，如何创建的，和SessionFactory的关系？	      参考文档
+		session只是hibernate框架自己设计的一个接口，用于实现一级缓存？具体的sql执行还是通过ConnectionManager来取到jdbc Connection来执行，
+		用上数据库连接池来优化，而且是线程安全的。
+
+	SessionFactory需要保证线程安全，并支持高并发，它会被多个线程共享，看其实现类的doc也有说明
 
 
-6. ant review
+7. ant review
 	
 ------------------------
 2013年5月6日
@@ -507,4 +520,3 @@ p92	part2-chapter4-ant
 		11）Preprocess tasks
 		12）Property tasks
 		13）	Remote tasks
-	

@@ -29,6 +29,14 @@ ft2013-04-22
 
 
 * ThreadLocal
+	- initialValue方法说明：若没有set对象，重写此方法以返回默认对象；若此方法也没被重写也没set对象，则返回null
+		Returns the current thread's "initial value" for this thread-local variable. This method will be invoked the first time a thread accesses the variable with the get method, unless the 
+		thread previously invoked the set method, in which case the initialValue method will not be invoked for the thread. Normally, this method is invoked at most once per thread, 
+		but it may be invoked again in case of subsequent invocations of remove followed by get. 
+		
+		This implementation simply returns null; if the programmer desires thread-local variables to have an initial value other than null, ThreadLocal must be subclassed, and this method 
+		overridden. Typically, an anonymous inner class will be used.
+
 	- 
 		DOC
 		------------
@@ -73,15 +81,20 @@ ft2013-04-22
 		However, since reference queues are not used, stale entries are guaranteed to be removed only when the table starts running out of space.
 
 	- 
-		每个Thread类型的线程都有个ThreadLocalMap类型的实例变量threadlocals，用来存放与此线程相关的ThreadLocal变量。再来看ThreadLocal保存数据的set方法，代码如下
+		每个Thread线程都有个ThreadLocalMap类型的实例变量threadlocals，用来存放与此线程相关的ThreadLocal变量。再来看ThreadLocal保存数据的set方法，代码如下
 			public   void  set(T value) {
 			Thread t = Thread.currentThread();
 			ThreadLocalMap map = getMap(t);
 			 if  (map !=  null  )
 			    map.set(  this  , value);//以当前threadlocal实例作为key，一个线程可能有多个threadlocal实例以存放不同的变量
 			 else
-			    createMap(t, value);
+			    createMap(t, value);//当前线程的ThreadLocalMap属性为null，初始化一个并set值
 			}
+			...
+			void createMap(Thread t, T firstValue) {
+				t.threadLocals = new ThreadLocalMap(this, firstValue);
+			}
+			...
 		首先获取当前的线程t，由getMap方法获取当前线程的threadLocals属性map，然后保存键值对。在保存的时候采用this对象做为键，同样在获取数据的时候，
 		也是以this作为键来获取相应的数据。因为一个线程可能有多个由ThreadLocal对象保存的变量，采用this作为key，可以实现这样不同ThreadLocal对象之间的区分。
 		from:	 http://www.cnblogs.com/javawebsoa/archive/2013/04/21/3034421.html
@@ -3384,10 +3397,17 @@ ftian20130102
 		http://archive.apache.org/dist/commons/dbcp/
 
 * jetty http client	jetty httpclient
+	- client通过装饰器模式Decorator，使用jdk5的ThreadPoolExecutor作为线程池调度
+		 org.eclipse.jetty.util.thread.ExecutorThreadPool
+		DOC
+		-----
+		Jetty ThreadPool using java 5 ThreadPoolExecutor This class wraps a ExecutorService(java.util.concurrent.ExecutorService) as a ThreadPool and LifeCycle interfaces 
+		so that it may be used by the Jetty org.eclipse.jetty.server.Server
+
 	- client的可配置项及其作用
-	1）setConnectorType,设置client使用的connector类型，有socket和select两种
-		SocketConnector
-		SelectConnector
+		1）setConnectorType,设置client使用的connector类型，有socket和select两种
+			SocketConnector
+			SelectConnector
 	- ref: http://blog.csdn.net/pwlazy/article/details/7389204
 	- 介绍
 		--------
@@ -3857,7 +3877,9 @@ Storage for Interactive Services
 * jmx 监控 java监控 性能监控 性能
 	java，javaee程序监控插件：http://code.google.com/p/javamelody/
 
-* tomcat6			 tomcat源码分析
+* tomcat6			 tomcat源码分析 tomcat7
+	- servlet3.0 tomcat7
+		
 	- 配置远程debug
 		call "%EXECUTABLE%" start %CMD_LINE_ARGS%
 		call "%EXECUTABLE%" jpda start %CMD_LINE_ARGS%
@@ -6594,6 +6616,122 @@ Storage for Interactive Services
 	看log4j的error方法说明，直接传对象接收的是message消息对象，如何给的是非message对象，可能没有重写tostring方法，输出的日志内容为对象而不是异常的内容。
 
 * concurrent包 ，java concurrent	       * 并发 * 同步 * java并发/同步
+	- ThreadPoolExecutor 
+
+		 java.util.concurrent.ThreadPoolExecutor
+		 DOC
+		 -----------------------------------------
+		An ExecutorService that executes each submitted task using one of possibly several pooled threads, normally configured using Executors factory methods. 
+
+			Thread pools address two different problems: they usually provide improved performance when executing large numbers of asynchronous tasks, due to 
+		reduced per-task invocation overhead, and they provide a means of bounding and managing the resources, including threads, consumed when executing a collection of tasks. 
+		Each ThreadPoolExecutor also maintains some basic statistics, such as the number of completed tasks. 
+
+		To be useful across a wide range of contexts, this class provides many adjustable parameters and extensibility hooks. However, programmers are urged to 
+		use the more convenient Executors factory methods Executors.newCachedThreadPool (unbounded thread pool, with automatic thread reclamation), 
+		Executors.newFixedThreadPool (fixed size thread pool) and Executors.newSingleThreadExecutor (single background thread), that preconfigure settings for 
+		the most common usage scenarios. Otherwise, use the following guide when manually configuring and tuning this class: 
+
+		Core and maximum pool sizes 
+		A ThreadPoolExecutor will automatically adjust the pool size (see ThreadPoolExecutor.getPoolSize) according to the bounds set by corePoolSize (
+		see ThreadPoolExecutor.getCorePoolSize) and maximumPoolSize (see ThreadPoolExecutor.getMaximumPoolSize). When a new task is submitted in method 
+		ThreadPoolExecutor.execute, and fewer than corePoolSize threads are running, a new thread is created to handle the request, even if other worker threads are idle. 
+		If there are more than corePoolSize but less than maximumPoolSize threads running, a new thread will be created only if the queue is full. By setting corePoolSize 
+		and maximumPoolSize the same, you create a fixed-size thread pool. By setting maximumPoolSize to an essentially unbounded value such as Integer.MAX_VALUE, 
+		you allow the pool to accommodate an arbitrary number of concurrent tasks. Most typically, core and maximum pool sizes are set only upon construction, but they may 
+		also be changed dynamically using ThreadPoolExecutor.setCorePoolSize and ThreadPoolExecutor.setMaximumPoolSize. 
+
+		On-demand construction 
+		By default, even core threads are initially created and started only when new tasks arrive, but this can be overridden dynamically using method ThreadPoolExecutor.prestartCoreThread or ThreadPoolExecutor.prestartAllCoreThreads. You probably want to prestart threads if you construct the pool with a non-empty queue. 
+
+		Creating new threads 
+		New threads are created using a java.util.concurrent.ThreadFactory. If not otherwise specified, a Executors.defaultThreadFactory is used, that creates threads to all be in the same ThreadGroup and with the same NORM_PRIORITY priority and non-daemon status. By supplying a different ThreadFactory, you can alter the thread's name, thread group, priority, daemon status, etc. If a ThreadFactory fails to create a thread when asked by returning null from newThread, the executor will continue, but might not be able to execute any tasks. 
+		Keep-alive times 
+		If the pool currently has more than corePoolSize threads, excess threads will be terminated if they have been idle for more than the keepAliveTime (see ThreadPoolExecutor.getKeepAliveTime). This provides a means of reducing resource consumption when the pool is not being actively used. If the pool becomes more active later, new threads will be constructed. This parameter can also be changed dynamically using method ThreadPoolExecutor.setKeepAliveTime. Using a value of Long.MAX_VALUE TimeUnit.NANOSECONDS effectively disables idle threads from ever terminating prior to shut down. By default, the keep-alive policy applies only when there are more than corePoolSizeThreads. But method ThreadPoolExecutor.allowCoreThreadTimeOut(boolean) can be used to apply this time-out policy to core threads as well, so long as the keepAliveTime value is non-zero. 
+		Queuing 
+		Any BlockingQueue may be used to transfer and hold submitted tasks. The use of this queue interacts with pool sizing: 
+		If fewer than corePoolSize threads are running, the Executor always prefers adding a new thread rather than queuing. 
+		If corePoolSize or more threads are running, the Executor always prefers queuing a request rather than adding a new thread. 
+		If a request cannot be queued, a new thread is created unless this would exceed maximumPoolSize, in which case, the task will be rejected. 
+		There are three general strategies for queuing: 
+		Direct handoffs. A good default choice for a work queue is a SynchronousQueue that hands off tasks to threads without otherwise holding them. Here, an attempt to queue a task will fail if no threads are immediately available to run it, so a new thread will be constructed. This policy avoids lockups when handling sets of requests that might have internal dependencies. Direct handoffs generally require unbounded maximumPoolSizes to avoid rejection of new submitted tasks. This in turn admits the possibility of unbounded thread growth when commands continue to arrive on average faster than they can be processed. 
+		Unbounded queues. Using an unbounded queue (for example a LinkedBlockingQueue without a predefined capacity) will cause new tasks to wait in the queue when all corePoolSize threads are busy. Thus, no more than corePoolSize threads will ever be created. (And the value of the maximumPoolSize therefore doesn't have any effect.) This may be appropriate when each task is completely independent of others, so tasks cannot affect each others execution; for example, in a web page server. While this style of queuing can be useful in smoothing out transient bursts of requests, it admits the possibility of unbounded work queue growth when commands continue to arrive on average faster than they can be processed. 
+		Bounded queues. A bounded queue (for example, an ArrayBlockingQueue) helps prevent resource exhaustion when used with finite maximumPoolSizes, but can be more difficult to tune and control. Queue sizes and maximum pool sizes may be traded off for each other: Using large queues and small pools minimizes CPU usage, OS resources, and context-switching overhead, but can lead to artificially low throughput. If tasks frequently block (for example if they are I/O bound), a system may be able to schedule time for more threads than you otherwise allow. Use of small queues generally requires larger pool sizes, which keeps CPUs busier but may encounter unacceptable scheduling overhead, which also decreases throughput. 
+		Rejected tasks 
+		New tasks submitted in method ThreadPoolExecutor.execute will be rejected when the Executor has been shut down, and also when the Executor uses finite bounds for both maximum threads and work queue capacity, and is saturated. In either case, the execute method invokes the RejectedExecutionHandler.rejectedExecution method of its RejectedExecutionHandler. Four predefined handler policies are provided: 
+		In the default ThreadPoolExecutor.AbortPolicy, the handler throws a runtime RejectedExecutionException upon rejection. 
+		In ThreadPoolExecutor.CallerRunsPolicy, the thread that invokes execute itself runs the task. This provides a simple feedback control mechanism that will slow down the rate that new tasks are submitted. 
+		In ThreadPoolExecutor.DiscardPolicy, a task that cannot be executed is simply dropped. 
+		In ThreadPoolExecutor.DiscardOldestPolicy, if the executor is not shut down, the task at the head of the work queue is dropped, and then execution is retried (which can fail again, causing this to be repeated.) 
+		It is possible to define and use other kinds of RejectedExecutionHandler classes. Doing so requires some care especially when policies are designed to work only under particular capacity or queuing policies. 
+		Hook methods 
+		This class provides protected overridable ThreadPoolExecutor.beforeExecute and ThreadPoolExecutor.afterExecute methods that are called before and after execution of each task. These can be used to manipulate the execution environment; for example, reinitializing ThreadLocals, gathering statistics, or adding log entries. Additionally, method ThreadPoolExecutor.terminated can be overridden to perform any special processing that needs to be done once the Executor has fully terminated. 
+		If hook or callback methods throw exceptions, internal worker threads may in turn fail and abruptly terminate. 
+
+		Queue maintenance 
+		Method ThreadPoolExecutor.getQueue allows access to the work queue for purposes of monitoring and debugging. Use of this method for any other purpose is strongly discouraged. Two supplied methods, ThreadPoolExecutor.remove and ThreadPoolExecutor.purge are available to assist in storage reclamation when large numbers of queued tasks become cancelled. 
+		Finalization 
+		A pool that is no longer referenced in a program AND has no remaining threads will be shutdown automatically. If you would like to ensure that unreferenced pools are reclaimed even if users forget to call ThreadPoolExecutor.shutdown, then you must arrange that unused threads eventually die, by setting appropriate keep-alive times, using a lower bound of zero core threads and/or setting ThreadPoolExecutor.allowCoreThreadTimeOut(boolean). 
+		Extension example. Most extensions of this class override one or more of the protected hook methods. For example, here is a subclass that adds a simple pause/resume feature: 
+
+		 class PausableThreadPoolExecutor extends ThreadPoolExecutor {
+		   private boolean isPaused;
+		   private ReentrantLock pauseLock = new ReentrantLock();
+		   private Condition unpaused = pauseLock.newCondition();
+
+		   public PausableThreadPoolExecutor(...) { super(...); }
+
+		   protected void beforeExecute(Thread t, Runnable r) {
+		     super.beforeExecute(t, r);
+		     pauseLock.lock();
+		     try {
+		       while (isPaused) unpaused.await();
+		     } catch (InterruptedException ie) {
+		       t.interrupt();
+		     } finally {
+		       pauseLock.unlock();
+		     }
+		   }
+
+		   public void pause() {
+		     pauseLock.lock();
+		     try {
+		       isPaused = true;
+		     } finally {
+		       pauseLock.unlock();
+		     }
+		   }
+
+		   public void resume() {
+		     pauseLock.lock();
+		     try {
+		       isPaused = false;
+		       unpaused.signalAll();
+		     } finally {
+		       pauseLock.unlock();
+		     }
+		   }
+		 }
+		 
+		Since:
+		1.5
+		---------------
+		PS: 
+		1）上面对于线程池的队列实现选择，固定线程数的采用ArrayBlockingQueue，不固定线程数的queue采用LinkedBlockingQueue（链表实现），以发挥
+		各自数据结构的优势
+		2）queuing部分 必须为阻塞队列
+			固定线程数和不固定线程数以及所使用的阻塞队列的长度选择，需要结合使用场景来设置，各有优缺点。
+			阻塞队列JDK提供
+			 java.util.concurrent.BlockingQueue<E>
+			 DOC
+			 --------------
+			A java.util.Queue that additionally supports operations that wait for the queue to become non-empty when retrieving an element, and wait for space to become available in 
+			the queue when storing an element. 
+
+
+
+
+
 	- java.util.concurrent.CopyOnWriteArrayList
 
 	- 原子对象，
@@ -22761,7 +22899,7 @@ day229 Saturday, February 16, 2013
 			<aop:advisor advice-ref="continuationBeforeAdvice"
 			...
 		Continuation处理步骤	* Continuation	jetty Continuation
-		1）Proxy Action处设置当前线程的Continuation对象
+		1）Proxy Action处设置当前线程的Continuation对象到ThreadLocal中
 		2）进入Action
 		3）调用Service方法(方法有Suspend注解且Service类已实现ContinuationListener类)，并处理Advice
 			spring配置此注解需要在Service方法执行前执行，以suspend请求及其他操作，如下：
@@ -22769,6 +22907,24 @@ day229 Saturday, February 16, 2013
 			continuation.setTimeout(getTimeout(target));//Service类实现ContinuationTimeoutHolder接口设置
 			continuation.suspend();//挂起并等待异步响应事件
 				Service类和Listener合并是否合适？易误解
+
+			suspend方法说明：
+				DOC
+				-------
+				Suspend the processing of the request and associated ServletResponse. 
+
+				After this method has been called, the lifecycle of the request will be extended beyond the return to the container from the Servlet.service(ServletRequest, ServletResponse) 
+				method and Filter.doFilter(ServletRequest, ServletResponse, FilterChain) calls. When a suspended request is returned to the container after a dispatch, then the container will 
+				not commit the associated response (unless an exception other than ContinuationThrowable is thrown). 
+
+				When the thread calling the filter chain and/or servlet has returned to the container with a suspended request, the thread is freed for other tasks and the request is held until either: 
+
+				1) a call to resume(). 
+				2) a call to complete(). 
+				3) the timeout expires. 
+				Typically suspend with no arguments is uses when a call to resume() is expected. If a call to complete() is expected, then the suspend(ServletResponse) method should be used 
+				instead of this method.
+
 		4）上述Advice处理好后，请求挂起，进入Service方法体逻辑
 			处理业务并在完成时调用Continuation的complete方法以通知处理完成
 				判断是否完成通过在Continuation中设置键来判断
@@ -24471,8 +24627,16 @@ day271 Friday, April 19, 2013
 	数据写入方案暂讨论为：写入云监控同时，也写入到monitor库
 	API暂时还是从monitor库取，后续改为从云监控取数据（或建议用户直接走云监控接口，减小API数据流的访问流量）
 
-3. 装饰器模式
+3. 装饰器模式(Wrapper or Decorator patten)
 	chunked输出可以重构为使用装饰器模式，继承自DataOutputStream或者FilterOutputStream
+
+	 javax.servlet.ServletRequestWrapper也是一个例子
+	DOC
+	---------
+	Provides a convenient implementation of the ServletRequest interface that can be subclassed by developers wishing to adapt the request to a Servlet. 
+	This class implements the Wrapper or Decorator pattern. Methods default to calling through to the wrapped request object.
+
+
 4. SLB流程梳理
 	RPC调用部分（如master到lvs agent或其他），异步RPC调用的实现（回调函数）
 
@@ -24756,4 +24920,55 @@ day279 Friday, May 03, 2013
 	http://zookeeper.apache.org/doc/r3.1.2/zookeeperInternals.html
 
 5. factory patten
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day280 Monday, May 06, 2013
+
+1. 
+	* 
+
+2. jetty http client
+	org.eclipse.jetty.util.thread.ExecutorThreadPool
+	DOC
+	-----------
+	Jetty ThreadPool using java 5 ThreadPoolExecutor This class wraps a ExecutorService as a ThreadPool 
+
+		
+	支持socketConnector和SelectConnector（epoll支持）
+	缓存的使用（Direct（系统支持，减少数据拷贝次数），与NonDirector），request，response缓存	  * directbuffer * nio
+
+	---------
+		如果我们构造一个ByteBuffer仅仅使用一次，不复用它，那么Direct Buffer和Heap Buffer没有明显的区别。两个地方我们可能通过Direct Buffer来提高性能： 
+		1）大文件，尽管我们Direct Buffer只用一次，但是如果内容很大，Heap Buffer的复制代价会很高，此时用Direct Buffer能提高性能。这就是为什么，
+		当我们下载一个大文件时，服务端除了用SendFile机制，也可以用“内存映射”，把大文件映射到内存，也就是MappedByteBuffer，是一种Direct Buffer，
+		然后把这个MappedByteBuffer直接写入SocketChannel，这样减少了数据复制，从而提高了性能。 
+
+		2）重复使用的数据，比如HTTP的错误信息，例如404呀，这些信息是每次请求，响应数据都一样的，那么我们可以把这些固定的信息预先存放在
+		Direct Buffer中（当然部分修改Direct Buffer中的信息也可以，重要的是Direct Buffer要能被重复使用），这样把Direct Buffer直接写入SocketChannel就比
+		写入Heap Buffer要快了。 
+	---------
+	from: http://eyesmore.iteye.com/blog/1133335
+	ref: http://stackoverflow.com/questions/5670862/bytebuffer-allocate-vs-bytebuffer-allocatedirect 
+	PS: 学习jetty http client，缓存了各种对象到buffer中
+
+	aps2类结构：-tip-
+		RpcEndPoint接口定义了通过RPC与其他系统交互的接口方法，提供关闭，启动组件，以及支持同步，异步调用，以及针对异步是否有返回值，通过回调
+	拿到异步结果；Kuafu2RpcEndPoint接口继承自RpcEndPoint，针对kuafu协议上的RpcEndpoint定义，并提供一个抽象类AbstractKuafu2RpcEndPoint（在底层实现提供
+	的异步调用基础上实现同步调用，底层实现只需提供异步调用即可）；JettyRpcEndPoint、NettyRpcEndPoint为实现上面抽象类的实现类，提供了具体的异步调用
+	实现；aps2类引用RpcEndPoint接口的实现，以作为rpc组件包与API的桥梁CommandExecutor接口的实现。
+		异步调用目前为jetty continuation方式实现。
+		另外，由于目前的RPC调用是，API将请求以http的方式发送给 http proxy，proxy将请求转换为RPC协议格式来请求kuafu，故API的rpcendpoint中没有实际构造
+	RPC请求的逻辑。
+
+
+
+3. servlet3
+	异步请求
+	tomcat7.x trunk: http://svn.apache.org/repos/asf/tomcat/tc7.0.x/trunk/
+
+
+4. hb3
+	session的创建及执行
+	不求甚解 or 知其所以然
 	
