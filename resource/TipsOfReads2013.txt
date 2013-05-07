@@ -442,7 +442,7 @@ p7&30
 	SessionFactory需要保证线程安全，并支持高并发，它会被多个线程共享，看其实现类的doc也有说明
 
 
-7. ant review
+7. Ant review
 	
 ------------------------
 2013年5月6日
@@ -451,6 +451,9 @@ p7&30
 
 
 p92	part2-chapter4-ant
+
+	- Ant常用target
+		"ant -p" to get the list of available targets.
 
 	- Ant简单介绍
 
@@ -519,4 +522,64 @@ p92	part2-chapter4-ant
 		10）Mail tasks
 		11）Preprocess tasks
 		12）Property tasks
-		13）	Remote tasks
+		13）Remote tasks
+	
+	- ivy
+		1）The ivy.xml file（用于配置本项目对其他库的依赖）
+			This file is used to describe the dependencies of the project on other libraries.
+			Here is the sample:
+			<ivy-module version="2.0">
+			    <info organisation="org.apache" module="hello-ivy"/>
+			    <dependencies>
+				<dependency org="commons-lang" name="commons-lang" rev="2.0"/>
+				<dependency org="commons-cli" name="commons-cli" rev="1.0"/>
+			    </dependencies>
+			</ivy-module>
+				@The root element ivy-module, with the version attribute used to tell Ivy which version of Ivy this file uses. 
+				@info tag, which is used to give information about the module for which we are defining dependencies
+				@the dependencies section lets you define dependencies. Here this module depends on two libraries: commons-lang and commons-cli. As you can see, we use the org 
+				and name attributes to define the organization and module name of the dependencies we need. The rev attribute is used to specify the version of the module you depend on.  
+
+				要确认所依赖的包的属性配置，由于ivy默认采用maven2库，可以到mvnrepository.com查询所需的module信息。具体见下面说明：
+
+				<dependency>
+					<groupId>commons-lang</groupId>
+					<artifactId>commons-lang</artifactId>
+					<version>2.0</version>
+				</dependency>
+
+				To convert this into an Ivy dependency declaration, all you have to do is use the groupId as organization, the artifactId as module name, and the version as revision. 
+				Maven2库中module定义的groupId作为ivy依赖中的organization、artifactId为name、version为revision
+
+				ivy.xml的其他细节见：${IVY_HOME}/doc/ivyfile.html
+
+				
+		2）The build.xml file
+			定义各种target，下面是关于ivy定义部分：
+			<project xmlns:ivy="antlib:org.apache.ivy.ant" name="hello-ivy" default="run">
+				...
+				<!-- ================================= 
+				  target: resolve              
+				 ================================= -->
+				<target name="resolve" description="--> retrieve dependencies with ivy">
+					<ivy:retrieve />
+				</target>
+			</project>
+
+			PS: 如果ivy已经正确安装，我们只需要在ant配置文件中定义一个命名空间（xmlns:ivy="antlib:org.apache.ivy.ant"），这样ivy的所有ant task都能使用；此处，
+			对于<ivy:retrieve />没有配置其他属性，将采用默认配置并需找ivy.xml文件作为依赖定义。
+		
+		3）Running the project
+			enter the hello-ivy example directory.
+			run ant
+		
+		ivy下载依赖库，默认缓存在用户目录的.ivy2/cache下，然后拷贝到项目默认库目录: lib目录 (也可在retrieve task中配置patten属性来自由的定义).
+		可通过report target生成项目模块依赖情况。
+		
+		其他：
+		As you can see, using Ivy to resolve dependencies stored in the maven 2 repository is extremely easy. Now you can go on with the next tutorials to learn more about 
+		how to use module configurations which is a very powerful Ivy specific feature. Other tutorials are also available where you will learn how to use Ivy settings to leverage 
+		a possibly complex enterprise repository. It may also be a good time to start reading the reference documentation, and especially the introduction material which gives 
+		a good overview of Ivy. The best practices page is also a must read to start thinking about how to use Ant+Ivy to build a clean and robust build system.
+
+

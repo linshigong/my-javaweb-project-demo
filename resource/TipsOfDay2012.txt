@@ -13,6 +13,116 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* 
+	The best way to learn is to practice!
+* 数据库连接池 * dbcp * c3p0
+	- dbcp
+		1）实现DataSource接口，提供支持连接池功能的DataSource实现，工厂模式，面向抽象编程
+		ConnectionFactory根据driver，url，username ，password等构建一个获取raw physical connections连接的工厂
+			工厂的设计： ConnectionFactory 为工厂接口，定义了一个抽象方法createConnection返回一个java.sql.Connection；针对上面的接口提供了
+			DataSourceConnectionFactory（DataSource.getConnection方法），DriverConnectionFactory（Driver.connect方法），DriverManagerConnectionFactory（
+			DriverManager.getConnection方法）三个获取连接的实现。另外，XAConnectionFactory接口继承ConnectionFactory，在其基础上扩展了基于事务管理器
+			环境的连接管理，接口说明如下：
+			-----
+			 org.apache.commons.dbcp.managed.XAConnectionFactory
+			DOC 
+			---------
+			XAConnectionFactory is an extension of ConnectionFactory used to create connections in a transaction managed environment. The XAConnectionFactory opperates 
+			like a normal ConnectionFactory except an TransactionRegistry is provided from which the XAResource for a connection can be obtained. This allows the existing DBCP 
+			pool code to work with XAConnections and gives a the ManagedConnection a way to enlist a connection in the the transaction.
+			-----
+
+		2）创建存放数据库连接connection的pool，dbcp池的设计：public class GenericObjectPool extends BaseObjectPool implements ObjectPool，
+			ObjectPool：
+				A pooling interface. 
+				ObjectPool defines a trivially simple pooling interface. The only required methods are borrowObject, returnObject and invalidateObject. 
+
+			BaseObjectPool：
+				A simple base implementation of ObjectPool. Optional operations are implemented to either do nothing, return a value indicating it is unsupported 
+				or throw UnsupportedOperationException.
+
+			GenericObjectPool：
+				A configurable ObjectPool implementation. 
+
+				When coupled with the appropriate PoolableObjectFactory, GenericObjectPool provides robust pooling functionality for arbitrary objects. 
+
+				A GenericObjectPool provides a number of configurable parameters: 
+
+				maxActive controls the maximum number of objects that can be allocated by the pool (checked out to clients, or idle awaiting checkout) at a given time. When non-positive, 
+					there is no limit to the number of objects that can be managed by the pool at one time. When maxActive is reached, the pool is said to be exhausted. The default setting 
+					for this parameter is 8. 
+				maxIdle controls the maximum number of objects that can sit idle in the pool at any time. When negative, there is no limit to the number of objects that may be idle at one time. 
+					The default setting for this parameter is 8. 
+				whenExhaustedAction specifies the behavior of the borrowObject method when the pool is exhausted: 
+					When whenExhaustedAction is WHEN_EXHAUSTED_FAIL, borrowObject will throw a NoSuchElementException 
+					When whenExhaustedAction is WHEN_EXHAUSTED_GROW, borrowObject will create a new object and return it (essentially making maxActive meaningless.) 
+					When whenExhaustedAction is WHEN_EXHAUSTED_BLOCK, borrowObject will block (invoke Object.wait()) until a new or idle object is available. If a positive 
+						maxWait value is supplied, then borrowObject will block for at most that many milliseconds, after which a NoSuchElementException will be thrown. If maxWait 
+						is non-positive, the borrowObject method will block indefinitely. 
+					The default whenExhaustedAction setting is WHEN_EXHAUSTED_BLOCK and the default maxWait setting is -1. By default, therefore, borrowObject will block 
+						indefinitely until an idle instance becomes available. 
+				When testOnBorrow is set, the pool will attempt to validate each object before it is returned from the borrowObject method. (Using the provided factory's PoolableObjectFactory.
+					validateObject method.) Objects that fail to validate will be dropped from the pool, and a different object will be borrowed. The default setting for this parameter is false. 
+				When testOnReturn is set, the pool will attempt to validate each object before it is returned to the pool in the returnObject method. (Using the provided factory's PoolableObjectFactory.
+					validateObject method.) Objects that fail to validate will be dropped from the pool. The default setting for this parameter is false. 
+				Optionally, one may configure the pool to examine and possibly evict objects as they sit idle in the pool and to ensure that a minimum number of idle objects are available. This is 
+					performed by an "idle object eviction" thread, which runs asynchronously. Caution should be used when configuring this optional feature. Eviction runs require an exclusive synchronization lock on the pool, so if they run too frequently and / or incur excessive latency when creating, destroying or validating object instances, performance issues may result. The idle object eviction thread may be configured using the following attributes: 
+
+				timeBetweenEvictionRunsMillis indicates how long the eviction thread should sleep before "runs" of examining idle objects. When non-positive, no eviction thread will be 
+					launched. The default setting for this parameter is -1 (i.e., idle object eviction is disabled by default). 
+				minEvictableIdleTimeMillis specifies the minimum amount of time that an object may sit idle in the pool before it is eligible for eviction due to idle time. When non-positive, no 
+					object will be dropped from the pool due to idle time alone. This setting has no effect unless timeBetweenEvictionRunsMillis > 0. The default setting for this parameter is 30 minutes. 
+				testWhileIdle indicates whether or not idle objects should be validated using the factory's PoolableObjectFactory.validateObject method. Objects that fail to validate will be 
+					dropped from the pool. This setting has no effect unless timeBetweenEvictionRunsMillis > 0. The default setting for this parameter is false. 
+				softMinEvictableIdleTimeMillis specifies the minimum amount of time an object may sit idle in the pool before it is eligible for eviction by the idle object evictor (if any), with the 
+					extra condition that at least "minIdle" object instances remain in the pool. When non-positive, no objects will be evicted from the pool due to idle time alone. This setting has no 
+					effect unless timeBetweenEvictionRunsMillis > 0. and it is superceded by minEvictableIdleTimeMillis (that is, if minEvictableIdleTimeMillis is positive, then softMinEvictableIdle
+					TimeMillis is ignored). The default setting for this parameter is -1 (disabled). 
+				numTestsPerEvictionRun determines the number of objects examined in each run of the idle object evictor. This setting has no effect unless timeBetweenEvictionRunsMillis > 0. The 
+					default setting for this parameter is 3. 
+
+				The pool can be configured to behave as a LIFO queue with respect to idle objects - always returning the most recently used object from the pool, or as a FIFO queue, where 
+					borrowObject always returns the oldest object in the idle object pool. 
+
+				lifo determines whether or not the pool returns idle objects in last-in-first-out order. The default setting for this parameter is true. 
+				GenericObjectPool is not usable without a PoolableObjectFactory. A non-null factory must be provided either as a constructor argument or via a call to setFactory before the pool is used. 
+
+				Implementation note: To prevent possible deadlocks, care has been taken to ensure that no call to a factory method will occur within a synchronization block. See POOL-125 and 
+					DBCP-44 for more information.
+		3）statement pool 预编译语句缓存，如果配置为true
+		4）poolable connection factory设置，构造PoolableConnectionFactory，可以池化连接的工厂，用以缓存并管理数据库连接
+			这里可池化工厂的设计：
+				PoolableObjectFactory接口（与ObjectPool结合使用，管理其提供对象的生命周期），
+					org.apache.commons.pool.PoolableObjectFactory
+					DOC
+					---------
+					An interface defining life-cycle methods for instances to be served by an ObjectPool. 
+
+					By contract, when an ObjectPool delegates to a PoolableObjectFactory, 
+
+					1) makeObject is called whenever a new instance is needed. 
+					2) activateObject is invoked on every instance that has been passivated before it is borrowed from the pool. 
+					3) validateObject is invoked on activated instances to make sure they can be borrowed from the pool. validateObject may also be used to test an instance 
+					being returned to the pool before it is passivated. It will only be invoked on an activated instance. 
+					4) passivateObject is invoked on every instance when it is returned to the pool. 
+					5) destroyObject is invoked on every instance when it is being "dropped" from the pool (whether due to the response from validateObject, or for reasons specific 
+					to the pool implementation.) There is no guarantee that the instance being destroyed will be considered active, passive or in a generally consistent state. 
+
+					PoolableObjectFactory must be thread-safe. The only promise an ObjectPool makes is that the same instance of an object will not be passed to more than one method 
+					of a PoolableObjectFactory at a time.
+
+				PoolableConnectionFactory实现上面的接口，用于创建 PoolableConnections
+
+			
+			
+			
+
+			
+
+
+
+
+
 * ivy * apache ivy
 	apache Ivy™ is a popular dependency manager focusing on flexibility and simplicity.
 
@@ -1737,11 +1847,32 @@ ft2013-04-22
 	PS: Servlet通过规范定义的request/response paradigm与servlet容器交互，容器负责连接接收和相应，servlet负责逻辑
 
 * java
+	- 接口中定义的方法都为抽象方法，若不显示声明abstract，编译器会加上；接口是一种特殊的抽象类；
 	- 注释DOC
 		 * @see {@link ChunkedOutputStream} and {@link ChunkedInputStream}
 		 <br>
 		 <p>
 		 etc
+
+		 预定义格式，带边框
+			 * <pre style="border:solid thin; padding: 1ex;"
+			 * > Object obj = <code style="color:#00C">null</code>;
+			 * Object key = <code style="color:#C00">"Key"</code>;
+			 *
+			 * <code style="color:#00C">try</code> {
+			 *     obj = pool.borrowObject(key);
+			 *     <code style="color:#0C0">//...use the object...</code>
+			 * } <code style="color:#00C">catch</code>(Exception e) {
+			 *     <code style="color:#0C0">// invalidate the object</code>
+			 *     pool.invalidateObject(key, obj);
+			 *     <code style="color:#0C0">// do not return the object to the pool twice</code>
+			 *     obj = <code style="color:#00C">null</code>;
+			 * } <code style="color:#00C">finally</code> {
+			 *     <code style="color:#0C0">// make sure the object is returned to the pool</code>
+			 *     <code style="color:#00C">if</code>(<code style="color:#00C">null</code> != obj) {
+			 *         pool.returnObject(key, obj);
+			 *     }
+			 * }</pre>
 
 * java 数组 tomact nio实现
 	pollers = new Poller[getPollerThreadCount()];
@@ -1840,16 +1971,29 @@ ft2013-04-22
 		因此完全可以放心采用。
 		from: http://www.cnblogs.com/ychellboy/archive/2009/12/28/1634443.html
 
-* 线程协作 wait&notify wait notify
+* 线程协作 wait&notify wait notify wait()
 	使用wait()与notify()/notifyAll()可以使得多个任务之间彼此协作。
 	1) wait()与notify()/notifyAll()
 		调用sleep()和yield()的时候锁并没有被释放，而调用wait()将释放锁。这样另一个任务（线程）可以获得当前对象的锁，从而进入它的synchronized方法中。
 	可以通过notify()/notifyAll()，或者时间到期，从wait()中恢复执行。
 		只能在同步控制方法或同步块中调用wait()、notify()和notifyAll()。如果在非同步的方法里调用这些方法，在运行时会抛出IllegalMonitorStateException异常。
+		因为，必须取到对象锁才能调用上面的方法，notify()方法说明如下：
+		----
+		This method should only be called by a thread that is the owner of this object's monitor. A thread becomes the owner of the object's monitor in one of three ways: 
+
+		By executing a synchronized instance method of that object. 执行对象的同步方法
+		By executing the body of a synchronized statement that synchronizes on the object. 执行对象中同步块中的语句
+		For objects of type Class, by executing a synchronized static method of that class. 执行对象所属类的静态同步方法时
+
+		Only one thread at a time can own an object's monitor.  在任一时刻，只能有一个线程拥有对象的锁
+		----
+
 	2) 模拟单个线程对多个线程的唤醒
 		模拟线程之间的协作。Game类有2个同步方法prepare()和go()。标志位start用于判断当前线程是否需要wait()。Game类的实例首先启动所有的Athele类实例，
 	使其进入wait()状态，在一段时间后，改变标志位并notifyAll()所有处于wait状态的Athele线程。
 	ref: http://zhangjunhd.blog.51cto.com/113473/71387/
+
+
 
 * 动名词
 	network networking
@@ -2652,6 +2796,7 @@ ftian20130102
 	google code 提供svn服务，但页面上不便于svn操作，比如添加分支，添加目录等，可通过svn工具来操作，如 TortoiseSVN，来建立新目录等等。
 
 * 代码合并    svn merger merger代码 * svn
+	- 对于修改了同一分支同一文件产生的冲突，update本地代码后，产生冲突文件，通过svn diff解决冲突，删除冲突文件并提交来解决
 	- svn合并代码特殊场景之一
 		从A点的trunk拉出新branch B1开发，在B点时trunk上合入了其他项目的代码，在C点时B1合并trunk的修改到本branch，在D点时B1需要合入trunk，此时会有冲突
 		通过merge a range of revisions方式合并，并手工解决冲突（trunk和branch有相同的修改，只要保留trunk上的即可）
@@ -3879,7 +4024,12 @@ Storage for Interactive Services
 
 * tomcat6			 tomcat源码分析 tomcat7
 	- servlet3.0 tomcat7
-		
+		下载tomcat7 trunk源码
+		查看其build.xml文件，已经定义了ide-eclipse target，方便将项目转为eclipse项目
+		导入eclipse即可
+
+
+
 	- 配置远程debug
 		call "%EXECUTABLE%" start %CMD_LINE_ARGS%
 		call "%EXECUTABLE%" jpda start %CMD_LINE_ARGS%
@@ -3960,7 +4110,7 @@ Storage for Interactive Services
 	feature：NIO,MBEAN etc
 	svn: http://svn.apache.org/repos/asf/tomcat/tc6.0.x/trunk/
 
-	- tomcat源码分析
+	- tomcat源码分析 ant项目导入 导入ant项目
 		--------
 			Tomcat的体系结构或者源码，
 			将Tomcat的源码导入到ide中，编写实例进行代码跟踪（debug）。
@@ -4052,9 +4202,10 @@ Storage for Interactive Services
 		一个ant项目拿到，如何确认其使用的ant版本？
 		已有编译的jar中查找(eg:MANIFEST.MF)
 
-	- eclipse导入ant工程
+	- eclipse导入ant工程 ant项目 ant导入 导入ant
 		----------
-		不同于maven可以直接对IDE的支持(mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavaDocs=true),ant并不具有这样的命令.这样如果eclipse需要import ant工程需要加入两个.classPath .project文件。如下: 
+		不同于maven可以直接对IDE的支持(mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavaDocs=true),ant并不具有这样的命令.这样如果eclipse需要import ant工程
+		需要加入两个.classPath .project文件。如下: 
 		.project 
 		<?xml version="1.0" encoding="UTF-8"?> 
 		<projectDescription> 
@@ -4092,6 +4243,9 @@ Storage for Interactive Services
 		前提是你的build.xml要正确包含需要的全部东西，比如你要用到的资源文件,类等等
 		----------
 		from: http://blog.csdn.net/screensky/article/details/7840893
+
+		参考下面tomat6 ant项目的导入过程，搜索本文档  tomcat源码分析
+
 * google应用
 	https://drive.google.com/?authuser=0#my-drive		  google云端硬盘
 		生态系统
@@ -4314,6 +4468,12 @@ Storage for Interactive Services
 		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
 
 * zookeeper
+	 - zookeeper源码分析
+		下载trunk代码，通过其提供的build.xml文件定义的eclipse target将项目转为eclipse项目
+		导入eclipse中
+
+
+
 	 - zookeeper集群部署
 		在HA集群中，ZooKeeper集群的压力一般不大，部署3~5个节点的集群就够用了。
 		在此部署3个节点的ZooKeeper集群，假设三个节点分别为：host1、host2、host3。
@@ -8354,7 +8514,7 @@ search in index find pdf
 	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
 
 * 消息系统 消息中间件 MQ
-	- AMQP协议
+	- AMQP(Advanced Message Queuing Protocol )协议
 		rabbitMQ基于此协议实现
 			tutorial：http://www.rabbitmq.com/tutorials/tutorial-one-python.html
 
@@ -9943,6 +10103,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
 	
 * ide * eclipse
+	- 项目依赖的Validate,如果关闭了自动Validate功能，项目导入后不会自动检查问题；可以手动执行validate以发现问题，比如可能某个库没导入
+		导入错误，感叹号 
 	- quick fix	       ctrl+1
 		修改属性名，类名等，需要IDE自动修改依赖的地方，可通过此功能去做，无需各处都手动修改		
 	- eclipse设置文件默认编辑器时，在edit配置中，比如wiki类型，可以新建类型，设置编辑器时，需要设置默认编辑器（有default按钮），否则ide可能出错，导致设置失败。
@@ -24181,8 +24343,11 @@ day263 Tuesday, April 09, 2013
 			struts2标签
 			EL表达式
 		session管理
-	
+
 	深入基础
+
+	细致和深入的理解专长，少而精；面覆盖到了，点就不容易突出，需要积累。
+
 
 
 
@@ -24971,4 +25136,58 @@ day280 Monday, May 06, 2013
 4. hb3
 	session的创建及执行
 	不求甚解 or 知其所以然
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day281 Tuesday, May 07, 2013
+
+1. 
+	* SLB广渠门
+	* 
+
+2. SLB广渠门
+	新增需求：RDS从v1迁到v2，需要用到SLB产品，但是其提供的vm只能提供ip，这样涉及rs，vm，rspool操作的接口需要支持用户传入ip的支持
+	确认传入ip时，是否需要验证ip对应的vm的所属权限？
+		原vmName参数，会用当前用户的账号去ECS查询vm，如果没有权限会返回错误。
+		此功能是否也开放给其他用户，如何处理规则？
+
+		待RDS先确认
+
+	API的rs表，vm没有vmName，只有ip
+
+	整理涉及的接口列表：
+
+3. ivy ant+ivy
+	 tipsofreads
+
+	 ant - from: Agile java development with spring ,hibernate and eclipse
+	 ivy - from doc files in its zip distribution
+
+	 zookeeper项目采用ant+ivy
+
+4. 方法论 -tip-
+	先解决基本问题，在考虑隐性问题
+	减少不必要的钻牛角尖
+
+5. MQ分析 发布订阅 消息服务
+	分析已有的message module：
+	库：
+		amqp-client-2.2.0（rabbitmq实现）
+	步骤：
+		1）new一个com.rabbitmq.client.ConnectionFactory工厂，需要提供host、port、username，password
+		2）从工厂取到一个 com.rabbitmq.client.Connection（Public API: Interface to an AMQ connection. ）
+		3）基于上面的Connection创建com.rabbitmq.client.Channel（Public API: Interface to an AMQ channel）
+		4）创建一个com.rabbitmq.client.QueueingConsumer（Convenience class: an implementation of Consumer with 
+		straightforward blocking semantics），并将channel作为参数传入其构造方法中，此为队列消费者
+		5）往Channel中注册consumer消费者，提供queue名称、是否autoAck、以及consumer，从而取到Public API - Start a non-nolocal, non-exclusive consumer
+			
+			一种数据结构，IPC机制的实现：
+			com.rabbitmq.utility.BlockingCell<T>
+			Simple one-shot IPC mechanism. Essentially a one-place buffer that cannot be emptied once filled
+
+
+		6）
+
+		
+
 	
