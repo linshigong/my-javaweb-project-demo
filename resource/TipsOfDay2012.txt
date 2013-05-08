@@ -1849,11 +1849,17 @@ ft2013-04-22
 * java
 	- 接口中定义的方法都为抽象方法，若不显示声明abstract，编译器会加上；接口是一种特殊的抽象类；
 	- 注释DOC
+		链接
+		/**
+		 *@see <a href="https://weblogs.java.net/blog/2007/11/27/consistent-hashing">consistent-hashing</a>
+		 */
+		
+		引用
 		 * @see {@link ChunkedOutputStream} and {@link ChunkedInputStream}
 		 <br>
 		 <p>
 		 etc
-
+		
 		 预定义格式，带边框
 			 * <pre style="border:solid thin; padding: 1ex;"
 			 * > Object obj = <code style="color:#00C">null</code>;
@@ -3078,6 +3084,8 @@ ftian20130102
 	http://www.slideshare.net/
 * 红黑树 Red-Black tree
 	TreeMap基于红黑树实现 jdk1.6
+
+	SortedMap m = Collections.synchronizedSortedMap(new TreeMap(...));
 	
 	A red–black tree is a type of self-balancing binary search tree, a data structure used in computer science, typically used to implement associative arrays.
 	from: http://en.wikipedia.org/wiki/Red%E2%80%93black_tree	 
@@ -7723,6 +7731,81 @@ search in index find pdf
 		另外,按下v键,可以进入可视模式,这个时候可以更自由更灵活的选取要复制的段落,区块了.
 
 * 一致性hash算法（consistent hashing） hash圆环 ，环形hash robin环 Round Robin round-robin    一致性哈希	 （这里以memcached客户端的应用为例子说明）
+	- 自己的理解
+		算法的好处：解决分布式系统中，比如缓存的重新发布以及缓存平衡性问题
+
+		基础思想：
+			1）对被存储Object和存储节点caches采用相同的hash算法
+			2）hash算法的结果范围在，int型变量的范围内，即-2^31~2^31-1
+		
+		实现描述：
+			1）声明一个长度为-2^31~2^31-1的有序map数据结构（eg: sortedmap-treemap）
+			2）通过hash算法取到caches的hash值，在map中对应hash值的index上存入cache
+				循环所有caches，加入上面map对应的index下标位置上(这里，如果要解决cache热点问题，需要定义cache虚拟节点以及虚拟节点的个数，
+				循环虚拟节点数，并对cache加虚拟节点的下标字符串拼接取hash值，也存入map中对应的index下)。
+			3）当需要存入某个object时，对object取hash值，c根据此hash值，从map中按自然顺序找到第一个出现的cache，若没找到则取map中的第一个cache
+			4）将object存入上面找到的cache中
+		
+		各种情况分析：
+			针对上面的一致性哈希算法，它提供了虚拟节点支持，下面分析加入新cache和删除某个已有cache的情形：
+			增加一个cache：
+				1）当增加一个cache时，根据hash算法取到对应的hash值，并以此hash值作为index存入map中
+				2）此时在新cache的index和自然顺序位于其之前的cache的index之间的hash值所对应的object会受影响（对于原来存于之前cache的数据，可设置超时，
+				或LRU算法来去除）
+			去除一个cache：
+				1）
+
+	- 一篇一致性hash文章
+		--------
+
+		Consistent Hashing
+
+
+
+		Posted by tomwhite on November 27, 2007 at 9:56 AM PST
+
+		 I've bumped into consistent hashing a couple of times lately. The paper that introduced the idea (Consistent Hashing and Random Trees: Distributed Caching Protocols for Relieving Hot Spots on the World Wide Web by David Karger et al) appeared ten years ago, although recently it seems the idea has quietly been finding its way into more and more services, from Amazon's Dynamo to memcached (courtesy of Last.fm). So what is consistent hashing and why should you care?
+		 
+		The need for consistent hashing arose from limitations experienced while running collections of caching machines - web caches, for example. If you have a collection of n cache machines then a common way of load balancing across them is to put object o in cache machine number hash(o) mod n. This works well until you add or remove cache machines (for whatever reason), for then n changes and every object is hashed to a new location. This can be catastrophic since the originating content servers are swamped with requests from the cache machines. It's as if the cache suddenly disappeared. Which it has, in a sense. (This is why you should care - consistent hashing is needed to avoid swamping your servers!)
+		 
+		It would be nice if, when a cache machine was added, it took its fair share of objects from all the other cache machines. Equally, when a cache machine was removed, it would be nice if its objects were shared between the remaining machines. This is exactly what consistent hashing does - consistently maps objects to the same cache machine, as far as is possible, at least.
+		 
+		The basic idea behind the consistent hashing algorithm is to hash both objects and caches using the same hash function. The reason to do this is to map the cache to an interval, which will contain a number of object hashes. If the cache is removed then its interval is taken over by a cache with an adjacent interval. All the other caches remain unchanged.
+		 
+		Demonstration
+		 
+		Let's look at this in more detail. The hash function actually maps objects and caches to a number range. This should be familiar to every Java programmer - the hashCode method on Object returns an int, which lies in the range -231 to 231-1. Imagine mapping this range into a circle so the values wrap around. Here's a picture of the circle with a number of objects (1, 2, 3, 4) and caches (A, B, C) marked at the points that they hash to (based on a diagram from Web Caching with Consistent Hashing by David Karger et al):
+		 
+
+
+		To find which cache an object goes in, we move clockwise round the circle until we find a cache point. So in the diagram above, we see object 1 and 4 belong in cache A, object 2 belongs in cache B and object 3 belongs in cache C. Consider what happens if cache C is removed: object 3 now belongs in cache A, and all the other object mappings are unchanged. If then another cache D is added in the position marked it will take objects 3 and 4, leaving only object 1 belonging to A.
+		 
+
+
+		This works well, except the size of the intervals assigned to each cache is pretty hit and miss. Since it is essentially random it is possible to have a very non-uniform distribution of objects between caches. The solution to this problem is to introduce the idea of "virtual nodes", which are replicas of cache points in the circle. So whenever we add a cache we create a number of points in the circle for it.
+		 
+		You can see the effect of this in the following plot which I produced by simulating storing 10,000 objects in 10 caches using the code described below. On the x-axis is the number of replicas of cache points (with a logarithmic scale). When it is small, we see that the distribution of objects across caches is unbalanced, since the standard deviation as a percentage of the mean number of objects per cache (on the y-axis, also logarithmic) is high. As the number of replicas increases the distribution of objects becomes more balanced. This experiment shows that a figure of one or two hundred replicas achieves an acceptable balance (a standard deviation that is roughly between 5% and 10% of the mean).
+		 
+
+
+		Implementation
+		 
+		For completeness here is a simple implementation in Java. In order for consistent hashing to be effective it is important to have a hash function that mixes well. Most implementations of Object's hashCode do not mix well - for example, they typically produce a restricted number of small integer values - so we have a HashFunction interface to allow a custom hash function to be used. MD5 hashes are recommended here.
+		 import java.util.Collection;import java.util.SortedMap;import java.util.TreeMap;public class ConsistentHash<T> { private final HashFunction hashFunction; private final int numberOfReplicas; private final SortedMap<Integer, T> circle = new TreeMap<Integer, T>(); public ConsistentHash(HashFunction hashFunction, int numberOfReplicas,     Collection<T> nodes) {   this.hashFunction = hashFunction;   this.numberOfReplicas = numberOfReplicas;   for (T node : nodes) {     add(node);   } } public void add(T node) {   for (int i = 0; i < numberOfReplicas; i++) {     circle.put(hashFunction.hash(node.toString() + i), node);   } } public void remove(T node) {   for (int i = 0; i < numberOfReplicas; i++) {     circle.remove(hashFunction.hash(node.toString() + i));   } } public T get(Object key) {   if (circle.isEmpty()) {     return null;   }   int hash = hashFunction.hash(key);   if (!circle.containsKey(hash)) {     SortedMap<Integer, T> tailMap = circle.tailMap(hash);     hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey();   }   return circle.get(hash); }} 
+		The circle is represented as a sorted map of integers, which represent the hash values, to caches (of type T here).
+		 When a ConsistentHash object is created each node is added to the circle map a number of times (controlled by numberOfReplicas). The location of each replica is chosen by hashing the node's name along with a numerical suffix, and the node is stored at each of these points in the map.
+		 
+		To find a node for an object (the get method), the hash value of the object is used to look in the map. Most of the time there will not be a node stored at this hash value (since the hash value space is typically much larger than the number of nodes, even with replicas), so the next node is found by looking for the first key in the tail map. If the tail map is empty then we wrap around the circle by getting the first key in the circle.
+		 
+		Usage
+		 
+		So how can you use consistent hashing? You are most likely to meet it in a library, rather than having to code it yourself. For example, as mentioned above, memcached, a distributed memory object caching system, now has clients that support consistent hashing. Last.fm's ketama by Richard Jones was the first, and there is now a Java implementation by Dustin Sallings (which inspired my simplified demonstration implementation above). It is interesting to note that it is only the client that needs to implement the consistent hashing algorithm - the memcached server is unchanged. Other systems that employ consistent hashing include Chord, which is a distributed hash table implementation, and Amazon's Dynamo, which is a key-value store (not available outside Amazon).
+		 
+		--------
+		from: https://weblogs.java.net/blog/2007/11/27/consistent-hashing
+
+		PS: 基本思想：The basic idea behind the consistent hashing algorithm is to hash both objects and caches using the same hash function.
+
 	- 与加入/移除结点时缓存重新发布的关系
 	- 一致性哈希算法最大程度的避免了key在服务节点列表上的重新分布，其他附带的改进就是有的一致性哈希算法还增加了虚拟服务节点的方法，也就是一个服务节点在环上有多个映射点，
 	这样就能抑制分布不均匀，最大限度地减小服务节点增减时的缓存重新分布。
@@ -9620,6 +9703,43 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- houyi api使用ibatis没有使用cacheModel的原因
+		由于houyi api的部署有多个，且各自相互独立，如果启用缓存，可能会出现一台API机器RS1缓存了某些数据，但另一台RS2却修改了db数据，RS2的缓存
+		根据配置会随即更新，但RS1的缓存却无法触发更新。
+
+		解决方法之一：使用同一缓存，比如使用memcached统一缓存；统一缓存部分设计为可替换方式，比如后面如果需要替换缓存实现服务。
+
+	- sqlmap配置文件中的CacheModel
+	cacheModel
+		A cacheModel is used to describe a cache for use with a  query mapped statement. Each query mapped statement can use a different cacheModel, or the same 
+		one. The following example will demonstrate how it looks related to a statement: 
+
+		<cacheModel id="product-cache" type="LRU">
+			<flushInterval hours="24"/>
+			<flushOnExecute statement="insertProduct"/>
+			<flushOnExecute statement="updateProduct"/>
+			<flushOnExecute statement="deleteProduct"/>
+			<property name=”size” value=”1000” />
+		</cacheModel>
+
+		<select id=”getProductList” parameterClass=”int” cacheModel=”product-cache”>
+			select * from PRODUCT where PRD_CAT_ID = #value#
+		</select>
+		
+		In the above example, a cache is defined for products that uses a WEAK reference type and flushes every 24 hours or whenever associated update statements are executed.
+
+		PS:  cacheModel用于查询缓存
+			
+			标签说明：
+			Element : flushInterval
+				Defines the interval of when the cache will be flushed. There can be only one flush interval element 
+				 and it can be set using hours, minutes, seconds or milliseconds.
+			Element : flushOnExecute
+				Defines that the cache will be flushed when the specified statement is executed. There can be any 
+				 number of "flush on execute" elements specified for a cache.
+			Element : property
+				Defines a standard Java property. Is used by various elements to define settings.
+
 	- spring对ibatis的支持
 		提供模板类 SqlMapClientTemplate ，对于批量操作需要使用其SqlMapClientCallback回调类来实现。
 		下面是模板类的部分doc说明：
@@ -9770,6 +9890,34 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- ibatis debug sql 执行语句位置
 		com.ibatis.sqlmap.engine.execution.SqlExecutor
 			public void executeQuery(StatementScope statementScope, Connection conn, String sql, Object[] parameters, int skipResults, int maxResults, RowHandlerCallback callback) throws SQLException {
+	- Ibatis中#与$的区别？
+		1) #是把传入的数据当作字符串，如#field#传入的是id,则生成sql语句:order by "id";
+		2) $传入的数据直接生成在sql里，如#field#传入的是id,则sql语句生成是这样，order by id ;
+		3) #方式能够很大程度防止sql注入, 但$方式无法防止sql注入;
+		4) $方式一般用于传入数据库对象．例如传入表名;
+		5) 一般能用#的就别用$ ;
+	- iBatis与Hibernate区别
+		1) iBatis 需要手写sql语句，也可以生成一部分，Hibernate则基本上可以自动生成，偶尔会写一些Hql。同样的需求,iBATIS的工作量比 Hibernate要大很多。
+		类似的，如果涉及到数据库字段的修改，Hibernate修改的地方很少，而iBATIS要把那些sql mapping的地方一一修改。
+		2) iBatis 可以进行细粒度的优化
+		比如说我有一个表，这个表有几个或者几十个字段，我需要更新其中的一个字段，iBatis 很简单，执行一个sql UPDATE TABLE_A SET column_1=#column_1# 
+		WHERE id=#id# 但是用 Hibernate 的话就比较麻烦了,缺省的情况下 hibernate 会更新所有字段。 当然我记得 hibernate 有一个选项可以控制只保存修改过的字段，
+		但是我不太确定这个功能的负面效果。
+		例如：我需要列出一个表的部分内容，用 iBatis 的时候，这里面的好处是可以少从数据库读很多数据，节省流量SELECT ID, NAME FROM TABLE_WITH_A_LOT_OF_COLUMN 
+		WHERE ...一般情况下Hibernate 会把所有的字段都选出来。比如说有一个上面表有8个字段，其中有一两个比较大的字段，varchar(255)/text。上面的场景中我
+		为什么要把他们也选出来呢？用hibernate 的话，你又不能把这两个不需要的字段设置为lazy load，因为还有很多地方需要一次把整个 domain object 加载出来。
+		这个时候就能显现出ibatis 的好处了。如果我需要更新一条记录（一个对象），如果使用 hibernate，需要现把对象 select 出来，然后再做 update。这对数据库来说
+		就是两条sql。而iBatis只需要一条update的sql就可以了。减少一次与数据库的交互，对于性能的提升是非常重要。
+		3)开发方面：
+		开发效率上，我觉得两者应该差不多。可维护性方面，我觉得 iBatis 更好一些。因为 iBatis 的 sql 都保存到单独的文件中。而 Hibernate 在有些情况下可能会在
+		java 代码中保sql/hql。相对Hibernate“O/R”而言，iBATIS 是一种“Sql Mapping”的ORM实现。 而iBATIS 的着力点，则在于POJO 与SQL之间的映射关系。也就是说
+		，iBATIS并不会为程序员在运行期自动生成SQL 执行。具体的SQL 需要程序员编写，然后通过映射配置文件，将SQL所需的参数，以及返回的结果字段映射到
+		指定POJO。使用iBATIS 提供的ORM机制，对业务逻辑实现人员而言，面对的是纯粹的Java对象，这一层与通过Hibernate 实现ORM 而言基本一致，而对于具体
+		的数据操作，Hibernate会自动生成SQL 语句，而iBATIS 则要求开发者编写具体的SQL 语句。相对Hibernate而言，iBATIS 以SQL开发的工作量和数据库移植性上的
+		让步，为系统设计提供了更大的自由空间。
+		4) 运行效率
+		在不考虑 cache 的情况下，iBatis 应该会比hibernate 快一些或者很多。
+
 * aqua 
 	ctrl + d -- desc table
 * 遍历 map.entrySet()
@@ -25191,3 +25339,50 @@ day281 Tuesday, May 07, 2013
 		
 
 	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day282 Wednesday, May 08, 2013
+
+1. 
+	* SLB广渠门
+
+2. SLB广渠门
+	邮件确认新增需求取消，RDS继续沿用直接调用slb master的方式
+
+	后期若确实需要支持，这里如何设计？
+
+3. Java MapReduce编程框架
+
+4. interview
+
+	1.参与或负责淘宝视频中心及视频导购系统的研发
+
+
+	原淘宝网岗位
+	岗位要求1. 本科以上学历，两年以上JAVA开发经验；
+	2. 熟悉WEB开发相关技术和开源框架，如HTML、Struts、Spring、iBatis等；
+	3. 有较大规模系统的设计和开发经验；
+	4. 有较丰富的数据存储和查询系统（如Oracle/Mysql, Redis, HBase等）经验，对性能优化有一定的经验；
+	5. 学习能力强，适应能力好，对技术充满热情，良好的沟通能力
+
+	Ibatis
+		cachemodel
+	Oracle
+		
+
+
+5. 系统优化 -tip-
+	由于houyi api的部署有多个，且各自相互独立，如果启用缓存，可能会出现一台API机器RS1缓存了某些数据，但另一台RS2却修改了db数据，RS2的缓存
+		根据配置会随即更新，但RS1的缓存却无法触发更新。
+
+		解决方法之一：使用同一缓存，比如使用memcached统一缓存；统一缓存部分设计为可替换方式，比如后面如果需要替换缓存实现服务。
+		其他解决方法？独立缓存消耗宝贵的内存，还是统一分布式缓存较好（关注网络、HA、以及序列化的性能），
+
+		注：分布式缓存的实现又涉及到对象序列化的问题，
+
+	根据上面的描述，重构优化的一个分支：
+		系统统一缓存的设计（接口设计（考虑扩展性，维护性），
+							部署结构与HA设计（与下面的HA有关系，分布式部署保证HA，采用一致性哈希，缓存热点问题），
+							序列化性能考虑，
+							网络稳定考虑，
+							内部具体各种缓存接口与统一缓存接口的交互及设计）
+
