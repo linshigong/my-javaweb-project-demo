@@ -13,6 +13,67 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* linux pipe 管道
+	 Pipes
+	The common Linux shells all allow redirection. For example
+	$ ls | pr | lpr
+	pipes the output from the ls command listing the directory's files into the standard input of the pr command which paginates them. Finally the standard output from the 
+	pr command is piped into the standard input of the lpr command which prints the results on the default printer. Pipes then are unidirectional byte streams which 
+	connect the standard output from one process into the standard input of another process. Neither process is aware of this redirection and behaves just as it would 
+	normally. It is the shell which sets up these temporary pipes between the processes.
+
+
+* IPC Mechanisms (Inter-Process Communication Mechanisms) MQ消息 rabbitmq客户端jar实现用到此机制
+	
+	ref: http://tldp.org/LDP/tlk/ipc/ipc.html
+
+* 进程与线程 区别和联系
+	-----
+	进程与线程的一个简单解释
+	　　进程（process）和线程（thread）是操作系统的基本概念，但是它们比较抽象，不容易掌握。
+	　　最近，我读到一篇材料，发现有一个很好的类比，可以把它们解释地清晰易懂。
+	　　1).
+	　　计算机的核心是CPU，它承担了所有的计算任务。它就像一座工厂，时刻在运行。
+	　　2).
+	　　假定工厂的电力有限，一次只能供给一个车间使用。也就是说，一个车间开工的时候，其他车间都必须停工。背后的含义就是，单个CPU一次只能运行一个任务。
+	　　3).
+	　　进程就好比工厂的车间，它代表CPU所能处理的单个任务。任一时刻，CPU总是运行一个进程，其他进程处于非运行状态。
+	　　4).
+	　　一个车间里，可以有很多工人。他们协同完成一个任务。
+	　　5).
+	　　线程就好比车间里的工人。一个进程可以包括多个线程。
+	　　6).
+	　　车间的空间是工人们共享的，比如许多房间是每个工人都可以进出的。这象征一个进程的内存空间是共享的，每个线程都可以使用这些共享内存。
+	　　7).
+	　　可是，每间房间的大小不同，有些房间最多只能容纳一个人，比如厕所。里面有人的时候，其他人就不能进去了。这代表一个线程使用某些共享内存时，
+	其他线程必须等它结束，才能使用这一块内存。
+	　　8).
+	　　一个防止他人进入的简单方法，就是门口加一把锁。先到的人锁上门，后到的人看到上锁，就在门口排队，等锁打开再进去。这就叫"互斥锁"（Mutual exclusion，缩写 Mutex），
+	防止多个线程同时读写某一块内存区域。
+	　　9).
+	　　还有些房间，可以同时容纳n个人，比如厨房。也就是说，如果人数大于n，多出来的人只能在外面等着。这好比某些内存区域，只能供给固定数目的线程使用。
+	　　10).
+	　　这时的解决方法，就是在门口挂n把钥匙。进去的人就取一把钥匙，出来时再把钥匙挂回原处。后到的人发现钥匙架空了，就知道必须在门口排队等着了。这种做法
+	叫做"信号量"（Semaphore），用来保证多个线程不会互相冲突。
+	　　不难看出，mutex是semaphore的一种特殊情况（n=1时）。也就是说，完全可以用后者替代前者。但是，因为mutex较为简单，且效率高，所以在必须保证资源独占的情况下，
+	还是采用这种设计。
+	　　11).
+	　　操作系统的设计，因此可以归结为三点：
+	　　（1）以多进程形式，允许多个任务同时运行；
+	　　（2）以多线程形式，允许单个任务分成不同的部分运行；
+	　　（3）提供协调机制，一方面防止进程之间和线程之间产生冲突，另一方面允许进程之间和线程之间共享资源。
+	-----
+	from: http://kb.cnblogs.com/page/176246/
+
+	-------
+	线程与进程的区别可以归纳为以下几点：
+	1）地址空间和其它资源（如打开文件）：进程间相互独立，同一进程的各线程间共享。某进程内的线程在其它进程不可见。
+	2）通信：进程间通信IPC，线程间可以直接读写进程数据段（如全局变量）来进行通信——需要进程同步和互斥手段的辅助，以保证数据的一致性。
+	3）调度和切换：线程上下文切换比进程上下文切换要快得多。
+	4）在多线程OS中，进程不是一个可执行的实体（每一个程序都至少有一个线程，若程序只有一个线程，那就是程序本身）。
+	-------
+	from: http://baike.baidu.com/view/1053.htm
+
 * 
 	The best way to learn is to practice!
 * 数据库连接池 * dbcp * c3p0
@@ -3203,7 +3264,21 @@ ftian20130102
 	from: http://www.mlxos.org/mlxos.html
 
 * HBase * nosql
+	- 简介
+	HBase(Hadoop Database)，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价PC Server上搭建起大规模结构化存储集群。
 	
+	HBase是Google Bigtable的开源实现，类似Google Bigtable利用GFS作为其文件存储系统，HBase利用Hadoop HDFS作为其文件存储系统；Google运行MapReduce来
+	处理Bigtable中的海量数据，HBase同样利用Hadoop MapReduce来处理HBase中的海量数据；Google Bigtable利用 Chubby作为协同服务，HBase利用Zookeeper作为对应。
+
+	上图描述Hadoop EcoSystem中的各层系统其中,HBase位于结构化存储层，Hadoop HDFS为HBase提供了高可靠性的底层存储支持，Hadoop MapReduce为HBase
+	提供了高性能的计算能力，Zookeeper为HBase提供了稳定服务和failover机制。
+
+	此外，Pig和Hive还为HBase提供了高层语言支持，使得在HBase上进行数据统计处理变的非常简单。 Sqoop则为HBase提供了方便的RDBMS数据导入功能，使得
+	传统数据库数据向HBase中迁移变的非常方便。	
+	from: http://baike.baidu.com/view/1993870.htm
+
+	- 官网 http://hbase.apache.org/
+
 * VPC * Amazon Virtual Private Cloud (Amazon VPC) 自定义网络 
 	- Amazon VPC
 		允许您在 Amazon Web Services (AWS) 云中预配置一个专用、隔离的部分，让您能够在定义的虚拟网络中启动 AWS 资源。借助 Amazon VPC，
@@ -4556,7 +4631,7 @@ Storage for Interactive Services
 	
 
 	 - zookeeper HA
-		
+		多节点，一主多备的方式，一个为leader，其他为follower
 	 - dubbo使用zookeeper registry   (安装好zookeeper后，dubbo的jar中有zookeeper registry模块来基于zookeeper实现registry)
 		Install the zookeeper registry:
 
@@ -7071,21 +7146,97 @@ Storage for Interactive Services
 
 		接下来逐一介绍
 		from：http://www.cnblogs.com/aurawing/articles/1887056.html
-* volatile / Java中的volatile关键字	 
-	关于volatile
-		我们知道，在Java中设置变量值的操作，除了long和double类型的变量外都是原子操作，也就是说，对于变量值的简单读写操作没有必要进行同步。这在JVM 1.2之前，Java的内存模型实现
-	总是从主存读取变量，是不需要进行特别的注意的。而随着JVM的成熟和优化，现在在多线程环境下volatile关键字的使用变得非常重要。在当前的Java内存模型下，线程可以把变量保存在
-	本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，
-	造成数据的不一致。要解决这个问题，只需要像在本程序中的这样，把该变量声明为volatile（不稳定的）即可，这就指示JVM，这个变量是不稳定的，每次使用它都到主存中进行读取。
-	一般说来，多任务环境下各任务间共享的标志都应该加volatile修饰。
+	- volatile / Java中的volatile关键字	 
+		关于volatile
+			我们知道，在Java中设置变量值的操作，除了long和double类型的变量外都是原子操作，也就是说，对于变量值的简单读写操作没有必要进行同步。这在JVM 1.2之前，Java的内存模型实现
+		总是从主存读取变量，是不需要进行特别的注意的。而随着JVM的成熟和优化，现在在多线程环境下volatile关键字的使用变得非常重要。在当前的Java内存模型下，线程可以把变量保存在
+		本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，
+		造成数据的不一致。要解决这个问题，只需要像在本程序中的这样，把该变量声明为volatile（不稳定的）即可，这就指示JVM，这个变量是不稳定的，每次使用它都到主存中进行读取。
+		一般说来，多任务环境下各任务间共享的标志都应该加volatile修饰。
+		
+		Volatile修饰的成员变量在每次被线程访问时，都强迫从共享内存中重读该成员变量的值。而且，当成员变量发生变化时，强迫线程将变化值回写到共享内存。这样在任何时刻，
+		两个不同的线程总是看到某个成员变量的同一个值。 
+
+		Java语言规范中指出：为了获得最佳速度，允许线程保存共享成员变量的私有拷贝，而且只当线程进入或者离开同步代码块时才与共享成员变量的原始值对比。 
+		这样当多个线程同时与某个对象交互时，就必须要注意到要让线程及时的得到共享成员变量的变化。 
+		而volatile关键字就是提示VM：对于这个成员变量不能保存它的私有拷贝，而应直接与共享成员变量交互。 
+		使用建议：在两个或者更多的线程访问的成员变量上使用volatile。当要访问的变量已在synchronized代码块中，或者为常量时，不必使用。 
+		由于使用volatile屏蔽掉了VM中必要的代码优化，所以在效率上比较低，因此一定在必要时才使用此关键字。
+		from: http://www.cnblogs.com/xwdreamer/archive/2012/05/13/2498615.html
 	
-	Volatile修饰的成员变量在每次被线程访问时，都强迫从共享内存中重读该成员变量的值。而且，当成员变量发生变化时，强迫线程将变化值回写到共享内存。这样在任何时刻，两个不同的线程总是看到某个成员变量的同一个值。 
-	Java语言规范中指出：为了获得最佳速度，允许线程保存共享成员变量的私有拷贝，而且只当线程进入或者离开同步代码块时才与共享成员变量的原始值对比。 
-	这样当多个线程同时与某个对象交互时，就必须要注意到要让线程及时的得到共享成员变量的变化。 
-	而volatile关键字就是提示VM：对于这个成员变量不能保存它的私有拷贝，而应直接与共享成员变量交互。 
-	使用建议：在两个或者更多的线程访问的成员变量上使用volatile。当要访问的变量已在synchronized代码块中，或者为常量时，不必使用。 
-	由于使用volatile屏蔽掉了VM中必要的代码优化，所以在效率上比较低，因此一定在必要时才使用此关键字。
-	from: http://www.cnblogs.com/xwdreamer/archive/2012/05/13/2498615.html
+	- java并发小节
+		------
+		Java多线程编程，是并发编程的一种（另一种重要的并发编程是多进程编程）。我们写java程序一般是运行在同一个进程中的，所以可以简单的认为：并发编程 = 多线程编程，让写操
+		作系统的人去关注多进程编程吧。多线程编程是一个重要的软件基础，不管你的代码是不是多线程，java程序运行在jvm中一定是多线程运行的：运行你的main方法的线程，以及一些后
+		台守护线程，如垃圾收集等。虽然在我们平时的程序中很少直接用到多线程，但是一些重要的框架都要用到多线程的。比如java应用服务器，Servlet，以及其他的任何一个知名的框架
+		。所以，学好多线程编程，对我们理解框架的实现，提高软件设计水平，以及写出更好的可扩展，可伸缩的软件具有非常重要的作用。
+
+		多线程编程是非常复杂的，主要体现在多线程程序非常容易引入bug，这些bug通常难以调试重现，同时是在程序在高并发高负载的时候偶然出现，而且很难重复出现，所以调试这些bug
+		是一个很困难的事。既然难么困难，为什么要用多线程呢，单线程不也挺好的吗？明知山有虎，偏向虎山行？那是人家体现自己的勇气用的。采用多线程又有什么好处呢？总的来说，
+		有以下两点好处：
+		1). 速度。首先，现在多核CPU已经烂大街了，你的CPU如果还是单核的你都不好意思和人打招呼。采用多线程可以“充分”利用CPU的处理能力。其实，更重要的一点是，并发通常可以
+		提高运行在单核处理器上的程序的性能。这听起来似乎违背直觉。导致这个现象产生的原因是 阻塞 。程序要很多的地方会产生阻塞，比如IO操作。此时单线程程序就会一直阻塞，直
+		到线程的资源都就绪。这会大大浪费CPU的处理能力。
+		2). 改进代码设计。面向对象就是要让程序以一种和自然世界相似的思维来设计程序，多线程编程可以以更加接近真实世界的方式来思维，使程序更加简单易懂。比如仿真，如果不采用
+		多线程，基本上没法实现。
+		并发编程是软件设计的基础，是可以离开任何程序语言来独立研究的。但是笔者认为那是计算机科学家干的事，比如Doug Lea，Brian Goetz 等，笔者窃认为自己还没有达到这种境界。
+		所以笔者只有结合java来说说多线程编程。Java在语言层面就支持多线程，而且有大量的类库来用于多线程编程，所以可以轻松用java写出多线程程序，做到以前只有专家能做到的事（
+		写出来的程序的质量当然有天渊之别，呵呵）。我觉得，java从以下三方面来支持多线程编程：
+		1). 多线程的实现机制。Java采用命令模式来实现多线程，即 执行器+ 任务 的方式。
+		2). 多线程的底层协调机制。从最基本的同步到各种用途的锁，让程序员精确控制线程之间的协作（合作和竞争）。
+		3). 多线程的高层协调工具类。各种原子变量，非阻塞队列，同步容器，同步器，让线程和线程之间的协作更简单方便。
+		下面分别从这三方面来阐述java的多线程编程。
+		一． 多线程的实现机制
+		Thread，Executor，ExecutorService，Runnable，Callable，Future……..当笔者看到这么多的类时，感到一阵头皮发麻。相信很多同仁也有一样的感觉。其实不止多线程，IO系统啊，Socket
+		编程啊，都会让人有这种感觉，许多初学者望而怯步。但是我们只要以设计模式的思想去思考这些系统的实现，然后用某个设计模式慢慢梳理看似乱成一锅的类和接口时，就会发觉这
+		些类库设计得很精妙和优雅。甚至对SUN的那帮人产生那什么XXX江水XXX连绵不绝的敬仰（不得不说，在技术上，过度的个人崇拜是不好的）。比如，用装饰者模式来分析IO系统
+		，把那一大堆分成资源流和过滤器流之后，整个IO系统就简单明了的多了。把java的网络编程分成底层的Socket编程和高层的URL编程之后，又有豁然开朗的感觉。那么多线程的这一
+		大堆类和接口又有什么玄机呢？答。案。就。是。。。。。。命令模式！首先分清楚执行器和任务这两个概念。执行器就是执行任务的器（？）。任务就是具体要实现的功能，依附在
+		执行器上得以执行（以上两概念纯属瞎掰，不必较真，大概理解就行）。Thread，Executor，ExecutorService等属于执行器，而Runnable，Callable，FutureTask属于任务。程序运行时需要创
+		建一个执行器，若干任务，任务依附在执行器上，由执行器启动执行并控制任务。至于ThreadFactory和UnCaughtExceptionHandler是指定执行的方式以及抛出异常时的处理，可以分别学
+		习。值得一提的是一个重要的类是Future，它可以实现线程有返回值。返回的结果就放在Future里面，随时可以用get（）来检查执行结果。还可以用cancel（）来对线程执行
+		interrupt（），功能十分强大。
+		二． 多线程的底层协调机制
+		编写多线程程序最重要的一个问题是对共享资源（或者叫共享，可变的状态）的访问，访问共享资源也是线程间相互通信的简单方法。而多个线程一起访问共享资源，就要注意线程安
+		全。编写线程安全的代码，本质上是管理对状态的访问，而且通常是共享的，可变的状态.所谓共享，是指一个变量可以被多个线程访问；所谓可变，是指变量在生命周期内可以给便
+		。我们讨论的线程安全好像是关于代码的，但真正要做的，是在不可控制的并发访问中保护数据。
+		Java提供底层的协调机制，以控制对共享资源的访问。这里的协调，包括竞争，合作和通信。
+		竞争是通过锁来实现的，在访问资源之前要先取得锁，如果锁正被其他线程占有，那么本线程就会阻塞，直到取得锁。具体的实现方式有两种：
+		1. synchronized关键字。Synchronized的语义是 想要执行被包围的代码块或方法，必须先取得它声明的那个对象锁。如果不能取得，线程到这里就阻塞，直到取得对象锁。至于这样做是
+		否能够真正保护了共享资源的访问，synchronized关键字是不管的。需要由程序员自己来保证：确保共享资源是私有的，所有访问共享资源的地方都加上了synchronized关键字，而且使用
+		的是同一个对象锁。Synchronized不仅能保证操作的原子性，还可以保证变量的可见性。而volatile仅能保证变量的可见性。（有关原子性和可见性不知道要放哪里，这里先提一下）
+		2. 使用concurrent.lock。使用concurrent.lock不仅能实现synchronized的全部功能，而且能提供更好的性能和更精确的语义。比如，synchronized用的是互斥锁，仅能实现对资源的互斥访问，
+		为concurrent.lock不仅有互斥锁，还有读写锁。把读锁和写锁分开，写锁相当于互斥锁，而读锁是共享的，可以让多线程同时读，以提高性能。
+		合作：线程之间的合作包括Object.wait/notify/notifyAll，Thread.interrupt， Condition.await/signal/signalAll。可以在资源未准备好时调用Object.wait()使当前线程进入阻塞，而其他线程在资源准备
+		好时调用notify把所有在Object上阻塞的线程唤醒，进入可执行状态。Condition.await/signal/signalAll是jdk5提供的更加精细控制线程的类，可以组合不同的Condition来实现复杂的控制。
+		通信:线程之间的通信通过PipedReader / PipedWriter组合成管道对。不同线程的线程可以在上面读写，从而实现通信。程序员可以方便地利用它们来实现“生产者-消费者”模型。
+		三．多线程的高层协调工具类
+		用底层的协调机制可以灵活实现各种各样的需求，但这样容易出错，对程序员的要求很高。JDK1.5推出了很多高层的协调工具类，这些类让我们可以不用再用synchronized或者Lock来控
+		制并发，只要简单实用它提供的容器，同步器等，就可以实现并发访问。主要的类也可以用竞争，合作及通信来划分。主要包括：
+		1). 各种特定用途的容器，方便线程之间的通信。如BlockingQueue，DelayQueue，ConcurrentHashMap，CopyOnWriteArrayList等。
+		2). 线程安全的基本变量类，在包java.util.concurrent.atomic中提供。
+		3). 各种用途的同步器synchronizer，如CountDownLatch，CyclicBarrier，Semaphore，Exchange。
+		4). 计时。TimeUnit类为指定和控制基于超时的操作提供了多重粒度（包括纳秒级）。以代替简陋的Thread.sleep。
+		以下将分别介绍：（暂略）
+		附A：并发编程需要掌握的一些基本概念：
+		1). 摩尔定律：集成电路芯片上所集成的晶体管数量，越每隔18个月便会翻一番。
+		2). Amdahl定律：对计算机系统的某个部件采用优化措施后所获得的计算机性能的提高，依赖于这部分的执行时间在整个运行时间中所占的比率。
+		3). 竞争条件：多个任务并发访问和操作同一数据且执行结果与访问的特定顺序有关，称为竞争条件。（多个任务竞争响应某个条件，因访问顺序不同产生冲突或不一致的情况）。比
+		如
+		“检查再运行”“惰性初始化”。
+		4). 原子操作：任务在执行过程中不能被打断的一序列操作
+		5). 复合操作：任务在执行过程中可以被打断的一序列操作
+		6). 不变约束：不变式表达了对状态的约束，这些状态是应该符合这个约束的值的组合。不变式可以代表某种业务规则。
+		7). 先验条件：针对方法，规定了在条用方法之前必须为真的条件
+		8). 后验条件：针对方法，规定了在条用方法之后必须为真的条件
+		9). 原子性：（见原子操作）
+		10). 可见性：确保线程对变量的写入对其他线程是可见的。即刷新内存中的变量。
+		附B：参考资料：
+		1. Java编程思想 中文版 第四版 by Bruce Eckel
+		2. Java并发编程实践 中文版 by Brian Goetz,Doug Lea 等
+		------
+		from: http://blog.sina.com.cn/s/blog_6271df6f01019wv8.html
+
 * svn 代码
 	版本控制，代码管理，使用
 	整个SVN代码管理可以看做一棵倒置的树
@@ -25333,8 +25484,61 @@ day281 Tuesday, May 07, 2013
 			com.rabbitmq.utility.BlockingCell<T>
 			Simple one-shot IPC mechanism. Essentially a one-place buffer that cannot be emptied once filled
 
+			往通道注册消费者代码如下:
+				com.rabbitmq.client.impl.ChannelN
+				--------
+				public String basicConsume(String queue, boolean autoAck, String consumerTag,
+							       boolean noLocal, boolean exclusive, Map<String, Object> arguments,
+							       final Consumer callback)
+					throws IOException
+				    {
+					BlockingRpcContinuation<String> k = new BlockingRpcContinuation<String>() {
+					    public String transformReply(AMQCommand replyCommand) {
+						String actualConsumerTag = ((Basic.ConsumeOk) replyCommand.getMethod()).consumerTag;
+						_consumers.put(actualConsumerTag, callback);
+						// We need to call back inside the connection thread
+						// in order avoid races with 'deliver' commands
+						try {
+						    callback.handleConsumeOk(actualConsumerTag);
+						} catch (Throwable ex) {
+						    _connection.getExceptionHandler().handleConsumerException(ChannelN.this,
+													      ex,
+													      callback,
+													      actualConsumerTag,
+													      "handleConsumeOk");
+						}
+						return actualConsumerTag;
+					    }
+					};
 
-		6）
+					rpc(new Basic.Consume(TICKET, queue, consumerTag,
+							      noLocal, autoAck, exclusive,
+							      false, arguments),
+					    k);
+
+					try {
+					    return k.getReply();
+					} catch(ShutdownSignalException ex) {
+					    throw wrap(ex);
+					}
+				    }
+				--------
+			
+
+
+		6）取queue中的数据，如果没有则等待（通过上面的BlockingCell实现）
+		7）AMQCommand调用transmit方法发送command，传入channel对象
+			从channel对象获取connection以完成数据写入
+			写入单位为：
+				com.rabbitmq.client.impl.Frame
+				Represents an AMQP wire-protocol frame, with frame type, channel number, and payload bytes.
+			
+			一个心跳线程，在发送frame后发送一个信号（signal）：
+				com.rabbitmq.client.impl.HeartbeatSender
+				Manages heartbeat sending for a AMQConnection. 
+				Heartbeats are sent in a dedicated thread that is separate from the main loop thread used for the connection.
+
+
 
 		
 
@@ -25386,3 +25590,39 @@ day282 Wednesday, May 08, 2013
 							网络稳定考虑，
 							内部具体各种缓存接口与统一缓存接口的交互及设计）
 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day283 Thursday, May 09, 2013
+
+1. 
+	* 
+2. 
+
+
+3. 
+
+4. 获取java运行的版本，采取不同的逻辑，比如高版本才支持的功能的使用
+	org.springframework.core.JdkVersion
+	-------
+		static {
+			javaVersion = System.getProperty("java.version");
+			// version String should look like "1.4.2_10"
+			if (javaVersion.indexOf("1.7.") != -1) {
+				majorJavaVersion = JAVA_17;
+			}
+			else if (javaVersion.indexOf("1.6.") != -1) {
+				majorJavaVersion = JAVA_16;
+			}
+			else if (javaVersion.indexOf("1.5.") != -1) {
+				majorJavaVersion = JAVA_15;
+			}
+			else {
+				// else leave 1.4 as default (it's either 1.4 or unknown)
+				majorJavaVersion = JAVA_14;
+			}
+		}
+	-------
+		
+
+5. mapreduce，hbase（hadoop，zookeeper）
+	zookeeper与paxos
