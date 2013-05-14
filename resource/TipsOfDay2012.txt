@@ -13,6 +13,9 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* 不只是为求一份工作而读书
+	Hard learing not just for a job!
+* 强烈的求知欲
 * linux pipe 管道
 	 Pipes
 	The common Linux shells all allow redirection. For example
@@ -24,8 +27,46 @@ ft2013-04-22
 
 
 * IPC Mechanisms (Inter-Process Communication Mechanisms) MQ消息 rabbitmq客户端jar实现用到此机制
-	
-	ref: http://tldp.org/LDP/tlk/ipc/ipc.html
+	- Explain difference between IPC mechanisms? 各种IPC机制类型的区别
+		----------
+		ipc mechanisms are mianly 5 types
+
+		1) pipes:it is related data only send from one pipe output is giving to another pipe input to share resouses pipe are used
+			drawback:itis only related process only communicated
+		2) message queues:message queues are un related process are also communicate with message queues
+			drawback:user dont know which process curently works
+		3) share memory:memory shared in distributed systems some memory wants to share some files that time it is use full
+		4) semaphores
+		semaphore is integer type and in semaphore resourses give coding like negetive value means process are wants to use perticular resource waiting only
+		and 0 means no process is waiting
+		and 1 means one resource is free
+
+		and
+
+		5) sockets:sockets also ipc it is comunicate clients and server
+		with socket system calls connection oriented and connection less also
+		---------- 另一个解释版本，相互补充
+		PIPE: Only two related (eg: parent & child) processess can be communicated. Data reading would be first in first out manner.
+
+		Named PIPE or FIFO : Only two processes (can be related or unrelated) can communicate. Data read from FIFO is first in first out manner.
+
+		Message Queues: Any number of processes can read/write from/to the queue.  Data can be read selectively. (need not be in FIFO manner)
+
+		Shared Memory:  Part of process's memory is shared to other processes. other processes can read or write into this shared memory area based on the permissions. 
+			Accessing Shared memory is faster than any other IPC mechanism as this does not involve any kernel level switching(Shared memory resides on user memory area).
+
+		Semaphore: Semaphores are used for process synchronisation. This can't be used for bulk data transfer between processes. 
+		PS: java的concurrent包的java.util.concurrent.locks.AbstractQueuedSynchronizer提供实现此机制的支持
+
+		----------
+		from: http://www.geekinterview.com/question_details/20720
+
+	- MQ的实现，涉及到IPC Mechanisms实现类型中的Message Queue，通过消息队列实现
+
+	- linux系统中支持IPC mechanism
+		Processes communicate with each other and with the kernel to coordinate their activities. Linux supports a number of Inter-Process Communication (IPC) mechanisms. 
+		Signals and pipes are two of them but Linux also supports the System V IPC mechanisms named after the Unix TM release in which they first appeared.
+		ref: http://tldp.org/LDP/tlk/ipc/ipc.html Interprocess Communication Mechanisms
 
 * 进程与线程 区别和联系
 	-----
@@ -6060,6 +6101,7 @@ Storage for Interactive Services
 	  使用VRRP协议，不用改造目前的网络结构，最大限度保护了当前投资，只需最少的管理费用，却大大提升了网络性能，具有重大的应用价值。
 
 * linux
+	- arping - send ARP REQUEST to a neighbour host
 	- Linux调试工具strace和gdb常用命令小结
 		---------
 				strace（用来跟踪任何程序的系统调用）和 GDB 调试工具（用来在受控的环境中运行程序的功能齐全的调试工具）
@@ -7247,7 +7289,9 @@ Storage for Interactive Services
 	- svn 命令
 		svn log -r486678 查看某个reversion log
 
-* tddl	  取模，拆分，定位
+* tddl	TDDL动态数据源	  取模，拆分，定位
+
+	
 	参考: http://rdc.taobao.com/team/jm/archives/1645
 
 search in index find pdf 
@@ -9066,29 +9110,49 @@ search in index find pdf
 	1) HDFS HA部署之VIP(Virtual IP Address)部署
 		在HA中会有2个NameNode：Active NameNode 和Standby NameNode，刚启动时2个NN都处于Standby状态，然后手动（或自动：ZooKeeper自动选举）将一个NN变成Active状态。
 		Client端有几种方法进行Failover：
+
 		向ZooKeeper询问：
-		Client每次访问NN时，先向ZooKeeper询问当前的Active NameNode，这样就能得到正确地址，如果期间发生Failover，则Client可以再向ZooKeeper询问一次，并和新的Active NameNode进行通信。貌似fb就是采用这种方式。
+		Client每次访问NN时，先向ZooKeeper询问当前的Active NameNode，这样就能得到正确地址，如果期间发生Failover，则Client可以再向ZooKeeper询问一次，并和新的
+		Active NameNode进行通信。貌似fb就是采用这种方式。
+
 		使用Smart Client：
-		Client端配置2个NameNode的地址信息，Client每次连接时先选择一个NN的地址信息，并和其建立联系，如果该NN是Standby NameNode，则Client会收到一个StandbyException，然后Client换一个NN进行尝试。这样最后经过2次尝试，Client就可以建立和Active NameNode的通信。社区版的代码使用这种方式。
+		Client端配置2个NameNode的地址信息，Client每次连接时先选择一个NN的地址信息，并和其建立联系，如果该NN是Standby NameNode，则Client会收到一个StandbyException，
+		然后Client换一个NN进行尝试。这样最后经过2次尝试，Client就可以建立和Active NameNode的通信。社区版的代码使用这种方式。
+
 		使用VIP：
 		虽然在HA中，有2个NN，但是对于Client，只需要Active NameNode的信息。因此可以使用VIP（Virtual IP Address）方式来进行Failover。
 		•	方法：
-		1.	给Active NameNode指定一个VIP;
-		2.	Client端只配置一个VIP地址信息，即Active NameNode的地址;
-		3.	当一个NameNode变成Active 状态时，同时在该节点上配置VIP;
-		4.	当发生Failover时，不光进行NN的状态切换，还停用Standby上的VIP，启用Active上的VIP;
-		5.	当Client和Active NameNode通信出现异常时会进行尝试，一直等到Failover完成。
+		(1).	给Active NameNode指定一个VIP;
+		(2).	Client端只配置一个VIP地址信息，即Active NameNode的地址;
+		(3).	当一个NameNode变成Active 状态时，同时在该节点上配置VIP;
+		(4).	当发生Failover时，不光进行NN的状态切换，还停用Standby上的VIP，启用Active上的VIP;
+		(5).	当Client和Active NameNode通信出现异常时会进行尝试，一直等到Failover完成。
 		这种方法和Smart Client相似，不同之处在于现在只在一个VIP上进行尝试，不用切换。这样升级时，Client不用修改配置文件，当集群规模大，Client很多时，这种方式代价小。
 		VIP部署
 		接着介绍如何部署VIP
 		假设VIP为10.220.99.120,部署在网卡0上，网关为10.220.99.254：
-		1.	将VIP：10.220.99.120绑定到网卡0上;
-		2.	通知网关，这一步是必须的，这样Client可以立即感知该VIP;
-		3.	挂载fstab下所有选项;
-		4.	执行命令如下所示，需要root权限：
+		(1).	将VIP：10.220.99.120绑定到网卡0上;
+		(2).	通知网关，这一步是必须的，这样Client可以立即感知该VIP;
+		(3).	挂载fstab下所有选项;
+		(4).	执行命令如下所示，需要root权限：
 		sudo ifconfig bond0:0 10.220.99.120 netmask 255.255.255.0 up
 
 		sudo arping -c 1 -s 10.220.99.120 10.220.99.254
+			man arping说明
+			-----
+			SYNOPSIS
+				 arping [ -AbDfhqUV]  [ -c count]  [ -w deadline]  [ -s source]  -I interface destination
+			DESCRIPTION
+				Ping destination on device interface by ARP packets, using source address source.
+			OPTIONS
+				-c count
+					stop after sending count ARP REQUEST packets. With deadline option, arping  waits  for  count  ARP REPLY packets, until the timeout expires.
+				-s source
+					IP source address to use in ARP packets.  If this option is absent, source address is:
+					In DAD mode (with option -D) set to 0.0.0.0.
+					In Unsolicited ARP mode (with options -U or -A) set to destination.
+					Otherwise, it is calculated from routing tables.
+			-----
 
 		sudo mount -a
 		如果要停用VIP，则需要执行：
@@ -10363,8 +10427,27 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		linux下：
 			mysql -uxx -pxx -Ddbname < xx.sql
 		需要相应权限
-	-  mysql账户管理，账户授权
+	-  mysql账户管理，账户授权	增加用户 删除用户
 		GRANT ALL PRIVILEGES ON *.* TO 'monty'@'localhost' IDENTIFIED BY 'some_pass' WITH GRANT OPTION;
+
+		在库qatest_normal_0中创建tddl用户,授予读写数据库权限
+
+		CREATE USER ’tddl’@'%’ IDENTIFIED BY ’tddl’;
+
+		GRANT Insert,Update,Select,Delete ON qatest_normal_0.* TO ’tddl’@'%’;
+
+		PS:
+			create user 'tddl'@'10.250.8.214' identified by 'tddl';
+			Check： select * from mysql.user where user='tddl'\G;
+
+			grant insert,update,select,delete on slbapi.* to 'tddl'@'10.250.8.214';
+			
+			由于已定义了host，用其他host登陆时会报错：
+			C:\Users\xxx>mysql -utddl -ptddl
+			ERROR 1045 (28000): Access denied for user 'tddl'@'localhost' (using password: YES)
+
+			drop user tddl;
+
 	- 一些命令使用，可以参考gui工具执行命令的sql参考 比如：Aqua Data Studio ，在alter table 时可以查看preview sql
 	insert into vip (host,port,gmt_create,gmt_modify)values('host3',80,'2012-12-12 00:00:00','2012-12-12 00:00:00'); //id为自增列
 	 select last_insert_id() as id from vip limit 1 
@@ -10381,6 +10464,9 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		create user houyi@10.250.8.214;
 		set password for houyi = password('houyi');
 		GRANT ALL PRIVILEGES ON *.* TO 'houyi'@'10.250.8.214' IDENTIFIED BY 'houyi' WITH GRANT OPTION;
+	- InnoDB和MyISAM是在使用MySQL最常用的两个表类型，各有优缺点，视具体应用而定。基本的差别为：MyISAM类型不支持事务处理等高级处理，
+		而InnoDB类型支持。MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持已经外部键等高级数据库功能。
+	- DML语句，比如insert ,update, delete，如果关闭自动提交需要执行commit才会持久化；而DDL，比如alter table，是系统自动提交无法回滚
 		
 Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * php 从小例子入手
@@ -23681,6 +23767,25 @@ day238 Wednesday, February 27, 2013
 	- concurrent包
 		-  ReentrantLock
 		   A reentrant mutual exclusion Lock with the same basic behavior and semantics as the implicit monitor lock accessed using synchronized methods and statements, but with extended capabilities. 
+
+		   取锁逻辑如下：
+			Acquires the lock unless the current thread is interrupted. 
+
+			Acquires the lock if it is not held by another thread and returns immediately, setting the lock hold count to one. 
+
+			If the current thread already holds this lock then the hold count is incremented by one and the method returns immediately. 
+
+			If the lock is held by another thread then the current thread becomes disabled for thread scheduling purposes and lies dormant until one of two things happens: 
+
+			The lock is acquired by the current thread; or 
+			Some other thread interrupts the current thread. 
+			If the lock is acquired by the current thread then the lock hold count is set to one. 
+
+			PS: 如果锁被其他线程占用，则当前线程
+
+
+
+
 5. jetty,tomcat
 	架构
 	使用NIO等的剖析
@@ -25526,7 +25631,22 @@ day281 Tuesday, May 07, 2013
 			
 
 
-		6）取queue中的数据，如果没有则等待（通过上面的BlockingCell实现）
+		6）取queue中的数据，如果没有则等待
+			实现采用了concurrent包的：
+			 java.util.concurrent.LinkedBlockingQueue<E>
+			DOC
+			-----------
+			An optionally-bounded blocking queue based on linked nodes. This queue orders elements FIFO (first-in-first-out). The head of the queue is that element that 
+			has been on the queue the longest time. The tail of the queue is that element that has been on the queue the shortest time. New elements are inserted at the tail 
+			of the queue, and the queue retrieval operations obtain elements at the head of the queue. Linked queues typically have higher throughput than array-based queues 
+			but less predictable performance in most concurrent applications. 
+
+			The optional capacity bound constructor argument serves as a way to prevent excessive queue expansion. The capacity, if unspecified, is equal to Integer.MAX_VALUE. 
+			Linked nodes are dynamically created upon each insertion unless this would bring the queue above capacity. 
+
+			This class and its iterator implement all of the optional methods of the Collection and Iterator interfaces. 
+
+
 		7）AMQCommand调用transmit方法发送command，传入channel对象
 			从channel对象获取connection以完成数据写入
 			写入单位为：
@@ -25596,7 +25716,8 @@ day283 Thursday, May 09, 2013
 
 1. 
 	* 
-2. 
+
+2. 大region二期周会
 
 
 3. 
@@ -25626,3 +25747,417 @@ day283 Thursday, May 09, 2013
 
 5. mapreduce，hbase（hadoop，zookeeper）
 	zookeeper与paxos
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day284 Friday, May 10, 2013
+
+1. 
+	* 大region二期
+
+2. 大region二期
+	代码合trunk
+
+3. 
+
+4. ReentrantLock的底层实现 java concurrent
+	公平锁
+	非公平锁
+	lock时
+		若取不到锁线程不参加cpu调度，并等待
+
+	ReentrantLock类lock的实现委托给了Sync抽象类的子类，Sync子类有FairSync、NonfairSync即公平锁和不公平锁
+
+	* 公平锁和非公平锁
+		如果获取一个锁是按照请求的顺序得到的，那么就是公平锁，否则就是非公平锁。
+		
+		这两种锁出现的原因：
+				在没有深入了解内部机制及实现之前，先了解下为什么会存在公平锁和非公平锁。公平锁保证一个阻塞的线程最终能够获得锁，因为是有序的，
+			所以总是可以按照请求的顺序获得锁。不公平锁意味着后请求锁的线程可能在其前面排列的休眠线程恢复前拿到锁，这样就有可能提高并发的性能。
+			这是因为通常情况下挂起的线程重新开始与它真正开始运行，二者之间会产生严重的延时。因此非公平锁就可以利用这段时间完成操作。这是非公平锁
+			在某些时候比公平锁性能要好的原因之一。
+		
+		前面说过java.util.concurrent.locks.AbstractQueuedSynchronizer （AQS)是Lock的基础，对于一个FairSync而言，lock()就直接调用AQS的acquire(int arg);
+
+		AQS DOC说明：抽象队列同步器
+			java.util.concurrent.locks.AbstractQueuedSynchronizer
+			---------
+			Provides a framework for implementing blocking locks and related synchronizers (semaphores, events, etc) that rely on first-in-first-out (FIFO) wait queues. This class is designed to be a useful basis for most kinds 
+			of synchronizers that rely on a single atomic int value to represent state. Subclasses must define the protected methods that change this state, and which define what that state means in terms of this object being 
+			acquired or released. Given these, the other methods in this class carry out all queuing and blocking mechanics. Subclasses can maintain other state fields, but only the atomically updated int value manipulated using 
+			methods getState, setState and compareAndSetState is tracked with respect to synchronization. 
+
+			Subclasses should be defined as non-public internal helper classes that are used to implement the synchronization properties of their enclosing class. Class AbstractQueuedSynchronizer does not implement any 
+			synchronization interface. Instead it defines methods such as acquireInterruptibly that can be invoked as appropriate by concrete locks and related synchronizers to implement their public methods. 
+
+			This class supports either or both a default exclusive mode and a shared mode. When acquired in exclusive mode, attempted acquires by other threads cannot succeed. Shared mode acquires by multiple threads 
+			may (but need not) succeed. This class does not "understand" these differences except in the mechanical sense that when a shared mode acquire succeeds, the next waiting thread (if one exists) must also determine 
+			whether it can acquire as well. Threads waiting in the different modes share the same FIFO queue. Usually, implementation subclasses support only one of these modes, but both can come into play for example in a 
+			ReadWriteLock. Subclasses that support only exclusive or only shared modes need not define the methods supporting the unused mode. 
+
+			This class defines a nested ConditionObject class that can be used as a Condition implementation by subclasses supporting exclusive mode for which method isHeldExclusively reports whether synchronization is 
+			exclusively held with respect to the current thread, method release invoked with the current getState value fully releases this object, and acquire, given this saved state value, eventually restores this object to its 
+			previous acquired state. No AbstractQueuedSynchronizer method otherwise creates such a condition, so if this constraint cannot be met, do not use it. The behavior of ConditionObject depends of course on the 
+			semantics of its synchronizer implementation. 
+
+			This class provides inspection, instrumentation, and monitoring methods for the internal queue, as well as similar methods for condition objects. These can be exported as desired into classes using an 
+			AbstractQueuedSynchronizer for their synchronization mechanics. 
+
+			Serialization of this class stores only the underlying atomic integer maintaining state, so deserialized objects have empty thread queues. Typical subclasses requiring serializability will define a readObject method that 
+			restores this to a known initial state upon deserialization. 
+
+			Usage
+			To use this class as the basis of a synchronizer, redefine the following methods, as applicable, by inspecting and/or modifying the synchronization state using getState, setState and/or compareAndSetState: 
+
+			tryAcquire 
+			tryRelease 
+			tryAcquireShared 
+			tryReleaseShared 
+			isHeldExclusively 
+			Each of these methods by default throws UnsupportedOperationException. Implementations of these methods must be internally thread-safe, and should in general be short and not block. Defining these methods is 
+			the only supported means of using this class. All other methods are declared final because they cannot be independently varied. 
+			You may also find the inherited methods from AbstractOwnableSynchronizer useful to keep track of the thread owning an exclusive synchronizer. You are encouraged to use them -- this enables monitoring and 
+			diagnostic tools to assist users in determining which threads hold locks. 
+
+			Even though this class is based on an internal FIFO queue, it does not automatically enforce FIFO acquisition policies. The core of exclusive synchronization takes the form: 
+
+			 Acquire:
+			     while (!tryAcquire(arg)) {
+				enqueue thread if it is not already queued;
+				possibly block current thread;
+			     }
+
+			 Release:
+			     if (tryRelease(arg))
+				unblock the first queued thread;
+			 
+			(Shared mode is similar but may involve cascading signals.) 
+			Because checks in acquire are invoked before enqueuing, a newly acquiring thread may barge ahead of others that are blocked and queued. However, you can, if desired, define tryAcquire and/or tryAcquireShared to disable barging by internally invoking one or more of the inspection methods. In particular, a strict FIFO lock can define tryAcquire to immediately return false if getFirstQueuedThread does not 
+			return the current thread. A normally preferable non-strict fair version can immediately return false only if hasQueuedThreads returns true and getFirstQueuedThread is not the current thread; or equivalently, that 
+			getFirstQueuedThread is both non-null and not the current thread. Further variations are possible. 
+
+			Throughput and scalability are generally highest for the default barging (also known as greedy, renouncement, and convoy-avoidance) strategy. While this is not guaranteed to be fair or starvation-free, earlier queued 
+			threads are allowed to recontend before later queued threads, and each recontention has an unbiased chance to succeed against incoming threads. Also, while acquires do not "spin" in the usual sense, they may 
+			perform multiple invocations of tryAcquire interspersed with other computations before blocking. This gives most of the benefits of spins when exclusive synchronization is only briefly held, without most of the 
+			liabilities when it isn't. If so desired, you can augment this by preceding calls to acquire methods with "fast-path" checks, possibly prechecking hasContended and/or hasQueuedThreads to only do so if the 
+			synchronizer is likely not to be contended. 
+
+			This class provides an efficient and scalable basis for synchronization in part by specializing its range of use to synchronizers that can rely on int state, acquire, and release parameters, and an internal FIFO wait 
+			queue. When this does not suffice, you can build synchronizers from a lower level using atomic classes, your own custom java.util.Queue classes, and LockSupport blocking support. 
+
+			Usage Examples
+			Here is a non-reentrant mutual exclusion lock class that uses the value zero to represent the unlocked state, and one to represent the locked state. While a non-reentrant lock does not strictly require recording of the 
+			current owner thread, this class does so anyway to make usage easier to monitor. It also supports conditions and exposes one of the instrumentation methods: 
+
+			 class Mutex implements Lock, java.io.Serializable {
+
+			   // Our internal helper class
+			   private static class Sync extends AbstractQueuedSynchronizer {
+			     // Report whether in locked state
+			     protected boolean isHeldExclusively() {
+			       return getState() == 1;
+			     }
+
+			     // Acquire the lock if state is zero
+			     public boolean tryAcquire(int acquires) {
+			       assert acquires == 1; // Otherwise unused
+			       if (compareAndSetState(0, 1)) {
+				 setExclusiveOwnerThread(Thread.currentThread());
+				 return true;
+			       }
+			       return false;
+			     }
+
+			     // Release the lock by setting state to zero
+			     protected boolean tryRelease(int releases) {
+			       assert releases == 1; // Otherwise unused
+			       if (getState() == 0) throw new IllegalMonitorStateException();
+			       setExclusiveOwnerThread(null);
+			       setState(0);
+			       return true;
+			     }
+
+			     // Provide a Condition
+			     Condition newCondition() { return new ConditionObject(); }
+
+			     // Deserialize properly
+			     private void readObject(ObjectInputStream s)
+				 throws IOException, ClassNotFoundException {
+			       s.defaultReadObject();
+			       setState(0); // reset to unlocked state
+			     }
+			   }
+
+			   // The sync object does all the hard work. We just forward to it.
+			   private final Sync sync = new Sync();
+
+			   public void lock()                { sync.acquire(1); }
+			   public boolean tryLock()          { return sync.tryAcquire(1); }
+			   public void unlock()              { sync.release(1); }
+			   public Condition newCondition()   { return sync.newCondition(); }
+			   public boolean isLocked()         { return sync.isHeldExclusively(); }
+			   public boolean hasQueuedThreads() { return sync.hasQueuedThreads(); }
+			   public void lockInterruptibly() throws InterruptedException {
+			     sync.acquireInterruptibly(1);
+			   }
+			   public boolean tryLock(long timeout, TimeUnit unit)
+			       throws InterruptedException {
+			     return sync.tryAcquireNanos(1, unit.toNanos(timeout));
+			   }
+			 }
+			 
+			Here is a latch class that is like a CountDownLatch except that it only requires a single signal to fire. Because a latch is non-exclusive, it uses the shared acquire and release methods. 
+
+			 class BooleanLatch {
+
+			   private static class Sync extends AbstractQueuedSynchronizer {
+			     boolean isSignalled() { return getState() != 0; }
+
+			     protected int tryAcquireShared(int ignore) {
+			       return isSignalled()? 1 : -1;
+			     }
+
+			     protected boolean tryReleaseShared(int ignore) {
+			       setState(1);
+			       return true;
+			     }
+			   }
+
+			   private final Sync sync = new Sync();
+			   public boolean isSignalled() { return sync.isSignalled(); }
+			   public void signal()         { sync.releaseShared(1); }
+			   public void await() throws InterruptedException {
+			     sync.acquireSharedInterruptibly(1);
+			   }
+			 }
+			 
+			Since:
+			1.5
+			--------
+			PS:
+				 java concurrnt包提供Semaphore的实现java.util.concurrent.Semaphore。A counting semaphore. Conceptually, a semaphore maintains a set of permits. 区别于单个锁
+				 一般用于只允许一定数目线程的去访问资源（物理或逻辑）的场景，比如用于对象池的控制 。下面是一个使用Semaphore的例子，摘自其DOC:
+				 -------
+				class Pool {
+				   private static final int MAX_AVAILABLE = 100;
+				   private final Semaphore available = new Semaphore(MAX_AVAILABLE, true);
+
+				   public Object getItem() throws InterruptedException {
+				     available.acquire();
+				     return getNextAvailableItem();
+				   }
+
+				   public void putItem(Object x) {
+				     if (markAsUnused(x))
+				       available.release();
+				   }
+
+				   // Not a particularly efficient data structure; just for demo
+
+				   protected Object[] items = ... whatever kinds of items being managed
+				   protected boolean[] used = new boolean[MAX_AVAILABLE];
+
+				   protected synchronized Object getNextAvailableItem() {
+				     for (int i = 0; i < MAX_AVAILABLE; ++i) {
+				       if (!used[i]) {
+					  used[i] = true;
+					  return items[i];
+				       }
+				     }
+				     return null; // not reached
+				   }
+
+				   protected synchronized boolean markAsUnused(Object item) {
+				     for (int i = 0; i < MAX_AVAILABLE; ++i) {
+				       if (item == items[i]) {
+					  if (used[i]) {
+					    used[i] = false;
+					    return true;
+					  } else
+					    return false;
+				       }
+				     }
+				     return false;
+				   }
+
+				 }
+				 -------
+				 PS: 先Semaphore.acquire()拿到锁，然后调用同步方法（有多个线程并发操作）getNextAvailableItem()方法以获取资源。-tip-
+
+		from: http://www.blogjava.net/xylz/archive/2010/07/07/325410.html
+	
+6. 并行开发 ，svn，多个branch并行开发
+	对于公用部分的修改，必须加注释，以便与与其他分支合并代码时解决冲突
+
+7. org.springframework.web.filter.CharacterEncodingFilter
+	设置request和response的http编码头
+	-----
+	if (this.encoding != null && (this.forceEncoding || request.getCharacterEncoding() == null)) {
+		request.setCharacterEncoding(this.encoding);
+		if (this.forceEncoding) {
+			response.setCharacterEncoding(this.encoding);
+		}
+	}
+	-----
+
+	-----
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>GBK</param-value>
+		</init-param>
+	</filter>
+	-----
+
+8. grep
+	匹配项前几行，后几行
+	jstack 18600 | grep RUNNABLE -B3 -A10
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day285 Monday, May 13, 2013
+
+1. 
+	* 大region二期
+2. 大region二期
+	- 连调测试
+		imageNo： rhel5u7_64_20G_alibase_v01.vhd
+		create_vm
+		start_vm 
+			running
+	- 
+
+	8.212搭建api环境
+	jetty-env: 
+		cd /home/admin/houyi
+		svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/console/jetty-env/houyi/ .
+		mkdir src
+		vim build.sh
+	java env
+	maven env
+		add mvn to $PATH
+			vim ~/.bash_profile
+			export PATH=/xxx/bin:$PATH
+			source ~/.bash_profile
+		chmod +x mvn
+
+
+
+
+
+
+4. JVM Speci	jvm规范阅读	* jvm spec
+Chapter 2. The Structure of the Java Virtual Machine
+	2.1 The class File Format
+	2.2 Data Types
+		Like the Java programming language, the Java Virtual Machine operates on two kinds of types: primitive types and reference types. There are, correspondingly, two kinds of values 
+		that can be stored in variables, passed as arguments, returned by methods, and operated upon: primitive values and reference values.
+	2.3 Primitive Types and Values
+	2.4 Reference Types and Values
+		There are three kinds of reference types: class types, array types, and interface types. Their values are references to dynamically created class instances, arrays, or class instances or 
+		arrays that implement interfaces, respectively.
+	2.5 Run-Time Data Areas
+		The Java Virtual Machine defines various run-time data areas that are used during execution of a program. Some of these data areas are created on Java Virtual Machine start-up and 
+		are destroyed only when the Java Virtual Machine exits. Other data areas are per thread. Per-thread data areas are created when a thread is created and destroyed when the thread exits.
+		2.5.1 The pc Register
+			The Java Virtual Machine can support many threads of execution at once (JLS §17). Each Java Virtual Machine thread has its own pc (program counter) register. At any point, 
+			each Java Virtual Machine thread is executing the code of a single method, namely the current method (§2.6) for that thread. If that method is not native, the pc register contains the 
+			address of the Java Virtual Machine instruction currently being executed. If the method currently being executed by the thread is native, the value of the Java Virtual Machine's pc register 
+			is undefined. The Java Virtual Machine's pc register is wide enough to hold a returnAddress or a native pointer on the specific platform.
+		2.5.2. Java Virtual Machine Stacks
+			Each Java Virtual Machine thread has a private Java Virtual Machine stack, created at the same time as the thread. A Java Virtual Machine stack stores frames (§2.6). A Java Virtual 
+			Machine stack is analogous to the stack of a conventional language such as C: it holds local variables and partial results, and plays a part in method invocation and return. Because the 
+			Java Virtual Machine stack is never manipulated directly except to push and pop frames, frames may be heap allocated. The memory for a Java Virtual Machine stack does not need to
+			be contiguous.
+
+			线程栈大小的可配置
+			A Java Virtual Machine implementation may provide the programmer or the user control over the initial size of Java Virtual Machine stacks, as well as, in the case of dynamically expanding 
+			or contracting Java Virtual Machine stacks, control over the maximum and minimum sizes.
+
+			The following exceptional conditions are associated with Java Virtual Machine stacks:
+				If the computation in a thread requires a larger Java Virtual Machine stack than is permitted, the Java Virtual Machine throws a StackOverflowError.
+
+				If Java Virtual Machine stacks can be dynamically expanded, and expansion is attempted but insufficient memory can be made available to effect the expansion, or if insufficient memory can be 
+				made available to create the initial Java Virtual Machine stack for a new thread, the Java Virtual Machine throws an OutOfMemoryError.
+
+		2.5.3. Heap
+			The Java Virtual Machine has a heap that is shared among all Java Virtual Machine threads. The heap is the run-time data area from which memory for all class instances and arrays is allocated.
+
+			The heap is created on virtual machine start-up. Heap storage for objects is reclaimed by an automatic storage management system (known as a garbage collector); objects are never explicitly 
+			deallocated. The Java Virtual Machine assumes no particular type of automatic storage management system, and the storage management technique may be chosen according to the implementor's
+			system requirements. The heap may be of a fixed size or may be expanded as required by the computation and may be contracted if a larger heap becomes unnecessary. The memory for the heap 
+			does not need to be contiguous.
+
+			A Java Virtual Machine implementation may provide the programmer or the user control over the initial size of the heap, as well as, if the heap can be dynamically expanded or contracted, control 
+			over the maximum and minimum heap size.
+
+			The following exceptional condition is associated with the heap:
+				If a computation requires more heap than can be made available by the automatic storage management system, the Java Virtual Machine throws an OutOfMemoryError.
+
+		2.5.4. Method Area
+			The Java Virtual Machine has a method area that is shared among all Java Virtual Machine threads. The method area is analogous to the storage area for compiled code of a conventional 
+			language or analogous to the "text" segment in an operating system process. It stores per-class structures such as the run-time constant pool, field and method data, and the code for methods and 
+			constructors, including the special methods (§2.9) used in class and instance initialization and interface initialization.
+
+			The method area is created on virtual machine start-up. Although the method area is logically part of the heap(逻辑上属于heap), simple implementations may choose not to either garbage collect 
+			or compact it. This version of the Java Virtual Machine specification does not mandate the location of the method area or the policies used to manage compiled code. The method area may be of a fixed size 
+			or may be expanded as required by the computation and may be contracted if a larger method area becomes unnecessary. The memory for the method area does not need to be contiguous.
+
+			A Java Virtual Machine implementation may provide the programmer or the user control over the initial size of the method area, as well as, in the case of a varying-size method area, control over 
+			the maximum and minimum method area size.
+
+			The following exceptional condition is associated with the method area:
+				If memory in the method area cannot be made available to satisfy an allocation request, the Java Virtual Machine throws an OutOfMemoryError.
+
+		2.5.5. Run-Time Constant Pool
+			A run-time constant pool is a per-class or per-interface run-time representation of the constant_pool table in a class file (§4.4). It contains several kinds of constants, ranging from numeric 
+			literals known at compile-time to method and field references that must be resolved at run-time. The run-time constant pool serves a function similar to that of a symbol table for a conventional 
+			programming language, although it contains a wider range of data than a typical symbol table.
+
+			Each run-time constant pool is allocated from the Java Virtual Machine's method area (§2.5.4). The run-time constant pool for a class or interface is constructed when the class or interface is 
+			created (§5.3) by the Java Virtual Machine.
+
+		2.5.6. Native Method Stacks
+			An implementation of the Java Virtual Machine may use conventional stacks, colloquially called "C stacks," to support native methods (methods written in a language other than the Java 
+			programming language). Native method stacks may also be used by the implementation of an interpreter for the Java Virtual Machine's instruction set in a language such as C. Java Virtual Machine 
+			implementations that cannot load native methods and that do not themselves rely on conventional stacks need not supply native method stacks. If supplied, native method stacks are typically 
+			allocated per thread when each thread is created.
+
+			This specification permits native method stacks either to be of a fixed size or to dynamically expand and contract as required by the computation. If the native method stacks are of a fixed size, 
+			the size of each native method stack may be chosen independently when that stack is created.
+
+			A Java Virtual Machine implementation may provide the programmer or the user control over the initial size of the native method stacks, as well as, in the case of varying-size native method stacks, 
+			control over the maximum and minimum method stack sizes.
+
+		more...
+
+	ref: http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html
+
+5. OOB（Out of Band Management System）带外管理系统
+	
+6. 定位工作目录
+	cd `dirname $0`/..	CD到执行文件所在目录的上级目录
+	BASE_HOME=`pwd`	取到目录路径
+
+7.java序列化
+	memcached java客户端对set进去的对象的序列化
+	它提供了NativeHandler类来优化一些标准java类型的编码以提升性能：Handle encoding standard Java types directly which can result in significant memory savings: 
+
+	比如对于boolean类型，client存储时先判断是否为标准且支持本地优化的类型，如果是，则以byte[]的方式存入远程memcached服务器中，get时，也是读取byte[]
+	来判断，并在client端构造对象返回，从而省去了双向序列化的消耗。
+
+	public class ObjectInputStream extends InputStream implements ObjectInput, ObjectStreamConstants
+		ObjectInputStream首先是一个流对象，继承了InputStream；然后具有ObjectInput功能；实现ObjectStreamConstants接口以使用对象序列化过程中要用到的常量。
+	ObjectInput接口继承自DataInput接口，扩展了对象input的支持（比如对象，数组，和字符串）：
+		DataInput includes methods for the input of primitive types, ObjectInput extends that interface to include objects, arrays, and Strings.
+	
+
+	
+8. StringBuilder，StringBuffer相对String，在大量字符串拼接时的优势在哪里？
+	String是不可变对象，每次修改都会产生新的字符串对象，GC回收压力大；
+	StringBuilder，StringBuffer在字符串拼接时，不会产生新的字符串，而是在申请的缓存区域存入了字符串的byte[]数据，以细粒度的方式存储最新的字符串的byte[]数组
+	表示
+
+9. 不只是为求一份工作而读书
