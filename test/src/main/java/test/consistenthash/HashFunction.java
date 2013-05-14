@@ -1,10 +1,11 @@
 package test.consistenthash;
 
+import org.eclipse.jetty.util.security.Credential.MD5;
+
 public class HashFunction {
 
 	public Integer hash(Object key) {
-		// TODO Auto-generated method stub
-		return null;
+		return hash(MD5.digest(key.toString()));
 	}
 
 	
