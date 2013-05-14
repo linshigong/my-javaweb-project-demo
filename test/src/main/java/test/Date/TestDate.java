@@ -42,6 +42,10 @@ public class TestDate {
 		}else{
 			System.out.println("same day");
 		}
+		
+		//
+		int i = 2;
+		System.out.println(i);
 	}
 	
 }
