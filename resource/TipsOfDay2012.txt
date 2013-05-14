@@ -13,6 +13,28 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* CRC32 * CRC-32(Cyclic redundancy check)	循环冗余校验
+	- http://www.52rd.com/Blog/Detail_RD.Blog_zx_zx_13124.html
+	- 
+		ref: http://en.wikipedia.org/wiki/Cyclic_redundancy_check
+	- 循环冗余校验 CRC的算法分析和程序实现
+		通信的目的是要把信息及时可靠地传送给对方，因此要求一个通信系统传输消息必须可靠与快速，在数字通信系统中可靠与快速往往是一对矛盾。为了解决可靠性，
+		通信系统都采用了差错控制。本文详细介绍了循环冗余校验CRC（Cyclic Redundancy Check）的差错控制原理及其算法实现。
+
+		关键字：通信 循环冗余校验  CRC-32  CRC-16  CRC-4
+
+
+
+	from: http://www.cnblogs.com/Qia_sky/archive/2005/03/07/114493.html
+	
+* java基本数据类型所占字节，unicode编码
+	byte  1个字节（8个bit）
+	short 2个字节
+	char  2个字节
+	int   4个字节
+	long  8个字节
+	float 4个字节
+	double 8个字节
 * 不只是为求一份工作而读书
 	Hard learing not just for a job!
 * 强烈的求知欲
@@ -3319,6 +3341,8 @@ ftian20130102
 	from: http://baike.baidu.com/view/1993870.htm
 
 	- 官网 http://hbase.apache.org/
+	- BI，大规模分布式计算，分布式存储
+
 
 * VPC * Amazon Virtual Private Cloud (Amazon VPC) 自定义网络 
 	- Amazon VPC
@@ -9718,10 +9742,16 @@ It is also an FTP application platform. We have developed a Java API to let you 
 
 	- 使用外部缓存框架，对应程序，通过统一接口调用，
 	- memcached的交互接口
-			    memcached的客户端通过TCP连接与服务器通信（UDP协议的接口也可以使用，详细说明请参考”UDP 协议”部分）。一个给定的运行中的memcached服务器在某个（可配置的）端口上监听连接；客户端连接该端口，发送命令给服务器，读取反馈，最后关闭连接。
-	       没有必要发送一个专门的命令去结束会话。客户端可以在不需要该连接的时候就关闭它。注意：我们鼓励客户端缓存它们与服务器的连接，而不是每次要存储或读取数据的时候再次重新建立与服务器的连接。memcache同时打开很多连接不会对性能造成到大的影响，这是因为memcache在设计之处，就被设计成即使打开了很多连接（数百或者需要时上千个连接）也可以高效的运行。缓存连接可以节省与服务器建立TCP连接的时间开销（于此相比，在服务器段为建立一个新的连接所做准备的开销可以忽略不计）。
-	       memcache通信协议有两种类型的数据：文本行和非结构化数据。文本行用来发送从客户端到服务器的命令以及从服务器回送的反馈信息。非结构化的数据用在客户端希望存储或者读取数据时。服务器会以字符流的形式严格准确的返回相应数据在存储时存储的数据。服务器不关注字节序，它也不知道字节序的存在。memcahce对非结构化数据中的字符没有任何限制，可以是任意的字符，读取数据时，客户端可以在前次返回的文本行中确切的知道接下来的数据块的长度。
-	       文本行通常以“"r"n”结束。非结构化数据通常也是以“"r"n”结束，尽管"r、"n或者其他任何8位字符可以出现在数据块中。所以当客户端从服务器读取数据时，必须使用前面提供的数据块的长度，来确定数据流的结束，二不是依据跟随在字符流尾部的“"r"n”来确定数据流的结束，尽管实际上数据流格式如此。
+			memcached的客户端通过TCP连接与服务器通信（UDP协议的接口也可以使用，详细说明请参考”UDP 协议”部分）。一个给定的运行中的memcached服务器在某个（可配置的）端
+		口上监听连接；客户端连接该端口，发送命令给服务器，读取反馈，最后关闭连接。
+	       没有必要发送一个专门的命令去结束会话。客户端可以在不需要该连接的时候就关闭它。注意：我们鼓励客户端缓存它们与服务器的连接，而不是每次要存储或读取数据的时候再次重
+	       新建立与服务器的连接。memcache同时打开很多连接不会对性能造成到大的影响，这是因为memcache在设计之处，就被设计成即使打开了很多连接（数百或者需要时上千个连接）也可
+	       以高效的运行。缓存连接可以节省与服务器建立TCP连接的时间开销（于此相比，在服务器段为建立一个新的连接所做准备的开销可以忽略不计）。
+	       memcache通信协议有两种类型的数据：文本行和非结构化数据。文本行用来发送从客户端到服务器的命令以及从服务器回送的反馈信息。非结构化的数据用在客户端希望存储或者读取
+	       数据时。服务器会以字符流的形式严格准确的返回相应数据在存储时存储的数据。服务器不关注字节序，它也不知道字节序的存在。memcahce对非结构化数据中的字符没有任何限制，
+	       可以是任意的字符，读取数据时，客户端可以在前次返回的文本行中确切的知道接下来的数据块的长度。
+	       文本行通常以“"r"n”结束。非结构化数据通常也是以“"r"n”结束，尽管"r、"n或者其他任何8位字符可以出现在数据块中。所以当客户端从服务器读取数据时，必须使用前面提供的数据块的
+	       长度，来确定数据流的结束，二不是依据跟随在字符流尾部的“"r"n”来确定数据流的结束，尽管实际上数据流格式如此。
 
 	c 实现
 	项目主页: http://code.google.com/p/memcached/wiki/Clients	
@@ -25346,7 +25376,7 @@ day274 Thursday, April 25, 2013
 		PS: 无论setConnectBlocking是否为true，通道都是非阻塞的；区别在于上面这段代码的分支中，建立连接是否会阻塞
 		如果为false，则connect方法立即返回，由应用去保证连接已建立以及获取结果的逻辑处理
 
-4. QA测试环境
+4. QA测试环境	AT03-HOUYI-AG
 	10.250.6.27
 	ssh 10.230.204.19
 	go2houyi2
@@ -26142,7 +26172,7 @@ Chapter 2. The Structure of the Java Virtual Machine
 	BASE_HOME=`pwd`	取到目录路径
 
 7.java序列化
-	memcached java客户端对set进去的对象的序列化
+	memcached java客户端对set进去的对象的序列化 * memcached client分析
 	它提供了NativeHandler类来优化一些标准java类型的编码以提升性能：Handle encoding standard Java types directly which can result in significant memory savings: 
 
 	比如对于boolean类型，client存储时先判断是否为标准且支持本地优化的类型，如果是，则以byte[]的方式存入远程memcached服务器中，get时，也是读取byte[]
@@ -26161,3 +26191,102 @@ Chapter 2. The Structure of the Java Virtual Machine
 	表示
 
 9. 不只是为求一份工作而读书
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day286 Tuesday, May 14, 2013
+
+1. 
+	* 大region二期
+
+2. 大region二期
+	连调
+	add_disk
+	create_snapshot
+		data disk
+		system disk
+	create_image
+	基于自定义image，create_vm
+	start_vm
+
+
+
+
+
+
+4.  in two's complement binary form.
+	二进制格式
+
+5. memcached java client * memcached client
+	cient在调用set存入integer类型对象时，不是直接将其byte[]存入memcached中，而是做了转换：
+	-----
+	protected static byte[] getBytes( int value ) {
+			byte[] b = new byte[4];
+			b[0] = (byte)((value >> 24) & 0xFF);
+			b[1] = (byte)((value >> 16) & 0xFF);
+			b[2] = (byte)((value >> 8) & 0xFF);
+			b[3] = (byte)((value >> 0) & 0xFF);
+			return b;
+	}
+	-----
+	后续将此byte[]存入服务器中,写入时，分两行一行为命令、超时，key等消息，换行行写入value消息，都以byte[]方式写入流中，flush输出流后，开始
+	阻塞读取socket的输入流。
+	-----
+	//存入了value的长度，以便于读取时根据长度取到value的byte[]，/r/n可能会在value中出现，故不能作为分隔符
+	String cmd = String.format( "%s %s %d %d %d\r\n", cmdname, key, flags, (expiry.getTime() / 1000), val.length );
+	sock.write( cmd.getBytes() );
+	sock.write( val );
+	sock.write( "\r\n".getBytes() );
+	sock.flush();
+	-----
+
+	支持数据压缩：
+		java.util.zip.GZIPOutputStream通过这个过滤器流对数据压缩后写入，装饰器模式（过滤器模式），装饰DeflaterOutputStream类，
+			在java.util.zip.*包下，包含与压缩相关的api
+				CRC-32	计算校验码
+				java.util.zip.CRC32
+				A class that can be used to compute the CRC-32 of a data stream.
+
+				java.util.zip.Deflater
+				-------
+				This class provides support for general purpose compression using the popular ZLIB compression library. The ZLIB compression library was initially developed as part of 
+				the PNG graphics standard and is not protected by patents. It is fully described in the specifications at the java.util.zip package description. 
+
+				The following code fragment demonstrates a trivial compression and decompression of a string using Deflater and Inflater. 
+
+				 try {
+				     // Encode a String into bytes
+				     String inputString = "blahblahblah\u20AC\u20AC";
+				     byte[] input = inputString.getBytes("UTF-8");
+
+				     // Compress the bytes
+				     byte[] output = new byte[100];
+				     Deflater compresser = new Deflater();
+				     compresser.setInput(input);
+				     compresser.finish();
+				     int compressedDataLength = compresser.deflate(output);
+
+				     // Decompress the bytes
+				     Inflater decompresser = new Inflater();
+				     decompresser.setInput(output, 0, compressedDataLength);
+				     byte[] result = new byte[100];
+				     int resultLength = decompresser.inflate(result);
+				     decompresser.end();
+
+				     // Decode the bytes into a String
+				     String outputString = new String(result, 0, resultLength, "UTF-8");
+				 } catch(java.io.UnsupportedEncodingException ex) {
+				     // handle
+				 } catch (java.util.zip.DataFormatException ex) {
+				     // handle
+				 }
+				-------
+
+6. OCM UMM 业务
+	OSS Control Module（简称 OCM）为 OSS 上层的应用提供控制 OSS 的接口，
+	同时方便 PE、运营同学查询、调节 OSS 参数使用。OCM 继续遵循 OSS 的 REST 接口风格，所有请求被抽象成四类请求：PUT，GET，HEAD 和 DELETE。O
+
+	用户管理组件（User Management Module, UMM）负责管理飞天对外服务1的所有用户以及用户的 Access ID/Key。本文档是用户管理组件的设计、开发指南。
+	描述了用户管理模块中的基本概念、提供的服务以及可用的 API。
+
+
+
