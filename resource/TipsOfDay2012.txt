@@ -19947,6 +19947,9 @@ day130 Tuesday, September 11, 2012
 
 		loadbalance，分布式存储
 
+		网络：
+		http://www.cnblogs.com/biangbiang/archive/2013/05/17/3083421.html
+
 
 
 2. 
@@ -26490,11 +26493,77 @@ day288 Thursday, May 16, 2013
 	Object对象的wait,notify,notifyall方法
 		取得对象锁后才能操作
 	Thread类的sleep，yield，join
-		
-		
-
-
-
 
 
 5. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day289 Friday, May 17, 2013
+
+1. 
+	* 大region二期
+	* 合唱团项目
+2. 大region二期
+	bugfix
+	ApsaraCommandExecutor2类抛出的CLCSuspendedException异常被部分service捕获，且没有继续抛出，导致AbstractExecuteAction类无法捕获此错误，也就无法
+	将-100, "houyi System is maintaining"抛出。
+
+	解决：
+		排查代码中ApsaraCommandExecutor2类返回到AbstractExecuteAction类的过程中，拦截了并消化了CLCSuspendedException异常的点，修改为继续抛出CLCSuspendedException
+		异常。
+		-----
+		catch (CLCSuspendedException e) {
+			logger.info(e.getMessage());
+			throw e;
+		}
+		-----
+
+		修改点：      从apsa2的execute方法反查，并结合全局搜索service层捕获Exception和Throwable的地方
+			InstanceServiceHelper
+				98
+			InstanceServiceImpl
+				1297
+				249
+			IpAddressServiceImpl
+				257
+				280
+				498
+				521
+				581
+				695
+				767
+			CommandExecutorServiceImpl
+				21
+				38
+			GroupServiceImpl
+				251
+		
+		演练：
+		发布步骤修改：
+			版本修改
+			关闭region的脚本，替换为支持检查是否为masterRegion的脚本
+				http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20130228trailbreaker
+				此版本用的mysql账号是读写账号，用db.Houyi()拿到的是只读账号，需要如此定义：db.Houyi(read_only=False)
+		API提供版本信息，每次发布好后，QA等人员可以判断部署的版本。
+			
+3. 合唱团项目
+	kickoff
+	部分需求再明确
+		过滤接口参考aws？
+
+	AOne中细分任务和开发人
+
+	设计文档编写
+		确认需求
+		设计
+		
+		开发
+4. design patten
+	命令模式
+		封装方法调用，
+
+		应用场景：如log，undo操作等
+
+
+
+

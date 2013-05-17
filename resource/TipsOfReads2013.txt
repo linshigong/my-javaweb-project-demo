@@ -400,6 +400,10 @@ Chapter6 Command Patten(命令模式)
 	our crystallized method to get it done. We can also do some wickedly smart things with
 	these encapsulated method invocations, like save them away for logging or reuse them to
 	implement undo in our code.
+	封装方法调用，调用者无需知道调用过程；另外也可用于记录log和常用逻辑到undo实现中，比如一些ide提供的
+	撤销功能。
+
+
 
 	
 
