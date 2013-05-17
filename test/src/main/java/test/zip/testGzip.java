@@ -30,6 +30,7 @@ public class testGzip {
 			//write
 			gos = new GZIPOutputStream(baos);
 			gos.write(v2.getBytes("utf-8"),0,v2.getBytes("utf-8").length);
+			gos.write(v2.getBytes("utf-8"),0,v2.getBytes("utf-8").length);
 			gos.finish();
 			gos.close();
 			
