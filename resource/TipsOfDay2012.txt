@@ -13,6 +13,41 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* 线程状态 对象锁
+	------
+	线程在一定条件下，状态会发生变化。线程变化的状态转换图如下：
+	　　1) 新建状态(New)：新创建了一个线程对象。
+	　　2) 就绪状态(Runnable)：线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于可运行线程池中，变得可运行，等待获取CPU的使用权。
+	　　3) 运行状态(Running)：就绪状态的线程获取了CPU，执行程序代码。
+	　　4) 阻塞状态(Blocked)：阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：
+	　　(一)、等待阻塞：运行的线程执行wait()方法，JVM会把该线程放入等待池中。
+	　　(二)、同步阻塞：运行的线程在获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池中。
+	　　(三)、其他阻塞：运行的线程执行sleep()或join()方法，或者发出了I/O请求时，JVM会把该线程置为阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、
+	或者I/O处理完毕时，线程重新转入就绪状态。
+	　　5) 死亡状态(Dead)：线程执行完了或者因异常退出了run()方法，该线程结束生命周期。
+		状态图：
+
+	小小的作下解释： 
+	1) 线程的实现有两种方式，一是继承Thread类，二是实现Runnable接口，但不管怎样，当我们new了这个对象后，线程就进入了初始状态； 
+	2) 当该对象调用了start()方法，就进入可运行状态； 
+	3) 进入可运行状态后，当该对象被操作系统选中，获得CPU时间片就会进入运行状态； 
+	4) 进入运行状态后情况就比较复杂了 
+		4.1) run()方法或main()方法结束后，线程就进入终止状态； 
+		4.2) 当线程调用了自身的sleep()方法或其他线程的join()方法，就会进入阻塞状态（该状态既停止当前线程，但并不释放所占有的资源）。当sleep()结束或join()结束后，
+		该线程进入可运行状态，继续等待OS分配时间片； 
+		4.3) 线程调用了yield()方法，意思是放弃当前获得的CPU时间片，回到可运行状态，这时与其他进程处于同等竞争状态，OS有可能会接着又让这个进程进入运行状态； 
+		4.4) 当线程刚进入可运行状态（注意，还没运行），发现将要调用的资源被synchroniza（同步），获取不到锁标记，将会立即进入锁池状态，等待获取锁标记（这时的锁池里
+		也许已经有了其他线程在等待获取锁标记，这时它们处于队列状态，既先到先得），一旦线程获得锁标记后，就转入可运行状态，等待OS分配CPU时间片； 
+		4.5) 当线程调用wait()方法后会进入等待队列（进入这个状态会释放所占有的所有资源，与阻塞状态不同），进入这个状态后，是不能自动唤醒的，必须依靠其他线程调用notify()
+		或notifyAll()方法才能被唤醒（由于notify()只是唤醒一个线程，但我们由不能确定具体唤醒的是哪一个线程，也许我们需要唤醒的线程不能够被唤醒，因此在实际使用时，一般都用
+		notifyAll()方法，唤醒有所线程），线程被唤醒后会进入锁池，等待获取锁标记。 
+	------
+	from: http://hi.baidu.com/guessa/item/a50014c95b17d30fad092f93
+
+* Reactor：构建JVM异步应用的基础框架
+　　Spring 社区今天推出了一个名为 Reactor 的基础框架，主要用于帮助开发者创建基于 JVM 的异步应用程序。该框架提供了 Java、Groovy 等 JVM 语言的抽象，
+	使得开发者构建事件/数据驱动的应用程序更加容易。 
+
 * CRC32 * CRC-32(Cyclic redundancy check)	循环冗余校验
 	- http://www.52rd.com/Blog/Detail_RD.Blog_zx_zx_13124.html
 	- 
@@ -48,7 +83,7 @@ ft2013-04-22
 	normally. It is the shell which sets up these temporary pipes between the processes.
 
 
-* IPC Mechanisms (Inter-Process Communication Mechanisms) MQ消息 rabbitmq客户端jar实现用到此机制
+* IPC Mechanisms (Inter-Process Communication Mechanisms) 进程间通信机制 MQ消息 rabbitmq客户端jar实现用到此机制
 	- Explain difference between IPC mechanisms? 各种IPC机制类型的区别
 		----------
 		ipc mechanisms are mianly 5 types
@@ -85,7 +120,7 @@ ft2013-04-22
 
 	- MQ的实现，涉及到IPC Mechanisms实现类型中的Message Queue，通过消息队列实现
 
-	- linux系统中支持IPC mechanism
+	- linux系统中提供IPC mechanism支持的方式
 		Processes communicate with each other and with the kernel to coordinate their activities. Linux supports a number of Inter-Process Communication (IPC) mechanisms. 
 		Signals and pipes are two of them but Linux also supports the System V IPC mechanisms named after the Unix TM release in which they first appeared.
 		ref: http://tldp.org/LDP/tlk/ipc/ipc.html Interprocess Communication Mechanisms
@@ -1971,6 +2006,9 @@ ft2013-04-22
 	PS: Servlet通过规范定义的request/response paradigm与servlet容器交互，容器负责连接接收和相应，servlet负责逻辑
 
 * java
+	- java se tutorial jdk tutorial
+		ref: http://docs.oracle.com/javase/specs/jls/se5.0/html/j3TOC.html
+
 	- 接口中定义的方法都为抽象方法，若不显示声明abstract，编译器会加上；接口是一种特殊的抽象类；
 	- 注释DOC
 		链接
@@ -7212,12 +7250,32 @@ Storage for Interactive Services
 
 		接下来逐一介绍
 		from：http://www.cnblogs.com/aurawing/articles/1887056.html
-	- volatile / Java中的volatile关键字	 
-		关于volatile
-			我们知道，在Java中设置变量值的操作，除了long和double类型的变量外都是原子操作，也就是说，对于变量值的简单读写操作没有必要进行同步。这在JVM 1.2之前，Java的内存模型实现
-		总是从主存读取变量，是不需要进行特别的注意的。而随着JVM的成熟和优化，现在在多线程环境下volatile关键字的使用变得非常重要。在当前的Java内存模型下，线程可以把变量保存在
-		本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，
-		造成数据的不一致。要解决这个问题，只需要像在本程序中的这样，把该变量声明为volatile（不稳定的）即可，这就指示JVM，这个变量是不稳定的，每次使用它都到主存中进行读取。
+	- volatile transient / Java中的volatile关键字	 * volatile * transient
+
+		A compile-time error occurs if a final variable is also declared volatile.
+		volatile不能和final同时使用，否则编译时error
+
+		transient和volatile两个关键字一个用于对象序列化，一个用于线程同步，都是Java中比较高阶的话题，简单总结一下。
+		1) transient
+		transient是类型修饰符，只能用来修饰字段。在对象序列化的过程中，标记为transient的变量不会被序列化。
+
+		示例：
+		class Test {
+		transient int a; // 不会被持久化
+		int b; // 持久化
+		}
+		当类Test的实例对象被序列化（比如将Test类的实例对象 t 写入硬盘的文本文件t.txt中），变量 a 的内容不会被保存，变量 b 的内容则会被保存。
+
+		参考：
+		把一个对象的表示转化为字节流的过程称为串行化（也称为序列化，serialization），从字节流中把对象重建出来称为反串行化（也称为为反序列化，deserialization）。
+		transient 为不应被串行化的数据提供了一个语言级的标记数据方法。
+		
+		2) 关于volatile
+		我们知道，在Java中设置变量值的操作，除了long和double类型的变量外都是原子操作，也就是说，对于变量值的简单读写操作没有必要进行同步。这在JVM 1.2之前，Java的内存模
+		型实现总是从主存读取变量，是不需要进行特别的注意的。而随着JVM的成熟和优化，现在在多线程环境下volatile关键字的使用变得非常重要。在当前的Java内存模型下，线程可以把变
+		量保存在本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值
+		的拷贝，造成数据的不一致。要解决这个问题，只需要像在本程序中的这样，把该变量声明为volatile（不稳定的）即可，这就指示JVM，这个变量是不稳定的，每次使用它都到主存中
+		进行读取。
 		一般说来，多任务环境下各任务间共享的标志都应该加volatile修饰。
 		
 		Volatile修饰的成员变量在每次被线程访问时，都强迫从共享内存中重读该成员变量的值。而且，当成员变量发生变化时，强迫线程将变化值回写到共享内存。这样在任何时刻，
@@ -7229,6 +7287,38 @@ Storage for Interactive Services
 		使用建议：在两个或者更多的线程访问的成员变量上使用volatile。当要访问的变量已在synchronized代码块中，或者为常量时，不必使用。 
 		由于使用volatile屏蔽掉了VM中必要的代码优化，所以在效率上比较低，因此一定在必要时才使用此关键字。
 		from: http://www.cnblogs.com/xwdreamer/archive/2012/05/13/2498615.html
+		PS: "在Java中设置变量值的操作，除了long和double类型的变量外都是原子操作"对这句话的解释，摘自jls se 5.0
+			-------
+			17.7 Non-atomic Treatment of double and long
+
+			Some implementations may find it convenient to divide a single write action on a 64-bit long or double value into two write actions on adjacent 32 bit values. For efficiency's sake, this behavior is implementation specific; Java virtual machines are free to perform writes to long and double values atomically or in two parts.
+
+			For the purposes of the Java programming language memory model, a single write to a non-volatile long or double value is treated as two separate writes: one to each 32-bit half. This can result in 
+			a situation where a thread sees the first 32 bits of a 64 bit value from one write, and the second 32 bits from another write. Writes and reads of volatile long and double values are always atomic. 
+			Writes to and reads of references are always atomic, regardless of whether they are implemented as 32 or 64 bit values.
+
+			VM implementors are encouraged to avoid splitting their 64-bit values where possible. Programmers are encouraged to declare shared 64-bit values as volatile or synchronize their programs 
+			correctly to avoid possible complications.
+			-------
+			PS: 就目前jvm的实现，如果long和double没有声明为volatile类型，则它们的赋值操作不是原子的，需要原子操作则要定义为volatile或者正确的同步。
+
+		JDK官方对volatile,transient的说明：
+		transient fileds:
+			Variables may be marked transient to indicate that they are not part of the persistent state of an object.
+
+			If an instance of the class Point:
+
+			class Point {
+				int x, y;
+				transient float rho, theta;
+			}
+			were saved to persistent storage by a system service, then only the fields x and y would be saved. This specification does not specify details of such services; see the specification of java.io.Serializable 
+			for an example of such a service.
+		
+
+		ref: http://docs.oracle.com/javase/specs/jls/se5.0/html/j3TOC.html or JSL3
+
+		http://www.ibm.com/developerworks/cn/java/j-jtp06197.html  Java 理论与实践: 正确使用 Volatile 变量
 	
 	- java并发小节
 		------
@@ -19402,6 +19492,7 @@ day120 Wednesday, August 29, 2012
 				A thread executing in the Java virtual machine is in this state. 
 			BLOCKED
 				A thread that is blocked waiting for a monitor lock is in this state. 
+				线程在等待一个对象锁，会处于这种状态
 			WAITING
 				A thread that is waiting indefinitely for another thread to perform a particular action is in this state. 
 			TIMED_WAITING
@@ -26242,7 +26333,20 @@ day286 Tuesday, May 14, 2013
 	支持数据压缩：
 		java.util.zip.GZIPOutputStream通过这个过滤器流对数据压缩后写入，装饰器模式（过滤器模式），装饰DeflaterOutputStream类，
 			在java.util.zip.*包下，包含与压缩相关的api
-				CRC-32	计算校验码
+				
+				CRC-32	循环冗余校验：通过CRC32类，在写入结束时将校验码写在尾部，校验码在初始化时为0，每写入一次生成一个int类型的校验码并作为下次计算的
+				基础，将最后一个数据byte[]的校验码放到输出流尾部；通过查看其解压的逻辑，如何去校验数据的准确性，在读入输入流的最后时校验尾部的校验码与当前
+				读取生成的码是否一致：
+					------
+					// Uses left-to-right evaluation order
+						if ((readUInt(in) != crc.getValue()) ||
+						    // rfc1952; ISIZE is the input size modulo 2^32
+						    (readUInt(in) != (inf.getBytesWritten() & 0xffffffffL)))
+						    throw new IOException("Corrupt GZIP trailer");
+					    }
+					------
+				PS: 作为使用者，只要使用JDK提供的GZIPOutputStream、GZIPInputStream即可，它内部来保证数据的正确性。
+
 				java.util.zip.CRC32
 				A class that can be used to compute the CRC-32 of a data stream.
 
@@ -26290,3 +26394,107 @@ day286 Tuesday, May 14, 2013
 
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day287 Wednesday, May 15, 2013
+
+1. 
+	* 大regino二期
+
+2. 大regino二期
+	脚本review
+
+
+4. BufferedOutputStream
+	byte[] buffered
+
+	设计模式：BufferedOutputStream也是继承自 FilterInputStream ，此类使用装饰器模式(或叫做过滤器模式)，内部操作的是其他inputsteam，作为一个装饰器模式
+	中的一个抽象装饰类，看它的说明：
+		A FilterInputStream contains some other input stream, which it uses as its basic source of data, possibly transforming the data along the way or providing additional functionality. 
+
+	比如DataInputStream也是继承自FilterInputStream。
+
+	A BufferedInputStream adds functionality to another input stream-namely, the ability to buffer the input and to support the mark and reset methods. 
+	BufferedOutputStream在原inputsteam的基础上，提供了buffer输入流以及mark和reset输入流的方法
+	
+	下面是缓存数组的声明，是volatile类型的(在进入同步块前及出同步块后，都需要将变化更新回主存)：
+		protected volatile byte buf[];
+	看BufferedOutputStream提供的2个操作此byte的方法的定义：
+		 public synchronized int read() throws IOException
+		 public synchronized int read(byte b[], int off, int len) throws IOException
+	都为synchronized方法，存在并行操作byte缓存的可能，故对此变量声明为volatile类型，所有线程都从主存中读取和操作，不做线程的私有拷贝。
+		
+5. design patten	 命令模式 从JDK中看设计模式的应用
+	Command Patten
+	命令和命令的执行者，通过抽象类过接口解耦和，命令只要关注业务并返回结果，不关心执行；执行者只关心执行，不关心命令的实现；
+
+	eg:
+		 java.util.concurrent.ScheduledExecutorService
+		 以submit方法来执行所有Runnable的实现类，这些被执行的对象都有一个run方法，都返回结果或没有结果。
+	
+	houyi api的aps2类就是命令模式中的接受者，负责接收并执行命令；那些command及其实现为命令接口和命令实现；Service层为请求者将命令交给接受者。
+
+	JDK中设计模式的应用：
+		
+6. java.lang.Thread.State 线程状态及其转换
+	
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day288 Thursday, May 16, 2013
+
+1. 
+	* 新项目
+		锻炼+业务
+	* 大region二期
+		发布演练
+
+2. 新项目
+	需求整理，明天kickoff
+	需求若涉及控制系统修改则去掉（避免与大region二期冲突），只做与api和api task相关的需求
+	本项目在大region 二期生产环境发布API成功后发布
+
+	image的大小，开始由PE上传时，插入db；后续根据此image创建的vm打的系统盘快照创建的自定义image的大小也取自原image大小。（
+	打的快照为系统盘全量快照，即盘快照，包含了数据和空闲空间大小的总和）
+	
+	问题：
+	1）create_image中参数image_no限制特殊字符的输入    ：细化规则
+		待PD确认
+
+	2）-99返回码整合到-95
+
+	3）API 接口增加一个token 字段，在校验时不对这个参数校验（该参数用来查询一个请求在系统中的处理流程，预计未来在API Proxy中生成这个token，本期只是在API端先进行处理）
+		token生成：token会传给api（可能由api proxy生成）
+		token目的：标识一个请求的处理流程（从api到控制系统，本项目只需支持api可接受token参数即可）
+		token具体设计：api接受token，api做签名验证时，去掉token参数后再校验签名，即token对用户透明（后续可以将token放入ThreadLocal中）
+	4）Houyi Task需求中imageSize大小的精确度，老image实际大小与db记录大小不一致问题，由PD确认用户是否认可
+
+	5）query_available_imgs增加区分系统镜像和用户自定义镜像的返回值
+		API是否能区分系统镜像和用户自定义镜像？
+		src_image_id标识当前Image是Image同步工具同步过来并插入的，还是用户自定义创建的，若为0则为新创建的，若不为0则为从image_id=src_image_id所指向的Image同步过来的。
+
+		PE建议通过user_id=0来区分PE上传的Image和用户自定义Image。
+	
+	kick off会议5.17 14:00-15:00 道格拉斯
+
+
+
+3. 每套API自身的角色范围域
+	API每套都是对等的，API自身并不知道其应该转发的域（比如DG的API应该只将请求发送到DG的集群，如果请求是其他集群的，报错也不合适。因为对外
+	API就是一个统一的服务，用户并不知道API的多套部署，用户只有一个入口；必须通过一个转发层将请求转发到正确的API上，来实现各套API分辖各自Master
+	的目的）
+
+	后面Master重构为region master，由region master直接管理nc，此时每个region master应该管辖那些nc的列表应该是确定的（？），region master可以水平扩展。
+
+
+4. 线程状态以及转换
+	Object对象的wait,notify,notifyall方法
+		取得对象锁后才能操作
+	Thread类的sleep，yield，join
+		
+		
+
+
+
+
+
+5. 

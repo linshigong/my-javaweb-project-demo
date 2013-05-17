@@ -1,3 +1,4 @@
+#########################################################################################################
 1. Head first设计模式
 ------------------------
 Tuesday, April 16, 2013 
@@ -387,7 +388,20 @@ p167&181
 
 
 ------------------------
-Monday, May 13, 2013
+Thursday, May 16, 2013
+
+p191&203
+
+Chapter6 Command Patten(命令模式)
+	封装调用：we’re going to encapsulate method invocation
+
+	That’s right, by encapsulating method invocation, we can crystallize pieces of computation so that the
+	object invoking the computation doesn’t need to worry about how to do things, it just uses
+	our crystallized method to get it done. We can also do some wickedly smart things with
+	these encapsulated method invocations, like save them away for logging or reuse them to
+	implement undo in our code.
+
+	
 
 
 
@@ -397,7 +411,7 @@ Monday, May 13, 2013
 
 
 
-
+#########################################################################################################
 2. Java NIO
 ------------------------
 Wednesday, April 23, 2013
@@ -407,6 +421,7 @@ Nio实现的socket，channel，buffer，selector
 
 
 
+#########################################################################################################
 3. Servlet3.0 final Specification
 
 ------------------------
@@ -434,9 +449,11 @@ The following is a typical sequence of events:
 	
 
 
+#########################################################################################################
 4. Java_Concurrency_in_Practice
 
 
+#########################################################################################################
 5. hibernate in action (GAVIN KING @2005)
 
 ------------------------
@@ -445,6 +462,7 @@ Monday, May 06, 2013
 p7&30
 	1.2 The paradigm mismatch	Domain模型与关系模型的不对称
 
+#########################################################################################################
 6. hibernate3源码
 	Session的概念，如何创建的，和SessionFactory的关系？	      参考文档
 		session只是hibernate框架自己设计的一个接口，用于实现一级缓存？具体的sql执行还是通过ConnectionManager来取到jdbc Connection来执行，
@@ -453,6 +471,7 @@ p7&30
 	SessionFactory需要保证线程安全，并支持高并发，它会被多个线程共享，看其实现类的doc也有说明
 
 
+#########################################################################################################
 7. Ant review
 	
 ------------------------
@@ -594,6 +613,7 @@ p92	part2-chapter4-ant
 		a good overview of Ivy. The best practices page is also a must read to start thinking about how to use Ant+Ivy to build a clean and robust build system.
 
 
+#########################################################################################################
 8. Thinking in Java
 
 ------------------------
@@ -635,3 +655,74 @@ Monday, May 13, 2013
 	682
 	高代价的操作会损失和恢复更低层结构的能力。
 	■
+
+#########################################################################################################
+9. JavaSE 6 Tutorial JDK自带说明
+
+------------------------
+Wednesday, May 15, 2013
+
+p file:///D:/Ref/java/Java%20tutorial/essential/concurrency/procthread.html	
+	■ Concurrency
+		并发编程的两个基本执行单元：processes and threads
+
+		Processing time for a single core is shared among processes and threads through an OS feature called time slicing.
+		
+		■ Processes
+		A process has a self-contained execution environment. A process generally has a complete, private set of basic run-time resources; in particular, each process has its own memory space.
+
+		Processes are often seen as synonymous with programs or applications. However, what the user sees as a single application may in fact be a set of cooperating processes. To facilitate 
+		communication between processes, most operating systems support Inter Process Communication (IPC) resources, such as pipes and sockets. IPC is used not just for communication 
+		between processes on the same system, but processes on different systems.
+		进程间的通信机制IPC，IPC不仅用于同一个系统内部的通信，还用于不同系统间的通信。
+
+		Most implementations of the Java virtual machine run as a single process. A Java application can create additional processes using a ProcessBuilder object. Multiprocess applications are 
+		beyond the scope of this lesson.
+		大多数jvm的实现都是运行在单进程中的，java程序也可通过ProcessBuilder创建其他的进程，但不在本课程考虑之内。
+
+		■ Threads
+		Threads are sometimes called lightweight processes. Both processes and threads provide an execution environment, but creating a new thread requires fewer resources than creating a new 
+		process.
+		线程又被叫做轻量级进程，两者都提供可执行环境，但是创建线程的代价比进程小的多。
+
+		Threads exist within a process — every process has at least one. Threads share the process's resources, including memory and open files. This makes for efficient, but potentially problematic, 
+		communication.
+
+		Multithreaded execution is an essential feature of the Java platform. Every application has at least one thread — or several, if you count "system" threads that do things like memory management 
+		and signal handling. But from the application programmer's point of view, you start with just one thread, called the main thread. This thread has the ability to create additional threads, as we'll 
+		demonstrate in the next section.
+		多线程执行时java平台提供一个核心特性。...
+
+			■ Thread Objects
+			Each thread is associated with an instance of the class Thread. There are two basic strategies for using Thread objects to create a concurrent application.
+			每个线程都与Thread类的一个实例相关联。有下面两种方式创建并发程序：
+			
+			1) To directly control thread creation and management, simply instantiate Thread each time the application needs to initiate an asynchronous task.
+			直接创建线程并操作
+
+			2) To abstract thread management from the rest of your application, pass the application's tasks to an executor.
+			从程序中抽象出线程管理，将这些任务交给executor去处理。
+
+			This section documents the use of Thread objects. Executors are discussed with other high-level concurrency objects.
+			Executors处理部分见下文high-level concurrency objects部分。
+
+			■ Defining and Starting a Thread
+			Provide a Runnable object.
+			or Subclass Thread
+
+			■ Pausing Execution with Sleep
+			Thread.sleep causes the current thread to suspend execution for a specified period. This is an efficient means of making processor time available to the other threads of an application 
+			or other applications that might be running on a computer system. The sleep method can also be used for pacing, as shown in the example that follows, and waiting for another thread 
+			with duties that are understood to have time requirements, as with the SimpleThreads example in a later section.
+
+			Two overloaded versions of sleep are provided: one that specifies the sleep time to the millisecond and one that specifies the sleep time to the nanosecond. However, these sleep times 
+			are not guaranteed to be precise, because they are limited by the facilities provided by the underlying OS. Also, the sleep period can be terminated by interrupts, as we'll see in a later 
+			section. In any case, you cannot assume that invoking sleep will suspend the thread for precisely the time period specified.
+			Sleep的时间不保证精确，依赖于底层OS时钟和调度的精确性(subject to the precision and accuracy of system timers and schedulers);任何情况，不应该假定在调用sleep后，
+			会暂停线程直到指定的精确时间后再重新执行（如：sleep时间到了但系统调度没调度到则还需等待执行）。程序不应该将逻辑建立于精确的sleep时间上。
+				
+
+
+
+
+	
