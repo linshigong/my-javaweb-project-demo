@@ -724,9 +724,101 @@ p file:///D:/Ref/java/Java%20tutorial/essential/concurrency/procthread.html
 			section. In any case, you cannot assume that invoking sleep will suspend the thread for precisely the time period specified.
 			Sleep的时间不保证精确，依赖于底层OS时钟和调度的精确性(subject to the precision and accuracy of system timers and schedulers);任何情况，不应该假定在调用sleep后，
 			会暂停线程直到指定的精确时间后再重新执行（如：sleep时间到了但系统调度没调度到则还需等待执行）。程序不应该将逻辑建立于精确的sleep时间上。
+
+			■ Interrupts
+			An interrupt is an indication to a thread that it should stop what it is doing and do something else. It's up to the programmer to decide exactly how a thread responds to an interrupt, 
+			but it is very common for the thread to terminate. This is the usage emphasized in this lesson.
+			调用interrupt，告诉线程停下当前的工作，由开发人员决定要做什么，一般都是关闭当前线程。
+				■ Supporting Interruption	     ？
+				How does a thread support its own interruption? This depends on what it's currently doing. If the thread is frequently invoking methods that throw InterruptedException, 
+				it simply returns from the run method after it catches that exception. For example, suppose the central message loop in the SleepMessages example were in the run method 
+				of a thread's Runnable object. Then it might be modified as follows to support interrupts:
+
+				for (int i = 0; i < importantInfo.length; i++) {
+				    //Pause for 4 seconds
+				    try {
+					Thread.sleep(4000);
+				    } catch (InterruptedException e) {
+					//We've been interrupted: no more messages.
+					return;
+				    }
+				    //Print a message
+				    System.out.println(importantInfo[i]);
+				}
+				Many methods that throw InterruptedException, such as sleep, are designed to cancel their current operation and return immediately when an interrupt is received.
+				What if a thread goes a long time without invoking a method that throws InterruptedException? Then it must periodically invoke Thread.interrupted, which returns 
+				true if an interrupt has been received. For example:
+
+				for (int i = 0; i < inputs.length; i++) {
+				    heavyCrunch(inputs[i]);
+				    if (Thread.interrupted()) {
+					//We've been interrupted: no more crunching.
+					return;
+				    }
+				}
+				In this simple example, the code simply tests for the interrupt and exits the thread if one has been received. In more complex applications, it might make more sense to 
+				throw an InterruptedException:
+				if (Thread.interrupted()) {
+				    throw new InterruptedException();
+				}
+				This allows interrupt handling code to be centralized in a catch clause.
+
+				■ The Interrupt Status Flag	  interrupt状态标志
+				The interrupt mechanism is implemented using an internal flag known as the interrupt status. Invoking Thread.interrupt sets this flag. When a thread checks for an interrupt by invoking the 
+				static method Thread.interrupted, interrupt status is cleared. The non-static isInterrupted method, which is used by one thread to query the interrupt status of another, does not change the 
+				interrupt status flag.
 				
+				By convention, any method that exits by throwing an InterruptedException clears interrupt status when it does so. However, it's always possible that interrupt status will immediately be 
+				set again, by another thread invoking interrupt.
+
+			■ Joins
+			The join method allows one thread to wait for the completion of another. If t is a Thread object whose thread is currently executing,t.join();
+			causes the current thread to pause execution until t's thread terminates. Overloads of join allow the programmer to specify a waiting period. However, as with sleep, join is dependent on the OS 
+			for timing, so you should not assume that join will wait exactly as long as you specify.
+
+			Like sleep, join responds to an interrupt by exiting with an InterruptedException.
+
+			TODO: More...
+
+------------------------
+Tuesday, May 21, 2013
+		
+		■ High Level Concurrency Objects
+		 This is especially true for massively concurrent applications that fully exploit today's multiprocessor and multi-core systems.
+		 适用于高并发程序，充分挖掘当前多CPU多核心的操作系统的性能。
+
+		 In this section we'll look at some of the high-level concurrency features introduced with version 5.0 of the Java platform. Most of these features are implemented in 
+		 the new java.util.concurrent packages. There are also new concurrent data structures in the Java Collections Framework.
+
+		 1) Lock 
+		 objects support locking idioms that simplify many concurrent applications.
+
+		 2) Executors 
+		 define a high-level API for launching and managing threads. Executor implementations provided by java.util.concurrent provide thread pool management suitable for large-scale applications.
+
+		 3) Concurrent 
+		 collections make it easier to manage large collections of data, and can greatly reduce the need for synchronization.
+
+		 4) Atomic 
+		 variables have features that minimize synchronization and help avoid memory consistency errors.
+
+		 5) ThreadLocalRandom 
+		 (in JDK 7) provides efficient generation of pseudorandom numbers from multiple threads.
 
 
 
 
+
+
+
+#########################################################################################################
+10. Java Network Programming 3rd edition Oreilly.Java.Network.Programming.3rd.Edition.Oct.2004
+Chapter5 Threads
+	老的web系统，ftp系统，每个连接一个进程，一但系统资源达到瓶颈，创建的进程数达到限制数据时，新来的连接就不会再处理
+
+	有2种方式解决上面的问题：
 	
+	一是，用进程池重用进程，启动时初始化好固定数据的进程，用一个队列存放请求，进程池消费队列中的请求；缺点，进程相对系统还是重量级的
+	资源，不便于横向扩展。
+	
+	二是，用轻量级线程（或者叫线程）来处理；缺点，编程模型复杂，线程和进程共享内存，需要控制线程间的访问
