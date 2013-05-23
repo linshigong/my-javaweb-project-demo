@@ -64,6 +64,9 @@ public class test {
 		
 		//
 		System.out.println("radix:"+Integer.toString(10, 16)+"\n"+Integer.toHexString(10));
+		
+		//
+		System.out.println("null==null="+(null == null));
 	}
 
 	
