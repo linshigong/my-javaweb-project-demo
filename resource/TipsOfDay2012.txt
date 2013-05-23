@@ -14,6 +14,23 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* java java基本数据类型和byte[] 之间的转换
+	ref: http://hi.baidu.com/wangkaijiangg/item/d3d825dfd36081f492a97406
+* MD5
+	MD5即Message-Digest Algorithm 5（信息-摘要算法5），用于确保信息传输完整一致。是计算机广泛使用的杂凑算法之一（又译摘要算法、哈希算法），主流编程语言普遍已有MD5实现。
+	将数据（如汉字）运算为另一固定长度值，是杂凑算法的基础原理，MD5的前身有MD2、MD3和MD4。
+
+	MD5的作用是让大容量信息在用数字签名软件签署私人密钥前被"压缩"成一种保密的格式（就是把一个任意长度的字节串变换成一定长的十六进制数字串）。
+	除了MD5以外，其中比较有名的还有sha-1、RIPEMD以及Haval等
+
+	MD5将任意长度的“字节串”映射为一个128bit的大整数，并且是通过该128bit反推原始字符串是困难的，换句话说就是，即使你看到源程序和算法描述，也无法将一个MD5的值变换回原始的字符串，从数学原理上说，是因为原始的字符串有无穷多个，这有点象不存在反函数的数学函数。所以，要遇到了md5密码的问题，比较好的办法是：你可以用这个系统中的md5（）函数重新设一个密码，如admin，把生成的一串密码的Hash值覆盖原来的Hash值就行了。
+
+	ref: http://baike.baidu.com/view/7636.htm
+	PS: 
+		把一个任意长度的字节串变换成一定长的十六进制数字串，128Bit的大整数
+
+		后面涉及到将128Bit字节数组转为long类型。MD5
+
 * 算法
 	排序算法
 		快速排序
@@ -2254,6 +2271,10 @@ ft2013-04-22
 		
 * hibernate
 	复习
+	一级缓存，session缓存，持久化层对象的缓存
+		待补充？
+	二级缓存，查询缓存，可以用第三方的缓存实现
+		待补充？
 
 * JDK
 	1.6
@@ -8623,6 +8644,26 @@ search in index find pdf
 
 			
 		SocketChannel
+		DOC
+		--------
+		A selectable channel for stream-oriented connecting sockets. 
+
+		Socket channels are not a complete abstraction of connecting network sockets. Binding, shutdown, and the manipulation of socket options must be done through an associated java.net.Socket object obtained by invoking the socket method. It is not possible to create a channel for an arbitrary, pre-existing socket, nor is it possible to specify the java.net.SocketImpl object to be used by a socket associated with a socket channel. 
+
+		A socket channel is created by invoking one of the open methods of this class. A newly-created socket channel is open but not yet connected. An attempt to invoke an I/O operation upon an unconnected channel will cause a NotYetConnectedException to be thrown. A socket channel can be connected by invoking its connect method; once connected, a socket channel remains connected until it is closed. Whether or not a socket channel is connected may be determined by invoking its isConnected method. 
+
+		Socket channels support non-blocking connection: A socket channel may be created and the process of establishing the link to the remote socket may be initiated via the connect method for later completion by the finishConnect method. Whether or not a connection operation is in progress may be determined by invoking the isConnectionPending method. 
+
+		The input and output sides of a socket channel may independently be shut down without actually closing the channel. Shutting down the input side of a channel by invoking the shutdownInput method of an associated socket object will cause further reads on the channel to return -1, the end-of-stream indication. Shutting down the output side of the channel by invoking the shutdownOutput method of an associated socket object will cause further writes on the channel to throw a ClosedChannelException. 
+
+		Socket channels support asynchronous shutdown, which is similar to the asynchronous close operation specified in the Channel class. If the input side of a socket is shut down by one thread while another thread is blocked in a read operation on the socket's channel, then the read operation in the blocked thread will complete without reading any bytes and will return -1. If the output side of a socket is shut down by one thread while another thread is blocked in a write operation on the socket's channel, then the blocked thread will receive an AsynchronousCloseException. 
+
+		Socket channels are safe for use by multiple concurrent threads. They support concurrent reading and writing, though at most one thread may be reading and at most one thread may be writing at any given time. The connect and finishConnect methods are mutually synchronized against each other, and an attempt to initiate a read or write operation while an invocation of one of these methods is in progress will block until that invocation is complete. 
+
+		Since:
+		1.4
+
+		--------
 	
 	To be contiue...
 
@@ -9872,6 +9913,10 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- 缓存系统MemCached的Java客户端优化历程 http://www.infoq.com/cn/articles/memcached-java
 		参考
 			用concurrent包替换原先synchronize关键字
+		比较原client与优化后的client
+			原whain客户端：https://github.com/gwhalin/Memcached-Java-Client.git
+			优化后的客户端：http://memcache-client-forjava.googlecode.com/svn/trunk/memcache-client-forjava
+
 			
 
 	- HA的实现
@@ -10131,6 +10176,10 @@ It is also an FTP application platform. We have developed a Java API to let you 
 
 		解决方法之一：使用同一缓存，比如使用memcached统一缓存；统一缓存部分设计为可替换方式，比如后面如果需要替换缓存实现服务。
 
+		OSCache支持分布式缓存，了解下它是如何保证分布式环境下的一致性的？
+	- ibatis+oscache
+		
+
 	- sqlmap配置文件中的CacheModel
 	cacheModel
 		A cacheModel is used to describe a cache for use with a  query mapped statement. Each query mapped statement can use a different cacheModel, or the same 
@@ -10339,6 +10388,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		让步，为系统设计提供了更大的自由空间。
 		4) 运行效率
 		在不考虑 cache 的情况下，iBatis 应该会比hibernate 快一些或者很多。
+		5）hibernate提供一级，二级缓存的支持；ibatis只有二级缓存的支持
 
 * aqua 
 	ctrl + d -- desc table
@@ -19518,7 +19568,7 @@ day119 Tuesday, August 28, 2012
 		异常场景：
 			
 
-	- UDP
+	- UDP	* UDP
 		
 		UDP处于IP层之上
 
@@ -19543,6 +19593,9 @@ day119 Tuesday, August 28, 2012
 		电话会议系统在内的许多应用都证明了UDP协议的存在价值。因为相对于可靠性来说，这些应用更加注重实际性能，所以为了获得
 		更好的使用效果（例如，更高的画面帧刷新速率）往往可以牺牲一定的可靠性（例如，画面质量）。这就是UDP和TCP两种协议的
 		权衡之处。根据不同的环境和特点，两种传输协议都将在今后的网络世界中发挥更加重要的作用。
+
+		PS:
+			类型heartbeat这些心跳服务，也是通过UDP协议来通讯的，即使丢失少量包，新的数据包会马上收到，可以容忍。
 
 		-------
 		Datagram sockets also use IP for routing, but they don't use TCP; they use the "User Datagram Protocol", or "UDP" 
@@ -26851,3 +26904,128 @@ day301 Wednesday, May 22, 2013
 5. ArrayList与LinkedList
 	LinkedList采用双向链表实现，查找对象时，需要遍历链表
 	ArrayList采用数组实现，查找对象时，可以采用二分查找等查找算法，根据下标访问对象，效率较高
+
+6. netty socket编程
+	socket编程
+	并发
+	IO/NIO
+	调度
+
+	* netty
+		
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day302 Thursday, May 23, 2013
+
+1. 
+	*  
+2. 
+
+4. hibernate+memcached
+	mybatis+memcached
+	* mybatis
+		插件
+			memcached作为二级缓存的插件
+			分库分表插件
+
+5. 分库发表
+	
+6. ibatis cache ibatis缓存部分 与hibernate比较
+	参考ibatis资料
+
+	ibatis只提供了二级缓存，即查询缓存；hibernate提供了一级缓存，即session缓存，session关联了本次请求所有涉及到的持久化对象，
+
+	分布式缓存，同步更新问题，参考下面一篇介绍chubby的文章，看它是如何设计主从功能以及实现分布式缓存更新问题的：
+
+	-----
+		为 了安全性和容错的考虑，所有的replicas（包括master）都维护的同一个DB的拷贝。但是，只有master能够接受client提交的操作对 DB进行读和写，
+		而其它的replicas只是和master进行通信来update它们各自的DB。所以，一旦一个master被选举出来后，所有的 client端都之和master进行通信（如图所示），
+		如果是读操作，那么master一台机器就搞定了，如果是写操作，master会通知其它的 replicas进行update。这样的话，一旦master意外停机，那么其它的replicas
+		也能够很快的选举出另外一个master。
+		....
+		最后谈谈client与cell的交互部分
+
+		这里大致包含两部分的内容：cache的同步机制和KeepAlive握手协议。
+
+			为 了降低client和cell之间通信的压力和频率，client在本地会保存一个和自己相关的Chubby文件的cache。例如如果client通过 Chubby library在cell上创建了一个文件，
+		那么在client本地，也会有一个相同的文件在cache中创建，这个cache中的文件的内容和cell 上文件的内容是一样的。这样的话，client如果想访问这个文件，就可以
+		直接访问本地的cache而不通过网络去访问cell。
+		
+			cache有两个状态，有效和无效。当 有一个client要改变某个File的时候，整个修改会被master block，然后master会发送无效标志给所有cache了这个数据的client
+		（它维护了这么一个表），当其它client端收到这个无效标志 后，就会将cache中的状态置为无效，然后返回一个acknowledge；当master确定收到了所有的acknowledge
+		之后，才完成整个 modification。
+
+			需要注意的是，master并不是发送update给client而是发送无效标志给client。这是因为如果发送update给client，那么每 一次数据的修改都需要发送一大堆的update，
+		而发送无效标示的话，对一个数据的很多次修改只需要发送一个无效标示，这样大大降低了通信量。
+	-----
+	PS:
+		主从架构设计，只允许Master去修改数据（如DB），其他从节点只提供读取服务；
+		对于cache更新，对cache修改会被master block住，然后master通知所有缓存了此对象的client此缓存失效。
+
+7. 落日弓web
+	熟悉一个请求的整体流程
+
+
+8. 对比memcached java client
+	一致性hash算法，md5计算hash值，字节转java基本类型
+
+	java基本数据类型和byte[] 之间的转换,java基本类型和字节的转换
+	ref: http://hi.baidu.com/wangkaijiangg/item/d3d825dfd36081f492a97406
+
+	MessageDigest返回的byte[]换行为java long类型
+
+	 计算MD5 hash值方法：
+	----
+	private static long md5HashingAlg( String key ) {
+			MessageDigest md5 = MD5.get();
+			md5.reset();
+			md5.update( key.getBytes() );
+			byte[] bKey = md5.digest();
+			long res = ((long)(bKey[3]&0xFF) << 24) | ((long)(bKey[2]&0xFF) << 16) | ((long)(bKey[1]&0xFF) << 8) | (long)(bKey[0]&0xFF);
+			return res;
+		}
+	----
+	PS: MD5计算结果为128bit的大整数，但是一致性hash算法需要的hash值范围为int型的最大值，即4个byte，所以对MD5的值进行移位操作，并计算得到
+	整数值，做为hash值；对节点和数据都采用上面相同的hash算法。
+	
+	----
+	/**
+	 * Gets the first available key equal or above the given one, if none found,
+	 * returns the first k in the bucket 
+	 * @param k key
+	 * @return
+	 */
+	private Long findPointFor( Long hv ) {
+		// this works in java 6, but still want to release support for java5
+		//Long k = this.consistentBuckets.ceilingKey( hv );
+		//return ( k == null ) ? this.consistentBuckets.firstKey() : k;
+
+		SortedMap<Long,String> tmap =
+			this.consistentBuckets.tailMap( hv );
+
+		return ( tmap.isEmpty() ) ? this.consistentBuckets.firstKey() : tmap.firstKey();
+	}
+	----
+	PS: 根据hash值从TreeMap中，找到正确的bucket（此处即服务器地址host）
+
+	 com.meetup.memcached.SockIOPool.populateConsistentBuckets方法
+	----
+	double factor = Math.floor( ((double)(40 * this.servers.length * thisWeight)) / (double)this.totalWeight );
+
+	for ( long j = 0; j < factor; j++ ) {
+		byte[] d = md5.digest( ( servers[i] + "-" + j ).getBytes() );
+		for ( int h = 0 ; h < 4; h++ ) {
+			Long k = 
+				  ((long)(d[3+h*4]&0xFF) << 24)
+				| ((long)(d[2+h*4]&0xFF) << 16)
+				| ((long)(d[1+h*4]&0xFF) << 8)
+				| ((long)(d[0+h*4]&0xFF));
+
+			consistentBuckets.put( k, servers[i] );
+			if ( log.isDebugEnabled() )
+				log.debug( "++++ added " + servers[i] + " to server bucket" );
+		}				
+	}
+	----
+	PS: 回头看下consistentBuckets这个treemap（其他sortedMap的实现也可）实现的hash环是如何初始化的
+

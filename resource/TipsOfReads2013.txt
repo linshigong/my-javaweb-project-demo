@@ -822,3 +822,16 @@ Chapter5 Threads
 	资源，不便于横向扩展。
 	
 	二是，用轻量级线程（或者叫线程）来处理；缺点，编程模型复杂，线程和进程共享内存，需要控制线程间的访问
+
+#########################################################################################################
+11. Ibatis In Action	CLINTON BEGIN BRANDON GOODIN LARRY MEADORS 2007
+
+Part3 iBATIS in the real world
+	1) Improving performance with caching
+
+	This chapter covers
+	■ Cache philosophy
+	■ Cache configuration
+	■ Caching strategies
+
+
