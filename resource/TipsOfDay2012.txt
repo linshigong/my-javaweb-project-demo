@@ -1,4 +1,4 @@
-
+*
 本机ip 10.1.171.132
 -tip-
 -idea-
@@ -14,7 +14,275 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
-* java java基本数据类型和byte[] 之间的转换
+* java java基本数据类型和byte[] 之间的转换   类型转换 字节到long long到字节
+	----
+	/**
+	 * 字节与Java基本类型的相互转换 
+	 */
+	public class DataChange {
+		/**
+		 * @param args
+		 */
+		public static void main(String[] args) {
+			int testTime = 100;// 测试次数
+
+			short sValue = 256;
+			int iValue = -99999;
+			long lValue = -99999;
+			double dValue = -99999999999.99999999d;
+			float fValue = -9999999999.9999f;
+
+			outPut(shortToByte(sValue));
+			try {
+
+				System.out.println(byteToShort(shortToByte(sValue)));
+			} catch (DataTranslateException e1) {
+				e1.printStackTrace();
+			}
+
+			outPut(intToByte(iValue));
+			try {
+				System.out.println(byteToInt(intToByte(iValue)));
+			} catch (DataTranslateException e) {
+				e.printStackTrace();
+			}
+
+			outPut(longToByte(lValue));
+			try {
+				System.out.println(byteToLong(longToByte(lValue)));
+			} catch (DataTranslateException e) {
+				e.printStackTrace();
+			}
+
+			outPut(doubleToByte(dValue));
+			try {
+				System.out.println(byteToDouble(doubleToByte(dValue)));
+			} catch (DataTranslateException e) {
+				e.printStackTrace();
+			}
+
+			outPut(floatToByte(fValue));
+			try {
+				System.out.println(byteToFloat(floatToByte(fValue)));
+			} catch (DataTranslateException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		private static void outPut(byte[] bytes) {
+			System.out.println(new String(bytes));
+		}
+
+		/**
+		 * short转换到字节数组
+		 * 
+		 * @param number
+		 * @return
+		 */
+		public static byte[] shortToByte(short number) {
+			byte[] b = new byte[2];
+			for (int i = 1; i >= 0; i--) {
+				b[i] = (byte) (number % 256);
+				number >>= 8;
+			}
+			byte bb = (byte) 12922;
+
+			return b;
+		}
+
+		/**
+		 * 字节到short转换
+		 * 
+		 * @param b
+		 * @return
+		 * @throws DataTranslateException
+		 */
+		public static short byteToShort(byte[] b) throws DataTranslateException {
+			if (b.length != 2)
+				throw new DataTranslateException();
+
+			return (short) ((((b[0] & 0xff) << 8) | b[1] & 0xff));
+		}
+
+		/**
+		 * 整型转换到字节数组
+		 * 
+		 * @param number
+		 * @return
+		 */
+		public static byte[] intToByte(int number) {
+			byte[] b = new byte[4];
+			for (int i = 3; i >= 0; i--) {
+				b[i] = (byte) (number % 256);
+				number >>= 8;
+			}
+			return b;
+		}
+
+		/**
+		 * 字节数组到整型转换
+		 * 
+		 * @param b
+		 * @return
+		 * @throws DataTranslateException
+		 */
+		public static int byteToInt(byte[] b) throws DataTranslateException {
+			if (b.length != 4)
+				throw new DataTranslateException();
+			return (int) ((((b[0] & 0xff) << 24) | ((b[1] & 0xff) << 16)
+					| ((b[2] & 0xff) << 8) | ((b[3] & 0xff) << 0)));
+		}
+
+		/**
+		 * long转换到字节数组
+		 * 
+		 * @param number
+		 * @return
+		 */
+		public static byte[] longToByte(long number) {
+			byte[] b = new byte[8];
+			for (int i = 7; i >= 0; i--) {
+				b[i] = (byte) (number % 256);
+				number >>= 8;
+			}
+			return b;
+		}
+
+		/**
+		 * 字节数组到整型的转换
+		 * 
+		 * @param b
+		 * @return
+		 * @throws DataTranslateException
+		 */
+		public static long byteToLong(byte[] b) throws DataTranslateException {
+			if (b.length != 8)
+				throw new DataTranslateException();
+			return ((((long) b[0] & 0xff) << 56) | (((long) b[1] & 0xff) << 48)
+					| (((long) b[2] & 0xff) << 40) | (((long) b[3] & 0xff) << 32)
+					| (((long) b[4] & 0xff) << 24) | (((long) b[5] & 0xff) << 16)
+					| (((long) b[6] & 0xff) << 8) | (((long) b[7] & 0xff) << 0));
+		}
+
+		/**
+		 * double转换到字节数组
+		 * 
+		 * @param d
+		 * @return
+		 */
+		public static byte[] doubleToByte(double d) {
+
+			byte[] bytes = new byte[8];
+			long l = Double.doubleToLongBits(d);
+			for (int i = 0; i < bytes.length; i++) {
+				bytes[i] = new Long(l).byteValue();
+				l = l >> 8;
+			}
+			return bytes;
+		}
+
+		/**
+		 * 字节数组到double转换
+		 * 
+		 * @param b
+		 * @return
+		 * @throws DataTranslateException
+		 */
+		public static double byteToDouble(byte[] b) throws DataTranslateException {
+			if (b.length != 8)
+				throw new DataTranslateException();
+			long l;
+			l = b[0];
+			l &= 0xff;
+			l |= ((long) b[1] << 8);
+			l &= 0xffff;
+			l |= ((long) b[2] << 16);
+			l &= 0xffffff;
+			l |= ((long) b[3] << 24);
+			l &= 0xffffffffl;
+			l |= ((long) b[4] << 32);
+			l &= 0xffffffffffl;
+
+			l |= ((long) b[5] << 40);
+			l &= 0xffffffffffffl;
+			l |= ((long) b[6] << 48);
+			l &= 0xffffffffffffffl;
+
+			l |= ((long) b[7] << 56);
+
+			return Double.longBitsToDouble(l);
+		}
+
+		/**
+		 * float转换到字节数组
+		 * 
+		 * @param d
+		 * @return
+		 */
+		public static byte[] floatToByte(float d) {
+
+			byte[] bytes = new byte[4];
+			int l = Float.floatToIntBits(d);
+			for (int i = 0; i < bytes.length; i++) {
+				bytes[i] = new Integer(l).byteValue();
+				l = l >> 8;
+			}
+			return bytes;
+		}
+
+		/**
+		 * 字节数组到float的转换
+		 * 
+		 * @param b
+		 * @return
+		 * @throws DataTranslateException
+		 */
+		public static float byteToFloat(byte[] b) throws DataTranslateException {
+			if (b.length != 4)
+				throw new DataTranslateException();
+			int l;
+			l = b[0];
+			l &= 0xff;
+			l |= ((long) b[1] << 8);
+			l &= 0xffff;
+			l |= ((long) b[2] << 16);
+			l &= 0xffffff;
+			l |= ((long) b[3] << 24);
+			l &= 0xffffffffl;
+			return Float.intBitsToFloat(l);
+		}
+
+		/**
+		 * 字符串到字节数组转换
+		 * 
+		 * @param s
+		 * @return
+		 */
+		public static byte[] stringToByte(String s) {
+			return s.getBytes();
+		}
+
+		/**
+		 * 字节数组带字符串的转换
+		 * 
+		 * @param b
+		 * @return
+		 */
+		public static String byteToString(byte[] b) {
+			return new String(b);
+
+		}
+	}
+
+	class DataTranslateException extends Exception {
+		/**
+		 * 数据转换异常
+		 */
+		private static final long serialVersionUID = -1549549583129122004L;
+
+	}
+	----
 	ref: http://hi.baidu.com/wangkaijiangg/item/d3d825dfd36081f492a97406
 * MD5
 	MD5即Message-Digest Algorithm 5（信息-摘要算法5），用于确保信息传输完整一致。是计算机广泛使用的杂凑算法之一（又译摘要算法、哈希算法），主流编程语言普遍已有MD5实现。
@@ -2044,6 +2312,30 @@ ft2013-04-22
 	PS: Servlet通过规范定义的request/response paradigm与servlet容器交互，容器负责连接接收和相应，servlet负责逻辑
 
 * java
+	- javaee servet技术中的Filter
+		 javax.servlet.Filter
+		 DOC
+		 --------------------
+
+
+		A filter is an object that performs filtering tasks on either the request to a resource (a servlet or static content), or on the response from a resource, or both. 
+
+		Filters perform filtering in the doFilter method. Every Filter has access to * a FilterConfig object from which it can obtain its initialization parameters, a * reference to the ServletContext which it can use, for example, to load resources * needed for filtering tasks. * 
+
+		* Filters are configured in the deployment descriptor of a web application * 
+
+		* Examples that have been identified for this design are
+		* 1) Authentication Filters 
+		* 2) Logging and Auditing Filters 
+		* 3) Image conversion Filters 
+		* 4) Data compression Filters 
+		* 5) Encryption Filters 
+		* 6) Tokenizing Filters 
+		* 7) Filters that trigger resource access events 
+		* 8) XSL/T filters 
+		* 9) Mime-type chain Filter 
+		--------------------
+
 	- java se tutorial jdk tutorial
 		ref: http://docs.oracle.com/javase/specs/jls/se5.0/html/j3TOC.html
 
@@ -8821,6 +9113,8 @@ search in index find pdf
 		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
  * spring
+	- spring MVC
+		
 	- 加入spring支持
 		pom配置spring依赖包
 		创建application
@@ -10745,6 +11039,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
 	
 * ide * eclipse
+	- 配置eclipse项目的源码目录和文件夹，以及导入项目的目录顺序，项目属性-Order and Export
 	- 项目依赖的Validate,如果关闭了自动Validate功能，项目导入后不会自动检查问题；可以手动执行validate以发现问题，比如可能某个库没导入
 		导入错误，感叹号 
 	- quick fix	       ctrl+1
@@ -10945,8 +11240,20 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- maven库下载错误，比如配置正确但无法自动下载到本地目录下，可以尝试删除原目录再调用maven命令以触发下载。
+		也可能是某个jar没下载，比如maven库没有配置正确，导致其他的jar也下载失败
+		test成功，jar都下载下来后，eclipse里update下依赖即可
 	- maven web项目 maven项目 部署 测试 ，可通过bat或shell的方式来自动化编译打包部署，方便web项目的调试
 		搜索本文件内容：mavn web project 自动部署启动容器脚本(bat脚本)
+
+		打包速度太慢，直接用maven插件进行热部署并启动：
+		mvn tomcat:run
+		mvn jetty:run	mvn jetty:stop 
+
+		maven插件及其使用
+
+		maven plugin 说明：http://maven.apache.org/plugins/index.html
+
 	- maven jvm参数配置 配置jvm    maven运行参数配置
 		maven默认的jvm配置，比如内存不能满足需要，可能导致错误，如：java.lang.OutOfMemoryError: PermGen space问题
 		下面摘自网络，可参考：
@@ -21518,7 +21825,7 @@ day168 Tuesday, November 13, 2012
 		根据并发量配置linux进程打开文件数属性：ulimit -a ；ulimit -n 4096 ；修改/etc/security/limits.conf 添加如下一行：	      * - nofile 1006154 修改/etc/pam.d/login添加如下一行 session required /lib/security/pam_limits.so
 
 4. timeout问题 超时问题 socket超时
-	apache的commons-httpclient-3.1.jar封装的socket默认超时为0，即不会超时，需要显示的设置超时时间。
+	apache的commons-httpclient-3.1.jar封装的socket默认超时为0，即不会超时，需要显式的设置超时时间。
 	设置超时说明为：Sets the default socket timeout (SO_TIMEOUT) in milliseconds which is the timeout for waiting for data
 
 	比如设置超时30s，在一定的并发下可保证服务的稳定，一旦超过一个阀值，连接池被耗尽，再继续并发，大量socket拥堵达到文件打开数上限（待验证）
@@ -21615,7 +21922,7 @@ day171 Friday, November 16, 2012
 			netstat -anpc |grep 220.181.111.148 |grep CLOSE_WAIT - 查看CLOSE_WAIT状态的连接
 
 		分析结果：
-			场景1）中，没有CLOSE_WAIT瞬时状态
+			场景1）中，没有CLOSE_WAIT瞬时状态; 关闭连接的情况要处理好，数据没有读取完毕就关闭连接报java.net.SocketException: Connection reset异常
 				执行好后，没有到www.baidu.com的socket连接	，netstat -anpc |grep 220.181.111.148为空
 			场景2）中保持有170个的CLOSE_WAIT状态的socket，直到测试进程结束才会断开socket。
 			netstat -anpc |grep 220.181.111.148
@@ -25086,6 +25393,13 @@ day263 Tuesday, April 09, 2013
 
 	细致和深入的理解专长，少而精；面覆盖到了，点就不容易突出，需要积累。
 
+	高到不可替代，否则帽子摘不掉；唯有卧薪尝胆，另辟蹊径
+		有感于前辈
+	
+	当地高校+关系+强技术背景（公司）牛人+外包，业务为主，自我成长
+		所以外包转正可能性微乎其微
+
+
 
 
 
@@ -26964,6 +27278,7 @@ day302 Thursday, May 23, 2013
 
 7. 落日弓web
 	熟悉一个请求的整体流程
+	页面统一由extjs的js文件生成，extjs封装了各种web富客户端需要用到的组件，对外提供属性设置的方式供调用。
 
 
 8. 对比memcached java client
@@ -27008,24 +27323,569 @@ day302 Thursday, May 23, 2013
 	----
 	PS: 根据hash值从TreeMap中，找到正确的bucket（此处即服务器地址host）
 
-	 com.meetup.memcached.SockIOPool.populateConsistentBuckets方法
+	初始化一致性哈希环的 com.meetup.memcached.SockIOPool.populateConsistentBuckets方法
 	----
-	double factor = Math.floor( ((double)(40 * this.servers.length * thisWeight)) / (double)this.totalWeight );
+	// list of all servers
+	private String[] servers;
+	private Integer[] weights;
+	private Integer totalWeight = 0;
+	...
+	private void populateConsistentBuckets() {
+		if ( log.isDebugEnabled() )
+			log.debug( "++++ initializing internal hashing structure for consistent hashing" );
 
-	for ( long j = 0; j < factor; j++ ) {
-		byte[] d = md5.digest( ( servers[i] + "-" + j ).getBytes() );
-		for ( int h = 0 ; h < 4; h++ ) {
-			Long k = 
-				  ((long)(d[3+h*4]&0xFF) << 24)
-				| ((long)(d[2+h*4]&0xFF) << 16)
-				| ((long)(d[1+h*4]&0xFF) << 8)
-				| ((long)(d[0+h*4]&0xFF));
+		// store buckets in tree map，k=hashcode , v=server host
+		this.consistentBuckets = new TreeMap<Long,String>();
 
-			consistentBuckets.put( k, servers[i] );
+		MessageDigest md5 = MD5.get();
+
+		//初始化totalWeight变量，为所有server的weight值之和，若部分weight未初始化则取1
+		if ( this.totalWeight <= 0 && this.weights !=  null ) {
+			for ( int i = 0; i < this.weights.length; i++ )
+				this.totalWeight += ( this.weights[i] == null ) ? 1 : this.weights[i];
+		}
+		else if ( this.weights == null ) {//若未设置server的weight配置，则totalWeight变量初始化servers数组的长度，即每个server的weight默认都为1
+			this.totalWeight = this.servers.length;
+		}
+		
+		for ( int i = 0; i < servers.length; i++ ) {
+			int thisWeight = 1;
+			if ( this.weights != null && this.weights[i] != null )
+				thisWeight = this.weights[i];
+
+			double factor = Math.floor( ((double)(40 * this.servers.length * thisWeight)) / (double)this.totalWeight );
+			
+			for ( long j = 0; j < factor; j++ ) {
+				byte[] d = md5.digest( ( servers[i] + "-" + j ).getBytes() );
+				for ( int h = 0 ; h < 4; h++ ) {//4个虚拟节点，解决热点问题
+					Long k = 
+						  ((long)(d[3+h*4]&0xFF) << 24)
+						| ((long)(d[2+h*4]&0xFF) << 16)
+						| ((long)(d[1+h*4]&0xFF) << 8)
+						| ((long)(d[0+h*4]&0xFF));
+
+					consistentBuckets.put( k, servers[i] );
+					if ( log.isDebugEnabled() )
+						log.debug( "++++ added " + servers[i] + " to server bucket" );
+				}				
+			}
+
+			// create initial connections
 			if ( log.isDebugEnabled() )
-				log.debug( "++++ added " + servers[i] + " to server bucket" );
-		}				
+				log.debug( "+++ creating initial connections (" + initConn + ") for host: " + servers[i] );
+
+			for ( int j = 0; j < initConn; j++ ) {
+				SockIO socket = createSocket( servers[i] );
+				if ( socket == null ) {
+					log.error( "++++ failed to create connection to: " + servers[i] + " -- only " + j + " created." );
+					break;
+				}
+				
+				//上面初始化hash环，此处初始化每个server的socket池，Map<String,Map<SockIO,Long>> pool，key=server host ,value=IdentityHashMap<SockIO,Long> socketio与当前时间值
+				addSocketToPool( availPool, servers[i], socket );
+				if ( log.isDebugEnabled() )
+					log.debug( "++++ created and added socket: " + socket.toString() + " for host " + servers[i] );
+			}
+		}
 	}
 	----
-	PS: 回头看下consistentBuckets这个treemap（其他sortedMap的实现也可）实现的hash环是如何初始化的
+	PS: 回头看上面consistentBuckets这个treemap（其他sortedMap的实现也可）实现的hash环是如何初始化的
 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day303 Friday, May 24, 2013
+
+1. 
+	* 
+2. 
+
+3. 落日弓
+	落日弓wiki：http://wiki.ec.alibaba-inc.com/index.php/弹性计算与落日弓
+	svn: http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigong/branches/luorigong_for_bigregion
+		orange框架包含在内
+
+	Orange Python框架：wiki: http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9249291
+
+	配置maven库以下载下面的依赖，以配置SSO登陆
+	-----
+	<dependency>
+			<groupId>com.alibaba.platform.shared</groupId>
+			<artifactId>buc.sso.client</artifactId>
+			<version>0.1.20</version>  <!-- 根据下面第3点不同的web.xml配置，选择相应的版本。建议使用最新版本 -->
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.platform.shared</groupId>
+			<artifactId>buc.sso.common</artifactId>
+			<version>0.1.20</version>
+		</dependency>
+	-----
+
+	来自下面的库：
+	-----
+	<repository>
+		<id>nexus</id>
+		<url>http://repo.alibaba-inc.com/nexus/content/groups/alirepositiry/</url>
+		<releases>
+			<enabled>true</enabled>
+		</releases>
+		<snapshots>
+			<enabled>false</enabled>
+		</snapshots>
+	</repository>
+	-----
+
+	mvn test
+	eclipse update maven dependency 
+	done
+	
+	看用户登陆，用户验证 ，SSO
+		通过Filter拦截需要验证的请求，与SSO服务的验证中心交互，验证通过后，拿到一个标识，存入当前请求线程的ThreadLocal中
+
+
+		
+
+4. extjs * extjs
+	- 官网 
+		http://www.sencha.com/products/extjs/
+	- 
+	--------
+	历史 
+
+	最初的ExtJS只是YUI的一个扩展包，自1.1版开始独立发布。它是一个开源软件，遵守GPL 3.0协议。
+	2007年12日4日推出Ext JS 2.0版.
+	2009年7日6日推出Ext JS 3.0版.Ext JS 3.1 版中增加可分组的列标题。
+	2010年6月, Ext JS更名为Sencha（Sencha是日本的煎茶），并且集成jQTouch和Raphal库，这是世界上第一个基于HTML5的移动应用框架，全面兼容 Android 和 Apple iOS。
+	2011年4月26日, 推出Ext framework 4.0版，引入了Config和Mixins概念，另外还新增class, 开发人员可以在一个class包含另一个class.
+	许可证 [编辑]
+
+	Extjs之前使用LGPL和商业授权的双重协议，在08年时改成了现在使用的GPL和商业授权的双重协议，也遵守其他的开源软件协议。
+
+	功能描述 
+
+	Ext包括多种控件，可以实现各种各样的功能
+	文本框和文本域控制，可以控制文本框和文本域中的内容过滤，实现所见即所得的编辑形式。
+	单选框和复选框控制
+	Grid control(表格控件)：可以轻松的实现表格数据统计，拖放。
+	树形控制：生成树形目录，编辑管理树，点击展开或是关闭。
+	Tabs：可活动的标签页，标签页组，可自由添加和删除的标签页，功能丰富。
+	工具条：在面板中可以方便的插入顶部工具条或是底部工具条，实现各种复杂的功能。
+	桌面应用程序菜单：可以制作类似于Windows桌面的网页菜单。
+	灵活的面板布局：将一个面板划分为东南西北中(ESWNC)五个部分，每个部分可以放不同的内容。
+	滚动条：用滚动条来控制数据的显示。
+	Flash图表：flash制作的数据图表功能。
+
+	优点和不足
+
+	Ext集成了CSS样式文件，窗口、面板都有现成的样式，甚至都不需要美工进行特别的美化就可以直接使用。功能涵盖了一个Web 2.0网站所需要的几乎所有的功能，非常完备。但是相应的文件大，加载速度并不理想，而且在低版本的浏览器上显示效果不佳。
+	--------
+	ref: https://zh.wikipedia.org/wiki/Extjs
+
+5. 一种检查方法入参的方式，在方法体逻辑执行前，由另一个检查方法来否则校验	-tip- check方法
+	java.lang.String
+	-----
+	public String(byte bytes[], int offset, int length) {
+		checkBounds(bytes, offset, length);
+		char[] v  = StringCoding.decode(bytes, offset, length);
+		this.offset = 0;
+		this.count = v.length;
+		this.value = v;
+	}
+
+	...
+	private static void checkBounds(byte[] bytes, int offset, int length) {
+		if (length < 0)
+			throw new StringIndexOutOfBoundsException(length);
+		if (offset < 0)
+			throw new StringIndexOutOfBoundsException(offset);
+		if (offset > bytes.length - length)
+			throw new StringIndexOutOfBoundsException(offset + length);
+	}
+	-----
+	PS: 来自JDK String类的构造方法
+
+https://code.google.com/p/shardbatis/wiki/UserGuide2x
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day304 Monday, May 27, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	熟悉
+	资源文件统一管理
+		mvn tomcat:run时tomcat采用源码中的webapps目录下，导致冲突
+
+		采用外部的tomcat来部署测试（using the Tomcat Manager application.）：
+
+		1）配置tomcat的用户（To access the Tomcat Web Application Manager, you must use a name/password with a manager role in Tomcat's tomcat-users.xml file.）
+		<?xml version='1.0' encoding='utf-8'?>
+		<tomcat-users>
+		  <role rolename="manager"/>
+		  <user username="test" password="test" roles="manager"/>
+		</tomcat-users>
+		2）配置maven（ settings.xml file, I need to create a server entry specifying a name for my tomcat server and the manager name and password）
+		<server>
+			<id>mytomcat</id>
+			<username>test</username>
+			<password>test</password>
+		</server>
+		3）配置pom.xml（added a tomcat-maven-plugin entry to the "mywebapp" project's pom.xml.）
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>tomcat-maven-plugin</artifactId>
+			<configuration>
+				<url>http://192.168.1.7:8080/manager</url>
+				<server>mytomcat</server>
+				<path>/mywebapp</path>
+			</configuration>
+		</plugin>
+
+
+
+
+
+	编译测试
+
+	wiki: http://wiki.ec.alibaba-inc.com/index.php/落日弓
+	后端api svn: http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigong/branches
+
+	日志分级别记录
+
+	后端api返回的json值增加字段等变化情况时，与现有前端web定义的pojo冲突报错，可采取兼容后端api字段变化，但记录log，表示有变化未处理
+
+	后期规划：
+		操作流，在现有功能基本满足情况下，设计自动化操作流，无需人工点击各个操作步骤。
+
+3. apache http client * http client
+	MultiThreadedHttpConnectionManager
+		HttpConnectionManagerParams params = client.getHttpConnectionManager().getParams();
+		params.setConnectionTimeout(1000 * 30);
+		params.setDefaultMaxConnectionsPerHost(10240);
+		params.setMaxTotalConnections(10240);
+		params.setSoTimeout(1000 * 30);
+		params.setTcpNoDelay(true);
+	采用连接池方式，复用http连接，下面是部分复用HttpConnection对象的源码：
+	1）
+	-------
+	httpMethod.releaseConnection();
+	-------
+	
+	2）释放连接的输出流以重用连接
+	org.apache.commons.httpclient.HttpMethodBase
+	-------
+	public void releaseConnection() {
+		try {
+		    if (this.responseStream != null) {
+			try {
+			    // FYI - this may indirectly invoke responseBodyConsumed.
+			    this.responseStream.close();//关闭响应输入流
+			} catch (IOException ignore) {
+			}
+		    }
+		} finally {
+		    ensureConnectionRelease();//确保连接对象被回收到池中
+		}
+	    }
+	-------
+	
+	3）
+	org.apache.commons.httpclient.HttpMethodBase
+	-------
+	private void ensureConnectionRelease() {
+		if (responseConnection != null) {
+		    responseConnection.releaseConnection();
+		    responseConnection = null;//置当前方法对象对连接的引用为null，GC考虑
+		}
+	    }
+	-------
+
+	4）
+	org.apache.commons.httpclient.HttpConnection
+	-------
+	public void releaseConnection() {
+		LOG.trace("enter HttpConnection.releaseConnection()");
+		if (locked) {
+		    LOG.debug("Connection is locked.  Call to releaseConnection() ignored.");
+		} else if (httpConnectionManager != null) {
+		    LOG.debug("Releasing connection back to connection manager.");
+		    httpConnectionManager.releaseConnection(this);//此处的实现为MultiThreadedHttpConnectionManager；this指当前getmethod对象（占用此连接资源）
+		} else {
+		    LOG.warn("HttpConnectionManager is null.  Connection cannot be released.");
+		}
+	    }
+	-------
+
+	5）
+	 org.apache.commons.httpclient.MultiThreadedHttpConnectionManager
+	-------
+	public void releaseConnection(HttpConnection conn) {
+		LOG.trace("enter HttpConnectionManager.releaseConnection(HttpConnection)");
+
+		if (conn instanceof HttpConnectionAdapter) {
+		    // connections given out are wrapped in an HttpConnectionAdapter
+		    conn = ((HttpConnectionAdapter) conn).getWrappedConnection();
+		} else {
+		    // this is okay, when an HttpConnectionAdapter is released
+		    // is releases the real connection
+		}
+
+		// make sure that the response has been read.
+		SimpleHttpConnectionManager.finishLastResponse(conn);
+
+		connectionPool.freeConnection(conn);
+	    }
+	-------
+
+	6）复用连接前，确保前一个请求已处理完毕，若没有处理完毕则取出响应流并关闭它，将HttpConnection对象所引用的输出赋值为null
+	org.apache.commons.httpclient.SimpleHttpConnectionManager
+	/**
+	     * Since the same connection is about to be reused, make sure the
+	     * previous request was completely processed, and if not
+	     * consume it now.
+	     * @param conn The connection
+	     */
+	-------
+	static void finishLastResponse(HttpConnection conn) {
+		InputStream lastResponse = conn.getLastResponseInputStream();
+		if (lastResponse != null) {
+		    conn.setLastResponseInputStream(null);
+		    try {
+			lastResponse.close();
+		    } catch (IOException ioe) {
+			conn.close();
+		    }
+		}
+	    }
+	-------
+
+	7）标记连接对象为空闲
+	org.apache.commons.httpclient.MultiThreadedHttpConnectionManager
+	-------
+	public void freeConnection(HttpConnection conn) {
+
+		    HostConfiguration connectionConfiguration = configurationForConnection(conn);
+
+		    if (LOG.isDebugEnabled()) {
+			LOG.debug("Freeing connection, hostConfig=" + connectionConfiguration);
+		    }
+
+		    synchronized (this) {
+			
+			if (shutdown) {
+			    // the connection manager has been shutdown, release the connection's
+			    // resources and get out of here
+			    conn.close();
+			    return;
+			}
+			
+			HostConnectionPool hostPool = getHostPool(connectionConfiguration, true);
+
+			// Put the connect back in the available list and notify a waiter
+			hostPool.freeConnections.add(conn);
+			if (hostPool.numConnections == 0) {
+			    // for some reason this connection pool didn't already exist
+			    LOG.error("Host connection pool not found, hostConfig=" 
+				      + connectionConfiguration);
+			    hostPool.numConnections = 1;
+			}
+
+			freeConnections.add(conn);
+			// we can remove the reference to this connection as we have control over
+			// it again.  this also ensures that the connection manager can be GCed
+			removeReferenceToConnection((HttpConnectionWithReference) conn);
+			if (numConnections == 0) {
+			    // for some reason this connection pool didn't already exist
+			    LOG.error("Host connection pool not found, hostConfig=" 
+				      + connectionConfiguration);
+			    numConnections = 1;
+			}
+
+			// register the connection with the timeout handler
+			idleConnectionHandler.add(conn);
+
+			notifyWaitingThread(hostPool);//Notify通知工作线程池，有连接可用
+		    }
+		}
+	    }
+	-------
+
+	8）
+	 org.apache.commons.httpclient.MultiThreadedHttpConnectionManager.ConnectionPool
+	-------
+	public synchronized void notifyWaitingThread(HostConnectionPool hostPool) {
+
+		    // find the thread we are going to notify, we want to ensure that each
+		    // waiting thread is only interrupted once so we will remove it from 
+		    // all wait queues before interrupting it
+		    WaitingThread waitingThread = null;
+			
+		    if (hostPool.waitingThreads.size() > 0) {
+			if (LOG.isDebugEnabled()) {
+			    LOG.debug("Notifying thread waiting on host pool, hostConfig=" 
+				+ hostPool.hostConfiguration);
+			}
+			waitingThread = (WaitingThread) hostPool.waitingThreads.removeFirst();
+			waitingThreads.remove(waitingThread);
+		    } else if (waitingThreads.size() > 0) {
+			if (LOG.isDebugEnabled()) {
+			    LOG.debug("No-one waiting on host pool, notifying next waiting thread.");
+			}
+			waitingThread = (WaitingThread) waitingThreads.removeFirst();
+			waitingThread.hostConnectionPool.waitingThreads.remove(waitingThread);
+		    } else if (LOG.isDebugEnabled()) {
+			LOG.debug("Notifying no-one, there are no waiting threads");
+		    }
+			
+		    if (waitingThread != null) {
+			waitingThread.interruptedByConnectionPool = true;
+			waitingThread.thread.interrupt();
+		    }
+		}
+	-------
+	
+	 org.apache.commons.httpclient.HttpMethodBase的getResponseBodyAsString方法读取响应的实现，
+	 默认最大响应字节数组大小为整型的最大值，也可通过允许自定义大小的多态方法来满足其他要求
+	-------
+	public byte[] getResponseBody() throws IOException {
+		if (this.responseBody == null) {
+		    InputStream instream = getResponseBodyAsStream();
+		    if (instream != null) {
+			long contentLength = getResponseContentLength();
+			if (contentLength > Integer.MAX_VALUE) { //guard below cast from overflow
+			    throw new IOException("Content too large to be buffered: "+ contentLength +" bytes");
+			}
+			int limit = getParams().getIntParameter(HttpMethodParams.BUFFER_WARN_TRIGGER_LIMIT, 1024*1024);
+			if ((contentLength == -1) || (contentLength > limit)) {
+			    LOG.warn("Going to buffer response body of large or unknown size. "
+				    +"Using getResponseBodyAsStream instead is recommended.");
+			}
+			LOG.debug("Buffering response body");
+			ByteArrayOutputStream outstream = new ByteArrayOutputStream(
+				contentLength > 0 ? (int) contentLength : DEFAULT_INITIAL_BUFFER_SIZE);
+			byte[] buffer = new byte[4096];
+			int len;
+			while ((len = instream.read(buffer)) > 0) {
+			    outstream.write(buffer, 0, len);
+			}
+			outstream.close();
+			setResponseStream(null);
+			this.responseBody = outstream.toByteArray();
+		    }
+		}
+		return this.responseBody;
+	    }
+	-------
+	
+	SimpleHttpConnectionManager
+		只维护一个连接，如果配置为复用也可。默认new HttpClient()为只复用一个连接。
+
+	多线程测试连接池使用方式
+
+	测试时，流未结束被重置报：connection reset错误 ？（www.baidu.com）
+		流读取关闭再release连接
+		与服务端是否关闭有关系，测试时，可模拟服务端，比如用tomcat的某个servelet作为响应，保证服务端不会关闭连接或限制连接数。
+
+		测试连接：http://localhost:8080/examples/servlets/servlet/HelloWorldExample，未出现连接重置异常
+
+
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day305 Tuesday, May 28, 2013
+
+1. 
+	* 落日弓web
+	* 大region二期
+		晚上线上发布
+
+2. 落日弓web
+	extjs4
+		mvc
+		根据例子实践学习
+		http://equin0xe.blogspot.com/2012/07/tutorial-to-start-using-extjs-4-and.html
+
+		http://www.showframework.com/blog/2012/08/28/how-to-study-extjs/	新手如何学习ExtJS 4
+
+		下载extjs4源码+文档+demo
+	
+	后端API测试地址：
+		#luorigong.api=http://10.230.223.191:9999	 开发测试
+		luorigong.api=http://10.250.6.145:9999	测试环境
+		sso.server.url=https://login-test.alibaba-inc.com		用户认证
+
+	Json到java bena的转换，采用jackson库：
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+		
+		转换方式：
+		ObjectMapper om = new ObjectMapper();
+		SimpleSSOUser user = om.readValue(userJsonStr, SimpleSSOUser.class);
+			这里，需要json字符串与bean 的属性定义一一对应？是否有设置可以允许不一一对应
+
+		TypeReference抽象类：（ This class is used to pass full generics type information, and avoid problems with type erasure (that basically removes most usable type references from runtime Class objects).）
+			if (json.startsWith("[") && json.endsWith("]")) {
+			// array of AclRule
+			TypeReference<List<AclRule>> ref = new TypeReference<List<AclRule>>() {
+			};
+			List<AclRule> aclRules = (List<AclRule>) JsonUtil.mapper.readValue(json, ref);
+			return aclRules;
+			}
+	
+	后端API提供HTTP curl方法来操作，如GET,DELETE,POST,PUT
+	具体见后端API的文档说明
+
+	spring MVC流程：
+		通过servlet接受自定义格式uri的请求
+		org.springframework.web.servlet.handler.SimpleUrlHandlerMapping中定义请求与处理bean的映射
+
+	对于静态文件，比如图片，js，css等，可以开启缓存，加快响应
+		HTTP header:
+			last-Modified
+	
+	Chome等浏览器对请求的时间以及处理渲染的时间有记录，便于调试性能瓶颈。
+		Blocking
+		Sending
+		Waiting
+		Receiving
+
+	Extjs4
+		查看组件的属性，方法等可在其DOCS中查看，官网地址：也可从下载的包中的DOCS目录下查看，对于例子需要WEB服务器的支持。
+			http://docs.sencha.com/extjs/4.2.1/
+		
+		导入extjs与extjs的展示原理： get View->get Data -> Render
+		首页，在web.xml中配置下，或者取名为index.html则默认为index页显示；在主页中导入extjs的css，js等资源和库文件；
+		这样后续的窗口页面，都是通过这基础的内容通过异步请求来呈现，具体过程为先请求js的view，然后view再去调用
+		web服务获取view所需要的jason数据，请求完毕。具体见下面分析。
+
+		对于浏览器已缓存的js文件，可以直接从缓存中拿到（Last-Modified HTTP header）
+
+
+		页面的js通过异步请求服务器，拿到extjs js格式的view，渲染后展示出来，如下面一个请求例子（资源视图-所有资源-核心路由管理）：
+			h ttp://localhost:8080/luorigongweb/app/view/resource/grids/ManageCoreRouteGridPanel.js?_dc=1369726140183
+		view中的动态数据，会再次请求服务获取数据：
+			h ttp://localhost:8080/luorigongweb/services/coreRoute/list.json?_dc=1369726140420&nodeId=1&type=idcId&page=1&start=0&limit=25&filter=%5B%7B%22property%22%3A%22ip%22%7D%2C%7B%22property%22%3A%22ip%22%7D%5D
+		
+		Store为数据的来源，定义了proxy，可配置是否主动下载数据。
+		内容展示，从store中取服务器数据或本地store的数据。
+		提交表单数据的逻辑，定义的Form上提交等按钮的触发函数上，
+		
+		阅读自带Guides:
+
+		根据文档写简单mvc例子
+		
+		页面结构：
+			Viewport.js作为最顶层的view，下一层是一级Tab页ViewportChildTab.js，后面就是具体的各个view，form等资源。
+
+	
+	
+	applicationContext-security.xml配置文件？
+
+
+
+
+
+	
