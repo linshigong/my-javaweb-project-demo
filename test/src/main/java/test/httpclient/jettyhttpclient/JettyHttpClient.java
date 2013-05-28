@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 public class JettyHttpClient {
 
@@ -11,6 +12,17 @@ public class JettyHttpClient {
 		HttpClient client = new HttpClient();
 		client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
 		client.setConnectTimeout(5 * 1000);
+		client.setIdleTimeout(1000 * 60 * 60);//1小时连接未用则超时释放
+		client.setMaxConnectionsPerAddress(10240);
+		client.setMaxQueueSizePerAddress(10240);
+		
+		QueuedThreadPool pool = new QueuedThreadPool();
+		pool.setMaxThreads(Runtime.getRuntime().availableProcessors());
+		pool.setDaemon(true);
+		pool.setName("JettyHttpClient");
+		
+		client.setThreadPool(pool);
+		
 		/*
 		 	if (_httpClient.isConnectBlocking())
             {
@@ -47,7 +59,7 @@ public class JettyHttpClient {
 		try {
 			client.send(exchange);
 			Thread.sleep(60 * 1000);
-//			exchange.waitForDone();
+			exchange.waitForDone();
 			response = exchange.getResponseContent();
 		} catch (IOException e) {
 			e.printStackTrace();
