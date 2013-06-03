@@ -14,6 +14,19 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* personal web
+	dynamic DNS resolve动态域名解析服务（Dynamic Domain Name Server）
+		花生壳等（每次动态公网IP发生变化时，将新的IP更新到动态域名解析服务商的数据库中，这样每次域名都指向到新的IP）
+		http://www.pubyun.com/
+	虚拟服务器，DMZ主机（开放所有端口，不建议）
+
+* webkit
+	WebKit 是一个开源的浏览器引擎，与之相对应的引擎有Gecko（Mozilla Firefox 等使用）和Trident（也称MSHTML，IE 使用）。同时WebKit 也是苹果Mac OS X 系统引擎
+	框架版本的名称，主要用于Safari，Dashboard，Mail 和其他一些Mac OS X 程序。WebKit 前身是 KDE 小组的 KHTML，WebKit 所包含的 WebCore 排版引擎和 JSCore 引擎
+	来自于 KDE 的 KHTML 和 KJS，当年苹果比较了 Gecko 和 KHTML 后，仍然选择了后者，就因为它拥有清晰的源码结构、极快的渲染速度。Apple将 KHTML 发扬光大，
+	推出了装备 KHTML 改进型 WebKit 引擎的浏览器 Safari。
+	ref: http://baike.baidu.com/view/1510583.htm
+
 * java java基本数据类型和byte[] 之间的转换   类型转换 字节到long long到字节
 	----
 	/**
@@ -308,8 +321,9 @@ ft2013-04-22
 	查找算法
 		二分查找
 
-* 个人站点 站长 草根站长
+* 个人站点 站长 草根站长 技术站点 	      -tip-
 	专业，全面的java代码分享站 http://www.javaniu.com/
+	系统架构分析 http://www.sudone.com/	   友情链接到多个牛站哦~
 	开源中国社区
 * IM
 	- 服务器端编程
@@ -4578,6 +4592,9 @@ ftian20130102
 	不规范项目的编码形式，另外一方面也是由于项目的进度比较紧，没有那么多的时间去
 	完成工厂的统一创建，当然对于这样的动态创建对象的工厂，推荐的做法还是我们后面会讲到的创建型模式--《抽象工厂模式》来解决吧。
 	from: http://www.cnblogs.com/hegezhou_hot/archive/2010/11/30/1892227.html
+	- 策略模式
+	看springMVC的DispatcherServlet
+
 * Megastore:
 	Providing Scalable, Highly Available
 Storage for Interactive Services
@@ -7210,13 +7227,16 @@ Storage for Interactive Services
 		/proc/sys/net/ipv4/tcp_tw_recycle
 		recyse是加速TIME-WAIT sockets回收
 
-		对tcp_tw_reuse和tcp_tw_recycle的修改，可能会出现.warning, got duplicate tcp line warning, got BOGUS tcp line.上面这二个参数指的是存在这两个完全一样的TCP连接，这会发生在一个连接被迅速的断开并且重新连接的情况，而且使用的端口和地址相同。但基本上这样的事情不会发生，无论如何，使能上述设置会增加重现机会。这个提示不会有人和危害，而且也不会降低系统性能，目前正在进行工作
+		对tcp_tw_reuse和tcp_tw_recycle的修改，可能会出现.warning, got duplicate tcp line warning, got BOGUS tcp line.上面这二个参数指的是存在这两个完全一样的TCP连接，
+		这会发生在一个连接被迅速的断开并且重新连接的情况，而且使用的端口和地址相同。但基本上这样的事情不会发生，无论如何，使能上述设置会增加重现机会。
+		这个提示不会有人和危害，而且也不会降低系统性能，目前正在进行工作
 
 		/proc/sys/net/ipv4/tcp_keepalive_time
 		表示当keepalive起用的时候,TCP发送keepalive消息的频度。缺省是2小时
 
 		/proc/sys/net/ipv4/tcp_fin_timeout    最佳值和BSD一样为30
-		fin_wait1状态是在发起端主动要求关闭tcp连接，并且主动发送fin以后，等待接收端回复ack时候的状态。对于本端断开的socket连接，TCP保持在FIN-WAIT-2状态的时间。对方可能会断开连接或一直不结束连接或不可预料的进程死亡。
+		fin_wait1状态是在发起端主动要求关闭tcp连接，并且主动发送fin以后，等待接收端回复ack时候的状态。对于本端断开的socket连接，TCP保持在FIN-WAIT-2状态的时间。
+		对方可能会断开连接或一直不结束连接或不可预料的进程死亡。
 
 		/proc/sys/net/core/netdev_max_backlog
 		该文件指定了，在接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目。
@@ -7224,7 +7244,9 @@ Storage for Interactive Services
 		表示用于向外连接的端口范围。缺省情况下很小：32768到61000，改为1024到65000。
 		 
 		net.ipv4.tcp_max_tw_buckets = 5000
-		表示系统同时保持TIME_WAIT套接字的最大数量，如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。默认为180000，改为5000。对于Apache、Nginx等服务器，上几行的参数可以很好地减少TIME_WAIT套接字数量，但是对于Squid，效果却不大。此项参数可以控制TIME_WAIT套接字的最大数量，避免Squid服务器被大量的TIME_WAIT套接字拖死。
+		表示系统同时保持TIME_WAIT套接字的最大数量，如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。默认为180000，改为5000。对于Apache、Nginx等服务器，
+		上几行的参数可以很好地减少TIME_WAIT套接字数量，但是对于Squid，效果却不大。此项参数可以控制TIME_WAIT套接字的最大数量，避免Squid服务器被大量的TIME_WAIT
+		套接字拖死。
 		 
 		 
 		其它查看连接数据命令：
@@ -9598,6 +9620,119 @@ search in index find pdf
 		来自：http://www.cnblogs.com/yasin/archive/2009/07/20/1527013.html
 
 * Squid cache 
+	- squid搭设CDN
+		------
+		主服务器群,然后在利用Squid逆向缓存web80端口来加速自己的网站.各大门户网站象163,sina,chinaitlab之类基本都是使用的这种技术,好处是大大的有.比如加速了网络和可以防黑客（因为他们见到的都是CDN的主机）
+		这是利用Squid逆向集群模式做的一种应用
+
+		网络环境：
+
+		主服务器群：源Web服务器群 位于公网ip:220.XXX.XXX.X port:80(后台才是WEB的服务器)
+
+		注: 要保证TCP80,UDP3130在防火墙上是开的(供icp_port通讯使用,多台Squid集群才会用到)
+
+		全国各地分服务器：A服务器公网IP111.xxx.xxx.x
+
+		B服务器公网ip112.xxx.xxx.x
+
+		注: 要保证TCP80,UDP3130在防火墙上是开的(供icp_port通讯使用,多台Squid集群才会用到)
+
+		……………………
+		需要解决的问题：
+
+		全国的所有用户,无论是电信,还是网通,都能速度很好的打开网站
+
+		实施
+
+		1）分别在主服务器群和全国各地分服务器的三台服务器安装Squid,不会安装的请直接关闭本网页.
+
+		2）分别配置Squid,这里只重点叙述Squid集群配置要点.
+
+		主服务器群Squid的配置：
+
+		http_port 220.XXX.XXX.X:80 vhost vport #让Squid监听本机ip的80端口
+
+		icp_port 3130 #多台squid通信使用
+
+		cache_peer “内网web服务器的地址” parent 80 0 no-query originserver no-digest name=cache0 #设置源Web服务器群的ip和端口
+
+		cache_peer 220.XXX.XXX.X sibling 80 3130 name=cache1 #让远程的squid连接本地Squid工作在sibling模式并指定其端口
+
+		cache_peer 111.xxx.xxx.x sibling 80 3130 name=cache2 #A服务器
+
+		cache_peer 112.xxx.xxx.x sibling 80 3130 name=cache3 #B服务器
+
+		cache_peer_domain cache0 www.php-oa.com #配置本机squid允许接受访问的域名
+
+		acl Safe_ports port 80
+
+		acl Safe_ports port 3130 #允许以上端口的代理
+
+		全国各地分服务器Squid的配置：
+
+		A服务器：
+
+		http_port 111.xxx.xxx.x:80 vhost vport
+
+		icp_port 3130
+
+		cache_peer 220.xxx.xxx.x parent 81 0 no-query originserver no-digest name=cache0 #设置主服务器群Web服务器为源服务器
+
+		cache_peer 111.xxx.xxx.x sibling 80 3130 name=cache1
+
+		cache_peer 220.xxx.xxx.x sibling 80 3130 name=cache2
+
+		cache_peer 112.xxx.xxx.x sibling 80 3130 name=cache3
+
+		cache_peer_domain cache0 www.php-oa.com
+
+		acl Safe_ports port 80
+
+		acl Safe_ports port 3130
+
+		B服务器：
+
+		http_port 112.xxx.xxx.x:80 vhost vport
+
+		icp_port 3130
+
+		cache_peer 220.xxx.xxx.x parent 80 0 no-query originserver no-digest name=cache0
+
+		cache_peer 112.xxx.xxx.x sibling 80 3130 name=cache1
+
+		cache_peer 220.xxx.xxx.x sibling 80 3130 name=cache2
+
+		cache_peer 111.xxx.xxx.x sibling 80 3130 name=cache3
+
+		cache_peer_domain cache0 www.php-oa.com
+
+		acl Safe_ports port 80
+
+		acl Safe_ports port 3130
+		虽然配置好了但是如何让电信和网通的用户能有选择的访问两个不同镜像呢？这个请各位自己查相关的资料,要不到https://www.dnspod.com申请双线,电信网通的转发服务
+
+		注:下面看看cache_peer的参数
+
+		通过squid.conf配置文件中的cache_peer选项来配置代理服务器阵
+		列,通过其他的选项来控制选择代理伙伴的方法.Cache_peer的使用格式如下：
+		cache_peer  hostname type http_port icp_port
+		共有5个选项可以配置：
+		1） hostname:指被请求的同级子代理服务器或父代理服务器.可以用主机名或ip地址表示；
+		2）type：指明hostname的类型,是同级子代理服务器还是父代理服务器,也即parent（父） 还是 sibling（子）；
+		3）http_port：hostname的监听端口；
+		4）icp_port：hostname上的ICP监听端口,对于不支持ICP协议的可指定7；
+		5） options：可以包含一个或多个关键字.
+		Options可能的关键字有：
+		1） proxy-only：指明从peer得到的数据在本地不进行缓存,缺省地,squid是要缓存这部分数据的；
+		2） weight=n：用于你有多个peer的情况,这时如果多于一个以上的peer拥有你请求的数据时,squid通过计算每个peer的ICP响应时间来 决定其weight的值,然后squid向其中拥有最大weight的peer发出ICP请求.也即weight值越大,其优先级越高.当然你也可以手工 指定其weight值；
+		3） no-query：不向该peer发送ICP请求.如果该peer不可用时,可以使用该选项；
+		4） Default：有点象路由表中的缺省路由,该peer将被用作最后的尝试手段.当你只有一个父代理服务器并且其不支持ICP协议时,可以使用default和
+		no-query选项让所有请求都发送到该父代理服务器；
+		5）login=user:password：当你的父代理服务器要求用户认证时可以使用该选项来进行认证.
+
+		curl -I http://www.xxx.com
+		------
+		ref: http://www.php-oa.com/2007/12/27/squid-dnspod.html
 	- Why should I deploy Squid?
 		(Or.. "Why should I bother with web caching? Can't I just buy more bandwidth?")
 		The developers of the HTTP protocol identified early on that there was going to be exponential growth in content and, concerned with distribution mechanisms, added powerful caching primitives.
@@ -27778,7 +27913,7 @@ day304 Monday, May 27, 2013
 	-------
 	
 	SimpleHttpConnectionManager
-		只维护一个连接，如果配置为复用也可。默认new HttpClient()为只复用一个连接。
+		只维护一个连接，如果配置为复用也可。默认new HttpClient()为只复用一个连接。如果每次都实例化一个，就没有复用连接了。
 
 	多线程测试连接池使用方式
 
@@ -27787,6 +27922,30 @@ day304 Monday, May 27, 2013
 		与服务端是否关闭有关系，测试时，可模拟服务端，比如用tomcat的某个servelet作为响应，保证服务端不会关闭连接或限制连接数。
 
 		测试连接：http://localhost:8080/examples/servlets/servlet/HelloWorldExample，未出现连接重置异常
+
+		通过wireshark抓包，发现收到baidu的RST信号，重置连接，这与服务器的保护策略？待 -tip-
+
+		httpclient要与服务端保持http长连接需要带上:connection:keep-alive，这样告诉服务端请求保持连接；但服务端可能处理socket会就关闭了，看
+		下面的DOC说明：
+		java.net.SocketOptions 定义了socket一些设置项
+		-------
+		When the keepalive option is set for a TCP socket and no data has been exchanged across the socket in either direction for 2 hours (NOTE: the actual value is implementation dependent), 
+		TCP automatically sends a keepalive probe to the peer. This probe is a TCP segment to which the peer must respond. One of three responses is expected: 1. The peer responds with the 
+		expected ACK. The application is not notified (since everything is OK). TCP will send another probe following another 2 hours of inactivity. 2. The peer responds with an RST, which tells 
+		the local TCP that the peer host has crashed and rebooted. The socket is closed. 3. There is no response from the peer. The socket is closed. The purpose of this option is to detect if the 
+		peer host crashes. Valid only for TCP socket: SocketImpl
+		-------
+		根据上面，百度响应了http请求后就主动关闭了连接，访问量如此高的服务器采用长连接也不实际，而且是请求响应方式无需保持连接（这里connection:keep-alive保持
+		的是四层TCP连接）
+
+		简单的通过chrome浏览器请求tomcat的servlet，采用的是keep-alive的请求，可以用netstat查看连接情况，有tcp保持的记录，
+
+		下面来看tomcat服务端，对Tcp参数connection:keep-alive是如何处理的，此处看的是tomcat的DOC，对应"The HTTP Connector"章节，这里解释了HTTP Connector能设置的参数
+		maxKeepAliveRequests	
+The maximum number of HTTP requests which can be pipelined until the connection is closed by the server. Setting this attribute to 1 will disable HTTP/1.0 keep-alive, as well as HTTP/1.1 keep-alive and pipelining. Setting this to -1 will allow an unlimited amount of pipelined or keep-alive HTTP requests. If not specified, this attribute is set to 100.
+ref: http://tomcat.apache.org/tomcat-5.5-doc/config/http.html
+
+
 
 
 	
@@ -27885,7 +28044,364 @@ day305 Tuesday, May 28, 2013
 	applicationContext-security.xml配置文件？
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day306 Wednesday, May 29, 2013
 
+1. 
+	* 落日弓web
+
+2. Extjs DOC
+	建议的目录结构：
+	-------
+	- appname
+		- app
+			- namespace
+				- Class1.js
+				- Class2.js
+				- ...
+		- extjs
+		- resources
+			- css
+			- images
+			- ...
+		- app.js
+		- index.html
+	-------
+	PS: app中为用户自定义的js文件，namespace定义为view、store、module、controller，再其下的子目录还可以在根据业务模块划分。
+	@appname is a directory that contains all your application's source files
+	@app contains all your classes, the naming style of which should follow the convention listed in the Class System guide
+	@extjs contains the Ext JS 4 SDK files
+	@resources contains additional CSS and image files which are responsible for the look and feel of the application, as well as other static resources (XML, JSON, etc.)
+	@index.html is the entry-point HTML document
+	@app.js contains your application's logic
+	注意：此目录结构为官方约定，若不一致默认情况下会无法加载js文件。比如application中可以设置autoCreateViewport: true属性来自动加载viewport文件。
+
+	运行一个HelloWorld示例
+	搭建maven web项目，后续用此测试项目模拟相同环境测试。
+	extjs4+tomcat6+jdk1.6+spring+apache httpclient
+	配置m2e插件，配置运行mvn tomcat:run命令来调试
+
+	extjs SDK目录
+		若页面用的是debug版本的库，则会引用src目录下的js文件；若为编译版的则不会使用src目录下的js，这样生成环境部署时，可使用编译后的库，然后去掉src目录
+		从而，减小sdk的大小。
+	
+	extjs4项目部署：（Sencha SDK Tools打包用到的最新库，用于生成环境打包）
+		参考官方Guide: http://docs.sencha.com/extjs/4.2.1/#!/guide/getting_started
+		--------
+		The newly-introduced Sencha SDK Tools (download here) makes deployment of any Ext JS 4 application easier than ever. The tools allow you to generate a manifest of all JavaScript 
+		dependencies in the form of a JSB3 (JSBuilder file format) file, and create a custom build containing only the code that your application needs.
+
+		Once you've installed the SDK Tools, open a terminal window and navigate into your application's directory.
+
+		cd path/to/web/root/helloext
+		From here you only need to run a couple of simple commands. The first one generates a JSB3 file:
+
+		sencha create jsb -a index.html -p app.jsb3
+		For applications built on top of a dynamic server-side language like PHP, Ruby, ASP, etc., you can simply replace index.html with the actual URL of your application:
+
+		sencha create jsb -a http://localhost/helloext/index.html -p app.jsb3
+		This scans your index.html file for all framework and application files that are actually used by the app, and then creates a JSB file called app.jsb3. Generating the JSB3 first gives us a chance to 
+		modify the generated app.jsb3 before building - this can be helpful if you have custom resources to copy, but in most cases we can immediately proceed to build the application with the second command:
+
+		sencha build -p app.jsb3 -d .
+		This creates 2 files based on the JSB3 file:
+
+		all-classes.js - This file contains all of your application's classes. It is not minified so is very useful for debugging problems with your built application. In our example this file is empty because our 
+		"Hello Ext" application does not contain any classes.
+		app-all.js - This file is a minimized build of your application plus all of the Ext JS classes required to run it. It is the minified and production-ready version of all-classes.js + app.js.
+		An Ext JS application will need a separate index.html for the production version of the app. You will typically handle this in your build process or server side logic, but for now let's just create a new file 
+		in the helloext directory called index-prod.html:
+
+		<html>
+		<head>
+		    <title>Hello Ext</title>
+
+		    <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css">
+		    <script type="text/javascript" src="extjs/ext.js"></script>
+		    <script type="text/javascript" src="app-all.js"></script>
+		</head>
+		<body></body>
+		</html>
+		Notice that ext-debug.js has been replaced with ext.js, and app.js has been replaced with app-all.js. If you navigate to http://localhost/helloext/index-prod.html in your browser, you should see the 
+		production version of the "Hello Ext" application.
+		--------
+		PS: 下载了Sencha Cmd 3.1.2
+		官网关于CMD工具的说明：
+			--------
+			Sencha Cmd is the cornerstone to build your Sencha application. From scaffolding a new project, to minifying and deploying your application to production, Sencha 
+			Cmd provides a full set of lifecycle management features to compliment your Sencha project.
+			--------
+			PS: 搭建新项目、精简化以及部署应用到生成环境，及项目生命周期中相关需要用到的功能
+
+
+
+
+	bubbly.cc
+	panac.cc
+	erland.cc
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day307 Thursday, May 30, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	执行流程
+	页面组织结构：子页面嵌套关系及与目录树的关系
+
+	一切都从webcontent目录下的index.html和app.js开始： 目录结构及项目结构符合extjs4的官方建议结构 -tip-
+	app.js为新项目定义的开始，是衔接extjs4库和用户自定义js内容的桥梁，当然app.js是在index.html中随同extjs库和资源文件一起被引入的。
+
+	app.js中定义了application，application中的：
+		autoCreateViewport: true
+	属性会触发加载app\view\viewport.js文件，此文件里定义了页面需要用的子模块，比如：
+	requires: ['LuoRiGong.view.ViewportChildTab'],
+
+	extjs4根据require的模块，自动加载对应的文件，注意：自动加载是基于app目录和app.js的名称定义，以及app目录下的文件的命名要统一，与官方定义一致
+	否则浏览器console会报加载不了js文件（比如chrome）。
+	
+	Extjs4命名规范：
+	1）Class类
+	类名只能包含字母数字，不推荐使用数字，除非是常用词。不要用下划线中化纤等非字母数字字符。
+
+	MyCompany.useful_util.Debug_Toolbar 不合法
+	MyCompany.util.Base64 合法
+	类应该组织在包或者说命名空间下面，并且至少要有一个顶层命名空间，例如：
+
+	MyCompany.data.CoolProxy
+	MyCompany.Application
+	顶层命名空间和真正的类，应该采用驼峰式命名，其他一律小写，例如：
+
+	MyCompany.form.action.AutoLoad
+	非Ext官方类，不可以在Ext顶层命名空间下（这是为了防止冲突）
+
+	首字母组合词也要采用驼峰式命名，例如：
+	
+	2）Source File源文件
+	类的命名和源文件存放路径是对应的，例如：
+		Ext.util.Observable 存放在 path/to/src/Ext/util/Observable.js
+		Ext.form.action.Submit 存放在 path/to/src/Ext/form/action/Submit.js
+		MyCompany.chart.axis.Numeric 存放在 path/to/src/MyCompany/chart/axis/Numeric.js
+	这里面的path/to/src就是程序跟目录下的那个app目录，所有类都应该这样组织，保证维护性
+
+	3）Methods and Variables 方法和成员变量
+	和类名一样只能用字母和数字，其他符号不可以
+	同样是驼峰命名，但是首字母小写，首字母组合词也如此
+
+	4）Properties 属性
+	跟成员变量一致
+	如果是常量
+
+	ExtJs MVC
+	Defining a Controller 定义一个控制器
+	控制器是应用的粘合剂，它们所作的事情就是监听事件并执行动作
+
+
+3. domain
+	reland.cc
+	yl-4x
+
+
+4. extjs4 eclipse插件 安装及配置 * extjs4 spket
+	地址： http://www.agpad.com/update
+	下面是官方使用说明：
+	-----
+	Create JavaScript profile
+
+	Select the menu item Window > Preferences... to open the workbench preferences.
+	Select the Spket > JavaScript Profile preference page to display the installed JavaScript Profiles.
+	Click the New.. button. In the Name field, type ExtAIR as the name for the new profile. Then click OK.
+	Click the Add Library button. From the Library drop-down list, select AIR. Then click OK.
+	Select profile ExtAIR then click the Add Library button. From the Library drop-down list, select ExtJS. Then click OK.
+	Click the Add File button, choose ext.jsb which can be found in Ext source folder
+	Select the ExtAIR profile created in step 3, click the Default button make it the default profile for all project. The default profile can also be configured per project by using Configure Project Specific Settings... link.
+	Click on OK to save the preferences.
+
+
+	Start coding
+
+	From the menu bar, select File > New > File
+	In the File name field, type test.js as the name for the new file. Then click Finish.
+	-----
+	from: http://www.spket.com/ext-air-tutorials.html
+	PS: 就是插件安装好后，需要设置插件，增加profile配置，并指向到extjs4的目录下；新建js文件，打开时采用spket插件提供的编辑器；
+
+
+
+
+SEVERE: Can't create channelSocket
+ 31 java.lang.ClassFormatError: Code segment has wrong length in class file org/apache/jk/common/ChannelSocket
+ 环境原6.0.x，换为6.3.x即可（AJP端口正确打开）
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day308 Friday, May 31, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	extjs速度慢的优化：squid做前端缓存
+		考虑对静态资源做缓存，直接从缓存读取而不去web服务器获取
+		从chrome的加载记录可以看出，慢的原因在于需要加载大量js文件，如果用前端缓存速度相对会提高不少，可配置测试下 待？
+
+3. Spring MVC对文件上传的支持 MultipartResolver接口
+	Strategy Patten策略模式的应用，底层上传文件实现还是采用apache common upload包
+	------
+	org.springframework.web.multipart.MultipartResolver
+	A strategy interface for multipart file upload resolution in accordance with RFC 1867. Implementations are typically usable both within an application context and standalone. 
+	------
+	PS: MultipartResolver一个策略接口用于多媒体文件上传处理
+
+	org.springframework.web.servlet.DispatcherServlet
+	这个转发servlet采用策略模式，根据配置来设置各种解析器Resolver，需要替换直接在配置文件中替换实现即可；DispatcherServlet定义了多个策略的成员变量
+	在初始化策略对象时，若未在BeanFactory配置则取默认实现或者为空，下面为部分源码：
+	-----
+	/** MultipartResolver used by this servlet */
+	private MultipartResolver multipartResolver;
+
+	/** LocaleResolver used by this servlet */
+	private LocaleResolver localeResolver;
+	...
+	...
+	/**
+	 * Initialize the strategy objects that this servlet uses.
+	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
+	 */
+	protected void initStrategies(ApplicationContext context) {
+		initMultipartResolver(context);
+		initLocaleResolver(context);
+		initThemeResolver(context);
+		initHandlerMappings(context);
+		initHandlerAdapters(context);
+		initHandlerExceptionResolvers(context);
+		initRequestToViewNameTranslator(context);
+		initViewResolvers(context);
+		initFlashMapManager(context);
+	}
+	-----
+
+	spring MVC: URL MAPPING
+	org.springframework.web.servlet.handler.SimpleUrlHandlerMapping
+
+4. ExtJs4
+	根据用到的组件和属性来属性各个组件。
+
+	1) xtype的定义
+	------
+	This property provides a shorter alternative to creating objects than using a full class name. Using xtype is the most common way to define component instances, especially in a container. 
+	For example, the items in a form containing text fields could be created explicitly like so:
+
+	 items: [
+	     Ext.create('Ext.form.field.Text', {
+		 fieldLabel: 'Foo'
+	     }),
+	     Ext.create('Ext.form.field.Text', {
+		 fieldLabel: 'Bar'
+	     }),
+	     Ext.create('Ext.form.field.Number', {
+		 fieldLabel: 'Num'
+	     })
+	 ]
+	But by using xtype, the above becomes:
+
+	 items: [
+	     {
+		 xtype: 'textfield',
+		 fieldLabel: 'Foo'
+	     },
+	     {
+		 xtype: 'textfield',
+		 fieldLabel: 'Bar'
+	     },
+	     {
+		 xtype: 'numberfield',
+		 fieldLabel: 'Num'
+	     }
+	 ]
+	When the xtype is common to many items, Ext.container.AbstractContainer.defaultType is another way to specify the xtype for all items that don't have an explicit xtype:
+
+	 defaultType: 'textfield',
+	 items: [
+	     { fieldLabel: 'Foo' },
+	     { fieldLabel: 'Bar' },
+	     { fieldLabel: 'Num', xtype: 'numberfield' }
+	 ]
+	Each member of the items array is now just a "configuration object". These objects are used to create and configure component instances. A configuration object can be manually used to 
+	instantiate a component using Ext.widget:
+
+	 var text1 = Ext.create('Ext.form.field.Text', {
+	     fieldLabel: 'Foo'
+	 });
+
+	 // or alternatively:
+
+	 var text1 = Ext.widget({
+	     xtype: 'textfield',
+	     fieldLabel: 'Foo'
+	 });
+	This conversion of configuration objects into instantiated components is done when a container is created as part of its {Ext.container.AbstractContainer.initComponent} process. As part of the 
+	same process, the items array is converted from its raw array form into a Ext.util.MixedCollection instance.
+
+	You can define your own xtype on a custom component by specifying the xtype property in Ext.define. For example:
+
+	Ext.define('MyApp.PressMeButton', {
+	    extend: 'Ext.button.Button',
+	    xtype: 'pressmebutton',
+	    text: 'Press Me'
+	});
+	Care should be taken when naming an xtype in a custom component because there is a single, shared scope for all xtypes. Third part components should consider using a prefix to avoid collisions.
+
+	Ext.define('Foo.form.CoolButton', {
+	    extend: 'Ext.button.Button',
+	    xtype: 'ux-coolbutton',
+	    text: 'Cool!'
+	});
+	See Ext.enums.Widget for list of all available xtypes.
+	------
+
+	2) Ext.container.ContainerView
+	Base class for any Ext.Component that may contain other Components. Containers handle the basic behavior of containing items, namely adding, inserting and removing items.
+	eg:
+	--------
+	// Explicitly create a Container
+	Ext.create('Ext.container.Container', {
+	    layout: {
+		type: 'hbox'
+	    },
+	    width: 400,
+	    renderTo: Ext.getBody(),
+	    border: 1,
+	    style: {borderColor:'#000000', borderStyle:'solid', borderWidth:'1px'},
+	    defaults: {
+		labelWidth: 80,
+		// implicitly create Container by specifying xtype
+		xtype: 'datefield',
+		flex: 1,
+		style: {
+		    padding: '10px'
+		}
+	    },
+	    items: [{
+		xtype: 'datefield',
+		name: 'startDate',
+		fieldLabel: 'Start date'
+	    },{
+		xtype: 'datefield',
+		name: 'endDate',
+		fieldLabel: 'End date'
+	    }]
+	});
+	--------
+
+	3) Ext.container.Viewport
+	属性：
+	
 
 
 	
+
+
+
