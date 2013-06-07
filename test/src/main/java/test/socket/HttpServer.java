@@ -26,6 +26,7 @@ public class HttpServer {
 			// 显示启动信息
 			while (true) {
 				Socket socket = server_socket.accept();
+				socket.setKeepAlive(true);
 				System.out.println("New connection accepted "
 						+ socket.getInetAddress() + ":" + socket.getPort());
 				// 创建分线程

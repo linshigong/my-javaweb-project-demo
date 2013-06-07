@@ -17,7 +17,7 @@ public class JettyHttpClient {
 		client.setMaxQueueSizePerAddress(10240);
 		
 		QueuedThreadPool pool = new QueuedThreadPool();
-		pool.setMaxThreads(Runtime.getRuntime().availableProcessors());
+		pool.setMaxThreads(10);//Runtime.getRuntime().availableProcessors()，此处值要大于2？
 		pool.setDaemon(true);
 		pool.setName("JettyHttpClient");
 		
@@ -50,26 +50,107 @@ public class JettyHttpClient {
 			e1.printStackTrace();
 		}
 		
-		ContentExchange exchange = new ContentExchange();
+		ContentExchange exchange = new ContentExchange(){
+			@Override
+			protected void onResponseComplete() throws IOException {
+				super.onResponseComplete();
+				System.out.println(this.getResponseStatus());
+			}
+			
+			@Override
+			protected void onException(Throwable x) {
+				System.out.println(x);
+			}
+			
+			@Override
+			protected void onRequestCommitted() throws IOException {
+				System.out.println("request done");
+			}
+		};
 		String url = "93.46.8.89";//93.46.8.89 facebook ^^
-		String url2 = "10.250.8.214";
-		exchange.setURL("http://"+url2);
+		String url2 = "http://10.250.8.214";
+		String url3 = "http://www.baidu.com/";
+		exchange.setURL(url3);
+		exchange.setMethod("GET");
 		
 		String response = null;
 		try {
 			client.send(exchange);
-			Thread.sleep(60 * 1000);
 			exchange.waitForDone();
-			response = exchange.getResponseContent();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		try {
+			client.stop();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Jetty Client
+	 */
+	public static class HttpUtil{
 		
-		System.out.println(response);
+		public static int num = 0;//temp use for test
 		
+		private final static HttpClient client = new HttpClient();
+		
+		static {
+			client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
+			client.setConnectTimeout(5 * 1000);
+			client.setIdleTimeout(1000 * 60 * 60);//1小时连接未用则超时释放
+			client.setMaxConnectionsPerAddress(10240);
+			client.setMaxQueueSizePerAddress(10240);
+			
+			QueuedThreadPool pool = new QueuedThreadPool();
+			pool.setMaxThreads(10);
+			pool.setDaemon(true);
+			pool.setName("JettyHttpClient");
+			
+			client.setThreadPool(pool);
+			
+			client.setConnectBlocking(false);//此属性的设置影响内容如注释中说明
+			try {
+				client.start();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+	
+		public static String send(String url){
+			ContentExchange exchange = new ContentExchange();
+			exchange.setURL(url);
+			exchange.setMethod("GET");
+			
+			String response = null;
+			try {
+				client.send(exchange);
+				exchange.waitForDone();
+				response = exchange.getResponseContent();
+//				System.out.println("status="+exchange.getResponseStatus()+" \n"+response);
+				if(exchange.getResponseStatus() == 200){
+					num++;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			return response;
+		}
+		
+		public static void shutdown(){
+			try {
+				client.stop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }
