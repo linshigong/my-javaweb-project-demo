@@ -4965,6 +4965,13 @@ Storage for Interactive Services
 	goagent
 		https://code.google.com/p/goagent/
 		gae
+		
+		配置svn客户端用proxy连接：
+		eg: TortoiseSVN
+			setting>network>proxy
+				url port
+				svn username
+				svn password
 
 * facebook
 	http://www.facebook.com/note.php?note_id=76191543919&ref=mf
