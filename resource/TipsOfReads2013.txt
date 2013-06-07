@@ -403,6 +403,37 @@ Chapter6 Command Patten(命令模式)
 	封装方法调用，调用者无需知道调用过程；另外也可用于记录log和常用逻辑到undo实现中，比如一些ide提供的
 	撤销功能。
 
+------------------------
+Wednesday, June 05, 2013
+
+	文中以远程温度遥控器装置的设计为例，比如发送操作指令、取消是一个指令等
+
+	实现步骤：
+	a. Implementing the command interface
+	b. Implementing a Command to turn a light on
+	c. A client which uses the command
+
+
+	Command Patten definition:
+		The Command Pattern encapsulates a request as an object, thereby letting you parameterize other objects	with different requests, queue or log requests, and support
+		undoable operations.
+
+------------------------
+Thursday, June 06, 2013
+
+p289&301
+
+Template Method Pattern 模板方法定义：
+	The Template Method Pattern defi nes the skeleton
+	of an algorithm in a method, deferring some steps to
+	subclasses. Template Method lets subclasses redefi ne
+	certain steps of an algorithm without changing the
+	algorithm’s structure.
+
+	抽象出算法的骨架，由子类实现。
+
+
+
 
 
 	

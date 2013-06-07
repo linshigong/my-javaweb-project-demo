@@ -14,6 +14,20 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* CDN Content Delivery Network 内容分发网络
+	原理：
+
+	例子：
+		Amazon的CloudFront
+* cname
+	CNAME指别名记录也被称为规范名字。这种记录允许您将多个名字映射到同一台计算机。 通常用于同时提供WWW和MAIL服务的计算机。
+	例如，有一台计算机名为“host.mydomain.com”（A记录）。 它同时提供WWW和MAIL服务，为了便于用户访问服务。可以为该计算机设置两个别名（CNAME）：
+	WWW和MAIL。 这两个别名的全称就是“www.mydomain.com”和“mail.mydomain.com”。实际上他们都指向“host.mydomain.com”。
+
+	在linux上使用BIND建立DNS服务器
+
+* 集群监控
+	Ganglia
 * personal web
 	dynamic DNS resolve动态域名解析服务（Dynamic Domain Name Server）
 		花生壳等（每次动态公网IP发生变化时，将新的IP更新到动态域名解析服务商的数据库中，这样每次域名都指向到新的IP）
@@ -2095,7 +2109,8 @@ ft2013-04-22
 		    <async-supported>true</async-supported> 
 		</servlet> 
 
-		对于使用 Servlet 3.0 提供的 @WebServlet 和 @WebFilter 进行 Servlet 或过滤器配置的情况，这两个注解都提供了 asyncSupported 属性，默认该属性的取值为 false，要启用异步处理支持，只需将该属性设置为 true 即可。以 @WebFilter 为例，其配置方式如下所示：
+		对于使用 Servlet 3.0 提供的 @WebServlet 和 @WebFilter 进行 Servlet 或过滤器配置的情况，这两个注解都提供了 asyncSupported 属性，默认该属性的取值为 false，
+		要启用异步处理支持，只需将该属性设置为 true 即可。以 @WebFilter 为例，其配置方式如下所示：
 		@WebFilter(urlPatterns = "/demo",asyncSupported = true) 
 		public class DemoFilter implements Filter{...} 
 
@@ -4913,6 +4928,12 @@ Storage for Interactive Services
 	从git上，google code上也能看到开源项目
 	facebook:
 		https://github.com/facebook
+	常用git命令
+	git clone https://github.com/goagent/goagent.git
+	然后checkout tag
+	git tag
+	git checkout $tagNum
+
 	
 *avahi
 	/var/log/messages
@@ -4934,13 +4955,17 @@ Storage for Interactive Services
 	如果你用不到 把该服务直接关闭    
 	/etc/init.d/avahi-daemon stop or service avahi-daemon  stop
 
-* vpn,proxy ,brea k
+* vpn,proxy ,brea k 
 	https://trial5.securetrial.net/home
 
 	web page proxy to access www
 
 	http://www.gamesites200.com/wowprivate/
 		set it up by yourself
+	goagent
+		https://code.google.com/p/goagent/
+		gae
+
 * facebook
 	http://www.facebook.com/note.php?note_id=76191543919&ref=mf
 	开源项目在git：
@@ -6556,6 +6581,57 @@ Storage for Interactive Services
 	  使用VRRP协议，不用改造目前的网络结构，最大限度保护了当前投资，只需最少的管理费用，却大大提升了网络性能，具有重大的应用价值。
 
 * linux
+	- /etc/sysctl.conf
+		-----
+		# Kernel sysctl configuration file for Red Hat Linux
+		#
+		# For binary values, 0 is disabled, 1 is enabled.  See sysctl(8) and
+		# sysctl.conf(5) for more details.
+
+		# Controls IP packet forwarding
+		net.ipv4.ip_forward = 0
+
+		# Controls source route verification
+		net.ipv4.conf.default.rp_filter = 1
+
+		# Do not accept source routing
+		net.ipv4.conf.default.accept_source_route = 0
+
+		# Controls the System Request debugging functionality of the kernel
+		kernel.sysrq = 0
+
+		# Controls whether core dumps will append the PID to the core filename
+		# Useful for debugging multi-threaded applications
+		kernel.core_uses_pid = 1
+
+		# Controls the use of TCP syncookies
+		net.ipv4.tcp_syncookies = 1
+
+		# Controls the maximum size of a message, in bytes
+		kernel.msgmnb = 65536
+
+		# Controls the default maxmimum size of a mesage queue
+		kernel.msgmax = 65536
+
+		# Controls the maximum shared segment size, in bytes
+		kernel.shmmax = 68719476736
+
+		# Controls the maximum number of shared memory segments, in pages
+		kernel.shmall = 4294967296
+
+		# Determines how often to check for stale neighbor entries. 
+		net.ipv4.neigh.default.gc_stale_time=120
+
+		# Using arp_announce/arp_ignore to solve the ARP Problem
+		net.ipv4.conf.default.arp_announce = 2
+		net.ipv4.conf.all.arp_announce = 2
+
+		# Disable reverse-path filter
+		net.ipv4.conf.all.rp_filter = 0  
+		net.ipv4.conf.default.rp_filter = 0
+		net.ipv4.tcp_tw_reuse = 1
+		net.ipv4.tcp_tw_recycle = 1
+		-----
 	- arping - send ARP REQUEST to a neighbour host
 	- Linux调试工具strace和gdb常用命令小结
 		---------
@@ -6734,9 +6810,11 @@ Storage for Interactive Services
 			 connect(3, {sa_family=AF_INET, sin_port=htons(80), sin_addr=inet_addr("216.239.122.102")}, 16) = -1 EINPROGRESS (Operation now in progress)
 			 select(4, NULL, [3], NULL, NULL)        = 1 (out [3])
 			那么，上述的输出，说明进程发生了什么呢？
-			注意到这个进程尝试连接/var/run/nscd/socket连接了吗？这意味着nc程序首先会去连接NSCD- Name Service Cache Daemon - 它通常用于设置和NIS，YP，LDAP或者类似目录协议相关的域名查询配置上。在上述例子中，连接失败了。
+			注意到这个进程尝试连接/var/run/nscd/socket连接了吗？这意味着nc程序首先会去连接NSCD- Name Service Cache Daemon - 它通常用于设置和NIS，YP，
+			LDAP或者类似目录协议相关的域名查询配置上。在上述例子中，连接失败了。
 			 
-			接下来进程开始连接到DNS，这点可以从sin_port=htons(53)输出可以看出。你可以看到，它接着做了一个sendto()的调用，发出了一个包含www.news.com信息的DNS包。然后读取返回的包数据，不知什么原因，它做了三次这样的尝试。一个可能的原因是www.news.com是一条CNAME记录。多次请求可能是nc程序处理的一种方式。
+			接下来进程开始连接到DNS，这点可以从sin_port=htons(53)输出可以看出。你可以看到，它接着做了一个sendto()的调用，发出了一个包含www.news.com信息
+			的DNS包。然后读取返回的包数据，不知什么原因，它做了三次这样的尝试。一个可能的原因是www.news.com是一条CNAME记录。多次请求可能是nc程序处理的一种方式。
 			 
 			最后，它总算是发起了connect()操作，注意这个操作的返回结果是EINPROGRESS，这意味着这个连接是非阻塞式的，nc希望继续，于是它调用了select()。
 			 
@@ -9135,8 +9213,68 @@ search in index find pdf
 		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
  * spring
-	- spring MVC
-		
+	- spring MVC		 * spring mvc
+		1) 支持注解方式的参数处理，类似REST方式service的实现也提供了参数解析辅助注解
+		2) 请求的uri带格式后缀时，比如/xxx/list.json，作用于视图解析部分，根据后缀返回对应的view
+			org.springframework.web.servlet.view.ContentNegotiatingViewResolver
+			DOC
+			-----
+			Implementation of ViewResolver that resolves a view based on the request file name or Accept 
+			 header. 
+			The ContentNegotiatingViewResolver does not resolve views itself, but delegates to other 
+			 ViewResolvers. By default, these other view resolvers are picked up automatically from the application 
+			 context, though they can also be set explicitly by using the viewResolvers property. <strong>Note</
+			 strong> that in order for this view resolver to work properly, the order property needs to be set to a 
+			 higher precedence than the others (the default is Ordered.HIGHEST_PRECEDENCE.) 
+			This view resolver uses the requested media type to select a suitable View for a request. This media 
+			 type is determined by using the following criteria: <ol> 
+				- If the requested path has a file extension and if the setFavorPathExtension property is true, 
+				 the mediaTypes property is inspected for a matching media type. 
+				- If the request contains a parameter defining the extension and if the setFavorParameter 
+				 property is true, the mediaTypes property is inspected for a matching media type. The default name 
+				 of the parameter is format and it can be configured using the parameterName property. 
+				- If there is no match in the mediaTypes property and if the Java Activation Framework (JAF) 
+				 is both enabled and present on the classpath, FileTypeMap.getContentType(String) is used instead. 
+				- If the previous steps did not result in a media type, and ignoreAcceptHeader is false, the 
+				 request Accept header is used. </ol> 
+			Once the requested media type has been determined, this resolver queries each delegate view 
+			 resolver for a View and determines if the requested media type is compatible with the view's content 
+			 type). The most compatible view is returned. 
+			Additionally, this view resolver exposes the defaultViews property, allowing you to override the views 
+			 provided by the view resolvers. Note that these default views are offered as candicates, and still need 
+			 have the content type requested (via file extension, parameter, or Accept header, described above). 
+			 You can also set the default content type directly, which will be returned when the other mechanisms 
+			 (Accept header, file extension or parameter) do not result in a match. 
+			For example, if the request path is /view.html, this view resolver will look for a view that has the text/
+			 html content type (based on the html file extension). A request for /view with a text/html request 
+			 Accept header has the same result. 
+			-----
+
+			spring配置
+			-----
+			<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+				<property name="mediaTypes">
+					<map>
+						<entry key="json" value="application/json" />
+					</map>
+				</property>
+				<property name="defaultViews">
+					<list>
+						<bean
+							class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+						</bean>
+					</list>
+				</property>
+			</bean>			
+			-----
+			PS: 配置了请求扩展名为.json时，返回内容类型为application/json格式
+
+			Spring MVC对响应的格式的封装，比如对于xml的返回，可以采用不同的xml转换组件，由org.springframework.oxm.Marshaller来抽象。
+			DOC
+			-----
+			Defines the contract for Object XML Mapping Marshallers. Implementations of this interface can serialize a given Object to an XML Stream. 
+			-----
+
 	- 加入spring支持
 		pom配置spring依赖包
 		创建application
@@ -10167,6 +10305,57 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			...
 			-----
 * struts
+	- Struts2插件机制
+		比如，struts与spring集成时，可以用spring来获取注入的对象，就是通过struts的配置struts.objectFactory=spring来完成
+		下面为一篇介绍struts2插件机制的文章：
+		-----
+		方便为Struts2扩展功能。
+
+		主要作用：
+
+		简化开发，提高开发效率，有人写插件，封装技术细节，其他人使用；
+		代码复用，封装的插件，可以重复利用；
+		提高软件开发的质量，插件被反复使用，bug应该较少。
+
+		Struts2 插件的文档：http://struts.apache.org/2.0.11/docs/plugins.html
+
+		Struts2的插件机制，类似eclipse或者firefox的插件机制，和Struts1.x有很大区别。
+
+		Struts2插件由单一的jar文件组成，包括：类文件和配置文件（扩展、替代或者添加到已有的框架功能中）。
+
+		安装插件：通过复制（并且复制依赖jar文件）到classpath。
+
+		配置插件：插件的jar文件中包含struts-plugin.xml，和struts.xml文件格式相同。
+
+		该配置文件可以：
+
+		定义新的package、result、interceptor、action
+		覆盖框架的常量
+		引入新的扩展点实现类
+		框架中一些受欢迎，但是可选的属性通过插件方式发布。应用程序发布时可以留下所有插件，也可以只包含其中使用到的。插件可以包含在原始代码中，也可以是第三方发布的。
+
+		注意：插件的加载没有特定次序。插件不能互相依赖。插件可以依赖struts2核心部分的类，但是不能依赖其他插件的类。
+
+		框架加载配置文件的次序：
+
+		struts-default.xml (bundled in the Core JAR)
+		struts-plugin.xml (as many as can be found in other JARs)
+		struts.xml (provided by your application)
+		配置文件都加载完毕后，各个插件才可以使用这些配置。
+
+		扩展点：
+
+		com.opensymphony.xwork2.ObjectFactory：单例的，用于创建action、result和interceptor，属性是struts.objectFactory
+		com.opensymphony.xwork2.ActionProxyFactory：创建Action的代理
+		com.opensymphony.xwork2.util.ObjectTypeDeterminer：确定数据类型
+		org.apache.struts2.dispatcher.mapper.ActionMapper：确定请求对应的action
+		org.apache.struts2.dispatcher.multipart.MultiPartRequest：处理文件上传的请求
+		org.apache.struts2.views.freemarker.FreemarkerManager：加载和处理freemarker的模板
+		org.apache.struts2.views.velocity.VelocityManager：加载和处理velocity的模板
+		-----
+		ref: http://marshal.easymorse.com/archives/177
+		struts2插件机制官网说明：http://struts.apache.org/release/2.0.x/docs/plugins.html
+
 	- struts2一些线程对象的访问是通过ThreadLocal来实现线程共享的，如
 		 org.apache.struts2.ServletActionContext
 		 DOC
@@ -10339,6 +10528,16 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	http://redis.io/
 
 * Memcached  
+	- memcached解决单点实现HA方法
+		1）通过集群实现HA
+		repcached（memched主从复制），结合LVS的NAT模式不同端口转发实现memched双机HA。(区别于主备方式)
+		ref: http://www.linuxidc.com/Linux/2013-04/82684.htm
+		PS: 对于机器利用率问题，可以合理利用已有的机器资源，将memcached部署到内存消耗少的已有机器上。
+		lvs主备互为HA，
+		repcached是日本人开发的实现memcached复制功能，它是一个单 master单 slave的方案，但它的 master/slave都是可读写的，而且可以相互同步，如果 master坏掉， 
+		slave侦测到连接断了，它会自动 listen而成为 master；而如果 slave坏掉， master也会侦测到连接断，它就会重新 listen等待新的 slave加入 ；master没有抢占功能，
+		如果master挂掉再起来只能是从了，并且永远只能是从。ref: http://blog.csdn.net/sanshiqiduer/article/details/6336902	
+
 	- 缓存系统MemCached的Java客户端优化历程 http://www.infoq.com/cn/articles/memcached-java
 		参考
 			用concurrent包替换原先synchronize关键字
@@ -11375,6 +11574,92 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- maven-tomcat-plugin的用法
+		-----
+		maven-tomcat-plugin的用法
+		maven-tomcat-plugin让maven与tomcat配合得很好。它可以把应用部署到Tomcat服务器，也可以把 tomcat作为内嵌服务器启动，就像jetty一样。
+		使用JPDA启动tomcat的远程调试功能。这样就能与eclipse配合起来，轻松地实现调试。而且具有tomcat的热部署功能。
+		 
+		具体做法如下：
+		1) 在pom.xml文件中配置maven-tomcat-plugin插件。
+		Xml代码
+		  <build>
+		    <finalName>demo</finalName>
+		    <plugins>
+		     <plugin>
+		      <groupId>org.codehaus.mojo</groupId>
+		      <artifactId>tomcat-maven-plugin</artifactId>
+		      <version>1.1</version>
+		     </plugin>
+		    </plugins>
+		  </build>
+		 
+		2) 配置环境变量MAVEN_OPTS，启动调试功能。
+		写道
+		MAVEN_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,address=1044,server=y,suspend=n
+		 
+		3) 在eclipse中配置远程调试
+
+		MAVEN命令：mvn tomcat:run
+
+		参考：
+		http://mojo.codehaus.org/tomcat-maven-plugin/introduction.html
+
+
+		上面的配置是把tomcat作为内嵌服务器使用。
+
+		如果把tomcat作为外部服务器，还需要做如下配置。
+		1) 修改startup.bat
+		  修改call "%EXECUTABLE%" jpda start %CMD_LINE_ARGS%
+		2) 修改catalina.bat
+		  修改set JPDA_TRANSPORT=dt_socket
+		  修改set JPDA_ADDRESS=1045
+		3) 修改tomcat-users.xml
+		  如果没有，则加入<role rolename="manager"/>
+		  加入，<user username="admin" password="" roles="manager"/>
+		  maven默认使用admin密码为空登录tomcat管理控制台。
+		******************************************************************
+		maven-tomcat-plugin能够方便的部署war应用到本地或远程的tomcat上,废话少说,看代码,下面是带有maven- tomcat-plugin配置的pom.xml
+		<properties>
+		　　　　<!--　Cargo　settings　-->
+		　　　　 <cargo.container.manager.url>http://192.168.1.107/manager</cargo.container.manager.url>
+		　　　　 <cargo.container.username>admin</cargo.container.username>
+		　　　　 <cargo.container.password>123456</cargo.container.password>
+		　　　　<cargo.wait>false</cargo.wait>
+		</properties>
+		<build>
+		　　　　<plugins>
+		　　　　　　　　<plugin>
+		　　　　　　　　　　　　 <groupId>org.codehaus.mojo</groupId>
+		　　　　　　　　　　　　 <artifactId>tomcat-maven-plugin</artifactId>
+		　　　　　　　　　　　　 <version>1.0-beta-1</version>
+		　　　　　　　　　　　　 <configuration>
+		　　　　　　　　　　　　　　　　<path>/runes</path>
+		　　　　　　　　　　　　　　　　<url>${cargo.container.manager.url}</url>
+		　　　　　　　　　　　　　　　　 <username>${cargo.container.username}</username>
+		　　　　　　　　　　　　　　　　<password>${cargo.container.password}</password>
+		　　　　　　　　　　　　　　　　 <warDirectory>${basedir}/src/main/webapp</warDirectory>
+		　　　　　　　　　　　　</configuration>
+		　　　　　　　　　　　　<executions>
+		　　　　　　　　　　　　　　　　<execution>
+		　　　　　　　　　　　　　　　　　　　　 <id>tomcat-deploy</id>
+		　　　　　　　　　　　　　　　　　　　　 <phase>deploy</phase>
+		　　　　　　　　　　　　　　　　　　　　<goals>
+		　　　　　　　　　　　　　　　　　　　　　　　　<goal>deploy</goal>
+		　　　　　　　　　　　　　　　　　　　　</goals>
+		　　　　　　　　　　　　　　　　</execution>
+		　　　　　　　　　　　　　　　　<!--execution>
+		　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 <id>undeploy</id>
+		　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 <phase>deploy</phase>
+		　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 <goals>
+		　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 <goal>start</goal>
+		　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 </goals>
+		　　　　　　　　　　　　　　　　　　　　　　　　　　　　</execution-->
+		　　　　　　　　　　　　</executions>
+		　　　　　　　　</plugin>
+		　　　　 </plugins>
+		-----
+		ref: http://blog.sina.com.cn/s/blog_7fa2bcf50100yy68.html
 	- maven库下载错误，比如配置正确但无法自动下载到本地目录下，可以尝试删除原目录再调用maven命令以触发下载。
 		也可能是某个jar没下载，比如maven库没有配置正确，导致其他的jar也下载失败
 		test成功，jar都下载下来后，eclipse里update下依赖即可
@@ -21283,7 +21568,7 @@ day151 Tuesday, October 16, 2012
 		blkback：Dommain 0 后端驱动。
 		blktap：转发blkback IO请求的虚拟块设备驱动。
 		tapdisk：转发blkback IO请求的用户态进程。
-		tdc：也即td connector，将VM的IO请求转发到分布式存储。
+		tdc：也即td connector，将VM的IO请求转发到分布式存储。 TapDisk Connector
 		apsara：飞天，分布式平台系统。
 		pangu：飞天的一个组件，实现分布式存储。
 		BSS： Block Storage System，块存储系统，也即镜像存储系统。
@@ -27936,14 +28221,19 @@ day304 Monday, May 27, 2013
 		peer host crashes. Valid only for TCP socket: SocketImpl
 		-------
 		根据上面，百度响应了http请求后就主动关闭了连接，访问量如此高的服务器采用长连接也不实际，而且是请求响应方式无需保持连接（这里connection:keep-alive保持
-		的是四层TCP连接）
+		的是四层TCP连接，此点有待验证？10个并发长连接请求百度，到结束时client发送链接重置信号给服务器（HTTP RST ACK）
 
 		简单的通过chrome浏览器请求tomcat的servlet，采用的是keep-alive的请求，可以用netstat查看连接情况，有tcp保持的记录，
 
 		下面来看tomcat服务端，对Tcp参数connection:keep-alive是如何处理的，此处看的是tomcat的DOC，对应"The HTTP Connector"章节，这里解释了HTTP Connector能设置的参数
+		
 		maxKeepAliveRequests	
-The maximum number of HTTP requests which can be pipelined until the connection is closed by the server. Setting this attribute to 1 will disable HTTP/1.0 keep-alive, as well as HTTP/1.1 keep-alive and pipelining. Setting this to -1 will allow an unlimited amount of pipelined or keep-alive HTTP requests. If not specified, this attribute is set to 100.
-ref: http://tomcat.apache.org/tomcat-5.5-doc/config/http.html
+		The maximum number of HTTP requests which can be pipelined until the connection is closed by the server. Setting this attribute to 1 will disable HTTP/1.0 keep-alive, as well as HTTP/1.1 keep-alive 
+		and pipelining. Setting this to -1 will allow an unlimited amount of pipelined or keep-alive HTTP requests. If not specified, this attribute is set to 100.
+		ref: http://tomcat.apache.org/tomcat-5.5-doc/config/http.html
+
+		wireshark设置百度的rs IP作为过滤方便分析，根据vip找到其中rs的ip进行访问即可，eg:
+			ip.addr eq 10.1.170.131 and ip.addr eq 220.181.112.143
 
 
 
@@ -28401,7 +28691,592 @@ day308 Friday, May 31, 2013
 	
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day309 Monday, June 03, 2013
+
+1. 
+	* 落日弓web
+
+
+2. 落日弓web
+	
+	对象实例化方法：
+	创建一个新的My.sample.Person实例使用的是Ext.create()方法，使用new关键字也可以创建实例（new My.sample.Person()），但是不推荐使用new，
+	应该养成使用Ext.create的习惯，因为这样可以利用到动态加载的好处
+
+	介绍Extjs4的几个基本对象及方法：
+	1) Ext.define( className, data, createdFn ) : Ext.Base	  define方法，return Ext.Base(The root of all classes created with Ext.define.)
+		Defines a class or override. A basic class is defined like this:
+		---
+		 Ext.define('My.awesome.Class', {
+		     someProperty: 'something',
+
+		     someMethod: function(s) {
+			 alert(s + this.someProperty);
+		     }
+
+		     ...
+		 });
+
+		 var obj = new My.awesome.Class();
+
+		 obj.someMethod('Say '); // alerts 'Say something'
+		---
+
+	2）Ext.create方法 
+		定义：
+		create( [name], [args] ) : Object
+		Instantiate a class by either full name, alias or alternate name.
+		---
+		If Ext.Loader is enabled and the class has not been defined yet, it will attempt to load the class via synchronous loading.
+
+		For example, all these three lines return the same result:	   各种创建对象的方法
+
+		 // alias 别名，注意别名要注册到widget中
+		 var window = Ext.create('widget.window', {
+		     width: 600,
+		     height: 800,
+		     ...
+		 });
+
+		 // alternate name
+		 var window = Ext.create('Ext.Window', {
+		     width: 600,
+		     height: 800,
+		     ...
+		 });
+
+		 // full class name 全类名
+		 var window = Ext.create('Ext.window.Window', {
+		     width: 600,
+		     height: 800,
+		     ...
+		 });
+
+		 // single object with xclass property:
+		 var window = Ext.create({
+		     xclass: 'Ext.window.Window', // any valid value for 'name' (above)
+		     width: 600,
+		     height: 800,
+		     ...
+		 });
+
+		Parameters
+			name : String (optional)
+			The class name or alias. Can be specified as xclass property if only one object parameter is specified.
+			args : Object... (optional)
+			Additional arguments after the name will be passed to the class' constructor.
+		Returns
+			Object
+			instance
+		---
+	
+	Ext.define定义类时，类体中的proxy，model，extend等等属性是哪里来的？
+		来自其基础的父类Class，比如Ext.data.Store的所有子类都可以覆盖父类的proxy属性。这也体现了此框架面向对象编程的应用，继续看看proxy属性在Stroe类
+		的定义说明：
+			proxy : String/Ext.data.proxy.Proxy/Object
+			The Proxy to use for this Store. This can be either a string, a config object or a Proxy instance - see setProxy for details.
+
+			Ext.data.proxy.Proxy继续了解，关于Proxy instance的说明：
+			Proxies are used by Stores to handle the loading and saving of Model data. Usually developers will not need to create or interact with proxies directly.
+	
+		Ext.data.proxy.Ajax为Proxy的子类，通过AJAX请求从服务端加载数据，看一个例子：
+		---
+		Ext.define('User', {
+		    extend: 'Ext.data.Model',
+		    fields: ['id', 'name', 'email']
+		});//上面为Model的定义
+
+		//The Store contains the AjaxProxy as an inline configuration
+		var store = Ext.create('Ext.data.Store', {
+		    model: 'User',
+		    proxy: {
+			type: 'ajax', //指明所定义的Proxy子类的类型，剩下的属性都是对子类属性的定义
+			url : 'users.json'
+		    }
+		});
+
+		store.load();
+		---
+		PS: 通过AJAX来请求的数据的方式的限制为：不能从其他domain获取数据，是由于浏览器安全考虑，具体见文档说明：
+			-------
+			Limitations
+
+			AjaxProxy cannot be used to retrieve data from other domains. If your application is running on http://domainA.com it cannot load data from http://domainB.com because browsers have a built-in 
+			security policy that prohibits domains talking to each other via AJAX.
+
+			If you need to read data from another domain and can't set up a proxy server (some software that runs on your own domain's web server and transparently forwards requests to http://domainB.com, 
+			making it look like they actually came from http://domainA.com), you can use Ext.data.proxy.JsonP and a technique known as JSON-P (JSON with Padding), which can help you get around the problem 
+			so long as the server on http://domainB.com is set up to support JSON-P responses. See JsonPProxy's introduction docs for more details.
+			-------
+			
+			继续，静态Store的定义，即此Store无需动态获取数据，事先已定义好，比如以下下拉列表数据：
+			-----
+			-----
+
+	上面描述了store定义，下面继续说说其他组件的定义
+
+	Model定义：
+		-----
+		 // Set up a model to use in our Store
+		 Ext.define('User', {
+		     extend: 'Ext.data.Model',
+		     fields: [
+			 {name: 'firstName', type: 'string'},
+			 {name: 'lastName',  type: 'string'},
+			 {name: 'age',       type: 'int'},
+			 {name: 'eyeColor',  type: 'string'}
+		     ]
+		 });//fields属性，限定了其定义的对象需要符合field对象的要求，具体见field的定义说明
+
+		 var myStore = Ext.create('Ext.data.Store', {
+		     model: 'User',
+		     proxy: {
+			 type: 'ajax',
+			 url: '/users.json',
+			 reader: {
+			     type: 'json',
+			     root: 'users'
+			 }
+		     },
+		     autoLoad: true
+		 });
+		-----
+		PS: 此例子定义了一个Model和一个使用此Model的Store
+	
+	View定义：
+		
+
+
+
+
+3. 根据项目提交内容分析增加新功能与维护现有功能的部分流程细节
 	
 
+4. 除了apache的poi包，落日弓web用jexcelapi包处理excel
+	
+
+5. sso账号申请
+
+6. extjs4
+	Inline data
+	inline configuration
+	inline ...
+	比如stroe中proxy的{...}配置方式
+
+7. 二期修改发布步骤 dg api
+
+8. 一个应用服务器集群，session共享，统一缓存例子
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day310 Tuesday, June 04, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	ACL模块的熟悉 ，"顺藤摸瓜式的扫荡"
+	
+	一、从viewport.js开始分析，位于app>view>viewport.js，由app.js根据默认路径加载，代码如下：
+		-----
+		Ext.define('LuoRiGong.view.Viewport', {
+		    extend: 'Ext.container.Viewport',
+		    requires: [
+			'LuoRiGong.view.ViewportChildTab'
+		    ],
+		    
+		    layout:  {
+			type: 'fit',
+			defaultMargins: {top: 5, right: 0, bottom: 0, left: 0}
+		    },
+		    
+		    items: [
+			{
+					xtype: 'viewportChildTab'
+			}
+		    ]
+		});
+		-----
+		PS: 继承于Ext.container.Viewport，显示的入口，viewport的定义：
+			-----
+			A specialized container representing the viewable application area (the browser viewport).
+
+			The Viewport renders itself to the document body, and automatically sizes itself to the size of the browser viewport and manages window resizing. There may only be one 
+			Viewport created in a page.
+
+			Like any Container, a Viewport will only perform sizing and positioning on its child Components if you configure it with a layout.
+
+			A Common layout used with Viewports is border layout, but if the required layout is simpler, a different layout should be chosen.
+
+			For example, to simply make a single child item occupy all available space, use fit layout.
+
+			To display one "active" item at full size from a choice of several child items, use card layout.
+
+			Inner layouts are available because all Panels added to the Viewport, either through its items, or the add method of any of its child Panels may themselves have a layout.
+
+			The Viewport does not provide scrolling, so child Panels within the Viewport should provide for scrolling if needed using the autoScroll config.
+			-----
+			PS: 一个页面一般只创建一个viewport，关于布局中layout的fit（只有一个对象呈现时，填充所有区域）、card(有多个对象，某一时刻只有一个对象填充所有区域时)\border(
+			类型java的swing布局，border表示分块布局，东南西北等) 、hbox（水平划分布局，在同一个水平线上排列组件，高度可通过align属性配置）
+		属性说明：
+		1）layout
+			-----
+			Important: In order for child items to be correctly sized and positioned, typically a layout manager must be specified through the layout configuration option.
+			
+			The sizing and positioning of child items is the responsibility of the Container's layout manager which creates and manages the type of layout you have in mind. For example:
+			
+			If the layout configuration is not explicitly specified for a general purpose container (e.g. Container or Panel) the default layout manager will be used which does nothing but 
+			render child components sequentially into the Container (no sizing or positioning will be performed in this situation).
+
+			layout may be specified as either as an Object or as a String:
+			Specify as an Object
+			Example usage:
+
+			layout: {
+			    type: 'vbox',
+			    align: 'left'
+			}
+			@type
+			The layout type to be used for this container. If not specified, a default Ext.layout.container.Auto will be created and used.
+
+			Valid layout type values are listed in Ext.enums.Layout.
+			@Layout specific configuration properties
+
+			Additional layout specific configuration properties may also be specified. For complete details regarding the valid config options for each layout type, see the layout class 
+			corresponding to the type specified.
+
+			Specify as a String
+			Example usage:
+
+			layout: 'vbox'
+			-----
+		2）requires
+			-----
+			requires : String[]4
+			List of classes that have to be loaded before instantiating this class. For example:
+
+			Ext.define('Mother', {
+			    requires: ['Child'],
+			    giveBirth: function() {
+				// we can be sure that child class is available.
+				return new Child();
+			    }
+			});
+			-----
+			PS: 在实例化当前类之前，预加载进来所需的类，这里为LuoRiGong.view.ViewportChildTab，避免在解析时再从服务器下载类，影响用户体验。
+		3）items
+			-----
+			items : Object/Object[]1
+			A single item, or an array of child Components to be added to this container
+
+			Unless configured with a layout, a Container simply renders child Components serially into its encapsulating element and performs no sizing or positioning upon them.
+
+			Example:
+
+			// specifying a single item
+			items: {...},
+			layout: 'fit',    // The single items is sized to fit
+
+			// specifying multiple items
+			items: [{...}, {...}],
+			layout: 'hbox', // The items are arranged horizontally
+			-----
+			PS: 组件的布局需要配置layout配置实现
+
+			另外这里还有个xtype属性，定义如下：
+			xtype : Ext.enums.Widget
+			This property provides a shorter alternative to creating objects than using a full class name. Using xtype is the most common way to define component instances, especially in a container.
+			PS: 方便实例化对象，特别是在容器中，下面是个对照例子：
+				-----
+				 items: [
+				     Ext.create('Ext.form.field.Text', {
+					 fieldLabel: 'Foo'
+				     }),
+				     Ext.create('Ext.form.field.Text', {
+					 fieldLabel: 'Bar'
+				     }),
+				     Ext.create('Ext.form.field.Number', {
+					 fieldLabel: 'Num'
+				     })
+				 ]
+
+				But by using xtype, the above becomes:
+
+				 items: [
+				     {
+					 xtype: 'textfield',
+					 fieldLabel: 'Foo'
+				     },
+				     {
+					 xtype: 'textfield',
+					 fieldLabel: 'Bar'
+				     },
+				     {
+					 xtype: 'numberfield',
+					 fieldLabel: 'Num'
+				     }
+				 ]
+				-----
+	二、接着，viewportChildTab分析
+		定义如下：
+		-----
+		Ext.define('LuoRiGong.view.ViewportChildTab', {
+			extend: 'Ext.tab.Panel',
+			xtype: 'viewportChildTab',
+			
+			requires: [
+				'LuoRiGong.view.datacenter.DataCenterContainer',
+			'LuoRiGong.view.resource.ResourceViewContainer',
+			...
+			...
+			],
+			
+			defaults: {
+			layout: {
+			    type : 'hbox',
+			    align: 'stretch'
+			}
+		    },
+			
+			items: [
+			{
+			    title: '控制系统',
+			    xtype: 'dataCenterContainer'
+			},
+			
+			{
+			    title: '资源视图',
+			    xtype: 'resourceViewContainer'
+			},
+		       ...
+		       ...       
+		    ],
+		    
+		    listeners: {
+			tabchange: function(tabPanel, newCard, oldCard, eOpts) {
+				if (newCard.title == '控制系统') {
+					Ext.getStore('DataCenterTreeStore').load();
+				}
+				
+				if (newCard.title == '资源视图') {
+					Ext.getStore('ResourceViewTreeStore').load();
+				}
+				...
+				...
+			}
+		    }
+		});
+		-----
+		PS: 这个类中定义了页面的主要版面和大体布局，继承于Ext.tab.Panel，关于Panel的定义看下面：
+			-----
+			A basic tab container. TabPanels can be used exactly like a standard Ext.panel.Panel for layout purposes, but also have special support for containing child Components (items) 
+			that are managed using a CardLayout layout manager, and displayed as separate tabs.
+
+			Note: By default, a tab's close tool destroys the child tab Component and all its descendants. This makes the child tab Component, and all its descendants unusable. To enable re-use of a tab, 
+			configure the TabPanel with autoDestroy: false.
+			-----
+		属性说明：
+		1）xtype
+			-----
+			xtype : Ext.enums.Widget10
+			This property provides a shorter alternative to creating objects than using a full class name. Using xtype is the most common way to define component instances, especially in a container.
+			...
+			...
+			When the xtype is common to many items, Ext.container.AbstractContainer.defaultType is another way to specify the xtype for all items that don't have an explicit xtype:
+
+			 defaultType: 'textfield',
+			 items: [
+			     { fieldLabel: 'Foo' },
+			     { fieldLabel: 'Bar' },
+			     { fieldLabel: 'Num', xtype: 'numberfield' }
+			 ]
+			-----
+			PS: AbstractContainer.defaultType is another way to specify the xtype for all items that don't have an explicit xtype:
+
+		2）defaults
+			-----
+			defaults : Object/Function
+			This option is a means of applying default settings to all added items whether added through the items config or via the add or insert methods.
+
+			Defaults are applied to both config objects and instantiated components conditionally so as not to override existing properties in the item (see Ext.applyIf).
+
+			If the defaults option is specified as a function, then the function will be called using this Container as the scope (this reference) and passing the added item as the first parameter. 
+			Any resulting object from that call is then applied to the item as default properties.
+
+			For example, to automatically apply padding to the body of each of a set of contained Ext.panel.Panel items, you could pass: defaults: {bodyStyle:'padding:15px'}.
+
+			Usage:
+
+			defaults: { // defaults are applied to items, not the container
+			    autoScroll: true
+			},
+			items: [
+			    // default will not be applied here, panel1 will be autoScroll: false
+			    {
+				xtype: 'panel',
+				id: 'panel1',
+				autoScroll: false
+			    },
+			    // this component will have autoScroll: true
+			    new Ext.panel.Panel({
+				id: 'panel2'
+			    })
+			]
+			-----
+			PS: 对添加都此Panel的所有组件设置默认配置，不会覆盖子组件已有配置
+
+		3）listeners
+			-----
+			listeners : Object
+			A config object containing one or more event handlers to be added to this object during initialization. This should be a valid listeners config object as specified in the 
+			addListener example for attaching multiple handlers at once.
+			-----
+			PS: 一个配置对象，在初始化Panel对象时添加一个或多个事件处理器。此配置对象需要符合标准的listener配置，参考addListener方法中添加多个handler的
+			说明
+
+			本例中，tabPanel会触发tabchange事件，故在配置listener配置时，编写了触发tabchange事件的处理逻辑。时间处理函数的参数，查阅事件的文档说明，下面为摘取：
+				-----
+				tabchange( tabPanel, newCard, oldCard, eOpts )1
+				Fires when a new tab has been activated (activated by setActiveTab).
+				-----
+			
+			下面，说下本初用到store的说明：
+				Ext.getStore获取store
+					Ext.getStore
+					-----
+					getStore( store ) : Ext.data.Store
+					Shortcut to Ext.data.StoreManager.lookup.
+
+					Gets a registered Store by id
+
+					Available since: 4.0.0
+
+					Parameters
+					store : String/Object
+					The id of the Store, or a Store instance, or a store configuration
+					-----
+					PS: 根据store id获取store对象的快捷方法，也可根据实例或配置
+					此处，获取了左边树要的数据
+
+				Store.load方法获取数据
+					-----
+					load( [options] )
+					Loads data into the Store via the configured proxy. This uses the Proxy to make an asynchronous call to whatever storage backend the Proxy uses, 
+					automatically adding the retrieved instances into the Store and calling an optional callback if required. Example usage:
+
+					store.load({
+					    scope: this,
+					    callback: function(records, operation, success) {
+						// the operation object
+						// contains all of the details of the load operation
+						console.log(records);
+					    }
+					});
+					If the callback scope does not need to be set, a function can simply be passed:
+
+					store.load(function(records, operation, success) {
+					    console.log('loaded records');
+					});
+					-----
+					PS: 通过proxy配置，加载数据到Store中
+			
+			listener做的事情：
+				加载新tab页需要的store的数据
+				关闭旧tab页的task，如Ext.TaskManager.stop(...)
+					这些task是在globalutilities.js文件中定义的全局对象（由function genJobStatusTask(componentType, componentId, statusType, interval, map, panel) 方法定义），
+					此处为刷新操作状态的。	     全局任务
+
+	三、ResourceViewContainer分析
+
+	四、ResourceViewTreeStore分析（用于上面的ResourceViewContainer）
+
+			
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day311 Wednesday, June 05, 2013
+
+1. 
+	* 落日弓web
+	* 大region二期发布
+		AY48C
+		AY81A
+		AY81B
+
+		青岛大region，发布控制系统
+
+2. 落日弓web
+	1）继续上次的分析
+
+	2）落日弓的业务熟悉
+	从wiki的集群搭建步骤开始
+	a. 到资源视图，找到机房，大region，资源视图的树可以右键添加
+
+	Acl中的宏与规则，宏定义了某个角色的所有IP组合，比如houyiapi宏表示所有houyiapi的ip集合；规则表示宏到宏之间的具体acl规则。
+
+	页面的按钮调用，不只是顺序调用还有循环调用
+
+	houyiAPI以域名（vip）的方式管理；然后，在集群信息找可以看到houyiapi与大region的关系
+
+	新集群搭建与扩容：
+		集群搭建，首先在资源视图中加对应的资源（对于大region共享的，可以不用再添加）
+		然后到控制系统，集群信息中补充更多新增集群的信息，并配置好代码源、数据库、网段、物理机等资源；
+
+	物理机资源（nc资源）的管理由Armory管理，落日弓访问其服务获取信息；对于测试环境的nc，未在Armory中管理，需要手工整理后上传到落日弓中。
+		Armory中的机器管理，要新建或扩容而利用nc资源时，从Armory的Buffer组中获取，集群搭建关闭后，置buffer组为server组。
+		
+	
+
+	失效功能或需完善功能：
+		控制系统-集群部署-环境检查 基本不用，因为环境变化太大
+		控制系统-集群部署-一键部署 未使用
+		控制系统-集群配置-aworkshot和apiproxy发布，为人工操作
+		控制系统-集群配置-Monitor测试 QA方功能未实现
+		控制系统-扫尾-集群交付 可用，但未用
+
+
+3. slb部署流程
+	http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9261407
+
+4. Areasolve为大禹
+	用于部署飞天，落日弓agent部署于集群的AG上，nc上的操作通过大禹完成。
+
+	落日弓部署结构图：
+	Portal(java web)   (部署2个，f5均衡)
+	|
+	API(python web)
+	----------------------
+	|				|
+	Agent1（AG1）	Agent2(AG2)
+	----------------------
+	|				|
+	Arearesolve		Arearesolve
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day312 Thursday, June 06, 2013
+
+1. 
+	* 落日弓web
+2. 
+
+3. 有各种开源，各种服务，各种成熟架构，还少什么让我们成功？
+	环境？魄力？资金？人才？方案？
+
+4. houyimon库
+	采用了分库，分表
+	一个集群1个到多个monitor库，每个库的表按照天进行分表。
+
+5. Armory
+	测试地址
+	http://opsdbtest.ops.aliyun-inc.com/ admin
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day313 Friday, June 07, 2013
+
+1. 
+	* 落日弓web
+2. 
 
 
