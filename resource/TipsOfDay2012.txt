@@ -14,6 +14,166 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* 云端存储 文件同步
+	SkyDrive
+
+* openstack
+	
+* SSO Single Sigh On 单点登录
+	- 异构系统单点登录 SSO（single-sign-on）技术
+		-----
+		在 QQ 已经登录的情况下，手动输入网址打开 QQ 邮箱 或者 QQ 空间 等腾讯网站，可以看到网页已经检测到本地 QQ 客户端已经登录，于是用户可以很方便
+		地一键登录网站而不必再输入用户名密码。这实际上是典型的异构系统单点登录 SSO（single-sign-on）技术
+
+		有这么一个神奇的链接，http://xui.ptlogin2.qq.com/cgi-bin/qlogin 你一点开，它就检测到你登录了 QQ。通过查看页面源代码，我们可以发现一个关于 ptlogin 的 js 文件，
+		这段代码中，描述了使用 ActivexObject 浏览器插件的过程，于是一切了然。
+
+		可是 ActiveX 是 IE 的插件呀，我们使用 Chrome 或者 FireFox 也是可以直接登录的，这是怎么回事呢？
+
+		原来，QQ 使用了历史很悠久的 NPAPI（Netscape Plugin Application Programming Interface）接口。NPAPI 几乎支持所有主流浏览器，包括 FireFox、Chrome、Opera（
+		IE 从 5.5 后停止支持 NPAPI，转而使用 ActiveX）。
+
+		打开 chrome://plugins/ 我们可以发现自动登录的有关插件，而在路径 C:\Program Files (x86)\Common Files\Tencent\TXSSO 下就可以找到关于 SSO 的相关动态链接库。
+
+		Tencent_SSO_plugin
+
+		np 插件一般命名都会加np前缀 如 QQ 的这个 npSSOAxCtrlForPTLogin.dll，只要按照标准的写法，放在浏览器会加载的地方，用的时候写个标签就可以在 js 里面调用了。
+		于是跨浏览器（无视 IE）的插件开发变得相当可行。运行在 NPAPI 插件中的代码拥有当前用户的所有权限，不在沙箱中运行，所以它的扩展程序在被 Chrome 网上
+		应用店接受前要求人工审核。
+		-----
+		ref: http://www.lovelucy.info/tencent-sso.html
+
+	- 单点登录系统的原理思考
+	-----
+
+	单点登录系统的原理思考  
+      	引子
+	昨天在网上看到一个帖子，帖子的内容大概是说领导要求一个苦B程序员实现一个单点登录的系统，将各个业务系统联系起来，但不能修改其他业务系统的源码。
+	其实，在企业信息化过程中，通常有多个应用系统，每个应用系统中，有独立用户管理模块，用来保存每个用户对应的账号，权限等信息，为了减少每个人登录系统时，
+	记忆密码的麻烦，经常会用到单点登录功能。
+	我们公司用的就是CAS单点登录系统，我们抛开CAS这种成熟的单点登录系统，从头开始思考和设计一下单点登录如何实现。
+
+
+	需求简述
+	单点登录系统保存了用户的登录名和密码，上网用户在单点登录系统中认证成功后，就可以直接登录各个业务系统。
+	这个需求看似简单，但实际暗藏玄机：
+	1). 用户访问任何一个业务系统时，如果已经在单点登录服务器中认证成功，那么可以获取对应的权限，访问对应的界面。
+	2). 用户如果在其中任何一个业务系统中点击“注销”按钮后，那么不能继续访问其他业务系统，如果访问，必须重新登录
+	3). 用户访问任何一个业务系统时，如果尚未在单点登录服务器中认证成功，那么需要跳转到单点登录界面，输入用户名密码，校验成功后，再回到原来的访问界面
+	4). 用户关闭浏览器后，再次打开，不能继续访问其他业务系统
+
+
+	实现方案
+	根据上述需求，我们可以考虑出很多套实现方案，这些方案各有优缺点，根据各个方案的比较，选出实现最简单、功能最完善、性能最优化的方案，作为最终的实现方案。
+
+	我们知道用户点击业务系统中的各个连接，访问业务系统时，可能存在以下场景
+	场景1：用户尚未在单点登录系统中完成登录，此时单点登录系统没有当前用户的在线信息
+	场景2：用户已经在单点登录系统中完成登录，但尚未在当前业务系统中完成登录，当前业务系统中没有此用户的在线信息
+	场景3：用户已经在单点登录系统中完成登录，并且也在当前业务系统中完成登录
+	场景4：用户已经在单点登录系统中注销，但在当前业务系统中尚未注销
+
+	对于场景1，此时业务系统应该拦截用户的访问请求，并且将用户重定向到单点登录系统中，当用户在单点登录系统中完成登录后，再在当前业务系统中执行用户登录的操作，
+	再重定向到用户上次访问的界面，让用户能够正常访问业务系统
+	对于场景2，此时业务系统应该拦截用户的访问请求，并且与单点登录系统通信，获取当前用户的在线状态后，在当前业务系统中执行登录操作，再向用户返回上次请求的结果
+	界面，让用户能够正确访问业务系统
+	对于场景3，此时业务系统应该拦截用户的访问请求，并且与单点登录系统通信，校验用户是否在线，再向用户返回上次请求的结果界面，让用户能够正确访问业务系统
+	对于场景4，此时业务系统应该拦截用户的访问请求，并且与单点登录系统通信，校验用户是否在线，因为此时用户已下线，所以在当前业务系统中完成注销操作，并且将用户
+	跳转到单点登录的登录界面，后续处理与情况1一致。
+
+	方案一
+
+	    方案描述
+
+	    1). 用户访问业务系统时，业务系统可以根据HTTP请求的源IP，去单点登录系统中查询
+		1). 如果此IP对应的用户尚未认证，跳转到单点登录系统的登录界面，要求输入用户名和密码进行认证
+		2). 如果此IP对应的用户已经认证，业务系统认为此用户登录成功，允许其继续访问业务系统
+	    2). 在单点登录系统的登录界面或后台session中，需要保存用户上次访问的URL，以便于用户认证成功后，能够再次回到上次访问的界面
+	    3). 用户在单点登录系统的登录界面输入用户名密码登录成功后，单点登录系统记录此用户的身份以及对应的IP地址，再将浏览器重定向到上次访问的URL中，这样就回到了步骤1，
+	    此时用户已经认证成功，可以访问业务系统。
+	    4). 用户在任意业务系统中单击注销按钮时，业务系统完成系统自身的注销操作后，将界面重定向到单点登录系统的注销URL中，并自动在单点登录系统中注销用户信息
+
+	    优点
+
+	    1). 只要浏览器支持基本的重定向功能，就可以按照本方案实现
+
+	    缺点
+
+	    1). 要实现上述需求，需要修改业务系统的代码，对于.net和java编写的业务系统，需要两套不同的代码
+
+	    安全性
+
+	    1). 根据用户的IP地址进行用户身份的判定，会带来以下安全问题：
+
+		1). 如果用户IP修改后，需要重新认证才能继续访问业务系统
+
+		2). 如果用户恶意仿冒领导的IP地址，那么可以越权访问自己没有权限的业务系统
+		3). 在公共的PC中，前一个用户关闭浏览器，没有点击注销按钮，那么后续使用这台PC的所有人，都可以直接使用前一个人的账号访问业务系统
+
+	    性能
+
+	    每次访问业务系统的任何一个URL，都需要与单点登录系统联动，如果用户量很大，单点登录系统会成为瓶颈
+
+
+	方案二
+
+	    方案描述
+
+	    1). 用户使用单点登录系统的登录界面，输入用户名和密码登录成功后，单点登录系统为用户浏览器安装一个cookie，cookie的值是一个全局唯一的字符串（下文称为ticket），
+	    理论上这个唯一值永远不能重复，用来标识用户的一次成功的登录请求。同一个用户，在同一个时刻登录两次，得到的ticket值应该完全不同。
+
+	    2. 用户访问业务系统时，如果当前用户尚未在业务系统中登录，就将界面重定向到单点登录系统中，这时访问的URL前缀是单点登录系统的前缀
+
+		1).如果用户已经在单点登录系统中完成登录，那么此时用户访问单点登录URL时，就会带上步骤1中的ticket，单点登录系统识别出此ticket，知道当前用户已经认证过，
+		将用户界面再次跳转到业务系统中，并且携带上述ticket，业务系统也将此ticket安装到cookie中，后续对于此业务系统的所有访问，都直接根据ticket去单点登录系统中查询
+		用户是否在线就可以了
+
+		2).如果用户尚未在单点登录系统中完成登录，那么此时用户访问单点登录URL时，无法携带上步骤1中的ticket，单点登录系统为展示登录界面，用户输入用户名和密码
+		登录成功后，将用户界面再次跳转到业务系统中，并且携带上述ticket，业务系统也将此ticket安装到cookie中，后续对于此业务系统的所有访问，都直接根据ticket去单点
+		登录系统中查询用户是否在线就可以了
+
+	    3). 用户访问业务系统时，如果当前用户已经在业务系统中登录，那么访问业务系统的cookie中，会携带单点登录ticket，业务系统根据此ticket，去单点登录系统中查询用户
+	    是否已经在线，如果已经在线，就允许继续访问，否则就执行注销操作
+
+	    4). 用户在任意一个业务系统中执行注销操作时，业务系统在拦截注销操作，并且与单点登录系统联动，在单点登录系统中完成注销后，再跳转回业务系统的注销界面
+
+	    优点
+
+	    1). 单点登录系统的整套拦截和转发流程，可以封装成为公共组件，只需少许修改业务系统代码
+
+	    2). 所有业务系统都可以使用上述方案增加与单点登录系统的联动功能
+
+	    缺点
+
+	    上述单点登录功能，依赖浏览器的cookie功能，如果浏览器不支持cookie，将无法使用
+
+	    安全性
+
+	    1). 用户恶意仿冒他人IP，也无法获取对应业务系统的访问权限，安全性比方案一高
+
+	    2). 恶意用户拦截HTTP请求，获取cookie中进行仿冒，同样可以获取他人对于业务系统的访问权限
+
+	    性能
+
+	    当业务系统很多、上网用户很多时，每次访问业务系统的任何一个链接，都需要与单点登录系统联动，查询用户是否在线，单点登录系统可能成为瓶颈 
+
+
+	方案比较
+	上述方案，都需要对于现有系统进行一些修改，但方案二的安全性相对较高
+	方案二中提到的安全性问题，可以通过定期更新ticket值，或每次访问都生成不同的ticket值来进行规避。
+	上述方案，因为涉及对于单点登录系统的大量访问，所以会使得单点登录系统成为瓶颈，可以采用如下方案在安全性不降低很多的情况下规避性能问题：
+	方案一：业务系统记录上次与单点登录系统联动，获取用户状态的时间，并且n分钟内，所有用户对于业务系统的情况，都不和单点登录系统联动
+	方案二：业务系统和单点登录系统之间采用性能更高的网络协议，例如UDP协议进行在线状态的交互，按照现有经验，因为UDP报文头部较小，报文有效内容比例大，
+	同时报文长度短，比现有的HTTP协议性能可以提高1～2个数量级，每秒支撑1000次查询请求，是没有问题的。
+
+
+	总结
+	上述方案二，是借鉴CAS单点登录系统的实现进行描述的。
+	对于第一章节提到的那种对于现有业务系统不进行任何修改的方
+	-----
+	PS: http://blog.163.com/among_1985/blog/static/27500523201262683541321/
+	落日弓SSO基于公用的第二种方案实现，有心跳检测
+
+	
 * CDN Content Delivery Network 内容分发网络
 	原理：
 
@@ -333,7 +493,8 @@ ft2013-04-22
 		插入排序
 
 	查找算法
-		二分查找
+		二分查找（binary search algorithm）
+		java.util.Arrays类提供了支持Binary Search的静态方法（需要待查找数组为升序排列的数组）
 
 * 个人站点 站长 草根站长 技术站点 	      -tip-
 	专业，全面的java代码分享站 http://www.javaniu.com/
@@ -2714,6 +2875,57 @@ ft2013-04-22
 			命令使用：
 			jmap -heap 2083
 			可以观察到New Generation（Eden Space，From Space，To Space）,tenured generation,Perm Generation的内存使用情况
+			例子：
+			-----
+			$jmap -heap 607
+			Attaching to process ID 607, please wait...
+			Debugger attached successfully.
+			Server compiler detected.
+			JVM version is 14.2-b01
+
+			using thread-local object allocation.
+			Parallel GC with 4 thread(s)
+
+			Heap Configuration:
+			   MinHeapFreeRatio = 40
+			   MaxHeapFreeRatio = 70
+			   MaxHeapSize      = 2147483648 (2048.0MB)
+			   NewSize          = 838860800 (800.0MB)
+			   MaxNewSize       = 838860800 (800.0MB)
+			   OldSize          = 5439488 (5.1875MB)
+			   NewRatio         = 2
+			   SurvivorRatio    = 6
+			   PermSize         = 134217728 (128.0MB)
+			   MaxPermSize      = 134217728 (128.0MB)
+
+			Heap Usage:
+			PS Young Generation
+			Eden Space:
+			   capacity = 829751296 (791.3125MB)
+			   used     = 303288752 (289.2386932373047MB)
+			   free     = 526462544 (502.0738067626953MB)
+			   36.55176598844384% used
+			From Space:
+			   capacity = 4521984 (4.3125MB)
+			   used     = 2260992 (2.15625MB)
+			   free     = 2260992 (2.15625MB)
+			   50.0% used
+			To Space:
+			   capacity = 4521984 (4.3125MB)
+			   used     = 0 (0.0MB)
+			   free     = 4521984 (4.3125MB)
+			   0.0% used
+			PS Old Generation
+			   capacity = 1308622848 (1248.0MB)
+			   used     = 380483832 (362.85765838623047MB)
+			   free     = 928139016 (885.1423416137695MB)
+			   29.075132883512058% used
+			PS Perm Generation
+			   capacity = 134217728 (128.0MB)
+			   used     = 45552840 (43.44257354736328MB)
+			   free     = 88664888 (84.55742645263672MB)
+			   33.93951058387756% used
+			-----
 
 			jmap -histo 2083 ｜ jmap -histo:live 2083
 			可以观察heap中所有对象的情况（heap中所有生存的对象的情况）。包括对象数量和所占空间大小。
@@ -2817,8 +3029,32 @@ ftian20130102
 	java中hashcode方法的引入，是为了集合数据结构而出现，比如Map结构，用来计算哈希值并作为键以提高性能
 	下面是JDK包中HashMap类的put方法部分：
 	------
+	public V put(K key, V value) {
+		if (key == null)
+		    return putForNullKey(value);
+		int hash = hash(key.hashCode());//再hash，避免冲突
+		int i = indexFor(hash, table.length);
+		for (Entry<K,V> e = table[i]; e != null; e = e.next) {
+		    Object k;
+		    if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
+			V oldValue = e.value;
+			e.value = value;
+			e.recordAccess(this);
+			return oldValue;
+		    }
+		}
 
+		modCount++;
+		addEntry(hash, key, value, i);
+		return null;
+	}
 	------
+	PS: hash方法的说明：
+		-----
+		Applies a supplemental hash function to a given hashCode, which defends against poor quality hash functions. This is critical because HashMap uses power-of-two 
+		length hash tables, that otherwise encounter collisions for hashCodes that do not differ in lower bits. Note: Null keys always map to hash 0, thus index 0.
+		-----
+		降低原生hash算法产生值时的冲突
 	
 * 发布
 	在AG执行
@@ -4133,6 +4369,9 @@ ftian20130102
 		http://archive.apache.org/dist/commons/dbcp/
 
 * jetty http client	jetty httpclient
+	- doc
+		ref: http://www.eclipse.org/jetty/documentation/current/http-client-api.html
+
 	- client通过装饰器模式Decorator，使用jdk5的ThreadPoolExecutor作为线程池调度
 		 org.eclipse.jetty.util.thread.ExecutorThreadPool
 		DOC
@@ -4972,6 +5211,9 @@ Storage for Interactive Services
 				url port
 				svn username
 				svn password
+		浏览器配置：
+			firefox请安装FoxyProxy，Firefox需要导入证书，方法请见FAQ
+			chrome请安装SwitchySharp插件，然后导入这个设置https://goagent.googlecode.com/files/SwitchyOptions.bak，或备份下载地址
 
 * facebook
 	http://www.facebook.com/note.php?note_id=76191543919&ref=mf
@@ -9219,8 +9461,14 @@ search in index find pdf
 	 slbapi测试环境：
 		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
+ * JSR 303 Bean Validation
+		“This JSR defines a metadata model and API for JavaBean validation. The default metadata source is annotations,
+	with the ability to override and extend the meta-data through the use of XML validation descriptors.
+	The validation API developed by this JSR is not intended for use in any one tier or programming model. It is specifically
+	not tied to either the web tier or the persistence tier, and is available for both server-side application programming,
+	as well as rich client Swing application developers.” – JSR-303 Specification
  * spring
-	- spring MVC		 * spring mvc
+	- spring MVC		 * spring mvc JSR 303: Bean Validation
 		1) 支持注解方式的参数处理，类似REST方式service的实现也提供了参数解析辅助注解
 		2) 请求的uri带格式后缀时，比如/xxx/list.json，作用于视图解析部分，根据后缀返回对应的view
 			org.springframework.web.servlet.view.ContentNegotiatingViewResolver
@@ -12278,6 +12526,66 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- shell带颜色输出，比如区分检查结果的成功（绿色）和失败（红色）
+		echo -e "\033[32m [something here] \033[0m"
+		
+		shell脚本中echo显示内容带颜色[zz]
+		-----		
+		shell脚本中echo显示内容带颜色显示,echo显示带颜色，需要使用参数-e 
+	　　格式如下： 
+	　　echo -e "\033[字背景颜色；文字颜色m字符串\033[0m" 
+	　　例如： 
+	　　echo -e "\033[41;36m something here \033[0m" 
+	　　其中41的位置代表底色， 36的位置是代表字的颜色 
+	　　注： 
+	　　1、字背景颜色和文字颜色之间是英文的"" 
+	　　2、文字颜色后面有个m 
+	　　3、字符串前后可以没有空格，如果有的话，输出也是同样有空格 
+	　　下面是相应的字和背景颜色，可以自己来尝试找出不同颜色搭配 
+	　　例 
+	　　echo -e “\033[31m 红色字 \033[0m” 
+	　　echo -e “\033[34m 黄色字 \033[0m” 
+	　　echo -e “\033[41;33m 红底黄字 \033[0m” 
+	　　echo -e “\033[41;37m 红底白字 \033[0m” 
+	　　字颜色：30—–37 
+	　　echo -e “\033[30m 黑色字 \033[0m” 
+	　　echo -e “\033[31m 红色字 \033[0m” 
+	　　echo -e “\033[32m 绿色字 \033[0m” 
+	　　echo -e “\033[33m 黄色字 \033[0m” 
+	　　echo -e “\033[34m 蓝色字 \033[0m” 
+	　　echo -e “\033[35m 紫色字 \033[0m” 
+	　　echo -e “\033[36m 天蓝字 \033[0m” 
+	　　echo -e “\033[37m 白色字 \033[0m” 
+	　　字背景颜色范围：40—–47 
+	　　echo -e “\033[40;37m 黑底白字 \033[0m” 
+	　　echo -e “\033[41;37m 红底白字 \033[0m” 
+	　　echo -e “\033[42;37m 绿底白字 \033[0m” 
+	　　echo -e “\033[43;37m 黄底白字 \033[0m” 
+	　　echo -e “\033[44;37m 蓝底白字 \033[0m” 
+	　　echo -e “\033[45;37m 紫底白字 \033[0m” 
+	　　echo -e “\033[46;37m 天蓝底白字 \033[0m” 
+	　　echo -e “\033[47;30m 白底黑字 \033[0m” 
+	　　最后面控制选项说明 
+	　　\33[0m 关闭所有属性 
+	　　\33[1m 设置高亮度 
+	　　\33[4m 下划线 
+	　　\33[5m 闪烁 
+	　　\33[7m 反显 
+	　　\33[8m 消隐 
+	　　\33[30m — \33[37m 设置前景色 
+	　　\33[40m — \33[47m 设置背景色 
+	　　\33[nA 光标上移n行 
+	　　\33[nB 光标下移n行 
+	　　\33[nC 光标右移n行 
+	　　\33[nD 光标左移n行 
+	　　\33[y;xH设置光标位置 
+	　　\33[2J 清屏 
+	　　\33[K 清除从光标到行尾的内容 
+	　　\33[s 保存光标位置 
+	　　\33[u 恢复光标位置 
+	　　\33[?25l 隐藏光标 
+	　　\33[?25h 显示光标 
+		-----
 	- shell将执行结果赋值给一个变量
 		shell赋值语句，等号两边不能有空格
 		
@@ -29194,9 +29502,171 @@ day310 Tuesday, June 04, 2013
 					这些task是在globalutilities.js文件中定义的全局对象（由function genJobStatusTask(componentType, componentId, statusType, interval, map, panel) 方法定义），
 					此处为刷新操作状态的。	     全局任务
 
-	三、ResourceViewContainer分析
+	三、 ResourceViewContainer 分析 (就是tab页的资源视图，里面的内容都在此容器里配置；其他tab页和此tab平级，故这里以本tab为例子说明)
+		定义如下：
+		-----
+		Ext.define('LuoRiGong.view.resource.ResourceViewContainer', {
+		    extend: 'Ext.container.Container',
+		    xtype: 'resourceViewContainer',
+		    
+		    requires: [
+			'LuoRiGong.view.resource.ResourceViewList',
+			'LuoRiGong.view.LuoRiGongContainer'
+		    ],
 
-	四、ResourceViewTreeStore分析（用于上面的ResourceViewContainer）
+		    items: [
+			{
+			    xtype: 'resourceViewList',
+			    margin: '5, 3, 5, 5',
+			    flex: 1
+			},
+			
+			{
+				xtype: 'luoRiGongContainer',
+			    id   : 'resourceViewContainer'
+			}
+		    ]
+		});
+		-----
+		PS: require包含进来2个组件；并在items属性上配置上面2个组件以显示，对于第一个组件同时配置了其显示属性（
+		margin：此处为xtype定义的子组件的属性，文档说明如下：
+			-----
+			margin : Number/String6
+			Specifies the margin for this component. The margin can be a single numeric value to apply to all sides or it can be a CSS style specification for each style, 
+			for example: '10 5 3 10' (top, right, bottom, left).
+			-----
+		flex：	 Ext.layout.container.HBox的属性
+			-----
+			flex : Number3
+			This configuration option is to be applied to child items of the container managed by this layout. Each child item with a flex property will be flexed (horizontally in hbox, vertically in vbox) 
+			according to each item's relative flex value compared to the sum of all items with a flex value specified. Any child items that have either a flex = 0 or flex = undefined will not be 'flexed' (the 
+			initial size will not be changed).			
+			-----
+			作于与layout定义的子items的布局配置，第一个item flex=1，第二个为4，即第一个占水平长度的1/5
+		）
+
+		属性说明：
+		1）id （items配置的第二个item有id属性）
+			-----
+			id : String
+			The unique id of this component instance.
+
+			It should not be necessary to use this configuration except for singleton objects in your application. Components created with an id may be accessed globally using Ext.getCmp.
+
+			Instead of using assigned ids, use the itemId config, and ComponentQuery which provides selector-based searching for Sencha Components analogous to DOM querying. 
+			The Container class contains shortcut methods to query its descendant Components by selector.
+
+			Note that this id will also be used as the element id for the containing HTML element that is rendered to the page for this component. This allows you to write id-based CSS rules 
+			to style the specific instance of this component uniquely, and also to select sub-elements using this component's id as the parent.
+
+			Note: To avoid complications imposed by a unique id also see itemId.
+
+			Note: To access the container of a Component see ownerCt.
+
+			Defaults to an auto-assigned id.
+			-----
+
+	四、对于上面2个子组件的分析
+		
+		第一个为：ResourceViewList (即页面左边的树展示)
+			定义如下：
+			-----
+			Ext.define('LuoRiGong.view.resource.ResourceViewList', {
+				extend: 'Ext.tree.Panel',
+				xtype: 'resourceViewList',
+
+				useArrows: false,
+				frame: true,
+
+				store: 'ResourceViewTreeStore',
+
+				setActiveResourceList: function(record) {
+					idcId = record.get('nodeId');
+					
+					var resourceViewContainer = Ext.getCmp('resourceViewContainer');
+				    resourceViewItem = Ext.create('LuoRiGong.view.resource.IdcResourceContainer');
+				    
+				    resourceViewItem.down('idcResourceList').setTitle(record.get('text'));
+				    
+				    resourceViewContainer.removeAll(true);
+				    resourceViewContainer.add(resourceViewItem);
+				},
+
+				listeners: {
+					itemclick: function(me, record, item, index, e, eOpts) {
+						if(record.isLeaf()) {
+							this.setActiveResourceList(record);
+						} 
+					},
+					
+					itemcontextmenu: function(me, record, item, index, e, eOpts ) {
+						if (record.get('depth') == '0') {
+							var allResourcesContextMenu = Ext.create('LuoRiGong.view.resource.menu.AllResourcesContextMenu');
+						allResourcesContextMenu.showAt(e.getX(), e.getY());
+						} else if (record.get('depth') == '1') {
+							areaId = record.get('nodeId');
+							var areaContextMenu = Ext.create('LuoRiGong.view.resource.menu.AreaContextMenu');
+						areaContextMenu.showAt(e.getX(), e.getY());
+						} else if (record.get('depth') == '2') {
+							idcId = record.get('nodeId');
+							var idcContextMenu = Ext.create('LuoRiGong.view.resource.menu.IdcContextMenu');
+							idcContextMenu.showAt(e.getX(), e.getY());
+						}
+					e.preventDefault();
+					}
+				}
+			});			
+			-----
+			PS: 组件继承的是Ext.tree.Panel，是tree包下的Panel（还有其他类型的Panel，比如Ext.form.Panel、Ext.tab.Panel、Ext.grid.Panel等）；
+			listener中的逻辑后续移到Controller中，遵循MVC
+
+			属性说明：
+			1）useArrows  表示是否使用箭头图标，默认为false；定义在Ext.tree.Panel上
+			2）frame Ext.tree.Panel
+				-----
+				frame : Boolean
+				True to apply a frame to the panel.
+				Defaults to: false
+				Overrides: Ext.AbstractComponent.frame
+				-----
+			3）store 数据源配置
+				-----
+				store : Ext.data.TreeStore REQUIRED
+				The Store the tree should use as its data source.
+
+				Available since: 4.0.4
+
+				Overrides: Ext.panel.Table.store
+				-----
+				PS: 注意到，标识为REQUIRED，表示此属性必须配置
+
+				这里的Store类型为Ext.data.TreeStore，定义如下：
+				-----
+				The TreeStore is a store implementation that is backed by by an Ext.data.Tree. It provides convenience methods for loading nodes, as well as the ability to use the 
+				hierarchical tree structure combined with a store. This class is generally used in conjunction with Ext.tree.Panel. This class also relays many events from the Tree for 
+				convenience.
+
+				Using Models
+
+				If no Model is specified, an implicit model will be created that implements Ext.data.NodeInterface. The standard Tree fields will also be copied onto the Model for 
+				maintaining their state. These fields are listed in the Ext.data.NodeInterface documentation.
+
+				Reading Nested Data
+
+				For the tree to read nested data, the Ext.data.reader.Reader must be configured with a root property, so the reader can find nested data for each node (if a root is not 
+				specified, it will default to 'children'). This will tell the tree to look for any nested tree nodes by the same keyword, i.e., 'children'. If a root is specified in the config make 
+				sure that any nested nodes with children have the same name. Note that setting defaultRootProperty accomplishes the same thing.
+				-----
+
+
+
+
+		第二个为：luoRiGongContainer
+			此组件是一个空的Container模板，多个tab页共用，根据id定义来区分。
+
+
+		
+	五、ResourceViewTreeStore分析（用于上面的ResourceViewContainer中的ResourceViewList TreePanel）
 
 			
 
@@ -29284,6 +29754,96 @@ day313 Friday, June 07, 2013
 
 1. 
 	* 落日弓web
-2. 
+
+2. 落日弓web
+	api文档
+	java部分优化分析
+
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day314 Saturday, June 08, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	继续day310第2条分析
+
+	SSO通过cookie实现，存了token在cookie中
+
+	spring MVC有哪些参数校验框架，可进行配置，类似struts2的可配置校验
+
+3. man 的帮助 :h出现man的帮助说明
+	-----
+	SUMMARY OF LESS COMMANDS
+
+	      Commands marked with * may be preceded by a number, N.
+	      Notes in parentheses indicate the behavior if N is given.
+
+	  h  H                 Display this help.
+	  q  :q  Q  :Q  ZZ     Exit.
+	 ---------------------------------------------------------------------------
+
+				   MOVING
+
+	  e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).
+	  y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).
+	  f  ^F  ^V  SPACE  *  Forward  one window (or N lines)
+	-----
+
+4. javax.servlet.http.HttpSessionListener
+	需要在web.xml配置此Listener，以拦截session事件与统一session缓存配合使用
+
+	+一致性哈希
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day315 Sunday, June 09, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	继续day310第2条分析
+	
+	左边树的加载
+		第一次取的是node=root的节点记录
+		看DB对树形数据的存储结构定义：
+			第一级节点：区域，定义在district表；
+			第二级节点：大region，定义在big_region表，通过dc_id关联到district表，定义其属于哪个区域
+			第三级节点：小region，定义在region表，通过big_region_id关联到big_region表；并且冗余存储了dc_id，room_id
+
+	
+	并行发布：
+		多region并行发布；各个步骤的进度，各个region的进度
+	
+	工作流：
+		抽象出每次发布的job，提供页面供选择以生成发布操作流；并支持自定义job已满足特殊操作。
+	
+
+3. openstack
+	cloudxy
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day316 Thursday, June 13, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	继续day310第2条分析	
+
+3. spring mvc + extjs + JSR303验证规范
+	一个例子：
+	git clone https://github.com/wswijaya/spring-mvc-forms.git
+	文档 http://myxaab.wordpress.com/2011/03/22/integrating-jsr303-with-spring-mvc-3-and-extjs-forms/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day317 Friday, June 14, 2013
+
+1. 
+	* 落日弓web
+
+2. 落日弓web
+	继续day310 
