@@ -9468,6 +9468,18 @@ search in index find pdf
 	not tied to either the web tier or the persistence tier, and is available for both server-side application programming,
 	as well as rich client Swing application developers.” – JSR-303 Specification
  * spring
+	- spring工厂方法配置
+		-----
+		<!--工厂类bean-->
+		<bean id="carFactory" class="com.coder.bo.CarFactory" />
+		<!--factory-bean指定工厂类Bean，factory-method指定工厂类Bean创建Bean的工厂方法-->
+		<bean id="car" factory-bean="carFactory" factory-method="createQiRuiCar" />
+
+		...
+
+		<!--class直接指定工厂类Bean，factory-method指定工厂类Bean创建Bean的工厂方法-->
+		<bean id="car" class="com.coder.bo.CarFactory" factory-method="createQiRuiCar" />
+		-----
 	- spring MVC		 * spring mvc JSR 303: Bean Validation
 		1) 支持注解方式的参数处理，类似REST方式service的实现也提供了参数解析辅助注解
 		2) 请求的uri带格式后缀时，比如/xxx/list.json，作用于视图解析部分，根据后缀返回对应的view
@@ -9663,6 +9675,115 @@ search in index find pdf
 		的子类． 
 		3）一般在Service层我们可以自己捕获DAO方法所产成的DataAccessException，然后再抛出一个业务方法有意义的异常(ps:此异常最好继承DataAccessException)，然后
 		在Web层捕获，这样我们就可以手动编码的灵活实现通过业务方法执行的成功和失败来向用户转发不同的页面．
+
+		spring事务配置属性说明：比如多个service在同一个事务中执行的的需求
+		spring事务传递性、spring事务传播特性，参考下面文章：
+			-----
+			关于spring的事务传播特性
+
+			摘要: 我们都知道事务的概念，那么事务的传播特性是什么呢？(此处着重介绍传播特性的概念，关于传播特性的相关配置就不介绍了，可以查看spring的官方文档) 在
+			我们用SSH开发项目的时候，我们一般都是将事务设置在Service层 ...
+
+			我们都知道事务的概念，那么事务的传播特性是什么呢？(此处着重介绍传播特性的概念，关于传播特性的相关配置就不介绍了，可以查看spring的官方文档) 
+			在我们用SSH开发项目的时候，我们一般都是将事务设置在Service层 那么当我们调用Service层的一个方法的时候它能够保证我们的这个方法中执行的所有的对数据库
+			的更新操作保持在一个事务中，在事务层里面调用的这些方法要么全部成功，要么全部失败。那么事务的传播特性也是从这里说起的。 
+
+			如果你在你的Service层的这个方法中，除了调用了Dao层的方法之外，还调用了本类的其他的Service方法，那么在调用其他的 Service方法的时候，这个事务是怎么规定的呢，
+			我必须保证我在我方法里掉用的这个方法与我本身的方法处在同一个事务中，否则如果保证事物的一致性。事务的传播特性就是解决这个问题的，“事务是会传播的”在Spring
+			中有针对传播特性的多种配置我们大多数情况下只用其中的一种:PROPGATION_REQUIRED：这个配置项的意思是说当我调用service层的方法的时候开启一个事务(具体调用
+			那一层的方法开始创建事务，要看你的aop的配置),那么在调用这个service层里面的其他的方法的时候,如果当前方法产生了事务就用当前方法产生的事务，否则就创建一个
+			新的事务。这个工作使由Spring来帮助我们完成的。 
+			
+			以前没有Spring帮助我们完成事务的时候我们必须自己手动的控制事务，例如当我们项目中仅仅使用hibernate，而没有集成进 spring的时候，我们在一个service层中调用
+			其他的业务逻辑方法，为了保证事物必须也要把当前的hibernate session传递到下一个方法中，或者采用ThreadLocal的方法，将session传递给下一个方法，其实都是一个
+			目的。现在这个工作由 spring来帮助我们完成，就可以让我们更加的专注于我们的业务逻辑。而不用去关心事务的问题。 
+
+			默认情况下当发生RuntimeException的情况下，事务才会回滚，所以要注意一下 如果你在程序发生错误的情况下，有自己的异常处理机制定义自己的Exception，
+			必须从RuntimeException类继承 这样事务才会回滚！
+			 
+			Spring事务传播特性总结：
+			1)只要定义为spring的bean就可以对里面的方法使用@Transactional注解。 
+			2)Spring的事务传播是Spring特有的。不是对底层jdbc的代理。
+			3)使用spring声明式事务，spring使用AOP来支持声明式事务，会根据事务属性，自动在[方法调用之前决定是否开启一个事务]，并在[方法执行之后]决定事务提交或回滚事务。
+			
+			4)Spring支持的PROPAGATION_NESTED 与PROPAGATION_REQUIRES_NEW的区别:
+			PROPAGATION_REQUIRES_NEW：二个事务没有信赖关系，不会存在A事务的成功取决于B事务的情况。有可能存在A提交B失败。A失败（比如执行到
+			doSomeThingB的时候抛出异常）B提交，AB都提交，AB都失败的可能。
+			PROPAGATION_NESTED：与PROPAGATION_REQUIRES_NEW不同的是，内嵌事务B会信赖A。即存在A失败B失败。A成功，B失败。A成功，B成功。而不存在A失败，
+			B成功。
+
+			5) 特别注意PROPAGATION_NESTED的使用条件:使用JDBC 3.0驱动时,仅仅支持DataSourceTransactionManager作为事务管理器。需要JDBC 驱动的java.sql.Savepoint类。
+			有一些JTA的事务管理器实现可能也提供了同样的功能。使用PROPAGATION_NESTED，还需要把PlatformTransactionManager的nestedTransactionAllowed属性设为true;而
+			nestedTransactionAllowed属性值默认为false;
+			6)特别注意PROPAGATION_REQUIRES_NEW的使用条件：JtaTransactionManager作为事务管理器			 
+			的AOP简介与事务传播特性总结2009-10-26 16:56srping用到的另外一项技术就是AOP(Aspect-Oriented Programming, 面向切面编程)，它是一种新的方**, 是对传统 
+			OOP(Object-Oriented Programming, 面向对象编程)的补充。AOP 的主要编程对象是切面(aspect), 而切面模块化横切关注点。在应用 AOP 编程时, 仍然需要在定义公共功能,
+			但可以明确的定义这个功能在哪里, 以什么方式应用, 并且不必修改受影响的类. 这样一来横切关注点就被模块化到特殊的对象(切面)里。每个事物逻辑位于一个位置, 
+			代码不分散，便于维护和升级，业务模块更简洁, 只包含核心业务代码。 
+
+			现实中使用spring最多的就是声明式事务配置功能。下面就来了解其aop在事务上应用。首先要了解的就是AOP中的一些概念： 
+			Aspect(切面):指横切性关注点的抽象即为切面，它与类相似，只是两者的关注点不一样，类是对物体特征的抽象，而切面是横切性关注点的抽象。 
+			joinpoint(连接点):所谓连接点是指那些被拦截到的点。在spring中，这些点指的是方法，因为spring只支持方法类型的连接点，实际上joinpoint还可以是field或类构造器)。 
+			Pointcut(切入点):所谓切入点是指我们要对那些joinpoint进行拦截的定义。 
+			Advice(通知):所谓通知是指拦截到joinpoint之后所要做的事情就是通知.通知分为前置通知，后置通知，异常通知，最终通知，环绕通知。 
+			Target(目标对象):代理的目标对象。 
+			Weave(织入):指将aspects应用到target对象并导致proxy对象创建的过程称为织入。 
+			Introduction(引入):在不修改类代码的前提下，Introduction可以在运行期为类动态地添加一些方法或Field。 
+
+			所谓AOP，我的理解就是应该是这样一个过程，首先需要定义一个切面，这个切面是一个类，里面的方法就是关注点(也是通知)，或者说里面的方法就是
+			用来在执行目标对象方法时需要执行的前置通知，后置通知，异常通知，最终通知，环绕通知等等。有了切面和通知，要应用到目标对象，就需要定义这些通知
+			的切入点，换句话说就是需要对哪些方法进行拦截，而这些被拦截的方法就是连接点，所谓连接点也就是在动态执行过程，被织入切面的方法(至少在spring中只能
+			对方法进行拦截)。因此，在动态过程中通知的执行就属于织入过程，而被织入这些通知的对象就是目标对象了。 
+
+			通常应用中，被织入的都是事务处理，对事务的织入不是普通简单的织入，它有着事务特有的特性—— 
+			事务的传播特性： 
+			1) PROPAGATION_REQUIRED: 如果存在一个事务，则支持当前事务。如果没有事务则开启新的事物。 
+			2) PROPAGATION_SUPPORTS: 如果存在一个事务，支持当前事务。如果没有事务，则非事务的执行。 
+			3) PROPAGATION_MANDATORY: 如果已经存在一个事务，支持当前事务。如果没有一个活动的事务，则抛出异常。 
+			4) PROPAGATION_REQUIRES_NEW: 总是开启一个新的事务。如果一个事务已经存在，则将这个存在的事务挂起。 
+			5) PROPAGATION_NOT_SUPPORTED: 总是非事务地执行，并挂起任何存在的事务。 
+			6) PROPAGATION_NEVER: 总是非事务地执行，如果存在一个活动事务，则抛出异常 
+			7) (spring)PROPAGATION_NESTED：如果一个活动的事务存在，则运行在一个嵌套的事务中. 如果没有活动事务, 则按TransactionDefinition.PROPAGATION_REQUIRED 属性执行。 
+			这些都是事务特有的特性，比如前面分析的，如果两个在代码上不相关的操作，需要放在同一个事务中，这就需要利用到传播特性了，这时后调用的方法的传播特性
+			的值就应该是PROPAGATION_REQUIRED。在spring中只需要进行这样的配置，就实现了生命式的事物处理。
+
+				- REQUIRED
+				- SUPPORTS
+				- MANDATORY
+				- REQUIRES_NEW
+				- NOT_SUPPORTED
+				- NEVER
+				- NESTED
+
+			化成表格的事务的传播特性
+			----------------------------------
+			事务属性	事务1	事务2
+			----------------------------------
+			Required		无		事务2
+						事务1	事务1
+			RequiredNew	无		事务2
+						事务1	事务2
+			Support		无		无
+						事务1	事务1				
+			Mandatory	无		抛异常
+						事务1	事务1			
+			NOSupport	无		无
+						事务1	无			
+			Never		无		无
+						事务1	抛异常
+			
+			最后一点需要提及的就是Spring事务的隔离级别： 
+			1) ISOLATION_DEFAULT：这是一个PlatfromTransactionManager默认的隔离级别，使用数据库默认的事务隔离级别。 
+			2) ISOLATION_READ_UNCOMMITTED：这是事务最低的隔离级别，它充许令外一个事务可以看到这个事务未提交的数据。 
+			3) ISOLATION_READ_COMMITTED：保证一个事务修改的数据提交后才能被另外一个事务读取。另外一个事务不能读取该事务未提交的数据。 
+			4) ISOLATION_REPEATABLE_READ：这种事务隔离级别可以防止脏读，不可重复读。但是可能出现幻像读。它除了保证一个事务不能读取另一个事务未提交的数据外，
+			还保证了避免下面的情况产生(不可重复读)。 
+			5) ISOLATION_SERIALIZABLE 这是花费最高代价但是最可靠的事务隔离级别。事务被处理为顺序执行。除了防止脏读，不可重复读外，还避免了幻像读。 
+			除了第一个是spring特有的，另外四个与
+			-----
+			from: http://blog.sina.com.cn/s/blog_84feb25101010yoe.html
+
+
 	- Log4jConfigListener 
 		log4j配置动态加载，Spring默认刷新Log4j配置文件的间隔,单位为millisecond
 	- spring抽象类注入，spring接口注入有区别
@@ -9737,6 +9858,139 @@ search in index find pdf
 	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
 
 * 消息系统 消息中间件 MQ
+	- rabbitmq
+
+Mirrored Queue Behaviour
+
+In normal operation, for each mirrored-queue, there is one master and several slaves, each on a different node. The slaves apply the operations that occur to the master in exactly the same order as the master and thus maintain the same state. All actions other than publishes go only to the master, and the master then broadcasts the effect of the actions to the slaves. Thus clients consuming from a mirrored queue are in fact consuming from the master.
+
+Should a slave fail, there is little to be done other than some bookkeeping: the master remains the master and no client need take any action or be informed of the failure.
+
+If the master fails, then one of the slaves must be promoted. At this point, the following happens:
+
+A slave is promoted to become the new master. The slave chosen for promotion is the eldest slave. As such, it has the best chance of being synchronised with the master. However, note that should there be no slave that is synchronised with the master, messages that only the master held will be lost.
+The slave considers all previous consumers to have been abruptly disconnected. As such, it requeues all messages that have been delivered to clients but are pending acknowledgement. This can include messages for which a client has issued acknowledgements: either the acknowledgement was lost on the wire before reaching the master, or it was lost during broadcast from the master to the slaves. In either case, the new master has no choice but to requeue all messages it thinks have not been acknowledged.
+Clients that were consuming from the mirrored-queue and support our Consumer Cancellation Notifications extension will receive a notification that their subscription to the mirrored-queue has been abruptly cancelled. At this point they should re-consume from the queue, which will pick up the new master. The reason for sending this notification is that informing clients of the loss of the master is essential: otherwise the client may continue to issue acknowledgements for messages they were sent by the old, failed master, and not expect that they might be about to see the same messages again, this time sent by the new master. Of course, clients that were connected to the failed node will find their connections failed, and will need to reconnect to a surviving node of the cluster.
+As a result of the requeuing, clients that re-consume from the queue must be aware that they are likely to subsequently receive messages that they have seen previously.
+As the chosen slave becomes the master, no messages that are published to the mirrored-queue during this time will be lost: messages published to a mirrored-queue are always published directly to the master and all slaves. Thus should the master fail, the messages continue to be sent to the slaves and will be added to the queue once the promotion of a slave to the master completes.
+
+Similarly, messages published by clients using publisher confirms will still be confirmed correctly even if the master (or any slaves) fail between the message being published and the message being able to be confirmed to the publisher. Thus from the point of view of the publisher, publishing to a mirrored-queue is no different from publishing to any other sort of queue. It is only consumers that need to be aware of the possibility of needing to re-consume from a mirrored-queue upon receipt of a Consumer Cancellation Notification.
+
+If you are consuming from a mirrored-queue with noAck=true (i.e. the client is not sending message acknowledgements) then messages can be lost. This is no different from the norm of course: the broker considers a message acknowledged as soon as it has been sent to a noAck=true consumer, and should the client disconnect abruptly, the message may never be received. In the case of a mirrored-queue, should the master die, messages that are in-flight on their way to noAck=true consumers may never be received by those clients, and will not be requeued by the new master. Because of the possibility that the consuming client is connected to a node that survives, the Consumer Cancellation Notification is useful in identifying when such events may have occurred. Of course, in practise, if you care about not losing messages then you are advised to consume with noAck=false.
+
+Publisher Confirms and Transactions
+Mirrored queues support both Publisher Confirms and Transactions. The semantics chosen are that in the case of both confirms and transactions, the action spans all mirrors of the queue. So in the case of a transaction, a tx.commit-ok will only be returned to a client when the transaction has been applied across all mirrors of the queue. Equally, in the case of publisher confirms, a message will only be confirmed to the publisher when it has been accepted by all of the mirrors. It is correct to think of the semantics as being the same as a message being routed to multiple normal queues, and of a transaction with publications within that similarly are routed to multiple queues.
+
+Unsynchronised Slaves
+
+A node may join a cluster at any time. Depending on the configuration of a queue, when a node joins a cluster, queues may add a slave on the new node. At this point, the new slave will be empty: it will not contain any existing contents of the queue. Such a slave will receive new messages published to the queue, and thus over time will accurately represent the tail of the mirrored-queue. As messages are drained from the mirrored-queue, the size of the head of the queue for which the new slave is missing messages, will shrink until eventually the slave's contents precisely match the master's contents. At this point, the slave can be considered fully synchronised, but it is important to note that this has occured because of actions of clients in terms of draining the pre-existing head of the queue.
+
+Thus a newly added slave provides no additional form of redundancy or availability of the queue's contents until the contents of the queue that existed before the slave was added have been removed or the queue has been explicitly synchronised (see below). Since the queue becomes unresponsive while synchronisation is occurring, it is preferable to allow active queues from which messages are being drained to synchronise naturally, and only explicitly synchronise inactive queues.
+
+Explicit synchronisation can be triggered in two ways: manually or automatically. If a queue is set to automatically synchronise it will synchronise whenever a new slave joins - becoming unresponsive until it has done so.
+
+Starting and Stopping Nodes
+
+If you stop a RabbitMQ node which contains the master of a mirrored-queue, some slave on some other node will be promoted to the master (assuming there is one). If you continue to stop nodes then you will reach a point where a mirrored-queue has no more slaves: it exists only on one node, which is now its master. If the mirrored-queue was declared durable then, if its last remaining node is shutdown, durable messages in the queue will survive the restart of that node. In general, as you restart other nodes, if they were previously part of a mirrored-queue then they will rejoin the mirrored queue.
+
+However, there is currently no way for a slave to know whether or not its queue contents have diverged from the master to which it is rejoining (this could happen during a network partition, for example). As such, when a slave rejoins a mirrored-queue, it throws away any durable local contents it already has and starts empty. Its behaviour is at this point the same as if it were a new node joining the cluster.
+
+Configuring Mirroring
+
+Queues have mirroring enabled via policy. Policies can change at any time; it is valid to create a non-mirrored queue, and then make it mirrored at some later point (and vice versa). There is a difference between a non-mirrored queue and a mirrored queue which does not have any slaves - the former lacks the extra mirroring infrastructure and will run faster.
+
+You should be aware of the behaviour of adding mirrors to a queue.
+
+To cause queues to become mirrored, you should create a policy which matches them and sets policy keys ha-mode and (optionally) ha-params. The following table explains the options for these keys:
+
+ha-mode	ha-params	Result
+all	(absent)	 Queue is mirrored across all nodes in the cluster. When a new node is added to the cluster, the queue will be mirrored to that node.
+exactly	count	 Queue is mirrored to count nodes in the cluster. If there are less than count nodes in the cluster, the queue is mirrored to all nodes. If there are more than count nodes in the cluster, and a node containing a mirror goes down, then a new mirror will not be created on another node. (This is to prevent queues migrating across a cluster as it is brought down.)
+nodes	node names	 Queue is mirrored to the nodes listed in node names. If any of those node names are not a part of the cluster, this does not constitute an error. If none of the nodes in the list are online at the time when the queue is declared then the queue will be created on the node that the declaring client is connected to.
+Whenever the HA policy for a queue changes it will endeavour to keep its existing mirrors as far as this fits with the new policy.
+
+"nodes" policy and migrating masters
+Note that setting or modifying a "nodes" policy can cause the existing master to go away if it is not listed in the new policy. In order to prevent message loss, RabbitMQ will keep the existing master around until at least one other slave has synchronised (even if this is a long time). However, once synchronisation has occured things will proceed just as if the node had failed: consumers will be disconnected from the master and will need to reconnect.
+
+For example, if a queue is on [A B] (with A the master), and you give it a nodes policy telling it to be on [C D], it will initially end up on [A C D]. As soon as the queue synchronises on its new mirrors [C D], the master on A will shut down.
+
+Synchronising Queues
+Queues can be set to automatically synchronise by setting the ha-sync-mode policy key to automatic. ha-sync-mode can also be set to manual. If it is not set then manual is assumed.
+
+You can determine which slaves are synchronised with the following rabbitmqctl invocation:
+
+rabbitmqctl list_queues name slave_pids synchronised_slave_pids
+You can manually synchronise a queue with:
+
+rabbitmqctl sync_queue name
+And you can cancel synchronisation with:
+
+rabbitmqctl cancel_sync_queue name
+These features are also available through the management plugin.
+
+Some examples
+Policy where queues whose names begin with "ha." are mirrored to all nodes in the cluster:
+
+rabbitmqctl	
+rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
+rabbitmqctl (Windows)	
+rabbitmqctl set_policy ha-all "^ha\." "{""ha-mode"":""all""}"
+HTTP API	
+PUT /api/policies/%2f/ha-all {"pattern":"^ha\.", "definition":{"ha-mode":"all"}}
+Web UI	
+Navigate to Admin > Policies > Add / update a policy.
+Enter "ha-all" next to Name, "^ha\." next to Pattern, and "ha-mode" = "all" in the first line next to Policy.
+Click Add policy.
+Policy where queues whose names begin with "two." are mirrored to any two nodes in the cluster, with automatic synchronisation:
+
+rabbitmqctl	
+rabbitmqctl set_policy ha-two "^two\." \
+   '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
+rabbitmqctl (Windows)	
+rabbitmqctl set_policy ha-two "^two\." ^
+   "{""ha-mode"":""exactly"",""ha-params"":2,"ha-sync-mode":"automatic"}"
+HTTP API	
+PUT /api/policies/%2f/ha-two
+{"pattern":"^two\.", "definition":{"ha-mode":"exactly", "ha-params":2,"ha-sync-mode":"automatic"}}
+Web UI	
+Navigate to Admin > Policies > Add / update a policy.
+Enter "ha-two" next to Name and "^two\." next to Pattern.
+Enter "ha-mode" = "exactly" in the first line next to Policy, then "ha-params" = 2 in the second line, then "ha-sync-mode" = "automatic" in the third, and set the type on the second line to "Number".
+Click Add policy.
+In This Section
+Features
+Server Documentation
+Configuration
+SSL Support
+Distributed RabbitMQ
+Reliable Delivery
+Clustering
+High Availability
+High Availability (pacemaker)
+Access Control
+SASL Authentication
+Flow Control
+Memory Use
+Firehose / Tracing
+Manual Pages
+Windows Quirks
+Client Documentation
+Plugins
+News
+Protocol
+Our Extensions
+Building
+Previous Releases
+License
+In This Page
+Mirrored Queue Behaviour
+Unsynchronised Slaves
+Starting and Stopping Nodes
+Configuring Mirroring
+Sitemap | Contact
+
+		HA
+		ref: http://www.rabbitmq.com/ha.html
 	- AMQP(Advanced Message Queuing Protocol )协议
 		rabbitMQ基于此协议实现
 			tutorial：http://www.rabbitmq.com/tutorials/tutorial-one-python.html
@@ -10560,6 +10814,43 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			...
 			-----
 * struts
+	- struts.xml的package定义namespace，action的name属性定义uri，通过下面在action uri和所请求的action方法名之间加上叹号的方式定位到方法，称为动态方法调用。
+	struts2请求方式：http://localhost:8080/luorigong/resourceManagerAction!listBigRegion.action?_dc=1372
+
+	一个action包含多个请求处理的配置方式有下面几种：
+	1）为Action配置method属性
+		-----
+		将Action类中的每一个处理方法都定义成一个逻辑Action方法。
+		
+		如上，把LoginAction中的login和regist方法都配置成逻辑Action。要调用login方法，则相应的把index.jsp中表单元素的action设置为"manage/userLogin.action"；
+		要调用regist方法，把regist.jsp中表单元素的action设置为"manage/userRegist.action"。
+		-----
+	2）使用通配符映射(wildcard mappings)方式
+		-----
+		在struts.xml文件中配置<action…>元素时，它的name、class、method属性都可支持通配符，这种通配符的方式是另一种形式的动态方法调用。
+		当我们使用通配符定义Action的name属性时，相当于用一个元素action定义了多个逻辑Action：
+		<action name="user_*"
+		class="org.qiujy.web.struts2.action.UserAction" method="{1}">
+			    <result name="success">/success.jsp</result>
+			    <result name="error">/error.jsp</result>
+			</action>
+		如上，<action name=”user_*”>定义一系列请求URL是user_*.action模式的逻辑Action。同时method属性值为一个表达式{1}，表示它的值是name属性值中第一个*的值。
+		例如：用户请求URL为user_login.action时，将调用到UserAction类的login方法；用户请求URL为user_regist.action时，将调用到UserAction类的regist方法。
+		-----
+	3）动态方法调用
+		-----
+		DMI：Dynamic Method Invocation 动态方法调用。
+		动态方法调用是指：表单元素的action不直接等于某个Action的名字，而是以如下形式来指定对应的动作名：
+		<form method="post" action="userOpt!login.action">
+		则用户的请求将提交到名为”userOpt”的Action实例，Action实例将调用名为”login”方法来处理请求。同时login方法的签名也是跟execute()一样，即为public String login() throws Exception。
+		注意：要使用动态方法调用，必须设置Struts2允许动态方法调用，通过设置struts.enable.DynamicMethodInvocation常量来完成，该常量属性的默认值是true。
+		-----
+	ref: http://blog.csdn.net/zz_mm/article/details/5460397Struts2 XML配置详解
+
+	- struts.xml
+		配置package标签的namespace，路由请求
+		配置action标签，name定义请求的uri
+
 	- Struts2插件机制
 		比如，struts与spring集成时，可以用spring来获取注入的对象，就是通过struts的配置struts.objectFactory=spring来完成
 		下面为一篇介绍struts2插件机制的文章：
@@ -12526,6 +12817,121 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- 例子
+		-----
+		maven,tomcat, jetty 自动部署脚本
+
+		#tomcat:
+
+		cd /home/deploy/javaside.org/javaside/
+
+		log=../.mvn-pkg.log
+
+		webPath=/var/www/javaside.org/
+
+		mvn clean package -Pproduct | tee $log
+		t=$(grep "BUILD SUCCESS" $log)
+
+		if [ $? -eq 0 ]
+		then
+		    #mvn package success deploy project
+		    t=$(ps aux |grep "catalina.home=/usr/local/tomcat -Djava.io.tmpdir=/usr/local/tomcat/temp org.apache.catalina.startup.Bootstrap start" | grep -v grep)
+
+		    if [ $? -eq 0 ]
+		    then
+			#stop tomcat server
+			echo ""
+			echo "stop tomcat ......"
+			echo ""
+			/usr/local/tomcat/bin/shutdown.sh
+
+			while true
+			do
+			    t=$(ps aux |grep "catalina.home=/usr/local/tomcat -Djava.io.tmpdir=/usr/local/tomcat/temp org.apache.catalina.startup.Bootstrap start" | grep -v grep)
+
+			    if [ $? -ne 0 ]
+			    then
+				#now stoping, wait
+				sleep 1
+			    else
+				break
+			    fi
+			done
+		    fi
+
+		    rm -rf ${webPath}/*
+		    cp -r /home/deploy/javaside.org/javaside/target/javaside/* ${webPath}
+		    cp ../config/*.properties ${webPath}/WEB-INF/classes/
+
+		    #start tomcat server
+		    echo ""
+		    echo "start tomcat ......"
+		    echo ""
+		    /usr/local/tomcat/bin/startup.sh
+		else
+		    echo ""
+		    echo "===================== Project Build Fail ========================="
+		    echo ""
+		fi
+
+		rm -rf $log
+
+		tail -f /usr/local/tomcat/logs/catalina.out
+
+
+		#jetty:
+
+		cd /home/deploy/javaside.org/javaside/
+
+		log=../.mvn-pkg.log
+
+		webPath=/var/www/jetty/javaside.org/
+
+		mvn clean package -Pproduct | tee $log
+		t=$(grep "BUILD SUCCESS" $log)
+
+		if [ $? -eq 0 ]
+		then
+		    #mvn package success deploy project
+		    t=$(ps aux |grep "/usr/local/jetty/start.jar" | grep -v grep)
+
+		    if [ $? -eq 0 ]
+		    then
+			#stop jetty server
+			echo ""
+			echo "stop jetty ......"
+			echo ""
+			/usr/local/jetty/bin/jetty.sh stop
+
+		    fi
+
+		    rm -rf ${webPath}/*
+		    cp -r /home/deploy/javaside.org/javaside/target/javaside/* ${webPath}
+		    cp ../config/*.properties ${webPath}WEB-INF/classes/
+
+		    #start jetty server
+		    echo ""
+		    echo "start jetty ......"
+		    echo ""
+		    /usr/local/jetty/bin/jetty.sh start
+		else
+		    echo ""
+		    echo "===================== Project Build Fail ========================="
+		    echo ""
+		fi
+
+		rm -rf $log
+
+		tail -f /usr/local/jetty/logs/$(date "+%Y_%m_%d").stderrout.log
+
+		自启动脚本
+
+		export JAVA_HOME=/usr/local/java
+		export PATH=$JAVA_HOME/bin/:$PATH
+		export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$CLASSPATH
+		       
+		/usr/local/jetty/bin/jetty.sh start
+		-----
 	- shell带颜色输出，比如区分检查结果的成功（绿色）和失败（红色）
 		echo -e "\033[32m [something here] \033[0m"
 		
@@ -29657,6 +30063,39 @@ day310 Tuesday, June 04, 2013
 				specified, it will default to 'children'). This will tell the tree to look for any nested tree nodes by the same keyword, i.e., 'children'. If a root is specified in the config make 
 				sure that any nested nodes with children have the same name. Note that setting defaultRootProperty accomplishes the same thing.
 				-----
+			4）setActiveResourceList
+				为自定义的一个属性，此处自定义属性指向一个函数
+
+			5）listener	这些控制脚本可移到Controller中去
+				itemclick( this, record, item, index, e, eOpts )
+					Fires when an item is clicked.
+					Parameters
+						this : Ext.view.View
+						record : Ext.data.Model
+						The record that belongs to the item
+						item : HTMLElement
+						The item's element
+						index : Number
+						The item's index
+						e : Ext.EventObject
+						The raw event object
+						eOpts : Object
+						The options object passed to Ext.util.Observable.addListener.
+
+				itemcontextmenu( this, record, item, index, e, eOpts )
+					Fires when an item is right clicked.
+					Parameters
+						this : Ext.view.View
+						record : Ext.data.Model
+						The record that belongs to the item
+						item : HTMLElement
+						The item's element
+						index : Number
+						The item's index
+						e : Ext.EventObject
+						The raw event object
+						eOpts : Object
+						The options object passed to Ext.util.Observable.addListener.
 
 
 
@@ -29667,6 +30106,66 @@ day310 Tuesday, June 04, 2013
 
 		
 	五、ResourceViewTreeStore分析（用于上面的ResourceViewContainer中的ResourceViewList TreePanel）
+		定义如下：
+		-----
+		Ext.define('LuoRiGong.store.ResourceViewTreeStore', {
+		    extend: 'Ext.data.TreeStore',
+			model: 'LuoRiGong.model.TreeItem',
+			autoLoad: false,
+		    
+		    proxy: {
+			type: 'ajax',
+			url: 'services/tree/resourceView/list.json',
+			reader: {
+			    type: 'json',
+			    root: 'children'
+			}
+		    },
+		    
+		    root: {
+			text: '所有资源',  
+			expanded: false
+		    },
+		    
+		    folderSort: true,
+		    sorters: [{
+			property: 'text',
+			direction: 'ASC'
+		    }],
+		    
+		    listeners: {
+			beforeload: function(store, operation, eOpts) {
+				operation.params.nodeId = operation.node.get('nodeId');
+			}
+		    }
+		});
+		-----
+
+		属性说明：
+		1）model : String
+	 		Name of the Model associated with this store. The string is used as an argument for Ext.ModelManager.getModel.
+		2）autoLoad : Boolean/Object
+			If data is not specified, and if autoLoad is true or an Object, this store's load method is automatically called after creation. If the value of autoLoad is an Object, this 
+			Object will be passed to the store's load method.
+		3）proxy : String/Ext.data.proxy.Proxy/Object
+			The Proxy to use for this Store. This can be either a string, a config object or a Proxy instance - see setProxy for details.
+
+			type：指定proxy的类型
+				下面是Ext.data.proxy.Ajax的定义：
+				-----
+				Ext.define('Ext.data.proxy.Ajax', {
+				    requires: ['Ext.util.MixedCollection', 'Ext.Ajax'],
+				    extend: 'Ext.data.proxy.Server',
+				    alias: 'proxy.ajax',
+				    alternateClassName: ['Ext.data.HttpProxy', 'Ext.data.AjaxProxy'],
+				-----
+				PS: type来自其" alias: 'proxy.ajax'"的定义，其他地方类推
+			url：
+			reader：
+				reader : Object/String/Ext.data.reader.Reader1
+				The Ext.data.reader.Reader to use to decode the server's response or data read from client. This can either be a Reader instance, a config object or just a valid 
+				Reader type name (e.g. 'json', 'xml').
+
 
 			
 
@@ -29844,6 +30343,132 @@ day317 Friday, June 14, 2013
 
 1. 
 	* 落日弓web
+	* 大region二期
+		新增cn-fujian-ck-c02，76a集群，需要发布大region二期版本api，修改发布wiki增加步骤
+		AG相同？
+		DB相同
+		现版本为二期之前的版本api
+
 
 2. 落日弓web
 	继续day310 
+
+3. extjs * extjs
+	对于js文件大的情况，可以考虑压缩源文件的方式，类似库文件都提供了压缩后的版本，用于生成环境。
+
+4. MQ服务
+	稳定
+	HA
+	消息持久化
+5. acl
+	-----
+	API ACL规则梳理
+	规则描述	 规则原因
+	APIProxy机器要能够访问所有API Server机器的8080端口	 转发API请求
+	APIProxy机器要能够访问houyi数据库，一般端口范围为3000到4000	 APIProxy需要根据ip/vm等信息查询在哪个region
+	APIProxy机器要能够访问sls服务 （service.ols.aliyun-inc.com）	 推送日志
+	API Sever机器要能够访问houyi数据库，一般端口范围为3000到4000；	 API访问自己的数据库
+	API Sever机器要能够访问大Region中所有小Region的houyi monitor数据库，一般端口范围为3000到4000	 API访问Monitor数据库获取VM的性能信息。
+	API Server机器要能够访问大Region中所有小Region的fuxi vip的31267端口	 http_proxy部署在fuxi上, api请求通过http_proxy转发
+	API Server机器能够访问rabbitmq机器的5672端口	 状态同步
+	API Taskserver机器能够访问houyi数据库，一般端口范围为3000到4000	 流量推送开关（region_need_statistics表）与推送日志（statistics_log表）等
+	API Taskserver机器要能够访问大Region中所有小Region的houyi monitor数据库，一般端口范围为3000到4000	 获取vm监控信息
+	API Taskserver机器要能够访问计量OMS服务（service.oms.aliyun-inc.com，内部生产集群不需要）	 计量服务
+	API Taskserver机器要能够访问大Region中所有小Region的fuxi vip的32167端口	 获取vm公网ip地址
+	API Taskserver机器要能够访问安全流量服务（10.135.252.105:8080，内部生产集群不需要）	 获取vm的带宽信息
+	落日弓 AG要能够访问所有APIProxy、API Server、API Taskserver机器的22端口	 部署API服务
+	AG要能够访问API Server的22端口与8080端口	 日常运维
+	AY03-NEW的AG要能够访问内部生产集群的API Server/APIProxy/API Taskserver机器的22端口	 内部集群API发布机
+	AY32C的AG要能够访问外部售卖生产集群的API Server/APIProxy/API Taskserver机器的22端口	 外部集群API发布机
+	业务方要能够访问APIProxy vip	 外部调用
+	-----
+
+6. jetty，tomcat容器配置，一些部署环境的搜集整理
+
+	BASE_BIN_DIR=`dirname $0`
+
+	JAVA_HOME=/usr/ali/java
+	JETTY_HOME=/usr/ali/jetty
+	BASE_HOME=/home/admin/houyi
+	JETTY_PORT=8080
+
+	export TMPDIR="$BASE_HOME/tmp"
+	export JETTY_PID="$BASE_HOME/logs/jetty.pid"
+	export JETTY_LOGS="$BASE_HOME/logs"
+
+	export START_INI="$BASE_HOME/start.ini"
+	export JETTY_ARGS="--ini=$START_INI"
+	export JETTY_CONF="$BASE_HOME/etc/jetty.conf"
+
+	安装于部署分离，虚拟主机方式
+
+
+7. notepad++
+	free open source 
+	plugin
+	
+	
+	
+Honeymon
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day318 Thursday, June 27, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	去掉了python API层，整合到portal层，采用struts2+spring3+ibatis
+	直接访问luorigong数据库
+
+	现在的结构为：java暴露接口，AG上的python agent做任务，它们的交互通过MQ实现（之前的结构是python API与agent通过MQ交互，也不会直接相互调用）
+
+	java端，采用Ext+JQuery方式，jquery搭建页面架子，组件用Ext生成并注入。
+
+	采用spring配置事务，service间的事务通过传播传递
+
+	python API部分：
+		代码目录下的master.py定义了URI到接受请求的Handler的映射，handler的post，get等方法处理对应的http请求。
+		逻辑包括与数据库交互，及与MQ交互
+
+	工作：
+		1）资源视图中，将原python API的逻辑移植到java web上
+			原python API逻辑梳理
+			java编码
+		2）控制系统发布于扩容逻辑移植
+			原逻辑梳理
+			java编码
+		3）前端由Ext MVC替换为Ext+Jquery，逐步过渡
+
+	例子：
+		参考已有的：资源视图-大region管理，熟悉页面js修改到逻辑从python API移植过来的过程。
+		struts.xml的package定义namespace，action的name属性定义uri，通过下面在action uri和所请求的action方法名之间加上叹号的方式定位到方法，称为动态方法调用。
+		参考* struts
+		
+		struts2请求方式：http://localhost:8080/luorigong/resourceManagerAction!listBigRegion.action?_dc=1372
+
+		本项目改为，action，dao的spring配置通过spring注解实现（@Component，@Controller），但是service的配置还是在xml文件中并结合其他注解达到和xml配置一样的效果。
+		eg:
+		-----
+		@Component("testAction")
+		@Scope(BeanDefinition.SCOPE_PROTOTYPE)	 //定义scope
+		-----
+
+		action的返回都通过其result成员变量传递：
+		-----
+		<global-results>
+			<result type="json" name="success">
+				<param name="root">result</param>
+				<param name="excludeProperties">
+					data.*\.creatorUser,data.*\.modifyUser
+				</param>
+			</result>
+			<result type="json" name="successByUser">
+				<param name="root">result</param>
+				<param name="excludeProperties">
+					data.*\.modifyUser
+				</param>
+			</result>
+		</global-results>
+		-----
+	
