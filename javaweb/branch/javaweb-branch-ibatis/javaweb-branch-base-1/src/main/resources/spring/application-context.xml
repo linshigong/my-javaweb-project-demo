@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="byName">
+	
+	<bean id="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	   <property name="testOnBorrow" value="true"/>
+	   <property name="validationQuery" value="SELECT 1 FROM DUAL"/>
+	   <property name="driverClassName" value="${jdbc.driverClass}"/>
+	   <property name="url" value="${jdbc.url}"/>
+	   <property name="username" value="${jdbc.username}"/>
+	   <property name="password" value="${jdbc.password}"/>
+	   <property name="minIdle" value="${jdbc.minimumConnectionCount}"/>
+	   <property name="maxActive" value="${jdbc.maximumActiveTime}"/>
+	   <property name="maxIdle" value="${jdbc.maximumConnectionCount}"/>
+	</bean>
+
+	<bean id="sqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient">
+			<bean class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+				<property name="dataSource">
+					<ref bean="dataSource" />
+				</property>
+				<property name="configLocation" value="classpath:ibatis/ibatis-config.xml" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="userDao" class="mytest.dao.impl.UserDaoImpl">
+		<property name="sqlMapClientTemplate" ref="sqlMapClientTemplate"/>
+	</bean>
+    
+</beans>

@@ -1,0 +1,8 @@
+|connect|
+|clean table|`user`|
+|insert|`user`|
+|user_id|user_name|service_secret_key|service_access_id|status|is_admin|billing|
+|111|user1|key1|id1|1|0|1|
+|222|user2|key2|id2|1|0|1|
+
+
