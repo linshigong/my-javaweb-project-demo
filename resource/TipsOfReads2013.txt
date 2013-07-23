@@ -866,3 +866,7 @@ Part3 iBATIS in the real world
 	■ Caching strategies
 
 
+#########################################################################################################
+12. MQ
+	12.1 RabbitMQ 
+	from: http://sishuok.com/forum/blogPost/list/5782.html

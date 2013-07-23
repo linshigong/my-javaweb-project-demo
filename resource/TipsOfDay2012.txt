@@ -14,6 +14,9 @@ google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
 tmp
 ft2013-04-22
+* 幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。
+	幂等有以下几种定义：
+	对于单目运算/函数，如果一个运算/函数对于在范围内的所有的一个数多次进行该运算所得的结果和进行一次该运算所得的结果是一样的，那么我们就称该运算/函数是幂等的。比如绝对值运算就是一个例子，在实数集中，有abs(a)=abs(abs(a))，[1]
 * 云端存储 文件同步
 	SkyDrive
 
@@ -2502,6 +2505,110 @@ ft2013-04-22
 	PS: Servlet通过规范定义的request/response paradigm与servlet容器交互，容器负责连接接收和相应，servlet负责逻辑
 
 * java
+	- java路径，类路径，相对路径，绝对路径
+		this.getClass().getClassLoader().getResource("//").getPath() 获取类路径，即classes所在路径
+		参考：
+		-----
+		 J2EE项目相对路径、绝对路径获取
+
+		servletstringtreejspwebpath
+		　　在写java程序时不可避免要获取文件的路径…总结一下，遗漏的随时补上
+
+		　　1.可以在servlet的init方法里
+
+		　　String path = getServletContext()。getRealPath("/");
+
+		　　这将获取web项目的全路径
+
+		　　例如 :E:\eclipseM9\workspace\tree\
+
+		　　tree是我web项目的根目录
+
+		　　2.你也可以随时在任意的class里调用
+
+		　　this.getClass()。getClassLoader()。getResource("/")。getPath();
+
+		　　这将获取 到classes目录的全路径
+
+		　　例如 : E:\eclipseM9/workspace/tree/WEB-INF/classes/
+
+		　　这个方法也可以不在web环境里确定路径，比较好用
+
+		　　3.request.getContextPath();
+
+		　　获得web根的上下文环境
+
+		　　如 /tree
+
+		　　tree是我的web项目的root context
+
+		　　1. 可以在servlet的init方法里
+
+		　　String path = getServletContext()。getRealPath("/");
+
+		　　这将获取web项目的全路径
+
+		　　例如 :E:\eclipseM9\workspace\tree\
+
+		　　tree是我web项目的根目录
+
+		　　2
+
+		　　jsp 获取文件路径
+
+		　　2008-08-06 16:57
+
+		　　<%@ page contentType="text/html; charset=gb2312" language="java" import="java.io.*" errorPage="" %>
+
+
+		　　当前WEB应用的物理路径：<%=application.getRealPath("/")%>
+		　　当前你求请的JSP文件的物理路径：<%=application.getRealPath(request.getRequestURI())%>
+		　　<%
+
+		　　String path=application.getRealPath(request.getRequestURI());
+
+		　　String dir=new File(path)。getParent();
+
+		　　out.println("当前JSP文件所在目录的物理路径"+dir);
+
+		　　%>
+
+		　　String virtPath = request.getServletPath();//虚拟路径
+
+		　　String realPath = request.getRealPath(virtPath);//物理路径
+
+		　　JSP中获得当前应用的相对路径和绝对路径
+
+		　　根目录所对应的绝对路径：request.getRequestURI()
+
+		　　文件的绝对路径 :application.getRealPath(request.getRequestURI());
+
+		　　当前web应用的绝对路径 :application.getRealPath("/");
+
+		　　取得请求文件的上层目录：new File(application.getRealPath(request.getRequestURI()))。getParent()
+
+		　　Servlet中获得当前应用的相对路径和绝对路径
+
+		　　根目录所对应的绝对路径：request.getServletPath();
+
+		　　文件的绝对路径 :request.getSession()。getServletContext()。getRealPath
+
+		　　(request.getRequestURI())
+
+		　　当前web应用的绝对路径 :servletConfig.getServletContext()。getRealPath("/");
+
+		　　(ServletContext对象获得几种方式：
+
+		　　Javax.servlet.http.HttpSession.getServletContext()
+
+		　　Javax.servlet.jsp.PageContext.getServletContext()
+
+		　　Javax.servlet.ServletConfig.getServletContext()
+
+		　　)
+		-----
+		from: http://blog.csdn.net/icecream0/article/details/7387622
+
 	- javaee servet技术中的Filter
 		 javax.servlet.Filter
 		 DOC
@@ -3605,6 +3712,10 @@ ftian20130102
 	google code 提供svn服务，但页面上不便于svn操作，比如添加分支，添加目录等，可通过svn工具来操作，如 TortoiseSVN，来建立新目录等等。
 
 * 代码合并    svn merger merger代码 * svn
+	- 冲突解决
+		update代码后，通过工具对冲突进行编辑及解决
+		Tortoise SVN为到冲突的文件上右键打开编辑冲突功能，编辑好后，再右键选择Resolved即可
+
 	- 对于修改了同一分支同一文件产生的冲突，update本地代码后，产生冲突文件，通过svn diff解决冲突，删除冲突文件并提交来解决
 	- svn合并代码特殊场景之一
 		从A点的trunk拉出新branch B1开发，在B点时trunk上合入了其他项目的代码，在C点时B1合并trunk的修改到本branch，在D点时B1需要合入trunk，此时会有冲突
@@ -9468,6 +9579,10 @@ search in index find pdf
 	not tied to either the web tier or the persistence tier, and is available for both server-side application programming,
 	as well as rich client Swing application developers.” – JSR-303 Specification
  * spring
+	- 自动注解注入配置
+		 <context:component-scan base-package="com.aliyun.luorigong"/>
+		 会扫描cllasspath下所有注解了component等注解的类，并自己注册到spring容器中
+
 	- spring工厂方法配置
 		-----
 		<!--工厂类bean-->
@@ -9857,137 +9972,255 @@ search in index find pdf
  * word * office word
 	- word的列表问题，多级列表调整缩进样式，选中列表项，右键选“调整列表缩进”，具体看哪个对话框。
 
-* 消息系统 消息中间件 MQ
+* 消息系统 消息中间件 MQ	 * rabbitmq
 	- rabbitmq
+		-----
+		RabbitMQ 
+		1). introduction:
+		      RabbitMQ is a message broker. In essence, it accepts messages from producers, and delivers them to consumers. In-between, it can route, buffer, and persist the messages according to rules you give it.
 
-Mirrored Queue Behaviour
+		    A queue is the name for a mailbox. It lives inside RabbitMQ. Although messages flow through RabbitMQ and your applications, they can be stored only inside a queue. A queue is not bound 
+		    by any limits, it can store as many messages as you like - it's essentially an infinite buffer. Many producers can send messages that go to one queue - many consumers can try to receive data from one queue.
 
-In normal operation, for each mirrored-queue, there is one master and several slaves, each on a different node. The slaves apply the operations that occur to the master in exactly the same order as the master and thus maintain the same state. All actions other than publishes go only to the master, and the master then broadcasts the effect of the actions to the slaves. Thus clients consuming from a mirrored queue are in fact consuming from the master.
+		    To send, we must declare a queue for us to send to; then we can publish a message to the queue:
+		     channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		    String message = "Hello World!";
+		    channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+		    System.out.println(" [x] Sent '" + message + "'");
+		     Declaring a queue is idempotent - it will only be created if it doesn't exist already. The message content is a byte array, so you can encode whatever you like there.
+		2). Work Queues:
+		     The main idea behind Work Queues (aka: Task Queues) is to avoid doing a resource-intensive task immediately and having to wait for it to complete. Instead we schedule the task to be done later. 
+		     We encapsulate a task as a message and send it to a queue. A worker process running in the background will pop the tasks and eventually execute the job. When you run many workers the tasks 
+		     will be shared between them.
+		     
+		     One of the advantages of using Task Queue is the ability to easily parallelise work. If we are building up a backlog of work, we can just add more workers and that way, scale easily.
+		Message acknowledgment：
+		    Doing a task can take a few seconds. You may wonder what happens if one of the consumers starts a long task and dies with it only partly done. With our current code, once RabbitMQ delivers 
+		a message to the customer it immediately removes it from memory. In this case, if you kill a worker we will lose the message it was just processing. We'll also lose all the messages that were dispatched 
+		to this particular worker but were not yet handled.
+		
+		But we don't want to lose any tasks. If a worker dies, we'd like the task to be delivered to another worker.
 
-Should a slave fail, there is little to be done other than some bookkeeping: the master remains the master and no client need take any action or be informed of the failure.
+		In order to make sure a message is never lost, RabbitMQ supports message acknowledgments. An ack(nowledgement) is sent back from the consumer to tell RabbitMQ that a particular message 
+		has been received, processed and that RabbitMQ is free to delete it.
 
-If the master fails, then one of the slaves must be promoted. At this point, the following happens:
+		If a consumer dies without sending an ack, RabbitMQ will understand that a message wasn't processed fully and will redeliver it to another consumer. That way you can be sure that no message is lost, 
+		even if the workers occasionally die.
+		There aren't any message timeouts; RabbitMQ will redeliver the message only when the worker connection dies. It's fine even if processing a message takes a very, very long time.
 
-A slave is promoted to become the new master. The slave chosen for promotion is the eldest slave. As such, it has the best chance of being synchronised with the master. However, note that should there be no slave that is synchronised with the master, messages that only the master held will be lost.
-The slave considers all previous consumers to have been abruptly disconnected. As such, it requeues all messages that have been delivered to clients but are pending acknowledgement. This can include messages for which a client has issued acknowledgements: either the acknowledgement was lost on the wire before reaching the master, or it was lost during broadcast from the master to the slaves. In either case, the new master has no choice but to requeue all messages it thinks have not been acknowledged.
-Clients that were consuming from the mirrored-queue and support our Consumer Cancellation Notifications extension will receive a notification that their subscription to the mirrored-queue has been abruptly cancelled. At this point they should re-consume from the queue, which will pick up the new master. The reason for sending this notification is that informing clients of the loss of the master is essential: otherwise the client may continue to issue acknowledgements for messages they were sent by the old, failed master, and not expect that they might be about to see the same messages again, this time sent by the new master. Of course, clients that were connected to the failed node will find their connections failed, and will need to reconnect to a surviving node of the cluster.
-As a result of the requeuing, clients that re-consume from the queue must be aware that they are likely to subsequently receive messages that they have seen previously.
-As the chosen slave becomes the master, no messages that are published to the mirrored-queue during this time will be lost: messages published to a mirrored-queue are always published directly to the master and all slaves. Thus should the master fail, the messages continue to be sent to the slaves and will be added to the queue once the promotion of a slave to the master completes.
+		Message durability：
+		    We have learned how to make sure that even if the consumer dies, the task isn't lost. But our tasks will still be lost if RabbitMQ server stops.
+		When RabbitMQ quits or crashes it will forget the queues and messages unless you tell it not to. Two things are required to make sure that messages aren't lost: we need to mark both the queue and 
+		messages as durable.
+		    First, we need to make sure that RabbitMQ will never lose our queue. In order to do so, we need to declare it as durable:
+		boolean durable = true;
+		channel.queueDeclare("hello", durable, false, false, null);
+		     RabbitMQ doesn't allow you to redefine an existing queue with different parameters and will return an error to any program that tries to do that. 
+		     At this point we're sure that the task_queue queue won't be lost even if RabbitMQ restarts. Now we need to mark our messages as persistent - by setting MessageProperties (which implements 
+		BasicProperties) to the value PERSISTENT_TEXT_PLAIN.
+		import com.rabbitmq.client.MessageProperties;
+		channel.basicPublish("", "task_queue", 
+			    MessageProperties.PERSISTENT_TEXT_PLAIN,
+			    message.getBytes());
+		Note on message persistence：
+		     Marking messages as persistent doesn't fully guarantee that a message won't be lost. Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ has 
+		accepted a message and hasn't saved it yet. Also, RabbitMQ doesn't do fsync(2) for every message -- it may be just saved to cache and not really written to the disk. The persistence guarantees aren't 
+		strong, but it's more than enough for our simple task queue. If you need a stronger guarantee you can wrap the publishing code in a transaction.
 
-Similarly, messages published by clients using publisher confirms will still be confirmed correctly even if the master (or any slaves) fail between the message being published and the message being able to be confirmed to the publisher. Thus from the point of view of the publisher, publishing to a mirrored-queue is no different from publishing to any other sort of queue. It is only consumers that need to be aware of the possibility of needing to re-consume from a mirrored-queue upon receipt of a Consumer Cancellation Notification.
+		Fair dispatch：
+		    You might have noticed that the dispatching still doesn't work exactly as we want. For example in a situation with two workers, when all odd messages are heavy and even messages are light, one worker 
+		will be constantly busy and the other one will do hardly any work. Well, RabbitMQ doesn't know anything about that and will still dispatch messages evenly.   This happens because RabbitMQ just dispatches 
+		 message when the message enters the queue. It doesn't look at the number of unacknowledged messages for a consumer. It just blindly dispatches every n-th message to the n-th consumer.
+		     In order to defeat that we can use the basicQos method with the prefetchCount = 1 setting. This tells RabbitMQ not to give more than one message to a worker at a time. Or, in other words, don't 
+		dispatch a new message to a worker until it has processed and acknowledged the previous one. Instead, it will dispatch it to the next worker that is not still busy.
+		int prefetchCount = 1;
+		channel.basicQos(prefetchCount);
 
-If you are consuming from a mirrored-queue with noAck=true (i.e. the client is not sending message acknowledgements) then messages can be lost. This is no different from the norm of course: the broker considers a message acknowledged as soon as it has been sent to a noAck=true consumer, and should the client disconnect abruptly, the message may never be received. In the case of a mirrored-queue, should the master die, messages that are in-flight on their way to noAck=true consumers may never be received by those clients, and will not be requeued by the new master. Because of the possibility that the consuming client is connected to a node that survives, the Consumer Cancellation Notification is useful in identifying when such events may have occurred. Of course, in practise, if you care about not losing messages then you are advised to consume with noAck=false.
+		3). Publish/Subscribe: 
+		     Essentially, published messages are going to be broadcast to all the receivers.
+		Exchanges:
+		     The core idea in the messaging model in RabbitMQ is that the producer never sends any messages directly to a queue.
 
-Publisher Confirms and Transactions
-Mirrored queues support both Publisher Confirms and Transactions. The semantics chosen are that in the case of both confirms and transactions, the action spans all mirrors of the queue. So in the case of a transaction, a tx.commit-ok will only be returned to a client when the transaction has been applied across all mirrors of the queue. Equally, in the case of publisher confirms, a message will only be confirmed to the publisher when it has been accepted by all of the mirrors. It is correct to think of the semantics as being the same as a message being routed to multiple normal queues, and of a transaction with publications within that similarly are routed to multiple queues.
+		     Instead, the producer can only send messages to an exchange. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. 
+		     The exchange must know exactly what to do with a message it receives. Should it be appended to a particular queue? Should it be appended to many queues? Or should it get discarded. The rules
+		     for that are defined by the exchange type.
 
-Unsynchronised Slaves
+		     There are a few exchange types available: direct, topic, headers and fanout.
+		     channel.exchangeDeclare("logs", "fanout");
 
-A node may join a cluster at any time. Depending on the configuration of a queue, when a node joins a cluster, queues may add a slave on the new node. At this point, the new slave will be empty: it will not contain any existing contents of the queue. Such a slave will receive new messages published to the queue, and thus over time will accurately represent the tail of the mirrored-queue. As messages are drained from the mirrored-queue, the size of the head of the queue for which the new slave is missing messages, will shrink until eventually the slave's contents precisely match the master's contents. At this point, the slave can be considered fully synchronised, but it is important to note that this has occured because of actions of clients in terms of draining the pre-existing head of the queue.
+		Nameless exchange：
+		     In previous parts of the tutorial we knew nothing about exchanges, but still were able to send messages to queues. That was possible because we were using a default exchange, which we identify 
+		     by the empty string ("").
 
-Thus a newly added slave provides no additional form of redundancy or availability of the queue's contents until the contents of the queue that existed before the slave was added have been removed or the queue has been explicitly synchronised (see below). Since the queue becomes unresponsive while synchronisation is occurring, it is preferable to allow active queues from which messages are being drained to synchronise naturally, and only explicitly synchronise inactive queues.
+		     Recall how we published a message before:
+		      channel.basicPublish("", "hello", null, message.getBytes());
+		     The first parameter is the the name of the exchange. The empty string denotes the default or nameless exchange: messages are routed to the queue with the name specified by routingKey, if it exists.
 
-Explicit synchronisation can be triggered in two ways: manually or automatically. If a queue is set to automatically synchronise it will synchronise whenever a new slave joins - becoming unresponsive until it has done so.
+		Temporary queues：
+		     Giving a queue a name is important when you want to share the queue between producers and consumers.
+		     We want to hear about all log messages, not just a subset of them. We're also interested only in currently flowing messages not in the old ones. To solve that we need two things.
+		     Firstly, whenever we connect to Rabbit we need a fresh, empty queue. To do this we could create a queue with a random name, or, even better - let the server choose a random queue name for us.
+		     Secondly, once we disconnect the consumer the queue should be automatically deleted.
+		     In the Java client, when we supply no parameters to queueDeclare() we create a non-durable, exclusive, autodelete queue with a generated name:
+		      String queueName = channel.queueDeclare().getQueue();
+		     At that point queueName contains a random queue name. For example it may look like amq.gen-U0srCoW8TsaXjNh73pnVAw==.
+		Bindings：
+		     We've already created a fanout exchange and a queue. Now we need to tell the exchange to send messages to our queue. That relationship between exchange and a queue is called a binding.
+		      channel.queueBind(queueName, "logs", "");
+		4). Routing：
+		Bindings：
+		     In previous examples we were already creating bindings. You may recall code like:
+		      channel.queueBind(queueName, EXCHANGE_NAME, "");
+		     A binding is a relationship between an exchange and a queue. This can be simply read as: the queue is interested in messages from this exchange.
+		     Bindings can take an extra routingKey parameter.
+		      channel.queueBind(queueName, EXCHANGE_NAME, "black");
+		     The meaning of a binding key depends on the exchange type. The fanout exchanges, which we used previously, simply ignored its value.
+		Direct exchange:
+		     We will use a direct exchange instead. The routing algorithm behind a direct exchange is simple - a message goes to the queues whose binding key exactly matches the routing key of the message.
+		     The routing algorithm behind a direct exchange is simple - a message goes to the queues whose binding key exactly matches the routing key of the message.
+		5). Topics
+		     Messages sent to a topic exchange can't have an arbitrary routing_key - it must be a list of words, delimited by dots. The words can be anything, but usually they specify some features connected t
+		     o the message.
 
-Starting and Stopping Nodes
+		     There can be as many words in the routing key as you like, up to the limit of 255 bytes.
+		     The binding key must also be in the same form. The logic behind the topic exchange is similar to a direct one - a message sent with a particular routing key will be delivered to all the queues that 
+		     are bound with a matching binding key. However there are two important special cases for binding keys:
+		     * (star) can substitute for exactly one word.
+		     # (hash) can substitute for zero or more words.
+		6). Remote procedure call (RPC)
+		     But what if we need to run a function on a remote computer and wait for the result? Well, that's a different story. This pattern is commonly known as Remote Procedure Call or RPC.
+		-----
+		from: http://sishuok.com/forum/blogPost/list/5782.html
+	- rabbitmq
+		常用命令
+		Mirrored Queue Behaviour
 
-If you stop a RabbitMQ node which contains the master of a mirrored-queue, some slave on some other node will be promoted to the master (assuming there is one). If you continue to stop nodes then you will reach a point where a mirrored-queue has no more slaves: it exists only on one node, which is now its master. If the mirrored-queue was declared durable then, if its last remaining node is shutdown, durable messages in the queue will survive the restart of that node. In general, as you restart other nodes, if they were previously part of a mirrored-queue then they will rejoin the mirrored queue.
+		In normal operation, for each mirrored-queue, there is one master and several slaves, each on a different node. The slaves apply the operations that occur to the master in exactly the same order as the master and thus maintain the same state. All actions other than publishes go only to the master, and the master then broadcasts the effect of the actions to the slaves. Thus clients consuming from a mirrored queue are in fact consuming from the master.
 
-However, there is currently no way for a slave to know whether or not its queue contents have diverged from the master to which it is rejoining (this could happen during a network partition, for example). As such, when a slave rejoins a mirrored-queue, it throws away any durable local contents it already has and starts empty. Its behaviour is at this point the same as if it were a new node joining the cluster.
+		Should a slave fail, there is little to be done other than some bookkeeping: the master remains the master and no client need take any action or be informed of the failure.
 
-Configuring Mirroring
+		If the master fails, then one of the slaves must be promoted. At this point, the following happens:
 
-Queues have mirroring enabled via policy. Policies can change at any time; it is valid to create a non-mirrored queue, and then make it mirrored at some later point (and vice versa). There is a difference between a non-mirrored queue and a mirrored queue which does not have any slaves - the former lacks the extra mirroring infrastructure and will run faster.
+		A slave is promoted to become the new master. The slave chosen for promotion is the eldest slave. As such, it has the best chance of being synchronised with the master. However, note that should there be no slave that is synchronised with the master, messages that only the master held will be lost.
+		The slave considers all previous consumers to have been abruptly disconnected. As such, it requeues all messages that have been delivered to clients but are pending acknowledgement. This can include messages for which a client has issued acknowledgements: either the acknowledgement was lost on the wire before reaching the master, or it was lost during broadcast from the master to the slaves. In either case, the new master has no choice but to requeue all messages it thinks have not been acknowledged.
+		Clients that were consuming from the mirrored-queue and support our Consumer Cancellation Notifications extension will receive a notification that their subscription to the mirrored-queue has been abruptly cancelled. At this point they should re-consume from the queue, which will pick up the new master. The reason for sending this notification is that informing clients of the loss of the master is essential: otherwise the client may continue to issue acknowledgements for messages they were sent by the old, failed master, and not expect that they might be about to see the same messages again, this time sent by the new master. Of course, clients that were connected to the failed node will find their connections failed, and will need to reconnect to a surviving node of the cluster.
+		As a result of the requeuing, clients that re-consume from the queue must be aware that they are likely to subsequently receive messages that they have seen previously.
+		As the chosen slave becomes the master, no messages that are published to the mirrored-queue during this time will be lost: messages published to a mirrored-queue are always published directly to the master and all slaves. Thus should the master fail, the messages continue to be sent to the slaves and will be added to the queue once the promotion of a slave to the master completes.
 
-You should be aware of the behaviour of adding mirrors to a queue.
+		Similarly, messages published by clients using publisher confirms will still be confirmed correctly even if the master (or any slaves) fail between the message being published and the message being able to be confirmed to the publisher. Thus from the point of view of the publisher, publishing to a mirrored-queue is no different from publishing to any other sort of queue. It is only consumers that need to be aware of the possibility of needing to re-consume from a mirrored-queue upon receipt of a Consumer Cancellation Notification.
 
-To cause queues to become mirrored, you should create a policy which matches them and sets policy keys ha-mode and (optionally) ha-params. The following table explains the options for these keys:
+		If you are consuming from a mirrored-queue with noAck=true (i.e. the client is not sending message acknowledgements) then messages can be lost. This is no different from the norm of course: the broker considers a message acknowledged as soon as it has been sent to a noAck=true consumer, and should the client disconnect abruptly, the message may never be received. In the case of a mirrored-queue, should the master die, messages that are in-flight on their way to noAck=true consumers may never be received by those clients, and will not be requeued by the new master. Because of the possibility that the consuming client is connected to a node that survives, the Consumer Cancellation Notification is useful in identifying when such events may have occurred. Of course, in practise, if you care about not losing messages then you are advised to consume with noAck=false.
 
-ha-mode	ha-params	Result
-all	(absent)	 Queue is mirrored across all nodes in the cluster. When a new node is added to the cluster, the queue will be mirrored to that node.
-exactly	count	 Queue is mirrored to count nodes in the cluster. If there are less than count nodes in the cluster, the queue is mirrored to all nodes. If there are more than count nodes in the cluster, and a node containing a mirror goes down, then a new mirror will not be created on another node. (This is to prevent queues migrating across a cluster as it is brought down.)
-nodes	node names	 Queue is mirrored to the nodes listed in node names. If any of those node names are not a part of the cluster, this does not constitute an error. If none of the nodes in the list are online at the time when the queue is declared then the queue will be created on the node that the declaring client is connected to.
-Whenever the HA policy for a queue changes it will endeavour to keep its existing mirrors as far as this fits with the new policy.
+		Publisher Confirms and Transactions
+		Mirrored queues support both Publisher Confirms and Transactions. The semantics chosen are that in the case of both confirms and transactions, the action spans all mirrors of the queue. So in the case of a transaction, a tx.commit-ok will only be returned to a client when the transaction has been applied across all mirrors of the queue. Equally, in the case of publisher confirms, a message will only be confirmed to the publisher when it has been accepted by all of the mirrors. It is correct to think of the semantics as being the same as a message being routed to multiple normal queues, and of a transaction with publications within that similarly are routed to multiple queues.
 
-"nodes" policy and migrating masters
-Note that setting or modifying a "nodes" policy can cause the existing master to go away if it is not listed in the new policy. In order to prevent message loss, RabbitMQ will keep the existing master around until at least one other slave has synchronised (even if this is a long time). However, once synchronisation has occured things will proceed just as if the node had failed: consumers will be disconnected from the master and will need to reconnect.
+		Unsynchronised Slaves
 
-For example, if a queue is on [A B] (with A the master), and you give it a nodes policy telling it to be on [C D], it will initially end up on [A C D]. As soon as the queue synchronises on its new mirrors [C D], the master on A will shut down.
+		A node may join a cluster at any time. Depending on the configuration of a queue, when a node joins a cluster, queues may add a slave on the new node. At this point, the new slave will be empty: it will not contain any existing contents of the queue. Such a slave will receive new messages published to the queue, and thus over time will accurately represent the tail of the mirrored-queue. As messages are drained from the mirrored-queue, the size of the head of the queue for which the new slave is missing messages, will shrink until eventually the slave's contents precisely match the master's contents. At this point, the slave can be considered fully synchronised, but it is important to note that this has occured because of actions of clients in terms of draining the pre-existing head of the queue.
 
-Synchronising Queues
-Queues can be set to automatically synchronise by setting the ha-sync-mode policy key to automatic. ha-sync-mode can also be set to manual. If it is not set then manual is assumed.
+		Thus a newly added slave provides no additional form of redundancy or availability of the queue's contents until the contents of the queue that existed before the slave was added have been removed or the queue has been explicitly synchronised (see below). Since the queue becomes unresponsive while synchronisation is occurring, it is preferable to allow active queues from which messages are being drained to synchronise naturally, and only explicitly synchronise inactive queues.
 
-You can determine which slaves are synchronised with the following rabbitmqctl invocation:
+		Explicit synchronisation can be triggered in two ways: manually or automatically. If a queue is set to automatically synchronise it will synchronise whenever a new slave joins - becoming unresponsive until it has done so.
 
-rabbitmqctl list_queues name slave_pids synchronised_slave_pids
-You can manually synchronise a queue with:
+		Starting and Stopping Nodes
 
-rabbitmqctl sync_queue name
-And you can cancel synchronisation with:
+		If you stop a RabbitMQ node which contains the master of a mirrored-queue, some slave on some other node will be promoted to the master (assuming there is one). If you continue to stop nodes then you will reach a point where a mirrored-queue has no more slaves: it exists only on one node, which is now its master. If the mirrored-queue was declared durable then, if its last remaining node is shutdown, durable messages in the queue will survive the restart of that node. In general, as you restart other nodes, if they were previously part of a mirrored-queue then they will rejoin the mirrored queue.
 
-rabbitmqctl cancel_sync_queue name
-These features are also available through the management plugin.
+		However, there is currently no way for a slave to know whether or not its queue contents have diverged from the master to which it is rejoining (this could happen during a network partition, for example). As such, when a slave rejoins a mirrored-queue, it throws away any durable local contents it already has and starts empty. Its behaviour is at this point the same as if it were a new node joining the cluster.
 
-Some examples
-Policy where queues whose names begin with "ha." are mirrored to all nodes in the cluster:
+		Configuring Mirroring
 
-rabbitmqctl	
-rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
-rabbitmqctl (Windows)	
-rabbitmqctl set_policy ha-all "^ha\." "{""ha-mode"":""all""}"
-HTTP API	
-PUT /api/policies/%2f/ha-all {"pattern":"^ha\.", "definition":{"ha-mode":"all"}}
-Web UI	
-Navigate to Admin > Policies > Add / update a policy.
-Enter "ha-all" next to Name, "^ha\." next to Pattern, and "ha-mode" = "all" in the first line next to Policy.
-Click Add policy.
-Policy where queues whose names begin with "two." are mirrored to any two nodes in the cluster, with automatic synchronisation:
+		Queues have mirroring enabled via policy. Policies can change at any time; it is valid to create a non-mirrored queue, and then make it mirrored at some later point (and vice versa). There is a difference between a non-mirrored queue and a mirrored queue which does not have any slaves - the former lacks the extra mirroring infrastructure and will run faster.
 
-rabbitmqctl	
-rabbitmqctl set_policy ha-two "^two\." \
-   '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
-rabbitmqctl (Windows)	
-rabbitmqctl set_policy ha-two "^two\." ^
-   "{""ha-mode"":""exactly"",""ha-params"":2,"ha-sync-mode":"automatic"}"
-HTTP API	
-PUT /api/policies/%2f/ha-two
-{"pattern":"^two\.", "definition":{"ha-mode":"exactly", "ha-params":2,"ha-sync-mode":"automatic"}}
-Web UI	
-Navigate to Admin > Policies > Add / update a policy.
-Enter "ha-two" next to Name and "^two\." next to Pattern.
-Enter "ha-mode" = "exactly" in the first line next to Policy, then "ha-params" = 2 in the second line, then "ha-sync-mode" = "automatic" in the third, and set the type on the second line to "Number".
-Click Add policy.
-In This Section
-Features
-Server Documentation
-Configuration
-SSL Support
-Distributed RabbitMQ
-Reliable Delivery
-Clustering
-High Availability
-High Availability (pacemaker)
-Access Control
-SASL Authentication
-Flow Control
-Memory Use
-Firehose / Tracing
-Manual Pages
-Windows Quirks
-Client Documentation
-Plugins
-News
-Protocol
-Our Extensions
-Building
-Previous Releases
-License
-In This Page
-Mirrored Queue Behaviour
-Unsynchronised Slaves
-Starting and Stopping Nodes
-Configuring Mirroring
-Sitemap | Contact
+		You should be aware of the behaviour of adding mirrors to a queue.
+
+		To cause queues to become mirrored, you should create a policy which matches them and sets policy keys ha-mode and (optionally) ha-params. The following table explains the options for these keys:
+
+		ha-mode	ha-params	Result
+		all	(absent)	 Queue is mirrored across all nodes in the cluster. When a new node is added to the cluster, the queue will be mirrored to that node.
+		exactly	count	 Queue is mirrored to count nodes in the cluster. If there are less than count nodes in the cluster, the queue is mirrored to all nodes. If there are more than count nodes in the cluster, and a node containing a mirror goes down, then a new mirror will not be created on another node. (This is to prevent queues migrating across a cluster as it is brought down.)
+		nodes	node names	 Queue is mirrored to the nodes listed in node names. If any of those node names are not a part of the cluster, this does not constitute an error. If none of the nodes in the list are online at the time when the queue is declared then the queue will be created on the node that the declaring client is connected to.
+		Whenever the HA policy for a queue changes it will endeavour to keep its existing mirrors as far as this fits with the new policy.
+
+		"nodes" policy and migrating masters
+		Note that setting or modifying a "nodes" policy can cause the existing master to go away if it is not listed in the new policy. In order to prevent message loss, RabbitMQ will keep the existing master around until at least one other slave has synchronised (even if this is a long time). However, once synchronisation has occured things will proceed just as if the node had failed: consumers will be disconnected from the master and will need to reconnect.
+
+		For example, if a queue is on [A B] (with A the master), and you give it a nodes policy telling it to be on [C D], it will initially end up on [A C D]. As soon as the queue synchronises on its new mirrors [C D], the master on A will shut down.
+
+		Synchronising Queues
+		Queues can be set to automatically synchronise by setting the ha-sync-mode policy key to automatic. ha-sync-mode can also be set to manual. If it is not set then manual is assumed.
+
+		You can determine which slaves are synchronised with the following rabbitmqctl invocation:
+
+		rabbitmqctl list_queues name slave_pids synchronised_slave_pids
+		You can manually synchronise a queue with:
+
+		rabbitmqctl sync_queue name
+		And you can cancel synchronisation with:
+
+		rabbitmqctl cancel_sync_queue name
+		These features are also available through the management plugin.
+
+		Some examples
+		Policy where queues whose names begin with "ha." are mirrored to all nodes in the cluster:
+
+		rabbitmqctl	
+		rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
+		rabbitmqctl (Windows)	
+		rabbitmqctl set_policy ha-all "^ha\." "{""ha-mode"":""all""}"
+		HTTP API	
+		PUT /api/policies/%2f/ha-all {"pattern":"^ha\.", "definition":{"ha-mode":"all"}}
+		Web UI	
+		Navigate to Admin > Policies > Add / update a policy.
+		Enter "ha-all" next to Name, "^ha\." next to Pattern, and "ha-mode" = "all" in the first line next to Policy.
+		Click Add policy.
+		Policy where queues whose names begin with "two." are mirrored to any two nodes in the cluster, with automatic synchronisation:
+
+		rabbitmqctl	
+		rabbitmqctl set_policy ha-two "^two\." \
+		   '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
+		rabbitmqctl (Windows)	
+		rabbitmqctl set_policy ha-two "^two\." ^
+		   "{""ha-mode"":""exactly"",""ha-params"":2,"ha-sync-mode":"automatic"}"
+		HTTP API	
+		PUT /api/policies/%2f/ha-two
+		{"pattern":"^two\.", "definition":{"ha-mode":"exactly", "ha-params":2,"ha-sync-mode":"automatic"}}
+		Web UI	
+		Navigate to Admin > Policies > Add / update a policy.
+		Enter "ha-two" next to Name and "^two\." next to Pattern.
+		Enter "ha-mode" = "exactly" in the first line next to Policy, then "ha-params" = 2 in the second line, then "ha-sync-mode" = "automatic" in the third, and set the type on the second line to "Number".
+		Click Add policy.
+		In This Section
+		Features
+		Server Documentation
+		Configuration
+		SSL Support
+		Distributed RabbitMQ
+		Reliable Delivery
+		Clustering
+		High Availability
+		High Availability (pacemaker)
+		Access Control
+		SASL Authentication
+		Flow Control
+		Memory Use
+		Firehose / Tracing
+		Manual Pages
+		Windows Quirks
+		Client Documentation
+		Plugins
+		News
+		Protocol
+		Our Extensions
+		Building
+		Previous Releases
+		License
+		In This Page
+		Mirrored Queue Behaviour
+		Unsynchronised Slaves
+		Starting and Stopping Nodes
+		Configuring Mirroring
+		Sitemap | Contact
 
 		HA
 		ref: http://www.rabbitmq.com/ha.html
@@ -10633,6 +10866,75 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		3).保证这两种方法都使用 public void 修饰，而且不能带有任何参数。
 
 * test * mock  * jmock		       * 单元测试 * 集成测试		 * jtester
+
+	- 测试File文件
+		动态生成，测试结束后删除
+		-----
+		    @Test
+		    public void testReadAllContentFromFile() throws Exception{
+			
+			File f = new File("temp");
+			FileOutputStream fos = new FileOutputStream(f);
+			fos.write("hello".getBytes());
+			
+			String actual = ReadFromFile.readAllContentFromFile(f.getAbsolutePath());
+			
+			Assert.assertEquals(actual, "hello");
+			
+			fos.close();
+			
+			f.delete();
+		    }
+		-----
+	- jtester mock静态私有方法
+		-----
+		 //mock slb master
+		@Test
+		public void testCreateLb2(){
+
+		new MockUp<SlbOperatonUtils>(){
+		    @SuppressWarnings("unused")
+		    @Mock
+		    public String executePost(String url){
+			return "{\"code\":200,\"msg\":\"successful\",\"data\":{\"lb_id\":\"12345678-region_id\",\"eip\":\"10.250.6.36\"}}";
+		    }
+		};
+
+		String[] actual = SlbOperatonUtils.createLb(regionNo, userId, masterUrl);
+
+		System.out.println(actual);
+		Assert.assertNotNull(actual);
+		}
+		...
+		...
+		private static String executePost(String url){
+			String resultStr = null;
+			try {
+			    resultStr = Request.Post(url).execute().returnContent().asString();
+			} catch (ClientProtocolException e) {
+			    e.printStackTrace();
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+			
+			return resultStr;
+		};
+		-----
+		PS: 这里createLb方法，将http调用部分独立出方法，便于解耦和单元测试 -tip-
+		mock静态方法
+
+	- jtester
+		框架在测试方法前，准备数据时，开启了事务，插入了几条记录
+		方法中的操作需要再次开启事务，对插入的记录修改时，由于与原事务不一致，导致事务等待，产生死锁，测试方法执行失败？
+		解决方案：
+
+		jtester的运行过程，事务的管理机制？
+			测试框架通过替换spring上下文中的datasource实例为一个proxy来达到框架和被测试到的datasource为同一个并管理事务的目的，正确情况下datasource对应的
+			实例应该被替换，但此案例下没有被替换，导致事务不一致，原因？
+
+
+
+
 	- jtester抽象类方法的测试, mock一个抽象类实现
 		写一个mock类继承抽象类，并在spring测试配置中注入
 		<bean id="abstractService" class="com.aliyun.slb.api.service.impl.AbstractServiceMockImpl">
@@ -10817,7 +11119,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- struts.xml的package定义namespace，action的name属性定义uri，通过下面在action uri和所请求的action方法名之间加上叹号的方式定位到方法，称为动态方法调用。
 	struts2请求方式：http://localhost:8080/luorigong/resourceManagerAction!listBigRegion.action?_dc=1372
 
-	一个action包含多个请求处理的配置方式有下面几种：
+	一个action包含多个请求处理的配置方式有下面几种： (对于共享数据，可以放到ThreadLocal中，类似struts的action可以从context中取一样)
 	1）为Action配置method属性
 		-----
 		将Action类中的每一个处理方法都定义成一个逻辑Action方法。
@@ -10922,7 +11224,12 @@ It is also an FTP application platform. We have developed a Java API to let you 
 
 		在上述过程中所有的对象（Action，Results，Interceptors，等）都是通过ObjectFactory来创建的。
 
-		Struts2的目标很简单--使Web开发变得更加容易。为了达成这一目标，Struts2中提供了很多新特性，比如智能的默认设置、annotation的使用以及"惯例重于配置"原则的应用，而这一切都大大减少了XML配置。Struts2中的Action都是POJO，这一方面增强了Action本身的可测试性，另一方面也减小了框架内部的耦合度，而HTML表单中的输入项都被转换成了恰当的类型以供action使用。开发人员还可以通过拦截器（可以自定义拦截器或者使用Struts2提供的拦截器）来对请求进行预处理和后处理，这样一来，处理请求就变得更加模块化，从而进一步减小耦合度。模块化是一个通用的主题--可以通过插件机制来对框架进行扩展；开发人员可以使用自定义的实现来替换掉框架的关键类，从而获得框架本身所不具备的功能；可以用标签来渲染多种主题（包括自定义的主题）；Action执行完毕以后，可以有多种结果类型--包括渲染JSP页面，Velocity和Freemarker模板，但并不仅限于这些。最后，依赖注入也成了Struts2王国中的一等公民，这项功能是通过Spring框架的插件和Plexus共同提供的，与PicoContainer的结合工作还正在进行中
+		Struts2的目标很简单--使Web开发变得更加容易。为了达成这一目标，Struts2中提供了很多新特性，比如智能的默认设置、annotation的使用以及"惯例重于配置"原则的应用，
+		而这一切都大大减少了XML配置。Struts2中的Action都是POJO，这一方面增强了Action本身的可测试性，另一方面也减小了框架内部的耦合度，而HTML表单中的输入项
+		都被转换成了恰当的类型以供action使用。开发人员还可以通过拦截器（可以自定义拦截器或者使用Struts2提供的拦截器）来对请求进行预处理和后处理，这样一来，
+		处理请求就变得更加模块化，从而进一步减小耦合度。模块化是一个通用的主题--可以通过插件机制来对框架进行扩展；开发人员可以使用自定义的实现来替换掉框架的关键类，
+		从而获得框架本身所不具备的功能；可以用标签来渲染多种主题（包括自定义的主题）；Action执行完毕以后，可以有多种结果类型--包括渲染JSP页面，Velocity和Freemarker模板，
+		但并不仅限于这些。最后，依赖注入也成了Struts2王国中的一等公民，这项功能是通过Spring框架的插件和Plexus共同提供的，与PicoContainer的结合工作还正在进行中
 		from: http://blog.csdn.net/zhangxu3739/article/details/4028656
 
 	- 拦截器直接返回
@@ -11344,6 +11651,25 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- mapping文件写法一例
+		-----
+		<select id="selectClusterByIdcId" parameterClass="Long" resultClass="cluster">
+			<include refid="select-region" />  
+			<dynamic prepend="WHERE">
+			  <isNotEmpty prepend="and" property="bigRegionId"> 
+			      big_region_id =  #bigRegionId# 
+			 </isNotEmpty>
+		    </dynamic>
+		</select>
+		-----
+	- DAO测试时，创建记录语句需要结合ibatis的key select配置来返回id，若未配置返回的是null，即插入操作无返回值
+		-----
+		<selectKey resultClass="long" keyProperty="id">  
+		<![CDATA[
+		SELECT LAST_INSERT_ID() AS ID 
+		]]>    
+		</selectKey>
+		-----
 	- houyi api使用ibatis没有使用cacheModel的原因
 		由于houyi api的部署有多个，且各自相互独立，如果启用缓存，可能会出现一台API机器RS1缓存了某些数据，但另一台RS2却修改了db数据，RS2的缓存
 		根据配置会随即更新，但RS1的缓存却无法触发更新。
@@ -11421,6 +11747,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		实现的地方需要考虑是否需要扩展，从而设计为接口。-tip- * 架构 * 设计 * 扩展
 	- ibatis也支持简单的内置对象返回
 		比如用queryList方法返回resultClass="hashmap"的List<Map>数据结构
+
 	- mapping文件语句定义
 		插入数据时，返回其主键（自定义查询的主键）
 		<insert id="insertImage" parameterMap="imageParameter">
@@ -11579,6 +11906,202 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- mysql终端，汉字显示，乱码问题
+		mysql --default-character-set=utf8
+		指定编码的数据库连接方式来解决
+
+		or
+		进入mysql终端后，再设置编码格式
+
+	- 字符串拼接
+		MySQL的concat函数可以连接一个或者多个字符串,如....
+		from: http://richelace.blog.sohu.com/101765008.html
+	- mysql case when then语句 sql逻辑语句
+	-----
+			case 
+        	when odbs.db_type='ecs_region' then region.cluster_name
+        	else null 
+		end clusterName,
+		case 
+        	when odbs.db_type='ecs_bigregion' then bregion.name
+        	else null 
+		end bigRegionName,
+		case 
+        	when odbs.db_type='ecs_houyiapi' then hapi.vip
+        	else null 
+		end houyiApiVip
+	 from odbs odbs
+	 left join room room on room.id=odbs.room_id
+	 left join region region on region.id=odbs.id_type
+	 left join big_region bregion on bregion.id=odbs.id_type
+	 left join houyiapi hapi on hapi.id=odbs.id_type 
+	-----
+	此场景为某个id_type列存的是不同引用表的主键id，以db_type表示类型以指向特定的表；
+	此查询动态根据条件从关联表中取对应的数据。
+
+	参考：http://www.cnblogs.com/john2000/archive/2010/09/21/1832729.html mysql 语句case when
+		-----
+		表的创建
+		CREATE TABLE `lee` (
+		`id` int(10) NOT NULL AUTO_INCREMENT,  
+		`name` char(20) DEFAULT NULL,  
+		`birthday` datetime DEFAULT NULL,  
+		PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+		数据插入：
+
+		insert into lee(name,birthday) values ('sam','1990-01-01');
+
+		insert into lee(name,birthday) values ('lee','1980-01-01');
+
+		insert into lee(name,birthday) values ('john','1985-01-01');
+
+		 
+
+		使用case when语句
+
+		1)
+
+		select name,
+		 case 
+			when birthday<'1981' then 'old'
+			when birthday>'1988' then 'yong'
+			else 'ok' END YORN
+		from lee;
+
+		 
+
+		 
+
+		2)
+
+		select NAME,
+		 case name
+		     when 'sam' then 'yong'
+			when 'lee' then 'handsome'
+			else 'good' end
+		from lee;
+
+		 
+
+		当然了case when语句还可以复合
+
+		3)
+
+		select name,birthday,
+		 case 
+		     when birthday>'1983' then 'yong'
+			when name='lee' then 'handsome'
+			else 'just so so ' end
+		from lee;
+
+		  
+
+		在这里用sql语句进行日期比较的话，需要对年加引号。要不然可能结果可能和预期的结果会不同。我的mysql版本5.1
+
+		当然也可以用year函数来实现，以第一个sql为例
+
+		select NAME,
+		 CASE
+		     when year(birthday)>1988 then 'yong'
+			when year(birthday)<1980 then 'old'
+			else 'ok' END
+		from lee;
+					 
+		create table penalties
+		(
+		 paymentno INTEGER not NULL,
+		    payment_date DATE not null,
+		    amount DECIMAL(7,2) not null,
+		    primary key(paymentno)
+		)
+
+		insert into penalties values(1,'2008-01-01',3.45);
+		insert into penalties values(2,'2009-01-01',50.45);
+		insert into penalties values(3,'2008-07-01',80.45);
+
+
+		(1)#对罚款登记分为三类，第一类low，包括大于0小于等于40的罚款，第二类moderate大于40
+		#到80之间的罚款，第三类high包含所有大于80的罚款。
+
+		(2)#统计出属于low的罚款编号。
+
+		 
+
+		第一道题的解法与上面的相同
+		select paymentno,amount,
+		 case 
+		     when amount>0 and amount<=40 then 'low'
+			when amount>40 and amount<=80 then 'moderate'
+			when amount>80 then 'high'
+			else 'incorrect' end lvl
+		from `penalties`
+
+		(3)#统计出属于low的罚款编号。重点看这里的解决方法
+		方法1.
+		select paymentno,amount
+		from `penalties`
+		where case 
+		 when amount>0 and  amount<=40 then 'low'
+		    when amount>40 and amount<=80 then 'moderate'
+		    when amount>80 then 'high'
+		    else 'incorrect' end ='low';
+
+		方法2
+		select * 
+		from (select paymentno,amount,
+		 case 
+		     when amount>0 and amount<=40 then 'low'
+			when amount>40 and amount<=80 then 'moderate'
+			when amount>80 then 'high'
+			else 'incorrect' end lvl
+		from `penalties`) as p
+		where p.lvl='low';
+		-----
+
+	- mysql报错分析
+		sql语句错误，mysql会从错误开始时做提示，比如下面的提示：
+		You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'room.name idcName,    hapi.vip houyiApiVip   from realserver rs    left join roo' at line 1
+		错误就发生在其引用sql片段的开始位置。
+
+	- mysql锁查询，行锁查询
+
+	- 设置编码类型，字符编码 ；cmd默认连接到mysql汉字显示为乱码
+		mysql> show variables like 'character%';
+		+--------------------------+----------------------------+
+		| Variable_name            | Value                      |
+		+--------------------------+----------------------------+
+		| character_set_client     | latin1                     |
+		| character_set_connection | utf8                       |
+		| character_set_database   | latin1                     |
+		| character_set_filesystem | binary                     |
+		| character_set_results    | latin1                     |
+		| character_set_server     | latin1                     |
+		| character_set_system     | utf8                       |
+		| character_sets_dir       | /usr/share/mysql/charsets/ |
+		+--------------------------+----------------------------+
+		8 rows in set (0.00 sec)	
+
+		set character_set_client=utf8
+		...
+		设置为下面的结果即可：
+		mysql> show variables like 'charac%';
+		+--------------------------+----------------------------+
+		| Variable_name            | Value                      |
+		+--------------------------+----------------------------+
+		| character_set_client     | utf8                       |
+		| character_set_connection | utf8                       |
+		| character_set_database   | utf8                       |
+		| character_set_filesystem | binary                     |
+		| character_set_results    | utf8                       |
+		| character_set_server     | utf8                       |
+		| character_set_system     | utf8                       |
+		| character_sets_dir       | /usr/share/mysql/charsets/ |
+		+--------------------------+----------------------------+
+
+		最好是在连接时指定编码，如下：
+		mysql -uroot -pxxxx --default-character-set=utf8
+
 	- 查看表空间信息
 		如果想知道MySQL数据库中每个表占用的空间、表记录的行数的话，可以打开MySQL的 information_schema 数据库。在该库中有一个 TABLES 表，这个表主要字段分别是：
 		TABLE_SCHEMA : 数据库名
@@ -11919,6 +12442,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
 	
 * ide * eclipse
+	- eclipse项目红叉
+		到Error log下查看
 	- 配置eclipse项目的源码目录和文件夹，以及导入项目的目录顺序，项目属性-Order and Export
 	- 项目依赖的Validate,如果关闭了自动Validate功能，项目导入后不会自动检查问题；可以手动执行validate以发现问题，比如可能某个库没导入
 		导入错误，感叹号 
@@ -11926,6 +12451,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		修改属性名，类名等，需要IDE自动修改依赖的地方，可通过此功能去做，无需各处都手动修改		
 	- eclipse设置文件默认编辑器时，在edit配置中，比如wiki类型，可以新建类型，设置编辑器时，需要设置默认编辑器（有default按钮），否则ide可能出错，导致设置失败。
 	- debug时，保证被debug的程序和当前源码一致，否则可能debug异常（比如debug不进来）
+		debug查看源码有问题时，比如不能定位到源码，可以在配置debug时就将源码目录或项目文件夹等配置上去，然后再进行debug。
 	- eclipse debug时，可以激活 break points窗口中的skip all break points按钮，这样会跳过所有debug点。
 		debug点图标上会多个右斜线
 	- 设置文件默认打开编辑器：general - appearance - editors - file associations 比如设置文本方式打开xml文件
@@ -12120,6 +12646,18 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * 精度转换
 	Long.valueOf(String.valueOf(compensationFailureJobHour * HOUR_SEC))
 * maven
+	- maven项目编码问题
+		报：spring Invalid byte 2 of 3-byte UTF-8 sequence
+		xml文件中的汉字有编码问题，需要显式的设置pom中的属性：
+		eg:
+		<properties>
+			<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>	  <!-- 显式指定编码 -->
+			<maven.test.skip>true</maven.test.skip>
+			<struts.version>2.2.1</struts.version>
+			<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
+			<junit.version>4.4</junit.version>
+		</properties>
+
 	- maven-tomcat-plugin的用法
 		-----
 		maven-tomcat-plugin的用法
@@ -12470,6 +13008,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- rstrip函数
+		Python中的strip用于去除字符串的首尾字符，同理，lstrip用于去除左边的字符，rstrip用于去除右边的字符。这三个函数都可传入一个参数，指定要去除的首尾字符。
 	- 终端输入，命令行输入，用户输入 用raw_input([prompt])
 		var = raw_input("Enter something: ")
 		print "you entered ", var
@@ -17738,6 +18278,7 @@ day52 Wednesday, May 30, 2012
 				- 现定义在返回执行统一转换
 				- 被转换的源类型包含多种(map,list,其他)
 					通过方法多态，提供通用几种类型的方法，对于参数个数不一致，通过可变长参数实现
+					xxx(String... args)
 				- 被转换参数一个或者多个
 
 			
@@ -30472,3 +31013,1059 @@ day318 Thursday, June 27, 2013
 		</global-results>
 		-----
 	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day319 Friday, June 28, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	extjs 找到组件对应的js文件，以进行下一步的编辑，可通过chrome的提供的信息来查看连接请求的js文件，此文件生成显示的内容组件
+
+	以大region管理为例：
+		找到ManageBigRegionGridPanel.js文件
+		里面的render加载内容
+		Action返回内容为List<BigRegionVo>数据结构，转为json格式；render根据json中的key映射到对应行的value。
+		
+		BigRegionVo这里为用于映射Ext的数据而定义的bean，本项目用于dao的bean也是单独定义的。
+	
+	实战：修改集群管理标签（先从显示列表页开始）
+		1）找到对应列表页的js
+			ManageClusterGridPanel.js
+
+			下面的render对显示做了转换，比如从数值映射到文字描述，注意render的用法：
+			-----
+			columns: [	
+				{
+					text: '集群类型',
+					flex: 1,
+					dataIndex: 'type',
+					renderer: function(value) {
+						if (value === 'test') {
+						    return '测试集群';
+						} else if (value == 'native_sale') {
+							return '对内生产';
+						} else if (value == 'foreign_sale') {
+							return '对外销售';
+						} else {
+							return value;
+							alert('集群类型不合法！');
+						}
+					}
+				},
+			-----
+
+		2）找到对应store所请求的URI
+			store: 
+				Cluster
+				api: {
+				    read: 'services/cluster/list.json',
+				    create: 'services/cluster/create.json' 
+				},
+
+				BigRegion.js的store已改为：
+				api: {
+				    read: 'resourceManagerAction!listBigRegion.action'
+				},
+		3）根据URI从java代码中找到对应到后端API的URI
+			从之前项目代码查看：services/cluster/list.json 转换为后端的URI
+			spring servlet拦截/services/*请求，转到ClusterServiceImpl拦截/cluster映射，再到映射/list的方法
+
+		4）根据后端URI找到python API的handler
+			UrlUtil.getResourceClusterUrl() 获取请求后端的URI，再根据wiki API说明确定http请求类型（GET or POST or Others），或者直接从Bo代码中查看http请求类型。
+			此处list方法为get类型
+
+		5）分析对应接口逻辑
+			从handle中找到db等操作
+			lrgdb.py 封装了luorigong库的操作
+
+		6）转为java实现
+			Dao层继承父类DAO
+			dao的实现，可采用回调模式Callback，避免太多的异常捕获等代码
+			通过注解注入，Domain-Driven Design 
+
+
+3. paxos
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day320 Monday, July 01, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	MQ部分完善
+		同步消息			
+		异步消息
+			一些任务的消息
+		
+		有发消息
+		有收消息
+		
+		queue.py
+
+
+	资源视图部分迁移功能到java（包含前后端）
+
+	proxyaction添加
+		去掉.action /.do配置，action=xxx.xxx，action对应值的的一部分为action名称，第二部分为方法名，实现action重用目的，解决action膨胀问题。
+		通过proxyaction统一处理公有逻辑
+		
+
+3. rabbitmq 环境
+	10.250.6.228
+	rabbitmqctl
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day321 Tuesday, July 02, 2013
+
+1. 
+	* 落日弓
+		ResourceTreeStore
+
+2. 落日弓
+	资源视图：
+		1）左边树修改
+			修改了action请求方式，对应修改代码部分
+			ResourceViewTreeStore.js
+				来自app的目录层次结构，reource/ResourceViewList.js
+			ResourceTreeStore
+				中间树store
+				根据这里的定义，找到每个panel的定义：
+					ManageBigRegionGridPanel.js
+						从而找到具体的操作store等的定义
+						store: BigRegion.js
+			
+			ManageBigRegionGridPanel.js
+				大region管理列表显示页
+				然后找到Form的定义：
+					AddBigRegionForm.js
+					用到了各个store，修改对应url即可
+				双击修改form：
+					UpdateBigRegionForm.js
+					原update逻辑在BigRegionServiceImpl.java.java中
+		2）集群管理		
+			manageClusterGridPanel
+				
+
+	结合现有javaweb代码+python API代码，转为java代码
+		ClusterServiceImpl.java
+			这里的逻辑为主
+			将原查询API获取的数据用sql代替
+			逻辑不变，比如用到哪些字段，完全移植即可
+		python API中逻辑为sql查询操作
+	
+
+
+3. 控制系统部署流程说明
+	资源视图-配置新建小region的各种资源信息
+	控制系统-
+
+4. svn update后，配置文件中汉字有乱码
+	待分析
+
+
+5. struts2 json插件 * struts2
+	默认不支持父类bean的属性转换，可以配置，如下：
+	-----
+	<global-results>
+		<result type="json" name="success">
+			<param name="root">result</param>
+			<param name="ignoreHierarchy">false</param><!-- 配置此处，支持父类属性的转换，否则不会转换父类的属性 -->
+			<param name="excludeProperties">
+				data.*\.creatorUser,data.*\.modifyUser
+			</param>
+		</result>
+	</global-results>
+	-----
+
+6. 多线程问题
+	由于ExecuteActionFactory,getExecuteAction(String name) ;方法返回的是自己的缓存集合，每次返回的都是单例，需要注意多线程问题。
+	目前方案为Action实现中，不放全局可变的成员变量。
+
+6. 
+	idc_id: room表id
+	dc_id: area表id，area为逻辑概念，对应district表，从而有了dcId的命名
+
+	district即area
+	room即idc即机房
+	
+	bigregion
+	apibigregion 页面封装bean，即现在的vo
+		ApiModel2WebModelTransfer.java做转换工作
+	
+	BeanTransformUtils类的转换，看之间的转换关联关系
+		依据先的vo到dao bean映射来修改
+		可参考老的api bean定义
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day322 Wednesday, July 03, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）
+	vo与bean的对应关系
+	大region管理：
+		列表页面-realserver列的值关联自big_region_realserver表，其为big_region表和realserver表的中间表
+		在BigregionDao中增加操作big_region_realserver中间表的接口做级联操作
+
+		bigregionrealserver表dao操作编码
+			查询时直接关联查询
+			增加和更新独立定义
+
+	
+	
+	DAO测试时，创建记录语句需要结合ibatis的key select配置来返回id
+	-----
+	<selectKey resultClass="long" keyProperty="id">  
+    	<![CDATA[
+    	SELECT LAST_INSERT_ID() AS ID 
+    	]]>    
+	</selectKey>
+	-----
+
+	resourcedao, resourceserver中关于bigregion的功能移到bigregion相关的层中去。
+
+
+
+	有些事务涉及的并发处理操作很多,将其称为大事务
+	
+	2）cluster 集群管理
+		列表页面内容参考原javaweb逻辑
+		请求后端URI: 
+			/resource/cluster，根据传入的参数返回不同的列表内容
+				district_id
+				big_region_id
+				room_id(idcId)
+				id：clusterId
+
+		根据 /resource/cluster 找到：
+			orange/webapp/master.py -> ResClusterHandler -> ResClusterHandler.py	
+			SQL语句定义在 lrgdb.py中
+		
+			Cluster的sql查询，都在region表中，cluster表自身没用到
+
+			Service，Dao还是以cluster命名，具体操作指向到region表
+
+		到room表查询idc的name信息：
+			/resource/room
+		
+		小节：
+			集群列表页面为，从region表查基本数据，然后到关联字段对应表找详细信息注入后，响应给用户
+			改为sql关联查询
+		
+		EXTJS
+			store的定义中
+			reader: {
+			    type: 'json',
+			    root: 'data'
+			}
+			root表示json的数据节点key，具体的内容从此key对应的json对象中获取
+
+		原资源查询都支持根据请求的参数对结果进行筛选，比如bigregion查询，可以根据区域dcId、机房idcId、id或所有数据等。
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day323 Thursday, July 04, 2013
+
+1. 
+	* 落日弓
+2. 落日弓
+	1）集群管理/Cluster
+		list
+		add
+		edit
+	clusterDao移入regionDao，表与dao对应；clustter的逻辑写在regionDao中
+
+	2）网段管理/NetSpace
+		ManageNetSpaceGridPanel.js
+		NetSpace.js
+		原list请求URI=services/netSpace/list.json
+
+		对应 subnet 表	 ，关联字段及对应表如下：
+			room_id	room表
+			vlan_id	
+			trans_id
+			zone_id
+			region_id	region表
+
+		store配置好json值对象的key名称为：root: 'data'
+
+		form中的store取数据触发逻辑，写在了双击触发弹窗的gridPanel文件中（逻辑无处不在啊）
+
+		idc / room
+		涉及 room 表：
+			dc_id：与district表的id映射，即与area/district区域关联
+
+
+
+
+4. jtester框架的事务与测试方法事务不在同一事务中？
+	待
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day324 Friday, July 05, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）extjs更新form值回显逻辑	* Extjs form表单相关
+		以ManageNetSpaceGridPanel.js为例
+		弹出更新表单定义在双击事件中，回去加载表单用到的store，store中的model定义，与store请求所返回json的映射配置。
+			注意：这里服务端返回的json对象，要与store的model一一对应，并且属性类型也许一致。-tip-
+			vo全部用String类型
+
+		UpdateNetSpaceForm.js
+
+		LuoRiGong.store.Cluster
+		LuoRiGong.model.Cluster
+
+		grid页面的clusterId字段为null，导致回显映射失败；grid页面的双击触发更新form页面逻辑中，回去form中用到的store取数据，并与grid中此行的record对应，
+		从而显示原值。
+		通过调试，发现grid列表页的json值中，clusterId为null，虽然此列的显示值不为空；extjs的映射是根据key对应的value来处理的，显示出来了代表value也不为空。-tip-
+
+		服务端返回数据，填充进store，页面从store中取数据，store的数据受model定义，如果model未定义则页面取不到数据。
+			服务端返回的json，store中的model，grid中的dataindex，form中的name
+
+		熟悉extjs的grid和form中，那些关键属性，显示属性，值属性等等。
+			Grid中列的值为dataIndex属性指向store取回json对象的key对应的value
+			Form中的name，等属性，要在对应的store中找到值，若为null则无法显示。
+	2）网段管理
+		更新
+			更新机房时，数据被移到其他机房下面显示了，不是问题，注意下；因为，现在的数据基本上是根据机房筛选显示的。
+	3）集群管理
+		新增
+			拿到：big_region_id、room_id、region_type、
+			根据big_region_id查询并更新bigregion 的ossId等数据
+				cluster_id =big_region['cluster_id_curr']
+				oss_id = big_region['oss_id_curr']
+
+			下面为插入region逻辑：
+			lrgdb.py
+			-----
+			def region_add(self, room_id, big_region_id,
+			    cluster_id, oss_id, info):
+		    
+			now = get_time_now()
+		    
+			big_region = self.big_region_get_by_id(big_region_id)
+		    
+			result = \
+			    self.db.insert('region', 
+				big_region_id = big_region_id,
+				room_id = room_id, 
+				oss_id = oss_id,
+				cluster_id = cluster_id,
+				dc_id = big_region.dc_id,
+				cluster_name = info['cluster_name'],
+				region_type = info['region_type'],
+				#mac_start = info['mac_start'],
+
+				#add default value
+				pangulog_checkpoint_freedisk_limit = 0,
+				netc_iptable_version_checkout_time = 300,
+				nc_iptable_version_checkout_time = 600,
+				master_with_macnat = 0,
+				master_memory_low_ratio = 50,
+				pangu_app_copy = "1-1,2-3",
+				vcpu = 40,
+				vmemory = 80000,
+				vdisk = 6000,
+
+				gmt_create = now,
+				gmt_modify = now,
+		    
+		       )
+			-----
+
+			修改bigregion表字段时，通过select for update保证原子操作
+
+	4）DNS管理
+		extjs使用时，js文件验证安装mvc分目录，以及根据业务区分不同的子目录，很方便查找文件做维护修改 -tip-
+
+		ManageDnsGridPanel.js
+
+		业务简单，只关联room表
+		从ibatis mapping文件，到dao，到service，到单元测试的步骤
+	5）嫦娥管理
+		ManageMoonmmGridPanel.js
+		
+		表：moom_mm，只以room_id关联room表
+
+		以Dns的一套为模板拷贝修改
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day325 Monday, July 08, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	6）代码源管理
+		from dao to action
+
+		md5字段的赋值逻辑，页面无此字段
+
+		表：codesrc
+	7）数据库管理
+		表：odbs
+	8）MQ管理
+		表：mq
+	9）HouyiAPI域名管理
+		表：houyiapi
+
+3. apache common lang包
+	StringUtils.indexOfAny(str,str[])
+		提供在指定字符串中，查找目标字符串集合中的一个的工具方法
+
+4. svn目录release下，有sql变动
+	涉及一些资源加了 product 字段，标识资源属于哪个产品线
+		产品线参数设置默认值，不允许修改；系统自动在对应的产品线页面上注入值
+
+	odbs表，将关联id的横向标识，代替为一个db_type加id来一起标识，无需因为产品增加odbs表就增加对应的外键定义。
+
+5. 面向服务端编程
+
+6. java 反射
+	通过反射调用业务方法时，jdk的调用方法已经封装了反射过程中会出现的各种异常，如果上层业务关心异常的类型，可以通过InvocationTargetException提供的getTargetException()方法
+	来获取业务层实际的异常。
+
+7. Extjs Form提交显示问题
+	form异步提交数据后，根据返回是否成功做不同提示。
+	看form的文档说明
+	-----
+	form.submit({
+		url: 'services?action=mqAction.update',
+		method: 'POST',
+				
+		success: function(form, action) {
+			Ext.Msg.alert('Success', action.result.msg);
+			Ext.ComponentQuery.query('updateMqForm')[0].close();
+		},
+
+		failure: function(form, action) {
+		switch (action.failureType) {
+				    case Ext.form.action.Action.CLIENT_INVALID:
+					Ext.Msg.alert('Failure', '表单内容不合法！');
+					break;
+				    case Ext.form.action.Action.CONNECT_FAILURE:
+					Ext.Msg.alert('Failure', '连接错误');
+					break;
+				    case Ext.form.action.Action.SERVER_INVALID:
+				       Ext.Msg.alert('Failure', action.result.msg);
+			       }
+		}
+	});
+	-----
+	{"code":2,"data":null,"forward":"success","info":"通过反射动态调用函数异常","success":false,"total":0} 走failure逻辑
+	若success为true则走success逻辑
+	
+	form方式提交表单时，ext框架默认更新返回json中的success字段的为true还是false，从而认为提交是否成功。-tip-
+	看Ext.form.Basic的例子：http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.form.Basic-method-submit submit方法说明
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day326 Tuesday, July 09, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	关于使用jtester测试时，dbfit做的sql操作和到的操作事务互不可见的原因分析？
+		现象为dbfit准备数据，dao逻辑看不到；且dao 的事务会提交而不是和测试框架的事务一样在测试方法结束后回滚
+
+	根据已有jtester测试dao正常的项目为例，并结合dao操作时源码debug分析，发现当前有问题项目的dao，在测试时，会开启新的db连接和事务，但正常的
+	测试dao例子中会取已有的连接和事务。
+
+	于是看两者的dao配置，同样都是用org.springframework.orm.ibatis.SqlMapClientTemplate类，一个是在spring里注入了sqlMapClient对象及其datasource；另一个
+	是直接配置了sqlMapClient对象并注入datasource，然后获取SqlMapClientTemplate类来使用。
+	原方式：public class BaseDao extends SqlMapClientDaoSupport { 其他dao继承baseDao，然后在baseDao通过注解注入org.springframework.orm.ibatis.SqlMapClientFactoryBean返回
+	的sqlMapClient。
+
+	两者的SqlMapClientTemplate实例中datasource成员变量，正确的为null，有问题的是有datasource的
+
+	问题：阻塞在sqlexecutor的executeUpdate
+
+	Dbfit如何处理事务？
+		jtester采用自己的db配置生成datasource实例，并提供spring容器中的datasource实例，以保证测试框架和业务程序使用相同的datasource。
+
+	JTesterClassPathXmlApplicationContext 提供了proxy datasource来统一进行dao操作，
+	但本项目却debug不进来，why？
+		在debug链上看getbean的调用关系，
+		JTesterSpringTestListener的beforeTestSetUp方法，进行测试方法前的初始化
+	
+	10）RealServer管理
+		表：realserver
+
+	11）Aresolve管理 大禹客户端管理
+		表：aresolve
+		Wiki : /resource/aresolve
+		dao test ok then front-end
+
+		eclipse其配置好的tomcat:run
+
+3. 区域、机房等资源增加产品标识字段
+	增加product字段标识此资源所属的产品
+
+	相应的一级资源树那里，将所有资源改为ESC，并增加2个并列的SLB、OSS
+		
+	
+4. 		
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day327 Wednesday, July 10, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	其他资源移植，及odbs表结构变动修改
+			create	list
+	District	done		done
+	Region	done
+	CodeSrc
+	Subnet	done
+	Room	done
+	Odbs	done
+	这几个类查询时需要加product字段过滤，在action层传入产品product类型给service层,service层传入product参数以根据产品类型筛选数据。
+
+	12）Slb管理
+		slb表
+		slb_region表在其他地方产生关联，此处只是slb单表操作
+
+		提供根据dc_id区域查询条件，关联到room表的dc_id
+	13）RDS管理
+		rds表
+		lrg.py 单表insert操作
+
+		Extjs对表单字段的验证支持，通过使用内置的Filed来保证，比如ip filed，会自动校验是否为ip格式 * extjs
+	14）OTS管理
+		ots表
+
+	处理odbs表结构变更，以及一些资源表增加product字段以标识其所属于的产品。
+		页面不动，根据不同类型，修改bean并持久化
+	
+	15）区域管理
+		在resourceAction中
+
+		ResourceViewList.js 左边一级树页面js文件
+			store: ResourceViewTreeStore.js
+
+
+		ManageAreaGridPanel.js
+
+	16）机房管理
+
+	区域>机房>
+
+	注：资源视图的树，区域下要显示机房，需要此区域下有大region记录，才会出现+号
+
+			
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day328 Thursday, July 11, 2013
+
+1. 
+	* 落日弓
+2. 落日弓
+
+	action的命名，包位于控制系统包下，action名称自定义
+	
+	1）控制系统-资源申请- ImageSlbVip申请
+	container:
+		ClusterResourcePrepareContainer.js
+	fieldSet:(类型：字段集合)
+		ImageSlbVipApplyForFieldSet.js
+		按钮逻辑在此filed的事件中
+	ViewImageSlbVipsWindow.js 查看列表页
+		url: services/slb/viewImageSlbVips.json
+	
+	SlbVipHandler.py
+	
+	表：region_slb slb产品属于哪个region的关联表
+			region_id,
+			slb_id
+			记录region和slb的关联关系
+
+			slb_usage_type 记录此region下的slb的使用类型，目前有：ecs（内部ecs产品使用），forsale（对外售卖用）
+
+		slb slb产品主表
+			room_id 关联机房
+
+		region region表
+
+		lb_info slb产品下具体lbId等消息表，为slb的子表
+			slb_id关联slb表
+
+
+	2）控制系统-集群配置-生成数据库SQL
+		对于houyi库，已提供接口，参考其文档说明
+
+
+
+3. mq
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day329 Friday, July 12, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	部分资源加了product字段，在操作时（新增、查询等）注意其逻辑，避免筛选过滤时出现数据不一致问题
+
+	1）SLB VIP申请
+
+	2）houyi数据库导入
+		通过houyi api提供的几个接口，将新一个集群即region需要的数据，导入houyi库
+	3）Ext.tree.panel
+		有例子，位于extjs文档的guide的tree中
+
+		doing
+	4）控制系统-集群部署-部署飞天客户端	
+		熟悉java端构造数据，将job名称，后端function名称（job表）等信息，发送到MQ，然后MQ会广播消息，各个agent收到消息后，判断是否为自己感兴趣的消息，
+		做相应处理。
+
+
+3. 将业务实现和使用的第三方库或组件交互的地方，抽象出一层做转接，避免直接内嵌在业务逻辑中使用，那样后续不方便替换实现，也不便于单元测试。-tip- 设计
+	将关联其他组件的地方，都抽象出来；具体业务只与抽象层依赖，抽象层可以通过IOC替换具体实现。
+	
+
+4. URL编码，
+	slb创建vip的请求中有json串参数，请求前先进行url编码，http请求会报不合法
+
+5. extjs button事件处理
+	-----
+	handler	: function(button, e) {
+			Ext.Msg.prompt('申请EcsVip', '请输入申请VIP数量:', function(buttonId , text) {
+				if(buttonId == 'ok') {
+					if (Ext.isNumeric(text)) {
+						Ext.Ajax.request({
+								url: 'services?action=resourceApplyAction.applyForImageSlbVips',
+								method: 'POST',
+								params: {nodeId: clusterId, type: 'clusterId', num: text},
+								timeout: apiMaxTimeout,
+								
+								callback: function(options, success, response) {
+									if (success) {
+										var responseTextObject = Ext.JSON.decode(response.responseText);
+										if (responseTextObject.success == true) {
+											var store = Ext.getStore('ImageSlb');
+											store.loadRawData(responseTextObject.data);
+											var win = Ext.create('LuoRiGong.view.datacenter.window.ViewImageSlbVipsWindow');
+									win.show();
+										} else {
+											Ext.Msg.alert('失败', responseTextObject.info);
+										}
+									} else {
+										Ext.Msg.alert('失败', '服务器内部错误，解析错误或者连接超时');
+									}
+								}
+							});
+					} else {
+						Ext.Msg.alert('提示', '请输入一个数字！')
+					}
+				}
+			}, window, false, '1');
+	-----
+	PS: 具体属性看文档说明
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day330 Tuesday, July 16, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）落日弓slb vip申请，action加页面修改
+	2）控制系统-集群配置
+		（1）从部署神农开始
+			逻辑可参考原javaweb+python api的逻辑
+
+		ClusterConfigOperateFormPanel.js
+		-----
+		items: [
+			{
+					xtype: 'splitbutton',
+				text    : '部署神农',
+					    handler	: function(button, e) {
+						var requestUrl = 'services/dayu/deployShennong.json';
+						btnAjaxRequest1(requestUrl, clusterId, button, successTrueFn1, successFalseFn1, failureFn1);
+					    }
+				    }
+		-----
+		PS: 按钮都定义在form对象的items集合中
+		原请求url为：services/dayu/deployShennong.json
+		btnAjaxRequest2 方法为工具方法中的一个，定义在 globalutilities.js 中 ， successTrueFn1等回调方法的定义也在此全局js文件中定义。
+		
+		原入口：DayuServiceImpl
+			java web端部署神农的逻辑，由于和其他大部分nc部署操作类型，目前都是通过dayu来部署的，故java web定义了一个deployDayu方法，通过不同参数，
+			实现不同操作功能。
+			已写好service层定义，在 DayuService中，其实现继承了OperateAbstract类，用于抽象调用dayu共用的组装参数逻辑（不同调用间共用参数较多，避免重复逻辑）。
+				组装dayu参数时，涉及dayu_path表记录一部分数据，主要为一些常用命令、脚本，配置的路径及名称等（比如：bin_me名称指向/bin/me命令路径，再比如落日弓脚本
+				的目录等），以此定位命令脚本等的目录位置。
+
+				另外，dayu客户端执行时，需要roledef_src，roledef_updated两个配置项，这个应该是dayu自身定义的参数 OR python api会再转换？
+
+		dayuservice组装好参数后，交给mqservice进行消息发送，参数格式为：action名称+参数对象
+			mq的发送消息逻辑：
+				a. 根据action名称及job名称，从job表找到对应的job消息，从而拿到此job对应干活agent所要执行的function（job表的agent_func_name字段）
+					此次设计job的3张表：job，job_instance,job_workflow
+					workflow,workflow_instance
+				b. 根据之前构造的Map参数对象中的region对象，拿到要请求到的agent的名称（以region.getClusterName()为agent名称）
+				c. 将构造好的map参数对象，再作为值放入请求agent的请求参数map中，丢到mq中广播
+				d. 处理mq返回结果，ok的话就将此新job持久化到job_instance表中；否则报错
+		
+		由于ecsDayuAction.deployShennong没有在job表定义，无法连调，待？
+		
+		（2）停止盘古
+			URL: services/apsara/stopPangu.json
+				定位到原 apsaraService ，并处理现有的 apsaraService
+				PS: 此按钮用到了飞天操作的service类，之前为dayu操作，小节下就是，具体的nc操作可以归为几个大类，对应几个service及实现
+			
+			job名称：ecsApsaraAction.stopPangu
+
+			在原组装参数基础上，再组装进pangu的一些参数
+				组装参数的逻辑，写在原来的python api端，需要阅读，根据java web传入的action定位到python代码逻辑。 
+				注：java web的action到后端python的映射定义在ApiAction类中，里面注释了请求的url格式，比如飞天操uri为： /job/apsara，dayu为/job/dayu等
+					apsara: JobApsaraHandler.py
+					dayu: JobDayuHandler.py
+
+					java web传递参数给python api，api来组装参数并发送消息给mq
+
+			然后和（1）一样，丢消息给mq并处理响应
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day331 Wednesday, July 17, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）继续：控制系统-集群配置
+	（3）添加盘古APP
+		ClusterConfigOperateFormPanel.js
+		JobApsaraHandler.py
+		-----
+		 def post(self):
+
+			try:
+			    body  = self.request.body
+			    body  = json.loads(body)
+			    param = body['param'] if body.has_key('param') else {}
+			    if body.has_key('cluster_name'):
+				cluster_name = body['cluster_name']
+			    
+			    if body.has_key('region_id'):
+				region_id = body['region_id']
+
+			    action = body['action']
+
+			    region = self.db_api.region_get_by_cluster_name(cluster_name)
+
+			    job = "ApsaraWorker.ApsaraJob.%s" % action
+			    param['region'] = region
+			    param['env'] = self.db_api.config_path_to_dict()
+			
+			    getattr(self, action)(cluster_name, job, param)
+
+			    self.write({'code' : 200, "msg" : 'OK'})
+
+			except Exception, e:
+			    self.write({'code' : get_code(e), "msg" : wrap_exc(self.logger, e)})
+		-----
+		PS: 上面这个post方法，处理javaweb发送来的飞天job命令；具体的路由是通过action名称，以getattr方法将action名称映射到方法名称，从而调用对应的方法（具体见getattr方法
+		方法注释说明）。-tip- python getattr方法	* python
+			getattr方法注释
+			-----
+			getattr Found at: __builtin__
+			getattr(object, name[, default]) -> value
+			    
+			    Get a named attribute from an object; getattr(x, 'y') is equivalent to x.y.
+			    When a default argument is given, it is returned when the attribute doesn't
+			    exist; without it, an exception is raised in that case.
+			-----
+			PS: getattr(x, 'y') is equivalent to x.y
+
+		javaweb调python api的：
+			action=add_pangu_app
+		
+		clusterName为region.getClusterName()，即为AgentName，后续会发送消息到MQ，对应此名称的agent应该消费此消息。
+			mq客户端发布消息默认为async，通过锁的方式(线程同步)在异步基础上实现同步。
+
+		从而了解整体调用流程。
+
+		取到pangu app数据，根据clusterName取到对应的db，db从odbs表获取（里面有db类型标识）houyidb，从而获取对应集群db中pangu app数据。
+			根据odbs中db的配置信息，创建db连接来使用。
+
+		使用spring提供的jdbctemplate来执行第二方DB的操作。
+
+		db.select('pangu_app', what='*', _test=_test)	      ？这里_test作用是什么？
+			db为orange/orange/database.py
+			self.db = web.database(dbn='mysql', host=host, port=port, user=user, passwd=passwd, db=dbname, mincached=mincached)
+
+		看houyidb的pangu_app表
+			app_name 
+			min_copy 
+			max_copy
+			zone			
+
+		python appent方法
+		-----
+		for n in nc_zones:
+		    if not r.has_key(n.zone_id):
+			r[n.zone_id] = []
+			self.logger.debug('get zone: %s' % n.zone_id)
+		    r[n.zone_id].append(n.ip)
+		    self.logger.debug('zone %s append nc %s' % (n.zone_id, n.ip))
+		-----
+		PS: append方法是list(列表)的方法，在列表最后加上这个元素
+
+		添加panguapp的具体逻辑是否有描述？
+
+		actionName=ecsApsaraAction.addPanguApp
+
+		模式为，有共同参数，对应不同操作，有相应细节参数需要加入
+
+		查看LOG功能的实现：
+			JobLogStatusServiceImpl.java
+			逻辑在globalutilities.js中
+				getLogFromOffset1方法
+				setLogTask方法
+			url： services/jobLogStatus/getJobLog.json
+				后端url：/job/log
+					JobLogHandler.py
+
+			根据参数从服务端取log数据，并render到指定按钮查看日志窗口中
+	（4）停止KV
+	（5）启动KV
+	（6）添加KV
+	（7）启动houyi
+		url: services/houyi/startHouyi.json
+
+		job表action_name - agent_func_name映射
+	（8）启动arproxy
+	（9）重启tdc
+	（10）创建monitor表
+	（11）同步rc.local
+		url: services/env/syncRcLocalForDeploy.json
+		/job/env
+		JobEnvHandler.py
+
+		目前template文件放在class路径下
+	（12）同步rc.sysinit
+		参考第11步
+	（13）API接入
+		url: services/houyiApi/reloadHouyiapiCache.json
+
+		HouyiApiService
+
+		BaseHandler 在webx.py文件中定义
+	（14）APIPROXY发布
+		pass 功能在另一个页面处理
+
+	（15）NC解锁
+		url: services/clusterConfigOperate/unlockNcList.json
+		/job/pet
+
+		nc，vm操作通过pet执行
+
+		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('环境检查','houyi','shangshu@alibaba-inc.com','system',0,'clusteredDeployAction.checkEnvironment','precheck','EnvWorker.EnvJob.precheck_cluster');
+		agent的function名称和之前保持一致
+
+		原action统一作为function名称
+			pet操作，job的actionFuncName为共用，在参数中传入action给agent以确定具体的操作；
+			其他job都是唯一的funcName
+		
+		初始化job数据：
+		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('NC解锁','houyi','shangshu@alibaba-inc.com','system',0,'ecPetAction.unlockNcs','unlock ncs','PetWorker.PetJob.run');
+
+		job发送后，根据uuid来标识每个job（如后续的日志查看等需要）
+
+		干活Agent的log查看：
+			agent地址： 10.250.6.228-atzy
+			log目录：tail -f /tmp/orange/orange.jobmaster.debug.log
+		
+		log查看查看log.js请求JobInstAction
+
+
+		
+
+
+
+
+
+		
+
+
+
+	2）region表的默认值，sql定义了默认值，若程序中为null则不执行插入，保持db默认值
+		product字段
+
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day332 Thursday, July 18, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	继续day331第二条
+
+	ClusterConfigOperateFormPanel.js
+
+
+	
+3. java获取当前路径
+		//This will print a complete absolute path from where your application has initialized.
+		System.getProperty("user.dir"));
+
+		D:\workspace2\luorigongweb3
+		\
+
+4. python
+	file.read()方法
+	-----
+	file.read([size]) 
+	Read at most size bytes from the file (less if the read hits EOF before obtaining size bytes). If the size argument is negative or omitted, read all data until EOF is reached. 
+	The bytes are returned as a string object. An empty string is returned when EOF is encountered immediately. (For certain files, like ttys, it makes sense to continue reading after an EOF is hit.) 
+	Note that this method may call the underlying C function fread() more than once in an effort to acquire as close to size bytes as possible. Also note that when in non-blocking mode, less data 
+	than was requested may be returned, even if no size parameter was given.
+	-----
+	PS: 搜索read，找到file method
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day333 Friday, July 19, 2013
+
+1. 
+    * 落日弓
+
+2. 落日弓
+	日志查看功能
+	页面提供：componentType、componentId、offset、jobName参数
+	根据jobName找到job，再去查询jobInst，最后去agent查询日志数据
+
+	buttonTextToUrlMapping.js 定义了每个按钮的jobName
+
+	componentId对应到业务表id，比如houyi类型的到region表
+	
+	请求到不存在的region，导致等待超时
+
+	插入job记录时，根据原job名称，action名称，插入记录；一个job会有多个action操作
+
+
+	API接入job初始化：
+		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('API接入','houyi','shangshu@alibaba-inc.com','system',0,'reload_houyiapi_cache','reload api cache','HouyiAPIWorker.HouyiAPIJob');
+
+	Agent的python逻辑，在master.py中，main方法是其入口，消费MQ的消息，并交给callback函数处理。
+
+	agent_fun_name为3段式，对应agent代码的：handlerName + className + functionName 
+		eg: HouyiAPIWorker.HouyiAPIJob.reload_houyiapi_cache
+		HouyiAPIWorker.py + HouyiAPIJob(class) + reload_houyiapi_cache(function)
+
+		PetWorker.PetJob.run 此job就一个function，里面的具体操作依据参数中的action来定位
+			
+
+	异步job，执行后的状态如何回显？
+		job发送到mq后，状态为running，直到mq收到agent工作结果状态并更新job状态后，页面才会定时刷新此状态
+
+	集群配置
+	（1）创建VM
+	pet操作直接操作，不发送mq？
+
+	。。。
+
+	（1）部署QA代码
+	javaweb- handler - worker
+		在handler层将jobName和actionName组合为 3段式结构
+		
+
+
+
+3. get方式对汉字需要编码处理，或用post请求
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day334 Monday, July 22, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）机房添加后，要显示下级，需要手动DB添加大region信息。
+	2）连调测试集群配置
+		与agent连调，经过mq
+	3）资源视图变动
+		原大region管理，去掉realserver列显示
+			修改表单也去掉realserver表单项
+		原realserver管理，加上大region列显示（从big_region_realserver取关联关系）；
+			增加realserver的表单中，增加2种类型（RMS,RHS），并增加vip表单项；注：houyiapi的vip在houyiapi表中
+	4）代码源命名变化修改
+		store定义修改：SourceCodeType.js
+		extjs render修改：gridColumnRenderer.js
+
+
+3. jtester测试
+	datasource未被代理proxy datasource替换，原因？
+	debug JTesterClassPathXmlApplicationContext的getBean方法，此处会替换被使用的dataSource实例。
+
+4. luorigong数据库部分表有默认值情况，采用默认值，insert语句不包含哪些列
+
+5. jdbctemplate ，DriverManagerDataSource
+	因为事务，连接未自动关闭（放到线程上下文ThreadLocal中了）
+	-----
+	public static void doReleaseConnection(Connection con, DataSource dataSource) throws SQLException {
+		if (con == null) {
+			return;
+		}
+
+		if (dataSource != null) {
+			ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
+			if (conHolder != null && connectionEquals(conHolder, con)) {
+				// It's the transactional Connection: Don't close it.
+				conHolder.released();
+				return;
+			}
+		}
+
+		// Leave the Connection open only if the DataSource is our
+		// special SmartDataSoruce and it wants the Connection left open.
+		if (!(dataSource instanceof SmartDataSource) || ((SmartDataSource) dataSource).shouldClose(con)) {
+			logger.debug("Returning JDBC Connection to DataSource");
+			con.close();
+		}
+	}
+	-----
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day335 Tuesday, July 23, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）日志查看功能
+		修改 buttonTextToUrlMapping.js ，jobName设置为agentFuncName
+		修改DataCenterList.js（搜ConfigMenu），在动态配置按钮时，修改componentType的houyi 为houyictrl，原houyiapi，apiproxy类型不变
+
+		jobName，componentType，offset，传给服务端即可
+	
+3. extjs定义全局变量
+	定义变量在js中，在页面上提前include加载，后续的js代码可以引用
+
+	extjs的debug可以在chrome的工具中进行
+
+	通过alert(xxx),打印信息。
