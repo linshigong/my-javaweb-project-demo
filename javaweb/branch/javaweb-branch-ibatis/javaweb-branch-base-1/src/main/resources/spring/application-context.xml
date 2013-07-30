@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
 	default-autowire="byName">
 	
-	<bean id="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean id="propertiesConfigurer" class="mytest.util.CustomPropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>jdbc.properties</value>
