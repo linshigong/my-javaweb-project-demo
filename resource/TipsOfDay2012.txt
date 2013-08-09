@@ -12,8 +12,44 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
+multi-boxing
+	http://kittykittyboomboom.wordpress.com/2012/01/04/basic-guide-to-multi-boxing-world-of-warcraft/
 tmp
 ft2013-04-22
+* 佳丽摄影
+
+* 6843 ft75
+* What Are the Differences Between ISO and IMG Files?
+
+	The Facts
+	ISO and IMG are both archival formats. Each file contains a copy of the contents of the original disc the archive was made from, plus information about the file structure of the disc. 
+	They are designed to make archiving the disc easier and make creating an exact duplicate copy easier. However, while there is only one version of the ISO format, IMG comes in two versions: 
+	compressed and uncompressed.
+	from: http://www.ehow.com/info_8075301_differences-between-iso-img-files.html
+
+
+
+Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.html#ixzz2aWDD6SsV
+* div+css
+	1) li 左右分开对其
+	-----
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+	<HTML>
+	 <HEAD>
+	 </HEAD>
+	 <BODY>
+	<style>
+	#list li { text-align: left; }
+	#list span { float: right; }
+	#list a { float: right; }
+	</style>
+	<ul id="list">
+		<li>4-8<span>&nbsp;&nbsp;123&nbsp;&nbsp; </span><a href="list.asp">111111111111111</a></li>
+		<li>4-9<span>&nbsp;&nbsp;321&nbsp;&nbsp;</span><a href="list.asp">222222222222222</a></li>
+	</ul>
+	 </BODY>
+	</HTML>
+	-----
 * 幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。
 	幂等有以下几种定义：
 	对于单目运算/函数，如果一个运算/函数对于在范围内的所有的一个数多次进行该运算所得的结果和进行一次该运算所得的结果是一样的，那么我们就称该运算/函数是幂等的。比如绝对值运算就是一个例子，在实数集中，有abs(a)=abs(abs(a))，[1]
@@ -2963,7 +2999,7 @@ ft2013-04-22
 		sar - system active report
 		df/du
 			查看各分区使用情况:  df -h
-			查看指定目录的大小: du -sh
+			查看指定目录的大小: du -sh		目录大小 文件大小
 		ulimit
 
 		iostat IO状态查看
@@ -3712,6 +3748,10 @@ ftian20130102
 	google code 提供svn服务，但页面上不便于svn操作，比如添加分支，添加目录等，可通过svn工具来操作，如 TortoiseSVN，来建立新目录等等。
 
 * 代码合并    svn merger merger代码 * svn
+	- svn提交报错
+		Server sent unexpected return value (405 Method Not Allowed) in response to MKACTIVITY
+		PS: 试着将http改为https
+
 	- 冲突解决
 		update代码后，通过工具对冲突进行编辑及解决
 		Tortoise SVN为到冲突的文件上右键打开编辑冲突功能，编辑好后，再右键选择Resolved即可
@@ -4230,9 +4270,13 @@ ftian20130102
 * 服务器端的无阻塞编程
 	找到阻塞的点
 	实现
-	AIO ,EPOLL,TCP
+	AIO(Async IO) ,EPOLL,TCP
 
 	实现复杂性与性能的兼顾考虑
+* IO模型
+	linux IO模型
+	阻塞I/O	非阻塞I/O	I/O复用	信号驱动I/O	异步IO
+	see: http://www.cnblogs.com/aHuner/archive/2013/05/31/3110337.html
 
 * SSL
 	- SSL协议详解 http://kb.cnblogs.com/page/162080/
@@ -5430,6 +5474,85 @@ Storage for Interactive Services
 	
 	Describe REST Web services with WSDL 2.0 
 		http://www.ibm.com/developerworks/webservices/library/ws-restwsdl/
+	
+	WSDL 简介
+		WSDL是Web Service的描述语言，是一种接口定义语言，用于描述Web Service的接口信息等。
+		WSDL文档可以分为两部分。顶部分由抽象定义组成，而底部分则由具体描述组成
+	-----
+		WSDL 文档结构
+		WSDL 文档是利用这些主要的元素来描述某个 web service 的：
+		元素	定义
+		<portType>	web service 执行的操作
+		<message>	web service 使用的消息
+		<types>	web service 使用的数据类型
+		<binding>	web service 使用的通信协议
+		一个 WSDL 文档的主要结构是类似这样的：
+		<definitions>
+
+		<types>
+		   definition of types........
+		</types>
+
+		<message>
+		   definition of a message....
+		</message>
+
+		<portType>
+		   definition of a port.......
+		</portType>
+
+		<binding>
+		   definition of a binding....
+		</binding>
+
+		</definitions>
+		WSDL 文档可包含其它的元素，比如 extension 元素，以及一个 service 元素，此元素可把若干个 web services 的定义组合在一个单一的 WSDL 文档中。
+		如需完整的语法概述，请访问 WSDL 语法 这一节。
+		WSDL 端口
+		<portType> 元素是最重要的 WSDL 元素。
+		它可描述一个 web service、可被执行的操作，以及相关的消息。
+		可以把 <portType> 元素比作传统编程语言中的一个函数库（或一个模块、或一个类）。
+		WSDL 消息
+		<message> 元素定义一个操作的数据元素。
+		每个消息均由一个或多个部件组成。可以把这些部件比作传统编程语言中一个函数调用的参数。
+		WSDL types
+		<types> 元素定义 web service 使用的数据类型。
+		为了最大程度的平台中立性，WSDL 使用 XML Schema 语法来定义数据类型。
+		WSDL Bindings
+		<binding> 元素为每个端口定义消息格式和协议细节。
+		WSDL 实例
+		这是某个 WSDL 文档的简化的片段：
+		<message name="getTermRequest">
+		   <part name="term" type="xs:string"/>
+		</message>
+
+		<message name="getTermResponse">
+		   <part name="value" type="xs:string"/>
+		</message>
+
+		<portType name="glossaryTerms">
+		  <operation name="getTerm">
+			<input message="getTermRequest"/>
+			<output message="getTermResponse"/>
+		  </operation>
+		</portType>
+		在这个例子中，<portType> 元素把 "glossaryTerms" 定义为某个端口的名称，把 "getTerm" 定义为某个操作的名称。
+		操作 "getTerm" 拥有一个名为 "getTermRequest" 的输入消息，以及一个名为 "getTermResponse" 的输出消息。
+		<message> 元素可定义每个消息的部件，以及相关联的数据类型。
+		对比传统的编程，glossaryTerms 是一个函数库，而 "getTerm" 是带有输入参数 "getTermRequest" 和返回参数 getTermResponse 的一个函数。
+	-----
+
+* REST
+	无状态通信
+　　无状态通信是我要讲到的最后一个原则。首先，需要着重强调的是，虽然REST包含无状态性（statelessness）的观念，但这并不是说暴露功能的应用不能有状态——
+　　事实上，在大部分情况下这会导致整个做法没有任何用处。REST要求状态要么被放入资源状态中，要么保存在客户端上。或者换句话说，服务器端不能保持除了单次请求之外的，
+	任何与其通信的客户端的通信状态。这样做的最直接的理由就是可伸缩性——如果服务器需要保持客户端状态，那么大量的客户端交互会严重影响服务器的内存可用空间（footprint）。
+	（注意，要做到无状态通信往往需要需要一些重新设计——不能简单地将一些session状态绑缚在URI上，然后就宣称这个应用是RESTful。）
+	　　但除此以外，其它方面可能显得更为重要：无状态约束使服务器的变化对客户端是不可见的，因为在两次连续的请求中，客户端并不依赖于同一台服务器。一个客户端从某台
+	服务器上收到一份包含链接的文档，当它要做一些处理时，这台服务器宕掉了，可能是硬盘坏掉而被拿去修理，可能是软件需要升级重启——如果这个客户端访问了从这台服务器
+	接收的链接，它不会察觉到后台的服务器已经改变了。
+	from: http://kb.cnblogs.com/page/132129/
+	PS：部分截取
 
 * zookeeper
 	 - zookeeper源码分析
@@ -9579,6 +9702,173 @@ search in index find pdf
 	not tied to either the web tier or the persistence tier, and is available for both server-side application programming,
 	as well as rich client Swing application developers.” – JSR-303 Specification
  * spring
+	- spring文件上传处理
+		从struts提供的ServletActionContext中获取request对象，从而获取上传的文件，然后用spring的文件类处理
+		-----
+		MultiPartRequestWrapper mpRequest = (MultiPartRequestWrapper) ServletActionContext.getRequest();
+			File[] files = mpRequest.getFiles("ncInfo");
+			if (files != null && files.length == 1) {
+			    InputStream input = null;
+			    try {
+				input = new FileInputStream(files[0]);
+			    } catch (FileNotFoundException e) {
+				logger.error("read uploaded file error", e);
+				throw new WebException(ExceptionConstants.FAILED_TO_OPEN_UPLOADED_FILE);
+			    }
+			    List<ApiIso> apiIsoList = ExcelUtil.readExcel(input, new IsoReadExcelHandler());
+		-----
+		PS: MultiPartRequestWrapper
+
+		-----
+		public static <T> List<T> readExcel(InputStream input,
+					ReadExcelRowHandler<T> rowHandler) {
+				// 参数检查
+				if (input == null) {
+					throw new RuntimeException("The InputStream is null");
+				}
+				if (rowHandler == null) {
+					throw new RuntimeException("The ReadExcelRowHandler is null");
+				}
+
+				// 读取Excel
+				Workbook workbook = null;
+				try {
+					try {
+						workbook = Workbook.getWorkbook(input);
+					} catch (Exception e) {
+						throw new RuntimeException(
+								"getWorkbook from inputStream error.", e);
+					}
+					Sheet sheet = workbook.getSheet(0);
+					int rows = sheet.getRows();
+
+					List<T> result = new ArrayList<T>(rows);
+					// 第一行是标题
+					if (rows <= 1) {
+						return result;
+					}
+					// 标题列数
+					int headingLength = sheet.getRow(0).length;
+
+					// 循环解析每行数据,忽略第一行
+					for (int i = 1; i < rows; i++) {
+						Cell[] cells = sheet.getRow(i);
+						if (cells.length > 0) {
+							// 取出当前行每个单元格的值
+							List<String> cellValueList = new ArrayList<String>(
+									headingLength);
+							boolean allBlank = true;
+							// 循环获取当前行的每个单元格的值
+							for (Cell cell : cells) {
+								String value = cell.getContents();
+								if (StringUtils.isNotBlank(value)) {
+									value = value.trim();
+									allBlank = false;
+								}
+								cellValueList.add(value.trim());
+							}
+							// 如果当前行的每个单元格都是空的，那么忽略当前行
+							if (allBlank) {
+								continue;
+							}
+							// 回调接口处理每行数据的转换
+							T object = rowHandler.readRow(cellValueList, i,
+									headingLength);
+							if (object != null) {
+								result.add(object);
+							}
+						}
+					}
+					return result;
+				} finally {
+					// 关闭资源
+					if (workbook != null) {
+						workbook.close();
+					}
+					try {
+						input.close();
+					} catch (IOException e) {
+						throw new RuntimeException("close inputStream error.", e);
+					}
+				}
+			}
+		-----
+		PS: 处理逻辑，通过回调函数来做具体转换，不同excel文件；实现行处理的回调函数即可
+
+		-----
+		public class IsoReadExcelHandler implements ReadExcelRowHandler<ApiIso> {
+		    private final static Logger logger = Logger.getLogger(IsoReadExcelHandler.class);
+		    private static final int CELLS_LENGTH = 8;
+
+		    @Override
+		    public ApiIso readRow(List<String> cellValueList, int row, int headingLength) {
+			if (cellValueList == null || cellValueList.isEmpty()) {
+			    return null;
+			}
+
+		-----
+		PS: 回调接口，用以处理具体的转换逻辑
+
+
+	- 代码中获取属性配置
+	重写spring提供类的processProperties方法，spring处理属性文件的类设计
+	-----
+	<bean id="propertyConfigurer"
+		class="com.tjsoft.base.util.CustomizedPropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/config/jdbc.properties</value>
+				<value>/WEB-INF/config/mail.properties</value>
+				<value>/WEB-INF/config/system.properties</value>
+			</list>
+		</property>
+	</bean>
+	-----
+	-----
+	import java.util.HashMap;
+	import java.util.Map;
+	import java.util.Properties;
+
+	import org.springframework.beans.BeansException;
+	import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+	import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+
+	/**
+	 * 自定义PropertyPlaceholderConfigurer返回properties内容
+	 * 
+	 * @author LHY 2012-02-24
+	 * 
+	 */
+	public class CustomizedPropertyPlaceholderConfigurer extends
+			PropertyPlaceholderConfigurer {
+
+		private static Map<String, Object> ctxPropertiesMap;
+
+		@Override
+		protected void processProperties(
+				ConfigurableListableBeanFactory beanFactoryToProcess,
+				Properties props) throws BeansException {
+			super.processProperties(beanFactoryToProcess, props);
+			ctxPropertiesMap = new HashMap<String, Object>();
+			for (Object key : props.keySet()) {
+				String keyStr = key.toString();
+				String value = props.getProperty(keyStr);
+				ctxPropertiesMap.put(keyStr, value);
+			}
+		}
+
+		public static Object getContextProperty(String name) {
+			return ctxPropertiesMap.get(name);
+		}
+
+	}
+	-----
+	from: http://blog.csdn.net/lhy030320999/article/details/7683243
+	PS: 不仅从配置注入，编程时获取属性配置，获取属性文件
+		重写spring的org.springframework.beans.factory.config.PropertyPlaceholderConfigurer，自
+
+
 	- 自动注解注入配置
 		 <context:component-scan base-package="com.aliyun.luorigong"/>
 		 会扫描cllasspath下所有注解了component等注解的类，并自己注册到spring容器中
@@ -10224,6 +10514,60 @@ search in index find pdf
 
 		HA
 		ref: http://www.rabbitmq.com/ha.html
+
+		AMQP(Advanced Message Queuing Protocol) 规范说明：http://www.amqp.org/
+
+		rabbit-mq命令：
+			1) rabbitmq-multi - start/stop local cluster RabbitMQ nodes
+				SYNOPSIS
+				       rabbitmq-multi {command} [command options...]
+				DESCRIPTION
+				       RabbitMQ is an implementation of AMQP, the emerging standard for high performance enterprise messaging. The RabbitMQ server is a robust and scalable
+				       implementation of an AMQP broker.
+
+				       rabbitmq-multi scripts allows for easy set-up of a cluster on a single machine.
+			2) rabbitmqctl
+				Commands:
+				    stop
+				    stop_app
+				    start_app
+				    status
+				    reset
+				    force_reset
+				    rotate_logs <suffix>
+
+				    cluster <clusternode> ...
+				    force_cluster <clusternode> ...
+
+				    close_connection <connectionpid> <explanation>
+
+				    add_user <username> <password>
+				    delete_user <username>
+				    change_password <username> <newpassword>
+				    set_admin <username>
+				    clear_admin <username>
+				    list_users
+
+				    add_vhost <vhostpath>
+				    delete_vhost <vhostpath>
+				    list_vhosts
+				    set_permissions [-p <vhostpath>] <user> <conf> <write> <read>
+				    clear_permissions [-p <vhostpath>] <username>
+				    list_permissions [-p <vhostpath>]
+				    list_user_permissions [-p <vhostpath>] <username>
+
+				    list_queues [-p <vhostpath>] [<queueinfoitem> ...]
+				    list_exchanges [-p <vhostpath>] [<exchangeinfoitem> ...]
+				    list_bindings [-p <vhostpath>] [<bindinginfoitem> ...]
+				    list_connections [<connectioninfoitem> ...]
+				    list_channels [<channelinfoitem> ...]
+				    list_consumers
+			3）rabbitmq-server - start RabbitMQ AMQP server
+			NOTES
+			1). clustering on a single machine guide
+			   http://www.rabbitmq.com/clustering.html#single-machine
+
+
 	- AMQP(Advanced Message Queuing Protocol )协议
 		rabbitMQ基于此协议实现
 			tutorial：http://www.rabbitmq.com/tutorials/tutorial-one-python.html
@@ -10825,6 +11169,10 @@ search in index find pdf
 			简单的说，在dbrg-1上需要生成一个密钥对，即一个私钥，一个公钥。将公钥拷贝到dbrg-2，dbrg-3上，这样，比如当dbrg-1向dbrg-2发起ssh连接的时候，
 		dbrg-2上就会生成一个随机数并用dbrg-1的公钥对这个随机数进行加密，并发送给dbrg-1；dbrg-1收到这个加密的数以后用私钥进行解密，并将解密后的数发送回dbrg-2，
 		dbrg-2确认解密的数无误后就允许dbrg-1进行连接了。这就完成了一次公钥认证过程。
+
+* MapReduce 
+	MapReduce is a programming model for processing large data sets with a parallel, distributed algorithm on a cluster.
+
 * gfs
 	一曰google file system	   (google)
 	一曰global file system  (redhat)
@@ -10922,6 +11270,23 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		-----
 		PS: 这里createLb方法，将http调用部分独立出方法，便于解耦和单元测试 -tip-
 		mock静态方法
+
+	    @Test
+	    public void testReloadCache(){
+		
+		new MockUp<ApiProxyOperationUtils>(){
+		    @SuppressWarnings("unused")
+		    @Mock
+		    public String executeGet(String url){//此为静态私有方法，可去掉static声明，并改为public
+			return "{\"code\": 200, \"msg\": \"reset all regions success.\"}";
+		    }
+		};
+		
+		ResultDomain actual = ApiProxyOperationUtils.reloadCache("testIp");
+		
+		Assert.assertTrue(actual.getCode() == 200);
+		
+	    }
 
 	- jtester
 		框架在测试方法前，准备数据时，开启了事务，插入了几条记录
@@ -11646,6 +12011,13 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	addresses by filling out this form.
 
 * json
+	- json串转Bean时，如果Bean定义为内部类，则会报错
+		说属性的set方法找不到；同样，从内部类的Bean转为json对象也会报get方法找不到。    即使是静态内部类
+		环境：net.sf.json.JSONObject json-lib-2.2.3.jar
+
+		Property 'code' has no getter method in class 'class test.json.pojo2$pojo3'
+		Property 'code' has no setter method in class 'class test.json.pojo2$pojo3'
+
 	- 测试 json转换为map对象
 		String str3 = "{\"code\":200,\"msg\":\"successful\",\"data\":{ \"lb_id\":\"123\",\" eip\":\"10.250.6.36\"}}";
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
@@ -11777,7 +12149,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		（2）在config文件中统一配置（sqlMapConfig）
 			<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
 			<typeHandler javaType="snapshotStorageType" callback="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>
-
+		eg：
 			<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER"/>
 	- where calse的共用需要设计好，否则反而增加维护
 		<isNotEqual>语句需要注意，类似if..else，可能会意外带入条件，最好还是用匹配上的条件去判断<isNotEmpty>,<isEqual>
@@ -31423,6 +31795,7 @@ day325 Monday, July 08, 2013
 3. apache common lang包
 	StringUtils.indexOfAny(str,str[])
 		提供在指定字符串中，查找目标字符串集合中的一个的工具方法
+	containsAny(String str, char[] searchChars)
 
 4. svn目录release下，有sql变动
 	涉及一些资源加了 product 字段，标识资源属于哪个产品线
@@ -32062,10 +32435,813 @@ day335 Tuesday, July 23, 2013
 		修改DataCenterList.js（搜ConfigMenu），在动态配置按钮时，修改componentType的houyi 为houyictrl，原houyiapi，apiproxy类型不变
 
 		jobName，componentType，offset，传给服务端即可
+	2）realserver资源视图，修改		     extjs 取表单，取表单项 * extjs
+		AddRealServerForm.js
+		-----
+		,
+						
+		{
+		xtype: 'combobox',
+		fieldLabel: '类型',
+		store: 'RealServerType',
+		queryMode: 'local',
+		valueField: 'type',
+		displayField: 'displayName',
+		typeAhead: true,
+		forceSelection: true,
+		emptyText: '选择RealServer类型',
+		name: 'type',
+		listeners: {
+			select: function(combo, records, eOpts) {
+				VipField = combo.nextSibling('textfield[name="vip"]');
+				bigRegionCombobox = combo.nextSibling('combobox[name="bigRegionId"]');
+				if (combo.value != REALSERVER_TYPE_APIPROXY) {
+					bigRegionCombobox.setVisible(true);
+					if(combo.value == REALSERVER_TYPE_RHS){//rhs
+						VipField.setVisible(true);
+					}else{
+						VipField.reset();
+						VipField.setVisible(false);
+					}
+				} else {//apiproxy
+					bigRegionCombobox.reset();
+					bigRegionCombobox.setVisible(false);
+					VipField.reset();
+					VipField.setVisible(false);
+				} 
+			}
+		}
+		},
+		-----
+
+		双击，弹出更新表单，也需要根据不同type显示对应的表单
+		-----
+		itemdblclick: function(me, record, item, index, e, eOpts) {
+			var win = Ext.create('LuoRiGong.view.resource.forms.UpdateRealServerForm');
+			VipField = win.down('textfield[name="vip"]');
+				bigRegionCombobox = win.down('combobox[name="bigRegionId"]');
+				rsType = record.get('type');
+				if (rsType != REALSERVER_TYPE_APIPROXY) {
+					bigRegionCombobox.enable(true);
+					bigRegionCombobox.setVisible(true);
+					if(rsType != REALSERVER_TYPE_RHS){//rhs
+						VipField.disable(true);
+						VipField.setVisible(false);
+					}
+				} else {//apiproxy
+					bigRegionCombobox.disable(true);
+					bigRegionCombobox.setVisible(false);
+					VipField.disable(true);
+					VipField.setVisible(false);
+				}
+				...
+		-----
+		PS: 双击grid的行时，获得record对象，从而获取列值
+			通过win.down(xxx)方法，获取将要打开窗口中的表单项
+
+	3）代码源
+		类型中，去掉后羿API源，并入后羿源；并写数据订正脚本到sql中提交svn
+	4）初始化job的agentFuncName
+		即java服务端设置job名称并给agent去执行，此agentFuncName与agent的jobXXXhandler中定义的job名称+函数名称匹配。
+
 	
 3. extjs定义全局变量
-	定义变量在js中，在页面上提前include加载，后续的js代码可以引用
+	定义变量在js中，在页面上提前include加载，后续的js代码可以引用 ；此即为js所支持的；
 
 	extjs的debug可以在chrome的工具中进行
 
 	通过alert(xxx),打印信息。
+4. 更新DAO对象时，如果会有因为type的不同，某些列会变化的情况，可以显式的设置0或空，以避免与dao mapping中定义的非null才更新的逻辑。-tip-
+	对于有关联表的情况，会更复杂，看情况可以限制修改某些表单，通过删除记录，重新建来支持。
+
+5. 
+tail -f /tmp/orange/orange.jobmaster.debug.log -n 300
+
+6. agent的job抽象
+	根据操作的工具即组件的不同，抽象出一组组的job。如：env，houyi ，apsara，apsara_client,arpproxy,houyiapi ,file etc.
+
+	jobXXXhandler为原接受java web请求的处理类，它处理后会继续发给mq，由agent消费消息并执行具体job。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day336 Wednesday, July 24, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	集群部署
+
+	ClusterDeployOperateFormPanel.js 按钮页面
+
+	ClusteredDeployAction.java
+
+	1）安装iptables mock
+	2）安装大禹客户端 Aresolve
+	3）安装大禹 dayu
+		jobdayuhandle.py中下面的逻辑，没出现在dayuservice实现中？ 重写baseParams方法中已处理
+		param['roledef_src'] = "%s/dayuroledef" % \
+                self.db_api.config_path_get_by_name(PATH_DIR_LUORIGONG)
+            param['roledef_updated'] = "%s/dayuroledef_updated" % \
+                self.db_api.config_path_get_by_name(PATH_DIR_LUORIGONG)
+	。。。
+	部署OSS Server
+	dayuservice
+	ossserverservice
+	...
+
+	=== 从ApiAction定义中的注释，找到对应的jobXXXhandler，进入逻辑 ===
+
+	资源视图-左边树
+		新增一个区域 ，在此区域下增加一个机房，机房无法显示，db数据正确，分析原因？
+		DistrictAction.listResource
+
+	定时刷新Llog功能修复：
+		js循环调用jobInstAction.viewLog，以显示日志并更新按钮执行状态。
+
+		globalutilities.js中定义的setLogTask方法为定时刷新任务逻辑。
+		此时报错，查看请求参数是jobName为空，到服务端时报错
+
+		logTextArea.addListener('change', function(logTextArea, newValue, oldValue) {
+			setLogTask(logTextArea, newValue, oldValue, jobName, componentType, componentId);
+		});
+		PS: 可以看出，只有当textarea产生change事件时，才会触发setLogTask方法，从而去刷新textarea的内容。
+		点击“查看日志”时，会去服务器取数据并填充到textarea中(textarea.setValue(xxx)参考extjs DOC)，此时应该触发change事件。
+			没有触发原因是，返回对象的key名字变了，改为正确的key即可取到数据，从而填充textarea。done
+
+		globalutilities.js的genJobStatusTask方法，会刷新按钮的执行状态；它是通过Job.js这个store来发送ajax请求的。
+		在 ClusterOperatePanel.js 中初始化了刷新job状态的任务逻辑，在tab change事件触发时做相应处理。
+		原逻辑，Action有一个getJob方法返回job列表数据（job名称，状态等信息），js遍历job并更新页面上对应job的状态。
+			lrgdb.py中job_get方法返回的数据
+			componentType：区分job类型，为houyictrl、houyiapi，apiproxy
+			componentId：区分job类型对应的id，即如果type为houyictrl则为clusterId，若为houyiapi则为realserverId
+
+			比如：取出集群部署页面所有job按钮的最新job信息。
+
+			action返回job状态信息后，页面js进行处理。genJobStatusTask
+
+
+3. 测试jtester事务问题
+	测试框架事务与dao事务不一致？
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day337 Thursday, July 25, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）根据 ClusterOperatePanel.js 页面传入的componentType类型，修改对应job的类型
+		houyictrl
+		houyiapi
+		apiproxy
+		它们已划分到不同的Tab页作为集合。
+
+	2）控制系统-扫尾
+	ClusterOperatePanel.js -> ClusterConfigOperateEndFormPanel.js 即为扫尾页面
+	（1）添加到嫦娥系统
+		services/moonmm/joinUpMoonmm.json
+
+		ThirdpartyMoonmmHandler.py
+
+		odbs表去掉原which_id字段，以type替换之,以标识db所属的类型houyictrl，apsara，oss_server etc。
+	（2）修改weight值
+		HouyiApiWeightHandler.py
+		直接到houyi库操作？OR 接口
+	（3）集群postcheck
+	（4）完成部署
+		DeployregionHandler.py
+
+
+
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+da338 Friday, July 26, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	继续扫尾部分
+
+	houyiapi测试环境： 10.230.227.11	 ATDEV01
+	admin,admin
+	houyi
+	10.230.227.11:3306/houyi，houyi，houyi                       
+	
+	调用houyiapi时，根据regionId找到调用的url的逻辑：
+		realserver表，type为apiproxy
+		regionId->bigRegionId->	houyiapi  找到vip即可
+		select
+			rs.ip ip
+		from region r
+		left join big_region br on br.id=r.big_region_id
+		left join houyiapi hyapi on hyapi.id=br.id_houyiapi
+	key和id，设置为可配。
+
+
+	
+3. 规范，算法与实现
+	规范，算法是一定的，实现可以千变万化。-tip-
+
+4. zk test
+
+5. extjs chrome type pending
+	chrome页面异步XMLHttpRequest请求失败
+	请求时，没有任何cookie，请求也无任何响应？
+		跳转 OR 缓存？
+
+	-----
+	Ext.define('LuoRiGong.store.Cluster', {
+	    extend: 'Ext.data.Store',
+	    model: 'LuoRiGong.model.Cluster',
+	    autoLoad: false,
+		
+	    proxy: {
+		type: 'ajax',		
+		api: {
+		    read: 'services?action=clusterAction.listClusters'
+		},
+		
+		reader: {
+		    type: 'json',
+		    root: 'data'
+		}
+	    }
+	});
+	-----
+	PS: 原store定义
+
+	-----
+	Ext.define('LuoRiGong.store.Cluster', {
+	    extend: 'Ext.data.Store',
+	    model: 'LuoRiGong.model.Cluster',
+	    autoLoad: false,
+		
+	    proxy: {
+		type: 'ajax',
+		method: 'GET',
+		withCredentials: true,
+		useDefaultXhrHeader: false,
+
+		headers: {
+		    "Accept": "application/json"
+		},
+		
+		api: {
+		    read: 'services?action=clusterAction.listClusters'
+		},
+		
+		reader: {
+		    type: 'json',
+		    root: 'data'
+		}
+	    }
+	});
+	-----
+	PS: 修改后的store，待验证？
+
+6. java * java 
+	String.valueOf(obj) 与 (String)obj 的区别？
+	第二种方式为，已知obj为String类型时做转换；第一种为，obj的类型可能为多种，调用obj的toString方法转换。
+		eg: 如果obj为Integer类型
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day339 Monday, July 29, 2013
+
+1. 
+	* 落日弓
+2. 落日弓
+	继续
+	1）扫尾->完成部署	done
+		Armory client: 
+			/test/orange/orange/armory.py
+				batch_update
+
+		Armory接口说明：	 http://wiki.ec.alibaba-inc.com/index.php/落日弓与armory
+			
+	2）部署后羿	done
+		集群部署，增加部署后羿按钮（原部署后羿逻辑包含在部署飞天中）
+		基本参数和其他命令一致
+
+	3）集群配置 pet操作，页面弹出框没有做不为空验证 
+		ClusterConfigOperateFormPanel.js
+	4）查看交付报告
+		
+
+	问题：
+		rc.local和pet操作中，一个jobName对应多个job的情况，在生成log时有问题，是否独立拆分？ 待
+		或者，在job标识上，再加上action的名称，2者组合实现唯一，然后在ajax请求log，有action的按钮带上对应的action即可，服务端从job表匹配。
+	解决，在db中存待标识的agent_func_name，在mq构造消息时，将尾部的job name标识去掉。
+		agent_func_name唯一，实现log的独立显示；
+
+3. 设计 代码复用 -tip-
+	独立的功能尽量抽取出来共用
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day340 Tuesday, July 30, 2013
+
+1. 
+	* 落日弓
+2. 落日弓
+	1）提测相关
+		安装包与配置单独打rpm包，部署时只需要安装即可
+			类似window下的安装包，里面有默认配置，也可自定义配置安装，方便安装，升级。
+		conf中的配置，在打包时根据对应的环境拷贝对应的配置，故配置文件修改要同步到对应的配置文件。
+	2） log显示修复
+	3）sql修改，后续以追加的方式，alert或update，不修改已有的sql变更
+	4）ISO,Image上传
+	ISO:
+		ManageIsoPanel.js
+		级联菜单，在下拉框内容变化时，触发事件，更新下一级菜单数据，以此类推。
+
+		java web uri: 
+			services/isoManage/isoUpload.json
+		IsoServiceImpl
+			isoUpload方法
+
+		python api uri:
+			/job/iso
+
+	Image:
+		ManageImagePanel.js
+
+
+3. rpm打包
+	http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/branches/luorigongzhuge/rpmbuild
+
+4. 业务
+	http://wiki.qa.aliyun-inc.com/index.php/云监控
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day341 Wednesday, July 31, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）ISO上传
+		ManageIsoPanel.js
+		获取request对象，从而获取文件内容：
+			 MultiPartRequestWrapper mpRequest = (MultiPartRequestWrapper) ServletActionContext.getRequest();
+			根据clusterName获取regionId，clusterName都为相同（需要发给指定cluster的agent去处理）
+	
+	ISO上传（Excel）		
+	
+	上传ISO状态
+		状态显示Store： IsoJob.js
+			services/jobLogStatus/getIsoJobs.json
+			JobLogStatusServiceImpl.java
+				getIsoJobs
+			在tab页切换时，触发store取log
+		状态显示Grid： UploadJobStatusGrid.js
+			
+		与JobInstAction对接，获取job的log
+	2）Image上传
+		ManageImagePanel.js
+		ImageServiceImpl.java
+
+		Store: ImageJob.js
+
+
+	3）部署后羿 修改 待？
+		还需要加两个参数houyi_resource_path，revision
+		查询codesrc， 得到这个region的houyictrl代码源的url 和revision
+
+
+	
+
+3. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day342 Thursday, August 01, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）按钮状态同步修复	      doing
+		集群部署页面 为例
+
+		原更新按钮状态逻辑为：
+			取到相关job的最新信息，遍历当前Panel下所有按钮，匹配上后更新状态。
+
+		ClusterDeployOperateFormPanel.js
+		globalutilities.js 的 btnAjaxRequest1 方法发送按钮点击ajax请求
+			successTrueFn1
+			successFalseFn 
+			这2个函数只根据返回值是否成功，弹出执行成功或失败
+		btnAjaxRequest1 方法在java服务端返回成功时，就将按钮状态置为执行完成，这点需要修改，改为java返回后将状态置为执行中，然后通过定时刷新任务来
+		刷新按钮状态。
+		
+		界定状态：
+			正在执行 - 异步请求发给服务端，服务端处理后返回ok时，为此状态（此时服务端任务还在异步处理中）
+			执行完成 - 后端异步任务执行结束，返回结果状态时
+		
+		ClusteredDeployAction
+
+		是否因为异步消息机制？
+		查看原代码，确实是否为同步机制，消息发出去后同步等待消费mq消息后再返回
+		以 大禹环境检查 为例：
+			JobDayuHandler.py
+			webx.py
+				send2agent方法
+				PS: 调用此方法发送消息给MQ
+		
+		定时刷新按钮状态任务：
+			ClusterOperatePanel.js 任务触发在这个Panel里
+			tab切换时，调用 genJobStatusTask 方法生成刷新按钮状态的任务
+
+			Store: Job.js
+			Model: Job.js
+
+			通过在js代码中加alert(xxx)调试 genJobStatusTask 方法的处理逻辑；并结合action的返回值与job model的一一对应。
+
+			问题定位：
+				1）store中model定义和返回值对应，并与函数中使用方式一致
+				2）字符串转json时，调用方式要正确，可从浏览器调试控制台看到js的错误提示，比如对象undefined
+					需要找原因，js正确处理后再继续往下走
+					var jobResult = Ext.JSON.decode(records[i].get('result'));
+					var code = jobResult.code;
+					var code = jobResult.get('code');//此用法报，对象没有get方法，采用上面的方式获取json对象中的code值。
+
+			在 buttonTextToUrlMapping.js 中，定义了各个tab页的按钮集合。比如 clusterDeployOperateFormPanelMap 定义了部署页面的按钮集合。
+
+			js遍历结果集时，少了部分结果，从console看到js解析json出错了，导致后续结果集无法遍历 -tip- * extjs * js
+				调试JS，碰到困惑的问题，赶快看js的console吧，看看是不是js执行出错导致的!!! so important!!! To save you valuable time~~
+			
+
+
+
+	2）部署飞天客户端     done
+		加一个step=deploy
+	3）部署后羿 修改 done
+		还需要加两个参数houyi_resource_path，revision
+		查询codesrc， 得到这个region的houyictrl代码源的url 和revision
+	4）部署OSS Server done
+		加参数，oss_resource_path = param['oss_resource_path']
+
+	调试：
+		查看agent的log，/usr/local/python/bin/python jobworker/master.py orange.conf
+	
+
+3. rabbitmq
+	Channel
+	Connection
+	Broker
+	ConnectionFactory
+	Queue
+	Consumer
+	connection.createChannel()
+	channel.exchangeDeclare(exchange, type)
+	channel.queueBind(replyQueueName, exchange, replyQueueName)
+	channel.basicPublish(exchange, "", basic, msg.getBytes())
+	channel.basicConsume(replyQueueName, true, new Consumer() {...
+
+	-----
+	   public void basicConsume(String queue, CallbackService callback) {
+		int attempt = 10;
+		Channel channel = null;
+		try {
+		    while (attempt > 0 && !isConnectionOpen()) {
+			connection = brokerConfigurationService.createConnection();
+			attempt--;
+		    }
+
+		    if (attempt == 0) {
+			throw new Exception("connection failed");
+		    }
+
+		    channel = connection.createChannel();
+		    channel.queueDeclare(queue, true, false, false, null);
+		    channel.queueBind(queue, exchange, "");
+		    QueueingConsumer consumer = new QueueingConsumer(channel);
+		    channel.basicConsume(queue, true, consumer);
+		    channel.basicQos(100);
+
+		    while (true) {
+			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+			String message = new String(delivery.getBody());
+			callback.callback(message);
+		    }
+		} catch (Exception e) {
+		    logger.error(e);
+		} finally {
+		    try {
+			if (channel != null) {
+			    channel.close();
+			}
+		    } catch (Exception e) {
+			logger.error(e);
+		    }
+		}
+	    }
+	-----
+	PS: 消费，循环监听消费消息；
+		nextDelivery方法实现中，采用Blocking Queue，private final BlockingQueue<Delivery> _queue，只有队列中有数据才继续，否则等待。
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day343 Friday, August 02, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）fixbug
+	2）houyiapi key id
+	3）在部署houyi之后增加一个按钮： 部署运维工具
+	PetoolsWorker.deploy_petools 
+	step =  kuorong/deploy
+	pe_resource_path = param["pe_resource_path"]
+	revision = param['revision'
+
+	Agant启动命令：/usr/local/python/bin/python jobworker/master.py orange.conf
+	4）去掉重启TDC按钮
+
+	10.250.6.228-MySql root 123456
+
+	根据集群类型的不同，有些按钮会变为不可用，如果集群后端agent不存在，则状态刷新也会没效果。
+	
+	QA java web环境：
+	go2houyi1
+	atzy - go2houyi1 - ssh 10.230.226.112 
+	Agetn: HOUYI1: go2houyici 
+
+3. MapReduce:The Free Lunch Is Not Over
+	并行计算
+	Map Reduce编程模型，编程框架
+
+4. struts2的请求处理流程
+	每个action都在独立的线程里执行完成，这样ThreadLocal中的数据就不会有并发问题
+	源码分析：
+
+5. extjs js 调试
+	页面没反应，菜单点击没反应等情况，都可以看看js执行控制台输出，看看是不是有错误了 -tip-
+	eg: 点击菜单没反应 
+		页面js中注释掉了 重启TDC 按钮，但是按钮配置map中没有去掉，导致给对象赋值null报错。
+
+6. zk locks shared lock ，distribute lock ， in practise
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day344 Monday, August 05, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	fixbug
+	1）集群配置->同步rc.local，中间同步文件，异步 OR 同步？
+	JobEnvHandler.py 
+		_sync_rc_file 
+			self.send2agent(cluster_name, 'FileWorker.FileJob.save', param, sync=True)
+		同步文件为同步操作，最后job为异步job
+
+		异步job，需要将job持久化到数据库中；同步操作不进行持久化job操作。
+
+		/tmp/orange/orange.jobmaster.error.log ERROR日志记录了错误，debug里没有记录部分日志 
+
+		Agent报错
+		-----
+		[Errno 2] No such file or directory: 'null/rc.native'
+		-----
+
+		DEBUG log
+		-----
+		16885 KeyError: 'path_dir_luorigong'
+		16886 [2013-08-05 13:49:01,177 4766 47421085352176] DEBUG (master.py:98) 
+		16887 [jobuuid:33c2b453-5af5-4b3d-a174-67fc127f55e8] ========EnvWorker.EnvJob.sync_rcfile end========  		
+		-----
+
+		rc.sysinit 
+			Agent收到后，解析json出错，python不能处理tab键\t，替换模板文件中的tab为4个空格即可 :%s/\t/    /g  * python -tip-
+
+	2）资源视图-添加houyiapi域名的表单，增加 accessId，accessKey，aliyunIdkp3个字段，以满足不同大region houyiapi采用的	账号不同。
+		并修改原配置方式
+
+	3）集群配置-apiproxy发布 修改 类似这样的对外API接口，可以开放出去，便于与其他系统集成
+		http://wiki.ec.alibaba-inc.com/index.php/API_Proxy%E4%B8%8EAPI
+
+	新增region
+	前提：api 数据库中已经有新增region的记录
+	步骤：在落日弓API服务器调用：curl http://apiproxy_realserver_host/reset/regions
+	返回：{"code": 200, "msg": "reset all regions success."}
+	
+	apiproxy发布步骤时，调用apiproxy机器上面的连接即可。
+		
+
+3. vim 替换所有 :%s/sourceStr/targetStr/g
+
+4. 工具类Utils，可以抽象部分公用代码
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day345 Tuesday, August 06, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	QA环境
+	XY2_TESTAG 10.230.226.112
+	sudo mysql
+	web服务也在此AG上
+	
+	apiproxy
+		apiproxy增加时，在big_region_realserver中不会有关联，而是通过houyiapi关联？
+		正解：
+			regionId-bigRegionId-houyiapiId+type=多个apiproxy rs
+		
+		big_region_realserver表只记录了houyiapi rs和bigregion的关联，没有其他类型rs的关联。 业务啊~
+
+		ApiProxy有多个，需要每个都调用。
+	
+	创建houyiapi域名时，增加3个表单项accessId,accessKey,aliyunIdkp
+		regionId > bigRegionId >从big_region表拿到houyiapi_id，从而拿到id,key...
+
+3. js处理时，decode json出错，导致按钮状态出问题
+	返回的json是个空
+	-----
+	{"beginTime":"2013-08-06 10:07:12","clusterName":null,"component":"houyictrl","componentId":12,"componentName":"HOUYICI","endTime":null,"flowStepNo":null,"gmtCreate":null,"gmtModify":null,"id":null,"jobActionName":null,"jobId":null,"jobName":"EnvWorker.EnvJob.install_iptables_mock","jobNeedParam":null,"name":"EnvWorker.EnvJob.install_iptables_mock","params":null,"pid":null,
+		"result":null,"status":"finished","statusArr":null,"uuid":"e18cb9fc-bafa-4824-bd02-c86e5370585c","workflowInstanceId":null}
+	-----
+	js debug调试
+	PS; chrome方便查看js错误
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day346 Wednesday, August 07, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	houyiapi账户订正语句，分线上，测试环境
+	session过期，本地和线上tomcat没问题，QA的jetty环境session很快过期
+
+	houyiapi表的订正：
+		houyiapi
+		big_region
+		big_region_realserver
+
+	查看ECS SLB VIP申请日志：
+		tail -f -n200 logs/2013_08_07.stderrout.log | grep Slb
+		HTTP超时后，会报对应的友好提示，按钮状态可优化
+	
+	Image,ISO上传bug分析：
+		从QA环境看
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day347 Thursday, August 08, 2013
+
+1. 
+	* 落日弓
+2. 落日弓
+	完成部署后-集群信息页面修改
+	Tab页：
+		ClusterDetailPanel.js
+	子Tab页，集群信息：
+		ClusterResourceReadOnlyFormPanel.js
+
+	默认代码源表单项类型为combobox，即可能会有多条记录：
+		defaultType: 'combobox', 
+	参考 clusterresource/SourceCodeInfoFormPanel.js 页面，代码源配置页面，Store都是独立的
+	
+	集群部署Tab页切换时，报：
+		com.aliyun.luorigong.exception.WebException
+			at com.aliyun.luorigong.workflow.action.JobInstAction.getJobStatus(JobInstAction.java:110)
+		tab页切换时，触发了globalutilities.js中定义取job状态的请求，其中参数componentType作为key是错误的，需改为component
+		错误请求：10.1.170.193 -  -  [08/Aug/2013:15:47:13 +0800] "GET /services?action=jobInstAction.getJobStatus&_dc=1375948336041&componentType=houyi&componentId=12&statusType=running%2Cfinished&page=1&start=0&limit=25 HTTP/1.1" 200 101 
+	
+
+3. 加入product字段的几张表，排查
+	District	done		done
+	Region	done
+	CodeSrc	done
+	Subnet	done
+	Room	done
+	Odbs	done	
+
+4. 落日弓开放接口
+	接口规范定义
+	业务接口需求分析
+5. 连接池DBCP提供的验证连接可用性功能的测试
+	问题现象：
+		slbapi通过连接池与DB交互，当DB做主备切换（DNS将域名解析到备库的IP上）到备库（由只读状态改为可读写状态）时，
+		slbapi还有连接会连原来的主库（切换过后为只读状态），写操作时报Read Only。
+
+		主备切换过程：备库设置可读写->修改域名DNS解析->切断原主库已有的DB连接，并设置原主库为只读 ； 主备切换
+
+	org.apache.commons.dbcp.BasicDataSource的testOnBorrow属性配置为true时，根据其文档说明，会验证连接是否可用，如果不可用则从新获取连接
+	关键：
+		上面，从新获取连接时，如果jdbc配置的是域名，新连接是从已解析出来的IP获取，还是重新解析域名拿到IP，从而生成新连接？
+
+	验证上面的问题：
+		模拟DB主备切换过程，分析连接池中连接的更新状态
+		连接是否可用的判断依据？
+			依托于Socket的连接是否可用？
+		根据源码，判断连接是否可用是基于db查询操作或其他机制来判断的，看接口对应此方法的说明：
+		
+		-----
+		boolean java.sql.Connection.isValid(int timeout) throws SQLException
+			Returns true if the connection has not been closed and is still valid. The driver shall submit a query on the connection or use some other mechanism that 
+			positively verifies the connection is still valid when this method is called. 			
+			
+			The query submitted by the driver to validate the connection shall be executed in the context of the current transaction.
+		-----
+		DBCP连接池，底层使用JDBC驱动提供的Driver来获取连接的。
+
+
+		OS dns cache linux操作系统自身不缓存dns信息
+			On Linux (and probably most Unix), there is no OS-level DNS caching unless nscd is installed and running. Even then, the DNS caching feature of nscd is disabled by
+			default at least in Debian because it's broken. The practical upshot is that your linux system very very probably does not do any OS-level DNS caching.		
+			from: http://stackoverflow.com/questions/11020027/dns-caching-in-linux
+
+	ttl=0的方式去掉了java的dns缓存使用是ok的。
+
+	SOCKET底层基于TCP协议，TCP协议保证连接可用性，只要在SOCKET超时时间之内，即使交互的两端网络断电，在网路恢复后SOCKET连接依然可用。
+	简单验证：
+		起个需要连接DB的服务，然后将网线拔掉再插上即可。  -tip-
+	
+	基于上面这点：
+	1）网络异常断电
+		DB切换时，交换机断电10min，恢复供电后，应用端的数据库连接池的连接还是访问到原主库的地址；原因为，断电后管理员无法连接到原主库去执行kill
+		操作且原socket连接还未超时，则继续可用。
+	2）正常切换时
+		比如演练时，管理员会登到原来饿主库机器
+		并kill掉已有的DB连接而且阻止新DB连接的建立，这样应用端使用时发现连接被关闭，就会去掉老连接并重新解析DNS到IP，然后建立新的连接以缓存。
+
+	上面的经历网络断电，socket依旧可用，还需要证明一点，即DB连接池的socket超时时间大于10min？
+		Mysql驱动源码分析，mysql-connector-java-5.1.18.jar，com.mysql.jdbc.ConnectionImpl类，是通过工厂方法获得，此Connection实现类中，实现了
+		获取DB连接的逻辑，在createNewIO方法中，以com.mysql.jdbc.MysqlIO类的实例封装到DB的连接信息，其构造函数可传递socketTimeout时间，如下：
+		this.mysqlConnection.setSoTimeout(socketTimeout);//即为socket的方法，表示读取超时，为0表示永不超时
+
+		socketFactory为创建socket的工厂，其实现有基于命名管道（NamedPipe）和基于标准socket的工厂	 ；
+		在com.mysql.jdbc.StandardSocketFactory实现中，看到String keepAlive = props.getProperty(TCP_KEEP_ALIVE_PROPERTY_NAME, TCP_KEEP_ALIVE_DEFAULT_VALUE);
+		默认不设置时，在其configureSocket方法中，Socket的keepalive为true。
+	-----
+	java socket参数详解:KeepAlive .
+		keepalive不是说TCP的常连接，当我们作为服务端，一个客户端连接上来，如果设置了keeplive为true，当对方没有发送任何数据过来，超过一个时间(看系统内核参数配置)，
+		那么我们这边会发送一个ack探测包发到对方，探测双方的TCP/IP连接是否有效(对方可能断点，断网)。如果不设置，那么客户端宕机时，服务器永远也不知道客户端宕机了，
+		仍然保存这个失效的连接。
+		
+		当然，在客户端也可以使用这个参数。客户端Socket会每隔段的时间（大约两个小时）就会利用空闲的连接向服务器发送一个数据包。这个数据包并没有其它的作用，
+		只是为了检测一下服务器是否仍处于活动状态。如果服务器未响应这个数据包，在大约11分钟后，客户端Socket再发送一个数据包，如果在12分钟内，服务器还没响应，
+		那么客户端Socket将关闭。如果将Socket选项关闭，客户端Socket在服务器无效的情况下可能会长时间不会关闭。
+		
+		尽管keepalive的好处并不多，但是很多开发者提倡在更高层次的应用程序代码中控制超时设置和死的套接字。同时需要记住，keepalive不允许你为探测套接字终点（endpoint）
+		指定一个值。所以建议开发者使用的另一种比keepalive更好的解决方案是修改超时设置套接字选项。
+		
+		说白了：这个参数其实对应用层的程序而言没有什么用。可以通过应用层实现了解服务端或客户端状态，而决定是否继续维持该Socket。
+		from: http://hi.baidu.com/sei_zhouyu/item/59a973c25fe9ff000bd93af7
+	-----
+	
+	-----
+	TCP长连接与短连接的区别
+		1). TCP连接
+
+		当网络通信时采用TCP协议时，在真正的读写操作之前，server与client之间必须建立一个连接，当读写操作完成后，双方不再需要这个连接时它们可以释放这个连接，
+		连接的建立是需要三次握手的，而释放则需要4次握手，所以说每个连接的建立都是需要资源消耗和时间消耗的
+
+		经典的三次握手示意图：
+
+
+
+		经典的四次握手关闭图：
+
+
+
+		2). TCP短连接
+
+		我们模拟一下TCP短连接的情况，client向server发起连接请求，server接到请求，然后双方建立连接。client向server发送消息，server回应client，然后一次读写就完成了，
+		这时候双方任何一个都可以发起close操作，不过一般都是client先发起close操作。为什么呢，一般的server不会回复完client后立即关闭连接的，当然不排除有特殊的情况。
+		从上面的描述看，短连接一般只会在client/server间传递一次读写操作
+
+		短连接的优点是：管理起来比较简单，存在的连接都是有用的连接，不需要额外的控制手段
+
+		3)TCP长连接
+
+		接下来我们再模拟一下长连接的情况，client向server发起连接，server接受client连接，双方建立连接。Client与server完成一次读写之后，它们之间的连接并不会主动关闭，
+		后续的读写操作会继续使用这个连接。
+
+		首先说一下TCP/IP详解上讲到的TCP保活功能，保活功能主要为服务器应用提供，服务器应用希望知道客户主机是否崩溃，从而可以代表客户使用资源。如果客户已经消失，
+		使得服务器上保留一个半开放的连接，而服务器又在等待来自客户端的数据，则服务器将应远等待客户端的数据，保活功能就是试图在服务器端检测到这种半开放的连接。
+
+		如果一个给定的连接在两小时内没有任何的动作，则服务器就向客户发一个探测报文段，客户主机必须处于以下4个状态之一：
+
+		客户主机依然正常运行，并从服务器可达。客户的TCP响应正常，而服务器也知道对方是正常的，服务器在两小时后将保活定时器复位。
+		客户主机已经崩溃，并且关闭或者正在重新启动。在任何一种情况下，客户的TCP都没有响应。服务端将不能收到对探测的响应，并在75秒后超时。服务器总共发送10个
+		这样的探测 ，每个间隔75秒。如果服务器没有收到一个响应，它就认为客户主机已经关闭并终止连接。
+		客户主机崩溃并已经重新启动。服务器将收到一个对其保活探测的响应，这个响应是一个复位，使得服务器终止这个连接。
+		客户机正常运行，但是服务器不可达，这种情况与2类似，TCP能发现的就是没有收到探查的响应。
+		从上面可以看出，TCP保活功能主要为探测长连接的存活状况，不过这里存在一个问题，存活功能的探测周期太长，还有就是它只是探测TCP连接的存活，属于比较斯文的做法，
+		遇到恶意的连接时，保活功能就不够使了。
+
+		在长连接的应用场景下，client端一般不会主动关闭它们之间的连接，Client与server之间的连接如果一直不关闭的话，会存在一个问题，随着客户端连接越来越多，server早晚
+		有扛不住的时候，这时候server端需要采取一些策略，如关闭一些长时间没有读写事件发生的连接，这样可以避免一些恶意连接导致server端服务受损；如果条件再允许就可以
+		以客户端机器为颗粒度，限制每个客户端的最大长连接数，这样可以完全避免某个蛋疼的客户端连累后端服务。
+
+		长连接和短连接的产生在于client和server采取的关闭策略，具体的应用场景采用具体的策略，没有十全十美的选择，只有合适的选择。
+		from: http://www.cnblogs.com/liuyong/archive/2011/07/01/2095487.html
+	-----
+	
