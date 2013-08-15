@@ -12,8 +12,9 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
-multi-boxing
+multi-boxing hotkeynet 
 	http://kittykittyboomboom.wordpress.com/2012/01/04/basic-guide-to-multi-boxing-world-of-warcraft/
+	octopus http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-guides/249823-multiboxing-guide-1-pc-5-accounts.html
 tmp
 ft2013-04-22
 * 佳丽摄影
@@ -9562,7 +9563,7 @@ search in index find pdf
 		CATALINA_OPTS='-Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider' 
 		PS: linux环境下默认select用epoll的实现，selector provider=sun.nio.ch.EPollSelectorProvider
 
-	- 5种IO模式 epoll	* epoll	select/poll(多路复用IO接口)
+	- 5种IO模式 epoll	* epoll	select/poll(多路复用IO接口) IO模型
 		epoll 是Linux内核为处理大批量句柄而作了改进的poll，是Linux下多路复用IO接口select/poll的增强版本，它能显著减少程序在大量并发连接中只有
 		少量活跃的情况下的系统CPU利用率。
 
@@ -12278,6 +12279,24 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- Mysql 查看连接数,状态    kill连接
+		命令： show processlist; 
+		如果是root帐号，你能看到所有用户的当前连接。如果是其它普通帐号，只能看到自己占用的连接。 
+		show processlist;只列出前100条，如果想全列出请使用show full processlist; 
+		mysql> show processlist;
+		from: http://blog.csdn.net/starnight_cbj/article/details/4492555
+
+	KILL [CONNECTION | QUERY] thread_id
+
+	- mysql超时设置，设置超时
+		配置mysql服务器超时时间，以满足测试场景
+
+		show global variables like "%timeout%";
+
+		interactive_timeout=28800
+		The number of seconds the server waits for activity on an interactive connection before closing it. An interactive client is defined as a client that uses the CLIENT_INTERACTIVE 
+		option to mysql_real_connect(). See also wait_timeout.
+
 	- mysql终端，汉字显示，乱码问题
 		mysql --default-character-set=utf8
 		指定编码的数据库连接方式来解决
@@ -33244,4 +33263,493 @@ day347 Thursday, August 08, 2013
 		长连接和短连接的产生在于client和server采取的关闭策略，具体的应用场景采用具体的策略，没有十全十美的选择，只有合适的选择。
 		from: http://www.cnblogs.com/liuyong/archive/2011/07/01/2095487.html
 	-----
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day348 Friday, August 09, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）集群信息-nc信息
+		ClusterResourceReadOnlyFormPanel.js
+		ncGridPanel.js NC信息Grid页面
+		Store: Nc.js
+
+		参考集群信息配置页面： NcGroupPanel.js
+
+	2）
+
+	3）开放API
+		pet对开放接口的需求整理
+
+
+
+3. IO模型
+	search IO模型
+4. 网络物理结构
+	
+	核心路由	7K		7K
+				|	|	 |	|
+				5K	5K	5K	5k
+				|
+				2K ...
+
+	Mac规划，由于大二层网络Mac量大，核心路由上的Mac表只能保存一定数量的Mac，需要规划，8K的vm的mac
+
+
+5. 根据UUID找日志内容
+	UUID关联到一次请求的所有处理过程，记录相关log即可
+
+6. DBCP连接池报错
+	配置了testOnBorrow选项
+	但某些情况下报： 
+	-----
+	[DEBUG] 2013-08-09 16:50:17 [CallbackServiceImpl:19]--{"body": {"job_status": "finished", "job_uuid": "071c9156-557f-411e-9d4a-b94670026768", "result": "{\"code\" : 200, \"msg\" : \"OK\"}"}, "to": "luorigongapi"}
+	[DEBUG] 2013-08-09 16:50:17 [SqlMapClientTemplate:168]--Opened SqlMapSession [com.ibatis.sqlmap.engine.impl.SqlMapSessionImpl@3fa36899] for iBATIS operation
+	[DEBUG] 2013-08-09 16:50:17 [SqlMapClientTemplate:185]--Obtained JDBC Connection [org.apache.commons.dbcp.PoolableConnection@76cd119c] for iBATIS operation
+	[DEBUG] 2013-08-09 16:50:17 [SQLErrorCodesFactory:199]--Looking up default SQLErrorCodes for DataSource [org.apache.commons.dbcp.BasicDataSource@1e883644]
+	[WARN ] 2013-08-09 16:50:17 [SQLErrorCodesFactory:227]--Error while extracting database product name - falling back to empty error codes
+	org.springframework.jdbc.support.MetaDataAccessException: Error while extracting DatabaseMetaData; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.
+		at org.springframework.jdbc.support.JdbcUtils.extractDatabaseMetaData(JdbcUtils.java:296)
+		at org.springframework.jdbc.support.JdbcUtils.extractDatabaseMetaData(JdbcUtils.java:320)
+		at org.springframework.jdbc.support.SQLErrorCodesFactory.getErrorCodes(SQLErrorCodesFactory.java:214)
+		at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.setDataSource(SQLErrorCodeSQLExceptionTranslator.java:141)
+		at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.<init>(SQLErrorCodeSQLExceptionTranslator.java:104)
+		at org.springframework.jdbc.support.JdbcAccessor.getExceptionTranslator(JdbcAccessor.java:99)
+		at org.springframework.orm.ibatis.SqlMapClientTemplate.execute(SqlMapClientTemplate.java:203)
+		at org.springframework.orm.ibatis.SqlMapClientTemplate.update(SqlMapClientTemplate.java:378)
+		at com.aliyun.luorigong.base.dao.BaseDao.update(BaseDao.java:132)
+		at com.aliyun.luorigong.dao.impl.JobInstDaoImpl.updateByUuid(JobInstDaoImpl.java:22)
+		at com.aliyun.luorigong.base.service.impl.CallbackServiceImpl.callback(CallbackServiceImpl.java:48)
+		at sun.reflect.GeneratedMethodAccessor131.invoke(Unknown Source)
+		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+		at java.lang.reflect.Method.invoke(Method.java:597)
+		at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:318)
+		at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:183)
+		at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:150)
+		at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:110)
+		at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+		at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:90)
+		at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+		at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:202)
+		at $Proxy60.callback(Unknown Source)
+		at com.aliyun.luorigong.base.service.impl.MQServiceImpl.basicConsume(MQServiceImpl.java:167)
+		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+
+
+		Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 59,583,429 milliseconds ago.  The last packet sent successfully to the server was 59,583,432 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+		at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+		at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+		at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+		at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+		at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+		at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1116)
+		at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3364)
+		at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1983)
+		at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2163)
+		at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2618)
+		at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2568)
+		at com.mysql.jdbc.StatementImpl.executeQuery(StatementImpl.java:1557)
+		at com.mysql.jdbc.DatabaseMetaData.getUserName(DatabaseMetaData.java:6731)
+		at org.apache.commons.dbcp.DelegatingConnection.toString(DelegatingConnection.java:123)
+		at org.apache.commons.dbcp.PoolingDataSource$PoolGuardConnectionWrapper.toString(PoolingDataSource.java:355)
+		at java.lang.String.valueOf(String.java:2826)
+		at java.lang.StringBuilder.append(StringBuilder.java:115)
+		at org.springframework.orm.ibatis.SqlMapClientTemplate.execute(SqlMapClientTemplate.java:185)
+		... 31 more
+	Caused by: java.net.SocketException: Broken pipe
+		at java.net.SocketOutputStream.socketWrite0(Native Method)
+		at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:92)
+		at java.net.SocketOutputStream.write(SocketOutputStream.java:136)
+		at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+		at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+		at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3345)
+		... 42 more
+	[DEBUG] 2013-08-09 16:50:17 [SQLErrorCodeSQLExceptionTranslator:283]--Unable to translate SQLException with Error code '0', will now try the fallback translator
+	    [DEBUG] 2013-08-09 16:50:17 [SQLStateSQLExceptionTranslator:95]--Extracted SQL state class '08' from value '08003'
+	    [DEBUG] 2013-08-09 16:50:17 [DataSourceTransactionManager:861]--Should roll back transaction but cannot - no transaction available
+	    [ERROR] 2013-08-09 16:50:17 [MQServiceImpl:170]--org.springframework.dao.DataAccessResourceFailureException: SqlMapClient operation; SQL [];
+	--- The error occurred in com/aliyun/luorigong/bean/config/JobInst.xml.
+	--- The error occurred while executing update.
+	--- Check the    update job_instance set gmt_modify=now()         ,    status=?      ,    result=?               ,    end_time=?            where uuid=?  .
+	--- Check the SQL Statement (preparation failed).
+	--- Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.; nested exception is com.ibatis.common.jdbc.exception.NestedSQLException:
+	--- The error occurred in com/aliyun/luorigong/bean/config/JobInst.xml.
+
+
+	--- Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.; nested exception is com.ibatis.common.jdbc.exception.NestedSQLException:
+	--- The error occurred in com/aliyun/luorigong/bean/config/JobInst.xml.
+	--- The error occurred while executing update.
+	--- Check the    update job_instance set gmt_modify=now()         ,    status=?      ,    result=?               ,    end_time=?            where uuid=?  .
+	--- Check the SQL Statement (preparation failed).
+	--- Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: No operations allowed after connection closed.
+	    [DEBUG] 2013-08-09 16:50:17 [DataSourceUtils:332]--Returning JDBC Connection to DataSource
+	    [DEBUG] 2013-08-09 16:50:17 [DataSourceUtils:297]--Could not close JDBC Connection
+	    java.sql.SQLException: Already closed.
+		at org.apache.commons.dbcp.PoolableConnection.close(PoolableConnection.java:114)
+		at org.apache.commons.dbcp.PoolingDataSource$PoolGuardConnectionWrapper.close(PoolingDataSource.java:191)
+		at org.springframework.jdbc.datasource.DataSourceUtils.doReleaseConnection(DataSourceUtils.java:333)
+		at org.springframework.jdbc.datasource.DataSourceUtils.releaseConnection(DataSourceUtils.java:294)
+		at org.springframework.jdbc.datasource.DataSourceUtils$ConnectionSynchronization.beforeCompletion(DataSourceUtils.java:452)
+		at org.springframework.transaction.support.TransactionSynchronizationUtils.triggerBeforeCompletion(TransactionSynchronizationUtils.java:106)
+		at org.springframework.transaction.support.AbstractPlatformTransactionManager.triggerBeforeCompletion(AbstractPlatformTransactionManager.java:937)
+		at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:738)
+		at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:723)
+		at org.springframework.transaction.interceptor.TransactionAspectSupport.commitTransactionAfterReturning(TransactionAspectSupport.java:393)
+		at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:120)
+		at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+		at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:90)
+		at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+		at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:202)
+		at $Proxy12.basicConsume(Unknown Source)
+		at com.aliyun.luorigong.base.service.impl.ReceiveMessage$ReceiveMessageThread.run(ReceiveMessage.java:23)
+	-----
+	PS: 环境为,java1.6,jetty容器，DBCP1.4，MqSQL5.1.40-community-log
+		配置如下：
+		-----
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+			<property name="testOnBorrow" value="true" />
+			<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+			<property name="driverClassName" value="${jdbc.driverClass}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+			<property name="minIdle" value="${jdbc.minimumConnectionCount}" />
+			<property name="maxActive" value="${jdbc.maximumActiveTime}" />
+			<property name="maxIdle" value="${jdbc.maximumConnectionCount}" />
+		</bean>
+		-----
+	
+	模拟MySQL服务器超时情况，来验证DBCP连接池的功能。
+		设置mysql超时较短，测试dbcp
+		在本地mysql环境，设置连接超时时间为10秒：
+			set interactive_timeout=10
+			此方法，只作用于当前会话。
+
+		修改这两个值是分为两种修改的。	   -tip-		       * mysql
+		-----
+		1）修改当前会话的这两个属性值。所谓的当前会话就是你当前获取的连接池的连接。比如你打开黑窗口那个会话。这个修改比较简单，直接set wait_timeout=10;就行了，
+		你怎么知道这么修改仅仅修改的是当前会话？很简单，你把这个黑窗口关了，你再重新开一个，再重新查，你发现没改啊。
+		2）修改全局的属性值。一般这个用的多，你到你的数据库安装包下找到my.ini，在最下面添加wait_timeout=10就可以了，然后重新启动mysql服务，我说的重新启动服务，
+		不是你关闭这个黑窗口，重新启动一个黑窗口。服务在我的电脑右键服务里去找。
+		-----
+		from: http://www.esnsc.com/news644.html
+
+		报错的DB连接16个小时没有用到；数据库配置的是默认的8小时后，连接过期；
+
+	网络解决方案：
+		testOnBorrow="true"
+		testWhileIdle="true"
+	
+	验证：
+		待？
+		
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day349 Monday, August 12, 2013
+
+1. 
+	* 落日弓
+	
+2. 落日弓
+	1）集群配置-配置houyiapi
+		监控表和 zone_ip表的初始化有问题
+		DatabaseGenAction
+			initDbForHouyiDeploy
+		log grep HouyiApiOperationUtils
+
+		变化：问题源头是因为 生成数据库SQL 步骤所生成的insert语句在 查看数据库SQL 中未显示出来。
+
+		分析：生成数据库SQL 逻辑
+		databaseGenAction.generateDeploySql
+		表： inner_sql
+			用于存储初始化数据库数据的insert语句
+
+		还是？原来的直接DB操作，替换为了接口调用
+		GenDbSqlServiceImpl
+			genDbSql
+		
+		确实改为了接口调用操作
+		HouyiApiServiceImpl
+			initHouyiDeploy
+
+	2）设计方案，验证day348第6条的数据库连接池配置
+		命令行的连接超时过后会重连；
+		但java应用貌似超时过后，还可以刷新连接的状态 ，show processlist;的Time会更新 ？
+			是TCP的keepalive配置在保持连接，此时如果把网线断掉，超出mysql的超时时间以外，则？
+				
+
+		手动kill调mysql的连接后，debug代码，在org.apache.commons.dbcp.PoolableConnectionFactory的validateObject会验证到异常，连接已关闭
+			java.sql.SQLException: validateConnection: connection closed
+		然后，会连接池重新建立一个DB连接。
+
+	3）查看集群信息
+		ClusterResourceReadOnlyFormPanel
+
+		nc信息
+
+			给共用的panel传参，以决定panel中某些组件的属性
+			panel中配置config属性
+			create时把参数带进去
+			create("panelName",{para1:val1,param2:val2})
+			-----
+			Ext.define('SmartPhone', {
+			     config: {
+				 hasTouchScreen: false,
+				 operatingSystem: 'Other',
+				 price: 500
+			     },
+			     constructor: function(cfg) {
+				 this.initConfig(cfg);
+			     }
+			});
+
+			var iPhone = new SmartPhone({
+			     hasTouchScreen: true,
+			     operatingSystem: 'iOS'
+			});
+
+			iPhone.getPrice(); // 500;
+			iPhone.getOperatingSystem(); // 'iOS'
+			iPhone.getHasTouchScreen(); // true;
+			-----
+			from: http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.Class-cfg-config
+	4) backup扩容
+		rc.local按钮日志及状态
+		ClusterChangeContainer.js
+		clusteredChangeAction.syncRcLocalForKuorong
+		修改为区分job的方式：js，java，数据库订正
+		EnvServiceImpl
+
+
+3. 大region命名
+	国家-区域-机房-a(外售)/b(内部)/c(第三方)
+
+4. extjs
+	1) 使用别处已定义好的panel，作为查看用
+	-----
+	{
+    		title: 'NC信息',
+            
+            items: [
+	            {
+			        xtype: 'ncGroupPanel'
+	            }
+	        ],
+	        
+	        listeners: {
+            	expand: function(f, eOpts) {
+            		var items = Ext.ComponentQuery.query('ncGroupPanel',f.up('form'));
+            		items[0].load(clusterId, 'clusterId');
+            	}
+            }
+    	},
+	-----
+	PS: 通过require属性引入进来，然后通过xtype方式引用此组件（会通过构造函数初始化）；最后，通过listener事件来实际加载Store的数据。			    * extjs组件查找 对象查找 
+	这里涉及，extjs查找组件的方法，extjs提供多种方式，参考
+		-----
+		在Extjs4.0中，依然可以沿用Extjs3.x中查找组件的方式，但是在Extjs4.0中，可以利用ComponentQuery，更方便找到对应组件。
+		(1) 通过组件ID获取组件："#组件ID”，如果通过这种方式，那么一定要记住在组件ID前添加#号。
+			// 通过ID获得组件:#ID
+			//   var items = Ext.ComponentQuery.query('#btn2',panel);
+		(2) 得到某一组件下所有的指定类型的组件："panel>button”，这种方式是查找所有panel组件下的所有button组件
+			// 获得panel下的所有button,这个需要注意，button必须在panel下的第一层，如果中间跨层是找不到的，如：'viewport>button'是找不到button的，因为中间有一层panel
+			//   var items = Ext.ComponentQuery.query('panel>button',panel);
+		(3) 通过xtype："treepanel”或".treepanel
+			// 如果是多个类别，可以逗号隔开，如：'gridpanel,treepanel'
+			// var items = Ext.ComponentQuery.query('button',panel);
+		(4) 如果想获取所有button并且action为save的button，则可以使用"button[action=save] "，又或者获取所有panel，并且autoscroll属性为true的panel，则可以使用"panel[autoScroll=true]"
+			  // 通过组件的属性来查找
+			  //   var items = Ext.ComponentQuery.query('button[id=btn2]',panel);
+			  note:通过属性查找的时候中括号要紧挨着类名，如上据代码button和[id=btn1]之间不能有空格！
+		(5) 还有两种方式，是查找某一组件的子组件或上级组件，例如
+			a、查找window下的form：win.down(“form”)
+			b、查找button的父组件window:button.up(“window”);
+		-----
+		from: http://blog.csdn.net/yanwushu/article/details/8434754
+	
+	这个例子，也学习如何从无到有来创建一个extjs显示页面，包含多个组件。
+
+
+
+backup houyi
+zone_ip
+	AT03-HOUYI1-A | AT03-HOUYI1 | 10.249.1.1-10.249.250.254     |  184090881 |  184154878 |
+| AT03-HOUYI1-A | AT03-HOUYI1 | 110.75.177.0-110.75.177.32    | 1850454272 | 1850454305 |
+| AT03-HOUYI1-B | AT03-HOUYI1 | 10.249.204.2-10.249.204.10    |  184142850 |  184142858 |
+| AT03-HOUYI1-B | AT03-HOUYI1 | 110.75.177.32-110.75.177.63   | 1850454304 | 1850454335 |
+
+mysql> select * from region;
++-----------+-------------+---------------+--------+-------------------+---------+------------+--------+---------------------+
+| region_no | region_name | nuwa_address  | status | big_ether_network | upgrade | visibility | weight | router_address      |
++-----------+-------------+---------------+--------+-------------------+---------+------------+--------+---------------------+
+| HOUYICI   | HOUYICI     | 10.230.204.55 |      1 |                 1 |       1 |          1 |      0 | 10.230.204.55:38930 |
++-----------+-------------+---------------+--------+-------------------+---------+------------+--------+---------------------+
+
+mysql> select * from monitor_datasource;
++--------------------------------------------------------------------------------------+----------+--------+-----------+-----------------+-----------------------+----------+------------+----------+--------------------+
+| url                                                                                  | username | passwd | region_no | index_at_region | driver_class          | min_idle | max_active | max_idle | validation_query   |
++--------------------------------------------------------------------------------------+----------+--------+-----------+-----------------+-----------------------+----------+------------+----------+--------------------+
+| jdbc:mysql://10.230.204.55:3306/houyimon?useUnicode=true&amp;characterEncoding=utf-8 | apsara   | 123456 | HOUYICI   |               0 | com.mysql.jdbc.Driver |       10 |         20 |       20 | SELECT 1 FROM DUAL |
++--------------------------------------------------------------------------------------+----------+--------+-----------+-----------------+-----------------------+----------+------------+----------+--------------------+
+
+create_monitor_db
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day250 Tuesday, August 13, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）rc.local,rc.sysinit
+		在扩容页面，backup扩容页面的日志查看问题修复
+		注意，这里有2个页面都有此按钮，莫混淆
+
+		修改ok，backup扩容页面的日志查看
+
+		再修复扩容页面的2个按钮日志
+			ClusterChangeContainer.js
+			ClusterEnlargeFormPanel.js	扩容页面
+			ClusterBackUpEnlargeFormPanel.js		backup扩容页面
+
+
+			clusteredChangeAction.syncRcLocalForKuorong
+			clusteredChangeAction.syncRcSysInitForKuorong
+
+
+
+		clusteredChangeAction.syncRcLocalForKuorong
+	2）映射zone，失败
+		将nc所在zone的信息，映射到houyidb的rack表中
+			机架映射到zone
+			zone信息来自集群信息中的配置，一般为1个或2个
+			nc和rack的映射关系，从Armory中获取，rack和zone的关系由此处生成
+
+			最后，会将这些映射关系存到houyidb中，以便控制系统可以指定zone起VM。
+
+		syscontrolAction.listBufferNcRacks
+			查询buffer组nc的rack列表
+		
+		原因：从Armory无法获取测试集群的nc数据（为QA手动导入），这样程序需要增加逻辑，判断为测试集群则不去Armory找，直接走DB查询。
+			从db查询buffer组的nc列表，从rack_zone表找到已经做了映射的rack列表，返回为在rack_zone做映射的nc列表数据。
+			nc从armory同步过来就有cluster的标识
+		
+		nc表的rackId即为其值，不是外键
+	3）API初始化缺少ZONE_IP，monitor_datasource表初始化。
+		create_cluster接口报region不存在的错，因为region_alias表有houyici这个小region记录，而region表的记录已被删除
+
+
+3. houyiai测试环境
+	ATDEV01_AG
+	10.230.227.11
+	admin,admin
+	
+	mysql服务连接被占满：
+		[admin@HOUYICI_AG]$ mysql -uxxx -pxxx
+		ERROR 1040 (HY000): Too many connections
+
+		可通过 show processlist;看那些服务占用大量连接资源
+	
+	因为暴露的是80口，需要root权限启动houyiapi
+
+	log在logs/openapi下
+
+	落日弓，通过houyiapi接口，插入大region，小region，zone_ip，zone等新建一个大region或小region所需要的数据。
+	大region数据，由agent插入，具体是在那个步骤或按钮上？
+		以便构造数据，否则houyiapi报regionNo找不到
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day251 Wednesday, August 14, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）API初始化缺少ZONE_IP，monitor_datasource表初始化。	
+		create_cluster 清除houyi库的region，region_alias,region_status,region_need_statistics
+		create_zone zone
+		join_zone_addresses zone_ip
+		
+		houyiapi在大region管理页面，选择大region对应的houyiapi。
+
+		route_ip_segment
+
+		global		
+		中定义的ajax请求有2个方法，一个是处理异步按钮，一个为同步按钮，选择的方法不同，对应的按钮状态分同步和异步：
+		-----
+		{
+		//xtype: 'splitbutton',
+		text: 'API接入',
+			    handler: function(button, e) {
+				var requestUrl = 'services?action=clusterConfigureAction.reloadCache';
+				btnAjaxRequest2(requestUrl, clusterId, button, successTrueFn1, successFalseFn1, failureFn1);
+			    }
+		    },
+		    
+		    {
+		text: 'APIProxy接入',
+		handler: function(button, e) {
+			var requestUrl = 'services?action=clusterConfigureAction.reloadCacheOfApiProxy';
+				btnAjaxRequest2(requestUrl, clusterId, button, successTrueFn1, successFalseFn1, failureFn1);
+			//Ext.Msg.alert('提示', '联系张勇添加集群，根据版本号在API PROXY页面发布');
+		}
+		},
+		-----
+		PS: 同步按钮
+
+		RackMapToZoneWindow.js
+			映射后，还需要将nc表的zone_id更新为目标zone
+			原逻辑没有更新nc表zoneId逻辑，why?
+		ResRackHandler.py
+		rackZoneAction.addRackZoneMappings
+
+	2）落日弓open api
+		参考Armory open api 
+		http://docs.alibaba-inc.com/
+
+		PET对接口需求：		    详见Aone：http://aone.alibaba-inc.com/aone2/task/19431
+			会在Aone上提需求
+			1）查询regionNo列表接口
+				以type参数，区分线上，测试，或全部的region列表
+			2）根据regionNo，以及待查询配置的key集合，返回对应key的value集合
+
+			3）查询配置项是否有更新的接口（可延后）
+				最近10min是否有配置项变动
+		open api wiki: http://wiki.ec.alibaba-inc.com/index.php/落日弓
+
+
+
+3. 提测
+	a. 出包
+		落日弓前端打包说明
+
+		1). 登陆10.250.6.23机器
+		2). cd /home/admin/wysh/luorigongweb/
+		3). checkout或者svn up需要打包分支的代码
+		4). cd 分支/rpmbuild
+		5). 打包源代码RPM：    cd rpm_code;python rpm_code.py
+		6). 打包配置文件RPM:   cd rpm_conf;python rpm_conf.py [dev|qa|product]
+		7). 将打包好的rpm拷贝到/var/www/html/luorigong/{date}的目录下,可以通过http://10.250.6.23/luorigong/{date}访问
+		落日弓后端打包说明
+
+		1). 登陆10.250.6.23机器
+		2). cd /home/admin/wysh/luorigongweb/agent
+		3). cd rpm
+		4). 打包源代码RPM：    python create_rpm.py agent 版本号
+		5). 将打包好的rpm拷贝到/var/www/html/luorigong/{date}的目录下,可以通过http://10.250.6.23/luorigong/{date}访问
+
+		PS: apache服务，提供http方式的包访问下载
+
+	b. aone上提测，加内容评论
+		8.14提测:
+		api: http://10.250.6.23/luorigong/20130814/luorigongweb-0.0.1-2599755.x86_64.rpm
+		修复问题: 修复已有bug
+		地址：http://aone.alibaba-inc.com/aone2/task/21633
+	
+	http://10.250.6.23/luoriogng/20130814
 	
