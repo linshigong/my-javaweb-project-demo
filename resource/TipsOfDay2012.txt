@@ -12,7 +12,7 @@ test
 	https://my-javaweb-project-demo.googlecode.com/svn
 google 检索 apache： site:*.apache.org 高级搜索
 	site:cnblogs.com 工厂
-multi-boxing hotkeynet 
+multi-boxing hotkeynet  keyclone
 	http://kittykittyboomboom.wordpress.com/2012/01/04/basic-guide-to-multi-boxing-world-of-warcraft/
 	octopus http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-guides/249823-multiboxing-guide-1-pc-5-accounts.html
 tmp
@@ -20,6 +20,57 @@ ft2013-04-22
 * 佳丽摄影
 
 * 6843 ft75
+* 独享带宽
+	-----
+	基本简介
+
+	独享带宽，顾名思义即托管用户独自享用一部分机房带宽资源。它适用于有较大规模的数据流量和访问量，对带宽资源要求保持恒定速率或有特殊要求的网站，
+	如较大规模的ICP服务商、视频音乐网站、以商业运营为目的的网站等。
+	大、中型托管业务中，客户对带宽有较高的要求，其网站的内容和性质决定只有使用独立的带宽资源才能满足品质的需求，而这种只给单独客户使用的带宽资源称为独享带宽。
+	独享带宽的收费方式区别于共享带宽，是两类的结合体，第一类是服务器所占用机架空间的机位费用，第二是独享带宽的费用，分门别类地计算机位费和带宽费。
+	使用独享带宽，整个带宽资源归属于一个客户，所以是按照独享带宽的最高值进行收费，而不在于客户的实际使用量。如：一个客户包一个机架另加100M独享的带宽，
+	那么哪怕这个客户所包的机架里只放了一台服务器，而这台服务器哪怕只使用了1M的带宽，那么这个客户还是必须按照一个机架的机位费和100M独享带宽的带宽费来全额支付。
+	独享带宽的优点是可自由使用带宽量，能保证速度和网络质量；而缺点则是费用昂贵，一般100M的独享带宽，每月费用从上万到数万不等，这种方式不是所有客户都能接受的。
+	编辑本段
+	独享带宽与共享带宽的区别
+
+	近段时间，一些小区用户反映[1]，他们在家上网时的速度与运营商承诺的有不小的“缩水”。电信专家提醒广大网民，影响宽带上网速度的原因有很多，其中最重要的一点
+	就是所选接入方式的带宽有独享和共享之分。
+	究竟什么是独享带宽呢？具体说来，就是用户电脑在通过宽带上网接入互联网时，数据传输的带宽是自己单独的接入到网络中，而不需要经过其他任何环节，这就是独享带宽。
+	宽带接入方式如果是独享带宽的话，那么其接入必然会相对稳定，速度可以得到有效的保证。以目前ADSL为例，它在网络拓扑结构上采用了星形结构，也就是说每个用户
+	的网络终端都有单独的一条线路与ADSL局域端相连，这样的设置使得ADSL可以保证所有带宽是由每一用户独享的，即使用户激增，其速度也不会减慢。
+	其实，所有的接入方式带宽共性与否主要是看从用户终端到电信骨干网中间的环节是否为独立的，如果不是，那么就是多人共享带宽的宽带。
+	文中开头提到的北京小区用户所使用的大都是LAN接入，其实也是带宽共享的一种。一般来说，整个小区是一个局域网，与电信骨干网相连接的带宽总出口有10M，也就是说，
+	如果小区内有一百人同时在线，那么就是有一百人在共享这10M的带宽，因此，共享带宽下的宽带接入，在上网用户稍多时可能速度会有所降低。
+	除此以外，共享带宽的另一个典型代表应该算是有线电视网的Cable Modem接入，它采用分层树形结构，总带宽与北京通信的LAN接入一样都是10M，同样需要面对用户数增加时
+	速度下降的危险。
+	-----
+	from: http://baike.baidu.com/link?url=DZ6Dcp1vV6SfkzZa0TC9fMepYE5IrzssQfF1GUaLkY2Y7cin_CGta4t9H5J24ofbceKFVMGDyfoQeiza4hIgUq
+
+* SDN
+Open SDN 
+	Big Switch Networks Open SDN Suite provides unmatched network agility, choice in network hardware, and optimized network operations.
+
+	The networking industry has been stuck in the “mainframe era” with vertically integrated hardware and software systems that are built upon proprietary architectures, 
+	and are substantially the same as they were decades ago. These legacy network architectures create operational fragility, drive excessively long provisioning times, and
+	result in unnecessarily high operational costs. The shift towards Software-Defined Networking represents the most transformative architectural trend in nearly 20 years, 
+	delivering unmatched network agility, choice in networking hardware and optimized network operations.
+
+	Software-defined networking (SDN) is a modern approach to networking that eliminates the complex and static nature of legacy distributed network architectures through 
+	the use of a standards-based software abstraction between the network control plane and underlying data forwarding plane, including both physical and virtual devices. This 
+	standards-based data plane abstraction, called OpenFlow, provides a novel approach to dynamically provision the network fabric from a centralized softwarebased controller.
+
+	An open SDN platform with centralized software provisioning delivers dramatic improvements in your network agility via programmability and automation, while substantially 
+	reducing the cost of your network operations. And using an industry standard data plane abstraction protocol like OpenFlow, you are now free to use any type and brand of 
+	data plane devices, since all the underlying network hardware is addressable through a common abstraction protocol. Importantly, OpenFlow facilitates the use of “bare metal
+	switches” and eliminates traditional vendor lock-in, giving you freedom of choice in networking like you have in other areas of your IT infrastructure, such as servers. SDN controllers 
+	also expose APIs northbound, which allow you to deploy a wide range of offthe-shelf and custom-built network applications – many of which were fundamentally not feasible prior 
+	to the advent of SDN.
+
+	Compared to legacy networking architectures that are vertically integrated from the underlying hardware, through the operating system, and into the network application functionality, 
+	the inherently open nature of an SDN represents a fundamental shift in power giving you choice, agility and automation of network operations not previously possible.	
+	from: http://www.bigswitch.com/products/open-sdn
+
 * What Are the Differences Between ISO and IMG Files?
 
 	The Facts
@@ -53,7 +104,8 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 	-----
 * 幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。
 	幂等有以下几种定义：
-	对于单目运算/函数，如果一个运算/函数对于在范围内的所有的一个数多次进行该运算所得的结果和进行一次该运算所得的结果是一样的，那么我们就称该运算/函数是幂等的。比如绝对值运算就是一个例子，在实数集中，有abs(a)=abs(abs(a))，[1]
+	对于单目运算/函数，如果一个运算/函数对于在范围内的所有的一个数多次进行该运算所得的结果和进行一次该运算所得的结果是一样的，
+	那么我们就称该运算/函数是幂等的。比如绝对值运算就是一个例子，在实数集中，有abs(a)=abs(abs(a))，[1]
 * 云端存储 文件同步
 	SkyDrive
 
@@ -597,14 +649,45 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 
 	from: http://www.cnblogs.com/Qia_sky/archive/2005/03/07/114493.html
 	
-* java基本数据类型所占字节，unicode编码
-	byte  1个字节（8个bit）
-	short 2个字节
-	char  2个字节
-	int   4个字节
-	long  8个字节
-	float 4个字节
-	double 8个字节
+* java
+	- 基本数据类型所占字节，unicode编码
+		byte  1个字节（8个bit）
+		short 2个字节
+		char  2个字节
+		int   4个字节
+		long  8个字节
+		float 4个字节
+		double 8个字节
+	- 反射，bean转换
+	-----
+	public static <T> T copy(Class<T> classType, Map<String, Object> map) {
+		Field[] fields = classType.getDeclaredFields();
+		T object = null;
+		try {
+			object = classType.newInstance();
+			for (int i = 0; i < fields.length; i++) {
+				Field field = fields[i];
+				String fieldName = field.getName();
+				if (field.getType().isArray()) {// field class type is array
+					field.setAccessible(true);
+					field.set(object, map.get(fieldName));
+				} else {
+					String value = ParameterValueGetter.getParameterValue(map, fieldName);
+					if (StringUtils.isEmpty(value)) {
+					continue;
+				}
+				field.setAccessible(true);
+				Object obj = field.getType().cast(value);//根据属性的Class类型，将值转换为对应类型
+				field.set(object, obj); //赋值
+				}
+			}
+		} catch (Exception e) {
+			LOG.error("error,failed to convert parameters to bean");
+			throw new WebException(ExceptionConstants.SYSTEM_REFLECTION_ERROR);
+		}
+		return object;
+	}
+	-----
 * 不只是为求一份工作而读书
 	Hard learing not just for a job!
 * 强烈的求知欲
@@ -710,6 +793,58 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 * 
 	The best way to learn is to practice!
 * 数据库连接池 * dbcp * c3p0
+	- DBCP配置 实践 生产环境配置
+		-----
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="com.alibaba.china.jdbc.SimpleDriver" />
+			<property name="url" value="${exodus2_database_driver_url}" />
+			<property name="username">
+				<value>${exodus2_database_driver_username}</value>
+			</property>
+			#if( $exodus2_production == "true")
+			<property name="password">
+			<bean class="com.alibaba.china.biz.common.security.EncryptDBPasswordFactory">
+			<property name="password" value="${exodus2_database_driver_password_encrypted}" />
+			</bean>
+			</property>
+			#else
+			<property name="password" value="${exodus2_database_driver_password}" />
+			#end
+			<!-- The maximum number of active connections that can be allocated from
+			this pool at the same time, or zero for no limit 
+			-->
+			<property name="maxActive"><value>14</value></property>
+			<property name="initialSize"><value>1</value></property>
+			<!--
+			The maximum number of milliseconds that the pool will wait (when there
+			are no available connections) for a connection to be returned before
+			throwing an exception
+			-->
+			<property name="maxWait"><value>60000</value></property>
+			<!--
+			The maximum number of active connections that can remain idle in the pool
+			-->
+			<property name="maxIdle"><value>14</value></property>
+			<property name="minIdle"><value>1</value></property>
+			<property name="removeAbandoned"><value>true</value></property>
+			<property name="removeAbandonedTimeout"><value>180</value></property>
+			<property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+			<!--
+			The minimum amount of time an object may sit idle in the pool 
+			before it is eligable for eviction by the idle object evictor (if any).
+			-->
+			<property name="minEvictableIdleTimeMillis"><value>1800000</value></property>
+			<property name="connectionProperties"><value>bigStringTryClob=true;clientEncoding=GBK;defaultRowPrefetch=50;serverEncoding=ISO-8859-1</value></property>
+		</bean>数据库方面发生的问题有brmms应用测试的时候发生了connection Break Pipe的问题。	  Broken Pipe
+
+		心跳检测
+		<property name="testWhileIdle"><value>true</value></property>
+		<property name="testOnBorrow"><value>false</value></property>
+		<property name="testOnReturn"><value>false</value></property>
+		<property name="validationQuery"><value>SELECT @@SQL_MODE</value></property>
+		<property name="numTestsPerEvictionRun"><value>20</value></property> <!-- 注意和maxActive保持一致 -->
+		-----
+
 	- dbcp
 		1）实现DataSource接口，提供支持连接池功能的DataSource实现，工厂模式，面向抽象编程
 		ConnectionFactory根据driver，url，username ，password等构建一个获取raw physical connections连接的工厂
@@ -2705,6 +2840,8 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 			 *         pool.returnObject(key, obj);
 			 *     }
 			 * }</pre>
+	反射获取属性Class类型
+	if (field.getType().equals(long.class) || field.getType().equals(Long.class)) {
 
 * java 数组 tomact nio实现
 	pollers = new Poller[getPollerThreadCount()];
@@ -2896,6 +3033,7 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 	/etc/hosts文件要ok，否则报：Local host name unknown: java.net.UnknownHostException: pangu_master.3: pangu_master.3
 		
 * hibernate
+	- http://www.blogjava.net/BlueDavy/archive/2006/03/27/37582.html hibernate总结
 	复习
 	一级缓存，session缓存，持久化层对象的缓存
 		待补充？
@@ -2980,6 +3118,10 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 	- 简介
 		那么，Dubbo是什么？
 		Dubbo[]是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。
+		（参看HSF的出现背景：
+		随着网站访问量增加，仅仅靠增加机器已不能满足系统的要求，于是需要对应用系统进行垂直拆分和水平拆分。在拆分之后，各个被拆分的模块如何通信？
+		如何保证性能？如何保证各个应用都以同样的方式交互？这就需要一种负责各个拆分的模块间通信的高性能服务框架(HSF)。
+		）
 
 		其核心部分包含:
 
@@ -3011,7 +3153,7 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 			---------
 			观察运行中的jvm物理内存的占用情况。
 			参数如下：
-			-heap：打印jvm heap的情况
+			-n：打印jvm heap的情况
 			-histo：打印jvm heap的直方图。其输出信息包括类名，对象数量，对象占用大小。
 			-histo：live ：同上，但是只答应存活对象的情况
 			-permstat：打印permanent generation heap情况
@@ -3138,8 +3280,13 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 * user
 ftian20130102
 
-* 学习的载体 -tip-
+* 学习的载体 -tip- * 学习网站
 	如tomcat源码：NIO，Servlet3.0，comet,classloader，服务器编程，JMX and etc.
+
+	http://www.tutorialspoint.com/cplusplus/index.htm   Simple Easy Learning
+
+	http://blog.csdn.net/marine2010/article/details/5401366 BlogJava
+
 * 编码
 	ref: http://baike.corp.taobao.com/index.php/编码规范最佳实践
 		
@@ -6550,7 +6697,8 @@ Storage for Interactive Services
 * xen 
 	- vhd (virtual hard disk)
 		Blktap2：Xen 4.0中所采用新的虚拟硬盘(VHD)提供了高性能虚拟机快照和克隆功能，此外还可以在不停止虚拟机处理的情况下做实时虚拟磁盘快照
-	- 选择一种开源实现，以此为基础，利用其API或修改源码实现业务需求；需要对开源产品本身的深入研究，然后在此基础上开发相应工具，于自身业务系统对接，实现产品（包扩相关的方方面面的再封装和管理）。
+	- 选择一种开源实现，以此为基础，利用其API或修改源码实现业务需求；需要对开源产品本身的深入研究，然后在此基础上开发相应工具，于自身业务系统对接，
+	实现产品（包扩相关的方方面面的再封装和管理）。
 	- tapdisk2
 		tap_disk 结构抽象了 tapdisk2 所有支持的 disk 类型，如 vhd, qcow, img 等等
 
@@ -7859,6 +8007,9 @@ Storage for Interactive Services
 
 * What Is a Socket	  * socket socket http socket与http
 	
+	- socket底层基于TCP协议，TCP协议保证连接的可用性，通讯的双方，在中间链路出问题时会重试，只要在超时时间内，会尝试连接。
+		看这个例子：    day347第5条
+
 	-	A socket is one end-point of a two-way communication link between two programs running on the network. 
 	Socket classes are used to represent the connection between a client program and a server program. The java.net package provides 
 	two classes--Socket and ServerSocket--that implement the client side of the connection and the server side of the connection, respectively. 
@@ -12024,6 +12175,20 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		Map map3 = (Map)JSONObject.toBean(JSONObject.fromObject(str3),HashMap.class);
 		System.out.println(map3.get("msg"));//successful
 * ibatis
+	- 批量执行
+		-----
+		getSqlMapClientTemplate().execute(new SqlMapClientCallback<Integer>() {
+			    @Override
+			    public Integer doInSqlMapClient(SqlMapExecutor executor) throws SQLException {
+				executor.startBatch();
+				
+				//...numerous update
+				
+				int rows = executor.executeBatch();
+				return rows;
+			    }
+			});
+		-----
 	- mapping文件写法一例
 		-----
 		<select id="selectClusterByIdcId" parameterClass="Long" resultClass="cluster">
@@ -12279,6 +12444,14 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		目前在很多企业的生产线上面使用。
 	from: http://xfshean.blog.163.com/blog/static/60206566201272224458578/
 * mysql
+	- pager命令，在mysql命令下，再使用shell命令筛选 ；若要取消 可以直接pager回车即可
+
+		show processlist; \P grep '10.1.170.193'
+		PAGER set to 'grep '10.1.170.193''
+
+		mysql> \P grep -v Sleep
+		参考：http://dev.mysql.com/doc/refman/5.1/en/show-processlist.html
+
 	- Mysql 查看连接数,状态    kill连接
 		命令： show processlist; 
 		如果是root帐号，你能看到所有用户的当前连接。如果是其它普通帐号，只能看到自己占用的连接。 
@@ -12287,6 +12460,8 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		from: http://blog.csdn.net/starnight_cbj/article/details/4492555
 
 	KILL [CONNECTION | QUERY] thread_id
+
+
 
 	- mysql超时设置，设置超时
 		配置mysql服务器超时时间，以满足测试场景
@@ -12638,6 +12813,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 			  SELECT to block if other transactions have modified the selected
 			  rows, you should disable autocommit.)
 		  --------
+
 	- MySQL查询结果导出到文件
 		选择某些行作为需要的数据
 			SELECT id,dbname FROM `index` into outfile "d://aaa.txt";
@@ -12833,6 +13009,55 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
 	
 * ide * eclipse
+	- eclipse
+		eclipse.ini配置
+		如果加载项目过多，导致eclipse内存不足，可配置eclipse.ini来加大内存，下面是一个例子：
+		-----
+		-startup
+		plugins/org.eclipse.equinox.launcher_1.2.0.v20110502.jar
+		--launcher.library
+		plugins/org.eclipse.equinox.launcher.gtk.linux.x86_1.1.100.v20110505
+		-product
+		org.eclipse.epp.package.jee.product
+		--launcher.defaultAction
+		openFile
+		-showsplash
+		org.eclipse.platform
+		--launcher.XXMaxPermSize
+		256m
+		--launcher.defaultAction
+		openFile
+		-vmargs
+		-Dosgi.requiredJavaVersion=1.5
+		-XX:MaxPermSize=256m
+		-Xms40m
+		-Xmx2048m
+		-----
+		PS: -Xms100，这里的值不能大于xxx，否则JVM无法启动
+
+		默认配置：
+		-----
+		-startup
+		plugins/org.eclipse.equinox.launcher_1.2.0.v20110502.jar
+		--launcher.library
+		plugins/org.eclipse.equinox.launcher.gtk.linux.x86_1.1.100.v20110505
+		-product
+		org.eclipse.epp.package.jee.product
+		--launcher.defaultAction
+		openFile
+		-showsplash
+		org.eclipse.platform
+		--launcher.XXMaxPermSize
+		256m
+		--launcher.defaultAction
+		openFile
+		-vmargs
+		-Dosgi.requiredJavaVersion=1.5
+		-XX:MaxPermSize=256m
+		-Xms40m
+		-Xmx512m
+		-----
+
 	- eclipse项目红叉
 		到Error log下查看
 	- 配置eclipse项目的源码目录和文件夹，以及导入项目的目录顺序，项目属性-Order and Export
@@ -13399,6 +13624,42 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- python list 操作
+		L.extend(iterable) -- extend list by appending elements from the  iterable
+		list1 = []
+		list2 = [1,2,3]
+		list1.extend(list2)
+		list1=[1,2,3]
+
+	- python方法，表达式边实验，边熟悉
+		-----
+		>>>if 1==2:
+		...		print 1
+		...    elif 2==2:
+		...		print 2
+		...
+		2
+		>>>
+		-----
+		PS: console中测试if elif分支语句
+
+	- 字符串操作		   String Methods
+		str.find(sub[, start[, end]]) 
+			Return the lowest index in the string where substring sub is found, such that sub is contained in the slice s[start:end]. Optional arguments start and end are interpreted as in slice notation. Return -1 if sub is not found.
+
+			Note
+			The find() method should be used only if you need to know the position of sub. To check if sub is a substring or not, use the in operator:
+
+			>>> 'Py' in 'Python'
+			True
+		
+		判断是否包含在字符串中，in：
+		        if regionType == 'localdisk':
+			    for ln in sys_crons:
+				if 'sudo /usr/ali/bin/python /etc/houyi/script/snapshot_tools_storage.py' in ln:
+				    lineStr = lineStr + '1500 144 2'
+				    sys_crons[sys_crons.index(ln)] = lineStr
+
 	- rstrip函数
 		Python中的strip用于去除字符串的首尾字符，同理，lstrip用于去除左边的字符，rstrip用于去除右边的字符。这三个函数都可传入一个参数，指定要去除的首尾字符。
 	- 终端输入，命令行输入，用户输入 用raw_input([prompt])
@@ -14614,6 +14875,52 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			the task of directly manipulating the  numerous  symbolic  links  in  those directories.
 		# chkconfig –list | grep on    # 列出所有启动的系统服务程序
 		# rpm -qa                # 查看所有安装的软件包
+
+			查询系统rpm包信息，最新安装，包有那些变更等等，比如排查某个xxx.so文件被替换的原因？
+			-----
+			PACKAGE QUERY OPTIONS:
+			--changelog
+			      Display change information for the package.
+
+			-c, --configfiles
+			      List only configuration files (implies -l).
+
+			-d, --docfiles
+			      List only documentation files (implies -l).
+
+			--dump Dump file information as follows (implies -l):
+
+			      path size mtime md5sum mode owner group isconfig isdoc rdev symlink
+
+			--filesbypkg
+			      List all the files in each selected package.
+
+			-i, --info
+			      Display  package  information, including name, version, and description.  This uses the --queryformat if one was
+			      specified.
+
+			--last Orders the package listing by install time such that the latest packages are at the top.
+
+			-l, --list
+			      List files in package.
+
+			--provides
+			      List capabilities this package provides.
+
+			-R, --requires
+			      List packages on which this package depends.
+
+			--scripts
+			      List the package specific scriptlet(s) that are used as part of the installation and uninstallation processes.
+
+			-s, --state
+			      Display the states of files in the package (implies -l).   The  state  of  each  file  is  one  of  normal,  not
+			      installed, or replaced.
+
+			--triggers, --triggerscripts
+			      Display the trigger scripts, if any, which are contained in the package.
+
+			-----
 		cat /proc/cpuinfo ：查看CPU相关参数
 		cat /proc/partitions ：查看硬盘和分区
 		cat /proc/meminfo ：查看内存信息
@@ -15028,7 +15335,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		rpm -q  ----->查询是否安装             rpm -ql ------>查询该套件所有的目录
 		rpm -qi ----->查询套件的说明资料       rpm -qc[d] ----->设定档与说明档
 		rpm -ivh  ---->安装                    rpm -V  -------->查看套件有否更动过
-		rpm -e  ------>删除                    rpm -Uvh ------->升级安装  
+		rpm -e  ------>删除                    rpm -Uvh ------->升级安装   加 --force类似--replacepkgs参数，如果没有安装则安装
 			rpm -e --nodeps python-2.3.4-14.7.el4 卸载安装包，检查依赖包
 		--nodeps ----->强行安装                --test ----->测试安装
 
@@ -32976,6 +33283,10 @@ day343 Friday, August 02, 2013
 	revision = param['revision'
 
 	Agant启动命令：/usr/local/python/bin/python jobworker/master.py orange.conf
+
+	cd /home/admin/wangys/luorigong_for_zhuge
+	nohup /usr/local/python/bin/python2.7 jobworker/master.py orange.conf &
+
 	4）去掉重启TDC按钮
 
 	10.250.6.228-MySql root 123456
@@ -33144,7 +33455,8 @@ day347 Thursday, August 08, 2013
 4. 落日弓开放接口
 	接口规范定义
 	业务接口需求分析
-5. 连接池DBCP提供的验证连接可用性功能的测试
+
+5. 连接池DBCP提供的验证连接可用性功能的测试			  * socket 
 	问题现象：
 		slbapi通过连接池与DB交互，当DB做主备切换（DNS将域名解析到备库的IP上）到备库（由只读状态改为可读写状态）时，
 		slbapi还有连接会连原来的主库（切换过后为只读状态），写操作时报Read Only。
@@ -33153,7 +33465,8 @@ day347 Thursday, August 08, 2013
 
 	org.apache.commons.dbcp.BasicDataSource的testOnBorrow属性配置为true时，根据其文档说明，会验证连接是否可用，如果不可用则从新获取连接
 	关键：
-		上面，从新获取连接时，如果jdbc配置的是域名，新连接是从已解析出来的IP获取，还是重新解析域名拿到IP，从而生成新连接？
+		上面，从新获取连接时，如果jdbc配置的是域名，新连接是从已解析出来的IP获取，还是重新解析域名拿到IP，从而生成新连接？   答：若DNS缓存已关闭，则会到新
+		IP上去建立连接，ttl=0的配置生效
 
 	验证上面的问题：
 		模拟DB主备切换过程，分析连接池中连接的更新状态
@@ -33407,7 +33720,7 @@ day348 Friday, August 09, 2013
 		at $Proxy12.basicConsume(Unknown Source)
 		at com.aliyun.luorigong.base.service.impl.ReceiveMessage$ReceiveMessageThread.run(ReceiveMessage.java:23)
 	-----
-	PS: 环境为,java1.6,jetty容器，DBCP1.4，MqSQL5.1.40-community-log
+	PS: 向已关闭的socket中写入报错，环境为,java1.6,jetty容器，DBCP1.4，MqSQL5.1.40-community-log
 		配置如下：
 		-----
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -33600,7 +33913,7 @@ create_monitor_db
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-day250 Tuesday, August 13, 2013
+day350 Tuesday, August 13, 2013
 
 1. 
 	* 落日弓
@@ -33664,7 +33977,7 @@ day250 Tuesday, August 13, 2013
 		以便构造数据，否则houyiapi报regionNo找不到
 	
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-day251 Wednesday, August 14, 2013
+day351 Wednesday, August 14, 2013
 
 1. 
 	* 落日弓
@@ -33753,3 +34066,2143 @@ day251 Wednesday, August 14, 2013
 	
 	http://10.250.6.23/luoriogng/20130814
 	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day352 Thursday, August 15, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）OPEN API文档
+		下周二，meeting
+
+3. SDN
+
+4. 重新配置了DBCP，报错
+	<property name="testWhileIdle" value="true" />
+	<property name="testOnBorrow" value="false" />
+	<property name="testOnReturn" value="false" />
+	<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+	<property name="driverClassName" value="${jdbc.driverClass}" />
+	<property name="url" value="${jdbc.url}" />
+	<property name="username" value="${jdbc.username}" />
+	<property name="password" value="${jdbc.password}" />
+	<property name="minIdle" value="${jdbc.minimumConnectionCount}" />
+	<property name="maxActive" value="${jdbc.maximumActiveTime}" />
+	<property name="maxIdle" value="${jdbc.maximumConnectionCount}" />
+	<property name="numTestsPerEvictionRun" value="${jdbc.maximumActiveTime}"/>
+	<property name="maxWait" value="60000"/>
+	<property name="timeBetweenEvictionRunsMillis" value="60000"/>
+
+	* dbcp
+	-----
+		    [DEBUG] 2013-08-15 15:16:36 [ActionContextCleanUp:68]--skipping cleanup counter=1
+		    [DEBUG] 2013-08-15 15:16:39 [CallbackServiceImpl:19]--{"body": {"job_status": "finished", "job_uuid": "eb04e4b7-94e4-4ad6-ad7d-b3a3365d2033", "result": "{\"code\" : 200, \"msg\" : \"OK\"}"}, "to": "luorigongapi"}
+		    [DEBUG] 2013-08-15 15:16:39 [SqlMapClientTemplate:168]--Opened SqlMapSession [com.ibatis.sqlmap.engine.impl.SqlMapSessionImpl@168f9a1] for iBATIS operation
+		    [DEBUG] 2013-08-15 15:16:39 [SqlMapClientTemplate:185]--Obtained JDBC Connection [jdbc:mysql://10.250.6.228:3306/luorigong?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull, UserName=root@10.1.170.193, MySQL-AB JDBC Driver] for iBATIS operation
+		    [DEBUG] 2013-08-15 15:16:39 [DataSourceUtils:332]--Returning JDBC Connection to DataSource
+		    [DEBUG] 2013-08-15 15:16:39 [DataSourceTransactionManager:861]--Should roll back transaction but cannot - no transaction available
+		    [ERROR] 2013-08-15 15:16:39 [ProxyAction:56]--
+		    java.lang.reflect.InvocationTargetException
+			at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+			at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+			at java.lang.reflect.Method.invoke(Method.java:597)
+			at com.aliyun.luorigong.base.action.ProxyAction.execute(ProxyAction.java:53)
+			at sun.reflect.GeneratedMethodAccessor182.invoke(Unknown Source)
+			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+			at java.lang.reflect.Method.invoke(Method.java:597)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invokeAction(DefaultActionInvocation.java:452)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invokeActionOnly(DefaultActionInvocation.java:291)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:254)
+			at com.opensymphony.xwork2.interceptor.DefaultWorkflowInterceptor.doIntercept(DefaultWorkflowInterceptor.java:176)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.validator.ValidationInterceptor.doIntercept(ValidationInterceptor.java:263)
+			at org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor.doIntercept(AnnotationValidationInterceptor.java:68)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ConversionErrorInterceptor.intercept(ConversionErrorInterceptor.java:133)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ParametersInterceptor.doIntercept(ParametersInterceptor.java:207)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ParametersInterceptor.doIntercept(ParametersInterceptor.java:207)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.StaticParametersInterceptor.intercept(StaticParametersInterceptor.java:190)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.MultiselectInterceptor.intercept(MultiselectInterceptor.java:75)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.CheckboxInterceptor.intercept(CheckboxInterceptor.java:94)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.FileUploadInterceptor.intercept(FileUploadInterceptor.java:243)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ModelDrivenInterceptor.intercept(ModelDrivenInterceptor.java:100)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ScopedModelDrivenInterceptor.intercept(ScopedModelDrivenInterceptor.java:141)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.debugging.DebuggingInterceptor.intercept(DebuggingInterceptor.java:267)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ChainingInterceptor.intercept(ChainingInterceptor.java:142)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.PrepareInterceptor.doIntercept(PrepareInterceptor.java:166)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.I18nInterceptor.intercept(I18nInterceptor.java:176)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.ServletConfigInterceptor.intercept(ServletConfigInterceptor.java:164)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.AliasInterceptor.intercept(AliasInterceptor.java:190)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ExceptionMappingInterceptor.intercept(ExceptionMappingInterceptor.java:187)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.aliyun.luorigong.base.action.TrimInterceptor.intercept(TrimInterceptor.java:47)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.impl.StrutsActionProxy.execute(StrutsActionProxy.java:52)
+			at org.apache.struts2.dispatcher.Dispatcher.serviceAction(Dispatcher.java:485)
+			at org.apache.struts2.dispatcher.FilterDispatcher.doFilter(FilterDispatcher.java:395)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at org.apache.struts2.dispatcher.ActionContextCleanUp.doFilter(ActionContextCleanUp.java:102)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at com.alibaba.buc.sso.client.filter.SSOFilter.doFilter(SSOFilter.java:123)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:88)
+			at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:233)
+			at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+			at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+			at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+			at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+			at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:298)
+			at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:857)
+			at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:588)
+			at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:489)
+			at java.lang.Thread.run(Thread.java:619)
+		Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+		The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+			at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:80)
+			at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:382)
+			at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:456)
+			at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:464)
+			at org.springframework.jdbc.core.JdbcTemplate.queryForList(JdbcTemplate.java:495)
+			at com.aliyun.luorigong.utils.HouyiDbUtils.getSubnetAll(HouyiDbUtils.java:257)
+			at com.aliyun.luorigong.ecs.syscontrol.service.impl.GenDbSqlServiceImpl.buildHouyidbSubnet(GenDbSqlServiceImpl.java:875)
+			at com.aliyun.luorigong.ecs.syscontrol.service.impl.GenDbSqlServiceImpl.genDbSql(GenDbSqlServiceImpl.java:143)
+			at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+			at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+			at java.lang.reflect.Method.invoke(Method.java:597)
+			at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:318)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:183)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:150)
+			at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:110)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+			at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:90)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+			at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:202)
+			at $Proxy53.genDbSql(Unknown Source)
+			at com.aliyun.luorigong.ecs.syscontrol.action.ClusteredChangeAction.generateKuorongSql(ClusteredChangeAction.java:143)
+			... 80 more
+		Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+		The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+			at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+			at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+			at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+			at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1116)
+			at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:344)
+			at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2332)
+			at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2369)
+			at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2153)
+			at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:792)
+			at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+			at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+			at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+			at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+			at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:381)
+			at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:305)
+			at java.sql.DriverManager.getConnection(DriverManager.java:582)
+			at java.sql.DriverManager.getConnection(DriverManager.java:154)
+			at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriverManager(DriverManagerDataSource.java:173)
+			at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriver(DriverManagerDataSource.java:164)
+			at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnectionFromDriver(AbstractDriverBasedDataSource.java:149)
+			at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnection(AbstractDriverBasedDataSource.java:119)
+			at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
+			at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
+			... 101 more
+		Caused by: java.net.ConnectException: Connection timed out: connect
+			at java.net.PlainSocketImpl.socketConnect(Native Method)
+			at java.net.PlainSocketImpl.doConnect(PlainSocketImpl.java:333)
+			at java.net.PlainSocketImpl.connectToAddress(PlainSocketImpl.java:195)
+			at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:182)
+			at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:366)
+			at java.net.Socket.connect(Socket.java:519)
+			at java.net.Socket.connect(Socket.java:469)
+			at java.net.Socket.<init>(Socket.java:366)
+			at java.net.Socket.<init>(Socket.java:209)
+			at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:257)
+			at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:294)
+			... 121 more
+		[ERROR] 2013-08-15 15:16:39 [ProxyAction:60]--Could not get JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+		The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+		    org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+		The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+			at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:80)
+			at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:382)
+			at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:456)
+			at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:464)
+			at org.springframework.jdbc.core.JdbcTemplate.queryForList(JdbcTemplate.java:495)
+			at com.aliyun.luorigong.utils.HouyiDbUtils.getSubnetAll(HouyiDbUtils.java:257)
+			at com.aliyun.luorigong.ecs.syscontrol.service.impl.GenDbSqlServiceImpl.buildHouyidbSubnet(GenDbSqlServiceImpl.java:875)
+			at com.aliyun.luorigong.ecs.syscontrol.service.impl.GenDbSqlServiceImpl.genDbSql(GenDbSqlServiceImpl.java:143)
+			at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+			at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+			at java.lang.reflect.Method.invoke(Method.java:597)
+			at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:318)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:183)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:150)
+			at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:110)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+			at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:90)
+			at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:172)
+			at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:202)
+			at $Proxy53.genDbSql(Unknown Source)
+			at com.aliyun.luorigong.ecs.syscontrol.action.ClusteredChangeAction.generateKuorongSql(ClusteredChangeAction.java:143)
+			at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+			at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+			at java.lang.reflect.Method.invoke(Method.java:597)
+			at com.aliyun.luorigong.base.action.ProxyAction.execute(ProxyAction.java:53)
+			at sun.reflect.GeneratedMethodAccessor182.invoke(Unknown Source)
+			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+			at java.lang.reflect.Method.invoke(Method.java:597)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invokeAction(DefaultActionInvocation.java:452)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invokeActionOnly(DefaultActionInvocation.java:291)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:254)
+			at com.opensymphony.xwork2.interceptor.DefaultWorkflowInterceptor.doIntercept(DefaultWorkflowInterceptor.java:176)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.validator.ValidationInterceptor.doIntercept(ValidationInterceptor.java:263)
+			at org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor.doIntercept(AnnotationValidationInterceptor.java:68)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ConversionErrorInterceptor.intercept(ConversionErrorInterceptor.java:133)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ParametersInterceptor.doIntercept(ParametersInterceptor.java:207)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ParametersInterceptor.doIntercept(ParametersInterceptor.java:207)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.StaticParametersInterceptor.intercept(StaticParametersInterceptor.java:190)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.MultiselectInterceptor.intercept(MultiselectInterceptor.java:75)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.CheckboxInterceptor.intercept(CheckboxInterceptor.java:94)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.FileUploadInterceptor.intercept(FileUploadInterceptor.java:243)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ModelDrivenInterceptor.intercept(ModelDrivenInterceptor.java:100)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ScopedModelDrivenInterceptor.intercept(ScopedModelDrivenInterceptor.java:141)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.debugging.DebuggingInterceptor.intercept(DebuggingInterceptor.java:267)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ChainingInterceptor.intercept(ChainingInterceptor.java:142)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.PrepareInterceptor.doIntercept(PrepareInterceptor.java:166)
+			at com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:98)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.I18nInterceptor.intercept(I18nInterceptor.java:176)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.interceptor.ServletConfigInterceptor.intercept(ServletConfigInterceptor.java:164)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.AliasInterceptor.intercept(AliasInterceptor.java:190)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.opensymphony.xwork2.interceptor.ExceptionMappingInterceptor.intercept(ExceptionMappingInterceptor.java:187)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at com.aliyun.luorigong.base.action.TrimInterceptor.intercept(TrimInterceptor.java:47)
+			at com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:248)
+			at org.apache.struts2.impl.StrutsActionProxy.execute(StrutsActionProxy.java:52)
+			at org.apache.struts2.dispatcher.Dispatcher.serviceAction(Dispatcher.java:485)
+			at org.apache.struts2.dispatcher.FilterDispatcher.doFilter(FilterDispatcher.java:395)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at org.apache.struts2.dispatcher.ActionContextCleanUp.doFilter(ActionContextCleanUp.java:102)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at com.alibaba.buc.sso.client.filter.SSOFilter.doFilter(SSOFilter.java:123)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:88)
+			at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+			at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+			at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+			at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:233)
+			at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+			at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+			at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+			at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+			at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:298)
+			at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:857)
+			at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:588)
+			at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:489)
+			at java.lang.Thread.run(Thread.java:619)
+		Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+		The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+			at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+			at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+			at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+			at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1116)
+			at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:344)
+			at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2332)
+			at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2369)
+			at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2153)
+			at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:792)
+			at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+			at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+			at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+			at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+			at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+			at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:381)
+			at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:305)
+			at java.sql.DriverManager.getConnection(DriverManager.java:582)
+			at java.sql.DriverManager.getConnection(DriverManager.java:154)
+			at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriverManager(DriverManagerDataSource.java:173)
+			at org.springframework.jdbc.datasource.DriverManagerDataSource.getConnectionFromDriver(DriverManagerDataSource.java:164)
+			at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnectionFromDriver(AbstractDriverBasedDataSource.java:149)
+			at org.springframework.jdbc.datasource.AbstractDriverBasedDataSource.getConnection(AbstractDriverBasedDataSource.java:119)
+			at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
+			at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
+			... 101 more
+		Caused by: java.net.ConnectException: Connection timed out: connect
+			at java.net.PlainSocketImpl.socketConnect(Native Method)
+			at java.net.PlainSocketImpl.doConnect(PlainSocketImpl.java:333)
+			at java.net.PlainSocketImpl.connectToAddress(PlainSocketImpl.java:195)
+			at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:182)
+			at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:366)
+			at java.net.Socket.connect(Socket.java:519)
+			at java.net.Socket.connect(Socket.java:469)
+			at java.net.Socket.<init>(Socket.java:366)
+			at java.net.Socket.<init>(Socket.java:209)
+			at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:257)
+			at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:294)
+			... 121 more
+		[DEBUG] 2013-08-15 15:16:39 [XWorkConverter:68]--Property: ignoreHierarchy
+	-----
+	PS: 创建DB连接出错，连接超时 ；与Broken·pipe的报错不同
+
+	上面DBCP的配置，1min会检测idle的连接，下面的结果显示，只有一个连接是active的：
+		| Id  | User      | Host				 | db           | Command | Time | State | Info             |
+		| 185 | root      | 10.1.170.193:61455 | luorigong | Sleep   |    2 |       | NULL             |
+		| 186 | root      | 10.1.170.193:61491 | luorigong | Sleep   |    2 |       | NULL             |
+		| 187 | root      | 10.1.170.193:61492 | luorigong | Sleep   |    2 |       | NULL             |
+		| 188 | root      | 10.1.170.193:61493 | luorigong | Sleep   |    2 |       | NULL             |
+		| 189 | root      | 10.1.170.193:61494 | luorigong | Sleep   |    2 |       | NULL             |
+		| 190 | root      | 10.1.170.193:61495 | luorigong | Sleep   |    2 |       | NULL             |
+		| 191 | root      | 10.1.170.193:61496 | luorigong | Sleep   |    2 |       | NULL             |
+		| 192 | root      | 10.1.170.193:61497 | luorigong | Sleep   |    2 |       | NULL             |
+		| 193 | root      | 10.1.170.193:61498 | luorigong | Sleep   |    2 |       | NULL             |
+		| 194 | root      | 10.1.170.193:61499 | luorigong | Sleep   |   78 |       | NULL             |
+		PS: 对于Active的连接，不会进行Idle连接检测，对应也不会刷新mysql服务器上连接的Time状态。
+		发现194这个id的连接，只有在应用使用到此连接时，才会重置TIme列的状态，并不会再idle检测中更新，一但一直没更新连接失效时，此时
+		没有配置testOnBorrow，则使用时会报错。
+
+		为什么，194会漏掉Idle检测？
+		分析dbcp的testWhenIdle机制：
+			
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day353 Friday, August 16, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1) dbcp配置测试
+
+3. dbcp，连接没有归还 * dbcp
+	| Id  | User      | Host               | db           | Command | Time | State | Info             |
+	606 | root      | 10.1.170.193:58209 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 607 | root      | 10.1.170.193:58239 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 608 | root      | 10.1.170.193:58240 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 609 | root      | 10.1.170.193:58241 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 610 | root      | 10.1.170.193:58242 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 611 | root      | 10.1.170.193:58243 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 612 | root      | 10.1.170.193:58244 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 613 | root      | 10.1.170.193:58245 | luorigong    | Sleep   |   18 |       | NULL             |
+	| 614 | root      | 10.1.170.193:58246 | luorigong    | Sleep   |    0 |       | NULL             |
+	| 615 | root      | 10.1.170.193:58247 | luorigong    | Sleep   |  161 |       | NULL             |
+	PS: 614为刷log用的db连接；615貌似为游离的连接，其他连接都被心跳更新了，但它却没有，原因？
+	是否为没有归还到池中
+	
+	各种原因无法debug到检测线程运行的evict()方法中，通过dump heap的方式分析heap中的对象。    java堆分析 java heap分析
+	win:
+		jmap -dump:file=c:\heap_dump_4064.txt 4064
+	用heap分析工具分析，此处用eclipse插件Memory Analysis来分析：
+		从对象树视图中，看到确实有11个 com.mysql.jdbc.JDBC4Connection 对象对应上面的11个连接。
+	
+	选择其中一条，右键，选择 "Path to GC Roots" -> "With all references"，查看这11个连接，发现其中1个连接的引用与其他10个的引用关系不同：
+		-----
+		Class Name                                                                                                                                                         | Shallow Heap | Retained Heap
+		--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		com.mysql.jdbc.JDBC4Connection @ 0x69f0b78                                                                                                                         |        1,120 |        65,024
+		|- _conn org.apache.commons.dbcp.PoolableConnection @ 0x69f0b30                                                                                                    |           40 |           120
+		|  '- delegate, _conn org.apache.commons.dbcp.PoolingDataSource$PoolGuardConnectionWrapper @ 0x6a651d8                                                             |           48 |           248
+		|     '- connection org.springframework.jdbc.datasource.SimpleConnectionHandle @ 0x6a651c8                                                                         |           16 |           264
+		|        '- connectionHandle org.springframework.jdbc.datasource.ConnectionHolder @ 0x6a65178                                                                      |           40 |           304
+		|           '- value java.util.HashMap$Entry @ 0x6a651a0                                                                                                           |           24 |            24
+		|              '- [11] java.util.HashMap$Entry[16] @ 0x6a65100                                                                                                     |           80 |           104
+		|                 '- table java.util.HashMap @ 0x6a65088                                                                                                           |           40 |           144
+		|                    '- value java.lang.ThreadLocal$ThreadLocalMap$Entry @ 0x670f698                                                                               |           32 |           176
+		|                       '- [15] java.lang.ThreadLocal$ThreadLocalMap$Entry[32] @ 0x6a1b078                                                                         |          144 |         1,536
+		|                          '- table java.lang.ThreadLocal$ThreadLocalMap @ 0x6708960                                                                               |           24 |         1,560
+		|                             '- threadLocals com.aliyun.luorigong.base.service.impl.ReceiveMessage$ReceiveMessageThread @ 0x67027e8  Thread-2 Native Stack, Thread|          112 |         2,240
+		--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		Class Name                                                                                     | Shallow Heap | Retained Heap
+		------------------------------------------------------------------------------------------------------------------------------
+		com.mysql.jdbc.JDBC4Connection @ 0x7c63c78                                                     |        1,120 |        63,232
+		'- _conn org.apache.commons.dbcp.PoolableConnection @ 0x7c32800                                |           40 |           176
+		   '- value org.apache.commons.pool.impl.GenericKeyedObjectPool$ObjectTimestampPair @ 0x4a74930|           24 |           200
+		      '- _val org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x49c6538           |           24 |           224
+			 '- _prev org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x6347e20       |           24 |            24
+			    '- _head org.apache.commons.pool.impl.CursorableLinkedList @ 0x6347e08             |           24 |           152
+			       '- _pool org.apache.commons.pool.impl.GenericObjectPool @ 0x6347d78             |           96 |         2,176
+				  |- this$0 org.apache.commons.pool.impl.GenericObjectPool$Evictor @ 0x6347e88 |           40 |            40
+				  |- connectionPool org.apache.commons.dbcp.BasicDataSource @ 0x60875a0        |          128 |           128
+		------------------------------------------------------------------------------------------------------------------------------
+
+		Class Name                                                                                       | Shallow Heap | Retained Heap
+		--------------------------------------------------------------------------------------------------------------------------------
+		com.mysql.jdbc.JDBC4Connection @ 0x47c5440                                                       |        1,120 |        62,168
+		|- _conn org.apache.commons.dbcp.PoolableConnection @ 0x47eb828                                  |           40 |           120
+		|  '- value org.apache.commons.pool.impl.GenericKeyedObjectPool$ObjectTimestampPair @ 0x47eb8e0  |           24 |           144
+		|     '- _val org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x49c6c48             |           24 |           168
+		|        '- _prev org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x49c6538         |           24 |           224
+		|           '- _prev org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x6347e20      |           24 |            24
+		|              '- _head org.apache.commons.pool.impl.CursorableLinkedList @ 0x6347e08            |           24 |           152
+		|                 '- _pool org.apache.commons.pool.impl.GenericObjectPool @ 0x6347d78            |           96 |         2,176
+		|                    |- this$0 org.apache.commons.pool.impl.GenericObjectPool$Evictor @ 0x6347e88|           40 |            40
+		|                    |- connectionPool org.apache.commons.dbcp.BasicDataSource @ 0x60875a0       |          128 |           128
+		--------------------------------------------------------------------------------------------------------------------------------
+
+		Class Name                                                                                                | Shallow Heap | Retained Heap
+		-----------------------------------------------------------------------------------------------------------------------------------------
+		com.mysql.jdbc.JDBC4Connection @ 0x48046f0                                                                |        1,120 |        62,168
+		|- _conn org.apache.commons.dbcp.PoolableConnection @ 0x482aaa0                                           |           40 |           120
+		|  '- value org.apache.commons.pool.impl.GenericKeyedObjectPool$ObjectTimestampPair @ 0x482ab58           |           24 |           144
+		|     '- _val org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x49c7370                      |           24 |           168
+		|        '- _prev org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x49c6c48                  |           24 |           168
+		|           '- _prev org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x49c6538               |           24 |           224
+		|              '- _prev org.apache.commons.pool.impl.CursorableLinkedList$Listable @ 0x6347e20            |           24 |            24
+		|                 '- _head org.apache.commons.pool.impl.CursorableLinkedList @ 0x6347e08                  |           24 |           152
+		|                    '- _pool org.apache.commons.pool.impl.GenericObjectPool @ 0x6347d78                  |           96 |         2,176
+		|                       |- this$0 org.apache.commons.pool.impl.GenericObjectPool$Evictor @ 0x6347e88      |           40 |            40
+		|                       |  |- <Java Local> java.util.TimerThread @ 0x63480f0  Timer-0 Native Stack, Thread|          112 |         1,168
+		|                       |  |- [1] java.util.TimerTask[128] @ 0x6347ee0                                    |          528 |           528
+		|                       |  '- Total: 2 entries                                                            |              |              
+		|                       |- connectionPool org.apache.commons.dbcp.BasicDataSource @ 0x60875a0             |          128 |           128
+		-----------------------------------------------------------------------------------------------------------------------------------------
+	-----
+	PS: 对比可以看出，第一个JDBC4Connection并不在dbcp的池中，这样也就不会受DBCP验证机制（idle检测等）的检查，从而逃出了DB连接检测。
+	一但此DB连接失效，再去使用时就会报：Broken Pipe错误。lol
+
+	根据堆中GC ROOT关系引用，找到是ReceiveMessageThread这个实例的线程持有此连接，被jobInstDao引用。
+	此时，通过点击一个会触发jobInstDao操作db的按钮，比如有MQ返回job状态变化的"停止KV"，收到状态变化后，jobInstDao会使用此id=615的连接进行
+	持久化操作，然后就可以看到615这个DB连接Time字段被更新了。
+
+	那么，id=615这个DB连接为什么没有在DBCP连接池中管理呢？
+		背景环境：
+			1）应用采用Spring配置式事务管理，配置在Service层
+				Service层事务配置
+				-----
+				<tx:advice id="txAdvice" transaction-manager="txManager">
+					<tx:attributes>
+						<tx:method name="get*" read-only="true" />
+						<tx:method name="select*" read-only="true" />
+						<tx:method name="list*" read-only="true" />
+						<tx:method name="count*" read-only="true" />
+						<tx:method name="delete*" propagation="REQUIRED" isolation="REPEATABLE_READ"
+							timeout="-1" read-only="false" rollback-for="java.lang.Exception" />
+						<tx:method name="update*" propagation="REQUIRED" isolation="REPEATABLE_READ"
+							timeout="-1" read-only="false" rollback-for="java.lang.Exception" />
+						<tx:method name="add*" propagation="REQUIRED" isolation="REPEATABLE_READ"
+							timeout="-1" read-only="false" rollback-for="java.lang.Exception" />
+						<tx:method name="create*" propagation="REQUIRED" isolation="REPEATABLE_READ"
+							timeout="-1" read-only="false" rollback-for="java.lang.Exception" />
+						<tx:method name="*" propagation="SUPPORTS" />
+					</tx:attributes>
+				</tx:advice>
+				-----
+			2）ReceiveMessageThread这个实例所在的线程和应用一起一直运行的
+			3）使用jobInstDao的Service层方法名未被配置到事务中
+
+		根据上面条件，推导：
+			由于Service没有配置全局事务，导致jobInstDao开启的事务不会自动提交，事务没提交，也就不会归还到DBCP池中，有下面代码为证：
+			org.springframework.jdbc.datasource.DataSourceUtils
+			-----
+			public static void doReleaseConnection(Connection con, DataSource dataSource) throws SQLException {
+				if (con == null) {
+					return;
+				}
+
+				if (dataSource != null) {
+					ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
+					if (conHolder != null && connectionEquals(conHolder, con)) {
+						// It's the transactional Connection: Don't close it.
+						conHolder.released();
+						return;
+					}
+				}
+
+				// Leave the Connection open only if the DataSource is our
+				// special SmartDataSoruce and it wants the Connection left open.
+				if (!(dataSource instanceof SmartDataSource) || ((SmartDataSource) dataSource).shouldClose(con)) {
+					logger.debug("Returning JDBC Connection to DataSource");
+					con.close();
+				}
+			}
+			-----
+			PS: 应用中使用 org.springframework.orm.ibatis.SqlMapClientTemplate 来进行ibatis的dao操作，SqlMapClientTemplate中使用了回调模式，在执行完
+			回调操作后，会调用上面DataSourceUtils实例的doReleaseConnection方法来关闭或回收连接，注意，此时如果DB连接是带事务的，则不关闭。
+
+			另外，此处还需要DB连接是被此处线程持有的；id=615这个连接是被ReceiveMessageThread实例所在的线程持有，故不受DBCP的管理。
+		
+		验证：
+			将jobInstDao的Service层方法加入写事务配置，这样就由spring来统一管理事务。
+	
+	结论：
+		id=615的DB连接不受DBCP管理，故一但连接失效也不会被检查到，使用此失效连接（比如，TCP keepalive超时后关闭）就会报Broken pipe错误。
+		而其不受DBCP管理的原因是，由于事务配置问题，导致其获取连接的方式不一致，从而也不受DBCP管理。
+		
+		事务泄露？
+
+	
+
+	题外：
+		测试时，测试数据库所在的磁盘满了，导致连接Lock，sql无法执行。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day354 Monday, August 19, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）openapi
+		参考Armory open api 
+		http://docs.alibaba-inc.com/
+
+		PET对接口需求：		    详见Aone：http://aone.alibaba-inc.com/aone2/task/19431
+			会在Aone上提需求
+			1）查询regionNo列表接口
+				以type参数，区分线上，测试，或全部的region列表
+			2）根据regionNo，以及待查询配置的key集合，返回对应key的value集合
+
+			3）查询配置项是否有更新的接口（可延后）
+				最近10min是否有配置项变动
+		open api wiki: http://wiki.ec.alibaba-inc.com/index.php/落日弓
+		PET配置模板，配置项：
+		http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9248310#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0
+	2）工作量估算
+		Aone上 ，wiki上看项目变更，落日弓跟踪项目
+			ecs产品项目，数据库变动，反映到落日弓上，需要做哪些工作
+
+	3）call meeting
+		明天api设计评审
+		pet
+			提供通用接口，尽量不提供特用接口
+
+		region查询接口
+	4）CI上出包	落日弓提测
+		http://jenkins.aliyun-inc.com:8080/job/CI.luorigongweb.build/
+
+		选择 落日弓
+		配置编译
+			选择编译参数
+		编译
+		找到对应的rpm包
+		从Aone提测
+	5）线上发布
+
+
+3. 落日弓跟踪项目
+	有一套跟踪项目的文档模板
+	每期项目，填写模板中对应的内容项即可整理项目对落日弓的需求
+
+	填写好模板，对应转化为落日弓的开发或设计需求。
+	此模板由ECS项目PM填写，落日弓与项目对接依据此文档，每期项目都独立维护一份这样的文档。
+		以模块划分：数据库、配置、组件/服务、cron table、网络
+
+4. HSF（Highspeed Service Framework）淘宝(taobao)HSF框架	    * HSF		* 服务型中间件
+	http://hsf.taobao.net/hsfversion/
+	-----
+		一、背景
+
+		随着网站访问量增加，仅仅靠增加机器已不能满足系统的要求，于是需要对应用系统进行垂直拆分和水平拆分。在拆分之后，
+		各个被拆分的模块如何通信？如何保证性能？如何保证各个应用都以同样的方式交互？这就需要一种负责各个拆分的模块间通信的高性能服务框架(HSF)。
+
+
+
+		二、HSF做的事情
+
+		1. 标准Service方式的RPC
+
+		1）. service定义：基于OSGI的service定义方式
+
+		2）. TCP/IP通信：
+
+		IO方式：nio,采用mina框架
+
+		连接方式：长连接
+
+		服务器端有限定大小的连接池
+
+		WebService方式
+
+		3）. 序列化：hessian序列化机制
+
+		2. 软件负载体系
+
+		采用软件实现负载均衡，支持随机、轮询、权重、按应用路由等方式。软件负载均衡没有中间点，通过配置中心统一管理。配置中心收集服务提供者
+		和消费者的注册信息，以推送的方式发送到服务消费者直接使用，不经过中间点；注册中心可以感应服务器的状态，出现failover时，实现注册信息重新推送。
+
+		3. 模块化、动态化
+
+		4. 服务治理
+
+		服务治理利用注册中心实现服务信息管理（服务提供者、调用者信息查询）、服务依赖关系分析、服务运行状况感知、服务可用性保障，如：路由调整、
+		流量分配、服务端降级、调用端降级等
+	-----
+	PS: KFC是其c++版本实现
+	
+	HSF用户手册：http://confluence.taobao.ali.com/pages/viewpage.action?pageId=193625414
+	
+	没有开源，可看另外一个开源实现dubbo
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day355 Tuesday, August 20, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）磐禹项目 开启
+		分析 磐石项目 的改动，对应落日弓需要做的改动
+		拉新分支
+		web端：	 http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/branches/luorigongweb_for_panyu/ 
+		Agent端：http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigong/branches/luorigong_for_panyu/ 
+
+	2）属性Agent端代码，准备编写Agent段程序 python
+		luorigongpy\orange\jobworker目录下    （原python api在orange\webapp\handlers目录下）
+
+		原python API处理java web请求的服务是在 orange\webapp\master.py 启动的；
+		此处Agent服务由  orange\jobworker\master.py 启动，从这里开始Agant服务。
+		
+		Agent启动方式：example: python master orange.conf or python master [ID] [CONFIG]
+	3) 磐禹项目 任务
+		a. 去掉rc.sysinit按钮
+		b. 磐石项目数据库变动，对应落日弓修改
+
+
+
+5. dubbo，hsf
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day356 Wednesday, August 21, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	开发
+	1）调用houyiapi的create_cluster增加version参数(值为1.0)
+	2）调用houyiapi的create_zone增加参数disk_type;(locadisk集群值为io1,io2，raf集群值为dfs1,dfs2)
+		目前zone的数据是在集群信息中录入，需要在2个字段，分别记录zoneA，zoneB的disk_type类型
+
+		找houyiapi PD要最新接口文档
+
+		集群信息页面加，2个zone的disk_type字段，并在集群存储类型变化时，combobox去掉对应的项（通过取得store，然后去掉record的方式，getRange）
+
+	3）houyidb初始化nc表时，不需要初始化cpu,memory,disk
+
+
+3. tomcat调用栈分析
+	在Action方法里设置debug，然后查看调用堆栈信息。
+
+	Test URl: 
+	http://localhost:8090/luorigong-1.0/services?action=syscontrolAction.listDataCenterTreeItem&_dc=1377050499439&nodeId=2&type=areaId&sort=%5B%7B%22property%22%3A%22leaf%22%2C%22direction%22%3A%22ASC%22%7D%2C%7B%22property%22%3A%22text%22%2C%22direction%22%3A%22ASC%22%7D%5D&node=90cbf77d-48db-49d6-9f39-f37a16edf13a
+	
+	不同Connector对应使用不同的Endpoint：
+	org.apache.tomcat.util.net.JIoEndpoint
+		Handle incoming TCP connections. This class implement a simple server model: one listener thread accepts on a socket and creates a new worker thread for each incoming connection. 
+		More advanced Endpoints will reuse the threads, use queues, etc.
+		PS: 一个监听线程处理TCP连接，为每个接入的Socket新建一个Worker线程来处理
+
+		堆栈例子：
+		-----
+		Daemon Thread [http-8090-13] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction.listDataCenterTreeItem(java.util.Map<java.lang.String,java.lang.Object>) line: 78	
+			sun.reflect.GeneratedMethodAccessor145.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			sun.reflect.DelegatingMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object...) line: not available	
+			com.aliyun.luorigong.base.action.ProxyAction.execute() line: 53	
+			sun.reflect.GeneratedMethodAccessor144.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			sun.reflect.DelegatingMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object...) line: not available	
+			com.opensymphony.xwork2.DefaultActionInvocation.invokeAction(java.lang.Object, com.opensymphony.xwork2.config.entities.ActionConfig) line: 452	
+			com.opensymphony.xwork2.DefaultActionInvocation.invokeActionOnly() line: 291	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 254	
+			com.opensymphony.xwork2.interceptor.DefaultWorkflowInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 176	
+			com.opensymphony.xwork2.interceptor.DefaultWorkflowInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor(com.opensymphony.xwork2.validator.ValidationInterceptor).doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 263	
+			org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 68	
+			org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.StrutsConversionErrorInterceptor(com.opensymphony.xwork2.interceptor.ConversionErrorInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 133	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ParametersInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 207	
+			com.opensymphony.xwork2.interceptor.ParametersInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.ActionMappingParametersInteceptor(com.opensymphony.xwork2.interceptor.ParametersInterceptor).doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 207	
+			org.apache.struts2.interceptor.ActionMappingParametersInteceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.StaticParametersInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 190	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.MultiselectInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 75	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.CheckboxInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 94	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.FileUploadInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 243	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ModelDrivenInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 100	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ScopedModelDrivenInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 141	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.debugging.DebuggingInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 267	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ChainingInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 142	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.PrepareInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 166	
+			com.opensymphony.xwork2.interceptor.PrepareInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.I18nInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 176	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.ServletConfigInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 164	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.AliasInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 190	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ExceptionMappingInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 187	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.aliyun.luorigong.base.action.TrimInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 47	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.impl.StrutsActionProxy.execute() line: 52	
+			org.apache.struts2.dispatcher.Dispatcher.serviceAction(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.ServletContext, org.apache.struts2.dispatcher.mapper.ActionMapping) line: 485	
+			org.apache.struts2.dispatcher.FilterDispatcher.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 395	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			org.apache.struts2.dispatcher.ActionContextCleanUp.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 102	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			com.alibaba.buc.sso.client.filter.SSOFilter.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 123	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.FilterChain) line: 88	
+			org.springframework.web.filter.CharacterEncodingFilter(org.springframework.web.filter.OncePerRequestFilter).doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 76	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			org.apache.catalina.core.StandardWrapperValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 233	
+			org.apache.catalina.core.StandardContextValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 191	
+			org.apache.catalina.core.StandardHostValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 127	
+			org.apache.catalina.valves.ErrorReportValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 102	
+			org.apache.catalina.core.StandardEngineValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 109	
+			org.apache.catalina.ha.tcp.ReplicationValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 347	
+			org.apache.catalina.ha.session.JvmRouteBinderValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 227	
+			org.apache.catalina.connector.CoyoteAdapter.service(org.apache.coyote.Request, org.apache.coyote.Response) line: 293	
+			org.apache.coyote.http11.Http11Processor.process(java.net.Socket) line: 859	
+			org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(java.net.Socket) line: 602	
+			org.apache.tomcat.util.net.JIoEndpoint$Worker.run() line: 489	
+			java.lang.Thread.run() line: not available	
+		-----
+	
+	org.apache.tomcat.util.net.NioEndpoint
+		NIO tailored thread pool, providing the following services: 
+			Socket acceptor thread 
+			Socket poller thread 
+			Worker threads pool 
+		When switching to Java 5, there's an opportunity to use the virtual machine's thread pool.
+		PS: 一个处理接入连接的线程，一个poller线程，一个工作线程池
+		
+		堆栈例子：
+		所有线程
+		-----
+		Java HotSpot(TM) Client VM[localhost:8000]	
+			Daemon Thread [http-8090-exec-2] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-1] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [TP-Monitor] (Running)	
+			Daemon Thread [TP-Processor4] (Running)	
+			Daemon Thread [TP-Processor3] (Running)	
+			Daemon Thread [TP-Processor2] (Running)	
+			Daemon Thread [TP-Processor1] (Running)	
+			Daemon Thread [http-8090-Acceptor-0] (Running)	
+			Daemon Thread [http-8090-ClientPoller-1] (Running)	
+			Daemon Thread [http-8090-ClientPoller-0] (Running)	
+			Daemon Thread [ContainerBackgroundProcessor[StandardEngine[Catalina]]] (Running)	
+			Thread [pool-2-thread-1] (Running)	
+			Thread [Thread-6] (Running)	
+			Thread [AMQP Connection 10.250.8.214:5672] (Running)	
+			Daemon Thread [GroupChannel-Heartbeat-1] (Running)	
+			Daemon Thread [Tribes-MembershipSender] (Running)	
+			Daemon Thread [Tribes-MembershipReceiver] (Running)	
+			Daemon Thread [NioReceiver] (Running)	
+			Daemon Thread [NioBlockingSelector.BlockPoller-1] (Running)	
+			Thread [main] (Running)	
+			Daemon Thread [http-8090-exec-3] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-4] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-5] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-6] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-7] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-8] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-9] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-10] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-11] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-12] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-13] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-14] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-15] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			Daemon Thread [http-8090-exec-16] (Running)	
+		-----
+		PS: 一个
+
+		-----
+		Daemon Thread [http-8090-exec-15] (Suspended (breakpoint at line 78 in com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction))	
+			com.aliyun.luorigong.ecs.syscontrol.action.SyscontrolAction.listDataCenterTreeItem(java.util.Map<java.lang.String,java.lang.Object>) line: 78	
+			sun.reflect.NativeMethodAccessorImpl.invoke0(java.lang.reflect.Method, java.lang.Object, java.lang.Object[]) line: not available [native method]	
+			sun.reflect.NativeMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			sun.reflect.DelegatingMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object...) line: not available	
+			com.aliyun.luorigong.base.action.ProxyAction.execute() line: 53	
+			sun.reflect.NativeMethodAccessorImpl.invoke0(java.lang.reflect.Method, java.lang.Object, java.lang.Object[]) line: not available [native method]	
+			sun.reflect.NativeMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			sun.reflect.DelegatingMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) line: not available	
+			java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object...) line: not available	
+			com.opensymphony.xwork2.DefaultActionInvocation.invokeAction(java.lang.Object, com.opensymphony.xwork2.config.entities.ActionConfig) line: 452	
+			com.opensymphony.xwork2.DefaultActionInvocation.invokeActionOnly() line: 291	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 254	
+			com.opensymphony.xwork2.interceptor.DefaultWorkflowInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 176	
+			com.opensymphony.xwork2.interceptor.DefaultWorkflowInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor(com.opensymphony.xwork2.validator.ValidationInterceptor).doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 263	
+			org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 68	
+			org.apache.struts2.interceptor.validation.AnnotationValidationInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.StrutsConversionErrorInterceptor(com.opensymphony.xwork2.interceptor.ConversionErrorInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 133	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ParametersInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 207	
+			com.opensymphony.xwork2.interceptor.ParametersInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.ActionMappingParametersInteceptor(com.opensymphony.xwork2.interceptor.ParametersInterceptor).doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 207	
+			org.apache.struts2.interceptor.ActionMappingParametersInteceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.StaticParametersInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 190	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.MultiselectInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 75	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.CheckboxInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 94	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.FileUploadInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 243	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ModelDrivenInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 100	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ScopedModelDrivenInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 141	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.debugging.DebuggingInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 267	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ChainingInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 142	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.PrepareInterceptor.doIntercept(com.opensymphony.xwork2.ActionInvocation) line: 166	
+			com.opensymphony.xwork2.interceptor.PrepareInterceptor(com.opensymphony.xwork2.interceptor.MethodFilterInterceptor).intercept(com.opensymphony.xwork2.ActionInvocation) line: 98	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.I18nInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 176	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.interceptor.ServletConfigInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 164	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.AliasInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 190	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.opensymphony.xwork2.interceptor.ExceptionMappingInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 187	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			com.aliyun.luorigong.base.action.TrimInterceptor.intercept(com.opensymphony.xwork2.ActionInvocation) line: 47	
+			com.opensymphony.xwork2.DefaultActionInvocation.invoke() line: 248	
+			org.apache.struts2.impl.StrutsActionProxy.execute() line: 52	
+			org.apache.struts2.dispatcher.Dispatcher.serviceAction(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.ServletContext, org.apache.struts2.dispatcher.mapper.ActionMapping) line: 485	
+			org.apache.struts2.dispatcher.FilterDispatcher.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 395	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			org.apache.struts2.dispatcher.ActionContextCleanUp.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 102	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			com.alibaba.buc.sso.client.filter.SSOFilter.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 123	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.FilterChain) line: 88	
+			org.springframework.web.filter.CharacterEncodingFilter(org.springframework.web.filter.OncePerRequestFilter).doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain) line: 76	
+			org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 235	
+			org.apache.catalina.core.ApplicationFilterChain.doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse) line: 206	
+			org.apache.catalina.core.StandardWrapperValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 233	
+			org.apache.catalina.core.StandardContextValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 191	
+			org.apache.catalina.core.StandardHostValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 127	
+			org.apache.catalina.valves.ErrorReportValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 102	
+			org.apache.catalina.core.StandardEngineValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 109	
+			org.apache.catalina.ha.tcp.ReplicationValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 347	
+			org.apache.catalina.ha.session.JvmRouteBinderValve.invoke(org.apache.catalina.connector.Request, org.apache.catalina.connector.Response) line: 227	
+			org.apache.catalina.connector.CoyoteAdapter.service(org.apache.coyote.Request, org.apache.coyote.Response) line: 293	
+			org.apache.coyote.http11.Http11NioProcessor.process(org.apache.tomcat.util.net.NioChannel) line: 889	
+			org.apache.coyote.http11.Http11NioProtocol$Http11ConnectionHandler.process(org.apache.tomcat.util.net.NioChannel) line: 744	
+			org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run() line: 2274	
+			java.util.concurrent.ThreadPoolExecutor$Worker.runTask(java.lang.Runnable) line: not available	
+			java.util.concurrent.ThreadPoolExecutor$Worker.run() line: not available	
+			java.lang.Thread.run() line: not available	
+		-----
+		PS: Worker线程池
+
+4. extjs 事件处理 change		  * extjs 命名空间 取store
+	change: function(combo, newValue, oldValue, eOpts){
+	}
+	文档上事件说明为：
+	change( this, newValue, oldValue, eOpts )
+
+	这里第一个参数 this 可以用其他的替换，可能会命名冲突
+
+	storeA = Ext.getStore('ZoneDiskTypeRaf');
+	
+	-----
+		{
+			xtype: 'combobox',
+			fieldLabel: 'Store type',
+			name: 'storeType',
+			store: 'StoreType',
+			valueField: 'value',
+			displayField: 'displayName',
+			queryMode : 'local',
+			emptyText: '选择存储类型',
+			forceSelection: true,
+			editable: false,
+			allowBlank: false,
+			listeners:{
+				change: function(combo, newValue, oldValue, eOpts){
+					diskTypeStore = Ext.getStore('ZoneDiskTypeRaf');
+					comboA = combo.previousNode('combobox[name="zoneADiskType"]');
+					comboB = combo.previousNode('combobox[name="zoneADiskType"]');
+					comboA.reset();
+					comboB.reset();
+					diskTypeStore.reload();
+					if(combo.value == 'raf'){
+						storeA.remove(storeA.getRange(0,1));
+					}else{
+						storeA.remove(storeA.getRange(2,3));
+					}
+				}
+			}
+		}
+	-----
+	PS: extjs 查找 previousNode
+		静态store，删除过后的reload diskTypeStore.reload();
+
+5. 沉香 配置管理 ZK
+	一个ZK集群，一个web portal服务多种产品，每个产品有各自的ZK集群
+	通过ZK集群管理集群的配置，保证配置一致以及配置维护。
+
+	后面在java段的工作：一方面，沉香相关的job上层java逻辑的编写，用于工作流操作
+	另外，dayu2的逻辑从Agent到Java都需要重新开放，dayu2分解了dayu1的操作
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day357 Thursday, August 22, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	提测 http://aone.alibaba-inc.com/aone2/task/24797 
+	1）Image,ISO	
+		agent部分的修改
+		整理现有ISO，Image在Agent端的逻辑，然后根据变化得出如何修改：
+			原逻辑： 调用iso脚本，进行iso操作
+				拿到java web端传来的参数
+				拿到ISO信息（路径，名称等）
+				判断ISO url是否可用
+				创建iso目录：dir_luorigong/iso ，若已存在则跳过
+				创建iso.conf文件（记录每个iso信息），并返回blackconf,whiteconf
+				判断iso目录下的子目录，如果大于10，则删除最早的一个目录（格式为：2013-08-16_02-34-27_iso）
+		业务咨询PE团团
+
+		后续，iso，image都改为iso.py来处理，看看此脚本的说明（来自测试环境的AG上的py文件）：
+			python iso.py
+			-----
+			Usage: iso.py [options]
+
+			A ISO manage tool, such as upload, download or query iso.
+
+			Options:
+			  --version             show program's version number and exit
+			  -h, --help            show this help message and exit
+			  -v, --verbose         print more debug messages.
+			  -a ACTION, --action=ACTION
+						set the action name, value can be "upload", "download"
+						or "query", required.
+			  -n ISO_NAME, --name=ISO_NAME
+						set the iso name, required.
+			  -d ISO_DIR, --dir=ISO_DIR
+						set the directory to save iso file, optional
+			  -t ISO_TYPE, --type=ISO_TYPE
+						for upload only, set the iso type, value can be
+						win/linux32/linux64/winpe/livecd, optional.
+			  -w FILE, --whitelist=FILE
+						for upload only, specify a list of image whose iso id
+						should be updated, optional.
+			  -b FILE, --blacklist=FILE
+						for upload only, specify a list of image whose iso id
+						should NOT be updated, optional.
+			  -m ISO_MD5, --md5=ISO_MD5
+						for upload only, chech the md5 of specified iso,
+						optional.
+
+			Examples:
+
+			1. Upload iso linux_64-virt-release-2472418-20130729.iso in current directory
+
+			Note: iso type is linux64, and blacklist is /tmp/iso.blacklist (excluding ubuntu 12.04 image)
+
+			# DON'T update those below ubuntu images' iso id when upload normal linux64 iso
+			# cat >> /tmp/iso.blacklist <<EOF
+			ubuntu1204_64_20G_alibase_v01.vhd
+			ubuntu1204_64_20G_security_v01.vhd
+			ubuntu1204_64_vm_name_10607_v1.vhd
+			ubuntu1204_64_youke_yiyun_backup_image_v01
+			ubuntu1204_64_youke_yiyun_backup_image_v02
+			ubuntu1204_64_youke_yiyun_backup_image_v03
+			EOF
+			# python iso.py -n linux_64-virt-release-2472418-20130729.iso -a upload -t linux64 -d . -m md5 -b /tmp/iso.blacklist
+
+			2. Upload iso ubuntu_12.04_64-virt-release-2472418-20130730.iso in current directory
+
+			Note: iso type is linux64, and whitelist is /tmp/iso.whitelist (only contains ubuntu 12.04 image)
+
+			# ONLY update those below ubuntu images' iso id when upload ubuntu iso
+			# cat >> /tmp/iso.whitelist <<EOF
+			ubuntu1204_64_20G_alibase_v01.vhd
+			ubuntu1204_64_20G_security_v01.vhd
+			ubuntu1204_64_vm_name_10607_v1.vhd
+			ubuntu1204_64_youke_yiyun_backup_image_v01
+			ubuntu1204_64_youke_yiyun_backup_image_v02
+			ubuntu1204_64_youke_yiyun_backup_image_v03
+			EOF
+			# python iso.py -n ubuntu_12.04_64-virt-release-2472418-20130730.iso -a upload -t linux64 -d . -m md5 -w /tmp/iso.whitelist
+
+			3. Download iso linux_64-virt-release-2472418-20130729.iso to current directory:
+			# python iso.py -n linux_64-virt-release-2472418-20130729.iso -a download -d .
+
+			4. Query iso linux_64-virt-release-2472418-20130729.iso:
+			# python iso.py -a query -n linux_64-virt-release-2472418-20130729.iso
+			-----
+
+	2) OpenApi接口 低优先级
+		先实现一部分
+		* struts2 result
+		-----
+		<!-- OpenAPI Action -->
+		<action name="open" class="openApiProxyAction">
+			<result name="success" type="json">
+				<param name="root">result</param>
+				<param name="ignoreHierarchy">false</param>
+				<param name="excludeProperties">
+					data.*\.creatorUser,data.*\.modifyUser,errorCode,resultData,forward
+				</param>
+			</result>
+		</action>
+		-----
+	3）沉香接口	？待
+		http://wiki.ec.alibaba-inc.com/index.php/%E6%B2%89%E9%A6%99_Worker_%E6%8E%A5%E5%8F%A3#.E5.AF.BC.E5.85.A5.E6.B2.89.E9.A6.99
+		飞天部分java编码 
+	4）代码源
+		虚拟化源，现在虚拟化源只有一个host deploy脚本，提供源的地址，里面有描述源信息的release.ini文件（落日弓与源交互的格式文本），落日弓依据release.ini
+		中的描述来使用源中的各个RPM包。
+
+		心动消息项目houyi源release.ini文件内容：
+		-----
+			[release]
+			name = Xin Dong Xiao Xi
+			description = xindongxiaoxi
+			changes = RHS, RMS,pync
+			date = 2013-07-09
+			release_id = 2013-07-09
+
+			[svn]
+			rhs_url = http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/service/rhs/0.1
+			rhs_revision = 1.0.0
+			rms_url = http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/service/rms/branches/0.1/rms-http
+			rms_revision = 0.1.0
+			api_url = 
+			api_revision = 
+			rabbitmq_url = http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/service/rabbitmq
+			rabbitmq_revision = 3.1.3
+
+			[wiki]
+			project_wiki = http://wiki.ec.alibaba-inc.com/s/1kv
+			release_wiki = http://wiki.ec.alibaba-inc.com/s/1kv
+
+			[aone]
+			aone = http://aone.alibaba-inc.com/aone2/project/669/portal
+
+			[location]
+
+			aos_houyi_http_proxy = http://10.202.66.27/package/houyi/release_deploy/2013_0717/houyi/aos_houyi_http_proxy_debug_64.tar.gz
+			config_crm_clone = http://10.202.66.27/package/houyi/release_deploy/2013_0717/ec_tools/config_crm_clone.sh
+			deploy_http_proxy = http://10.202.66.27/package/houyi/release_deploy/2013_0717/ec_tools/deploy_http_proxy.sh
+			http_proxy_ctl = http://10.202.66.27/package/houyi/release_deploy/2013_0717/ec_tools/http_proxy_ctl
+
+			houyi_sync_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/houyi_sync-1.0.0-2427648.x86_64.rpm 
+			houyi_tools_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/ec_tools_trunk-1.0.21.2435368/houyi_tools-1.0.0-2435368.x86_64.rpm 
+			aos_houyi = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/aos_houyi_debug_64.tar.gz 
+			aos_houyi_monitor = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/aos_houyi_monitor_debug_64.tar.gz 
+			aos_houyi_nc = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/aos_houyi_nc_debug_64.tar.gz 
+
+			rhs_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/rhs/rhs-1.0.0-2442745.x86_64.rpm
+			regionmaster_env_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/region_master/houyi-regionmaster-env-1.0.0-2419923.x86_64.rpm
+			regionmaster_prj_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/region_master/houyi-regionmaster-prj-1.0.0-2398233.x86_64.rpm
+			api_env_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/houyiapi/houyi-api-env-1.0.0-2419927.x86_64.rpm
+			api_prj_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/houyiapi/houyi-api-prj-1.0.0-2420011.x86_64.rpm
+			rms_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/rms/rms-service-0.1.0-2443031.x86_64.rpm
+			rabbitmq_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/rms/rabbitmq-service-3.1.3-2443029.x86_64.rpm
+			pync_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/pync/pync-1.1.0-2398149.x86_64.rpm
+			apiproxy_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/apiproxy/apiproxy-1.0.0-2398246.x86_64.rpm
+			python_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/Python-2.7.5-20130724.x86_64.rpm
+			libevent_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/libevent-2.0.19-2.x86_64.rpm
+			libdrizzle_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/libdrizzle-2011.07.21-2.x86_64.rpm
+			memcache_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/memcached-1.4.14-1.x86_64.rpm
+			ngx_openresty = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/ngx_openresty-1.2.8.6-2.x86_64.rpm
+
+			[jobs]
+			api = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/api
+			rabbitmq = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/rabbitmq
+			regionmaster = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/regionmaster
+			rhs = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/rhs
+			rmshttp = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/rmshttp
+			pync = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/pync
+
+			[md5sum]
+			houyi_sync_rpm = 656e17a31257ab33f81a70615aa2e7fa
+			houyi_tools_rpm = 0e7b92af4727eba498c594ab36c5f1fc
+			rhs_rpm = fcd285bd75b633f6c5e2924a6745d5f5 
+			regionmaster_env_rpm=249a9d04090e4672e903bbfedece7192
+			regionmaster_prj_rpm=e00040c9b70dc3dffcae418f7a887c8c
+			api_env_rpm=67565059d583863f75a3b55480e8ceb5
+			api_prj_rpm=d180fb490f4f83625df24351953f8e63
+			rms_rpm = 67d7bcdcc55cca829ae3c9f86fa9424f
+			rabbitmq_rpm = 5ae162203b2f520a02039a817a3ca088
+			pync_rpm=01abccc3772516364feda32517bd2550
+			aos_houyi_http_proxy = d2a46adb8e9a52ce48563f25a742f12f  
+			config_crm_clone = 52f0ed55b25bf0588300352314b25e6b  
+			deploy_http_proxy = d2a352daf547331f0127e7e97541a6fd  
+			http_proxy_ctl = eb9856df4f3571d52e26835af755e322  
+			apiproxy_rpm = b43dad542a08fbbdb0ae06cc41e84cbe
+			python_rpm = 26d23943ea7da2bce5e41fba9549a9b7
+			libevent_rpm = cb64532f4e640aa857ff1a91b57d5e81
+			libdrizzle_rpm = 3bfb75bc40a0b7af9f71dfeb05aed4c9
+			memcache_rpm = 7bfc51bb58a2fbaf4a4bb698ea986c44
+			ngx_openresty = f46a96cde529b6ccaa25b2c1b425f168
+			aos_houyi = 8db087479efd4427cb4157424ce915bf
+			aos_houyi_monitor = 50ab856b1a45d12d82fa435c78835d5a
+			aos_houyi_nc = ddaf32ca9a2dfa0a6a70aaefd28f8265
+		-----
+		PS: 落日弓与代码源操作的桥梁
+
+		host deploy脚本打包为RPM，作为源并提供地址给落日弓
+
+		增加houyi虚拟化源，houyi基础源（放类似jetty,python等业务无关的共用包）
+
+		* extjs 回显 extjs回显
+			store只负责加载数据，表单要回显数据需要调用 loadRecord 方法，将从store中匹配对应的属性，从而找到对应store中的record，并显示指定的字段。
+			记住，model中也要对应的添加属性，否则对应不上（record中不会有model未定义的记录）。
+		
+
+
+		 
+						 
+3. java * java
+	通过异常的方式，返回已知的结果，不可取，堆栈信息的处理太多，影响性能。
+
+4. 落日弓部署结构
+	web服务在落日弓自己申请的机器上
+	Agent在各个集群的AG（Admin Gateway）上
+
+5. python urllib2.urlopen(url)方法		* python
+	只是返回meta信息，如果要读取内容，需根据返回的对象再次调用
+	-----
+	try:
+            for iso in param["iso"]:
+                iso_address = param["url"].strip('/') + '/' + iso['name']
+                urllib2.urlopen(iso_address)
+	-----
+	PS: 此方法可验证连接是否有效，且不用	下载文件本身
+	To get the actual data you need to perform a read().
+
+	可直接在python cmd下测试某些API，不仅仅从文档查阅 -tip-
+
+6. 沉香
+	chenxiang
+	介绍 架构
+	web portal(配置沉香) - zk集群（集群配置管理）
+	Client ：负责与zk通讯，即zk client的概念
+		client负责监听zk某个目录树的变化，一旦变化也同步变化；
+		client需要知道所有的zk地址
+
+	Agent：负责安装，管理chenxiang
+		
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day358 Friday, August 23, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）ISO，Image
+	iso黑名单，白名单	
+		imageNo列表，标识是否要上传
+
+	PET安装好后，直接到pet目录下找到iso.py文件执行操作
+		config_path
+		| id | path_name | real_path             | gmt_create          | gmt_modify          |
+		+----+-----------+-----------------------+---------------------+---------------------+
+		| 22 | dir_pet   | /home/admin/pet/trunk | 0000-00-00 00:00:00 | 0000-00-00 00:00:00 |
+
+	iso.conf文件结构：
+		iso.conf 
+		-----
+		[
+			{
+				"iso_type": "win", 
+				"version": "12", 
+				"user_id": 12, 
+				"name": "123321", 
+				"region_no": null, 
+				"big_region_no": "cn-hangzhou-sandun-a01", 
+				"user_iso": 0, 
+				"visibility": 0
+			}
+		]
+		-----
+
+		之前iso_deploy脚本遍历 conf文件上传iso，现在需要自己遍历iso.conf来进行上传
+		
+		上传ISO，多个时，如果一个失败，如何处理？
+	
+	2）沉香功能
+		沉香服务与所有大region，只区分线上集群，内部集群，测试集群
+		根据region的集群类型
+
+		判断当前region的类型（线上，内部，测试），找到对应的沉香配置
+
+		沉香的模板可以共用，故目前只需要从沉香模板表查询第一条记录即可
+
+3. python			* python
+	__buildin__.open(xxx)
+	json.dumps(xx,xx)		json库
+		import json
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day359 Monday, August 26, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	网段划分，由于管理多个产品网段，网段类型需要对应修改
+	1）沉香管理 增加
+		资源视图
+		chenxiang表的zoom_id字段，设计用意，资源属于某个机房的前提；至于区分集群类型，可以从表内的region_type字段区分
+
+	2）image工具脚本位置发生改变，后面都采用此配置，无需维护老位置
+
+	3）小reigon表与大region表，集群类型是否应该继承于大region表，而不允许小region自定义选择（依据目前场景，一个大region内的小region的类型是一致的）
+
+	4）虚拟化代码源已创建ok
+		   python代码找到此源，解析release.ini，安装此源上的rpm包，后续命令调用执行
+
+	5）同步rc.local
+		取模板时，rc.local在native sale和foreign sale是一样的，故2个目录保留一个即可
+			开始以为rc.sysinit不一致，现在rc.sysinit已废弃
+		RAF和local disk集群，rc.local模板文件不一样，需要根据集群类型选择对应模板
+			目录改为分raf和local disk
+			sysinit直接删除
+
+
+
+3. OpenAPI
+	接口需求：
+		获取ESC所有集群名称，AG IP和所使用的dayudb信息。
+
+	
+4. 
+
+5. pe周会
+	客户至上，服务稳定至上
+	用户体验至关重要
+	多想想
+
+6.extjs 参数传递 * extjs
+	nodeId,idcId
+	ResourceViewList.js页定义，参数从上层传递过来，放在grid页面可见的范围内，post提交时作为参数给服务器。
+
+7. shell 
+	alias ll='ls -al' 
+	通过alias可以改变快捷命令的具体引用，但对于直接指定路径的命令是无效的，
+	对于path中有重复的命令的情况，linux下第一个配置生效；需要调换位置使后面的命令生效
+	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day360 Tuesday, August 27, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）host deploy脚本
+		修改agent代码
+			集群部署-安装iptables mock
+				clone模板出来的机器，对外生产用的已经加了iptables，但对内使用是不需要的，所有通过mock的方式去掉 （按钮的功能需求）
+				EnvWorker.py 
+					install_iptables_mock
+			host deploy脚本：
+				解析代码源
+					参考：安装大禹客户端 （传入 aresolve rpm包名称、）
+					DayuWorker.DayuJob.install_aresolve
+						获取所有dayu角色机器的ip列表（依据部署类型为新部署还是扩展列表内容不同）
+						去掉off-line.backup的机器
+						先删除已有的rpm包：sudo rpm -e \\`rpm -qa | grep aresolve\\`	   转义前：rpm -ql `rpm -qa | grep aresolve`
+						从yum源中安装aresolve`： self.pcheck('sudo /usr/bin/yum -y install %s ' % param['aresolve'], iplist_tmp, 'cmd_b', '-F')
+						grep一把：self.pcheck('sudo rpm -qa | grep aresolve', iplist_tmp, 'cmd_b', '-F', True)
+
+					这里没有从代码源中取rpm的操作，换个按钮操作看看，看代码源管理中有哪些代码源：
+					参考：集群部署-部署后羿
+						HouyiWorker.HouyiJob.deploy_houyi
+						Web端传递下面的参数：
+							houyictrl_resource_path 代码源路径
+							revision 版本号
+						HouyiWorker.py：
+							self._deploy_houyi_rpms(houyi_resource_path, deploy_dir, [admingateway, VM])
+							实现如下：
+							-----
+							def _deploy_houyi_rpms(self, url_base, dir, ipfiles):
+								houyi_sync_rpm = os.path.basename(self.release_info['location']['houyi_sync_rpm'].rstrip('/'))
+								houyi_sync_md5 = self.release_info['md5sum']['houyi_sync_rpm']
+								houyi_tools_rpm = os.path.basename(self.release_info['location']['houyi_tools_rpm'].rstrip('/'))
+								houyi_tools_md5 = self.release_info['md5sum']['houyi_tools_rpm']
+
+								files = [
+									    [houyi_sync_rpm, houyi_sync_md5],
+									    [houyi_tools_rpm, houyi_tools_md5]
+									]
+
+								self.transfer_files(files, url_base, dir, ipfiles)
+
+								cmdlist = []
+
+								for f in files:
+								    cmdlist.append("sudo rpm -U %s/%s --force" % (dir, f[0]))
+
+								self.multi_pcheck(cmdlist, ipfiles)
+
+								for f in ipfiles:
+								    self.pcheck("%s/gen_libvirt_storage_xml::/etc/houyi/" % (self.lrg_dir), f, 'scp', '-F')
+								    self.pcheck("%s/setip.template::/etc/houyi/" % (self.lrg_dir), f, 'scp', '-F')
+								    self.pcheck("%s/switch_to_pync.conf::/etc/houyi/" % (self.lrg_dir), f, 'scp', '-F')
+							-----
+							PS:	上面的info是定义在jobx.py中的共用逻辑，将代码源release.ini文件转换为dict对象，便于使用，下面为其实现
+								-----
+								def _deploy_init(self, deploy_dir, deploy_url):
+
+									self.run_cmd("mv %s %s_%s" % (deploy_dir, deploy_dir, time.strftime('%Y%m%d%H%M%S')),False)
+									safe_mkdirs(deploy_dir)
+
+									release_ini ="%s/release.ini" % deploy_url.rstrip('/')
+									retrieve_url(release_ini, deploy_dir, "")
+									self.release_info = cfg_to_dict( "%s/release.ini" % (deploy_dir))
+									self.logger_debug(self.release_info)
+								-----
+								PS: def retrieve_url(url, target, md5sum=None): 定义与urlhelper.py中
+
+				安装虚拟化代码源rpm包
+				脚本会被安装到/opt/host_deploy目录
+				使用本地包安装rpm：sh host_deploy.sh install_local external
+
+
+			扫尾-集群post check
+				EnvWorker.py 
+					postcheck_cluster
+
+			
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day361 Wednesday, August 28, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）测试
+	2）apitask,houyiapi,apiproxy工作流化
+		apitask的资源视图增加
+			关联到houyi api域名，即houyiapi表
+			
+	3）host deploy脚本
+		Clone模板出来的机器，原配置都是对外生产的，在内部生产使用时，需要做一些包的安装和卸载
+		QA测试集群配置和线上对外集群包一致。
+
+		业务：
+			具体修改为：
+			1）安装host deploy rpm包，目标角色为VM
+			2）调用脚本，目录为/opt/host_deploy
+			sh host_deploy.sh install_local external 线上对外集群
+			sh host_deploy.sh install_local internal_delta 线上对内集群
+
+			原来需要落日弓下载mock等rpm包，对内环境卸载一部分包，然后安装一部分包，现在都由脚本封装了。落日弓不关系内部细节，只需调用其提供的脚本即可实现
+			目的。
+
+		从代码源安装rpm通用步骤：
+		-----
+		env = param['env']
+		ncs = env['file_dayu_iplist_vm'] 
+		iptables_mock_path = env['iptables_mock_path']
+		arptables_mock = 'houyi-arptables-mock-0.1-0.1.release1315648.el5.x86_64.rpm'
+		iptables_mock = 'houyi-iptables-mock-0.1-0.1.release1315648.el5.x86_64.rpm '
+
+		cluster = param['region']['cluster_name']
+		self.lrg_dir = env['dir_luorigong']
+		houyivirt_resource_path = param["houyivirt_resource_path"]
+		revision = param['revision']
+		deploy_dir = '%s/houyi_%s' % (self.lrg_dir, revision)
+		roledef = "%s/role.def_%s" % (env['dir_config_cluster'], cluster)
+
+		self._deploy_init(deploy_dir, houyi_resource_path)		 //解析release.ini，并赋值给self.release_info
+
+		role = cfg_to_dict(roledef)["machines"]
+		VM = deploy_dir + '/' + "ip_VM"            
+		self._make_iplist_file(VM, role['VM'])	//得到目标角色的ip列表
+		self.pcheck('mkdir -p %s ' % deploy_dir, VM, 'cmd_b', '-F')
+
+		#deploy host deloy tool 
+		self.logger_debug("deploy host deloy tool")
+		self._deploy_pync(houyivirt_resource_path, deploy_dir, [VM])
+		-----
+		PS: _deploy_pync方法到VM角色的机器上安装rpm，如果有相应的配置文件（在生成配置步骤时，会根据模板生成各自的配置，并放到dir_luorigong的某个目录下），则
+		同步配置文件到VM角色的机器上。
+			下面为一个例子：
+			-----
+			 def _deploy_hostdeploy_tool(self, url_base, dir, ipfiles):
+
+				hostdeploy_rpm = os.path.basename(self.release_info['location']['houyi_virt_deploy'].rstrip('/'))
+				hostdeploy_md5 = self.release_info['md5sum']['houyi_virt_deploy']
+
+				files = [
+					    [hostdeploy_rpm, hostdeploy_md5],
+					]
+
+				self.transfer_files(files, url_base, dir, ipfiles)
+
+				cmdlist = []
+
+				for f in files:
+				    cmdlist.append("sudo rpm -ivh %s/%s --force" % (dir, f[0]))			      //安装rpm
+
+				self.multi_pcheck(cmdlist, ipfiles)
+
+				for f in ipfiles:										     //同步配置文件
+				    self.pcheck("%s/pync.conf::/tmp/" % (self.lrg_dir), f, 'scp', '-F')
+				    self.pcheck("sudo cp /tmp/pync.conf /etc/" , f, 'cmd_b', '-F')
+				    self.pcheck('sudo chmod 755 /etc/houyi', f, 'cmd_b', '-F')
+				    self.pcheck('sudo /etc/init.d/houyi-supervisord restart', f, 'cmd_b', '-F', False)
+				    self.pcheck('sudo /usr/local/python/bin/supervisorctl -c /usr/local/python/bin/supervisord.conf restart pync', f, 'cmd_b', '-F', False)
+				    self.pcheck('sudo /usr/local/python/bin/supervisorctl -c /usr/local/python/bin/supervisord.conf status pync', f, 'cmd_b', '-F')
+			-----
+			PS： 这里的配置文件在 生成配置 步骤生成的，根据组件的配置模板，查询到对应数据，生成文件后放到落日弓指定目录下，后续同步配置文件从
+			这里取。
+
+		虚拟化源release.ini例子：
+		-----
+		[release]
+		name = alios5u7
+		description = alios5u7 
+		changes =  houyi virt
+		date = 2013-08-26
+		release_id = 2013-08-26
+
+		[svn]
+
+		[wiki]
+
+		[aone]
+
+		[location]
+		houyi_virt_deploy = http://ftp.ec.alibaba-inc.com/public/projects/alios_20130625/host_deploy/test2602255/bin/houyi-virt-deploy-0.1-0.1.test2602255.el5.x86_64.rpm
+
+		[jobs]
+
+
+		[md5sum]
+		houyi_virt_deploy = a7cb4daf5223dbf71d1610c732864e64
+		-----
+		PS: FROM: http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyivirt/trunk_20130826_1444/release.ini
+	
+	4）落日弓获取角色ip列表的方式
+		vm角色ip列表获取
+			a. 通过机器上的配置文件
+				ncs = env['file_dayu_iplist_vm'] 
+				file_dayu_iplist_vm=/home/admin/.config_cluster/iplist_vm
+					目录下有role.def文件
+			b. 通过dayu的配置文件
+				
+			c. 通过控制系统的nc表
+	5）dayu2 service层编写
+		依据wiki上dayu2的agent接口说明，wiki: http://wiki.ec.alibaba-inc.com/index.php/Dayu2_Worker_接口
+
+	6）磐石项目数据库变动
+		houyidb初始化nc表时，不需要初始化cpu,memory,disk
+		判断为local disk集群时，初始化sql去掉上面的字段
+
+		按钮：集群配置-生成数据库
+			databaseGenAction.generateDeploySql
+
+
+
+
+3. linux权限影响命令结果		   * linux
+	netstat -apn
+	root账户可以看到pid和程序名
+
+4. extjs页面回显
+	store加载数据，loadRecord即可
+	store中model的定义，与页面数据显示5. 
+
+5. api task, houyiapi, apiproxy发布步骤梳理会议
+	落日弓如何流程化这些部署操作？
+
+6. extjs * extjs
+	extjs加载组件时，比如store，model，如果定义的有问题，比如名称不一致，页面加载时会hung住不动，页面无显示。
+	console也无报错。
+	注意下
+
+	可以分几步修改并调试，避免一次性修改太多，不易于调试
+
+7. linux
+	执行binary
+	exec binary_name
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day362 Thursday, August 29, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1) 整理出api task的配置模板
+		参考houyiapi安装时所使用的的配置模板 
+			
+			注：在工作流job中，不在原按钮布局的页面
+
+			HouyiAPIWorker.py
+				A. install_base_env		安装基础容器环境（jetty，部署目录）
+					解析参数及release.ini，得到env的rpm包，根据houyiapi的ip，远程安装：
+					ret = self.remote(r['ip'], 'sudo rpm -Uvh %s --force' % rpm_url)
+						ret = command.remote(addr, cmd )	    //pet工具提供的远程执行命令的方法
+							
+				B. install_houyiapi			安装houyiapi
+					-----
+					def install_houyiapi(self, param):
+					try:
+					    workflow_instance_param = json.loads(param['workflow_instance_param'])
+					    releasesrc = workflow_instance_param['releasesrc']['houyictrl']
+					    houyiapi = workflow_instance_param['app']['houyiapi']
+					    for r in houyiapi:
+						rpm_url = get_rpm_url(releasesrc, 'api_prj_rpm')
+						self.remote(r['ip'], 'sudo rpm -Uvh %s --force' % rpm_url)
+
+					    self.notify()
+					except Exception, e:
+					    self.logger_debug(exception=e)
+					    self.notify(rcode=get_code(e),errmsg='install houyiapi exception')
+					-----
+				C. rsync_houyiapi_conf		同步houyiapi配置文件
+					-----
+					def rsync_houyiapi_conf(self, param):
+						try: 
+						    workdir = '%s/workflow_%s' % (param['env']['dir_luorigong'], param['workflow_instance_id']) 
+
+						    workflow_instance_param = json.loads(param['workflow_instance_param'])
+						    houyiapi = workflow_instance_param['app']['houyiapi']
+
+						    if len(houyiapi) < 1:
+							raise exception.InvalidParamException(reason="invalid houyiapi param")
+						  
+						    dict = {} 
+						    dict['odbs_ip'] = houyiapi[0]['odbs']['ip']
+						    dict['odbs_port'] = houyiapi[0]['odbs']['port']
+						    dict['odbs_user'] = houyiapi[0]['odbs']['user']
+						    dict['odbs_passwd'] = houyiapi[0]['odbs']['passwd']
+						    dict['odbs_db_name'] = houyiapi[0]['odbs']['db_name']
+						    gen_file2('%s/ecs/api/jdbc.properties.tmpl' % self.templates, '%s/jdbc.properties' % workdir, dict) 
+						    gen_file2('%s/ecs/api/log4j.xml.tmpl' % self.templates, '%s/log4j.xml' % workdir) 
+						     
+						    dict = {}
+						    dict['mq_ip'] = houyiapi[0]['mq']['ip']
+						    dict['mq_port'] = houyiapi[0]['mq']['port']
+						    dict['mq_user'] = houyiapi[0]['mq']['user']
+						    dict['mq_passwd'] = houyiapi[0]['mq']['passwd']
+						    dict['mq_queue'] = houyiapi[0]['mq']['queue']
+						    
+						    for r in houyiapi:
+							dict['message_flag'] = houyiapi[0]['message_flag']
+							
+							# self.templates目录在agent程序 orange/templates 下，此目录下按类别分目录存放各个组件，产品的配置模板
+							# 每个组件的每个配置文件，对应这里的一个配置模板文件，具体参数由java层传递过来
+							gen_file2('%s/ecs/api/env.properties.tmpl' % self.templates, '%s/env.properties.%s' \   
+								% (workdir, r['ip']), dict) 
+
+							self.remote_copy(r['ip'], '%s/env.properties.%s' %(workdir, r['ip']) , '%s/env.properties'\
+								% (param['env']['dir_houyiapi_cfg']), indirect = True, owner = 'admin:admin')
+								       
+							self.remote_copy(r['ip'], '%s/jdbc.properties' % workdir , '%s/jdbc.properties'\
+								% (param['env']['dir_houyiapi_cfg']), indirect = True, owner = 'admin:admin')
+
+							self.remote_copy(r['ip'], '%s/log4j.xml' % workdir , '%s/log4j.xml'\
+								% (param['env']['dir_houyiapi_cfg']), indirect = True, owner = 'admin:admin')
+
+						    self.notify()
+						except Exception, e:
+						    self.logger_debug(exception=e)
+						    self.notify(rcode=get_code(e),errmsg='rsync conf exception')
+					-----
+					PS: 
+					> 根据上面的代码，程序解析参数，并注入到配置文件模板（已规定配置文件在agent端的目录）中以生成配置文件；然后，
+					拷贝到目标机器上指定目录下，完成配置的部署；
+						gen_file2方法来自pet库
+
+					> 生成的配置文件的存放目录，放到workdir = '%s/workflow_%s' % (param['env']['dir_luorigong'], param['workflow_instance_id']) 目录下；
+					> pet工具common的 remote_copy 实现配置文件远程同步；
+					> 目标机器配置文件存放的目录，定义在config_path表中，通过env传递给agent：
+						(param['env']['dir_houyiapi_cfg']
+				
+
+				D. start_houyiapi			启动houyiapi
+				E. stop_houyiapi			停止houyiapi
+		小节：
+			api task配置整理，先拿到api task有哪些配置文件（独立于程序配置的），然后拿到其配置文件所在目录并存在落日弓的config_path中。
+			
+			配置目录：
+				/home/admin/houyi-task/conf
+			配置文件模板：
+				admin@ATHOUYI1_AG]$ go2atps
+				[admin@AT-PS_AG]$ ls
+				jdbc.properties  jdbc.properties.default  job.properties  job.properties.default  log4j.xml  log4j.xml.default
+	2）api task功能
+
+		采用工作流后，一些参数会在实例化job的时候，存入到对应表的字段中；Service层接受jobInstId，查询出相应数据，组装成agent需要的参数格式即可。
+		后续实例化job时，可以提供选择而非类似填ip的方式
+
+
+		安装api task		
+			api task与houyiapi域名的关系
+				找到houyiapi库的信息
+			根据jobInstId，得到工作流id，从工作流中找到代码源信息。
+				
+
+		同步配置文件
+		启动
+		关闭 （因为有监控会在api task关闭后自动启动，需要touch一个文件来避免在升级时自动启动）
+		升级（因为有监控会在api task关闭后自动启动，需要touch一个文件来避免在升级时自动启动）
+			具体见api task的操作说明邮件：
+				Hi, all
+					 API TASK现在有一监控脚本，如果检测到进程不存在，就会自动重启api task。所以以前发布API TASK时，需要创建一个文件，让监控脚本不再自动重启API TASK。
+					 
+				在磐石项目里，API TASK发布会由走落日弓流程。
+				刚和团团确认了下，以后检测进程的脚本会有所修改，进程不在时不会自启动API TASK，所以发布时不再需要创建一个文件让监控脚本不重启。
+				@永生，照团团那样做的话，对落日弓发布API TASK脚本无影响，不需要在发布时创建文件以防自启动了，也不需要在启动后删除该文件让监控脚本正常运行。
+
+				@团团，确认磐石项目上线时会修改该脚本功能，并且如果检测到进程不再时，能及时通知PE开启API TASK。
+				还有一点，磐石项目里，API TASK的目录会有所改变，磐石上后，其目录会为/home/admin/houyi-task/，不再是houyi目录。我看了下，监控脚本好像还有地方需要修改，麻烦@团团修改下，谢谢。
+
+	
+	3）API PROXY发布整理
+		资源视图，realserver中已有
+		实现action，service，agent（已有）
+
+	4）增加大禹2客户端管理
+		在原大禹客户端表增加一个类型字段，区分dayu1和dayu2
+		然后，在集群信息配置大禹客户端的地方，如果为RAF集群则出现大禹1客户端列表，如果为local disk集群则出现大禹2客户端供选择。
+		
+
+3. extjs combobox多选的回显
+	多选的值以数组方式传递给服务器
+	model中字段类型定义为数组
+		Field还支持自定义字段处理
+	例子：
+		-----
+		{
+		xtype: 'combobox',
+		fieldLabel: 'Zone_A_DiskType',
+		name: 'zoneADiskType',
+		store: 'ZoneDiskType',
+		queryMode : 'local',
+		valueField: 'type',
+		displayField: 'displayName',
+		multiSelect: true,
+		forceSelection: true,
+		editable: false,
+		allowBlank: false 
+		},
+
+		...
+
+		{name: 'zoneADiskType',			type: 'array'},
+		{name: 'zoneBDiskType',			type: 'array'}
+		-----
+4. houyibase源 houyi基础源
+	基础环境的包
+	eg： http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyibase/trunk_20130829_0934/
+
+
+5. 代码源地址	   codssrc 代码源汇总目录 地址
+	http://jenkins.aliyun-inc.com/package/houyi/binary_release/
+
+6. dayu2的选择
+	在集群信息页面，配置结群的各种信息，比如集群的dayu客户端信息aresolve
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day363 Friday, August 30, 2013
+
+1. 
+	* 磐禹项目
+	
+2. 磐禹项目
+	1）api task
+		配置模板中的可变项的值，由Service从落日弓db中查询出，在实例化job时存入job对应的param参数字段中。
+			这样，资源视图apitask表单需要增加这些可选项的Field。
+				job.statistics.activeFlag 表示是否要推送数据，内部集群为false，外部集群为true
+、		工作流的方式：
+			Service无法根据jobInstId查询出的参数，在实例化job时存入param字段中
+			其他参数执行job时，Service从落日弓db查询
+
+	2) api proxy
+		发布步骤整理
+			agent已提供安装，添加bigregion的功能
+			再整理发配置的步骤，并加到agent功能中。
+				配置梳理
+					目录：
+					配置文件：
+
+		资源视图已有
+
+		api proxy wiki: http://wiki.ec.alibaba-inc.com/index.php/API_Proxy与API
+
+		dir_apiproxy_cfg=/usr/local/openresty/nginx/conf
+
+		模板文件：
+			region.json 文件，每次直接替换为新的
+				实例化job时，传入
+			upstream文件，在配置目录upstream目录下，新增一个大region时，对应增加一个upstream文件（内容根据具体信息填充模板得到）
+			
+
+		
+	3）集群信息-其他资源信息
+		大禹客户端的选择，需要根据集群的类型local disk OR RAF出现dayu1 client OR dayu2 client
+
+
+	4）API接口需求
+		接口一：查询集群有那些RPM包名称（去掉版本号）
+		接口二：根据RPM包名，查询各个集群的RPM包版本（解析release.ini）
+	5）houyictrl ，houyiapi
+		2种类型的job，对应发到不同的Agent去执行
+	
+	6）资源视图regionmaster，与houyiregiondb库关联
+		有bigRegionId
+		到odbs表，根据类型和bigRegionId，找到odbs
+
+
+5. cloudstack
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day364 Monday, September 02, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）api proxy
+		region.json配置文件的替换方式
+		落日弓只管理与环境相关的配置
+			region.json中的action直接写死，落日弓不支持修改，需要组件自己去维护
+			每期项目，组件action的变动，需要同时更新落日弓的模板文件
+			region.json模板文件 见其svn trunk： http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/apiproxy/trunk/
+
+			region.json.pre.default 双开
+			region.json.pro.default 生产   测试环境也是这个
+				2个文件的去边在与default_proxy上配的默认regionNo
+
+	2）python单元测试 * python
+		python unit test 
+		参考：
+			orange/tests目录下的例子
+		Python unit testing framework
+		-----
+		Python unit testing framework, based on Erich Gamma's JUnit and Kent Beck's
+		Smalltalk testing framework.
+
+		This module contains the core framework classes that form the basis of
+		specific test cases and suites (TestCase, TestSuite etc.), and also a
+		text-based utility class for running the tests and reporting the results
+		(TextTestRunner).
+
+		Simple usage:
+
+		import unittest
+
+		class IntegerArithmenticTestCase(unittest.TestCase):
+		def testAdd(self):  ## test method names begin 'test*'
+		self.assertEqual((1 + 2), 3)
+		self.assertEqual(0 + 1, 1)
+		def testMultiply(self):
+		self.assertEqual((0 * 10), 0)
+		self.assertEqual((5 * 8), 40)
+
+		if __name__ == '__main__':
+		unittest.main()
+
+		Further information is available in the bundled documentation, and from
+
+		http://docs.python.org/library/unittest.html
+		-----
+	5）开发环境发布：
+		打rpm包
+		关闭服务
+		卸载原rpm
+		安装
+		启动服务
+
+
+3. Agent 落日弓Agent
+	job的启动在orange/jobworker/master.py中
+	它的数据只接收MQ的消息，并判断是否该自己处理（启动时根据配置文件张指定的master_id，如果MQ消息中to键对应的值包含此master_id或为all,则取处理
+	agent master启动时，从orange.conf配置中找到自己的master_id:
+		orange.conf
+		-----
+		[region]
+		cluster_name = atzy
+		-----
+
+	目前有2种master_id: houictrl和HouyiAPI
+		修改配置文件分别启动
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day365 Tuesday, September 03, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）agent连调	   调试
+		pcheck，remote等远程执行方法，具体为：ssh x.x.x.x cmd -param eg: ssh 1.1.1.2 rpm -Uvh http://www.123.com/test.rpm --force
+	
+		SSH打通限于admin，落日弓agent服务需要以admin启动，以实现ssh打通访问。-tip-
+		
+		具体连调，在远程执行时报错时，可以到远程机器上重复执行相应的命令以重现并发现问题。
+
+		python调试 python debug * python
+			python的异常栈，由下到上，为从异常的触发点到最开始执行的方法
+
+	2）连调记录
+		安装API Task PASS
+		同步API Task配置 PASS
+		启动API Task PASS
+		停止API Task PASS
+		安装ApiProxy PASS
+
+	3) apiproxy基础环境安装
+		根据apiproxy基础环境需要的rpm包，到后羿源查找，并安装基础环境，也便于apiproxy其他功能的测试
+
+		由于项目本身是对apiproxy的升级，故其代码源中不会再次出现nginx的安装包；但为了测试需要，需要安装基础环境（包括nginx程序rpm包），可以
+		到发布源的trunk上找到他的rpm包。
+
+			基础环境，需要4个rpm包： libevent_rpm  ， libdrizzle_rpm  ， ngx_openresty_rpm ， memcache_rpm
+
+		涉及从基础源和项目源中分别取rpm包安装。
+
+		workflow_instance_param中存储多个代码源？
+			{"releasesrc":{"houyibase":"http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyibase/trunk_20130829_1007/",
+			"houyictrl":"http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/trunk_20130828_1254"}}
+		workflow_instance_param表记录了每个工作流实例的参数（param），目前只保存代码源信息，格式如上，以releasesrc为键保存的Json Map对象，里面记录
+		了工作流需要的代码源Map，Agent根据需要的代码源类型找到需要的代码源地址。
+
+		配置houyictrl trunk代码源地址，再配置houyibase地址（memcached），这样job就可以从这2个代码源中找到基础rpm安装包。
+	
+	4）磐石项目改动review会议
+		相关改动：
+		(1). nc_resource表的disk_io1,disk_io2,disk_dfs值，集群部署时需要问阮军	 
+			集群的nc磁盘信息，目前存在region表中，对应去掉原Disk字段，增加上面3种类型，并允许填入对应的值（比如local disk集群disk_dfs=0）
+			具体为region表的vdisk字段替换为上面3个列
+			
+			luorigong库region表修改
+			houyidb库nc_resource表的初始化sql修改
+	
+			DONE
+		(2). nc_resource表增加a_disk_io1,a_disk_io2,used_disk_io1,used_disk_io2,nc_disk_io1,nc_disk_io2 ,nc_disk_dfs 
+			初始化houyidb库的nc_resource表时加入上面字段的初始化
+
+			DONE
+		(3). api task配置文件再确定下 
+			
+		(4). crontab变化，sudo /usr/ali/bin/python /etc/houyi/script/snapshot_tools_storage.py /etc/houyi/script/snapshot_tools_storage 7 3 1 1 both 4 21600 0 500 1500 144 2
+		若raf集群倒数第三个是0，若localdisk集群倒数第三个是1500
+			AGWorker
+				在append好后，根据集群类型不同（local disk OR raf）做相应修改
+
+
+
+
+3. 配置文件从模板生成
+	有些配置也为ip的不同，其对应的内容不同，但文件名都一样，故agent在生成临时配置时，通过加ip后缀的方式以区分。
+		-----
+		gen_file2('%s/ecs/apitask/log4j.properties.tmpl' % self.templates, '%s/log4j.properties' % workdir) 
+
+		for r in apitasks:
+			dict = {}
+			dict['activeFlag'] = apitasks[0]['jobPropertiesMap']['activeFlag']
+			gen_file2('%s/ecs/apitask/job.properties.tmpl' % self.templates, '%s/job.properties' \
+			% workdir, dict)
+
+		self.remote_copy(r['ip'], '%s/job.properties.%s' % (workdir, r['ip']), '%s/job.properties'\
+		% (param['env']['dir_apitask_cfg']), indirect = True, owner = 'admin:admin')
+		-----
+		PS: 以ip后缀区分相同临时目录下同文件名、不同ip机器上的配置文件
+		对于各个ip机器上配置一致的文件，无需加ip后缀区分。 -tip-
+
+4. RPM包制作
+	设置安装路径
+	打包程序RPM
+	打包配置RPM
+
+	统一的格式管理包
+
+	发布源统一存放在一个svn地址下，分目录管理，与CI出包系统集成。
+
+	-tip-
+
+	python库的引入，软连接：
+		-----
+		[admin@ATZY_AG]$ ll /usr/local/python/lib/python2.7/site-packages/pypet/
+		total 0
+		lrwxrwxrwx 1 root root 38 Sep  3 11:27 common -> /home/admin/pet/trunk/lib/pypet/common
+		lrwxrwxrwx 1 root root 37 Sep  3 11:27 houyi -> /home/admin/pet/trunk/lib/pypet/houyi
+		lrwxrwxrwx 1 root root 43 Sep  3 11:27 __init__.py -> /home/admin/pet/trunk/lib/pypet/__init__.py
+		lrwxrwxrwx 1 root root 41 Sep  3 11:27 luorigong -> /home/admin/pet/trunk/lib/pypet/luorigong
+		-----
+		PS: site-packages下建立pypet目录，里面通过软连接指向pypet的目录（svn可以更新）
+
+5. RPM包安装覆盖.so文件问题排查
+	系统安装那些rpm包，先后顺序是什么，某个文件被意外替换了，是那个rpm包安装导致的？
+
+	rpm -qa --last |more 查询最近安装的rpm包
+	rpm -R packageName查看依赖包：
+	
+	待？
+
+6. linux注册为系统服务
+	service --status-all
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day366 Wednesday, September 04, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）day365-2-4) 任务处理
+
+	2）pet工具的common部分独立出rpm包，放到houyibase源中
+		rpm包如何进入源，步骤？
+
+		线索： 新版落日弓源创建成功 标题的邮件会通知源创建成功。
+		是CI出的源
+		找到邮件内容，从houyi标签进去，找到 新版落日弓所需 源 生成项目 ，进入就可以看到svn地址，修改此svn中的release.ini，然后出包，即可出新的代码源。
+
+		http://jenkins.aliyun-inc.com:8080/view/06-Houyi/job/CI.Binary.Release/build?delay=0sec
+		请填写对应项目的ini文件的svn地址，点此查看所有分支：binary_release
+		e.g: 为心动消息项目生成houyictrl源，则只需填入对应svn地址：
+		http://svn.alisoft-inc.com/repos/alisoft/houyi/binary_release/houyictrl/branches/xindongxiaoxi/
+
+		注意：
+		代码源release.ini trunk地址：
+			svn : http://svn.alisoft-inc.com/repos/alisoft/houyi/binary_release/
+				目录结构：
+				apsara_client/	
+					branches/	
+						async_raf/	
+						panshi/	
+							lib/	
+								__init__.py	
+								configlib.py	
+								logging.conf	
+								loglib.py	
+								utils.py	
+							release.ini	
+							release.py	
+					trunk/	
+				houyibase/	
+				houyictrl/	
+				houyiqa/	
+				houyivirt/	
+				oss_server/	
+				pechange/	
+				petools/	
+				slb/	
+				slbqa/
+
+
+			按照代码源分类，分别在不同的svn目录下，其下面再创建trunk和branch分支，trunk为全量RPM包记录，每个branch为修改那些RPM的变化记录。
+			根据需要选择对应的代码源。
+		
+		新RPM包加入代码源步骤整理：
+			A. 将RPM包纳入CI管理，从CI处拿到RPM包的地址，MD5值（会填入下面的release.ini文件）
+			B. 在代码源release.ini维护的svn分支上，找到组件所属代码源类别的的svn地址，判断放入trunk OR branch，然后修改里面的release.ini文件并commit，
+			C. 然后在CI上找到落日弓源的出包按钮，选择上面修改release.ini的svn地址，出包。
+
+	3）crontab文件
+		从单个文件独立出来，每条设置一个文件的方式？
+		man crontab对于crontab文件的修改，不允许直接修改文件，而是通过crontab命令来修改内容；程序可以将crontab内容按照条数独立存放，在生效到nc上时
+		进行合并。
+		crontab -e编辑
+		crontab -l查看
+
+		luorigond_dir/crontab目录下的crontab文件，是在 集群部署-生成配置 步骤完成的；然后，初始化AG时（agent部署再AG上），读取AG的crontab内容，并与
+		生成配置部署时，放在luorigong_dir目录下的文件对比，若没有则append到AG的crontab中。
+
+	4）查看磐石项目发布wiki，熟悉过程与需要做的步骤，对应落日弓是否都已支持
+		http://wiki.ec.alibaba-inc.com/index.php/磐石业务系统发布步骤
+
+	5）houyiapi env.properties文件是否有变化？
+		确认？
+		与马达确认：相比与上一个心动消息项目，本次磐石项目，houyiapi的env.properties文件没有变化
+
+		但由于新的消息项目，对env.properties文件的修改未同步到落日弓，异常env.properties确实有变动，需要修改此模板。
+
+		修改内容为：
+
+		在页面，通过参数的方式传递下来。
+
+		conf文件位置：http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_panshi/rpmbuild/conf/
+		在rpmbuild目录下
+
+	6）HouyiApi agent测试
+		
+
+
+3. RPM
+	rpm -i --test memcached-1.4.14-1.x86_64.rpm
+	
+	PE 升级RPM的时候，通过 RPM –U的方式。 这里要注意下， rpm –U对scripts执行的顺序是：
+	    |-- pre.sh                rpm 安装前会执行的脚本
+	    |-- post.sh              rpm 安装完毕后会执行的脚本
+	    |-- preun.sh            rpm 卸载前会执行的脚本
+	    |-- postun.sh          rpm 卸载后会执行的脚本
+	   
+	RPM打包： * Metapkg
+		Metapkg  is  a  tool  that creates RPM, DEB, packages from its own reasonably neutral package definition language.  The
+		metapkg-release program will copy your package to all @METAPKG, build, and release for all platforms.
+
+4. 页面显示问题排查
+	场景：本该显示内容的表单却为空
+		该配置的逻辑是否都已配置
+			逻辑正确就不要再往这个方向排查太深，也许本就不是这个地方导致的
+		逻辑没问题？！ 
+		是否为其他原因导致
+		比如返回数据是否ok，js处理是否正常。
+
+	发散思维
+
+
+
+-h 10.230.226.150 -c all_in_one_xindong --dbuser=apsara --dbpassword=123456 --msghost=10.230.227.11 --msguser=houyi --msgpassword=houyi --msgrun=true --rmshost=10.230.140.241 
+--dbhost=10.230.204.19
+
+5. pytthon文档查阅	    * python 文档使用
+	从一个方法名，顺藤摸瓜
+	eg: strip方法搜索
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day367 Thursday, September 05, 2013
+
+1. 
+	* 磐禹项目
+	
+2. 磐禹项目
+	1）
+
+	2）
+	集群配置-导入houyidb
+	集群配置-生成数据库sql
+
+	上面2个按钮在不同集群页面中，同时操作时，报 innerSql.xml中的deleteInnerSqlByRegionStep操作时，等待锁超时。原因？
+		此错误，为 生成数据库sql 步骤在删除innersql表的数据时等锁超时报错。
+		
+		delete from inner_sql where region_id=#regionId# and step=#step#
+			没有索引，导致表锁
+
+		update inner_sql set status=#status# where id=#id#
+			有索引，只锁定id对应的记录
+
+		故delete操作，导致其他事务都需要等待，如果时间过长，则报超时：
+			Cause: java.sql.SQLException: Lock wait timeout exceeded; try restarting transaction
+	
+	注意：尽可能让所有数据检索都通过索引来完成，从而避免InnoDB因为无法通过索引键加锁而升级为表级锁定。		-tip-		    * mysql
+
+	mysql事务
+
+	innoDB默认事务管理级别是 repeatable read即可重复读（同一个事务中select的结果是一致的），即不会读到其他事务已提交的内容。
+
+	另外，一些写事务需要注意锁的级别，尽量避免触发表级锁，从而导致其他事务等待或超时失败。
+
+
+3. 共享带宽 ，独享带宽
+
+
+
+http://www.atatech.org/article/detail/10648/0	    云梯
+桐庐-芦茨 游泳
+
+
+
+
+
