@@ -18,8 +18,10 @@ multi-boxing hotkeynet  keyclone
 tmp
 ft2013-04-22
 * 佳丽摄影
-
+* wRawac7ece	   ft
 * 6843 ft75
+* 静态路由
+	
 * 独享带宽
 	-----
 	基本简介
@@ -13731,7 +13733,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		except Exception,ex:
 		   print Exception,":",ex
 
-		使用except子句需要注意的事情，就是多个except子句截获异常时，如果各个异常类之间具有继承关系，则子类应该写在前面，否则父类将会直接截获子类异常。放在后面的子类异常也就不会执行到了。
+		使用except子句需要注意的事情，就是多个except子句截获异常时，如果各个异常类之间具有继承关系，则子类应该写在前面，否则父类将会直接截获子类异常。
+		放在后面的子类异常也就不会执行到了。
 
 		2 使用try跟finally:
 
@@ -13750,7 +13753,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 		·   如果没有发生异常，则执行finally中的代码。
 
-		第二种try语法在无论有没有发生异常都要执行代码的情况下是很有用的。例如我们在python中打开一个文件进行读写操作，我在操作过程中不管是否出现异常，最终都是要把该文件关闭的。
+		第二种try语法在无论有没有发生异常都要执行代码的情况下是很有用的。例如我们在python中打开一个文件进行读写操作，我在操作过程中不管是否出现异常，
+		最终都是要把该文件关闭的。
 
 		这两种形式相互冲突，使用了一种就不允许使用另一种，而功能又各异
 
@@ -13758,7 +13762,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 		raise [exception[,data]]
 
-		在Python中，要想引发异常，最简单的形式就是输入关键字raise，后跟要引发的异常的名称。异常名称标识出具体的类：Python异常是那些类的对象。执行raise语句时，Python会创建指定的异常类的一个对象。raise语句还可指定对异常对象进行初始化的参数。为此，请在异常类的名称后添加一个逗号以及指定的参数（或者由参数构成的一个元组）。
+		在Python中，要想引发异常，最简单的形式就是输入关键字raise，后跟要引发的异常的名称。异常名称标识出具体的类：Python异常是那些类的对象。执行raise语句时，
+		Python会创建指定的异常类的一个对象。raise语句还可指定对异常对象进行初始化的参数。为此，请在异常类的名称后添加一个逗号以及指定的参数（或者由参数构成的一个元组）。
 
 		例:
 
@@ -13854,7 +13859,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- python命令行参数处理
 		测试命令行参数问题时，可通过run as命令来配置运行参数，从而测试参数
 
-	- python异常分析，异常日志由上到下，为异常的入口点，直到报错的地方；java是由下而上，日志前面是具体出错的地方
+	- python异常分析，异常日志由上到下，为异常的入口点，直到报错的地方，第一行是具体错误内容。；java是由下而上，日志前面是具体出错的地方
 		------
 			[root@AT-HOUYIDEV_AG]$ python houyiapi_bigregion2new_update_regionstatus.py 
 			Before update houyi.region_status, houyi.region_status has 0 records
@@ -13870,6 +13875,8 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			  File "build/bdist.linux-x86_64/egg/MySQLdb/cursors.py", line 174, in execute
 			  File "build/bdist.linux-x86_64/egg/MySQLdb/connections.py", line 36, in defaulterrorhandler
 			_mysql_exceptions.OperationalError: (1054, "Unknown column 'AT' in 'field list'")
+			... eg
+			raise exception.CMDExecError(cmd=cmd, error=rt) 
 		------
 	- eclipse开发python
 		在pyconsole中导入module时，需要设置项目的pydev-PYTHONPATH（设置PATH）
@@ -35840,7 +35847,7 @@ day363 Friday, August 30, 2013
 		大禹客户端的选择，需要根据集群的类型local disk OR RAF出现dayu1 client OR dayu2 client
 
 
-	4）API接口需求
+	4）OpenAPI接口需求
 		接口一：查询集群有那些RPM包名称（去掉版本号）
 		接口二：根据RPM包名，查询各个集群的RPM包版本（解析release.ini）
 	5）houyictrl ，houyiapi
@@ -36141,6 +36148,109 @@ day366 Wednesday, September 04, 2013
 	RPM打包： * Metapkg
 		Metapkg  is  a  tool  that creates RPM, DEB, packages from its own reasonably neutral package definition language.  The
 		metapkg-release program will copy your package to all @METAPKG, build, and release for all platforms.
+	
+	以落日弓web为例，走RPM打包流程及其实现细节：		  rpm打包
+		1）在项目根目录下建立打包用目录，eg: rpmbuild，结构如下
+			|-- rpmbuild
+			|    |-- rpm_code		---------- 程序代码打包目录
+			|    |    |-- scripts		----------  rpm包安装或卸载时，需要执行的脚本，eg: precheck ,post check
+			|    |    |    |-- post.sh
+			|    |    |    |-- postun.sh
+			|    |    |    |-- pre.sh
+			|    |    |    |-- preun.sh
+			|    |    |-- index.yaml		----------  配置描述，记录rpm需要依赖的包及其信息
+			|    |    |-- rpm_code.py	 ----------  打包python脚本
+			|    |-- rpm_conf	---------- 配置文件打包目录
+			...结构同rpm_code目录结构
+		
+		index.yaml
+		-----
+			---
+			default:
+			  name: luorigongweb_ENV
+			  requires:
+			      - luorigongweb_env
+			  summary: this rpm is for luorigong web
+			  version: '0.0.1'
+		-----
+
+		rpm_code.py
+		-----
+			#!/usr/ali/bin/python
+
+			import sys
+			import os
+			import commands
+			import subprocess
+
+			webappRoot = "/home/admin/luorigong-web/webapps/"
+
+			def sync_exec_cmd(cmd):
+			    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds = True)
+			    r = p.communicate()[0]
+			    print ("\n%-12s : %s\n%-12s : %d\n[[[%s]]]") % ("Command", cmd, "Return Code", p.returncode, r)
+			    return [p.returncode, r]
+
+			def main():
+			    if len(sys.argv) < 2:
+				print 'python rpm_code.py [qa|dev|product]'
+				exit(-1)
+
+			    command = "rm -rf root;mkdir -p root" + webappRoot 
+			    sync_exec_cmd(command)
+
+			    # back up working dir
+			    oldDir = os.getcwd() 
+			 
+			    pyDir = os.path.split( os.path.realpath( sys.argv[0] ) )[0]
+			    srcDir = pyDir + "/../.."
+			    os.chdir(srcDir)
+			    
+			    sync_exec_cmd('cp -r %s/conf/%s/web.xml %s/src/main/webapp/WEB-INF/' %(srcDir, sys.argv[1],srcDir))
+			 
+			    #sync_exec_cmd('/usr/ali/maven/bin/mvn package clean')
+			    #sync_exec_cmd('/usr/ali/maven/bin/mvn package install')
+			    sync_exec_cmd('/usr/alibaba/maven/bin/mvn package clean')
+			    sync_exec_cmd('/usr/alibaba/maven/bin/mvn package install')
+
+			    warFrom = srcDir + "/target/luorigong-1.0.war"
+			    warTo = srcDir + "/rpmbuild/rpm_code/root/home/admin/luorigong-web/webapps/ROOT.war"
+			    sync_exec_cmd('mv %s %s' %(warFrom, warTo))
+
+			    # back to the working dir
+			    os.chdir(oldDir)
+
+			    sync_exec_cmd('metapkg .')
+			    print "create luorigong-web rpm  success "
+			    
+			if __name__=='__main__':
+			    main()
+		-----
+
+|-- db
+|-- jobworker
+|-- orange
+|-- script
+|-- sql
+|-- templates
+|   |-- 0102json
+|   |-- 0806json
+|   |-- db
+|   |-- ecs
+|   |   |-- api
+|   |   |-- apiproxy
+|   |   |-- apitask
+|   |   |-- pync
+|   |   |-- regionmaster
+|   |   |-- rhs
+|   |   |-- rmshttp
+|   |   `-- router
+|   |-- oss_server
+|   `-- report
+			
+		
+	
+
 
 4. 页面显示问题排查
 	场景：本该显示内容的表单却为空
@@ -36151,11 +36261,6 @@ day366 Wednesday, September 04, 2013
 		比如返回数据是否ok，js处理是否正常。
 
 	发散思维
-
-
-
--h 10.230.226.150 -c all_in_one_xindong --dbuser=apsara --dbpassword=123456 --msghost=10.230.227.11 --msguser=houyi --msgpassword=houyi --msgrun=true --rmshost=10.230.140.241 
---dbhost=10.230.204.19
 
 5. pytthon文档查阅	    * python 文档使用
 	从一个方法名，顺藤摸瓜
@@ -36168,7 +36273,7 @@ day367 Thursday, September 05, 2013
 	* 磐禹项目
 	
 2. 磐禹项目
-	1）
+	1）crontab修改并测试
 
 	2）
 	集群配置-导入houyidb
@@ -36187,12 +36292,16 @@ day367 Thursday, September 05, 2013
 			Cause: java.sql.SQLException: Lock wait timeout exceeded; try restarting transaction
 	
 	注意：尽可能让所有数据检索都通过索引来完成，从而避免InnoDB因为无法通过索引键加锁而升级为表级锁定。		-tip-		    * mysql
+		对表字段的设计也有要求，必要的字段加上索引
 
 	mysql事务
 
 	innoDB默认事务管理级别是 repeatable read即可重复读（同一个事务中select的结果是一致的），即不会读到其他事务已提交的内容。
 
 	另外，一些写事务需要注意锁的级别，尽量避免触发表级锁，从而导致其他事务等待或超时失败。
+
+	3） pet common包放入houyibase源
+		trunk上
 
 
 3. 共享带宽 ，独享带宽
@@ -36204,5 +36313,251 @@ http://www.atatech.org/article/detail/10648/0	    云梯
 
 
 
+4. 
+	目标1：项目完成情况
+	描述：
+	1.	落日弓OpenApi设计，以及接口需求梳理和实现
+	2.	参与大禹2的部署扩容流程
+	3.	磐石项目支持（apitask,apiproxy,houyiapi）落日弓支持部署
+	评估标准：
+	1.	落日弓OpenApi设计，以及接口需求梳理和实现 3.75
+	2.	参与大禹2的部署扩容流程 3
+	3.	磐石项目支持（apitask,apiproxy,houyiapi）落日弓支持部署 3.25
+
+	目标2：设计和实现
+	描述：
+	1.	落日弓OpenApi设计
+	2.	大禹2 java web端开发
+	3.	磐禹项目开发与磐石项目支持
+	评估标准：
+	1.	落日弓OpenApi设计 3.75
+	2.	大禹2 java web端开发 3
+	3.	磐禹项目开发与磐石项目支持 3.25
+
+	目标3：规范和流程
+	描述：
+	4.	遵守Houyi开发、部署相关流程规范
+	5.	当发现流程不规范时，能推进流程优化
+	评估标准：
+	1.	遵守Houyi开发、部署相关流程规范 4.75
+	2.	当发现流程不规范时，能推进流程优化 5.25
+
+	目标4：团队合作
+	描述：
+	1.	不带情绪工作，就事论事
+	2.	积极参与项目相关的技术讨论、问题解决
+	3.	在团队中营造好的工作和学习氛围，踏实的工作作风
+	4.	人人为我，我为人人
+	评估标准：
+	1.	不带情绪工作，就事论事 2.75
+	2.	积极参与项目相关的技术讨论、问题解决 2.5
+	3.	在团队中营造好的工作和学习氛围，踏实的工作作风 2.5
+	4.	人人为我，我为人人 2.25
+
+	目标5：个人发展
+	描述：
+	1．	积极熟悉落日弓涉及到的业务，并结合集群发布，变更，代码与实践结合梳理清楚业务流程，
+	2．	自身技术在一次次的问题、设计、学习、交流中沉淀
+	3．	积极思考运维的问题，提供自己能贡献的力量
+	4．	积极参与运维，项目上碰到的问题的解决
+	评估标准：
+	1．	积极熟悉落日弓涉及到的业务，并结合集群发布，变更，代码与实践结合梳理清楚业务流程，2.5
+	2．	自身技术在一次次的问题、设计、学习、交流中沉淀 2.5
+	3．	积极思考运维的问题，提供自己能贡献的力量 2.25
+	4．	积极参与运维，项目上碰到的问题的解决 2.75
 
 
+
+1. 登陆login1.cm3.taobao.org机器
+2. ssh xiaoyun.maoxy@pe1.ops.yh.aliyun.com 密码: （注意是PE1机器，权利很大）
+3.sudo -u admin  ssh 10.249.238.55,或sudo -u admin  ssh 10.249.238.56 (luorigong web机器)
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day368 Friday, September 06, 2013
+
+1. 
+	* 
+2. 磐禹项目
+	1）落日弓诸葛线上环境问题排查
+	A. apiproxy接入时，报apiproxy找不到
+		region_id > big_region_id > big_region.id_houyiapi + type: apiproxy = ApiProxy
+
+		api.ecs.aliyun-inc.com 这个域名对应的apiproxy没有配置
+	B. 嫦娥接入时，构造URL时，将参数的=号转义了，导致http请求的参数不合法。-tip-
+		只对value转义
+
+	
+	在诸葛项目发布
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day369 Monday, September 09, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）pet的2个包 pet-houyi , pet-common包 
+		联系继刚，放到yum源
+	2）OpenApi kiffoff文档整理，明天call meeting kick off
+
+	3）磐石项目 apiproxy ,apitask,houyiapi部署工作流梳理 与马信一起	
+		目前，工作流模板由落日弓开发提供（因为一些job参数的格式问题），实例化的数据由业务PM填写
+
+
+3. 语言
+	对计算机语言的理解：
+		一种计算机语言，从它出现的背景，它所能做的事来思考它存在的意义
+		使用一种语言，可以从语言本身出发，还可以从语言的一些共性出发（比如各种数据结构是通用的，不同平台相关的技术是相同的）
+
+4. IP通讯机制
+	tcp/ip 
+	http://blog.csdn.net/novrose/article/details/7648131
+
+	http://www.doc88.com/p-683406895875.html
+
+    -----
+	在使用TCP/IP协议通信的网络中，可以形象地理解为有两个信封，TCP和IP就像是信封，要传递的信息被划分成若干段，每一段塞入一个TCP信封，
+	并在该信封面上记录有分段号的信息，再将TCP信封塞入IP大信封，发送上网。在接收端，一个TCP软件包接收信封，抽出数据，按发送前的顺序交将信息还原，
+	并加以校验，若发现差错，TCP将会要求重发。因此，TCP/IP在网络中几乎可以无差错地传送数据。
+
+	但是这些信是如何到达目的地的呢?
+
+	我们来打个比方：以附图为例，小K住在村1的H1中，村里有个邮局H0，现在小K有两封信分别要给住在村1的H3和村2的H1中的人。小K的地址为：村1.H1，
+	邮局的地址为：村1.H0
+
+
+
+	操作的步骤如下：
+
+	小K首先把信封都贴上收信人的地址。第一封信的地址是：村1.H3；第二封信的地址是：村2.H2。
+
+	然后，小K比较了一下第一封的地址和自己的地址，发现第一封信的收信人和自己在一个村，所以最简单和经济的办法就是自己送去。
+
+	接下来，小K比较了一下第二封的地址和自己的地址，发现第二封信的收信人和自己不在一个村，甚至自己也都不知道如何到达那里，所以小K只好把信送到邮局，
+	由邮局来送这封信。
+
+	信总算送出去了。现在我们来总结一下这个过程需要哪些要素。
+
+	首先需要一个地址，这个地址包括两部分：一是你是哪个村的，二是你住在村里的哪个屋子里。
+
+	其次需要一个邮局来送不是同一个村的信，注意同一个村的信是不需要通过邮局的。
+
+	在使用TCP/IP协议通信的网络中，这个地址就是“IP地址”，IP地址分为网络号和主机号两部分，由四段1~255的数字组成。网络号就相当于地址中标明是哪个村的部分，
+	一个村的网络号是相同的，一个网络号代表一个“子网”。主机号就相当于地址中标明是哪座房子的部分。然而，在IP地址中并没有明确规定哪个部分是网络号，哪个部分
+	是主机号，还需要“子网掩码”来进行区分。网络中的每台计算机都有自己的IP地址，这个地址不能重复。邮局就是实现路由功能的路由器，它知道如何把数据发送到其他
+	子网上。路由器和网络上的其他计算机一样有自己的IP地址。当计算机发现要发送数据的目的地和自己不在同一个子网内时，就把数据发到路由器。为了使同一个子网内
+	的计算机识别出路由器，需要在计算机上配置一下，告诉计算机路由器的IP地址，这个地址在操作系统中称为“GateWay　网关　”。
+	    -----
+5. linux service
+	-----
+	注册一个系统服务，开机自启动．
+
+	1） 脚本编写
+
+	＃vim test.sh
+
+	[python] view plaincopyprint?
+	#!/bin/bash  
+	  
+	#description: hello.sh  
+	#chkconfig: 2345 20 81  
+	  
+	EXEC_PATH=/usr/local/  
+	EXEC=hello.sh  
+	DAEMON=/usr/local/hello.sh  
+	PID_FILE=/var/run/hello.sh.pid  
+	  
+	. /etc/rc.d/init.d/functions  
+	  
+	if [ ! -x $EXEC_PATH/$EXEC ] ; then  
+	       echo "ERROR: $DAEMON not found"  
+	       exit 1  
+	fi  
+	  
+	stop()  
+	{  
+	       echo "Stoping $EXEC ..."  
+	       ps aux | grep "$DAEMON" | kill -9 `awk '{print $2}'` >/dev/null 2>&1  
+	       rm -f $PID_FILE  
+	       usleep 100  
+	       echo "Shutting down $EXEC: [  OK  ]"      
+	}  
+	  
+	start()  
+	{  
+	       echo "Starting $EXEC ..."  
+	       $DAEMON > /dev/null &  
+	       pidof $EXEC > $PID_FILE  
+	       usleep 100  
+	       echo "Starting $EXEC: [  OK  ]"          
+	}  
+	  
+	restart()  
+	{  
+	    stop  
+	    start  
+	}  
+	  
+	case "$1" in  
+	    start)  
+		start  
+		;;  
+	    stop)  
+		stop  
+		;;  
+	    restart)  
+		restart  
+		;;  
+	    status)  
+		status -p $PID_FILE $DAEMON  
+		;;  
+	    *)  
+		echo "Usage: service $EXEC {start|stop|restart|status}"  
+		exit 1  
+	esac  
+	  
+	exit $?  
+
+
+
+	2）注册服务
+
+	# chmod 700 test.sh
+
+	# cp test.sh /etc/init.d/
+
+	# chkconfig --add test.sh
+
+	# chkconfig --list
+
+	3）删除服务
+
+	# chkconfig  --del test.sh
+	-----
+
+
+6. rc.local ，rc.sysinit文件
+{params:[{ip:1.1.1.1,rms_host:1.1.1.2,rms_port:5766},{ip:1.1.1.2,rms_host:1.1.1.2,rms_port:5766}]}
+
+7. 静态路由
+	路由规则，
+	路由器，路由与IP
+
+	tcp包只负责数据传输，对于跨网段的访问，就需要在其外面在包一层IP头，成为一个ip包。ip协议会先判断此包是否和当前host在相同网段，
+	相同则直接发送过去，若不同则需要发给路由，由路由根据规则找到最近的目标host，直到到达目标机或找不到被丢弃（会返回ICMP信息给源host）
+
+
+8. 2台机器测试api部分搭建
+	10.230.226.151
+	10.230.226.152 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day370 Tuesday, September 10, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）落日弓OpenApi项目kick off
+
+	
