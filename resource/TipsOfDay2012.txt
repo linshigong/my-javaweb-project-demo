@@ -3119,7 +3119,7 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 
 	- 简介
 		那么，Dubbo是什么？
-		Dubbo[]是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。
+		Dubbo[]是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。	 (PS: ESB? )
 		（参看HSF的出现背景：
 		随着网站访问量增加，仅仅靠增加机器已不能满足系统的要求，于是需要对应用系统进行垂直拆分和水平拆分。在拆分之后，各个被拆分的模块如何通信？
 		如何保证性能？如何保证各个应用都以同样的方式交互？这就需要一种负责各个拆分的模块间通信的高性能服务框架(HSF)。
@@ -3458,6 +3458,30 @@ ftian20130102
 		redmine
 	
 * nginx	
+	- nginx log 日志查看
+		nginx.conf
+		-----
+		http {
+		    include       mime.types;
+		    default_type  application/octet-stream;
+
+		    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+				      '[$arg_action] $status $resp_code $req_time $body_bytes_sent "$http_referer" '
+				      '"$http_user_agent" "$http_x_forwarded_for" "$upstream_addr" "$http_x_forwarded_for"';
+
+		    access_log  logs/access.log  main;
+		    ...
+		-----
+		PS: 配置了日志打印格式
+
+		access.log
+		-----
+		127.0.0.1 - - [12/Sep/2013:09:58:42 +0800] "GET /open/services?action=detail_vm HTTP/1.1" [detail_vm] 200 - 0 108 "-" "curl/7.15.5 (x86_64-redhat-linux-gnu) libcurl/7.15.5 OpenSSL/0.9.8b zlib/1.2.3 libidn/0.6.5" "-" "-" "-"
+		127.0.0.1 - - [12/Sep/2013:09:58:47 +0800] "GET /open/services?action=describe_vlans HTTP/1.1" [describe_vlans] 200 -497 69 101 "-" "curl/7.15.5 (x86_64-redhat-linux-gnu) libcurl/7.15.5 OpenSSL/0.9.8b zlib/1.2.3 libidn/0.6.5" "-" "10.230.226.151:8080" "-"
+		-----
+		PS: 打印出转发到RS的IP，便于问题定位
+			另外，若没有转发出去，则RS ip那个列值为空的 -tip-
+
 	- nginx转发配置
 		 ---------
 		  ...
@@ -14016,6 +14040,18 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- stat命令		   文件信息查看
+		stat - display file or file system status
+
+	- * grep 
+		grep "model name" /proc/cpuinfo
+	
+		另一种方法，
+		tree -L 5 | grep iso.py
+
+		找文件：
+			find . -name 'iso.py'
+
 	- 例子
 		-----
 		maven,tomcat, jetty 自动部署脚本
@@ -14486,7 +14522,18 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 			------
 	
 		* SecureCRT
+			- 到行首 ，行尾  等快捷键
+			快捷键：
+			1) ctrl + a :  移动光标到行首
+			2) ctrl + e ：移动光标到行尾
+			3) ctrl + d ：删除光标之后的一个字符
+			4) ctrl + w ： 删除行首到当前光标所在位置的所有字符
+			5) crtl + k ： 删除当前光标到行尾的所有字符
+			6) alt + b ： 打开快速启动栏
+			7) alt + 1/2/3... ： 在多个不同的session标签之间切换
+
 			- 快捷键 alt + 1,2,3....切换子标签窗口
+
 
 	-   $# 是传给脚本(或者函数)的参数个数, $0 是脚本本身的名字, $@ 是传给脚本(或者函数)的所有参数的列表. 举例:
 
@@ -23526,7 +23573,7 @@ day151 Tuesday, October 16, 2012
 		自定义image基于snapshot
 		从image表的字段分析：
 			
-4. BSS 业务
+4. BSS 业务			      BSS本身是一个客户端
 	快照系统: 虚拟机的快照系统
 	BlockStorageServices
 
@@ -23539,6 +23586,7 @@ day151 Tuesday, October 16, 2012
 		apsara：飞天，分布式平台系统。
 		pangu：飞天的一个组件，实现分布式存储。
 		BSS： Block Storage System，块存储系统，也即镜像存储系统。
+			是一个客户端，由它决定IO请求交给本地盘古存储还是交给OSS存储
 		OSS： Open Storage System, 开放存储系统，也即快照存储系统。
 
 
@@ -35979,6 +36027,8 @@ day365 Tuesday, September 03, 2013
 		(1). nc_resource表的disk_io1,disk_io2,disk_dfs值，集群部署时需要问阮军	 
 			集群的nc磁盘信息，目前存在region表中，对应去掉原Disk字段，增加上面3种类型，并允许填入对应的值（比如local disk集群disk_dfs=0）
 			具体为region表的vdisk字段替换为上面3个列
+
+			sata默认值 9.1T=9.1 * 1024 = 
 			
 			luorigong库region表修改
 			houyidb库nc_resource表的初始化sql修改
@@ -36366,11 +36416,21 @@ http://www.atatech.org/article/detail/10648/0	    云梯
 	3．	积极思考运维的问题，提供自己能贡献的力量 2.25
 	4．	积极参与运维，项目上碰到的问题的解决 2.75
 
-
+test
+线上
 
 1. 登陆login1.cm3.taobao.org机器
 2. ssh xiaoyun.maoxy@pe1.ops.yh.aliyun.com 密码: （注意是PE1机器，权利很大）
 3.sudo -u admin  ssh 10.249.238.55,或sudo -u admin  ssh 10.249.238.56 (luorigong web机器)
+
+	go2 apiproxy
+		xiaoyun.maoxy@pe1.ops.yh.aliyun.com $ sudo -u admin ssh 127.0.0.1
+		[admin@pe1]$ go2ag ay32c
+		[admin@AY32C_AG]$ vim houyiapilist
+			apiproxy port 80
+			   3 vip:10.135.252.61
+			   4 rs1:10.200.98.52
+
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day368 Friday, September 06, 2013
@@ -36548,6 +36608,7 @@ day369 Monday, September 09, 2013
 
 
 8. 2台机器测试api部分搭建
+	go2houyici
 	10.230.226.151
 	10.230.226.152 
 
@@ -36559,5 +36620,482 @@ day370 Tuesday, September 10, 2013
 
 2. 磐禹项目
 	1）落日弓OpenApi项目kick off
+	2）local disk测试集群搭建houyiapi部分
+		落日弓提供mq安装job
+			
+		马达提供自定义job创建houyi库并初始化基础数据 （QA提供机器的mysql信息）
+	3）MQ安装job实现	  参考心动消息工作流mq的安装
+		erlang(及其依赖包)
+		rabbitmq server http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/trunk_20130904_1258/rabbitmq-service-3.1.3-2503202.x86_64.rpm
+
+		MQ安装： http://wiki.qa.aliyun-inc.com/index.php/%E5%90%8E%E7%BE%BF%E9%83%A8%E7%BD%B2%E6%B5%81%E7%A8%8B#.E5.85.AB.EF.BC.9A.E5.AE.89.E8.A3.85RabbitMQ
+			-----
+			安装RabbitMQ
+
+			安装erlang软件
+				#sudo yum install erlang
+
+			下载rabbitmq-server的包(可以到10.250.6.28上获取)
+				#wget http://www.rabbitmq.com/releases/rabbitmq-server/v2.2.0/rabbitmq-server-generic-unix-2.2.0.tar.gz
+				tar zxvf rabbitmq-server-generic-unix-2.2.0.tar.gz
+				#sudo mv rabbitmq_server-2.2.0 /usr/local/rabbitmq_server
+
+				添加相应的环境变量 (vim /etc/profile)并应用变量
+				#export RABBITMQ_HOME=/usr/local/rabbitmq_server
+				#export PATH=$PATH:$RABBITMQ_HOME/sbin
+				source /etc/profile
+
+				修改rabbitmqr的相应配置信息，例log路径，mnesia路径等
+				#vim /usr/local/rabbitmq_server/sbin/rabbitmq-env, 按照如下操作
+				RABBITMQ_HOME="${SCRIPT_DIR}/.."  (删除)
+				CONFIG_FILE=$RABBITMQ_HOME/conf/rabbitmq (增加)
+				LOG_BASE=$RABBITMQ_HOME/log (增加)
+				MNESIA_BASE=$RABBITMQ_HOME/mnesia (增加)
+
+				#vim /usr/local/rabbitmq_server/sbin/rabbitmq-server 
+				替换 . `dirname $0`/rabbitmq-env 
+				为   . $RABBITMQ_HOME/sbin/rabbitmq-env
+			    
+				#vim /usr/local/rabbitmq_server/sbin/rabbitmqctl
+				替换 . `dirname $0`/rabbitmq-env 
+				为   . $RABBITMQ_HOME/sbin/rabbitmq-env
+
+				#vim /usr/local/rabbitmq_server/sbin/rabbitmq-multi
+				替换 . `dirname $0`/rabbitmq-env 
+				为   . $RABBITMQ_HOME/sbin/rabbitmq-env
+
+			启动rabbitmq server
+			#rabbitmq-server -detached
+
+			API配置MQ地址：
+			修改/home/admin/.houyi/message.properties ，将houyi.message.host改为配置的MQ地址。
+			-----
+
+		houyi1: 10.230.204.67
+
+		同步houyiapi配置步骤
+			realserver中增加2个ip的houyiapi realserver   
+			增加houyiapi域名
+			增加houyiapi对应的odbs（数据库）
+				数据库配置正确
+		
+		增加stop_houyiapi步骤
+
+		添加api task资源（ip地址）
+
+		添加apiproxy资源（ip地址）
+
+		trunk源与branch源的使用，当项目正式发布后，会将branch上更新的源合入trunk；但项目未正式发布，当部署测试集群需要时，可以将源变化的部分合入trunk-test目录下，
+		专门用于这样情况下的源使用，以避免无法使用多个同类型代码源的问题。
+			具体步骤：
+				check out trunk_test分支
+				修改release.ini，将项目上源变动合入
+					changes字段修改
+				提交
+		trunk_test源地址： http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/trunk_test_20130906_1125
+
+		安装apiproxy基础环境，依赖问题，卸载原libevent包后再安装：
+			sudo rpm -e --nodeps libevent-1.1a-3.2.1 
+		
+		启动nginx报错：
+			Starting nginx: nginx: [emerg] no port in upstream "mysql" in /usr/local/openresty/nginx/conf/region.conf:99
+			nginx: configuration file /usr/local/openresty/nginx/conf/nginx.conf test failed		
+	
+			region.conf中，mysql的配置
+			缺少add bigregion步骤的调用（初始化upstream.conf）
+				配置好bigregion，根据bigRegion找到houyiapi域名（大region管理视图中维护），根据域名和rs类型找到proxy，根据bigRegion找到对应apiproxy
+
+				upstream配置文件生成是否ok？
+
+		配置houyiapi（数据导入houyi库）
+			mysql -uapsara -p123456 -h10.230.226.151
+
+
+
+
+	4）QA两台机器上部署houyiapi相关部分，调通
+		磐石houyictrl源： http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/panshi_20130906_1553/
+
+ssh 10.230.226.152 sudo rpm -Uvh http://jenkins.aliyun-inc.com/package/houyi/api_base_package/libevent-2.0.19-2.x86_64.rpm --force
+
 
 	
+3. SHELL 历史命令快速查询
+	ctrl  + i
+
+4. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day371 Wednesday, September 11, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）apiproxy 配置文件
+		同步配置文件，生成upstream文件时，需重建upstream目录，然后将大reigon对应的upstream.conf放到upstream目录下，同时将base.upstream.conf也放到这个目录下，程序会
+		组装upstream目录下的多个文件内容为一个upstream.conf文件，并放到nginx的conf目录下。
+			152测试集群上测试下上面的逻辑
+			nginx.conf中配置进来独立的配置文件：
+			include upstream/*.upstream.conf;
+		
+		新部署需要增加同步上面base.upstream.conf文件的步骤，数据一部分根据houyiapi找到odbs信息，memcached信息从页面输入（默认值采用模板中的值）
+
+	2）合并诸葛最后的修改到磐禹分支
+
+3. 2个不同svn分支
+	1分支有修改，打patch，要合入2分支，报错？
+
+	对比版本1和版本2生成patch（or diff），然后将patch合入其中一个的版本中。注意：这里需要2个版本的直接比较，然后出patch，而不是自己对比出patch -tip-
+
+4. code review
+	1) isoworker
+		判断脚本是否成功，不能用返回值是否为空来判断 ，改为 if isSuccess == 'True'
+	2) crontab文件的修改
+		改为模板替换的方式
+		envworker
+
+		即应该是在生成配置步骤（即生成crontab文件时）修改，不是在初始化AG步骤（推送配置时）去做
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day372 Thursday, September 12, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）code review修改  参考day371第4条
+		crontab修改
+			“生成配置” clusteredDeployAction.buildConfig
+			此步骤生成AG角色的crontab文件，并同步到AG上；后续，在“初始化AG”时，将crontab最新内容更新到AG上。
+
+		模板用java web端的模板文件（agent端也有同样的模板文件？）
+			
+
+
+	2）邮件通知cloud，rc.local变化，@xxx
+		wiki:  http://wiki.ec.alibaba-inc.com/index.php/Xen虚拟化/alios_5u7项目/落日弓改动说明
+			start tdc 部分也注释掉，替换为service启动
+
+		集群部署初始化AG步骤时，将dir_luorigong目录中由 生成配置 步骤生成的rc.local文件，拷贝到AG的系统rc.local所在目录
+
+		然后，在集群配置时，
+
+		* rc.local 文件
+
+		同步rc.local时，java web端即时生成文件，放到dir_luorigong指定目录下，然后同步到各个vm机器 env中的file_dayu_iplist_vm
+
+		在生成AG配置时，其中一个步骤就是生成AG的rc.local文件
+				根据角色不同有不同的rc.local文件，本步骤生成AG配置，只生成AG角色自己的rc.local；另外，vm的rc.local文件是在集群配置中的同步rc.local按钮实现的。
+
+
+			
+	3) apiproxy测试
+		10.230.226.70 
+		测试环境api-proxy  配置参考
+
+		upstream目录下的文件，命名格式为 xxx.upsteam.conf
+			eg: upstream.conf.cn-hangzhou-xy2-ci01.1378816640 改为： cn-hangzhou-xy2-ci01.upstream.conf
+	
+		Proxy转发规则说明wiki：  -tip-	     参考：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9247654
+			根据请求的action，从region.json文件中找到此action应该采用哪种转发规则，目前有的规则为：
+				a. check_vm_name_actions 根据vmName找转发目标（根据vmName从houyi库查询其所属的大regionNo，然后转发到upstream目录下对应大regionNo配置的RS上） 
+				b. check_ip_actions 根据ip从houyi库找到对应的大regionNo
+				c. redirect_actions	 直接重定向（默认upstream，即base.upstream.conf）
+				d. region_actions
+
+			如果上面都没匹配到，会转发到base.upstream.conf中配置的默认大regionNo上去。
+	
+		apiproxy机器有访问控制，需要配置落日弓机器到apiproxy机器的acl，在apiproxy的region.conf文件中配置
+			-----
+			-----
+
+
+	4）权限设计思考
+	5）集群信息中 disk的默认值确认？
+	6）配置houyiapi连调
+		DatabaseGenAction.initDbForHouyiDeploy
+
+	7）推动MQ的rpm包？
+
+
+
+
+3. api proxy转发规则
+	-----
+		API Proxy 转发规则详细
+
+		需求
+		根据URL中参数判断出需要转发的大region实际API地址
+
+		例如请求URL：
+
+		http://x.x.x.x/open/service?action={action}&{other...}
+		规则
+		根据URL中action分为三类（默认upstream：cn_hangzhou_dg_a01）：
+
+		必选参数	 列表
+		1) vm_name	 start_vm
+		stop_vm
+		restart_vm
+		release_vm
+		reset_vm
+		reset_passwd
+		modify_vm
+		modify_flow_limit
+		modify_hostname
+		recover_vm
+		query_available_ncs
+		mount_iso
+		unmount_iso
+		query_mounted_iso
+		add_disk
+		remove_disk
+		shift_disk
+		detail_vm
+		query_vm_security
+		assign_ip
+		bind_ip
+		unbind_ip
+		monitor_vm
+		refresh_vm_acls
+		query_vm_device
+		create_snapshot
+		cancel_create_snapshot
+		list_snapshot
+		remove_snapshot
+		rollback_snapshot
+		retain_snapshot
+		list_mounted_snapshot
+		mount_snapshot
+		unmount_snapshot
+		open_ftp_pasv
+		dd_dns_alias
+		del_dns_alias
+		live_migrate_vm
+		release_vip_member
+		flush_control_ip_chain
+		refresh_vm_acls – 大region新加
+		join_group – 大region新加
+		leave_group – 大region新加
+		2) ip	 'release_ip', 'assign_vip', 'release_vip', 'describe_vip'
+		3) 直接重定向（默认upstream）	 'query_regions'
+		规则：
+
+		1) 判断action参数，为空直接返回-40（illegal service）错误。
+
+		2) 判断是否在{直接重定向}规则，如果有直接返回默认region。
+
+		3) 判断是否{vm_name}参数规则中：
+		   a). 判断vm_name是否为空，为空直接返回-200（vm name must set）错误。
+		   b). 根据vm_name查询instance表，结果为空返回-205（vm not exist）错误，否则返回region_no。
+
+		4) 判断是否在{ip}参数规则中：
+		   a). 判断ip是否为空，为空直接返回-400（ip must set）错误。
+		   b). 判断ip格式，非合法ip返回-405（ip pattern illegal）错误。
+		   c). 根据ip查询zone_ip表，结果为空返回-410（ip not exists）错误。
+
+		5) 如果URL中含有"region_no=xxx"，直接返回region_no。
+
+		6) 如果URL中含有"session=xxx"，根据{session}参数查询user表中default_region返回。
+
+		7) 走到这里，说明上述条件都不符合，返回-40（illegal service）错误。
+		proxy配置示例（正式时候替换）：
+
+		proxy lua配置：
+		local all_regions = {
+		    ["cn-beijing-btc-a01"] = { -- big region/upstream name
+			"cn-beijing-1",        -- AY13A
+			"cn-beijing-btc4",     -- AY13B
+		    },
+		    ["cn-hangzhou-dg-a01"] = { -- big region/upstream name
+			"cn-hangzhou-1",       -- AY41A
+			"cn-hangzhou-dg6",     -- AY41C
+			"cn-hangzhou-dg8",     -- AY41D
+			"cn-hangzhou-dg104",   -- AY41E
+			"cn-hangzhou-dg4",     -- AY41F
+			"cn-hangzhou-dg101",   -- AY41G
+		    },
+		    ["cn-hangzhou-xy-a01"] = { -- big region/upstream name
+			"cn-hangzhou-xy001",   -- AY47A
+		    },
+		}
+
+		nginx配置：
+		upstream cn-beijing-btc-a01 {
+		    server 10.247.37.7:80;
+		    server 10.247.37.8:80;
+		}
+
+		upstream cn-hangzhou-dg-a01 {
+		    server 10.204.99.194:80;
+		    server 10.204.99.195:80;
+		}
+
+		upstream cn-hangzhou-xy-a01 {
+		    server 10.204.99.196:80;
+		    server 10.204.99.197:80;
+		}
+	-----
+	PS: 注意，api proxy会模拟返回某些和houyiapi一样的返回值
+
+4. onenote
+	记录邮件等
+
+5. 集成商与规范
+
+6. 迭代器模式 Iterator -tip-	  设计模式
+	接口提供统一的抽象，调用；实现类去实现自己迭代的逻辑，调用者不关心。
+	standardProvider.charsets()
+
+	设计
+	将易变的部分与不变的部分分离，不变的地方抽象为接口，易变的地方由各自的实现类去实现。
+
+	比如处理从文档拿到对象列表的应用场景，需要解析的文档类型可能很多种类，但
+
+7.  houyiapi的agent在112，具体houyictrl操作需要到houyici的AG上去看日志
+注意
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day373 Friday, September 13, 2013
+
+1. 
+	* 磐禹项目
+
+2. 磐禹项目
+	1）IsoWorker.py中有中文问号，导致程序执行错误，也无错误日志输出。
+	通过单元测试发现。
+
+	在228上执行agent单元测试，有问题直接修改python文件，然后重启再测试的方式排查解决问题。-tip-
+
+	python单元测试方式，小节 ：？
+
+	* python 
+	下标访问与getXXX访问的区别，比如dict对象下标访问时，如果key不存在则会出错：KeyError ；而通过getXXX方法获取时python会自己处理不存在的情况，返回空。-tip-
+
+
+	go2info pet命令
+
+	Image上传，需要生成imageslist.conf，里面的device_size要和上传的Image的大小一致，（PS: 里面测试时，随意填了1，但后续却很难发现错误在哪里 why?）
+		另外，上传Image时，image的信息要填写正确
+			src_image_id=0   
+			iso_id 根据image类型，找到能启动此image的ISo，比如centos5u4_32_20G_alibase_v01.vhd要用 linux 32 iso 类型的iso，可以到houyi库iso_resource 表找  -tip- 业务
+				image借助ISO启动，即启动vm
+			
+		
+		eg: HOUYICI	http://10.230.204.21/image/	centos5u4_32_20G_alibase_v01.vhd	9:centos	1:共享	3171	0	vhd	x86	20	32	0:不支持	0:不支持	0:BaseImage	0	2:BUCKET_ON_KFC
+
+
+
+	2) MQ安装步骤整理
+		安装，配置
+
+	3）通用权限管理
+		spring security + BUC ? 
+		预研
+
+3. wget xxx -O dir/fileName目录要创建好
+	
+
+4. spring security * spring 权限系统 权限管理 权限设计
+	-----
+	通用
+	设计目标：
+		多维度的权限控制
+		分角色管理
+		不侵入业务，权限自成体系
+		易于扩展和通用，能方便的应用于其他系统
+	
+	权限组成部分：
+		权限资源（定义的权限，eg: uri）
+		角色(权限分配给角色)
+		组（用于分组的需求，与角色多对多关系）
+	
+	参考，权限设计
+	-----
+		权限组件
+		这里的权限组件部部包含单点登录和session数据缓存。
+		权限管理现状
+		目前BOPS的权限体系提供基于java服务的接口，和在页面层使用的标签库上的权限封装。
+		提供的权限服务接口
+			提供基于URL的权限控制
+			基于功能的权限控制
+		主要体现在两个地方，授权给指定人员可以查看指定人员列表的业务办理情况。
+		权限组成要素：
+		用户、组、角色、权限资源，权限分配
+		权限组件
+		为了方便以后系统国际站或者国内站的统一权限管理，这里提出权限组件的方案。
+		权限组件系统结构图
+		       
+		权限基础数据维护
+		权限数据维护的内容有：
+			权限资源维护
+			组织机构资源维护
+			权限分配
+		流程如图所示
+			     
+
+		业务页面调用权限的结构图
+
+		 
+		业务子系统调用权限的结构图
+		 
+		权限体系组成要素
+		权限资源
+		   按照树形关系组织权限资源，该对象包含如下主要属性：权限资源标识，上级资源标识，资源名称，资源描述，资源有效性。
+		组织机构资源
+		组织机构资源主要有以下类型：
+			人员
+		人员对应现实组织机构中的人员。
+			用户组
+		现实组织机构中，一个公司或者企业，一般有下属子公司，下属部门，部门下有子部门，最后一级部门下可能还有小组。最底层才是人员。
+		为此，在这里把用户组，抽象为抽象用户组和具体用户组。抽象用户组对应组织机构中的子公司、部门、子部门，下属节点是抽象用户组或者实体用户组；具体用户组为实体用户组，下面挂接的是人员。
+		一个人员可以同时出现在多个用户组中。
+			组织机构资源的有效性
+		在一个组织机构中，人员或者用户组是存在一个存续时间的问题，因此对于这两个业务对象，需要有组织资源有效性（或者包含存在开始时间和存在结束时间）的业务属性。
+		权限分配
+		系统中的权限资源一般来说可以分配到多个部门或者用户。为了方便权限分配，这里引入角色这个业务对象。
+			角色
+		   角色是组织机构中的普通对象，可以由人员或者用户组组成。一个角色可以包含一个或者多个用户，也可以包含一个多个用户组。
+			权限分配
+		权限分配是指把权限资源分配给指定的角色。具有指定角色的用户或者用户组下的人员具有访问该权限资源的权限。
+		权限分配的有效性：在一个权限资源分配给指定角色后，可以再进行临时取消，因此在权限分配对象上，需要有权限分配有效性的属性。
+		权限的继承
+		权限的继承来自于两个方面，一个是来自于权限资源树的继承。另外一个是来自于组织机构树上的继承。
+		权限资源树上的权限继承：
+		是指一个上级权限资源分配给指定的角色后，该权限资源的后代节点都可以被指定的角色所访问。
+		组织机构树上的权限继承
+		是指一个权限资源被分配给指定的用户组后，该用户组下后代用户组和人员都可以访问指定的权限资源。
+		权限的串联
+		权限的串联是从组织机构角度来描述的，对于指定的组织机构对象（用户组或者用户），只要满足以下条件中的其中一个，就通过了权限检测，实现了权限串联检测：
+		当前用户直属的角色被分配的了权限，那该用户就通过了权限资源检测。
+		当该用户所在的用户组被分配的相关的权限，那用户拥有相关的权限。
+		当该用户所在的祖先用户组被分配的相关的权限，那用户拥有相关的权限。
+		权限的并联检测
+		      在权限资源上自定权限并联属性：资源树上权限是否允许继承，组织机构树上是否允许继承。
+		权限的时效性
+			在权限资源有时间属性和有效性属性；
+			在组织机构对象上有时间属性和有效性属性
+			在权限分配上有时间属性和有效性属性
+		权限的服务接口：
+		提供基于java接口的服务接口
+		提供页面层权限接口
+	-----
+
+5. [admin@HOUYICI_AG]$ pwd
+/home/admin/pet/trunk/conf.d/houyi/pyconf.d
+	所有配置，会覆盖
+
+6. image上传
+	wake up and query
+	[2013-09-13 20:10:05,049 13844 47698113827168] DEBUG (system.py:110) 
+	[jobuuid:16868b09-0635-4f8f-81ac-153aabe403bb] /opt/tdc/tdc_admin 162982 -1 --query_snapshot_progress /tmp/162982.conf.oss
+	[2013-09-13 20:10:05,049 13844 47698113827168] DEBUG (system.py:110) 
+	[jobuuid:16868b09-0635-4f8f-81ac-153aabe403bb] /opt/tdc/tdc_admin 162982 -1 --query_snapshot_progress /tmp/162982.conf.oss
+	[2013-09-13 20:10:05,050 13844 47698113827168] DEBUG (system.py:110) 
+	[jobuuid:16868b09-0635-4f8f-81ac-153aabe403bb] [Debug] snapshot progress: 85
+	[2013-09-13 20:10:05,050 13844 47698113827168] DEBUG (system.py:110) 
+
+	查询快照进度
