@@ -21,7 +21,101 @@ ft2013-04-22
 * wRawac7ece	   ft
 * 6843 ft75
 * 静态路由
-	
+* 网盘
+skydriver.com
+https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=11&ct=1379419025&rver=6.2.6289.0&wp=MBI_SSL_SHARED&wreply=https:%2F%2Fskydrive.live.com%2F%3Fmkt%3Dzh-CN&lc=2052&id=250206&cbcxt=sky&mkt=zh-CN&cbcxt=sky
+* js * javascript
+	- js异常捕获
+		-----
+			js如何捕获异常
+			在JavaScript可以使用try...catch来进行异常处理。例如： try {
+			foo.bar();
+			} catch (e) {
+			alert(e.name + ": " + e.message);
+			}
+			目前我们可能得到的系统异常主要包含以下6种:
+			EvalError: raised when an error occurs executing code in eval()
+			RangeError: raised when a numeric variable or parameter is outside of its valid range
+			ReferenceError: raised when de-referencing an invalid reference
+			SyntaxError: raised when a syntax error occurs while parsing code in eval()
+			TypeError: raised when a variable or parameter is not a valid type
+			URIError: raised when encodeURI() or decodeURI() are passed invalid parameters
+			上面的六种异常对象都继承自Error对象。他们都支持以下两种构造方法: new Error();
+			new Error("异常信息");
+			手工抛出异常的方法如下：
+			try {
+			throw new Error("Whoops!");
+			} catch (e) {
+			alert(e.name + ": " + e.message);
+			}
+			如要判断异常信息的类型，可在catch中进行判断：
+			try {
+			foo.bar();
+			} catch (e) {
+			if (e instanceof EvalError) {
+			alert(e.name + ":" + e.message);
+			} 
+			else if (e instanceof RangeError) {
+			alert(e.name + ": " + e.message);
+			} 
+			// etc 
+			}
+			Error具有下面一些主要属性：
+			description: 错误描述 (仅IE可用).
+			fileName: 出错的文件名 (仅Mozilla可用).
+			lineNumber: 出错的行数 (仅Mozilla可用).
+			message: 错误信息 (在IE下同description)
+			name: 错误类型.
+			number: 错误代码 (仅IE可用).
+			stack: 像Java中的Stack Trace一样的错误堆栈信息 (仅Mozilla可用).
+			因此为了更好的了解错误信息我们可以将catch部分改为如下形式： try {
+			foo.bar();
+			} catch (e) {
+			if (browserType != BROWSER_IE) { 
+			alert("name: " + e.name + 
+			"message: " + e.message + 
+			"lineNumber: " + e.lineNumber + 
+			"fileName: " + e.fileName + 
+			"stack: " + e.stack); 
+			} 
+			else { 
+			alert("name: " + e.name + 
+			"errorNumber: " + (e.number & 0xFFFF ) + 
+			"message: " + e.message"); 
+			} 
+			}
+			JavaScript中的throw命令事实上可以抛出任何对象，并且我们可以在catch接受到此对象。例如：try {
+			throw new Date(); // 抛出当前时间对象 
+			} catch (e) {
+			alert(e.toLocaleString()); // 使用本地格式显示当前时间
+		-----
+		from: http://hi.baidu.com/wangkaijiangg/item/90f15e2600331d170975080c
+
+		eg: 
+		-----
+			if (value == 'running') {
+				return '正在执行';
+			} else if (value == 'finished') {
+				result = record.get('result');
+				if(result == null || result == ''){
+					return '执行失败';    				
+				}
+				try {
+						result = Ext.JSON.decode(result);
+					} catch (e) {
+						alert("json转换错误,请检查返回值,result=" + result);
+						return '执行失败';
+					}
+				if (result.code == 200) {
+					return '执行完成';
+				} else {
+					return '执行失败';
+				}
+			} else {
+				return value;
+			}
+		-----
+
 * 独享带宽
 	-----
 	基本简介
@@ -3922,6 +4016,12 @@ ftian20130102
 	google code 提供svn服务，但页面上不便于svn操作，比如添加分支，添加目录等，可通过svn工具来操作，如 TortoiseSVN，来建立新目录等等。
 
 * 代码合并    svn merger merger代码 * svn
+	- svn拉分支，建立trunk，branch
+		svn cp -r xxx http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/trunk http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/branches/luorigongweb_for_openapi -m "based on trunk@r2607124" 
+
+		-r不传就是取HEAD版本；-m 注释；
+		建立trunk，可从某个支 svn cp 到trunk目录下即可
+
 	- svn提交报错
 		Server sent unexpected return value (405 Method Not Allowed) in response to MKACTIVITY
 		PS: 试着将http改为https
@@ -4698,6 +4798,8 @@ ftian20130102
 		http://archive.apache.org/dist/commons/dbcp/
 
 * jetty http client	jetty httpclient
+	- web环境要临时修改一些文件，可从war包中解压到的tmp目录中修改
+
 	- doc
 		ref: http://www.eclipse.org/jetty/documentation/current/http-client-api.html
 
@@ -9068,6 +9170,9 @@ search in index find pdf
 	    2.3)CentOS 5的yum源设为上海交通大学网站 
 
 * vim
+	- 通过 shift + * 以及 /xxx方式的搜索，查看代码时快速定位方法，单词
+		搜索的方式实现
+
 	-自动缩进
 		在文件末尾添加一行，输入  set autoindent
 		在添加一行，输入         set cindent
@@ -13810,9 +13915,10 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		ref: http://www.python.org/dev/peps/pep-0263/
 
 
-	- pytest
+	- pytest * python单元测试
 		python测试工具
 		scales from simple unit to complex functional testing
+
 	- edit plue开发python
 		
 		运行python文件，需要参数时，可以配置对应tool的argument选项，如：配置为 $(FileName) $(Prompt) ，这样在运行时允许指定参数
@@ -14040,6 +14146,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	pd12 连接mysql，database菜单-configure data connection - 选择 connection profiles 设置即可
 
 * shell
+	- shell下，shell脚本方法，属性，引用查看，python编写 以及查看 
+		通过shift + * 匹配方式，跳跃查看代码
+
 	- stat命令		   文件信息查看
 		stat - display file or file system status
 
@@ -29880,6 +29989,9 @@ day303 Friday, May 24, 2013
 		
 
 4. extjs * extjs
+	- extjs json json转换 字符串到json
+		var responseTextObject = Ext.JSON.decode(response.responseText);
+
 	- 官网 
 		http://www.sencha.com/products/extjs/
 	- 
@@ -33942,31 +34054,6 @@ day349 Monday, August 12, 2013
 	这个例子，也学习如何从无到有来创建一个extjs显示页面，包含多个组件。
 
 
-
-backup houyi
-zone_ip
-	AT03-HOUYI1-A | AT03-HOUYI1 | 10.249.1.1-10.249.250.254     |  184090881 |  184154878 |
-| AT03-HOUYI1-A | AT03-HOUYI1 | 110.75.177.0-110.75.177.32    | 1850454272 | 1850454305 |
-| AT03-HOUYI1-B | AT03-HOUYI1 | 10.249.204.2-10.249.204.10    |  184142850 |  184142858 |
-| AT03-HOUYI1-B | AT03-HOUYI1 | 110.75.177.32-110.75.177.63   | 1850454304 | 1850454335 |
-
-mysql> select * from region;
-+-----------+-------------+---------------+--------+-------------------+---------+------------+--------+---------------------+
-| region_no | region_name | nuwa_address  | status | big_ether_network | upgrade | visibility | weight | router_address      |
-+-----------+-------------+---------------+--------+-------------------+---------+------------+--------+---------------------+
-| HOUYICI   | HOUYICI     | 10.230.204.55 |      1 |                 1 |       1 |          1 |      0 | 10.230.204.55:38930 |
-+-----------+-------------+---------------+--------+-------------------+---------+------------+--------+---------------------+
-
-mysql> select * from monitor_datasource;
-+--------------------------------------------------------------------------------------+----------+--------+-----------+-----------------+-----------------------+----------+------------+----------+--------------------+
-| url                                                                                  | username | passwd | region_no | index_at_region | driver_class          | min_idle | max_active | max_idle | validation_query   |
-+--------------------------------------------------------------------------------------+----------+--------+-----------+-----------------+-----------------------+----------+------------+----------+--------------------+
-| jdbc:mysql://10.230.204.55:3306/houyimon?useUnicode=true&amp;characterEncoding=utf-8 | apsara   | 123456 | HOUYICI   |               0 | com.mysql.jdbc.Driver |       10 |         20 |       20 | SELECT 1 FROM DUAL |
-+--------------------------------------------------------------------------------------+----------+--------+-----------+-----------------+-----------------------+----------+------------+----------+--------------------+
-
-create_monitor_db
-
-
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day350 Tuesday, August 13, 2013
 
@@ -36417,7 +36504,7 @@ http://www.atatech.org/article/detail/10648/0	    云梯
 	4．	积极参与运维，项目上碰到的问题的解决 2.75
 
 test
-线上
+线上环境
 
 1. 登陆login1.cm3.taobao.org机器
 2. ssh xiaoyun.maoxy@pe1.ops.yh.aliyun.com 密码: （注意是PE1机器，权利很大）
@@ -37099,3 +37186,206 @@ day373 Friday, September 13, 2013
 	[2013-09-13 20:10:05,050 13844 47698113827168] DEBUG (system.py:110) 
 
 	查询快照进度
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day374 Monday, September 16, 2013
+
+1. 
+	* 磐禹项目    发布
+
+2. 磐禹项目
+	1）ISO上传
+		osscmd执行时报错，与OSS同学沟通，“osscmd中会默认连接三级域名，也就是bucket.test-ecs-oss.aliyun-inc.com但是域名解析系统并没有解析这个地址”
+		需要pe去做这个dns解析变更
+		测试环境先在 osscmd的机器上绑定3级域名的解析
+
+		通过osscmd命令先测试下是否能找到oss服务？
+			/etc/houyi/osscmd/osscmd
+			
+			是因为3级域名是根据bucket来定义的，每次都可能变化，故需要dns解析    -坑-
+
+			查看iso.py脚本，获取oss信息时，从houyi,houyiregiondb中拿到对应小regionNo的oss info信息；用于后续与oss的交互。
+				-----
+				def make_oss_info(iso_name):
+				    '''Make oss infomations from database.'''
+				    houyi = db.Houyi()
+				    region_no = config.get_region_no()
+				    cluster_id = houyi.get_cluster_id(region_no)
+				    houyi.close()
+
+				    regiondb = db.Houyiregiondb()
+				    results = regiondb.query('''select access_id,access_key,ocm_addr,domain
+					    from oss_info,cluster_info where oss_info.id=cluster_info.oss_id
+					    and cluster_info.cluster_id="%s" limit 1''' % cluster_id, is_dict = True)
+				    results = db.first(results)
+				    regiondb.close()
+
+				    # Make the oss info dictionary
+				    bucket_name = get_bucket_name()
+
+				    oss_info = {
+					"oss_access_id": str(results.access_id),
+					"oss_access_key": str(results.access_key),
+					"oss_object_path":  str(get_object_path(bucket_name, iso_name)),
+					"oss_domain": str(results.domain),
+					"oss_ocm_address": str(results.ocm_addr)                                                                                                                                 
+				    }    
+
+				    return oss_info
+				-----
+		
+		du -sh | grep G
+			summary
+			human readable
+		/home/admin/luorigong目录下，发布过程中下载的image文件等都未删除，导致磁盘满。
+
+	******** ISO上传业务 *******
+	上传ISO的步骤：
+		1） wget xxx.iso
+		2）upload to pangu OR oss
+		3) Insert iso resource
+			return iso_id
+		4) Start to update iso id
+			修改houyi.image表中iso_id列
+		
+	上传ISO的目的： -tip-
+		每个Image镜像都需要找到合适的ISO来启动，有多种分类，目的就是从vhd的image起vm并可进行一些系统配置。
+		这样，上传ISO时，先从houyi.iso_resource表插入iso记录，上传好后，更新houyi.image表，根据platform找到应该用此ISO启动的Image，更新
+		它们的iso_id为刚上传的ISO.
+		发布ISO的需求，比如系统升级，系统配置修改，优化等。
+	
+	页面状态显示问题：
+		job已经成功，基于job_instance表的数据，但页面还是显示失败，待修复？
+			Tab页: ManageIsoPanel.js  切换tab时触发定时刷状态任务
+				Store定义在tab页上： IsoJob.js
+
+	ISO上传：
+	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/debian-64-gshell-livecd.iso
+	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/debian-live-6.0.5-amd64-rescue.iso
+	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/winpe.iso
+	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/windows-virt-1802945-20130503.iso
+	http://ftp.ec.alibaba-inc.com/public/builds/iso/virt/linux_32-virt-release-2472418-20130729.iso
+	http://ftp.ec.alibaba-inc.com/public/builds/iso/virt/linux_64-virt-release-2472418-20130729.iso
+	http://ftp.ec.alibaba-inc.com/public/builds/iso/virt/ubuntu_12.04_64-virt-release-2472418-20130730.iso
+
+
+	2）houyici ag上起vm测试
+		sh houyi_api.sh  create_instance user_id=229 region_id=HOUYICI cores=2 memory=1004 group_id=default image_id=redhat54.64.20120823.qa_rpc.vhd system_disk.type=io1  
+		system_disk.bps=80 system_disk.iops=60
+
+		sh houyi_api.sh  create_instance user_id=229 region_id=HOUYICI cores=2 memory=1004 group_id=default image_id=redhat54.64.20120823.qa_rpc.vhd system_disk.type=io1  
+		system_disk.bps=80 system_disk.iops=60 nc_id=3000-5		
+		
+		路径： /home/admin/pet/trunk/houyi/houyi_manage/toolkit
+		sh houyi_api.sh start_vm vm_name=VM-55379f86-0f1c-4b4d-8e71-8fcbdc3652df
+			配置： /etc/houyi_pet/conf.d/houyi/shconf.d/xxx.conf
+			修改为正确的houyi库
+		
+		启动vm后，到xen机器上看vm是否启动：
+			-----
+			控制系统角色/houyi角色查看 (AG上查看)/apsara/deploy/Fuxisrvd -v houyi status 	       （ag作为master访问入口admin gateway）
+				master、netc
+				history |grep status
+				/apsara/deploy/Fuxisrvd -v houyi status
+					查看控制系统，集群的角色（由多少nc组成，有哪些服务角色，各自在那个ip上）
+			-----
+			PS: 查看day126 第3条
+
+			go2nc vmName 命令
+				工具根据vmName找到nc的ip并跳过去
+			
+			查看nc日志
+				vim /var/log/houyi/master/HouyiMaster.LOG
+				...
+			/home/admin/.config_cluster/role.def_xxx.conf
+				记录houyi角色
+			
+
+3. 线上发布
+	[2013-09-16 22:44:50,028 7447 47300338544880] DEBUG (errCode.py:15) global name 'sys' is not defined
+	  File "/home/admin/luorigong-server/orange/jobworker/master.py", line 164, in <module>
+	    main()
+	  File "/home/admin/luorigong-server/orange/jobworker/master.py", line 158, in main
+	    print {'code': get_code(e), 'msg': wrap_exc(logger, e)}
+	  File "/home/admin/luorigong-server/orange/jobworker/../errCode.py", line 9, in wrap_exc
+	    tracebk = traceback.format_stack()
+	Traceback (most recent call last):
+	  File "/home/admin/luorigong-server/orange/jobworker/master.py", line 147, in main
+	    orange.utils.write_pid_file(pid_file, os.getpid())
+	  File "/home/admin/luorigong-server/orange/jobworker/../orange/utils.py", line 273, in write_pid_file
+	    sys.exit('Unable to create %s.  Running as non-root?'
+	NameError: global name 'sys' is not defined 	
+
+4. 程序打包为rpm，并设置service启动时，因为pid文件的目录不存在，导致python报引用未导入的库方法，原因？
+	* python
+	-----
+		NameError: global name 'sys' is not defined
+		Traceback (most recent call last):
+		File "/home/admin/luorigong-server/orange/jobworker/master.py", line 147, in main
+			orange.utils.write_pid_file(pid_file, os.getpid())
+		File "/home/admin/luorigong-server/orange/jobworker/../orange/utils.py", line 273, in write_pid_file
+			sys.exit('Unable to create %s.  Running as non-root?'
+		...
+		[admin@AY48A_AG]$ sudo service lrg-agent start
+		sudo: cannot get working directory
+		shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+		job-working-directory: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+		chdir: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+	-----
+	PS: 根据错误提示，报的是引用库函数找不到；
+	后来查明原因，是启动时要写入pid文件，pid文件的目录不存在，导致启动失败。
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day375 Tuesday, September 17, 2013
+
+1. 
+	* 磐禹项目发布后，小问题修复
+
+2. 发布后小问题
+	1）集群完成部署后的，集群信息页面，加上zone存储类型的字段显示
+	2）加入嫦娥接口，db信息错误，源于代码查询odbs时有bug；同时api task配置生成也受影响
+		apitask的jobinst的componentId=0，因为它不属于小region，可以通过apitask对象的houyiapiId关联，到odbs查找dbTyep为ecs_houyiapi且idType（
+		根据dbType不同表示不同表的id）为此houyiapiId的记录，即为houyi库的odbs对象。
+
+3. 基于某个分支，建立trunk，然后基于trunk，建立用于并行开发的3个分支						合并分支 分支合并		    * svn
+	此时，trunk上有修改，在3个分支中的某一个分支上修改后，合入trunk，其他2个分支，合入trunk的修改并提交即可。
+	后续，3个分支再合会trunk时，上面的修改不会冲突。conflict
+
+4. python单元测试实践
+	GREP: * python单元测试
+	目的：实践一种python单元测试，满足项目开发自测需要，减少开发测试时间消耗
+	
+	方案：
+		
+	实践步骤：
+		
+
+3. telnet测试端口连通性 是否连通 端口开放 端口打开
+	-----
+	eg1:
+
+	[root@luorigong-ag ~]# telnet 10.250.8.214 5672
+	Trying 10.250.8.214...
+	Connected to 10.250.8.214.
+	Escape character is '^]'.
+
+	eg2:
+	[admin@AYXXB_AG]$ telnet 10.249.238.58 5672
+	Trying 10.249.238.58...
+	telnet: connect to address 10.249.238.58: No route to host
+	telnet: Unable to connect to remote host: No route to host
+	-----
+
+	* telnet
+	-----
+	telnet - user interface to the TELNET protocol
+
+	SYNOPSIS
+	       telnet [-8] [-E] [-F] [-K] [-L] [-S tos] [-X authtype] [-a] [-c] [-d] [-e escapechar] [-f] [-k realm] [-l user] [-n tracefile] [-r] [-x] [host [port]]
+
+	DESCRIPTION
+	       The  telnet  command is used to communicate with another host using the TELNET protocol.  If telnet is invoked without the host argument, it enters com-
+	       mand mode, indicated by its prompt ( telnet>).  In this mode, it accepts and executes the commands listed below.  If it is invoked  with  arguments,  it
+	       performs an open command with those arguments.
+	-----
+	PS: #telnet hostName [Port]
