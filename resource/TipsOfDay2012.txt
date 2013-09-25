@@ -17,10 +17,291 @@ multi-boxing hotkeynet  keyclone
 	octopus http://www.ownedcore.com/forums/world-of-warcraft/world-of-warcraft-guides/249823-multiboxing-guide-1-pc-5-accounts.html
 tmp
 ft2013-04-22
+
+* 网络 * 子网掩码 * 网段
+	-----
+		IP地址
+
+		IP默认分配的子网掩码每段只有255或0
+		A类的默认子网掩码　255.0.0.0　一个子网最多可以容纳1677万多台电脑
+		B类的默认子网掩码　255.255.0.0　一个子网最多可以容纳6万台电脑
+		C类的默认子网掩码　255.255.255.0　一个子网最多可以容纳254台电脑
+		要想在同一网段，只要网络标识相同就可以了，那要怎么看网络标识呢？首先要做的是把每段的IP转换为二进制。（有人说，我不会转换耶，没关系，我们用Windows自带计算器就行。打开计算器，点“查看”>>"程序员型"，输入十进制的数字，再点一下“二进制”这个单选点，就可以切换至二进制了。）
+		把子网掩码切换至二进制，我们会发现，所有的子网掩码是由一串连续的1和一串连续的0组成的（一共4段，每段8位，一共32位数）。
+		255.0.0.0　11111111.00000000.00000000.00000000
+		255.255.0.0　11111111.11111111.00000000.00000000
+		255.255.255.0　11111111.11111111.11111111.00000000
+		这是A/B/C三类默认子网掩码的二进制形式，其实，还有好多种子网掩码，只要是一串连续的1和一串连续的0就可以了（每段都是8位）。如11111111.11111111.11111000.00000000，
+		这也是一段合法的子网掩码。子网掩码决定的是一个子网的计算机数目，计算机公式是2的m次方，其中，我们可以把m看作后面0的个数。如255.255.255.0转换成二进制，
+		那就是11111111.11111111.11111111.00000000，后面有8个0，那m就是8，255.255.255.0这个子网掩码可以容纳2的8次方（台）电脑，也就是256台，但是有两个IP是不能用的，那就是最后一段不能为0和255，减去这两台，就是254台。
+		编辑本段
+		计算方法
+
+		00　把将其转换为二进制的四段数字（每段要是8位，如果是0，可以写成8个0，也就是00000000）
+		11111111.1111111.11111000.00000000
+		然后，数数后面有几个0，一共是有11个，那就是2的11次方，等于2048，这个子网掩码最多可以容纳（2048-2）=2046台电脑。
+		我们再来看看这个改为默认子网掩码的B类IP
+		如IP：188.188.0.111，188.188.5.222，子网掩码都设为255.255.254.0，在同一网段吗？
+		编辑本段
+		二进制
+
+		IP(A) 188.188.0.111　10111100.10111100.00000000.01101111
+		IP(B) 188.188.5.222　10111100.10111100.00000101.11011110
+		Mask 255.255.254.0　11111111.11111111.11111110.00000000
+		255.255.254.0 是由23个1组成，也就是23位掩码。简单的说，由左往右数1，把十进制的IP换算成二进制后，前23位1相同的情况下就属于同一个网段内的IP，24位后的1
+		随意变化，属于同一网段。例中IP(A) 188.188.0.111，通过这个23位限制，可以看出的范围就是属于 188.188.0.0~188.188.1.255范围，只有在这个范围内，才属于同一个
+		网段内IP。IP(B)同网段的IP范围是188.188.4.0~188.188.5.255的范围，显然不在IP(A)的范围内，所以IP(A)与IP(B)不是同一网段内IP。
+		分别and运算，得
+		10111100.10111100.00000000.00000000
+		10111100.10111100.00000100.00000000
+		网络标识不一样，即不在同一网段
+		编辑本段
+		IP网段
+
+		现在的企业规模越来越大，从原来的十几台，到几十台，现在是几百台。那么所需的IP地址数量也越来越多。我们都知道C类一个网段的IP地址数为0-255,除去0和255,
+		只能有254台电脑，如果超过254台电脑，就需要增加IP地址，如何增加IP地址呢，为此就需要子网掩码。
+		现在的IP暂时由四段数字组成（以后将扩充更改），常分为三类IP:
+		A类：0.0.0.0到127.255.255.255
+		B类：128.0.0.0到191.255.255.255
+		C类：192.0.0.0到223.255.255.255
+		编辑本段
+		子网掩码
+
+		在同一网段，要求网络标识相同。网络标识就是用IP的二进制与子网掩码的二进制数据作'与'运算（可用WINDOWS计算器算二进制），所得结果，而不是IP地址前几段
+		相同就表示在同一网段。若网络标识相同，就表示在同一网段。
+		例：192.168.0.1 255.255.255.0的网络标识为：192.168.0.0
+		192.168.0.1： 11000000.10101000.00000000.00000001
+		255.255.255.0：11111111.11111111.11111111.00000000
+		编辑本段
+		作与运算
+
+		11000000.10101000.00000000.00000000
+		结果：192.168.0.0
+		子网掩码决定了一个子网的计算机数目，简单的算法就是2的M次方。M表示二进制的子网掩码后面0的数目。
+		例：255.255.255.0
+		二进制：11111111.11111111.11111111.00000000
+		后面有8个0,那M就是8,这个子网掩码可以容纳2的8次方（台）电脑，也就是256台，去掉0和255就是254台电脑。
+		实例：一个公司有530台电脑，组成一个对等网，子网掩码如何设？IP如何设？
+		编辑本段
+		子网掩码
+
+		2的M次方=530,求得M=10
+		那么子网掩码最后为10个0,如此便是：11111111.11111111.11111100.00000000
+		换成十进制便是：255.255.252.0
+		再看IP，我们选一个B类IP，例如：188.188.×.×
+		前两段按B类要随便设就可以，关键是第三段，只要网络标识相同就可以在同一网段就可以，我们先看网络标识：
+		255.255.252.0：11111111.11111111.11111100.00000000
+		188.188.×.×： 10111100.10111100.？？？？？？××.××××××××
+		网络标识： 10111100.10111100.？？？？？？00.00000000
+		上边×号无论填0和1结果都是0
+		？处填0和1都一样，我们就全填0,结果便是IP便是：
+		10111100.10111100.000000××.××××××××，这个IP共有530台电脑，IP最后一段分给254台，一共要分530/254=2.086段，进一法则要分成3段，所以IP地址000000××处分成
+		三个不同的数据即可，例：00000001，00000010，00000011，分别是1，2，3，这样IP地址就确定了188.188.1.×，188.188.2.×，188.188.3.×。
+	-----
+* core文件 linux core文件
+	-----
+	Linux core 文件介绍
+	1). core文件的简单介绍
+	在一个程序崩溃时，它一般会在指定目录下生成一个core文件。core文件仅仅是一个内存映象(同时加上调试信息)，主要是用来调试的。
+
+	2). 开启或关闭core文件的生成
+	用以下命令来阻止系统生成core文件:
+	ulimit -c 0
+	下面的命令可以检查生成core文件的选项是否打开:
+	ulimit -a
+	该命令将显示所有的用户定制，其中选项-a代表“all”。
+
+	也可以修改系统文件来调整core选项
+	在/etc/profile通常会有这样一句话来禁止产生core文件，通常这种设置是合理的:
+	# No core files by default
+	ulimit -S -c 0 > /dev/null 2>&1
+	但是在开发过程中有时为了调试问题，还是需要在特定的用户环境下打开core文件产生的设置
+	在用户的~/.bash_profile里加上ulimit -c unlimited来让特定的用户可以产生core文件
+	如果ulimit -c 0 则也是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb
+
+	3). 设置Core Dump的核心转储文件目录和命名规则
+	/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0
+	/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e
+	可以这样修改:
+	echo "/corefile/core-%e-%p-%t" > /proc/sys/kernel/core_pattern
+	将会控制所产生的core文件会存放到/corefile目录下，产生的文件名为core-命令名-pid-时间戳
+	以下是参数列表:
+	    %p - insert pid into filename 添加pid
+	    %u - insert current uid into filename 添加当前uid
+	    %g - insert current gid into filename 添加当前gid
+	    %s - insert signal that caused the coredump into the filename 添加导致产生core的信号
+	    %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间
+	    %h - insert hostname where the coredump happened into filename 添加主机名
+	    %e - insert coredumping executable name into filename 添加命令名
+
+	4). 使用core文件
+	在core文件所在目录下键入:
+	gdb -c core
+	它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等
+	如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:
+	gdb -c core MyServer
+	以下怎么办就该去学习gdb的使用了
+
+	5). 一个小方法来测试产生core文件
+	直接输入指令:
+	kill -s SIGSEGV $$
+
+	6). 为何有时程序Down了，却没生成 Core文件。
+
+	Linux下，有一些设置，标明了resources available to the shell and to processes。 可以使用
+
+	#ulimit -a 来看这些设置。 (ulimit是bash built-in Command)
+
+		     -a     All current limits are reported
+		      -c     The maximum size of core files created
+		      -d     The maximum size of a process鈥檚 data segment
+		      -e     The maximum scheduling priority ("nice")
+		      -f     The maximum size of files written by the shell and its children
+		      -i     The maximum number of pending signals
+		      -l     The maximum size that may be locked into memory
+		      -m     The maximum resident set size (has no effect on Linux)
+		      -n     The maximum number of open file descriptors (most systems do not allow this value to be set)
+		      -p     The pipe size in 512-byte blocks (this may not be set)
+		      -q     The maximum number of bytes in POSIX message queues
+		      -r     The maximum real-time scheduling priority
+		      -s     The maximum stack size
+		      -t     The maximum amount of cpu time in seconds
+		      -u     The maximum number of processes available to a single user
+		      -v     The maximum amount of virtual memory available to the shell
+		      -x     The maximum number of file locks
+
+	从这里可以看出，如果 -c是显示：core file size          (blocks, -c)
+
+	如果这个值为0，则无法生成core文件。所以可以使用：
+
+	#ulimit -c 1024 或者 #ulimit -c unlimited 来使能 core文件。
+
+	如果程序出错时生成Core 文件，则会显示Segmentation fault (core dumped)。
+
+	7). Core Dump的核心转储文件目录和命名规则:
+	/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0
+	-----
+
+* 视频处理，音频处理
+	ffmpeg
+		FFmpeg是一个开源免费跨平台的视频和音频流方案，属于自由软件，采用LGPL或GPL许可证（依据你选择的组件）。它提供了录制、转换
+		以及流化音视频的完整解决方案。它包含了非常先进的音频/视频编解码库libavcodec，为了保证高可移植性和编解码质量，libavcodec里很多
+		codec都是从头开发的。
+	
+* 
+	
+	http://tomfish88.iteye.com/blog/1392017
+	Twago.com 
+
+	Amazon HITs
+	https://www.mturk.com/mturk/welcome 
+
+	weike
+
+* interview
+	-----
+	1)根据简历,哪个项目印象最深刻?
+	无分值,但是根据简历,确定后续的问题主要覆盖面。
+	2)这个项目架构设计是怎么样的?有哪些系统,哪些部署环境,整个的功能和数据流向是怎么样的?
+	能够完整地说出系统的功能,部署的环境,数据的流向。评定相应的分值:1-5
+	3)这个项目用了哪些技术?为什么要用这些技术?
+	清晰地说出所使用的技术、框架,知道这些技术的使用目的。评定相应的分值:1-5
+	4)实施时发现这些技术有哪些优缺点?优点是怎样发挥利用的,缺点是如何克服的?
+	很明确这些技术本身的优缺点,清楚描述优点的发挥场景,以及对缺点的克服、绕过方案。评定相应的分值:1-5
+	5) 最后项目完成后,觉得当初的设计有哪些问题,应该做哪些改进?
+	有没有反思架构的设计,有没有想过某些技术的合理性并考虑重新选择,并分析改进和
+	替换的原因。
+
+	描述一个系统，功能，设计，实现	 描述
+	团队结构，工作职责	 描述
+	为什么采用一个技术，为什么不使用一个技术	 描述
+	应用中有使用到集群么？多大规模？	 cluster
+	"cluster中应用中碰到的问题,session共享问题？"	 cluster
+	如何实现集群?session复制？无状态？集中session？	 cluster
+	Collections和Collection的区别?	 collection
+	HashMap和HashTable的区别	 collection
+	Java中有那些集合的接口	 collection
+	Map与Collection的关系?	 collection
+	ClassLoader是如何查找类的？	 core
+	equals与==的区别	 core
+	"Exception,checked,unchecked"	 core
+	exception机制，层次	 core
+	final关键词的使用	 core
+	hashCode()方法的作用	 core
+	InputStream与Reader的区别	 core
+	interface与abstract类的区别	 core
+	Java非阻塞I/O？	 core
+	Java的基本对象Object有哪些方法?	 core
+	"Java中反射的性能如何,你是怎么看待的"	 core
+	Object的hashCode()的计算，肯定唯一的吗？	 core
+	典型的web应用的classloader结构	 core
+	"对象要实现排序,需要实现什么接口"	 core
+	请问你在什么情况下会在你的JAVA代码中使用可序列化？	 core
+	如何保证一个类的非静态方法在多个实例中是同步的？	 core
+	如何将一个String转化为int	 core
+	如何序列化一个类的实例	 core
+	怎么样克隆一个类	 core
+	怎样标识JavaBean对象里面的一个属性不需要被序列化？	 core
+	Java中内存调优的参数	 gc
+	垃圾收集是什么，为什么需要，怎么工作	 gc
+	ajax	 http
+	cookie&session	 http
+	cookie的原理	 http
+	http中的forward和redirect的区别	 http
+	ear应用中classloader的结构	 jee
+	EJB有哪几种事务属性(TransactionPropagationAttributes)？请阐述它们之间的区别。	 jee
+	JMS的有哪几种消息模型？	 jee
+	statefulsessionbean的生命周期	 jee
+	请详细描述StatefulSessionBean的生命周期。	 jee
+	"在一个EJB容器中,容器如何知道事务已经完成并且可以提交了？用户如何控制事务回滚？"	 jee
+	AOP的含义与用途	 opensource
+	Ioc的含义与用途	 opensource
+	Spring用过那些功能	 opensource
+	Structs中处理请求的流程	 opensource
+	解释springaop，transaction，FactoryBean&BeanFactory	 opensource
+	你知道IoC(InversionofControl)吗？IoC有哪几种类型？使用IoC有哪些好处？现在有哪些比较流行的IoC容器？	 opensource
+	平时会关注开源软件的发展么？	 opensource
+	HttpServlet类中有那些方法	 servlet
+	jsp执行过程，大量使用jsp有什么问题？PermGen大小	 servlet
+	servlet的生命周期	 servlet
+	session的生命周期	 servlet
+	如何在HttpSession过期的时候，清理你在HttpSession中保存的对象的资源占用？	 servlet
+	notify()对应的方法是什么	 thread
+	daemon线程的含义	 thread
+	Thread的sleep方法和Object的wait方法有什么区别？	 thread
+	解释synchronized	 thread
+	解释ThreadLocal	 thread
+	如何停止一个正在运行的线程？	 thread
+	什么叫线程安全?servlet线程安全吗?	 thread
+	什么是Daemon线程？它有什么意义？	 thread
+	怎么样写一个线程?用线程时的注意点?	 thread
+	JDK如何做到XMLParser的实现和接口无关？JDK是如何找到XMLParser的实现的？如何覆盖jdk1.4中的XMLParser实现？	 xml
+	xml解析模型描述	 xml
+	性能测试，容量测试，有没有？如何做？	 测试
+	有没有针对伸缩性的设计	 架构
+	有没有针对性能的设计	 架构
+	解释scalability与extensibility	 架构
+	常见的排序算法有哪些？各有什么优缺点？	 理论
+	设计模式列举，解释使用场景	 理论
+	PreparedStatement与Statement	 数据库
+	数据库事务有哪几个隔离级别？请分别阐述	 数据库
+	数据库相关的性能优化？sql，数据库本身，缓存？	 数据库
+	项目中碰到的问题，如何解决？	 问题解决
+	java应用性能优化，从哪些方面入手	 性能优化
+
+	-----
 * 佳丽摄影
 * wRawac7ece	   ft
 * 6843 ft75
 * 静态路由
+* soa * wsdl
+	QoS & SLA
+		QoS（Quality of Service）即服务质量，这是网络的一种安全机制，是用来解决网络延迟和阻塞等问题的一种技术。QoS对关键应用十分必要，当网络过载或拥塞时，
+		QoS能确保重要业务量不受延迟或丢弃，同时保证网络的高效运行。
+		
+		SLA（Service-Level Agreement），意思是服务等级协议。比如服务优先等级、服务响应时间等业务和网络上的相关指标，用户在什么级别享受什么样的服务等等。
+		QoS和SLA是成熟的SOA架构稳定高效的重要保障
+
 * 网盘
 skydriver.com
 https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=11&ct=1379419025&rver=6.2.6289.0&wp=MBI_SSL_SHARED&wreply=https:%2F%2Fskydrive.live.com%2F%3Fmkt%3Dzh-CN&lc=2052&id=250206&cbcxt=sky&mkt=zh-CN&cbcxt=sky
@@ -660,13 +941,16 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 	----
 	ref: http://hi.baidu.com/wangkaijiangg/item/d3d825dfd36081f492a97406
 * MD5
-	MD5即Message-Digest Algorithm 5（信息-摘要算法5），用于确保信息传输完整一致。是计算机广泛使用的杂凑算法之一（又译摘要算法、哈希算法），主流编程语言普遍已有MD5实现。
+	MD5即Message-Digest Algorithm 5（信息-摘要算法5），用于确保信息传输完整一致。是计算机广泛使用的杂凑算法之一（又译摘要算法、哈希算法），
+	主流编程语言普遍已有MD5实现。
 	将数据（如汉字）运算为另一固定长度值，是杂凑算法的基础原理，MD5的前身有MD2、MD3和MD4。
 
 	MD5的作用是让大容量信息在用数字签名软件签署私人密钥前被"压缩"成一种保密的格式（就是把一个任意长度的字节串变换成一定长的十六进制数字串）。
 	除了MD5以外，其中比较有名的还有sha-1、RIPEMD以及Haval等
 
-	MD5将任意长度的“字节串”映射为一个128bit的大整数，并且是通过该128bit反推原始字符串是困难的，换句话说就是，即使你看到源程序和算法描述，也无法将一个MD5的值变换回原始的字符串，从数学原理上说，是因为原始的字符串有无穷多个，这有点象不存在反函数的数学函数。所以，要遇到了md5密码的问题，比较好的办法是：你可以用这个系统中的md5（）函数重新设一个密码，如admin，把生成的一串密码的Hash值覆盖原来的Hash值就行了。
+	MD5将任意长度的“字节串”映射为一个128bit的大整数，并且是通过该128bit反推原始字符串是困难的，换句话说就是，即使你看到源程序和算法描述，
+	也无法将一个MD5的值变换回原始的字符串，从数学原理上说，是因为原始的字符串有无穷多个，这有点象不存在反函数的数学函数。所以，
+	要遇到了md5密码的问题，比较好的办法是：你可以用这个系统中的md5（）函数重新设一个密码，如admin，把生成的一串密码的Hash值覆盖原来的Hash值就行了。
 
 	ref: http://baike.baidu.com/view/7636.htm
 	PS: 
@@ -5942,6 +6226,22 @@ Storage for Interactive Services
 		- edit: dubbo.registry.adddress=zookeeper://127.0.0.1:2181
 		cd ../bin
 		./restart.sh
+		
+		zk更多应用场景：
+			http://blog.sina.com.cn/s/blog_5461c7ff01019r0i.html
+			摘取部分：
+			-----
+			命名服务也是分布式系统中比较常见的一类场景。在分布式系统中，通过使用命名服务，客户端应用能够根据指定名字来获取资源或服务的地址，
+			提供者等信息。被命名的实体通常可以是集群中的机器，提供的服务地址，远程对象等等——这些我们都可以统称他们为名字（Name）。其中较为常见
+			的就是一些分布式服务框架中的服务地址列表。通过调用ZK提供的创建节点的 API，能够很容易创建一个全局唯一的path，这个path就可以作为一个名称。
+
+			阿里巴巴集团开源的分布式服务框架Dubbo中使用ZooKeeper来作为其命名服务，维护全局的服务地址列表，点击这里查看Dubbo开源项目。在Dubbo实现中：
+			服务提供者在启动的时候，向ZK上的指定节点/dubbo/${serviceName}/providers目录下写入自己的URL地址，这个操作就完成了服务的发布。
+			服务消费者启动的时候，订阅/dubbo/${serviceName}/providers目录下的提供者URL地址， 并向/dubbo/${serviceName} /consumers目录下写入自己的URL地址。
+			注意，所有向ZK上注册的地址都是临时节点，这样就能够保证服务提供者和消费者能够自动感应资源的变化。
+			另外，Dubbo还有针对服务粒度的监控，方法是订阅/dubbo/${serviceName}目录下所有提供者和消费者的信息。
+			-----
+			PS: 和dubbo相关
 
 	 - 实例
 		ref: http://www.cnblogs.com/zhangzhang/archive/2013/01/16/2863339.html
@@ -9244,34 +9544,42 @@ search in index find pdf
 	　　<C-B>：向上移动一屏。
 	　　<C-U>：向上移动半屏。
 	　　G：到文件尾
-	　　numG：移动光标到指定的行（num）。（比如 10G 就是到第 10 行）
+	　　numG：移动光标到指定的行（num）。（比如 10G 就是到第 10 行）	     跳到指定行
 	　　gg：到文件首
 	　　H：移动光标到屏幕上面
 	　　M：移动光标到屏幕中间
 	　　L：移动光标到屏幕下面
 	　　*：读取光标处的字符串，并且移动光标到它再次出现的地方。
 	　　#：读取光标处的字符串，但是是往反方向寻找。
-	　　/text：从当前光标处开始搜索字符串 text，并且到达 text 出现的地方。必须使用回车来开始这个搜索命令。如果想重复上次的搜索的话，按 n移动到下个 text 处，N 移动到上一个 text 处 。
+	　　/text：从当前光标处开始搜索字符串 text，并且到达 text 出现的地方。必须使用回车来开始这个搜索命令。如果想重复上次的搜索的话，按 n移动到下个 text 处，
+	N 移动到上一个 text 处 。
 	　　？text：和上面类似，但是是反方向。
 	　　m{a-z}：在当前光标的位置标记一个书签，名字为 a-z 的单个字母。书签名只能是小写字母。你看不见书签的存在，但它确实已经在那里了。
 	　　`a：到书签 a 处。注意这个不是单引号，它一般位于大部分键盘的 1 的左边。
 	　　`.：到你上次编辑文件的地方。这个命令很有用，而且你不用自己去标记它。
-	　　%：在成对的括号等符号间移动，比如成对的 [ ] ， { }， ( ) 之间。将光标放到任意符号上，然后通过 % 来移动到和这个符号匹配的符号上，% 还可以正确的识别括号的嵌套层数，总是移动到真正匹配的位置上。因此这个命令在编辑程序代码的时候非常有用，可以让你方便的在一段代码的头尾间移动。
+	　　%：在成对的括号等符号间移动，比如成对的 [ ] ， { }， ( ) 之间。将光标放到任意符号上，然后通过 % 来移动到和这个符号匹配的符号上，
+	% 还可以正确的识别括号的嵌套层数，总是移动到真正匹配的位置上。因此这个命令在编辑程序代码的时候非常有用，可以让你方便的在一段代码的头尾间移动。
 	　　6、它主要应用在--Linux系统
 	- VIM 复制黏贴
 		内容：
-		用vim 这么久 了，始终也不知道怎么在vim 中使用系统粘贴板，通常要在网上复制 一段代码都是先gedit打开文件，中键粘贴后关闭，然后再用vim 打开编辑，真的不 爽；上次论坛上有人问到了怎么在vim 中使用系统粘贴板，印象里回复很多，有好几页的回复却没有解决问题，今天实在受不了了又在网上找办法，竟意外地找到 了，贴出来分享一下。
+		用vim 这么久 了，始终也不知道怎么在vim 中使用系统粘贴板，通常要在网上复制 一段代码都是先gedit打开文件，中键粘贴后关闭，然后再用vim 打开编辑，
+		真的不 爽；上次论坛上有人问到了怎么在vim 中使用系统粘贴板，印象里回复很多，有好几页的回复却没有解决问题，今天实在受不了了又在网上找办法，
+		竟意外地找到 了，贴出来分享一下。
 
 		如果只是想使用系统粘贴板的话直接在输入模式按Shift+Inset（粘贴）就可以了，下面讲一下vim 的粘贴板的基础知识，有兴趣的可以看看，应该会有所收获的。
 		vim 帮助文档里与粘贴板有关的内容如下：
 
-		    vim 有12个粘贴板，分别是0、1、2、...、9、a、“、＋；用:reg命令可以查看各个粘贴板里的内容。在vim 中简单用y只是复制 到“（双引号)粘贴板里，同样用p粘贴的也是这个粘贴板里的内容；
+		    vim 有12个粘贴板，分别是0、1、2、...、9、a、“、＋；用:reg命令可以查看各个粘贴板里的内容。在vim 中简单用y只是复制 到“（双引号)粘贴板里，
+		    同样用p粘贴的也是这个粘贴板里的内容；
 
-		    要将vim 的内容复制 到某个粘贴板，需要退出编辑模式，进入正常模式后，选择要复制 的内容，然后按"Ny（注意带引号）完成复制 ，其中N为粘贴板号(注意是按一下双引号然后按粘贴板号最后按y)，例如要把内容复制 到粘贴板a，选中内容后按"ay就可以了，有两点需要说明一下：
+		    要将vim 的内容复制 到某个粘贴板，需要退出编辑模式，进入正常模式后，选择要复制 的内容，然后按"Ny（注意带引号）完成复制 ，其中N为粘贴板号(注意是
+		    按一下双引号然后按粘贴板号最后按y)，例如要把内容复制 到粘贴板a，选中内容后按"ay就可以了，有两点需要说明一下：
 			“号粘贴板（临时粘贴板）比较特殊，直接按y就复制 到这个粘贴板中了，直接按p就粘贴这个粘贴板中的内容；
-			+号粘贴板是系统粘贴板，用"+y将内容复制 到该粘贴板后可以使用Ctrl＋V将其粘贴到其他文档（如firefox、gedit）中，同理，要把在其他地方用Ctrl＋C或右键复制 的内容复制 到vim 中，需要在正常模式下按"+p；
+			+号粘贴板是系统粘贴板，用"+y将内容复制 到该粘贴板后可以使用Ctrl＋V将其粘贴到其他文档（如firefox、gedit）中，同理，要把在其他地方用Ctrl＋C或右键复制 
+			的内容复制 到vim 中，需要在正常模式下按"+p；
 
-		    要将vim 某个粘贴板里的内容粘贴进来，需要退出编辑模式，在正常模式按"Np，其中N为粘贴板号，如上所述，可以按"5p将5号粘贴板里的内容粘贴进来，也可以按"+p将系统全局粘贴板里的内容粘贴进来。
+		    要将vim 某个粘贴板里的内容粘贴进来，需要退出编辑模式，在正常模式按"Np，其中N为粘贴板号，如上所述，可以按"5p将5号粘贴板里的内容粘贴进来，
+		    也可以按"+p将系统全局粘贴板里的内容粘贴进来。
 
 		注意：在我这里，只有vim.gtk或vim.gnome才能使用系统全局粘贴板，默认的vim.basic看不到+号寄存器。安装vim.gnome使用apt-get install vim-gnome，然后vim自动会链接到vim.gnome。
 		（二）
@@ -13755,6 +14063,12 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	”系统间协作的部分，找到相关人员沟通效率就快了，都是人定义的，谁定义谁最清楚 “
 
 * python
+	- WSGI
+		Web服务器网关接口（Python Web Server Gateway Interface，缩写为WSGI)是Python应用程序或框架和Web服务器之间的一种接口，已经被广泛接受, 
+		它已基本达成它了可移植性方面的目标。WSGI 没有官方的实现, 因为WSGI更像一个协议. 只要遵照这些协议,WSGI应用(Application)都可以在任何服务器(Server)上运行, 反之亦然。
+	- nezha http://github.com/LarryZhangy/nezha.git 学习
+	wsgi
+			
 	- python list 操作
 		L.extend(iterable) -- extend list by appending elements from the  iterable
 		list1 = []
@@ -13918,6 +14232,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 	- pytest * python单元测试
 		python测试工具
 		scales from simple unit to complex functional testing
+
+		unitest
+		http://www.ibm.com/developerworks/cn/linux/l-pyunit/ Python自动单元测试框架
 
 	- edit plue开发python
 		
@@ -36364,29 +36681,29 @@ day366 Wednesday, September 04, 2013
 			    main()
 		-----
 
-|-- db
-|-- jobworker
-|-- orange
-|-- script
-|-- sql
-|-- templates
-|   |-- 0102json
-|   |-- 0806json
-|   |-- db
-|   |-- ecs
-|   |   |-- api
-|   |   |-- apiproxy
-|   |   |-- apitask
-|   |   |-- pync
-|   |   |-- regionmaster
-|   |   |-- rhs
-|   |   |-- rmshttp
-|   |   `-- router
-|   |-- oss_server
-|   `-- report
+	|-- db
+	|-- jobworker
+	|-- orange
+	|-- script
+	|-- sql
+	|-- templates
+	|   |-- 0102json
+	|   |-- 0806json
+	|   |-- db
+	|   |-- ecs
+	|   |   |-- api
+	|   |   |-- apiproxy
+	|   |   |-- apitask
+	|   |   |-- pync
+	|   |   |-- regionmaster
+	|   |   |-- rhs
+	|   |   |-- rmshttp
+	|   |   `-- router
+	|   |-- oss_server
+	|   `-- report
+				
 			
 		
-	
 
 
 4. 页面显示问题排查
@@ -37389,3 +37706,243 @@ day375 Tuesday, September 17, 2013
 	       performs an open command with those arguments.
 	-----
 	PS: #telnet hostName [Port]
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day376 9/18/2013
+
+1. 
+	* 磐禹项目 发布后问题修复
+
+2. 磐禹项目 发布后问题修复
+	1）流量推送在 ，配置houyiapi步骤提前执行？
+		配置houyiapi，api接口，proxy接口 其中某一个步骤中，定位？
+
+		houyiapi步骤会调用houyiapi接口create_cluster，其中一个推送参数设置为不推送
+
+		初步判断为，在集群信息中配置了数据推送为：是，所以在配置houyiapi按钮时，传入推送标识为true导致。
+
+		结果：
+			确实是因为集群信息页面，是否推送字段为“是”时，配置houyiapi按钮会使推送服务生效：
+			-----
+			10.230.226.152 -  -  [18/Sep/2013:13:04:07 +0800] "GET /open/services?weight=0&status=enabled&sign_type=MD5&region_id=cn-hangzhou-xy2-ci01
+				&format=json&aliyun_idkp=149&sign=oxLnh3cW%2F3TTPXFmk5Rfww%3D%3D&timestamp=2013-09-18+13%3A04%3A07&nuwa_address=10.230.204.55
+				&cluster_name=HOUYICI&push_measure_flag=true&session=lisw&master_version=1.0&action=create_cluster&router_address=10.230.204.55%3A38930
+				&cluster_no=HOUYICI HTTP/1.0" 200 56
+			-----
+			PS: 创建cluster时的houyiapi日志，看到push_measure_flag=true
+				houyiapi对外是apiproxy的vip
+			
+			修改为：注释掉create_cluster传入推送标识参数。
+
+		40 | cn-qingdao-cm9007 | 2013-09-17 09:20:12 | 2013-09-17 09:20:12 |
+	
+	2）houyi.zone表增加存储类型字段
+		对应老的数据，如何订正？
+
+3. OpenApi接口		      接口版本 接口版本过渡
+	即 SOA中服务版本的管理
+	-----
+	处理更改
+		面向服务的体系结构（Service Oriented Architecture，SOA）正在成功地解决许多企业对业务灵活性和弹性的需要。但是与任何系统一样，即使 SOA 也不可避免地必须处理
+	由于业务或技术原因而导致的更改。事实上，由于 SOA 促进业务敏捷性，而敏捷性意味着更改，因此可以认为 SOA 甚至鼓励更改。但是，即使在 SOA 中，更改也是非常
+	麻烦的。由于 SOA 促进弹性，而弹性意味着能够适应更改，因此可以认为 SOA 必须以适当的方式处理更改。
+		系统中存在多种粒度级别的更改。由于 SOA 重点关注服务，因此研究 SOA 中的更改的重点自然是服务。当某个事物发生更改时，我们通常将结果视为该事物更改后的新
+	版本。因此，本文将讨论 SOA 上下文中的服务版本管理。
+		在 SOA 中，服务使用者与服务提供者进行交互以完成某个业务任务。SOA 中的更改会影响服务。多个服务使用者可以使用一个服务提供者（在理想的 SOA 中是这样）。
+	因此，可以合理地预计使用者和提供者在服务版本管理方面的观点和预期是不同的。例如，提供者通常有最小化更改的动机，但是当然要合理地快速响应来自使用者的更改
+	请求和来自内部的更改需要。另一方面，使用者通常不希望更改，或者希望与更改隔离，或者希望非常缓慢的更改。	
+
+
+	对 SOA 中的更改的不同观点增加了服务版本管理在以下方面的挑战：
+		1）推动提供者对更改的交付。
+		2）最小化由于更改而对使用者造成的中断。
+	-----
+	ref: http://www.ibm.com/developerworks/cn/websphere/techjournal/0810_col_flurry/0810_col_flurry.html
+
+	开放API接口
+	接口的多版本管理
+		比如，dubbo的多版本支持
+	
+	Amazon Open API.ppt
+		参考已有做的好的 API版本管理
+		-----
+		协议本身不断发展
+		版本兼容性
+		A2S各个不同版本的协议不保证兼容
+		在提交请求时需要指定Version参数来标识版本，当前最新版本是2007-07-16，如果没有指定Version则使用默认版本2005-10-05
+
+		不同版本的协议有不同的WSDL地址：http://ecs.amazonaws.com/AWSECommerceService/2007-10-29/AWSECommerceService.wsdl如果
+		访问http://ecs.amazonaws.com/AWSECommerceService/AWSECommerceService.wsdl则使用最后版本的WSDL
+
+		同样，不同版本的协议有不同的Schema地址：http://ecs.amazonaws.com/AWSECommerceService/2006-06-28/AWSECommerceService.xsd如果
+		访问http://ecs.amazonaws.com/AWSECommerceService/AWSECommerceService.xsd则使用最后版本的Schema
+		-----
+		API不带session信息？
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day377 Sunday, September 22, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1) 权限设计
+		BUC+Spring Security
+	2) Openapi设计
+		参考 AWS api
+
+	system_disk.type
+	system_disk.bps
+	system_disk.iops
+	data_disk.n.type
+	data_disk.n.size
+	data_disk.n.snapshot_id
+	data_disk.n.bps
+	data_disk.n.iops
+	PS: 通过 xxObject.xxProperty 的方式来标识domain的属性；
+	通过 xxObject.num.xxProperty 方式来表示多个列表对象的各自属性
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day378 Monday, September 23, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）Openapi设计
+	初期以落日弓自身需要暴露的api为主，设计接口
+
+	整体规划要实现的api，根据产品线：
+		ECS
+		RDS
+		OSS
+		SLB
+		...
+	
+	具体提供ECS的相关Openapi详细设计文档
+		需要实现的接口汇总
+		本期实现要实现那些
+		接口定义，返回值详细定义，返回码定义
+			返回值去掉id等落日弓表中的自我逻辑ID
+
+	组件发布步骤中，需要加入环境检查步骤（包括发布前检查precheck，发布后检查postcheck），类似RPM包管理，在RPM安装、卸载等操作时，需要检查环境，
+	并提供哪些要求不满足等等，以保证操作的顺利执行；如果，后续的job由各自的项目PM或PE写，则环境检查需要作为标准步骤，必须提供。-tip- * 设计 * 规范 * 设计规范
+
+	接口整理
+
+
+
+
+	2）权限设计
+	BUC走权限认证，在没有BUC的时候走系统自身认证；
+		内网证书
+	系统内部提供权限控制
+		角色管理
+			普通用户
+			PE
+			管理员
+			...
+		权限资源管理
+			
+
+3. 设计 ，思考  ，落日弓 集群部署随想
+	批量生产与规范化/标准化 -tip-
+	无论是工业产品或是软件产品，亦或是工作流程，要想实现自动化，批量化，工作流化的操作，首先需要对所有的流程规范化，每一步骤都有对应的约定
+	或定义，实现上也从标准或规范从发，类似程序编程中的面向接口开发。
+
+	以集群搭建部署为例，其中包含从机器采购到基础环境部署到应用部署到交付上线等多个环节，每个环节都一定会有自己需要关心和才能解决的问题，到下一个环节时应该保证
+	本环节都是ok的，此时的规范，比如提供交付报告，交付测试通过报告等，以规范各个环节自我的资源完备保证，这样提供给一个环节时，就类似接口，下一个环节的使用者认为
+	前一个环节是没问题的（只根据接口定义方式去使用，不关心实现提供者的具体逻辑）。
+
+
+4. word编排
+	目录排版
+
+	doc文档编写时，选择合适的标题样式（对于有自定义需求的可以自定义标题样式，比如多级列表标题），后面插入目录即可，目录就是标题的行汇总。 -tip-
+
+
+URL格式
+统一接入URL?协议参数&action=list_regions&region_type=1
+
+描述
+
+参数说明
+
+返回结果
+
+错误码
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day379 Tuesday, September 24, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1）Openapi设计
+		接口整理
+	
+	2）ag的rc.local  启动飞天的方法需要根据大禹2的方法调整。
+		# start apsara
+		/home/admin/aresolve/apsarad start
+		
+		之前，修改了VM机器的rc.local，
+
+		AG上rc.local文件的更新在 生成AG配置 步骤处理，会生成AG的rc.local文件并同步到AG上；
+		然后，在初始化AG配置时，将之前步骤已经放到落日弓指定目录的rc.local覆盖系统当前的rc.local文件，
+	3) 磐石项目，osscmd的位置
+		安装飞天客户端 时，其中一个步骤安装osscmd包，安装目录是 /etc/houyi/script/osscmd （为磐石项目的需求）
+		之前目录错写为：/etc/houyi/osscmd
+	
+	5）228 atzy环境，agent的service安装有问题，服务无法启动？
+		暂时用命令行启动
+	6）生成配置 步骤
+		生成pet的conf文件
+			增加了配置section，BIGREGION_*  和 CLUSTER_* 
+			http://ops.ecs.alibaba-inc.com/wiki/PET运维工具/如何添加配置文件 
+			pet pyconf pet配置文件
+		其他组件的配置文件
+	7）crontab模板修改
+		#add by zhe.lizh,merge
+		0 15 * * 1 sh /apsara/deploy/apsara_job/snapshot_mapreduce.sh
+		0 12 * * * sh /apsara/deploy/apsara_job/merge_start.sh 1000
+		可以删除		
+	8）上传ISO时
+		目前上传ISO工具是通过调用oss_domain去写OSS的，而控制系统是通过ocm_domain(在oss_domain上再封装了一层)去写OSS，故ISO上传工具需要修改为用ocm_domain去上传；
+		同时，落日弓增加部署ocm_cmd工具。
+
+		同时，飞天客户端源中增加ocm_cmd的rpm包
+			oss 柳煌
+
+3. python
+	http://github.com/LarryZhangy/nezha.git
+	WSGI
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+day380 Wednesday, September 25, 2013
+
+1. 
+	* 落日弓
+
+2. 落日弓
+	1） ocm_cmd包及其安装
+	2）三伏天项目改动及对应到落日弓的变动整理
+		pm 谭总
+		线上发布中
+
+		a. houyi.json有变动 
+		
+		梳理思路：
+			先看三伏天的项目wiki，了解项目背景
+			与PM沟通，整理所有需要关心的变动，再分析落日弓是否需要修改；对于一些配置，原逻辑不熟的情况，可全文搜索程序，熟悉对应的业务。
+
+
+
+5. 产品的思考，规范的思考
+	总是不愿意被繁琐的具体实现所羁绊，所以需要思考规范，如何解放自我。-tip-
+	WSGI
+	产品
+	接口
+	...
