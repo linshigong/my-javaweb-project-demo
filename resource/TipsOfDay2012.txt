@@ -4230,9 +4230,9 @@ ftian20130102
 			#   General setup for the virtual host
 			DefaultType text/xml
 
-			DocumentRoot "/home/admin/houyi_directory_backup/houyi/service/"
+			DocumentRoot "/home/admin/h-o-u-y-i_directory_backup/h-o-u-y-i/service/"
 
-			ErrorLog /home/admin/houyi_directory_backup/houyi/service/logs/openapi/error_log
+			ErrorLog /home/admin/h-o-u-y-i_directory_backup/h-o-u-y-i/service/logs/openapi/error_log
 
 			<Directory />
 			    Options FollowSymLinks
@@ -4242,7 +4242,7 @@ ftian20130102
 			    Allow from all
 			</Directory>
 
-			<Directory "/home/admin/houyi_directory_backup/houyi/service/">
+			<Directory "/home/admin/h-o-u-y-i_directory_backup/h-o-u-y-i/service/">
 			    Options FollowSymLinks
 			#    Options None
 			    AllowOverride None
@@ -4333,7 +4333,7 @@ ftian20130102
 
 * 代码合并    svn merger merger代码 * svn
 	- svn拉分支，建立trunk，branch
-		svn cp -r xxx http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/trunk http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/branches/luorigongweb_for_openapi -m "based on trunk@r2607124" 
+		svn cp -r xxx http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigongweb/trunk http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigongweb/branches/luorigongweb_for_openapi -m "based on trunk@r2607124" 
 
 		-r不传就是取HEAD版本；-m 注释；
 		建立trunk，可从某个支 svn cp 到trunk目录下即可
@@ -10360,7 +10360,7 @@ search in index find pdf
 	
 	 -------------------------
 	 slbapi测试环境：
-		mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
+		mysql -uh-o-u-y-i -ph-o-u-y-iat03 -h10.230.204.19 slbapi
 		http://10.230.204.24/slb/api?
  * JSR 303 Bean Validation
 		“This JSR defines a metadata model and API for JavaBean validation. The default metadata source is annotations,
@@ -12088,7 +12088,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- jtester ,用jmock框架
 		写期望 Expectations 时，要注意按照调用次序写 -tip-
 				a. 
-					when(resourceQueryFacade.query(Instance.class, (String[])any)).thenReturn(new Instance[]{new Instance(),new Instance()}); //java.lang.ClassCastException: [Ljava.lang.Object; cannot be cast to [Lcom.aliyun.houyi.entity.Instance;
+					when(resourceQueryFacade.query(Instance.class, (String[])any)).thenReturn(new Instance[]{new Instance(),new Instance()}); //java.lang.ClassCastException: [Ljava.lang.Object; cannot be cast to [Lcom.aliyun.h-o-u-y-i.entity.Instance;
 				b. 
 					//resourceQueryFacade.query(Instance.class, (String[])any);
 					//returnValue(new Instance[]{new Instance(),new Instance()});
@@ -12252,7 +12252,8 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		5 ActionProxy通过Configuration Manager询问框架的配置文件，找到需要调用的Action类
 		6 ActionProxy创建一个ActionInvocation的实例。
 		7 ActionInvocation实例使用命名模式来调用，在调用Action的过程前后，涉及到相关拦截器（Intercepter）的调用。
-		8 一旦Action执行完毕，ActionInvocation负责根据struts.xml中的配置找到对应的返回结果。返回结果通常是（但不总是，也可 能是另外的一个Action链）一个需要被表示的JSP或者FreeMarker的模版。在表示的过程中可以使用Struts2 框架中继承的标签。在这个过程中需要涉及到ActionMapper
+		8 一旦Action执行完毕，ActionInvocation负责根据struts.xml中的配置找到对应的返回结果。返回结果通常是（但不总是，也可 能是另外的一个Action链）
+		一个需要被表示的JSP或者FreeMarker的模版。在表示的过程中可以使用Struts2 框架中继承的标签。在这个过程中需要涉及到ActionMapper
 
 		在上述过程中所有的对象（Action，Results，Interceptors，等）都是通过ObjectFactory来创建的。
 
@@ -12723,8 +12724,8 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		]]>    
 		</selectKey>
 		-----
-	- houyi api使用ibatis没有使用cacheModel的原因
-		由于houyi api的部署有多个，且各自相互独立，如果启用缓存，可能会出现一台API机器RS1缓存了某些数据，但另一台RS2却修改了db数据，RS2的缓存
+	- h-o-u-y-i api使用ibatis没有使用cacheModel的原因
+		由于h-o-u-y-i api的部署有多个，且各自相互独立，如果启用缓存，可能会出现一台API机器RS1缓存了某些数据，但另一台RS2却修改了db数据，RS2的缓存
 		根据配置会随即更新，但RS1的缓存却无法触发更新。
 
 		解决方法之一：使用同一缓存，比如使用memcached统一缓存；统一缓存部分设计为可替换方式，比如后面如果需要替换缓存实现服务。
@@ -12824,12 +12825,12 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- ibatis属性转换，自定义转换 TypeHandlerCallback
 		通过在mapping文件中直接定义或者统一定义
 		（1）各自的mapping文件中	（sqlMap）
-			<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
-			<typeAlias alias="snapshotStorageTypeHandler" type="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>	
+			<typeAlias alias="snapshotStorageType" type="com.aliyun.h-o-u-y-i.constant.SnapshotStorageType"/>
+			<typeAlias alias="snapshotStorageTypeHandler" type="com.aliyun.h-o-u-y-i.dao.support.SnapshotStorageTypeHandler"/>	
 			<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER" typeHandler="snapshotStorageTypeHandler"/>
 		（2）在config文件中统一配置（sqlMapConfig）
-			<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
-			<typeHandler javaType="snapshotStorageType" callback="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>
+			<typeAlias alias="snapshotStorageType" type="com.aliyun.h-o-u-y-i.constant.SnapshotStorageType"/>
+			<typeHandler javaType="snapshotStorageType" callback="com.aliyun.h-o-u-y-i.dao.support.SnapshotStorageTypeHandler"/>
 		eg：
 			<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER"/>
 	- where calse的共用需要设计好，否则反而增加维护
@@ -13008,14 +13009,14 @@ It is also an FTP application platform. We have developed a Java API to let you 
         	else null 
 		end bigRegionName,
 		case 
-        	when odbs.db_type='ecs_houyiapi' then hapi.vip
+        	when odbs.db_type='ecs_h-o-u-y-iapi' then hapi.vip
         	else null 
-		end houyiApiVip
+		end h-o-u-y-iApiVip
 	 from odbs odbs
 	 left join room room on room.id=odbs.room_id
 	 left join region region on region.id=odbs.id_type
 	 left join big_region bregion on bregion.id=odbs.id_type
-	 left join houyiapi hapi on hapi.id=odbs.id_type 
+	 left join h-o-u-y-iapi hapi on hapi.id=odbs.id_type 
 	-----
 	此场景为某个id_type列存的是不同引用表的主键id，以db_type表示类型以指向特定的表；
 	此查询动态根据条件从关联表中取对应的数据。
@@ -13142,7 +13143,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 
 	- mysql报错分析
 		sql语句错误，mysql会从错误开始时做提示，比如下面的提示：
-		You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'room.name idcName,    hapi.vip houyiApiVip   from realserver rs    left join roo' at line 1
+		You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'room.name idcName,    hapi.vip h-o-u-y-iApiVip   from realserver rs    left join roo' at line 1
 		错误就发生在其引用sql片段的开始位置。
 
 	- mysql锁查询，行锁查询
@@ -13442,7 +13443,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
 		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 		|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
-		|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
+		|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | h-o-u-y-i.r.region_no |    1 |       |
 		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 
 		mysql> explain select * from region r left join region_alias r_a on r.region_no=r_a.region_no ;       
@@ -13450,7 +13451,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 		| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
 		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 		|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
-		|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
+		|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | h-o-u-y-i.r.region_no |    1 |       |
 		+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 		更多见mysql计划ppt说明
 
@@ -13497,9 +13498,9 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- mysql 区分大小写
 		参考day66
 	- mysql用户管理
-		create user houyi@10.250.8.214;
-		set password for houyi = password('houyi');
-		GRANT ALL PRIVILEGES ON *.* TO 'houyi'@'10.250.8.214' IDENTIFIED BY 'houyi' WITH GRANT OPTION;
+		create user h-o-u-y-i@10.250.8.214;
+		set password for h o u y i = password('h-o-u-y-i');
+		GRANT ALL PRIVILEGES ON *.* TO 'h-o-u-y-i'@'10.250.8.214' IDENTIFIED BY 'h-o-u-y-i' WITH GRANT OPTION;
 	- InnoDB和MyISAM是在使用MySQL最常用的两个表类型，各有优缺点，视具体应用而定。基本的差别为：MyISAM类型不支持事务处理等高级处理，
 		而InnoDB类型支持。MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持已经外部键等高级数据库功能。
 	- DML语句，比如insert ,update, delete，如果关闭自动提交需要执行commit才会持久化；而DDL，比如alter table，是系统自动提交无法回滚
@@ -13507,7 +13508,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 * php 从小例子入手
 	- shell中执行php
-		chengs@houyi-vm19.dev.sd.aliyun.com $ vi foo.php
+		chengs@h-o-u-y-i-vm19.dev.sd.aliyun.com $ vi foo.php
 
 		#!/usr/local/bin/php -q
 		<?
@@ -13516,9 +13517,9 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		?>
 
 		"foo.php" [New] 5L, 62C written                                                                                  
-		chengs@houyi-vm19.dev.sd.aliyun.com $ php foo.php 
+		chengs@h-o-u-y-i-vm19.dev.sd.aliyun.com $ php foo.php 
 		foo
-		chengs@houyi-vm19.dev.sd.aliyun.com $ 
+		chengs@h-o-u-y-i-vm19.dev.sd.aliyun.com $ 
 
 * eclipse 插件开发 eclipse plugin
 	http://code.google.com/p/eclipse-fonts/ 这是简单设置编辑器字体大小的插件，可以学习eclipse的plugin编程 ?
@@ -13743,15 +13744,15 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 					
 			3）创建抽象父类，进行测试前的资源初始化操作
 				@SpringApplicationContext({
-					"classpath:houyi-spring-test.xml",
-					"classpath:houyi-spring-dao.xml",
-				    "classpath:houyi-spring-db.xml",
-				    "classpath:houyi-openapi.xml",
+					"classpath:h-o-u-y-i-spring-test.xml",
+					"classpath:h-o-u-y-i-spring-dao.xml",
+				    "classpath:h-o-u-y-i-spring-db.xml",
+				    "classpath:h-o-u-y-i-openapi.xml",
 					})
 				@AutoBeanInject(maps = { @BeanMap(intf = "**.*", impl = "**.impl.*Impl") })
 				public abstract class BaseJtester extends JTester {
 				}
-				这里 classpath:houyi-spring-test.xml 是配置了jdbc等配置文件信息的参数信息，要配置正确
+				这里 classpath:h-o-u-y-i-spring-test.xml 是配置了jdbc等配置文件信息的参数信息，要配置正确
 			4）测试类继承上面的抽象类（db，mock，etc）
 				public class ZoneDaoImplTest extends BaseJtester {
 					
@@ -13765,7 +13766,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 						Assert.assertEquals("testClusterId", clusterId);
 					}
 		- 配置jtester时，报属性文件找不到
-			Caused by: java.io.FileNotFoundException: C:\Users\wb_shen.chengs\.houyi\jdbc.properties (系统找不到指定的路径。)
+			Caused by: java.io.FileNotFoundException: C:\Users\wb_shen.chengs\.h-o-u-y-i\jdbc.properties (系统找不到指定的路径。)
 				查找jtester抽象父类，导入的配置文件中，是否那个配置文件引用了错误的路径；如果原配置文件不能动，可以再test包下的resource中对其
 			做个拷贝，修改相应值，替代原配置文件导入。
 		- jtester配置数据库时，要配置应用的jdbc和jtester自身的jtester.properties文件中的数据库配置 
@@ -13931,12 +13932,12 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		http://blog.csdn.net/westkingwy/article/details/7671371
 			nexus-webapp-1.4.1/conf/plexus.properties 此属性文件配置nexus信息
 
-	- mvn clean package -Dmaven.test.skip=true -Dconfig.file=/home/admin/houyi-ace4j/service/config/auto-config.properties
+	- mvn clean package -Dmaven.test.skip=true -Dconfig.file=/home/admin/h-o-u-y-i-ace4j/service/config/auto-config.properties
 	- maven 循环依赖问题，依赖交叉
 		可通过将接口抽取到一个模块中，被其他实现模块引用；接口模块自身不依赖或只依赖类似model的中立模块
 
 	- 忽略测试失败
-		mvn test -Dmaven.test.failure.ignore=true -Dmaven.test.skip=false -Dmaven.test.error.ignore=true -Duser.home=/home/admin/houyi-test/src/test/resources -e -Duser.home=/home/admin
+		mvn test -Dmaven.test.failure.ignore=true -Dmaven.test.skip=false -Dmaven.test.error.ignore=true -Duser.home=/home/admin/h-o-u-y-i-test/src/test/resources -e -Duser.home=/home/admin
 		user.home为配置文件设置路径，不能错，spring容器初始化需要（可以用内包含逻辑，减少外部依赖）。
 
 	- 测试覆盖率插件 surefire-report
@@ -14204,7 +14205,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		判断是否包含在字符串中，in：
 		        if regionType == 'localdisk':
 			    for ln in sys_crons:
-				if 'sudo /usr/ali/bin/python /etc/houyi/script/snapshot_tools_storage.py' in ln:
+				if 'sudo /usr/ali/bin/python /etc/h-o-u-y-i/script/snapshot_tools_storage.py' in ln:
 				    lineStr = lineStr + '1500 144 2'
 				    sys_crons[sys_crons.index(ln)] = lineStr
 
@@ -14411,15 +14412,15 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 
 	- python异常分析，异常日志由上到下，为异常的入口点，直到报错的地方，第一行是具体错误内容。；java是由下而上，日志前面是具体出错的地方
 		------
-			[root@AT-HOUYIDEV_AG]$ python houyiapi_bigregion2new_update_regionstatus.py 
-			Before update houyi.region_status, houyi.region_status has 0 records
+			[root@AT-HOUYIDEV_AG]$ python h-o-u-y-iapi_bigregion2new_update_regionstatus.py 
+			Before update h-o-u-y-i.region_status, h-o-u-y-i.region_status has 0 records
 			Traceback (most recent call last):
-			  File "houyiapi_bigregion2new_update_regionstatus.py", line 46, in <module>
+			  File "h-o-u-y-iapi_bigregion2new_update_regionstatus.py", line 46, in <module>
 			    main()
-			  File "houyiapi_bigregion2new_update_regionstatus.py", line 42, in main
-			    import_region_status_into_houyi()
-			  File "houyiapi_bigregion2new_update_regionstatus.py", line 31, in import_region_status_into_houyi
-			    houyidb.execute(sql)
+			  File "h-o-u-y-iapi_bigregion2new_update_regionstatus.py", line 42, in main
+			    import_region_status_into_h-o-u-y-i()
+			  File "h-o-u-y-iapi_bigregion2new_update_regionstatus.py", line 31, in import_region_status_into_h-o-u-y-i
+			    h-o-u-y-idb.execute(sql)
 			  File "/usr/local/lib/python2.5/site-packages/pypet/common/database.py", line 103, in execute
 			    return self.cursor.execute(_format(sql), args)
 			  File "build/bdist.linux-x86_64/egg/MySQLdb/cursors.py", line 174, in execute
@@ -15659,7 +15660,7 @@ Apply address:http://www.taobao.ali.com/chanpin/wb/Lists/List4/view.aspx
 		fsck    检查和修复LINUX档案
 		ln      硬链接   ln -s  软件链接
 			rm -rf open.war
-			ln -s /home/admin/houyi/service/src/houyi.console.openapi/target/open.war
+			ln -s /home/admin/h-o-u-y-i/service/src/h-o-u-y-i.console.openapi/target/open.war
 		whereis   查找命令
 		locate    查找
 		find      查找   find / -name "***.***"
@@ -16112,17 +16113,17 @@ day1 2012年3月14日
 		ide eclipse 依赖 ，依赖从上到下配置，上面不对会导致下面的类编译报错。
 
 2. svn 
-	wiki http://wiki.houyi.alibaba-inc.com/dashboard.action
+	wiki http://wiki.h-o-u-y-i.alibaba-inc.com/dashboard.action
 	申请权限
-	http://svn.alisoft-inc.com/repos/alisoft/houyi/console/
+	http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/
 	和
-	http://svn.alisoft-inc.com/repos/alisoft/houyi/cloudengine
+	http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/cloudengine
 
 	department
 	阿里云-云计算业务发展-基础产品-平台技术
 
 wiki：
-	http://wiki.houyi.alibaba-inc.com/dashboard.action
+	http://wiki.h-o-u-y-i.alibaba-inc.com/dashboard.action
 
 bbs:
 	http://bbs.aliyun.com/
@@ -16132,9 +16133,9 @@ feitian SLB ACE（JCE...） (ACE - Ali Cloud Engine云引擎) OSS(kv storage)
 	ACE php container, nodejs container,jsp container
 
 test evn:
-	Latest SLB Build: http://10.1.152.71/release/houyi/slb/trunk/2.0.476963.0/
-	Latest Keepalived Build: http://10.1.152.71/release/houyi/slb/system/keepalived/1.1.20-476658.0/
-	Latest HAProxy Build: http://10.1.152.71/release/houyi/slb/system/haproxy/1.4.15.1-476658.0/
+	Latest SLB Build: http://10.1.152.71/release/h-o-u-y-i/slb/trunk/2.0.476963.0/
+	Latest Keepalived Build: http://10.1.152.71/release/h-o-u-y-i/slb/system/keepalived/1.1.20-476658.0/
+	Latest HAProxy Build: http://10.1.152.71/release/h-o-u-y-i/slb/system/haproxy/1.4.15.1-476658.0/
 
 	Bugfree: http://bugfree.aliyun-inc.com/index.php/bug/list/2
 
@@ -16189,7 +16190,7 @@ test evn:
 
 			6. 分析代码
 
-			from:wiki http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=3932212
+			from:wiki http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=3932212
 
 5. ssh client
 	PuTTY
@@ -16198,7 +16199,7 @@ test evn:
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day2 2012年3月15日
 
-1. 后羿系统
+1. 后-羿系统
 	
 	参考资料 Sina App Engine数据存储服务架构
 	
@@ -16206,23 +16207,23 @@ day2 2012年3月15日
 	wb_shen.chengs + pwd
 
 	url
-		...houyi/cloudengine
-		...houyi/console
+		...h-o-u-y-i/cloudengine
+		...h-o-u-y-i/console
 			branches-api...-requirement 
 
-3. houyi 异步通知 * houyi api open api
+3. h-o-u-y-i 异步通知 * h-o-u-y-i api open api
 	
-	异步通知是后羿系统提供的一套基于HTTP协议主动向客户系统发送VM操作结果状态的基础服务。其基本流程如下：
+	异步通知是后-羿系统提供的一套基于HTTP协议主动向客户系统发送VM操作结果状态的基础服务。其基本流程如下：
 	 
 	通知系统交互流程说明：
-	1. 后羿向外部系统发出通知，即访问外部系统提供的通知接收URL。// 外部系统提供的通知接收URL
+	1. 后-羿向外部系统发出通知，即访问外部系统提供的通知接收URL。// 外部系统提供的通知接收URL
 	2. 客户系统接到通知请求，根据签名信息验证通知真实性。
 	3. 客户系统处理通知。
-	摘自：houyi api 说明doc
+	摘自：h-o-u-y-i api 说明doc
 	
-	该说明书主要提供给后羿系统的终端用户，用户可以开发自己的系统访问后羿API完成有关虚拟机等其他后羿资源的管理和查询。
+	该说明书主要提供给后-羿系统的终端用户，用户可以开发自己的系统访问后-羿API完成有关虚拟机等其他后-羿资源的管理和查询。
 
-4. 通过svn checkout 部分houyi项目 熟悉 【配置 svn】
+4. 通过svn checkout 部分h-o-u-y-i项目 熟悉 【配置 svn】
 	svn插件拉下项目代码 (svn 项目绑定到对应的svn库上，(对于eclipse，如果绑定错误，先删除原有svn库，从team里重新绑定即可))
 	maven插件构建
 		部分依赖找不到的情况：(把所在目录下已有的文件删除)通过到依赖库手动下载pom文件和相应jar.swf等文件，放到maven的.m2文件夹中解决。
@@ -16249,7 +16250,7 @@ day2 2012年3月15日
 				
 				<repository>
 				  <id>ay32-releases</id>
-				  <url>http://repos.houyi.alibaba-inc.com:8081/nexus/content/repositories/releases/</url>
+				  <url>http://repos.h-o-u-y-i.alibaba-inc.com:8081/nexus/content/repositories/releases/</url>
 				  <releases>
 						<enabled>true</enabled>
 					  </releases>
@@ -16274,7 +16275,7 @@ day2 2012年3月15日
 				  <pluginRepositories>
 				<pluginRepository>
 					  <id>ay32-releases</id>
-					  <url>http://repos.houyi.alibaba-inc.com:8081/nexus/content/repositories/releases/</url>
+					  <url>http://repos.h-o-u-y-i.alibaba-inc.com:8081/nexus/content/repositories/releases/</url>
 					  <releases>
 					    <enabled>true</enabled>
 					  </releases>
@@ -16301,7 +16302,7 @@ day2 2012年3月15日
 	通过maven脚本构建测试部署 ？
 
 	ide里编辑，构建工具统一编译测试部署。
-	mvn clean install -rf :houyi-console-web-staff 
+	mvn clean install -rf :h-o-u-y-i-console-web-staff 
 	参数参考：
 		usage: mvn [options] [<goal(s)>] [<phase(s)>]
 
@@ -16376,7 +16377,7 @@ day2 2012年3月15日
 
 		maven 插件 ，源码自动下载
 
-5. 熟悉houyi代码，结构
+5. 熟悉h-o-u-y-i代码，结构
 	
 	
 	
@@ -16604,25 +16605,25 @@ day3 2012年3月16日
 
 		* 
 
-	openAPI mode 要引用到得其他各层分别在不同的model中: (openapi为houyi项目其中一个model)
+	openAPI mode 要引用到得其他各层分别在不同的model中: (openapi为h-o-u-y-i项目其中一个model)
 		<modules>
-		  <module>houyi.console.model</module> 域模型(历史原因有部分分散在其他model中)
-		  <module>houyi.console.util</module> 工具
-		  <module>houyi.console.acl</module> 访问控制
-		  <module>houyi.console.dao</module> DAO
-		  <module>houyi.console.clc</module> 对内master交互模块(操作vm等)
-		  <module>houyi.console.service</module> 逻辑层
-		  <module>houyi.console.message</module> 消息
-		  <module>houyi.console.statistics</module>  
-		  <module>houyi.console.web/houyi.console.web.support</module>  web这块原先以portal调
-		  <module>houyi.console.web/houyi.console.web.staff</module>
-		  <module>houyi.console.web/houyi.console.web.admin</module>
-		  <module>houyi.console.web/houyi.console.web.isv</module>
-		  <module>houyi.console.openapi</module> 对外openapi模块
+		  <module>h-o-u-y-i.console.model</module> 域模型(历史原因有部分分散在其他model中)
+		  <module>h-o-u-y-i.console.util</module> 工具
+		  <module>h-o-u-y-i.console.acl</module> 访问控制
+		  <module>h-o-u-y-i.console.dao</module> DAO
+		  <module>h-o-u-y-i.console.clc</module> 对内master交互模块(操作vm等)
+		  <module>h-o-u-y-i.console.service</module> 逻辑层
+		  <module>h-o-u-y-i.console.message</module> 消息
+		  <module>h-o-u-y-i.console.statistics</module>  
+		  <module>h-o-u-y-i.console.web/h-o-u-y-i.console.web.support</module>  web这块原先以portal调
+		  <module>h-o-u-y-i.console.web/h-o-u-y-i.console.web.staff</module>
+		  <module>h-o-u-y-i.console.web/h-o-u-y-i.console.web.admin</module>
+		  <module>h-o-u-y-i.console.web/h-o-u-y-i.console.web.isv</module>
+		  <module>h-o-u-y-i.console.openapi</module> 对外openapi模块
 		</modules>		
 	
 	openAPI 放开的请求action配置：- 统一出入口 ？
-		<package name="instance" extends="houyi-open" namespace="/">
+		<package name="instance" extends="h-o-u-y-i-open" namespace="/">
 			<action name="services" class="openAPIProxyAction" method="proxy"><!-- action交给spring管理，此action为：open api 的访问代理 -->
 			   <result type="userActionResult"></result> <!-- 自定义result -->
 			</action>
@@ -16651,7 +16652,7 @@ day4 2012年3月19日
 
 1. RESTful REST 请求
 
-http://svn.alisoft-inc.com/repos/alisoft/houyi/cloudengine/branches/tgt_jce_20120507_v2/master/src/main/java/com/aliyun/cloudengine/
+http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/cloudengine/branches/tgt_jce_20120507_v2/master/src/main/java/com/aliyun/cloudengine/
 JCE的master以REST架构，处理openAPI(为get/post请求规范)请求需要提供一个适配层(将REST请求转换为http方式的get/post请求) ？ - Java Cloud Engine
 
 jce的rest实现基于
@@ -16669,8 +16670,8 @@ rest http://www.ibm.com/developerworks/cn/java/j-lo-jaxrs/
     URI 所访问的每个资源都可以使用不同的形式加以表示（比如 XML 或者 JSON），具体的表现形式取决于访问资源的客户端，客户端与服务提供者使用一种内容协商的机制（请求头与 MIME 类型）来选择合适的数据格式，最小化彼此之间的数据耦合。
 
 【Task】
-	以 /houyi-cloudengine-master/src/main/java/com/aliyun/cloudengine/RestAdminApplication.java 为例，熟悉rest方式，并分析rest方式与openapi标准的get/post方式如何转换 ？
-	houyi-cloudengine-master 提供几个rest接口供外界调用。
+	以 /h-o-u-y-i-cloudengine-master/src/main/java/com/aliyun/cloudengine/RestAdminApplication.java 为例，熟悉rest方式，并分析rest方式与openapi标准的get/post方式如何转换 ？
+	h-o-u-y-i-cloudengine-master 提供几个rest接口供外界调用。
 	由于rest方式的请求url不同于普通http请求的url，需要提供一个模块处理标准http请求的处理(接受请求-调用接口-返回结果)
 		rest方式URI: persion/123		http方式: persion?id=123
 	
@@ -17099,7 +17100,7 @@ day8 Friday, March 23, 2012
 			应用
 	* 
 
-	参考 houyi-console/static (java)实现，上述任务 【Task】
+	参考 h-o-u-y-i-console/static (java)实现，上述任务 【Task】
 	= = URL请求的要求(格式，构造)等可以参考这个实现 = =
 		定义数据格式
 		定义任务
@@ -17286,8 +17287,8 @@ day11 Wednesday, March 28, 2012
 			private int jobType; //[0:vm job,1:device job; default 0]
 			private Date beginTime;
 			private Date endTime;
-			OR文件：/houyi-console-dao/src/main/resources/ibatis/TaskLog.xm
-				houyi库 statistics_log
+			OR文件：/h-o-u-y-i-console-dao/src/main/resources/ibatis/TaskLog.xm
+				h-o-u-y-i库 statistics_log
 	* service
 		JobService ：job相关操作
 			public boolean addOrModify(TaskLog job);
@@ -17393,7 +17394,7 @@ day11 Wednesday, March 28, 2012
 			在dao，model等模块加入对应代码。
 		* ibatis查询，可以根据外键设置关联查询，减少查询次数
 		* 由于是另外一个数据库，需要再配置数据源
-		* 在houyi-console-dao里写dao层用到pojo是static中的，是否把pojo，dao，service都按照模块放置，负责dao就要依赖到static中的pojo ？
+		* 在h-o-u-y-i-console-dao里写dao层用到pojo是static中的，是否把pojo，dao，service都按照模块放置，负责dao就要依赖到static中的pojo ？
 			static的model不直接提供dao，而是从其他数据组合而成。比如从appdao的查询记录里组合而成。
 		* 统计一个时间段的缓存使用量，如何取？暂定为求和
 		* 参考master的constant 包定义的常量，帮助了解一些业务知识
@@ -17409,8 +17410,8 @@ day12 Thursday, March 29, 2012
 1. go on 
 	新建maven project开发，独立功能
 	参考console的static模块，做成一个任务模块(业务，逻辑分离，易配置)
-	wiki地址：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=8259199
-	svn ：http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/trunk
+	wiki地址：http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=8259199
+	svn ：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/api/measure-data/trunk
 	web项目 or java进程(jar包main函数启动) or 作为一个组件部署（作为组件部署，有哪些要求，比如 cloudengine 在 xuanyuan 上运行）？
 	
 	* 导入需要的包
@@ -17452,7 +17453,7 @@ day13 Friday, March 30, 2012
 					<configuration>
 						<archive>
 							<manifest>
-								<mainClass>com.aliyun.houyi.acecalc.Test</mainClass>
+								<mainClass>com.aliyun.h-o-u-y-i.acecalc.Test</mainClass>
 							</manifest>
 						</archive>
 						<descriptorRefs>
@@ -17480,7 +17481,7 @@ day13 Friday, March 30, 2012
 						</descriptors>
 						<archive>
 							<manifest>
-								<mainClass>com.aliyun.houyi.acecalc.StartTask</mainClass>
+								<mainClass>com.aliyun.h-o-u-y-i.acecalc.StartTask</mainClass>
 							</manifest>
 						</archive>
 					</configuration>
@@ -17926,7 +17927,7 @@ day19 Wednesday, April 11, 2012
 			LOG_DIR=$BASE_DIR/logs
 			#set for java to load resource
 			USER_DIR=$BASE_DIR
-			JAR_NAME=houyi-measuredata-all-0.0.1.jar
+			JAR_NAME=h-o-u-y-i-measuredata-all-0.0.1.jar
 			if [ ! -n "$1" ]
 			then
 			    echo  "usage: $0 [insert|remove]";
@@ -17959,7 +17960,7 @@ day19 Wednesday, April 11, 2012
 		eg: TortoiseSVN   
 			check for modification - revert  
 		可以用客户端管理版本，eclipse只负责项目开发。 不同svn客户端交叉用可能出错误。
-		svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/trunk 
+		svn co http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/api/measure-data/trunk 
 		username
 		password
 	* svn
@@ -18014,7 +18015,7 @@ day20 Thursday, April 12, 2012
 1.  
 	sql独立，将各自的查询sql独立查询，程序里再组合，编写涉及到表的pojo和映射文件
 	dao db wiki 测试
-		'file://D:\workspace\measure/target/dbfit/com\aliyun\houyi\measuredata\dao\impl\MemacheAppRunningInfoDaoImplTest.testReadAceCalInfocByTimePeriod.when.html'
+		'file://D:\workspace\measure/target/dbfit/com\aliyun\h-o-u-y-i\measuredata\dao\impl\MemacheAppRunningInfoDaoImplTest.testReadAceCalInfocByTimePeriod.when.html'
 
 2. 
 	ls -R 
@@ -18052,7 +18053,7 @@ day21 Friday, April 13, 2012
 		数据的平均值，再对平均值求和。
 	* JCE OpenAPI
 		svn改了新分支，下载新的cloudengine分支
-			http://svn.alisoft-inc.com/repos/alisoft/houyi/cloudengine/branches/tgt_jce_20120507_v5/master
+			http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/cloudengine/branches/tgt_jce_20120507_v5/master
 
 2. job 的丢失处理时间
 	和临时文件保留时间改为配
@@ -18104,7 +18105,7 @@ day22 Monday, April 16, 2012
 	* ace的部署方式，加上先从svn下载默认目录结构(包含build部署，执行脚本)，然后执行build进行build,然后deploy，最后execute
 		这样，部署ace计量程序步骤如下：
 			a. 在有写权限的临时路径下执行
-				svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/api/measure-data/deploy-env			
+				svn co http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/api/measure-data/deploy-env			
 			b. 进入上面checkout下来的目录(deploy-env)，找到measure目录，将其拷贝到/home/admin/measure目录下(若没有此目录则新建，若重名就另外取目录名亦可)
 				cd deploy-env
 				cp -r measure /home/admin/measure
@@ -18411,10 +18412,10 @@ day28 Tuesday, April 24, 2012
 			openapi 
 				配置接入参数到 服务表 和 action表
 			测试地址：http://10.230.129.182:8088/open?
-			jce 测试环境wiki：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=8651094
+			jce 测试环境wiki：http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=8651094
 		- master的属性配置到 /src/main/conf/cemaster_env.properties 中，test下的属性只供测试调用
 		- rest暴露的服务uri定位 /open 
-		- wiki http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=6094915
+		- wiki http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=6094915
 		- site_id master的接口实现已经做了参数验证，桥接层不需要处理，提供统一的异常提示。
 			转接层不做业务相关的处理,让了解业务的逻辑去处理验证是否符合要求。模块责任清晰
 			参考 struts2的自动参数注入逻辑，不匹配的置为null
@@ -18533,7 +18534,7 @@ day28 Tuesday, April 24, 2012
 		- 将结果状态处理下 比如 -100 转换为-2100，返回给用户
 		- 实现slb后端提供的接口调用(定义的action操作)
 	* check out 代码
-		svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api
+		svn co http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/trunk/sources/api
 	* 阅读相关文档
 	* 查看源码
 		框架构成：struts2 + spring + ibatis 
@@ -18556,12 +18557,12 @@ day29 Wednesday, April 25, 2012
 			a. 实现slb后端文档提供的操作Action类，并配置到spring配置中
 			b. LoadBalancerService 加入新的功能定义，并实现
 				
-		- 涉及到vm的信息(比如向lb_id中加vm时) ，需要到后羿vm处去查询  ，数据库 houyi
+		- 涉及到vm的信息(比如向lb_id中加vm时) ，需要到后-羿vm处去查询  ，数据库 h-o-u-y-i
 			配置文件：slbapi.properties 
 				ec.api.url=http://10.230.204.65/open/services?
-		- 一些交互细节，demo等可参考v1版本的代码(houyi-console下)
-			svn 地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/console/trunk
-			如 /houyi-console-service/src/main/java/com/aliyun/houyi/service/impl/LBControlServiceImpl.java 参考其与slb后端交互逻辑。
+		- 一些交互细节，demo等可参考v1版本的代码(h-o-u-y-i-console下)
+			svn 地址：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/trunk
+			如 /h-o-u-y-i-console-service/src/main/java/com/aliyun/h-o-u-y-i/service/impl/LBControlServiceImpl.java 参考其与slb后端交互逻辑。
 		- slb后端的请求url从region表中获得。
 		- post请求：
 			注意请求内容以multipart的方式构造请求体，这样服务端接收时才能正确解析。
@@ -18675,7 +18676,7 @@ day32 Saturday, April 28, 2012
 		http://localhost:8080/slb/api?action=query_loadbalancer&region_no=region-test&lb_id=43-region-test&&session=accessid1&sign=xx
 		{"code":-2003,"msg":"system exception"}
 		http://localhost:8080/slb/api?action=query_loadbalancer_info&region_no=region-test&lb_id=43-region-test&&session=accessid1&sign=xx
-		{"code":200,"data":{"lb_id":"43-region-test","frontend_port":[],"lb_type":"compact","eip":"42.120.64.215","eip_type":"internet","rs_type":"houyi"},"msg":"successful"}
+		{"code":200,"data":{"lb_id":"43-region-test","frontend_port":[],"lb_type":"compact","eip":"42.120.64.215","eip_type":"internet","rs_type":"h-o-u-y-i"},"msg":"successful"}
 		第一个请求的错误，具体原因是action的名称不对，可以细化错误提示，便于调试和理解。
 
 		错误，异常提醒细化 
@@ -18692,7 +18693,7 @@ day32 Saturday, April 28, 2012
 				http://localhost:8080/slb/api?action=create_loadbalancer&region_no=region-test&lb_name=lbname2&lb_type=hybrid&eip_type=internet&session=cao.yin&sign=xx
 				{"code":200,"data":{"lb_id":"23-region-test","eip":"42.120.64.226"},"msg":"successful"}
 		查询LB: http://localhost:8080/slb/api?action=query_loadbalancer_info&region_no=region-test&lb_id=25-region-test&&session=accessid1&sign=xx
-			{"code":200,"data":{"lb_id":"25-region-test","frontend_port":[],"lb_type":"compact","eip":"42.120.64.227","eip_type":"internet","rs_type":"houyi"},"msg":"successful"}
+			{"code":200,"data":{"lb_id":"25-region-test","frontend_port":[],"lb_type":"compact","eip":"42.120.64.227","eip_type":"internet","rs_type":"h-o-u-y-i"},"msg":"successful"}
 		删除LB: http://localhost:8080/slb/api?action=delete_loadbalancer&region_no=region-test&lb_id=31-region-test&&session=accessid1&sign=xx
 			{"code":200,"msg":"successful"}
 		配置LB: http://localhost:8080/slb/api?action=config_loadbalancer&region_no=region-test&lb_id=25-region-test&status=active&session=accessid1&sign=xx
@@ -18824,7 +18825,7 @@ day35 Friday, May 04, 2012
 		api调用日志记录调用前后时间，按照设计的日志格式输出。可以在拦截器中记录调用日志
 	* slb api配上签名验证
 		测试例子：http://localhost:8080/slb/api?sign=kxUxw8Op%2B8TsTemi6qrknQ%3D%3D&timestamp=2012-05-04%2014%3A53%3A51&session=cao.yin&action=query_loadbalancer_info&lb_id=25-region-test&region_no=region-test&format=json
-			{"code":200,"data":{"lb_type":"compact","lb_id":"25-region-test","frontend_port":[],"eip":"42.120.64.225","eip_type":"internet","rs_type":"houyi"},"msg":"successful"}
+			{"code":200,"data":{"lb_type":"compact","lb_id":"25-region-test","frontend_port":[],"eip":"42.120.64.225","eip_type":"internet","rs_type":"h-o-u-y-i"},"msg":"successful"}
 2. 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -18840,11 +18841,11 @@ day36 Monday, May 07, 2012
 			http://10.230.204.24/slb/api?sign=7kes%2FcmCqF5ofzJkpsI7rg%3D%3D&timestamp=2012-05-07%2015%3A21%3A13&session=cao.yin&lb_id=8-region-test&action=query_loadbalancer_info&region_no=AT03-HOUYI1&format=json
 			{"code":-2610,"msg":"LbIdNotExist"}
 			http://10.230.204.24/slb/api?sign=pp9LAo7fjImc9ge4NoIbmg%3D%3D&timestamp=2012-05-08%2009%3A43%3A35&session=cao.yin&lb_id=25-AT03-HOUYI1&action=query_loadbalancer_info&region_no=AT03-HOUYI1&format=json
-			{"code":200,"data":{"lb_type":"compact","lb_id":"25-AT03-HOUYI1","frontend_port":[],"eip":"42.120.64.197","eip_type":"internet","rs_type":"houyi"},"msg":"successful"}
+			{"code":200,"data":{"lb_type":"compact","lb_id":"25-AT03-HOUYI1","frontend_port":[],"eip":"42.120.64.197","eip_type":"internet","rs_type":"h-o-u-y-i"},"msg":"successful"}
 	* 日志实现改为 将各处log项存入localthread中，最后记录log时，把log对象tostring即可。
-		参考 http://svn.alisoft-inc.com/repos/alisoft/houyi/openapi/trunk/aliyun.openapi.model/src/main/java/com/aliyun/openapi/entity/MonitorLogHolder.java 实现
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/openapi/trunk/aliyun.openapi.model/src/main/java/com/aliyun/openapi/entity/MonitorLog.java
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/openapi/trunk/aliyun.openapi.framework/src/main/java/com/aliyun/openapi/interceptor/LogInterceptor.java
+		参考 http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/openapi/trunk/aliyun.openapi.model/src/main/java/com/aliyun/openapi/entity/MonitorLogHolder.java 实现
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/openapi/trunk/aliyun.openapi.model/src/main/java/com/aliyun/openapi/entity/MonitorLog.java
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/openapi/trunk/aliyun.openapi.framework/src/main/java/com/aliyun/openapi/interceptor/LogInterceptor.java
 	* slb api的region_no 问题
 		AT03-HOUYI1,region-test 此值从slbapi库的region_mapping表中查询得到；将客户传递来的vm region转换为slb的region，对外统一用vm的region
 	* rs表操作的测试，事务一致性测试
@@ -18863,7 +18864,7 @@ day36 Monday, May 07, 2012
 			- slb api库数据源配置(库slbapi)
 			- slb后端业务数据数据库源配置(xuanyuan)
 			- 上面的 monitor_datasource 表中配置slb后端计量数据数据库源
-	(2) svn下载默认目录结构，地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api/deploy-env
+	(2) svn下载默认目录结构，地址：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/trunk/sources/api/deploy-env
 	(3) 将上面目录中的 slbapi 目录cp到 /home/admin 下
 	(4) 进入 slbapi 目录
 		cd /home/admin/slbapi
@@ -18913,13 +18914,13 @@ day36 Monday, May 07, 2012
 		</tx:advice>
 		<aop:config>
 			<aop:pointcut
-				expression="execution(* com.aliyun.houyi.service.impl.IpAddressServiceImpl.*(..))"
+				expression="execution(* com.aliyun.h-o-u-y-i.service.impl.IpAddressServiceImpl.*(..))"
 				id="ipAddressPointCut" />
 			<aop:advisor advice-ref="txAdvice4Ip" pointcut-ref="ipAddressPointCut" />
 		</aop:config>
 		<aop:config>
 			<aop:pointcut id="instanceStatusPointcut"
-				expression="@annotation(com.aliyun.houyi.service.rule.InstanceStatusConstraint)" />
+				expression="@annotation(com.aliyun.h-o-u-y-i.service.rule.InstanceStatusConstraint)" />
 			<aop:advisor advice-ref="instanceStatusInterceptor"
 				pointcut-ref="instanceStatusPointcut" order="10" />
 		</aop:config>
@@ -18960,7 +18961,7 @@ day36 Monday, May 07, 2012
 		会存在返回其他ip的情况
 
 	第二种方式：
-		维护vm name 与ip的表，从houyi库里取得，只做查询，更新，不修改？
+		维护vm name 与ip的表，从h-o-u-y-i库里取得，只做查询，更新，不修改？
 
 	
 	有个业务前提：
@@ -19087,17 +19088,17 @@ day41 Monday, May 14, 2012
 	* 大region了解
 		数据中心随着业务增长，当前region不能放入更多vm，需要跨region，但逻辑上他们还是属于同一region，这样上层下发规则时，能对应到同region的vm。
 		当前解决方式，把region规则上提到api层，在这层统一region。
-	* houyi api 在vm迁移时需要刷新cache中的region信息以映射到新的region，在region定位接口，提供清楚指定资源的cache接口。 clear_cache
+	* h-o-u-y-i api 在vm迁移时需要刷新cache中的region信息以映射到新的region，在region定位接口，提供清楚指定资源的cache接口。 clear_cache
 
 		缓存：AbstractResourceLocator 类的 resourceRegionCache 方法 (定位用)
 
-		com.aliyun.houyi.service.ResourceLocator
-			DefaultResourceLocator 和 AbstractResourceLocator中实现(/houyi-console-service)
-			然后添加一个action(包位置：com.aliyun.houyi.openapi.control.vm)，并配置(/houyi-console-openapi):在spring里配置action这个bean，至于action请求映射配置由于用了
+		com.aliyun.h-o-u-y-i.service.ResourceLocator
+			DefaultResourceLocator 和 AbstractResourceLocator中实现(/h-o-u-y-i-console-service)
+			然后添加一个action(包位置：com.aliyun.h-o-u-y-i.openapi.control.vm)，并配置(/h-o-u-y-i-console-openapi):在spring里配置action这个bean，至于action请求映射配置由于用了
 			代理方式依据配置bean的name来执行，故不用再到struts.xml中配置(只配置一个代理的访问入口)。
 		action bean名为clear_cache
 		需要定义接口说明，传递参数，返回值，状态码说明等。
-			参考houyi api文档
+			参考h-o-u-y-i api文档
 			cache_key: vm名称
 			cache_type:instance,ip,.. 要删除的cache实例类型，目前有instance,ip_segment,group,ip_address四种类型，默认为instance类型
 
@@ -19203,7 +19204,7 @@ day44 Thursday, May 17, 2012
 	* 了解大region需求
 
 	* vm api 之前实现了清除cache的action，现在需要确认是否也能把预加载的region去掉？
-		houyi-console-openapi
+		h-o-u-y-i-console-openapi
 		
 2. 
 	select sum(in_bytes) as tcp_internet_rx,lb_global_id      
@@ -19228,7 +19229,7 @@ day45 Friday, May 18, 2012
 	* slb api cache region启用修改
 		bug 41 继续报错
 
-	* houyi防火墙规则了解，大region相关业务点熟悉
+	* h-o-u-y-i防火墙规则了解，大region相关业务点熟悉
 	* slb后端api user_id必选，rs_type参数名改为mode ，对api这层做相应调整(代码+文档)
 
 2. 虚拟化
@@ -19259,7 +19260,7 @@ day46 Monday, May 21, 2012
 
 3. 消息中间件 MQ
 	云服务器api
-	/houyi-console-message
+	/h-o-u-y-i-console-message
 
 	<dependency>
 		<groupId>com.rabbitmq</groupId>
@@ -19343,7 +19344,7 @@ day47 Tuesday, May 22, 2012
 	- 查询可切换的nc接口，修改返回值中nc_id格式
 		QueryAvaliableNcsExecuteAction
 	- 查询nc详情(detail_nc)接口，解析并拆分传递的nc_id参数，并修改返回值中nc_id格式
-		到houyi-openapi.xml找对应关系
+		到h-o-u-y-i-openapi.xml找对应关系
 		SingleNcResourceAction
 		
 		
@@ -19403,7 +19404,7 @@ day50 Friday, May 25, 2012
 	snapshot_id得到其所属的region，然后进行相应操作），同时对应返回结果也做相应调整。
 
 
-3. houyi open api部分在内部文档，或者过期文档中
+3. h-o-u-y-i open api部分在内部文档，或者过期文档中
 	比如：list_mounted_snapshot
 
 
@@ -19442,7 +19443,7 @@ day51 Monday, May 28, 2012
 	
 	zone属于某个region，是多对一的关系，cluster_id和region_no是一对一
 
-	houyi api部分涉及权限的操作是在zone内进行的，即不跨zone，比如：迁移，
+	h-o-u-y-i api部分涉及权限的操作是在zone内进行的，即不跨zone，比如：迁移，
 
 5. NIO
 	解决同步IO资源耗尽问题 ，open api 等场景部分优化
@@ -19477,7 +19478,7 @@ day51 Tuesday, May 29, 2012
 	tip：
 		可以从库表中反应它们间一定的关系 :)
 	
-	api层只有region的概念，houyi后端有cluster_id概念？
+	api层只有region的概念，h-o-u-y-i后端有cluster_id概念？
 	
 3. 
 
@@ -19493,7 +19494,7 @@ day52 Wednesday, May 30, 2012
 			在action的父类里实现，提供一个公用的方法处理。
 		- 尽量避免不必要的网络交互（eg：访问数据库，访问网络上的其他service服务）
 		- 
-	* 整理houyi open api定位到region的规则
+	* 整理h-o-u-y-i open api定位到region的规则
 			现有2个api，北京那边api（不升级），杭州这边api（要升级），准备在2个api之上，用一个类似路由程序来统一接受访问api的请求，
 		并根据预定规则，将请求转发给老api或者新api，故需要整理这个路由的规则，让其能判断某个请求是到老api还是新api的？
 			新老版本如何共享一个DB？
@@ -19557,7 +19558,7 @@ day52 Wednesday, May 30, 2012
 					- 根据用户请求参数region_no
 						region_no - 根据region_no查询
 					- 根据调用者（user）
-						比如query_region接口只能通过user信息定位region，user信息可以根据session参数查询houyi open api数据库得到
+						比如query_region接口只能通过user信息定位region，user信息可以根据session参数查询h-o-u-y-i open api数据库得到
 						但是，用户会在北京region和杭州region都有vm吗？
 
 					上面，只是得到了用户所要请求的是那个region，还需要判断这个region是老api的，还是新api的？
@@ -19590,7 +19591,7 @@ day52 Wednesday, May 30, 2012
 				- 被转换参数一个或者多个
 
 			
-3. houyi open api常量类设计分析
+3. h-o-u-y-i open api常量类设计分析
 		对于一些常量，状态值的设计定义，减少硬编码：通过枚举定义一些常量，或者一组状态；通过一个接口定义枚举
 	基本机构。
 		* 枚举定义一些基本常量 eg: InstanceStatus定义vm的状态（待启动，启动中，运行中等）
@@ -19606,19 +19607,19 @@ day52 Wednesday, May 30, 2012
 
 	key words: expression="@annotation(
 	
-	<bean id="resourceQueryFacade" class="com.aliyun.houyi.acl.ResourceQueryFacade"/>
+	<bean id="resourceQueryFacade" class="com.aliyun.h-o-u-y-i.acl.ResourceQueryFacade"/>
 	
-	<bean id="resourceSurveyor" class="com.aliyun.houyi.acl.ResourceSurveyor">
+	<bean id="resourceSurveyor" class="com.aliyun.h-o-u-y-i.acl.ResourceSurveyor">
     		<property name="resourceQueryFacade" ref="resourceQueryFacade"></property>
 	</bean>
 
-	<bean id="instanceStatusInterceptor" class="com.aliyun.houyi.service.rule.InstanceStatusInterceptor">
+	<bean id="instanceStatusInterceptor" class="com.aliyun.h-o-u-y-i.service.rule.InstanceStatusInterceptor">
 		<property name="resourceSurveyor" ref="resourceSurveyor"/>
 	</bean>
 
 	<aop:config>
 		<aop:pointcut id="instanceStatusPointcut"
-			expression="@annotation(com.aliyun.houyi.service.rule.InstanceStatusConstraint)" />
+			expression="@annotation(com.aliyun.h-o-u-y-i.service.rule.InstanceStatusConstraint)" />
 		<aop:advisor advice-ref="instanceStatusInterceptor"
 			pointcut-ref="instanceStatusPointcut" order="10" />
 	</aop:config>	
@@ -19636,7 +19637,7 @@ day53 Thursday, May 31, 2012
 		考虑大region关于open api的需求还有那些地方可能会影响？
 			迭代2,3需要评估
 	* 后端mock：
-		调用houyi后端的mock实现。
+		调用h-o-u-y-i后端的mock实现。
 		对 ApsaraCommandExecutor 进行mock
 			保证传递进去的参数是正确的，mock出预期的返回，便于测试。
 	* 迭代2
@@ -19661,7 +19662,7 @@ day54 Friday, June 01, 2012
 		3）因为machine_no（随机字段）这个值存在重复性，启用新的算法(类似于UUID类的算法)，保证生成的machine_no是不会重复的 2
 		4）支持动态添加新region信息，不需要重启 1  动态添加新region信息
 			是否有添加region这个接口？
-				houyi.region表是手动插入记录
+				h-o-u-y-i.region表是手动插入记录
 				没有这个接口，需要设计方案；RegionValuesFactory里的region缓存，如何在region表手动插入记录时，更新RegionValuesFactory里region
 				缓存？
 					a. 定时刷新
@@ -19676,7 +19677,7 @@ day54 Friday, June 01, 2012
 	slb 测试环境：
 		
 		mysql
-			mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
+			mysql -uh-o-u-y-i -ph-o-u-y-iat03 -h10.230.204.19 slbapi
 
 	http://workflow.it.alibaba-inc.com/StartWorkflow.ashx?wfid=dfdd6d75-e539-4cb6-a289-a01eaaa5b426
 	服务类型，新开令牌；需求权限，内网默认权限
@@ -19687,8 +19688,8 @@ day55 Monday, June 04, 2012
 1. 
 	* 迭代1新增需求分析 见day54第1条
 		详见迭代一新增需求文档（doc）
-	* 将分支：http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_btc_migrate/中clear_cache接口代码加到分支	
-	   http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_update_struts上。
+	* 将分支：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_btc_migrate/中clear_cache接口代码加到分支	
+	   http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_update_struts上。
 		拉api_update_struts的代码，并更新上clear_cache接口
 	* slb后端会部署多个slb，每个slb对应一个计量库，一个业务库； 参考day42 slb 流量
 		一个slb对应多个vm，每个vm可能位于不同的region。
@@ -19708,8 +19709,8 @@ day55 Monday, June 04, 2012
 2. redmine 任务列表
 	拉分支 ：
 	【代码SVN路径】
-		houyi-api: http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_big_region
-		控制系统：http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/houyi/branches/ec_big_region
+		h-o-u-y-i-api: http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_big_region
+		控制系统：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/h-o-u-y-i/branches/ec_big_region
 	
 	list_vlan 第三周期？
 
@@ -19765,16 +19766,16 @@ day56 Tuesday, June 05, 2012
 		测试依赖的配置文件，有一部分在用户目录下，需要在spring配置文件中配置正确。
 
 	- 4.2	查询VM的设备接口（query_vm_device）
-		* /houyi-console-service/src/main/java/com/aliyun/houyi/service/impl/InstanceServiceImpl.java
+		* /h-o-u-y-i-console-service/src/main/java/com/aliyun/h-o-u-y-i/service/impl/InstanceServiceImpl.java
 			queryDevice方法修改
 		* zonedaoimpl
 		* ZoneDaoImplTest
 			jtester测试通过
 		* zoneservice / zoneserviceimpl
-		* /houyi-console-model/src/main/java/com/aliyun/houyi/entity/Zone.java 加上clusterId属性
+		* /h-o-u-y-i-console-model/src/main/java/com/aliyun/h-o-u-y-i/entity/Zone.java 加上clusterId属性
 		* zone表加cluster_id字段【sql 修改】
 			alter table zone add cluster_id varchar(32) NOT NULL;
-		* /houyi-console-util/src/main/java/com/aliyun/houyi/util/ResultParseUtil.java 工具类 ，处理返回值装配
+		* /h-o-u-y-i-console-util/src/main/java/com/aliyun/h-o-u-y-i/util/ResultParseUtil.java 工具类 ，处理返回值装配
 		* QueryVmDeviceExecuteAction
 			取得cluster_id，修改返回值
 			待测
@@ -19908,7 +19909,7 @@ day58 Thursday, June 07, 2012
 	- 4.15	查询可切换的nc接口（query_available_nc）
 		QueryAvaliableNcsExecuteAction
 			待测
-	- 4.16	查询nc详情(detail_nc)接口 (houyi-openapi.xml)
+	- 4.16	查询nc详情(detail_nc)接口 (h-o-u-y-i-openapi.xml)
 		NodeControlService
 		SingleNcResourceAction
 		状态码修改：NcErrorMessage 
@@ -20153,7 +20154,7 @@ day62 Wednesday, June 13, 2012
 		查询用户lb列表：
 			{\"code\":200,\"msg\":\"successful\",\"lbs\":[\"lb1\",\"lb2\"]}"); 由统一的data字段表示数据，改为lbs 。？
 
-	* houyi open api 参数修改部分，某些参数不是必选的？逻辑需要考略 
+	* h-o-u-y-i open api 参数修改部分，某些参数不是必选的？逻辑需要考略 
 		参考原有逻辑，处理可选参数。
 	* 状态码修改补充
 		原状态码不变（尽量减小对客户端的影响），新增需要的状态码：
@@ -20244,11 +20245,11 @@ day64 Friday, June 15, 2012
 			MonitorSqlMapTemplateFactory 的 monitorDatasources 变量
 				ConsistentCircle
 
-	* houyi open api 测试环境
+	* h-o-u-y-i open api 测试环境
 		http://10.250.6.33/open/services?
 		key:lisw,secret:lisw
 
-	* houyi open api 
+	* h-o-u-y-i open api 
 		涉及snapsho的接口，原部分接口逻辑在操作快照时没有对用户是否有权限操作快照做约束，现需要判断：
 			- 快照的owner和当前用户是否一致。
 			（image是有visibility使用权限设置的，可以设置为私有或公有或者其他定义的类型，快照为私有）
@@ -20331,7 +20332,7 @@ day64 Friday, June 15, 2012
 
 	action中处理返回值的逻辑，是否可以移到command的处理防护值方法中 职责划分
 
-4. houyi open api 系统
+4. h-o-u-y-i open api 系统
 	InstanceServiceImpl > mountDisk
 		this.instanceDao.updateInstanceConfig(instance); //没返回值，没log，非理想情况如何处理
 	mock？
@@ -20473,7 +20474,7 @@ day67 Wednesday, June 20, 2012
 	* 迭代一 参数修改部分 ，新增2个接口需要修改
 		
 2. slbapi 测试环境
-	mysql -uhouyi -phouyiat03 -h10.230.204.19 slbapi
+	mysql -uh-o-u-y-i -ph-o-u-y-iat03 -h10.230.204.19 slbapi
 3. slb测试
 	测试的条件能重现，就可以在本地debug
 
@@ -20507,17 +20508,17 @@ day68 Thursday, June 21, 2012
 	* big region 迭代一新增2个接口开发
 	* big region 测试环境
 		请求api的client 位置：
-			/houyi-console-openapi/src/test/java/com/aliyun/houyi/openapi/util
+			/h-o-u-y-i-console-openapi/src/test/java/com/aliyun/h-o-u-y-i/openapi/util
 		10.242.209.4  api地址
 		10.242.209.1 api db
-		日志 /home/admin/houyi/service/logs/openapi
+		日志 /home/admin/h-o-u-y-i/service/logs/openapi
 		10.250.8.214环境 admin操作
-			cd /home/admin/houyi/service
+			cd /home/admin/h-o-u-y-i/service
 			sh build/build.sh 
 			sh bin/reloadws_alone 
 			tail -f logs/openapi/jboss_stdout.log 
 		配置文件：
-			/home/admin/.houyi/
+			/home/admin/.h-o-u-y-i/
 
 		dev开发测试环境：
 			AT-HOUYIDEV-AG 10.250.6.27
@@ -20681,7 +20682,7 @@ day70 Tuesday, June 26, 2012
 2. 资源位置改变更新bug修改点
 	SnapshotServiceImpl
 		unmountSnapshot
-3. big region api&houyi avalible
+3. big region api&h-o-u-y-i avalible
 	API:10.250.6.33
 	DB:10.250.6.27
 4. 错误码 ，调试时，错误码+log
@@ -20699,7 +20700,7 @@ day70 Tuesday, June 26, 2012
 	BASE_HOME=`pwd`
 
 	#rm -rf $BASE_HOME/src/*
-	svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api $BASE_HOME/src
+	svn co http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/trunk/sources/api $BASE_HOME/src
 	cd $BASE_HOME/src
 	mvn clean package -Dmaven.test.skip=true 
 
@@ -20812,16 +20813,16 @@ day72 Thursday, June 28, 2012
 		- mvn skip的原因
 			原因为：testng框架在初始化时报错，对于依赖的测试用例都将skip
 			解决：解决初始化问题，比如spring容器初始化错误等
-				暂时先注释houyicontext重复加载抛错
-				设置 houyi.openapi.test=true 标识
+				暂时先注释h-o-u-y-icontext重复加载抛错
+				设置 h-o-u-y-i.openapi.test=true 标识
 	* -90 system error 错误
 		原因之一：vm找不到image，ibatis执行时，不能正确封装对象，报错
-			com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.houyi.entity.Image.  Cause: java.lang.IllegalArgumentException
+			com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.h-o-u-y-i.entity.Image.  Cause: java.lang.IllegalArgumentException
 				instance找到了，
 
 
 2. sql整理
-	houyi,zone表
+	h-o-u-y-i,zone表
 	alter table zone add cluster_id varchar(32) NOT NULL;
 	SELECT	region_no	FROM zone WHERE cluster_id=#clusterId#
 	SELECT	cluster_id	FROM zone WHERE zone_id=#zoneId#	
@@ -20842,16 +20843,16 @@ day72 Thursday, June 28, 2012
 	- bug #177163 live_migrate_vm接口：nc_id为‘-’或者‘--’时，统一返回-90
 		
 4. mvn test
-	mvn test -Dmaven.test.failure.ignore=true -Dmaven.test.skip=false -Dmaven.test.error.ignore=true -Duser.home=/home/admin/houyi-test/src/test/resources -e -Duser.home=/home/admin
+	mvn test -Dmaven.test.failure.ignore=true -Dmaven.test.skip=false -Dmaven.test.error.ignore=true -Duser.home=/home/admin/h-o-u-y-i-test/src/test/resources -e -Duser.home=/home/admin
 		user.home为配置文件设置路径，不能错，spring容器初始化需要（可以用内包含逻辑，减少外部依赖）。
 
-	big region ，重复设置houyi上下文，导致spring初始化失败
+	big region ，重复设置h-o-u-y-i上下文，导致spring初始化失败
 
 5. -90 system error 错误
 	原因之一：vm找不到image，ibatis执行时，不能正确封装对象，报错
 		instance.xml
 		instance.selectInstanceDetailByNo
-		com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.houyi.entity.Image.  Cause: java.lang.IllegalArgumentException
+		com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.h-o-u-y-i.entity.Image.  Cause: java.lang.IllegalArgumentException
 			instance找到了，left outer join 去找image时，image的记录是不存在的，但这种join方式，还是返回了vm存在的记录，只是image的字段都是空的。
 			可以在 join 时，如果image找不到则不匹配，返回空。
 			OR
@@ -20974,14 +20975,14 @@ day74 Monday, July 02, 2012
 	query_available_ncs: vm状态为destroyed的情况下，API报-90	   （控制系统destory，api这层为release状态）
 		在根据vm_name查找instance时（为了查询资源的regionNo），dao层sql语句报错，和之前一样，let join的表没数据，但result这个字段又是必须，故报ibatis设置result map错误，程序没有捕捉这个错误。
 			应该报这个错，日志没记录：
-				com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.houyi.entity.Image.  Cause: java.lang.IllegalArgumentException
+				com.ibatis.common.beans.ProbeException: Could not set property 'servicesSign' to value 'null' for com.aliyun.h-o-u-y-i.entity.Image.  Cause: java.lang.IllegalArgumentException
 		解决：
 			捕捉这个错误，打出log。
 		注：
 			错误日志找了半天找不到（根据请求内容，返回结果），原因在于 log里没有打印请求相关的内容，不好根据请求内容匹配，建议可以适当打印请求的一些关键内容，便于排查错误。 【日志内容设计，建议】
-				2012-07-02 14:12:13,249 ERROR [com.aliyun.houyi.openapi.interceptor.ParameterInterceptor] - [业务参数校验有问题，请检查原因：com.aliyun.houyi.openapi.exception.ParameterException: 协议参数校验不通过，参数名称：timestamp！]
+				2012-07-02 14:12:13,249 ERROR [com.aliyun.h-o-u-y-i.openapi.interceptor.ParameterInterceptor] - [业务参数校验有问题，请检查原因：com.aliyun.h-o-u-y-i.openapi.exception.ParameterException: 协议参数校验不通过，参数名称：timestamp！]
 
-				2012-07-02 14:35:38,204 ERROR [com.aliyun.houyi.openapi.interceptor.RegionAwareInterceptor] - [查询资源信息时发生错误!]
+				2012-07-02 14:35:38,204 ERROR [com.aliyun.h-o-u-y-i.openapi.interceptor.RegionAwareInterceptor] - [查询资源信息时发生错误!]
 				就这条日志，导致error错误发生，log里没有明确的内容标识本此请求，故通过即时重现来得到log输出。这里可以适当打印一些请求内容，便于后续排查错误。
 
 3. 日志打个唯一tag，再结合用户标识等唯一标识以及时间，可以从日志中统计出每个用户每次调用的所有有序日志输出。think it
@@ -21057,7 +21058,7 @@ day76 Wednesday, July 04, 2012
 	- [ID:175056]大region下查询可用公网IP资源(query_unassigned_ips)
 		QueryUnassignedIpsExecuteAction
 
-		此接口需要根据 zone_id取到对应的小region_no，查询houyi时，指定在这个小region上操作。
+		此接口需要根据 zone_id取到对应的小region_no，查询h-o-u-y-i时，指定在这个小region上操作。
 		
 3. dbfit 测试用的wiki文件，直接从sql检索结果贴过来，会有很多空格，可以用空来替换空格，再补上必要的空格，省去删空格的繁琐。
 	替换功能帮助不小
@@ -21097,7 +21098,7 @@ day77 Thursday, July 05, 2012
 	- [ID:175048]查询用户所有的VM监控信息接口，参数由小region变成大region(query_monitor_vms)
 		   VmPageMonitorExecuteAction
 
-4. big region ,houyi api 代码中多处用到java对象的址传递方式来，从一个方法中取得多个结果
+4. big region ,h-o-u-y-i api 代码中多处用到java对象的址传递方式来，从一个方法中取得多个结果
 	比如：声明一个变量，传入到方法参数中，执行好后，方法返回一个结果，参数中对象也保存了结果
 
 	这样的现象出现的原因？有何优缺点？
@@ -21213,7 +21214,7 @@ day80 Tuesday, July 10, 2012
 	slb v2 api ，在region_mapping表通过vm的region_no得到slb的region_no
 	，然后，在调用slb后端和查询流量数据时用到这个slb region_no。
 
-	slb v1 版本代码在houyi api的一个包中，属于houyi api project：
+	slb v1 版本代码在h-o-u-y-i api的一个包中，属于h-o-u-y-i api project：
 		
 		
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -21233,7 +21234,7 @@ day81 Wednesday, July 11, 2012
 			一个vm大region_no对应slb的一个region_no，他们是一对一关系
 		需求分析
 		请求参数中region_no为大region_no时	   ，只要在region_mapping表找到对应的slb region_no即可：
-			SLB V1用到slb region_no的地方有(houyi库)：
+			SLB V1用到slb region_no的地方有(h-o-u-y-i库)：
 				a. slb流量查询接口，
 					slb_monitor_datasource（此表region_no为vm的region_no）
 						一个vm大region_no对应一个slb region_no ,对应一个monitor库，即同大region_no下不同的小vm region_no都是对应相同的slb region及相同的slb monitor库。
@@ -21251,7 +21252,7 @@ day81 Wednesday, July 11, 2012
 						一个vm大region_no对应一个slb region_no,一一对应
 					region
 	数据订正：
-		SLB V1（houyi库）
+		SLB V1（h-o-u-y-i库）
 			1）region_mapping 表
 				订正 vm_region_no 字段为vm的大region_no值
 			2）slb_monitor_datasource 表
@@ -21300,7 +21301,7 @@ day83 Friday, July 13, 2012
 
 1. 
 	* 用户体系改造项目设计review
-	* houyi api 接口调用用例编写，便于测试
+	* h-o-u-y-i api 接口调用用例编写，便于测试
 	* 
 		
 2. vm状态 vm status
@@ -21316,28 +21317,28 @@ day83 Friday, July 13, 2012
 	ResetFailure(10, "重置失败"),
 	Transferring(11, "迁移中");
 
-3. houyi api 接口调用用例编写，便于测试
+3. h-o-u-y-i api 接口调用用例编写，便于测试
 	- create_vm接口返回值region_no为小region_no？   是否还有其他的也需要检查
 	- 创建的vm，调start_vm状态为pengding，数据库为startfail
 	- start_vm start fail 原因？控制系统
 		看api调用此接口传递给控制系统的参数，isoName参数为空，因为iso_resource表增加了big_region_no，开发环境没有更新此表。
-	- houyi api对取消创建快照接口，控制系统报 cancel failed错误时，api没有映射对应的错误，统一以-95报错	 ，或者是控制系统状态码错误？	
+	- h-o-u-y-i api对取消创建快照接口，控制系统报 cancel failed错误时，api没有映射对应的错误，统一以-95报错	 ，或者是控制系统状态码错误？	
 		注：确认为控制系统没有对错误码归类，比如不同错误可能都报-1码 ，有待控制系统返回特定码。
 		result: {"code":  -1,"desc":  "cancel failed","isSuccess":  "FALSE"}。
-		-95，invoke houyi system error
+		-95，invoke h-o-u-y-i system error
 	- 同上，卸载快照接口，
 		code":  -1,"desc":  "umount device from vm failed
-		-95，invoke houyi system error
+		-95，invoke h-o-u-y-i system error
 	- query_available_imgs 查询可用的镜像接口，返回值snapshot_id格式没更改	?
 		   文档注明返回值中snapshot_id部分废弃，本次代码不动，后续将去掉这个值
 	- list_vlans
-		-95，invoke houyi system error
+		-95，invoke h-o-u-y-i system error
 		Caused by: com.alibaba.apsara.kuafu.KuafuException: Exception: Message is dropped by KFC, server does not exist
 		控制系统服务不正常，在重启
 
 	qa测试：
-		cd /home/admin/lix/lix-src/tools  or /home/admin/lix/lix-src/tools/houyiTestFrame/houyiTestFrame
-		python2.7 houyiframe.py cases/release_test/bvt_ci.xml test vm_test		or python2.7 houyiframe.py cases/release_test/bvt_ci.xml 22:22
+		cd /home/admin/lix/lix-src/tools  or /home/admin/lix/lix-src/tools/h-o-u-y-iTestFrame/h-o-u-y-iTestFrame
+		python2.7 h-o-u-y-iframe.py cases/release_test/bvt_ci.xml test vm_test		or python2.7 h-o-u-y-iframe.py cases/release_test/bvt_ci.xml 22:22
 		[root@AT-HOUYIDEV-AG]$me
 		Local_Address: 10.250.6.27
 
@@ -21376,8 +21377,8 @@ day84 Monday, July 16, 2012
 			CACHE_MODULE_IS_EMPTY(-7100,"cache module is empty"),
 			CACHE_MODULE_IS_ILLEGAL(-7101,"cache module is illegal"),
 			RELOAD_CACHE_MODULE_FAILED(-7102,"reload cache module failed or cache module not found");			
-		houyi-spring-action.xml
-		houyi-spring-service.xml
+		h-o-u-y-i-spring-action.xml
+		h-o-u-y-i-spring-service.xml
 			
 
 4. 从StringUtils工具类的选用，看代码耦合 系统设计 工具类设计
@@ -21399,7 +21400,7 @@ day85 Tuesday, July 17, 2012
 		QueryAvailableVipsExecuteAction
 		IpAddressServiceImpl
 			slbRegionService没有注入
-		vm region_no找不到slb region_no,报：-95，invoke houyi system error ？
+		vm region_no找不到slb region_no,报：-95，invoke h-o-u-y-i system error ？
 	* list_vm_status
 		QueryVmListInfoExecuteAction
 		此接口，由于instance对应的image不存在报-90错误
@@ -21455,8 +21456,8 @@ day86 Wednesday, July 18, 2012
 		 - 订正工具（python脚本实现）
 		 - 设计文档
 	* 用户体系项目分支
-		slb v2 http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform
-		houyi api http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_user_reform
+		slb v2 http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/branches/slb_user_reform
+		h-o-u-y-i api http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_user_reform
 
 2. 
 
@@ -21497,14 +21498,14 @@ day89 Monday, July 23, 2012
 		- device，snapshot，vmAPI这边的权限验证，代码实现  ，具体见redmine新任务 待？
 
 		
-2. houyi api白名单
+2. h-o-u-y-i api白名单
 	在配置文件定义白名单ip，spring注入到拦截器等需要校验的地方。
 	配置时，多个ip间以“,”逗号隔开，spring注入时，调用set方法注入，在set方法里编写逻辑将ip字符串处理为Map。（通过重写set方法实现指定注入转换）
 
 	也可通过直接在spring配置中配置Map数据。
 
 3.  SLB V2用户体系改造，根据邮件给出的prd文档		  本周完成下面子任务
-	- 白名单参考houyi api的实现
+	- 白名单参考h-o-u-y-i api的实现
 		slbapi.properties 配置白名单ip
 		AgreementParameter 平台参数验证，session验证改为aliyun_idkp验证
 		CheckUserSignInterceptor 白名单验证，注掉以前user_id验证
@@ -21539,7 +21540,7 @@ day89 Monday, July 23, 2012
 				SlbApiLog
 			AbstractService
 				Rs
-				slbapi.sql rs表的user_id字段值为aliyunIDKP，原来是long类型的user_id，故重新定义字段，依据houyi api的user表user_id字段定义：
+				slbapi.sql rs表的user_id字段值为aliyunIDKP，原来是long类型的user_id，故重新定义字段，依据h-o-u-y-i api的user表user_id字段定义：
 					aliyun_idkp` varchar(32) DEFAULT NULL, 待确认？
 				RsService
 				RsServiceImpl
@@ -21548,14 +21549,14 @@ day89 Monday, July 23, 2012
 			LoadBalancerServiceImpl
 			查询SLB流量接口
 				MonitorInfoDaoImpl
-			调用houyi api改动
+			调用h-o-u-y-i api改动
 				ECServiceImpl
 
 
 	- 原校验机制注释，只采用AliyunIDKP验证机制，是否涉及错误码改动？待检查
 	- user表废弃
 	- 数据订正：rs表的user_id和rs_pool_name
-	- 调用houyi api部分，去掉原有签名（user表已废弃），通过aliyunIDKP方式调用houyi api（houyi api需要将slb api v2加入白名单中）
+	- 调用h-o-u-y-i api部分，去掉原有签名（user表已废弃），通过aliyunIDKP方式调用h-o-u-y-i api（h-o-u-y-i api需要将slb api v2加入白名单中）
 	- 对于关键点，类编写测试用例
 		CheckUserSignInterceptorTest 
 
@@ -21575,9 +21576,9 @@ day90 Tuesday, July 24, 2012
  1. 
 	* 用户体系改造-SLB V2 API
 	*  device，snapshot，vmAPI这边的权限验证
-		API有user和vm的所属关系（houyi instance表）
+		API有user和vm的所属关系（h-o-u-y-i instance表）
 		控制系统有VM，device，snapshot之间的所属关系
-	* houyi API 与控制系统状态保持
+	* h-o-u-y-i API 与控制系统状态保持
 		控制系统状态变化会通知rabbit MQ，API从MQ中得到消息，进行同步 ？	    Message模块中
 		通过rabbitMQ java开发包实现
 		eg：start_vm控制系统接到后返回200，过一段时间vm启动后，控制系统发消息到MQ,API读取消息，更新vm状态
@@ -21590,11 +21591,11 @@ day90 Tuesday, July 24, 2012
  2. 用户体系改造
 	- 什么时候可以测试环境连调测试？
 		SLB后端
-		houyi API
+		h-o-u-y-i API
 		SLB V2 API
 			流量接口
 			调用SLB后端
-			调用houyi API
+			调用h-o-u-y-i API
 	- 数据订正谁来做，portal数据什么时候提供？	     由其他同学负责
 	- 测试类
 	- 后面的问题在于测试
@@ -21631,11 +21632,11 @@ day90 Tuesday, July 24, 2012
 		需求：用户只能删除自己的snapshot
 			api目前只有snapshot_id，不带user信息，可以去再掉控制系统查快照详情
 			或者将vm信息一并传入控制系统，由控制系统验证所属关系？
-		[call houyi system. method:RemoveSnapshot,parameter:{"snapshot":"520322test","vmName":"mytestvm2012-2","deviceId":"817"}]
+		[call h-o-u-y-i system. method:RemoveSnapshot,parameter:{"snapshot":"520322test","vmName":"mytestvm2012-2","deviceId":"817"}]
 			给控制系统有VM名称,快照ID和设备ID
 	- [ID:182101]cancel_create_snapshot时传入的vm_name和snapshot_id不匹配时没有报错
 		CancelCreateSnapshotExecuteAction
-		[call houyi system. method:CancelSnapshot,parameter:{"snapshotId":"520322","vmName":"mytestvm2012-2"}]
+		[call h-o-u-y-i system. method:CancelSnapshot,parameter:{"snapshotId":"520322","vmName":"mytestvm2012-2"}]
 			传给控制系统 快照ID和VM名称，是否应该控制系统验证所属关系？API去验证的话就需要多一步查询控制系统步骤，最后验证还是由控制系统决定。
 	- detail_snapshot需要判断snapshot是否属于该用户
 		经查看代码，已有验证，跳过
@@ -21700,7 +21701,7 @@ day92 Thursday, July 26, 2012
 		提交ID:
 			[ID:183748]完善测试用例
 	* list_mounted_snapshot接口测试用例修改，提交代码
-	* houyi api
+	* h-o-u-y-i api
 		控制系统返回的对象类型定义在各自的command实现类中，可以查看API与控制系统交互的数据格式
 		确认rpc返回的pojo类类型。
 	* SLB API V2用户体系改造，调用SLB后端的user_id名称不变，只是值为aliyun_idkp
@@ -21711,7 +21712,7 @@ day92 Thursday, July 26, 2012
 				或者超出时间的直接返回空？
 				计量库 原lb_global_id改回为lb_id?
 					这是旧的库，新库地址：
-						mysql -uhouyi_odbs -phouyi_odbs -hmy3306.mysql.aliyun.com xuanyuan
+						mysql -uh-o-u-y-i_odbs -ph-o-u-y-i_odbs -hmy3306.mysql.aliyun.com xuanyuan
 
 2. 
 
@@ -21725,7 +21726,7 @@ day93 Friday, July 27, 2012
 	* 	业务熟悉
 		技术：多线程，并发，性能，服务器编程，重构
 		
-	* houyi api 数据推送模块后续重构
+	* h-o-u-y-i api 数据推送模块后续重构
 		考虑使用独立的缓存系统（比如，memcached），可以在API上抽象出操作缓存的接口，
 		可以针对不同的缓存框架使用对应的实现，比如通过操作memcached的接口，操作memcached缓存
 	* detail_vm接口问题
@@ -21786,11 +21787,11 @@ day95 Monday, July 30, 2012
 			提交修改后，在开发环境验证功能
 				
 	* SLB V2 用户体系改造，构建目录，deploy目录设置好，便于部署
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/build.sh
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/trunk/build.sh
 
 		svn checkout 部署目录：			nginx+tomcat
 			在/home/admin/slbapi目录下：
-				svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform/deploy-env/slbapi
+				svn co http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/branches/slb_user_reform/deploy-env/slbapi
 				sh build/build.sh
 				sh bin/tomcatctl start
 		
@@ -21815,7 +21816,7 @@ day96 Tuesday, July 31, 2012
 	* 用户体系改造，SLB API build脚本
 		当前的方式，需要在部署机去build，可能会因为网络不通等问题导致依赖找不到，编译失败，通过先build再分发的方式解决此问题，也是build机的用意。
 		参考已有build过程
-	* 用户体系改造，houyi api验证逻辑（管理接口前的逻辑实现）
+	* 用户体系改造，h-o-u-y-i api验证逻辑（管理接口前的逻辑实现）
 	* big region
 		create_vm等接口流程（在原有基础上加上了调度，防火墙的逻辑）
 	* SLB V2 在大region项目中的变动
@@ -21825,9 +21826,9 @@ day96 Tuesday, July 31, 2012
 		计量推送，region_no改为大region_no？待
 	* 10.230.204.24 部署slb v2 user_reform环境
 		在slbapi-user-reform目录
-		svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform/deploy-env/slbapi .
+		svn co http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/branches/slb_user_reform/deploy-env/slbapi .
 			删除src目录下的所有内容
-		修改build/build.sh的svn地址为 http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/branches/slb_user_reform
+		修改build/build.sh的svn地址为 http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/branches/slb_user_reform
 		sh build/build.sh
 		修改spring配置文件中的属性文件路径：默认为 ${user.home}/slbapi/conf目录下
 			在src下修改spring配置，然后mvn build
@@ -21895,7 +21896,7 @@ day96 Tuesday, July 31, 2012
 	VmCreateExecuteAction
 	VmCreateExecuteActionTest
 
-3. 用户体系改造 houyi api
+3. 用户体系改造 h-o-u-y-i api
 	user表修改，sql修改：
 	alter table user add is_agent tinyint default 0 COMMENT '@desc 0 不是代理商，默认为0;1 是代理商';
 	alter table user add agent_id int(10) unsigned DEFAULT null COMMENT '@desc 代理商ID，表示子用户属于哪个代理商';
@@ -21905,7 +21906,7 @@ day96 Tuesday, July 31, 2012
 4. userholder 加标识isGent，标识用户身份。
 	user插入逻辑确定：
 
-5. 用户体系改造，houyi api验证逻辑（管理接口前的逻辑实现）
+5. 用户体系改造，h-o-u-y-i api验证逻辑（管理接口前的逻辑实现）
 	- user表增加字段，参看第3条
 	- 修改user表改动涉及的类改动，mapping文件改动
 		user.xml
@@ -21928,15 +21929,15 @@ day96 Tuesday, July 31, 2012
 day97 Wednesday, August 01, 2012
 
 1. 
-	* 用户体系改造，houyi api
+	* 用户体系改造，h-o-u-y-i api
 	* 用户体系改造，SLB V2 api
 	* 大region，slb v2兼容小region
 
-2. 用户体系改造，houyi api
+2. 用户体系改造，h-o-u-y-i api
 	- 是否为管理接口调用的判定？在白名单且aliyunidkp值为空
 	- 在判断IDKP是否为空前，增加判断，请求的接口是否必须IDKP参数值
 		在哪里判断？通过配置文件还是其他方式标识
-	- 搭建 houyi api user_reform版本开发环境， doing
+	- 搭建 h-o-u-y-i api user_reform版本开发环境， doing
 		10.250.8.214
 	- 	- 万网等非白名单用户，数据表订正时，标识为非agent用户，即isagent=0（万网等非白名单用户，和以前一样没有切分子用户）
 
@@ -21978,7 +21979,7 @@ sudo bash root
 day98 Thursday, August 02, 2012
 
 1. 
-	* 用户体系改造 houyi api
+	* 用户体系改造 h-o-u-y-i api
 		提供管理者调用功能，
 		修改的点：
 			- 签名验证逻辑实现完善
@@ -22016,17 +22017,17 @@ day98 Thursday, August 02, 2012
 			的idkp时，会误认为其实代理商。
 				上面方式兼容万网等老用户调用有问题（万网is_agent=0）,判断代理商条件修改为：能根据session_id找到用户且其service_secret_key值不为空
 				
-			- houyi api数据库的user表，service_secret_key字段去掉不为空约束，对于代理商的子用户，此字段为空
-			- 配置白名单和action必须带IDKP的配置文件为：/houyi-console-openapi/src/main/resources/houyi-openapi.xml
+			- h-o-u-y-i api数据库的user表，service_secret_key字段去掉不为空约束，对于代理商的子用户，此字段为空
+			- 配置白名单和action必须带IDKP的配置文件为：/h-o-u-y-i-console-openapi/src/main/resources/h-o-u-y-i-openapi.xml
 
 
 	* 用户体系改造 SLB V2 API需求列表：
 		- 所有请求都需签名验证（和用户体系改造前的验证一样）
 		- 只支持新用户AliyunIDKP的调用（签名沿用其代理商（比如 144）的key）
-		- 原user表保持不变，用于SLB API签名验证（只记录代理商账户）和访问houyi api请求的签名
+		- 原user表保持不变，用于SLB API签名验证（只记录代理商账户）和访问h-o-u-y-i api请求的签名
 		- rs表数据订正
 
-2. 用户体系改造 houyi api  —— 参考第一条说明
+2. 用户体系改造 h-o-u-y-i api  —— 参考第一条说明
 	管理接口修改：
 		- detail_vm
 			VmQueryExecuteAction
@@ -22047,17 +22048,17 @@ day98 Thursday, August 02, 2012
 day99 Friday, August 03, 2012
 
 1. 
-	* 用户体系改造，houyi api
+	* 用户体系改造，h-o-u-y-i api
 		- 解决maven循环依赖问题，将依赖的接口独立到一个接口模块中，接口的实现在其他模块中
 			mvn a
 		- cache方式，
 	* 大region项目
 		涉及SLB V2 API改动点，需要另开分支提交，不在下面分支提交，对已提交的兼容大小region_no调用修改进行回滚：
-			http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/api
+			http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/trunk/sources/api
 	* 用户体系改造 SLB V2 api 代码回滚，提交后，将需要修改的地方再reversion回来
 		
 
-2. 用户体系改造 houyi api 
+2. 用户体系改造 h-o-u-y-i api 
 	    管理接口修改
 		check修改
 			ipAddressChecker
@@ -22087,7 +22088,7 @@ day99 Friday, August 03, 2012
 			InstanceServiceImpl
 				addUrlCallback方法中，当是代理商调用时，不能取UserHolder.getCurrentUserId()用户，暂定用instance对象的user_id属性，待确认？
 					后面需要搜索整个项目用到：UserHolder.getCurrentUserId() 和 UserHolder.getCurrentUser() 的地方，确认调用是否ok？
-				每个操作过后，把回调信息存入houyidb的url_callback表。
+				每个操作过后，把回调信息存入h-o-u-y-idb的url_callback表。
 		- stop_vm
 			VmStopExecuteAction
 			和start_vm一样，也要调：addUrlCallback 方法
@@ -22111,7 +22112,7 @@ day100 Saturday, August 04, 2012
 
 1. 
 	* 
-2. 用户体系改造 houyi api 
+2. 用户体系改造 h-o-u-y-i api 
 	重要：
 		- 原用到UserHolder.getCurrentUser() 或 UserHolder.getCurrentUserId()的地方，都需要考虑user不是最终用户的情况了。	     （幽灵般的userholder~~~）
 		- 代理商调用时，regionNo需要模拟最终用户的调用，否则会取代理商自身的默认region去操作。
@@ -22183,10 +22184,10 @@ day100 Saturday, August 04, 2012
 	
 
 5. 读取Houyi配置信息发生错误，装载Endpoint信息不能为空
-	houyi api启动时会初始化到控制系统的endpoint对象，需要提前在数据库配置好。
+	h-o-u-y-i api启动时会初始化到控制系统的endpoint对象，需要提前在数据库配置好。
 	at java.lang.Thread.run(Thread.java:619)
-Caused by: com.aliyun.houyi.clc.CLCConfigException: 读取Houyi配置信息发生错误，装载Endpoint信息不能为空！
-        at com.aliyun.houyi.service.support.CommandExecutorFactory.afterPropertiesSet(CommandExecutorFactory.java:88)
+Caused by: com.aliyun.h-o-u-y-i.clc.CLCConfigException: 读取Houyi配置信息发生错误，装载Endpoint信息不能为空！
+        at com.aliyun.h-o-u-y-i.service.support.CommandExecutorFactory.afterPropertiesSet(CommandExecutorFactory.java:88)
         at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1369)
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -22195,10 +22196,10 @@ day101 Monday, August 06, 2012
 1. 
 	* big region bug fix
 		调用cancel_create_snapshot时传入的vm和snapshot不匹配时，报-95
-	* 用户体系改造-houyi api修改
+	* 用户体系改造-h-o-u-y-i api修改
 	* 用户体系改造，slb api 需求列表，最后修改整理说明，便于调用方知晓 待？
 
-2. 用户体系改造-houyi api修改
+2. 用户体系改造-h-o-u-y-i api修改
 	- mount_iso
 		VmMountIsoExecuteAction
 			增加处理代理商操作逻辑，此类验证逻辑代码后续可以移到service层，或者再抽取，提到切面中去。-tip-
@@ -22236,7 +22237,7 @@ day101 Monday, August 06, 2012
 		user_id需要传给控制系统，结果如何返回？分页返回	，代理商调用返回public的ips
 		注意：ip相关接口，user_id都传递给了控制系统，api层不能通过代理商调用
 	- assign_ip  ？
-		确认houyi db的subnet表，原user_id=144的记录，是否都订正为public？如果是这样，那么传递代理商ID给控制系统即可。
+		确认h-o-u-y-i db的subnet表，原user_id=144的记录，是否都订正为public？如果是这样，那么传递代理商ID给控制系统即可。
 			这样接口就不需要修改，代理商传递代理商的userId给控制系统
 		AssignIpExecuteAction
 		IpAddressServiceImpl
@@ -22372,7 +22373,7 @@ day101 Monday, August 06, 2012
        BaseDomain中的动态字段，维护一个map，动态添加字段，这种方式用pojo传递动态新增的属性值到其他层。
 	dynamicFileds
 
-6. 用户体系改造，houyi api测试环境
+6. 用户体系改造，h-o-u-y-i api测试环境
 	http://10.250.8.214/open/service?action=detail_vm
 	部署的tomcat报内部错误：
 		500 
@@ -22397,9 +22398,9 @@ day101 Monday, August 06, 2012
 	EC配置（控制系统）
 
 	配置文件目录
-		/home/admin/.houyi/
+		/home/admin/.h-o-u-y-i/
 	EC日志查看
-		root@houyi-vm17.dev.sd.aliyun.com # vim /var/log/houyi/master/HouyiMaster.LOG
+		root@h-o-u-y-i-vm17.dev.sd.aliyun.com # vim /var/log/h-o-u-y-i/master/HouyiMaster.LOG
 		10.250.8.212
 7. nginx + tomcat
 	请求uri设置，在nginx的conf配置文件里，告诉那些uri需要proxy_pass到目标应用服务器地址即可，nginx直接把请求转发给应用服务器。
@@ -22415,7 +22416,7 @@ day102 Tuesday, August 07, 2012
 	
 2. 处理day101第2条带问号的接口
 	
-3. linux + tomcat7 + houyi api		  ，500 internal error 1990 
+3. linux + tomcat7 + h-o-u-y-i api		  ，500 internal error 1990 
 	http://10.250.8.214/open/services
 		正确URI
 	http://10.250.8.214/open/service
@@ -22457,9 +22458,9 @@ day102 Tuesday, August 07, 2012
 				----------		
 				在找不到  config 时抛出了ConfigurationException。
 
-		从上面错误结果看，程序已经执行到houyi api应用中，在struts框架中报了错，找不到action的config信息。
+		从上面错误结果看，程序已经执行到h-o-u-y-i api应用中，在struts框架中报了错，找不到action的config信息。
 
-		然后看houyi api的action配置，地址为services ，struts找不到action，prepare拦截器执行时就抛出了异常，可能是设置原因，应用和服务器都没有对应log，囧。
+		然后看h-o-u-y-i api的action配置，地址为services ，struts找不到action，prepare拦截器执行时就抛出了异常，可能是设置原因，应用和服务器都没有对应log，囧。
 
 		实际struts.xml配置的action路径为services。
 
@@ -22479,7 +22480,7 @@ day102 Tuesday, August 07, 2012
 	:s#vivian/#sky/# 替换当前行第一个 vivian/ 为 sky/	
 
 
-5. 用户体系改造-houyi api白名单暂放到 houyi.properties中
+5. 用户体系改造-h-o-u-y-i api白名单暂放到 h-o-u-y-i.properties中
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 typhoon
@@ -22488,7 +22489,7 @@ typhoon
 day103 Thursday, August 09, 2012
 
 1. 
-	*  用户体系改造-houyi api
+	*  用户体系改造-h-o-u-y-i api
 		集成测试
 			
 	* 用户体系改造-slb api
@@ -22498,9 +22499,9 @@ day103 Thursday, August 09, 2012
 	* big region
 		流量接口bigregion查询检查
 
-2. 本机ip地址是通过dhcp获取的，测试环境调用本地mysql，需要调整ip。 houyi apidev测试环境（8.214）
+2. 本机ip地址是通过dhcp获取的，测试环境调用本地mysql，需要调整ip。 h-o-u-y-i apidev测试环境（8.214）
 
-3. 用户体系改造-houyi api
+3. 用户体系改造-h-o-u-y-i api
 	不支持管理员是个最终用户
 		比如不能创建vm
 	集成测试
@@ -22529,7 +22530,7 @@ day103 Thursday, August 09, 2012
 		rx - rx_intra
 7. slb 8.214测试
 	http://10.250.8.214/slb/api?
-	houyi api
+	h-o-u-y-i api
 	http://10.250.8.214/open/services?
 
 
@@ -22541,13 +22542,13 @@ day104 Friday, August 10, 2012
 		query_monitor_vms 
 			VmPageMonitorExecuteAction
 
-	* 用户体系改造　houyi api bug fix
+	* 用户体系改造　h-o-u-y-i api bug fix
 		
 2. 用户体系改造 slb api处理						  slb v2 api
 	用户体系改造 SLB V2 API需求和关键点列表：
 	1）所有请求都需签名验证（和用户体系改造前的验证一样）
 	2）只支持新用户AliyunIDKP的调用（签名沿用其代理商（比如 144）的签名信息）
-	3）原user表保持不变，用于SLB API签名验证（只记录代理商账户）和访问houyi api请求的签名
+	3）原user表保持不变，用于SLB API签名验证（只记录代理商账户）和访问h-o-u-y-i api请求的签名
 	4）rs表数据订正
 	5）slb api透传aliyun_id值给slb后端，参数名和原来一致（即user_id）
 
@@ -22562,7 +22563,7 @@ day104 Friday, August 10, 2012
 
 4. 
 	8.214开发测试环境的slb环境，新建slb后端的计量库便于测试，地址在本机
-	houyi api 的db改用big region的db（6.27的db）
+	h-o-u-y-i api 的db改用big region的db（6.27的db）
 
 
 	http://www.cnblogs.com/lovecindywang/archive/2012/08/06/2624678.html
@@ -22577,7 +22578,7 @@ day105
 day106 Monday, August 13, 2012
 
 1. 
-	* 用户体系改造 houyi api bug fix
+	* 用户体系改造 h-o-u-y-i api bug fix
 		- live_migrate_vm 接口修改（需求时文档未列出此接口）
 		- create_vm接口
 			处理user_image_mode的逻辑，  只用自己的image还是可用自己的和公有的	   （0可用自己和公有的image；1只能用属于自己的image）
@@ -22604,7 +22605,7 @@ day106 Monday, August 13, 2012
 	方法二：直接使用 netstat   -anp   |   grep  portno
 	即：netstat –apn | grep 8080
 
-4. houyi api db业务
+4. h-o-u-y-i api db业务
 	iso表
 		user_iso - 标识iso是用户上传还是管理员上传的，用户查询iso时，不会返回user_iso=0的iso，
 		visibility标识iso可见性，0为公有（此时忽略user_id），1为私有
@@ -22625,7 +22626,7 @@ day106 Monday, August 13, 2012
 day107 Tuesday, August 14, 2012
 
 1. 
-	* 用户体系改造 - houyi api
+	* 用户体系改造 - h-o-u-y-i api
 		release_ip
 		ReleaseIpExecuteAction
 		需求：
@@ -22646,7 +22647,7 @@ day107 Tuesday, August 14, 2012
 	去掉 app_key,sign,sign_type，
 		app_key
 
-3. houyi api bug fix
+3. h-o-u-y-i api bug fix
 	- bug id：187183
 		UNIQUE KEY `key_pair` (`key_pair_name`,`user_id`) ，key_pair表key_pair_name不唯一
 
@@ -22654,7 +22655,7 @@ day107 Tuesday, August 14, 2012
 day108 Wednesday, August 15, 2012
 
 1. 
-	*　用户体系改造 houyi api
+	*　用户体系改造 h-o-u-y-i api
 		remove_key_pair
 			KeyPairRemoveExecuteAction
 			增加错误码：
@@ -22793,7 +22794,7 @@ day118 Monday, August 27, 2012
 		imageService.queryParentImageInBigRegion(imageNo,currentUser.getUserId()))
 		userholder中取user改为显式传参
 	- bind_ip
-		houyi-spring-action.xml
+		h-o-u-y-i-spring-action.xml
 		action配置修改：
 			<property name="limit" value="780"/> 改为：<property name="limit" value="5000"/>
 	- authorize_group		  
@@ -23037,9 +23038,9 @@ day121 Thursday, August 30, 2012
 
 1. 
 	* bug fix test 
-	* houyi api 需要 slf4j-log4j12-1.5.8.jar依赖
+	* h-o-u-y-i api 需要 slf4j-log4j12-1.5.8.jar依赖
 		jboss可不要？
-	* slb v2 ，houyi api
+	* slb v2 ，h-o-u-y-i api
 		cache梳理，是否提供reload方法？
 
 
@@ -23060,7 +23061,7 @@ day121 Thursday, August 30, 2012
 
 4. create_snapshot过程中，master重启
 	ec master reboot ,but agent at nc is still working ,they send the latest message to db or master 
-5. slb v2 ，houyi api cache梳理，是否提供reload方法？
+5. slb v2 ，h-o-u-y-i api cache梳理，是否提供reload方法？
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -23084,7 +23085,7 @@ day122 Friday, August 31, 2012
 	| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
 	+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 	|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
-	|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
+	|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | h-o-u-y-i.r.region_no |    1 |       |
 	+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 
 	mysql> explain select * from region r left join region_alias r_a on r.region_no=r_a.region_no ;       
@@ -23092,7 +23093,7 @@ day122 Friday, August 31, 2012
 	| id | select_type | table | type | possible_keys | key     | key_len | ref               | rows | Extra |
 	+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 	|  1 | SIMPLE      | r     | ALL  | NULL          | NULL    | NULL    | NULL              |    3 |       |
-	|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | houyi.r.region_no |    1 |       |
+	|  1 | SIMPLE      | r_a   | ref  | PRIMARY       | PRIMARY | 98      | h-o-u-y-i.r.region_no |    1 |       |
 	+----+-------------+-------+------+---------------+---------+---------+-------------------+------+-------+
 
 3. 既然使用这些载体或工具，要想发挥其应有的能力，就需要去了解它，熟悉它，会用工具，用好工具，让它们帮忙我们更好的实现目标。-tip-
@@ -23288,14 +23289,14 @@ day126 Wednesday, September 05, 2012
 
 	api-kfc(httpd-record service name and address,do forward)-master/netc-agent-operate
 
-	控制系统角色查看 (AG上查看)/apsara/deploy/Fuxisrvd -v houyi status 	       （ag作为master访问入口admin gateway）
+	控制系统角色查看 (AG上查看)/apsara/deploy/Fuxisrvd -v h-o-u-y-i status 	       （ag作为master访问入口admin gateway）
 	master、netc
 	history |grep status
-	/apsara/deploy/Fuxisrvd -v houyi status
+	/apsara/deploy/Fuxisrvd -v h-o-u-y-i status
 		查看控制系统，集群的角色（由多少nc组成，有哪些服务角色，各自在那个ip上）
 	ps axf |grep master
-	vim /var/log/houyi/master/HouyiMaster.LOG
-	vim /var/log/houyi/netc/HouyiNetcLOG
+	vim /var/log/h-o-u-y-i/master/HouyiMaster.LOG
+	vim /var/log/h-o-u-y-i/netc/HouyiNetcLOG
 
 	vim /var/log/xen/xend.log
 	
@@ -23414,8 +23415,8 @@ day129 Monday, September 10, 2012
 		b. ace4j
 		c. big region项目2新增接口进行user reform改造
 		d. big region包括api和master的bug fix
-		e. houyi计量推送优化
-		f. houyi api优化，部分重构；本地cache的优化（统一cache实现，提供cache更新方案-自动或被动调用）
+		e. h-o-u-y-i计量推送优化
+		f. h-o-u-y-i api优化，部分重构；本地cache的优化（统一cache实现，提供cache更新方案-自动或被动调用）
 	* ace4j(lxc)需要api提供几个防火墙的接口，看master提供的接口说明
 		添加ip白名单（ip放行）
 		删除ip白名单
@@ -23447,7 +23448,7 @@ day129 Monday, September 10, 2012
 day130 Tuesday, September 11, 2012
 
 1. 
-	* ace4j对houyi api的需求背景说明
+	* ace4j对h-o-u-y-i api的需求背景说明
 		master提供的3个接口熟悉，对应api的接口设计
 	* openstack分享
 		中心授权，组件化运行，MQ消息
@@ -23785,7 +23786,7 @@ day143 Friday, September 28, 2012
 1. 
 	* 大region二期kick off
 	* 老版本api，启动模式问题
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/tags/20120426_473751_trunk trunk上打的tag
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/tags/20120426_473751_trunk trunk上打的tag
 
 		create_vm没设置启动模式参数
 
@@ -23860,8 +23861,8 @@ day145 Monday, October 08, 2012
 	项目管理软件管理(redmine)？wiki管理？svn管理？
 		eg: redmine管理
 
-3. houyi.json
-	后羿角色的配置	 cc,nc,netc,master,monitor
+3. h-o-u-y-i.json
+	后-羿角色的配置	 cc,nc,netc,master,monitor
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day146 Tuesday, October 09, 2012
@@ -23910,7 +23911,7 @@ day147 Wednesday, October 10, 2012
 
 		开发环境搭设API服务，准备和master进行连调测试
 			10.250.8.214
-			打包已有部署目录：tar -cvf ../houyi-ace4j/service.tar service/
+			打包已有部署目录：tar -cvf ../h-o-u-y-i-ace4j/service.tar service/
 			清楚旧项目日志，程序等内容
 			修改，svn地址
 			修改apache配置文件httpd.conf，以本项目的conf文件启动
@@ -23924,7 +23925,7 @@ day147 Wednesday, October 10, 2012
 					    # LogFormat "%h %l %u %t \"%r\" %>s %b" common
 
 					    LogFormat "\"%{X-Forwarded-For}i\" %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{Host}i\" \"%{Accept-Encoding}i\"" common
-					    CustomLog "/home/admin/houyi-ace4j/service/logs/openapi/access_log" common
+					    CustomLog "/home/admin/h-o-u-y-i-ace4j/service/logs/openapi/access_log" common
 
 					    <IfModule logio_module>
 					      # You need to enable mod_logio.c to use %I and %O
@@ -24042,7 +24043,7 @@ day150 Monday, October 15, 2012
 
 2. 大region二期设计评审
 	1）对于KFC打通可以跨小region使用image的逻辑，现定为在本项目发布前，通过线上变更将kfc下线掉。API不修改逻辑，在image
-	同步工具同步了需要同步的image后，更新houyi库去掉kfc打通的表关系记录。
+	同步工具同步了需要同步的image后，更新h-o-u-y-i库去掉kfc打通的表关系记录。
 	2）跨小region操作快照时，原有vm，device，snapshot所属关系的检查master将不能check，如何解决？
 		方案一：废弃已不再使用的参数（文档标记为过时），API只做必要的check，下面列出涉及的接口：
 			mount_snapshot	去掉snapshot_at_vm,device参数，只验证snapshot_id和vm_name的user是否为同一用户（类似add_disk，只传递snapshot_id，API验证user即可）
@@ -24056,12 +24057,12 @@ day150 Monday, October 15, 2012
 	 跨region的image的流程如下：
 		0、启动vm
 		1、传递image id -> open api
-		2、open api查询 -> houyi.image； 找出snapshot id
-		3、open api查询snapshot对应的OSS -> 通过houyi master（image所在的集群）查询 -> houyidb.snapshot
-		4、open api把启动参数（包括上面查出的快照参数） -> houyi master
-		5、houyi master -> houyi nc
-		6、houyi nc用给的快照参数 -> 启动tdc
-	·from:http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=7209612
+		2、open api查询 -> h-o-u-y-i.image； 找出snapshot id
+		3、open api查询snapshot对应的OSS -> 通过h-o-u-y-i master（image所在的集群）查询 -> h-o-u-y-idb.snapshot
+		4、open api把启动参数（包括上面查出的快照参数） -> h-o-u-y-i master
+		5、h-o-u-y-i master -> h-o-u-y-i nc
+		6、h-o-u-y-i nc用给的快照参数 -> 启动tdc
+	·from:http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=7209612
 
 	OSS中的Object源信息和数据文件都是存放在KV Engine上，在kv存储上封装一个API层，开放调用。
 
@@ -24157,7 +24158,7 @@ day152 Wednesday, October 17, 2012
 	create_vm image调度
 
 		先根据image_no查找parent image，因为parent image大region内只有一个，其他的都是为了同步到其他region而复制的，如果删除任意一个，则包括
-		parent image及其子image都被删除。故使用时，要确保parent image是存在的。（houyi.image）
+		parent image及其子image都被删除。故使用时，要确保parent image是存在的。（h-o-u-y-i.image）
 
 		查询出parent image
 		根据parent image填充instance的imge基本信息
@@ -24291,12 +24292,12 @@ day156 Tuesday, October 23, 2012
 4. ibatis属性转换，自定义转换
 	通过在mapping文件中直接定义或者统一定义
 	（1）各自的mapping文件中	（sqlMap）
-		<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
-		<typeAlias alias="snapshotStorageTypeHandler" type="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>	
+		<typeAlias alias="snapshotStorageType" type="com.aliyun.h-o-u-y-i.constant.SnapshotStorageType"/>
+		<typeAlias alias="snapshotStorageTypeHandler" type="com.aliyun.h-o-u-y-i.dao.support.SnapshotStorageTypeHandler"/>	
 		<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER" typeHandler="snapshotStorageTypeHandler"/>
 	（2）在config文件中统一配置（sqlMapConfig）
-		<typeAlias alias="snapshotStorageType" type="com.aliyun.houyi.constant.SnapshotStorageType"/>
-		<typeHandler javaType="snapshotStorageType" callback="com.aliyun.houyi.dao.support.SnapshotStorageTypeHandler"/>
+		<typeAlias alias="snapshotStorageType" type="com.aliyun.h-o-u-y-i.constant.SnapshotStorageType"/>
+		<typeHandler javaType="snapshotStorageType" callback="com.aliyun.h-o-u-y-i.dao.support.SnapshotStorageTypeHandler"/>
 
 		<result property="snapshotType" column="snapshot_type" javaType="snapshotStorageType" jdbcType="INTEGER"/>
 
@@ -24305,7 +24306,7 @@ day156 Tuesday, October 23, 2012
 5. 
 
 		     image.xml
-		     /houyi-console-dao/src/main/resources/ibatis/image.xml
+		     /h-o-u-y-i-console-dao/src/main/resources/ibatis/image.xml
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -24323,7 +24324,7 @@ day157 Wednesday, October 24, 2012
 alter table 
 
 3. 系统 代码风格 代码规范 重构 优化
-	houyi api
+	h-o-u-y-i api
 		查询快照等的逻辑调用其service层即可，无需再实现。
 		commandexecute无需mock
 
@@ -24332,21 +24333,21 @@ alter table
 		APIf访问地址：6.32
 		数据库地址：6.32
 		数据库数据：qa测试环境API的数据库
-			'mysql -uhouyi -phouyiat03 -h10.230.204.19 houyi --auto-rehash --default-character-set=utf8'
+			'mysql -uh-o-u-y-i -ph-o-u-y-iat03 -h10.230.204.19 h-o-u-y-i --auto-rehash --default-character-set=utf8'
 	master环境：
-		进入方式：6.27 admin go2houyi1 >  go2houyi3
+		进入方式：6.27 admin go2h-o-u-y-i1 >  go2h-o-u-y-i3
 		ag: 10.230.204.19
 		Local_nuwa: 10.230.204.24
 		Local_mysql: 10.230.204.19
 	MQ：message.properties 
-		houyi.message.host=10.230.204.67
+		h-o-u-y-i.message.host=10.230.204.67
 		#10.249.38.101  
-		houyi.message.port=5672
-		houyi.message.username=guest
-		houyi.message.password=guest
-		houyi.message.queueName=queue1
-		houyi.message.retryTime=10
-		houyi.message.flag=false
+		h-o-u-y-i.message.port=5672
+		h-o-u-y-i.message.username=guest
+		h-o-u-y-i.message.password=guest
+		h-o-u-y-i.message.queueName=queue1
+		h-o-u-y-i.message.retryTime=10
+		h-o-u-y-i.message.flag=false
 		white.ip=10.230.204.24,10.249.195.162
 		lb.server.url=http://10.249.182.102:8088		
 
@@ -24370,7 +24371,7 @@ alter table
 
 		bigRegionNo=cn-hangzhou-xy2-test01
 
-		houyimonitor0过大，mysql报：ERROR 1030 (HY000): Got error 28 from storage engine			
+		h-o-u-y-imonitor0过大，mysql报：ERROR 1030 (HY000): Got error 28 from storage engine			
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -24447,7 +24448,7 @@ day160 Monday, October 29, 2012
 	* 飞天升级前拆除KFC
 		步骤：
 			- 同步kfc通的image
-			- 订正device数据，houyi库
+			- 订正device数据，h-o-u-y-i库
 			- 跨kfc使用image订正，跨打快照订正
 			- 拆kfc
 
@@ -24666,13 +24667,13 @@ day165 Thursday, November 08, 2012
 	项目管理从redmine迁移到aone
 		http://aone.alibaba-inc.com/aone2/project/134/task?_token=e18619aa-95f5-4590-9fda-b88be2554147
 	bugfix API branch：
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_bugfix_201211
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_bugfix_201211
 	http proxy doc：
 		http://wiki.ec.alibaba-inc.com/index.php/Http_proxy%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0#HA.E6.9C.BA.E5.88.B6.EF.BC.9A
 		http proxy的功能 http proxy http_proxy kuafu 
 			取代并兼容目前kfc内置的http服务器	
 				kuafu协议支持的集群规模有限,不能跨cluster，通过proxy层来实现跨集群访问
-			从houyiAPI接收http请求，转化为kfc request
+			从h-o-u-y-iAPI接收http请求，转化为kfc request
 
 3. resourceChecker
 	instanceServiceImplTest
@@ -24709,17 +24710,17 @@ day167 Monday, November 12, 2012
 	-----
 	问题1：创建VM（AY12111011204528c1514），控制系统在执行以下操作时存在deadlock
 	【API收到控制系统返回】：
-	2012-11-11 00:33:00,665  ERROR [ajp-127.0.0.1-8109-25] (ApsaraCommandExecutor.java:79) - failed to call houyi system,command:CreateVm, parameters: {"rackId":"","recoverable":0,"imageUrl":"","isoName":"","vcpus":1,"intranetRx":-1,"canBalloon":0,"baseUrl":"","ioValue":5,"ncId":"","userId":"29629","hostName":"AY12111011204528c1514","deviceId":"","vType":"","imageDeviceId":"70000006","internetRx":-1,"cpuValue":5,"startupMode":"init","imageClusterId":"1007","kernelId":"","ramdiskUrl":"","baseSize":0,"kernelUrl":"","vmName":"AY12111011204528c1514","isBlind":0,"imageVersion":"1","baseVersion":"","vlanId":"","intranetTx":-1,"imageSnapshotId":"259911","imageId":"centos5u4_32_20G_alibase_v01.vhd","mountType":1,"rate":-1,"lbType":"","baseType":0,"ballonEnable":0,"baseId":"","dataAvail":1,"imageSize":20,"internetTx":1024,"memory":1536,"snapshotSize":20,"zoneId":"cn-hangzhou-dg108-a","canMigrate":0,"groupId":"142837","initPasswd":"acff3fd1","pubKey":"","netValue":5,"ramdiskId":"","isoPath":"","imageType":2,"diskSize":40}; result: {"code":  -5025,"desc":  "mysql error","isSuccess":  "FALSE"}.
+	2012-11-11 00:33:00,665  ERROR [ajp-127.0.0.1-8109-25] (ApsaraCommandExecutor.java:79) - failed to call h-o-u-y-i system,command:CreateVm, parameters: {"rackId":"","recoverable":0,"imageUrl":"","isoName":"","vcpus":1,"intranetRx":-1,"canBalloon":0,"baseUrl":"","ioValue":5,"ncId":"","userId":"29629","hostName":"AY12111011204528c1514","deviceId":"","vType":"","imageDeviceId":"70000006","internetRx":-1,"cpuValue":5,"startupMode":"init","imageClusterId":"1007","kernelId":"","ramdiskUrl":"","baseSize":0,"kernelUrl":"","vmName":"AY12111011204528c1514","isBlind":0,"imageVersion":"1","baseVersion":"","vlanId":"","intranetTx":-1,"imageSnapshotId":"259911","imageId":"centos5u4_32_20G_alibase_v01.vhd","mountType":1,"rate":-1,"lbType":"","baseType":0,"ballonEnable":0,"baseId":"","dataAvail":1,"imageSize":20,"internetTx":1024,"memory":1536,"snapshotSize":20,"zoneId":"cn-hangzhou-dg108-a","canMigrate":0,"groupId":"142837","initPasswd":"acff3fd1","pubKey":"","netValue":5,"ramdiskId":"","isoPath":"","imageType":2,"diskSize":40}; result: {"code":  -5025,"desc":  "mysql error","isSuccess":  "FALSE"}.
 
 	【控制系统内部日志】：
-	[2012-11-11 00:33:00.641520] [ERROR] [15519] [build/debug64/houyi/common/houyi_metadata_process.cpp:2700] [method=update MAC]:update MAC fail[sql=update mac set name='AY12111011204528c1514', scope = 2, gmt_modify='2012-11-11 00:33:00' where mac='00:16:3e:12:12:1b']:[mysql error=Deadlock found when trying to get lock; try restarting transaction]
+	[2012-11-11 00:33:00.641520] [ERROR] [15519] [build/debug64/h-o-u-y-i/common/h-o-u-y-i_metadata_process.cpp:2700] [method=update MAC]:update MAC fail[sql=update mac set name='AY12111011204528c1514', scope = 2, gmt_modify='2012-11-11 00:33:00' where mac='00:16:3e:12:12:1b']:[mysql error=Deadlock found when trying to get lock; try restarting transaction]
 
 
 	问题2：补偿重试创建VM（AY12111011204528c1514）时，控制系统报存在该VM的数据。
 	PS:该VM第一次创建时，控制系统提示“mysql error“，API收到控制系统创建失败的信息，对该VM记录进行了回滚，但控制系统的VM记录并没有回滚。
 
 	【API收到控制系统返回】：
-	2012-11-11 01:14:13,336  ERROR [ajp-127.0.0.1-8109-3] (ApsaraCommandExecutor.java:79) - failed to call houyi system,command:CreateVm, parameters: {"rackId":"","recoverable":0,"imageUrl":"","isoName":"","vcpus":1,"intranetRx":-1,"canBalloon":0,"baseUrl":"","ioValue":5,"ncId":"","userId":"29629","hostName":"AY12111011204528c1514","deviceId":"","vType":"","imageDeviceId":"70000006","internetRx":-1,"cpuValue":5,"startupMode":"init","imageClusterId":"1007","kernelId":"","ramdiskUrl":"","baseSize":0,"kernelUrl":"","vmName":"AY12111011204528c1514","isBlind":0,"imageVersion":"1","baseVersion":"","vlanId":"","intranetTx":-1,"imageSnapshotId":"259911","imageId":"centos5u4_32_20G_alibase_v01.vhd","mountType":1,"rate":-1,"lbType":"","baseType":0,"ballonEnable":0,"baseId":"","dataAvail":1,"imageSize":20,"internetTx":1024,"memory":1536,"snapshotSize":20,"zoneId":"cn-hangzhou-dg108-a","canMigrate":0,"groupId":"142837","initPasswd":"acff3fd1","pubKey":"","netValue":5,"ramdiskId":"","isoPath":"","imageType":2,"diskSize":40}; result: {"code":  -15017,"desc":  "this vm name already exists","isSuccess":  "FALSE"}. 
+	2012-11-11 01:14:13,336  ERROR [ajp-127.0.0.1-8109-3] (ApsaraCommandExecutor.java:79) - failed to call h-o-u-y-i system,command:CreateVm, parameters: {"rackId":"","recoverable":0,"imageUrl":"","isoName":"","vcpus":1,"intranetRx":-1,"canBalloon":0,"baseUrl":"","ioValue":5,"ncId":"","userId":"29629","hostName":"AY12111011204528c1514","deviceId":"","vType":"","imageDeviceId":"70000006","internetRx":-1,"cpuValue":5,"startupMode":"init","imageClusterId":"1007","kernelId":"","ramdiskUrl":"","baseSize":0,"kernelUrl":"","vmName":"AY12111011204528c1514","isBlind":0,"imageVersion":"1","baseVersion":"","vlanId":"","intranetTx":-1,"imageSnapshotId":"259911","imageId":"centos5u4_32_20G_alibase_v01.vhd","mountType":1,"rate":-1,"lbType":"","baseType":0,"ballonEnable":0,"baseId":"","dataAvail":1,"imageSize":20,"internetTx":1024,"memory":1536,"snapshotSize":20,"zoneId":"cn-hangzhou-dg108-a","canMigrate":0,"groupId":"142837","initPasswd":"acff3fd1","pubKey":"","netValue":5,"ramdiskId":"","isoPath":"","imageType":2,"diskSize":40}; result: {"code":  -15017,"desc":  "this vm name already exists","isSuccess":  "FALSE"}. 
 
 	问题3：API后台日志看到存在distributed_flag_lock表的Deadlock异常
 
@@ -24739,16 +24740,16 @@ day167 Monday, November 12, 2012
 
 	问题4：VM（AY12111112291654c6269）第一次启动失败(失败原因的日志如下)，第二次启动是成功的
 	【NC日志】：
-	[2012-11-11 01:36:06.145832] [DEBUG] [24254] [build/debug64/houyi/nc/nc_firewall.cpp:617] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:AddRule failed ret:-1
-	[2012-11-11 01:36:06.146052] [DEBUG] [24254] [build/debug64/houyi/nc/nc_firewall.cpp:128] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:SetControlIpChain failed ret:-1
-	[2012-11-11 01:36:06.146104] [DEBUG] [24254] [build/debug64/houyi/nc/nc_firewall.cpp:186] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:SetInternetAllFireWall fail
-	[2012-11-11 01:36:06.238157] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2059] config redhat ip 00:16:3e:12:15:7d eth1 42.121.53.76 255.255.252.0 42.121.55.254:0:success
-	[2012-11-11 01:36:06.422903] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2086] config redhat default_gw 42.121.55.254:0:success
-	[2012-11-11 01:36:06.573502] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2114] config redhat route 192.168.0.0 16 10.200.127.254 eth0:0:success
-	[2012-11-11 01:36:06.663574] [INFO] [16733] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:967] Msg:vm[iso-AY12111112291654c6269] stopped 5 second after shutdown
-	[2012-11-11 01:36:06.683631] [ERROR] [16733] [build/debug64/houyi/nc/handlers/nc_vm_handler.cpp:733] [vmname=AY12111112291654c6269]:init vm failed, do not start vm
-	[2012-11-11 01:36:06.693163] [DEBUG] [16733] [build/debug64/houyi/nc/handlers/nc_handler.cpp:29] Msg:succeed to send response:StartVmRsp:sequence:4358921489341223957
-	[2012-11-11 01:36:06.710829] [DEBUG] [18769] [build/debug64/houyi/nc/vm_xen_wrapper.cpp:2114] config redhat route 172.16.0.0 12 10.200.127.254 eth0:0:success
+	[2012-11-11 01:36:06.145832] [DEBUG] [24254] [build/debug64/h-o-u-y-i/nc/nc_firewall.cpp:617] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:AddRule failed ret:-1
+	[2012-11-11 01:36:06.146052] [DEBUG] [24254] [build/debug64/h-o-u-y-i/nc/nc_firewall.cpp:128] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:SetControlIpChain failed ret:-1
+	[2012-11-11 01:36:06.146104] [DEBUG] [24254] [build/debug64/h-o-u-y-i/nc/nc_firewall.cpp:186] [vmName=AY12111112291654c6269][type=1][versionFrom=2]:SetInternetAllFireWall fail
+	[2012-11-11 01:36:06.238157] [DEBUG] [18769] [build/debug64/h-o-u-y-i/nc/vm_xen_wrapper.cpp:2059] config redhat ip 00:16:3e:12:15:7d eth1 42.121.53.76 255.255.252.0 42.121.55.254:0:success
+	[2012-11-11 01:36:06.422903] [DEBUG] [18769] [build/debug64/h-o-u-y-i/nc/vm_xen_wrapper.cpp:2086] config redhat default_gw 42.121.55.254:0:success
+	[2012-11-11 01:36:06.573502] [DEBUG] [18769] [build/debug64/h-o-u-y-i/nc/vm_xen_wrapper.cpp:2114] config redhat route 192.168.0.0 16 10.200.127.254 eth0:0:success
+	[2012-11-11 01:36:06.663574] [INFO] [16733] [build/debug64/h-o-u-y-i/nc/vm_xen_wrapper.cpp:967] Msg:vm[iso-AY12111112291654c6269] stopped 5 second after shutdown
+	[2012-11-11 01:36:06.683631] [ERROR] [16733] [build/debug64/h-o-u-y-i/nc/handlers/nc_vm_handler.cpp:733] [vmname=AY12111112291654c6269]:init vm failed, do not start vm
+	[2012-11-11 01:36:06.693163] [DEBUG] [16733] [build/debug64/h-o-u-y-i/nc/handlers/nc_handler.cpp:29] Msg:succeed to send response:StartVmRsp:sequence:4358921489341223957
+	[2012-11-11 01:36:06.710829] [DEBUG] [18769] [build/debug64/h-o-u-y-i/nc/vm_xen_wrapper.cpp:2114] config redhat route 172.16.0.0 12 10.200.127.254 eth0:0:success
 
 	-----
 
@@ -24846,7 +24847,7 @@ day169 Wednesday, November 14, 2012
 	web.xml
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>file:${user.home}/.houyi/log4j.xml</param-value>
+		<param-value>file:${user.home}/.h-o-u-y-i/log4j.xml</param-value>
 	</context-param>
 	<!-- 配置重加载 -->
 	<context-param>
@@ -24951,11 +24952,11 @@ day173 Tuesday, November 20, 2012
 
 1. 
 	* slb api数据检查
-	* houyi api
+	* h-o-u-y-i api
 		并发add_disk,remove_disk的问题
 		40 (+ 5 + 5 - 5 concurrent) = 45 ？50
 
-		http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9252783
+		http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9252783
 
 
 	* httpclient3.1
@@ -24971,7 +24972,7 @@ day173 Tuesday, November 20, 2012
 				from: http://www.ietf.org/rfc/rfc2616.txt
 		(2) 通过httpclient中simpleconnnectionmanager的带参构造函数实现，单元测试ok，但运行时计量推送逻辑有问题，报错如下：
 			Caused by: java.lang.NoSuchMethodError: org.apache.commons.httpclient.SimpleHttpConnectionManager.<init>(Z)V
-			at com.aliyun.houyi.util.HttpUtil.sendRequest(HttpUtil.java:48)
+			at com.aliyun.h-o-u-y-i.util.HttpUtil.sendRequest(HttpUtil.java:48)
 			根据错误，是找不到对应的方法。？
 
 		连接复用与多线程并发问题：连接复用，连接保持，connection persistence
@@ -25405,7 +25406,7 @@ day177 Monday, November 26, 2012
 
 
 			<!--other debug log file-->                                                                                                                                
-			<appender name="OTHER_DEBUG" class="com.aliyun.houyi.log.TimeSizeRollingFileAppender">                                                                 
+			<appender name="OTHER_DEBUG" class="com.aliyun.h-o-u-y-i.log.TimeSizeRollingFileAppender">                                                                 
 				<param name="File" value="logs/slbapi/other/other_debug.log"/>                                                                                
 				<param name="MaxBackupIndex" value="30"/>                                                                                                      
 				<param name="Encoding" value="UTF-8"/>                                                                                                         
@@ -25422,7 +25423,7 @@ day177 Monday, November 26, 2012
 			</appender>                                                                                                                                            
 																					       
 			<!--other info log file-->                                                                                                                                 
-			<appender name="OTHER_INFO" class="com.aliyun.houyi.log.TimeSizeRollingFileAppender">                                                                  
+			<appender name="OTHER_INFO" class="com.aliyun.h-o-u-y-i.log.TimeSizeRollingFileAppender">                                                                  
 				<param name="File" value="logs/slbapi/other/other_info.log"/>                                                                                 
 				<param name="MaxBackupIndex" value="30"/>                                                                                                      
 				<param name="Encoding" value="UTF-8"/>                                                                                                         
@@ -25439,7 +25440,7 @@ day177 Monday, November 26, 2012
 			</appender>                                                                                                                                            
 																					       
 			<!--other error log file-->                                                                                                                                
-			<appender name="OTHER_ERROR" class="com.aliyun.houyi.log.TimeSizeRollingFileAppender">                                                                 
+			<appender name="OTHER_ERROR" class="com.aliyun.h-o-u-y-i.log.TimeSizeRollingFileAppender">                                                                 
 				<param name="File" value="logs/slbapi/other/other_error.log"/>                                                                                
 				<param name="MaxBackupIndex" value="30"/>                                                                                                      
 				<param name="Encoding" value="UTF-8"/>                                                                                                         
@@ -25501,12 +25502,12 @@ day178 Tuesday, November 27, 2012
 
 1. 
 	* bugfix201211预发布
-	* houyi api
+	* h-o-u-y-i api
 		resetfailed
 		startfailed
 			master不保存此状态，通过MQ，api得到状态变化
 	* master重构 ？待201301
-		设置houyi api计量数据部分：
+		设置h-o-u-y-i api计量数据部分：
 			计量数据由nc采集 (以python替换cpp)，然后直接写入(或者做缓冲层或错开并发)到OMS，采集并保存过程完成。
 			API从OMS取需要的数据：
 				涉及，与OMS沟通：
@@ -25807,7 +25808,7 @@ day191 Friday, December 14, 2012
 
 2. /etc/hosts文件配置错误，导致jboss启动失败		      -tip-
 	Caused by: java.lang.RuntimeException: Exception creating identity: pangu_master_3: pangu_master_3
-	[MainDeployer] Could not create deployment: file:/home/admin/houyi-ace4j/service/.default-open/conf/jboss-service.xml
+	[MainDeployer] Could not create deployment: file:/home/admin/h-o-u-y-i-ace4j/service/.default-open/conf/jboss-service.xml
 	-------
 	...
 		Caused by: javax.management.MBeanRegistrationException: preRegister() failed: [ObjectName='jboss.remoting:service=NetworkRegistry', Class=org
@@ -25845,7 +25846,7 @@ day192 Monday, December 17, 2012
 
 
 	* python
-	* houyi api user 表
+	* h-o-u-y-i api user 表
 		access_id有unique约束，创建user时有默认值
 
 2. 
@@ -25938,8 +25939,8 @@ day 196 Friday, December 21, 2012
 day197 Monday, December 24, 2012
 
 1. 
-	* houyi api连调
-	* houyi api返回xml格式时，data标签的问题
+	* h-o-u-y-i api连调
+	* h-o-u-y-i api返回xml格式时，data标签的问题
 		有data时，即使数据为空，标签需要返回；
 		若本就没有data数据，不出现data标签
 	* 数据库切换功能的支持问题
@@ -26051,7 +26052,7 @@ day199 Wednesday, December 26, 2012
 				<artifactId>xmlsec</artifactId>
 				<version>1.4.3</version>
 			</dependency>
-		houyi api已替换。
+		h-o-u-y-i api已替换。
 	
 	* slb api并发性能优化问题
 		以list_loadbalancers接口为例
@@ -26090,10 +26091,10 @@ day200 Thursday, December 27, 2012
 				压测环境（SLB API + MASTER）开发集成环境
 			slb api通过拦截器，记录了请求进来到处理结束的时间差记录，便于分析性能瓶颈
 	* master环境切换
-		/apsarapangu/disk4/apsara-0.8.6/houyi-bigregion
-		sh ../build-deploy-start-houyi.sh
-	* houyi api打包名改变，对应提测模板改变，大region二期提测时需注意（若在末日曙光项目提测之后提测则没问题）
-	* houyi api空指针问题 -tip-										 ？待修复
+		/apsarapangu/disk4/apsara-0.8.6/h-o-u-y-i-bigregion
+		sh ../build-deploy-start-h-o-u-y-i.sh
+	* h-o-u-y-i api打包名改变，对应提测模板改变，大region二期提测时需注意（若在末日曙光项目提测之后提测则没问题）
+	* h-o-u-y-i api空指针问题 -tip-										 ？待修复
 		platform数据有问题时，没有判断null
 			如：数据库记录了错误的类型值，程序找不到对应的类型。
 
@@ -26282,13 +26283,13 @@ day205 Monday, January 07, 2013
 			
 		
 2. 上线订正脚本
-	参考：http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/tools/trunk/fix_data/ec_big_region2
+	参考：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/tools/trunk/fix_data/ec_big_region2
 	用python实现订正脚本，完成订正过程：
 		订正数据  （订正脚本只涉及插入数据/更新数据，表结构修改或增加由DBA执行订正脚本不负责这个）
 		验证
 
-	导入已有python库的db封装: pypet库，地址：http://svn.simba.taobao.com/svn/luban/houyiops/pet/trunk/lib/pypet
-		from pypet.houyi import db
+	导入已有python库的db封装: pypet库，地址：http://svn.simba.taobao.com/svn/luban/h-o-u-y-iops/pet/trunk/lib/pypet
+		from pypet.h-o-u-y-i import db
 
 3. python访问lbivirt API
 	正确安装好 libvirt-python 包后
@@ -26333,7 +26334,7 @@ day207 Wednesday, January 09, 2013
 1. 
 	* 大region二期发布步骤
 		API不重启，Master一个个单独发布
-		订正脚本放到：http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/tools/trunk/fix_data/ec_big_region2/API
+		订正脚本放到：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/tools/trunk/fix_data/ec_big_region2/API
 		需要注意：
 			用到pypet库，具体执行时确认所使用的python的版本已安装此库
 				python xxx.py
@@ -26372,8 +26373,8 @@ day208 Thursday, January 10, 2013
 			regionNo=AT03-HOUYI2
 			AG:
 				6.27		
-				go2houyi1
-				go2houyi2		
+				go2h-o-u-y-i1
+				go2h-o-u-y-i2		
 			
 		api配置数据库信息
 
@@ -26438,7 +26439,7 @@ day209 Friday, January 11, 2013
 3. 终端小tip 测试环境
 	MySql,API,AG(可临时跳到Nc等其他地方),Master
 		go2nc
-		go2houyi
+		go2h-o-u-y-i
 		go2xxx
 
 4. python的output/input,file python输入与输出，命令行参数
@@ -26565,7 +26566,7 @@ day212 Wednesday, January 16, 2013
 	有svn地址
 
 2. 大region二期发布步骤
-	设置maserRegion，reloadCache都通过go2houyiapi来执行
+	设置maserRegion，reloadCache都通过go2h-o-u-y-iapi来执行
 
 3. fuxi上的http_proxy作为桥梁，解决kuafu不能跨各个小集群访问的问题(kuafu自带了一个http proxy服务接口，只支持同步调用)	     http proxy
 	可到fuxi机器查看proxy的状态（me）
@@ -26592,9 +26593,9 @@ day213 Thursday, January 17, 2013
 				OTS是否需要多机房部署，如果需要
 
 	* 大region二期API发布步骤
-		杭州云配置目录:http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20121129/outer-pro-env
-		测试环境配置目录：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20121129/test-env
-		双开环境配置目录：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20121129/inner-pro-env
+		杭州云配置目录:http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_api/20121129/outer-pro-env
+		测试环境配置目录：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_api/20121129/test-env
+		双开环境配置目录：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_api/20121129/inner-pro-env
 		参考：http://wiki.ec.alibaba-inc.com/index.php/Bugfix11%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%BA%BF%E6%AD%A5%E9%AA%A4
 
 2. 
@@ -26612,16 +26613,16 @@ day214 Friday, January 18, 2013
 		6.27
 		/home/admin/fabdeploy
 		svn:
-			http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/fabdeploy
+			http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/fabdeploy
 		发布工具fab作者：鱼总
 		使用步骤：
-			source env_profile && fab houyiapi.api_prepare:url=http://xx,md5=xxx
+			source env_profile && fab h-o-u-y-iapi.api_prepare:url=http://xx,md5=xxx
 				备份原API部署目录，并拉取待发布的API包并校验MD5值
-			source env_profile && fab -H 10.249.243.62 houyiapi.api_stop
+			source env_profile && fab -H 10.249.243.62 h-o-u-y-iapi.api_stop
 				停API
-			source env_profile && fab -H 10.249.243.62 houyiapi.api_deploy
+			source env_profile && fab -H 10.249.243.62 h-o-u-y-iapi.api_deploy
 				部署新API包
-			source env_profile && fab -H xx.xx.xx.xx houyiapi.api_start
+			source env_profile && fab -H xx.xx.xx.xx h-o-u-y-iapi.api_start
 				启动API
 		
 		帮助查看：
@@ -26637,15 +26638,15 @@ day214 Friday, January 18, 2013
 				apitask.prepare         download zip into local, example: "fab apitask.prepare:url=[URL],md5=[MD5]"
 				apitask.start           apitask start, example: "fab -R [ROLE] apitask.start"
 				apitask.stop            apitask start, example: "fab -R [ROLE] apitask.stop"
-				houyiapi.api_deploy     push open.war to houyiapi server, example: "fab -R [ROLE] houyiapi.api_deploy"
-				houyiapi.api_prepare    download tar.gz into local, example: "fab houyiapi.api_prepare:url=[URL],md5=[MD5]"
-				houyiapi.api_rollback   rollback open.war, example: "fab -R [ROLE] houyiapi.api_rollback:[WAR]"
-				houyiapi.api_start      start houyiapi service, example: "fab -R [ROLE] houyiapi.api_start"
-				houyiapi.api_stop       stop houyiapi, example: "fab -R [ROLE] houyiapi.api_stop"
+				h-o-u-y-iapi.api_deploy     push open.war to h-o-u-y-iapi server, example: "fab -R [ROLE] h-o-u-y-iapi.api_deploy"
+				h-o-u-y-iapi.api_prepare    download tar.gz into local, example: "fab h-o-u-y-iapi.api_prepare:url=[URL],md5=[MD5]"
+				h-o-u-y-iapi.api_rollback   rollback open.war, example: "fab -R [ROLE] h-o-u-y-iapi.api_rollback:[WAR]"
+				h-o-u-y-iapi.api_start      start h-o-u-y-iapi service, example: "fab -R [ROLE] h-o-u-y-iapi.api_start"
+				h-o-u-y-iapi.api_stop       stop h-o-u-y-iapi, example: "fab -R [ROLE] h-o-u-y-iapi.api_stop"
 		
 		prepare的输出如下：
 		-------
-			--2013-02-27 10:13:21--  http://jenkins.aliyun-inc.com/package/houyi/ec/openapi_trunk-1.0.19.1457720/openapi_trunk-1.0.19.1457720.tar.gz
+			--2013-02-27 10:13:21--  http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/openapi_trunk-1.0.19.1457720/openapi_trunk-1.0.19.1457720.tar.gz
 			正在解析主机 jenkins.aliyun-inc.com... 10.230.226.113
 			正在连接 jenkins.aliyun-inc.com|10.230.226.113|:80... 已连接。
 			已发出 HTTP 请求，正在等待回应... 200 OK
@@ -26665,7 +26666,7 @@ day214 Friday, January 18, 2013
 			Done. 
 		-------
 	* 新项目
-		工信部数据上报项目，houyi API提供符合要求的VM数据给数据上报中心，由数据上报中心负责将数据给工信部。
+		工信部数据上报项目，h-o-u-y-i API提供符合要求的VM数据给数据上报中心，由数据上报中心负责将数据给工信部。
 
 2. http chunk
 	http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
@@ -26683,12 +26684,12 @@ day215 Monday, January 21, 2013
 	* 工信部上报项目，增加缓存重构需求
 		将regionNo对应控制系统地址的缓存重构，使之支持reload缓存接口
 	* http chunk (http1.1 protocol) 方式实现接口提供大量数据
-	* 与上报中心确认houyi api提供的接口？
+	* 与上报中心确认h-o-u-y-i api提供的接口？
 		邮件已发出，待确认
 	* 需要变的配置，需要从项目部署包中拉出来，发布都是以war包或jar包为单位，不便于修改配置
 
 2. 工信部上报项目，上报数据项整理以及是否需要增加与master的接口分析
-	尽快确定houyi api给出的接口是否满足要求？
+	尽快确定h-o-u-y-i api给出的接口是否满足要求？
 	评估API取数据对Master的变化需求？
 
 3. 通过socket实现简单的http server与http client来测试http chunked
@@ -26702,7 +26703,7 @@ day216 Tuesday, January 22, 2013
 		socket模拟http server，测试chunked
 
 	* 上报中心项目基于
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_bandwidth_fix 发布后从trunk啦分支
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_bandwidth_fix 发布后从trunk啦分支
 
 2. httpclient
 	StringEntity entity = new StringEntity("important message",
@@ -26735,7 +26736,7 @@ day217 Wednesday, January 23, 2013
 		这样是否考虑采用RDS或其他支持简单统计功能的存储产品？
 	* SLB API聚石塔项目发布 (新搭集群)
 		1.24号发布支持， API改动，数据库表初始化及更新(青岛slb master地址改动)
-		发布wiki：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9256383
+		发布wiki：http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9256383
 		环境：ssh sarah.wangq@shterm.aliyun-inc.com
 	* 大region二期，周五前合并代码，周五再次提测
 		API合并代码 merger代码 代码merger
@@ -26800,7 +26801,7 @@ day218 Thursday, January 24, 2013
 
 4. SLB API聚石塔项目
 	 -  在线支持 晚11:30
-		发布步骤wiki：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9256383
+		发布步骤wiki：http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9256383
 		SLB API 目前管理不同版本的后端，对于表名的修改，在老库上以别名方式来兼容API的修改。
 
 		聚石塔slb后端升级，slb api现管2个后端，另一个不升级，对于表名改动通过别名来兼容。？这里应该是视图，即通过创建视图来兼容来的表名的查询
@@ -26809,7 +26810,7 @@ day218 Thursday, January 24, 2013
 			一行：export JAVA_OPTS="$JAVA_OPTS -Dsun.net.inetaddr.ttl=0 -Dsun.net.inetaddr.negative.ttl=0"
 
 	- API运维wiki整理		
-		http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9251044
+		http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9251044
 		相应的简要发布步骤整理
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -26824,7 +26825,7 @@ day219 Friday, January 25, 2013
 	* 提测模板介绍
 		项目，脚本，sql变化都有对应的项可填
 		项目发布完，通知配管，更新发布信息
-		弹性计算-后羿-提测模板介绍 http://wiki.qa.aliyun-inc.com/index.php?title=弹性计算-后羿-提测模板介绍
+		弹性计算-后-羿-提测模板介绍 http://wiki.qa.aliyun-inc.com/index.php?title=弹性计算-后-羿-提测模板介绍
 		
 2. MSS重构
 	选择OTS作为数据源来存储VM监控数据，对监控数据的查询场景主要有2种：
@@ -26847,7 +26848,7 @@ day220 Monday, January 28, 2013
 
 1. 
 	* MSS重构
-		数据存储到OTS后，houyi定时任务采集回去并整合进安全的数据，	再推送到OMS，OMS在归并推到BOSS；这里也有个归并过程，
+		数据存储到OTS后，h-o-u-y-i定时任务采集回去并整合进安全的数据，	再推送到OMS，OMS在归并推到BOSS；这里也有个归并过程，
 		是否和MSS所需的归并连同考虑
 	* IDCISP上报项目
 		开发，单元测试，jetty容器调试
@@ -26858,7 +26859,7 @@ day220 Monday, January 28, 2013
 
 2. MSS重构
 	确认数据调用方
-		houyi任务，嫦娥，houyi api，（boss，portal？）
+		h-o-u-y-i任务，嫦娥，h-o-u-y-i api，（boss，portal？）
 	从而确认归并的问题
 
 3. IDCISP项目
@@ -26900,7 +26901,7 @@ day222 Wednesday, January 30, 2013
 	- 加入需求，指定imageNo去reset_vm时，保证所使用的image所在的集群为可用状态，尽量保证reset_vm成功  待分析？
 		region已升级，使用bucket类型image时，需要判断image所在的region是否可用，若不可用则找本地hash类型image。
 	- 将二期修改合入新branch：
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_bigregion2_base0102upgrade
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_bigregion2_base0102upgrade
 		并测试基本功能是否ok
 		开发测试环境部署（换容器jetty）
 
@@ -27060,7 +27061,7 @@ day228 Thursday, February 07, 2013
 	API-over HTTP protocol->HTTP Proxy-over KFC protocol>KFC agent->Nuwa agent
 
 	region表的proxy ip地址，以http方式与proxy交互，proxy得到请求角色的nuwa地址，proxy与KFC agent交互，KFC agent与nuwa agent交互
-		nuwa://localcluster:10240/sys/houyi/master
+		nuwa://localcluster:10240/sys/h-o-u-y-i/master
 
 
 4. command，要具体执行到那个region，可以将目标regionNo作为Command的属性，这样工具类就可以从这里获取，而无需一层层传递regionNo。
@@ -27150,7 +27151,7 @@ day230 Sunday, February 17, 2013
 
 3. MSS
 		青岛OTS有计划部署，但北京OTS可能需要到，2012年4,5月的样子，这样，会存在杭州，青岛都是OTS提供监控数据查询，北京还是原有的数据库的方式，这样涉及到查询监控数据的
-	调用方（如：houyi api，定时任务，嫦娥等）需要处理北京云的数据源还是老的数据源方式的逻辑。
+	调用方（如：h-o-u-y-i api，定时任务，嫦娥等）需要处理北京云的数据源还是老的数据源方式的逻辑。
 
 4. java事务
 	本地事务
@@ -27193,12 +27194,12 @@ day232 Tuesday, February 19, 2013
 	发布工具+项目发布脚本
 	
 	发布工具：	
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/fabdeploy
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/fabdeploy
 
 	Master的python发布脚本位置：
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_controller/
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_controller/
 	HouyiAPI的python发布脚本位置：
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_api/
 
 3. HouyiAPI增加根据小regionNo和控制系统命令名称来判断调用是否允许
 	若为不允许，则返回维护中状态码
@@ -27232,7 +27233,7 @@ day232 Tuesday, February 19, 2013
 
 
 4. HouyiAPI返回json格式data键的值为null的缺陷 QA记录
-	{"code":-95,"data":null,"msg":"invoke houyi system error"}
+	{"code":-95,"data":null,"msg":"invoke h-o-u-y-i system error"}
 5. 
 		
 		
@@ -27304,7 +27305,7 @@ day235 Friday, February 22, 2013
 		分内部生产、线上生产。
 
 		数据订正工具：
-			svn地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/
+			svn地址：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_api/
 				在这里提交工具文件
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -27320,7 +27321,7 @@ day236 Monday, February 25, 2013
 			发布开始时间，结束时间与PE确认
 	- 上线步骤整理
 		脚本编写自测
-			svn：http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20130228trailbreaker
+			svn：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_api/20130228trailbreaker
 				根据已有的工具所放地址来参考
 	- 邮件确认建表语句和SQL
 	- 提测（提前自测）
@@ -27360,9 +27361,9 @@ day237 Tuesday, February 26, 2013
 2. 开路先锋项目
 	- 脚本工具
 		pypet如何切换不同集群的数据库？
-			线上集群AG,内部集群AG，各自选取一个AG，在此AG上执行，pypet库保证其连接到正确的houyi库
-				选择AY03-NEW-AG作为内部集群发布操作houyi库的AG
-				选择AY41A-AG作为线上集群发布操作houyi库的AG
+			线上集群AG,内部集群AG，各自选取一个AG，在此AG上执行，pypet库保证其连接到正确的h-o-u-y-i库
+				选择AY03-NEW-AG作为内部集群发布操作h-o-u-y-i库的AG
+				选择AY41A-AG作为线上集群发布操作h-o-u-y-i库的AG
 		工具开发及自测
 		脚本不允许关闭Region或设置Region在升级中状态，提示Master region不能修改状态，需要切换其他Region为Master region，然后再修改此Region的状态。
 			切换Master region的工具？地址
@@ -27380,8 +27381,8 @@ day237 Tuesday, February 26, 2013
 	- regionNo返回为大regionNo
 		修改并提交
 	- 去掉已移入开路先锋项目的需求部分代码修改
-		houyi.console.service/src/test/java/com/aliyun/houyi/service/support/MasterEndpointCacheManageTest.java	D
-		houyi.console.service/src/main/java/com/aliyun/houyi/service/support/MasterEndpointCacheManage.java	D	
+		h-o-u-y-i.console.service/src/test/java/com/aliyun/h-o-u-y-i/service/support/MasterEndpointCacheManageTest.java	D
+		h-o-u-y-i.console.service/src/main/java/com/aliyun/h-o-u-y-i/service/support/MasterEndpointCacheManage.java	D	
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day238 Wednesday, February 27, 2013
@@ -27545,7 +27546,7 @@ day243 Wednesday, March 06, 2013
 
 3. jstat jinfo jps
 
-D:\workspace2\api_dcisp\houyi.console.openapi\target\open.war
+D:\workspace2\api_dcisp\h-o-u-y-i.console.openapi\target\open.war
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day244 Thursday, March 07, 2013
@@ -27681,7 +27682,7 @@ day246 Monday, March 11, 2013
 				where条件为IP转为Long类型，判断是否在区间内
 	每个Zone分配那些ip及其段的记录，应该每个Region的每个Zone有单独的段。
 	
-	wiki描述：http://ops.ecs.alibaba-inc.com/wiki/%E5%BC%B9%E6%80%A7%E8%AE%A1%E7%AE%97EC/%E6%97%A5%E5%B8%B8%E8%BF%90%E7%BB%B4%E6%93%8D%E4%BD%9C/2013.03.11_SLB_%E5%85%AC%E7%BD%91%E5%9C%B0%E5%9D%80%E5%88%9D%E5%A7%8B%E5%8C%96%E5%9C%A8houyiapi%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E7%9A%84%E6%95%B4%E7%90%86
+	wiki描述：http://ops.ecs.alibaba-inc.com/wiki/%E5%BC%B9%E6%80%A7%E8%AE%A1%E7%AE%97EC/%E6%97%A5%E5%B8%B8%E8%BF%90%E7%BB%B4%E6%93%8D%E4%BD%9C/2013.03.11_SLB_%E5%85%AC%E7%BD%91%E5%9C%B0%E5%9D%80%E5%88%9D%E5%A7%8B%E5%8C%96%E5%9C%A8h-o-u-y-iapi%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E7%9A%84%E6%95%B4%E7%90%86
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day247 Tuesday, March 12, 2013
@@ -27769,7 +27770,7 @@ day249 Tuesday, March 19, 2013
 5. 飞天升级步骤参看
 	http://wiki.aliyun-inc.com/projects/apsara/wiki/VMOnlineUpgradeNew
 
-6. houyi重构
+6. h-o-u-y-i重构
 	region master暴露dubbo服务，由前端来路由请求到具体的region master。
 	wiki: http://wiki.ec.alibaba-inc.com/index.php/%E5%A4%A7%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E9%87%8D%E6%9E%84#.E7.AE.80.E5.8C.96.E6.8E.A5.E5.8F.A3
 
@@ -27910,7 +27911,7 @@ api的地址如上
 		http://olsweb.aliyun-inc.com，需要了解的地方可以咨询我们的PM 荣惠。
 		wiki: http://wiki.aliyun-inc.com/projects/apsara/wiki/ShennongOpenService
 		
-5. 落日弓项目，需要API将每次版本的sql变动都放入统一的sql文件中 比如houyi_ddl.sql
+5. 落日弓项目，需要API将每次版本的sql变动都放入统一的sql文件中 比如h-o-u-y-i_ddl.sql
 	将用户体系改造中的sql变动加入上面的sql文件中
 
 6. svn权限重新分配
@@ -28034,7 +28035,7 @@ day256 Thursday, March 28, 2013
 
 2. IDCISP项目
 	双开发布
-		控制系统发布前检查状态，双开出现扩容导致多个master的问题，tubo配置conf有问题，重启后问题出现；控制系统发布nc，monitor，houyi，引用同一套库
+		控制系统发布前检查状态，双开出现扩容导致多个master的问题，tubo配置conf有问题，重启后问题出现；控制系统发布nc，monitor，h-o-u-y-i，引用同一套库
 		CC启动有延时，后续可提供可视化的web界面，以形象的呈现各个角色的服务状态
 
 
@@ -28043,7 +28044,7 @@ day256 Thursday, March 28, 2013
 	结构复杂,外部依赖多，导致单个region运维成本很高,无法快速扩容
 	手动搭建一个新region需要两周事件，而且交付质量无法保证
 	随着规模的增长，region数过多，管理维护成本高
-	配置数据分散在houyidb/apidb/regiondb 三个层次几十个db instance中，层次不清，结构复杂
+	配置数据分散在h-o-u-y-idb/apidb/regiondb 三个层次几十个db instance中，层次不清，结构复杂
 	vm运行数据分散在每个region的monitor db中，管理利用非常不方便，运维成本也高
 	数据流与控制流并行，对系统处理能力产生过大压力
 	vm管理/网络管理）等业务管理的接口消息量并不大；
@@ -28072,7 +28073,7 @@ day257 Friday, March 29, 2013
 	rpc - > rpc.jar > kfc
 
 4. 内网冒头代码review
-	http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_politics
+	http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_politics
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -28094,9 +28095,9 @@ day258 Monday, April 01, 2013
 	API的HA方案，参考master的方案：
 		keepalived
 		lvs agent 接受控制指令
-		参考wiki: http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9248400
+		参考wiki: http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9248400
 
-		slb api ha方案wiki: http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9260270
+		slb api ha方案wiki: http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9260270
 
 	SLB syn攻击防御，让lvs具有防御syn-flood ddos攻击的能力：
 		lvs上为每个vip新增两个计数项: syn包的数目, SYN_RECV状态的连接数
@@ -28581,7 +28582,7 @@ day267 Monday, April 15, 2013
 2. 广渠门项目
 	提测
 		1) SLB API增加逻辑，对于已关闭的region，API不去调用，返回集群维护中错误
-		2) 删除，切换vm或者rs时，slb api不需要再去houyi db查询vm信息，而是直接在slb api数据库查询
+		2) 删除，切换vm或者rs时，slb api不需要再去h-o-u-y-i db查询vm信息，而是直接在slb api数据库查询
 		3) slb api 支持只关闭对某个region下slb的调用，而不影响对其他region下slb的调用
 	HA方案预设计
 
@@ -28939,12 +28940,12 @@ day274 Thursday, April 25, 2013
 
 2. 大region二期
 	QA环境演练，api包未被正确替换（sql日志中无snapshot_type字段打出），查找原因
-		PE再执行一次观察发布过程，确定原因，确认为QA houyi2的AG发布工具版本过低，导致api未发布
-	houyi2,houyi1组成一个大region
+		PE再执行一次观察发布过程，确定原因，确认为QA h-o-u-y-i2的AG发布工具版本过低，导致api未发布
+	h-o-u-y-i2,h-o-u-y-i1组成一个大region
 
 3. MSS重构
 	参考slb的xuanyuan_agent的python实现的agent
-	http://svn.alisoft-inc.com/repos/alisoft/houyi/slb/slb_v2/trunk/sources/xuanyuan_agent
+	http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/slb/slb_v2/trunk/sources/xuanyuan_agent
 
 4. aps2类同步rpc与异步rpc的实现
 	异步rpc基于jetty http client的异步调用
@@ -28994,7 +28995,7 @@ day274 Thursday, April 25, 2013
 4. QA测试环境	AT03-HOUYI-AG
 	10.250.6.27
 	ssh 10.230.204.19
-	go2houyi2
+	go2h-o-u-y-i2
 	api: 10.230.226.146
 
 5. apsa
@@ -29033,8 +29034,8 @@ day276 Saturday, April 27, 2013
 	在delete_rs_pool 后端成功返回但api还没根据ip得到vmName前，调用了delete_rs操作，将rs表中记录删除，导致delete_rs_pool无法根据ip找到vmName
 
 	access_log
-	30330 10.230.130.1 - - [22/Apr/2013:14:12:44 +0800] "GET /slb/api?aliyun_idkp=1234567890&timestamp=2013-04-22%2014%3A19%3A27&sign=5t2Rvo0AI5N      d5wFVnWVgzA%3D%3D&session=0nyJ6lBPsku1F2TALWdFMA%3D%3D&rs_pool_name=czPerformTest_Thread-57&action=delete_rs&region_no=fake-vrrp-houyi-      region&rs_list=%5B%7B%22vm_name%22%3A%22slb-vrrp-01%24%2410.230.138.245%22%7D%5D HTTP/1.1" 200 148 "-" "-" "-"
-	30331 10.230.130.1 - - [22/Apr/2013:14:12:44 +0800] "GET /slb/api?aliyun_idkp=1234567890&timestamp=2013-04-22%2014%3A19%3A27&sign=vF8r0nqty%2      BH8qiU95icXww%3D%3D&session=0nyJ6lBPsku1F2TALWdFMA%3D%3D&rs_pool_name=czPerformTest_Thread-57&action=delete_rs_pool&region_no=fake-vrrp      -houyi-region HTTP/1.1" 200 172 "-" "-" "-"
+	30330 10.230.130.1 - - [22/Apr/2013:14:12:44 +0800] "GET /slb/api?aliyun_idkp=1234567890&timestamp=2013-04-22%2014%3A19%3A27&sign=5t2Rvo0AI5N      d5wFVnWVgzA%3D%3D&session=0nyJ6lBPsku1F2TALWdFMA%3D%3D&rs_pool_name=czPerformTest_Thread-57&action=delete_rs&region_no=fake-vrrp-h-o-u-y-i-      region&rs_list=%5B%7B%22vm_name%22%3A%22slb-vrrp-01%24%2410.230.138.245%22%7D%5D HTTP/1.1" 200 148 "-" "-" "-"
+	30331 10.230.130.1 - - [22/Apr/2013:14:12:44 +0800] "GET /slb/api?aliyun_idkp=1234567890&timestamp=2013-04-22%2014%3A19%3A27&sign=vF8r0nqty%2      BH8qiU95icXww%3D%3D&session=0nyJ6lBPsku1F2TALWdFMA%3D%3D&rs_pool_name=czPerformTest_Thread-57&action=delete_rs_pool&region_no=fake-vrrp      -h-o-u-y-i-region HTTP/1.1" 200 172 "-" "-" "-"
 	
 	事务问题及解决方案：
 			由于涉及slb后端和slb api的表关联操作，本质上是一个跨应用的数据库事务问题，即在slb后端删除rspool时，要开启事务保证此时rspool以及
@@ -29340,7 +29341,7 @@ day282 Wednesday, May 08, 2013
 
 
 5. 系统优化 -tip-
-	由于houyi api的部署有多个，且各自相互独立，如果启用缓存，可能会出现一台API机器RS1缓存了某些数据，但另一台RS2却修改了db数据，RS2的缓存
+	由于h-o-u-y-i api的部署有多个，且各自相互独立，如果启用缓存，可能会出现一台API机器RS1缓存了某些数据，但另一台RS2却修改了db数据，RS2的缓存
 		根据配置会随即更新，但RS1的缓存却无法触发更新。
 
 		解决方法之一：使用同一缓存，比如使用memcached统一缓存；统一缓存部分设计为可替换方式，比如后面如果需要替换缓存实现服务。
@@ -29676,8 +29677,8 @@ day285 Monday, May 13, 2013
 
 	8.212搭建api环境
 	jetty-env: 
-		cd /home/admin/houyi
-		svn co http://svn.alisoft-inc.com/repos/alisoft/houyi/console/jetty-env/houyi/ .
+		cd /home/admin/h-o-u-y-i
+		svn co http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/jetty-env/h-o-u-y-i/ .
 		mkdir src
 		vim build.sh
 	java env
@@ -29955,7 +29956,7 @@ day287 Wednesday, May 15, 2013
 		 java.util.concurrent.ScheduledExecutorService
 		 以submit方法来执行所有Runnable的实现类，这些被执行的对象都有一个run方法，都返回结果或没有结果。
 	
-	houyi api的aps2类就是命令模式中的接受者，负责接收并执行命令；那些command及其实现为命令接口和命令实现；Service层为请求者将命令交给接受者。
+	h-o-u-y-i api的aps2类就是命令模式中的接受者，负责接收并执行命令；那些command及其实现为命令接口和命令实现；Service层为请求者将命令交给接受者。
 
 	JDK中设计模式的应用：
 		
@@ -30027,7 +30028,7 @@ day289 Friday, May 17, 2013
 2. 大region二期
 	bugfix
 	ApsaraCommandExecutor2类抛出的CLCSuspendedException异常被部分service捕获，且没有继续抛出，导致AbstractExecuteAction类无法捕获此错误，也就无法
-	将-100, "houyi System is maintaining"抛出。
+	将-100, "h-o-u-y-i System is maintaining"抛出。
 
 	解决：
 		排查代码中ApsaraCommandExecutor2类返回到AbstractExecuteAction类的过程中，拦截了并消化了CLCSuspendedException异常的点，修改为继续抛出CLCSuspendedException
@@ -30063,7 +30064,7 @@ day289 Friday, May 17, 2013
 		发布步骤修改：
 			版本修改
 			关闭region的脚本，替换为支持检查是否为masterRegion的脚本
-				http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/houyi_api/20130228trailbreaker
+				http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/h-o-u-y-i_api/20130228trailbreaker
 				此版本用的mysql账号是读写账号，用db.Houyi()拿到的是只读账号，需要如此定义：db.Houyi(read_only=False)
 		API提供版本信息，每次发布好后，QA等人员可以判断部署的版本。
 			
@@ -30398,10 +30399,10 @@ day303 Friday, May 24, 2013
 
 3. 落日弓
 	落日弓wiki：http://wiki.ec.alibaba-inc.com/index.php/弹性计算与落日弓
-	svn: http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigong/branches/luorigong_for_bigregion
+	svn: http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigong/branches/luorigong_for_bigregion
 		orange框架包含在内
 
-	Orange Python框架：wiki: http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9249291
+	Orange Python框架：wiki: http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9249291
 
 	配置maven库以下载下面的依赖，以配置SSO登陆
 	-----
@@ -30548,7 +30549,7 @@ day304 Monday, May 27, 2013
 	编译测试
 
 	wiki: http://wiki.ec.alibaba-inc.com/index.php/落日弓
-	后端api svn: http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigong/branches
+	后端api svn: http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigong/branches
 
 	日志分级别记录
 
@@ -32047,11 +32048,11 @@ day311 Wednesday, June 05, 2013
 	从wiki的集群搭建步骤开始
 	a. 到资源视图，找到机房，大region，资源视图的树可以右键添加
 
-	Acl中的宏与规则，宏定义了某个角色的所有IP组合，比如houyiapi宏表示所有houyiapi的ip集合；规则表示宏到宏之间的具体acl规则。
+	Acl中的宏与规则，宏定义了某个角色的所有IP组合，比如h-o-u-y-iapi宏表示所有h-o-u-y-iapi的ip集合；规则表示宏到宏之间的具体acl规则。
 
 	页面的按钮调用，不只是顺序调用还有循环调用
 
-	houyiAPI以域名（vip）的方式管理；然后，在集群信息找可以看到houyiapi与大region的关系
+	h-o-u-y-iAPI以域名（vip）的方式管理；然后，在集群信息找可以看到h-o-u-y-iapi与大region的关系
 
 	新集群搭建与扩容：
 		集群搭建，首先在资源视图中加对应的资源（对于大region共享的，可以不用再添加）
@@ -32071,7 +32072,7 @@ day311 Wednesday, June 05, 2013
 
 
 3. slb部署流程
-	http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9261407
+	http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9261407
 
 4. Areasolve为大禹
 	用于部署飞天，落日弓agent部署于集群的AG上，nc上的操作通过大禹完成。
@@ -32097,7 +32098,7 @@ day312 Thursday, June 06, 2013
 3. 有各种开源，各种服务，各种成熟架构，还少什么让我们成功？
 	环境？魄力？资金？人才？方案？
 
-4. houyimon库
+4. h-o-u-y-imon库
 	采用了分库，分表
 	一个集群1个到多个monitor库，每个库的表按照天进行分表。
 
@@ -32224,14 +32225,14 @@ day317 Friday, June 14, 2013
 	API ACL规则梳理
 	规则描述	 规则原因
 	APIProxy机器要能够访问所有API Server机器的8080端口	 转发API请求
-	APIProxy机器要能够访问houyi数据库，一般端口范围为3000到4000	 APIProxy需要根据ip/vm等信息查询在哪个region
+	APIProxy机器要能够访问h-o-u-y-i数据库，一般端口范围为3000到4000	 APIProxy需要根据ip/vm等信息查询在哪个region
 	APIProxy机器要能够访问sls服务 （service.ols.aliyun-inc.com）	 推送日志
-	API Sever机器要能够访问houyi数据库，一般端口范围为3000到4000；	 API访问自己的数据库
-	API Sever机器要能够访问大Region中所有小Region的houyi monitor数据库，一般端口范围为3000到4000	 API访问Monitor数据库获取VM的性能信息。
+	API Sever机器要能够访问h-o-u-y-i数据库，一般端口范围为3000到4000；	 API访问自己的数据库
+	API Sever机器要能够访问大Region中所有小Region的h-o-u-y-i monitor数据库，一般端口范围为3000到4000	 API访问Monitor数据库获取VM的性能信息。
 	API Server机器要能够访问大Region中所有小Region的fuxi vip的31267端口	 http_proxy部署在fuxi上, api请求通过http_proxy转发
 	API Server机器能够访问rabbitmq机器的5672端口	 状态同步
-	API Taskserver机器能够访问houyi数据库，一般端口范围为3000到4000	 流量推送开关（region_need_statistics表）与推送日志（statistics_log表）等
-	API Taskserver机器要能够访问大Region中所有小Region的houyi monitor数据库，一般端口范围为3000到4000	 获取vm监控信息
+	API Taskserver机器能够访问h-o-u-y-i数据库，一般端口范围为3000到4000	 流量推送开关（region_need_statistics表）与推送日志（statistics_log表）等
+	API Taskserver机器要能够访问大Region中所有小Region的h-o-u-y-i monitor数据库，一般端口范围为3000到4000	 获取vm监控信息
 	API Taskserver机器要能够访问计量OMS服务（service.oms.aliyun-inc.com，内部生产集群不需要）	 计量服务
 	API Taskserver机器要能够访问大Region中所有小Region的fuxi vip的32167端口	 获取vm公网ip地址
 	API Taskserver机器要能够访问安全流量服务（10.135.252.105:8080，内部生产集群不需要）	 获取vm的带宽信息
@@ -32248,7 +32249,7 @@ day317 Friday, June 14, 2013
 
 	JAVA_HOME=/usr/ali/java
 	JETTY_HOME=/usr/ali/jetty
-	BASE_HOME=/home/admin/houyi
+	BASE_HOME=/home/admin/h-o-u-y-i
 	JETTY_PORT=8080
 
 	export TMPDIR="$BASE_HOME/tmp"
@@ -32736,7 +32737,7 @@ day325 Monday, July 08, 2013
 	8）MQ管理
 		表：mq
 	9）HouyiAPI域名管理
-		表：houyiapi
+		表：h-o-u-y-iapi
 
 3. apache common lang包
 	StringUtils.indexOfAny(str,str[])
@@ -32926,7 +32927,7 @@ day328 Thursday, July 11, 2013
 
 
 	2）控制系统-集群配置-生成数据库SQL
-		对于houyi库，已提供接口，参考其文档说明
+		对于h-o-u-y-i库，已提供接口，参考其文档说明
 
 
 
@@ -32944,8 +32945,8 @@ day329 Friday, July 12, 2013
 
 	1）SLB VIP申请
 
-	2）houyi数据库导入
-		通过houyi api提供的几个接口，将新一个集群即region需要的数据，导入houyi库
+	2）h-o-u-y-i数据库导入
+		通过h-o-u-y-i api提供的几个接口，将新一个集群即region需要的数据，导入h-o-u-y-i库
 	3）Ext.tree.panel
 		有例子，位于extjs文档的guide的tree中
 
@@ -33124,7 +33125,7 @@ day331 Wednesday, July 17, 2013
 
 		从而了解整体调用流程。
 
-		取到pangu app数据，根据clusterName取到对应的db，db从odbs表获取（里面有db类型标识）houyidb，从而获取对应集群db中pangu app数据。
+		取到pangu app数据，根据clusterName取到对应的db，db从odbs表获取（里面有db类型标识）h-o-u-y-idb，从而获取对应集群db中pangu app数据。
 			根据odbs中db的配置信息，创建db连接来使用。
 
 		使用spring提供的jdbctemplate来执行第二方DB的操作。
@@ -33133,7 +33134,7 @@ day331 Wednesday, July 17, 2013
 			db为orange/orange/database.py
 			self.db = web.database(dbn='mysql', host=host, port=port, user=user, passwd=passwd, db=dbname, mincached=mincached)
 
-		看houyidb的pangu_app表
+		看h-o-u-y-idb的pangu_app表
 			app_name 
 			min_copy 
 			max_copy
@@ -33169,8 +33170,8 @@ day331 Wednesday, July 17, 2013
 	（4）停止KV
 	（5）启动KV
 	（6）添加KV
-	（7）启动houyi
-		url: services/houyi/startHouyi.json
+	（7）启动h-o-u-y-i
+		url: services/h-o-u-y-i/startHouyi.json
 
 		job表action_name - agent_func_name映射
 	（8）启动arproxy
@@ -33185,7 +33186,7 @@ day331 Wednesday, July 17, 2013
 	（12）同步rc.sysinit
 		参考第11步
 	（13）API接入
-		url: services/houyiApi/reloadHouyiapiCache.json
+		url: services/h-o-u-y-iApi/reloadHouyiapiCache.json
 
 		HouyiApiService
 
@@ -33199,7 +33200,7 @@ day331 Wednesday, July 17, 2013
 
 		nc，vm操作通过pet执行
 
-		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('环境检查','houyi','shangshu@alibaba-inc.com','system',0,'clusteredDeployAction.checkEnvironment','precheck','EnvWorker.EnvJob.precheck_cluster');
+		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('环境检查','h-o-u-y-i','shangshu@alibaba-inc.com','system',0,'clusteredDeployAction.checkEnvironment','precheck','EnvWorker.EnvJob.precheck_cluster');
 		agent的function名称和之前保持一致
 
 		原action统一作为function名称
@@ -33207,7 +33208,7 @@ day331 Wednesday, July 17, 2013
 			其他job都是唯一的funcName
 		
 		初始化job数据：
-		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('NC解锁','houyi','shangshu@alibaba-inc.com','system',0,'ecPetAction.unlockNcs','unlock ncs','PetWorker.PetJob.run');
+		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('NC解锁','h-o-u-y-i','shangshu@alibaba-inc.com','system',0,'ecPetAction.unlockNcs','unlock ncs','PetWorker.PetJob.run');
 
 		job发送后，根据uuid来标识每个job（如后续的日志查看等需要）
 
@@ -33279,7 +33280,7 @@ day333 Friday, July 19, 2013
 
 	buttonTextToUrlMapping.js 定义了每个按钮的jobName
 
-	componentId对应到业务表id，比如houyi类型的到region表
+	componentId对应到业务表id，比如h-o-u-y-i类型的到region表
 	
 	请求到不存在的region，导致等待超时
 
@@ -33287,13 +33288,13 @@ day333 Friday, July 19, 2013
 
 
 	API接入job初始化：
-		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('API接入','houyi','shangshu@alibaba-inc.com','system',0,'reload_houyiapi_cache','reload api cache','HouyiAPIWorker.HouyiAPIJob');
+		insert into job(name,component,owner,job_type,need_param,action_name,description,agent_func_name) values('API接入','h-o-u-y-i','shangshu@alibaba-inc.com','system',0,'reload_h-o-u-y-iapi_cache','reload api cache','HouyiAPIWorker.HouyiAPIJob');
 
 	Agent的python逻辑，在master.py中，main方法是其入口，消费MQ的消息，并交给callback函数处理。
 
 	agent_fun_name为3段式，对应agent代码的：handlerName + className + functionName 
-		eg: HouyiAPIWorker.HouyiAPIJob.reload_houyiapi_cache
-		HouyiAPIWorker.py + HouyiAPIJob(class) + reload_houyiapi_cache(function)
+		eg: HouyiAPIWorker.HouyiAPIJob.reload_h-o-u-y-iapi_cache
+		HouyiAPIWorker.py + HouyiAPIJob(class) + reload_h-o-u-y-iapi_cache(function)
 
 		PetWorker.PetJob.run 此job就一个function，里面的具体操作依据参数中的action来定位
 			
@@ -33331,7 +33332,7 @@ day334 Monday, July 22, 2013
 		原大region管理，去掉realserver列显示
 			修改表单也去掉realserver表单项
 		原realserver管理，加上大region列显示（从big_region_realserver取关联关系）；
-			增加realserver的表单中，增加2种类型（RMS,RHS），并增加vip表单项；注：houyiapi的vip在houyiapi表中
+			增加realserver的表单中，增加2种类型（RMS,RHS），并增加vip表单项；注：h-o-u-y-iapi的vip在h-o-u-y-iapi表中
 	4）代码源命名变化修改
 		store定义修改：SourceCodeType.js
 		extjs render修改：gridColumnRenderer.js
@@ -33378,7 +33379,7 @@ day335 Tuesday, July 23, 2013
 2. 落日弓
 	1）日志查看功能
 		修改 buttonTextToUrlMapping.js ，jobName设置为agentFuncName
-		修改DataCenterList.js（搜ConfigMenu），在动态配置按钮时，修改componentType的houyi 为houyictrl，原houyiapi，apiproxy类型不变
+		修改DataCenterList.js（搜ConfigMenu），在动态配置按钮时，修改componentType的h-o-u-y-i 为h-o-u-y-ictrl，原h-o-u-y-iapi，apiproxy类型不变
 
 		jobName，componentType，offset，传给服务端即可
 	2）realserver资源视图，修改		     extjs 取表单，取表单项 * extjs
@@ -33446,7 +33447,7 @@ day335 Tuesday, July 23, 2013
 			通过win.down(xxx)方法，获取将要打开窗口中的表单项
 
 	3）代码源
-		类型中，去掉后羿API源，并入后羿源；并写数据订正脚本到sql中提交svn
+		类型中，去掉后-羿API源，并入后-羿源；并写数据订正脚本到sql中提交svn
 	4）初始化job的agentFuncName
 		即java服务端设置job名称并给agent去执行，此agentFuncName与agent的jobXXXhandler中定义的job名称+函数名称匹配。
 
@@ -33464,7 +33465,7 @@ day335 Tuesday, July 23, 2013
 tail -f /tmp/orange/orange.jobmaster.debug.log -n 300
 
 6. agent的job抽象
-	根据操作的工具即组件的不同，抽象出一组组的job。如：env，houyi ，apsara，apsara_client,arpproxy,houyiapi ,file etc.
+	根据操作的工具即组件的不同，抽象出一组组的job。如：env，h-o-u-y-i ，apsara，apsara_client,arpproxy,h-o-u-y-iapi ,file etc.
 
 	jobXXXhandler为原接受java web请求的处理类，它处理后会继续发给mq，由agent消费消息并执行具体job。
 
@@ -33518,8 +33519,8 @@ day336 Wednesday, July 24, 2013
 		在 ClusterOperatePanel.js 中初始化了刷新job状态的任务逻辑，在tab change事件触发时做相应处理。
 		原逻辑，Action有一个getJob方法返回job列表数据（job名称，状态等信息），js遍历job并更新页面上对应job的状态。
 			lrgdb.py中job_get方法返回的数据
-			componentType：区分job类型，为houyictrl、houyiapi，apiproxy
-			componentId：区分job类型对应的id，即如果type为houyictrl则为clusterId，若为houyiapi则为realserverId
+			componentType：区分job类型，为h-o-u-y-ictrl、h-o-u-y-iapi，apiproxy
+			componentId：区分job类型对应的id，即如果type为h-o-u-y-ictrl则为clusterId，若为h-o-u-y-iapi则为realserverId
 
 			比如：取出集群部署页面所有job按钮的最新job信息。
 
@@ -33538,8 +33539,8 @@ day337 Thursday, July 25, 2013
 
 2. 落日弓
 	1）根据 ClusterOperatePanel.js 页面传入的componentType类型，修改对应job的类型
-		houyictrl
-		houyiapi
+		h-o-u-y-ictrl
+		h-o-u-y-iapi
 		apiproxy
 		它们已划分到不同的Tab页作为集合。
 
@@ -33550,10 +33551,10 @@ day337 Thursday, July 25, 2013
 
 		ThirdpartyMoonmmHandler.py
 
-		odbs表去掉原which_id字段，以type替换之,以标识db所属的类型houyictrl，apsara，oss_server etc。
+		odbs表去掉原which_id字段，以type替换之,以标识db所属的类型h-o-u-y-ictrl，apsara，oss_server etc。
 	（2）修改weight值
 		HouyiApiWeightHandler.py
-		直接到houyi库操作？OR 接口
+		直接到h-o-u-y-i库操作？OR 接口
 	（3）集群postcheck
 	（4）完成部署
 		DeployregionHandler.py
@@ -33570,19 +33571,19 @@ da338 Friday, July 26, 2013
 2. 落日弓
 	继续扫尾部分
 
-	houyiapi测试环境： 10.230.227.11	 ATDEV01
+	h-o-u-y-iapi测试环境： 10.230.227.11	 ATDEV01
 	admin,admin
-	houyi
-	10.230.227.11:3306/houyi，houyi，houyi                       
+	h-o-u-y-i
+	10.230.227.11:3306/h-o-u-y-i，h-o-u-y-i，h-o-u-y-i                       
 	
-	调用houyiapi时，根据regionId找到调用的url的逻辑：
+	调用h-o-u-y-iapi时，根据regionId找到调用的url的逻辑：
 		realserver表，type为apiproxy
-		regionId->bigRegionId->	houyiapi  找到vip即可
+		regionId->bigRegionId->	h-o-u-y-iapi  找到vip即可
 		select
 			rs.ip ip
 		from region r
 		left join big_region br on br.id=r.big_region_id
-		left join houyiapi hyapi on hyapi.id=br.id_houyiapi
+		left join h-o-u-y-iapi hyapi on hyapi.id=br.id_h-o-u-y-iapi
 	key和id，设置为可配。
 
 
@@ -33667,8 +33668,8 @@ day339 Monday, July 29, 2013
 
 		Armory接口说明：	 http://wiki.ec.alibaba-inc.com/index.php/落日弓与armory
 			
-	2）部署后羿	done
-		集群部署，增加部署后羿按钮（原部署后羿逻辑包含在部署飞天中）
+	2）部署后-羿	done
+		集群部署，增加部署后-羿按钮（原部署后-羿逻辑包含在部署飞天中）
 		基本参数和其他命令一致
 
 	3）集群配置 pet操作，页面弹出框没有做不为空验证 
@@ -33715,7 +33716,7 @@ day340 Tuesday, July 30, 2013
 
 
 3. rpm打包
-	http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/branches/luorigongzhuge/rpmbuild
+	http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigongweb/branches/luorigongzhuge/rpmbuild
 
 4. 业务
 	http://wiki.qa.aliyun-inc.com/index.php/云监控
@@ -33751,9 +33752,9 @@ day341 Wednesday, July 31, 2013
 		Store: ImageJob.js
 
 
-	3）部署后羿 修改 待？
-		还需要加两个参数houyi_resource_path，revision
-		查询codesrc， 得到这个region的houyictrl代码源的url 和revision
+	3）部署后-羿 修改 待？
+		还需要加两个参数h-o-u-y-i_resource_path，revision
+		查询codesrc， 得到这个region的h-o-u-y-ictrl代码源的url 和revision
 
 
 	
@@ -33822,9 +33823,9 @@ day342 Thursday, August 01, 2013
 
 	2）部署飞天客户端     done
 		加一个step=deploy
-	3）部署后羿 修改 done
-		还需要加两个参数houyi_resource_path，revision
-		查询codesrc， 得到这个region的houyictrl代码源的url 和revision
+	3）部署后-羿 修改 done
+		还需要加两个参数h-o-u-y-i_resource_path，revision
+		查询codesrc， 得到这个region的h-o-u-y-ictrl代码源的url 和revision
 	4）部署OSS Server done
 		加参数，oss_resource_path = param['oss_resource_path']
 
@@ -33895,8 +33896,8 @@ day343 Friday, August 02, 2013
 
 2. 落日弓
 	1）fixbug
-	2）houyiapi key id
-	3）在部署houyi之后增加一个按钮： 部署运维工具
+	2）h-o-u-y-iapi key id
+	3）在部署h-o-u-y-i之后增加一个按钮： 部署运维工具
 	PetoolsWorker.deploy_petools 
 	step =  kuorong/deploy
 	pe_resource_path = param["pe_resource_path"]
@@ -33914,9 +33915,9 @@ day343 Friday, August 02, 2013
 	根据集群类型的不同，有些按钮会变为不可用，如果集群后端agent不存在，则状态刷新也会没效果。
 	
 	QA java web环境：
-	go2houyi1
-	atzy - go2houyi1 - ssh 10.230.226.112 
-	Agetn: HOUYI1: go2houyici 
+	go2h-o-u-y-i1
+	atzy - go2h-o-u-y-i1 - ssh 10.230.226.112 
+	Agetn: HOUYI1: go2h-o-u-y-ici 
 
 3. MapReduce:The Free Lunch Is Not Over
 	并行计算
@@ -33966,7 +33967,7 @@ day344 Monday, August 05, 2013
 		rc.sysinit 
 			Agent收到后，解析json出错，python不能处理tab键\t，替换模板文件中的tab为4个空格即可 :%s/\t/    /g  * python -tip-
 
-	2）资源视图-添加houyiapi域名的表单，增加 accessId，accessKey，aliyunIdkp3个字段，以满足不同大region houyiapi采用的	账号不同。
+	2）资源视图-添加h-o-u-y-iapi域名的表单，增加 accessId，accessKey，aliyunIdkp3个字段，以满足不同大region h-o-u-y-iapi采用的	账号不同。
 		并修改原配置方式
 
 	3）集群配置-apiproxy发布 修改 类似这样的对外API接口，可以开放出去，便于与其他系统集成
@@ -33997,21 +33998,21 @@ day345 Tuesday, August 06, 2013
 	web服务也在此AG上
 	
 	apiproxy
-		apiproxy增加时，在big_region_realserver中不会有关联，而是通过houyiapi关联？
+		apiproxy增加时，在big_region_realserver中不会有关联，而是通过h-o-u-y-iapi关联？
 		正解：
-			regionId-bigRegionId-houyiapiId+type=多个apiproxy rs
+			regionId-bigRegionId-h-o-u-y-iapiId+type=多个apiproxy rs
 		
-		big_region_realserver表只记录了houyiapi rs和bigregion的关联，没有其他类型rs的关联。 业务啊~
+		big_region_realserver表只记录了h-o-u-y-iapi rs和bigregion的关联，没有其他类型rs的关联。 业务啊~
 
 		ApiProxy有多个，需要每个都调用。
 	
-	创建houyiapi域名时，增加3个表单项accessId,accessKey,aliyunIdkp
-		regionId > bigRegionId >从big_region表拿到houyiapi_id，从而拿到id,key...
+	创建h-o-u-y-iapi域名时，增加3个表单项accessId,accessKey,aliyunIdkp
+		regionId > bigRegionId >从big_region表拿到h-o-u-y-iapi_id，从而拿到id,key...
 
 3. js处理时，decode json出错，导致按钮状态出问题
 	返回的json是个空
 	-----
-	{"beginTime":"2013-08-06 10:07:12","clusterName":null,"component":"houyictrl","componentId":12,"componentName":"HOUYICI","endTime":null,"flowStepNo":null,"gmtCreate":null,"gmtModify":null,"id":null,"jobActionName":null,"jobId":null,"jobName":"EnvWorker.EnvJob.install_iptables_mock","jobNeedParam":null,"name":"EnvWorker.EnvJob.install_iptables_mock","params":null,"pid":null,
+	{"beginTime":"2013-08-06 10:07:12","clusterName":null,"component":"h-o-u-y-ictrl","componentId":12,"componentName":"HOUYICI","endTime":null,"flowStepNo":null,"gmtCreate":null,"gmtModify":null,"id":null,"jobActionName":null,"jobId":null,"jobName":"EnvWorker.EnvJob.install_iptables_mock","jobNeedParam":null,"name":"EnvWorker.EnvJob.install_iptables_mock","params":null,"pid":null,
 		"result":null,"status":"finished","statusArr":null,"uuid":"e18cb9fc-bafa-4824-bd02-c86e5370585c","workflowInstanceId":null}
 	-----
 	js debug调试
@@ -34025,11 +34026,11 @@ day346 Wednesday, August 07, 2013
 	* 落日弓
 
 2. 落日弓
-	houyiapi账户订正语句，分线上，测试环境
+	h-o-u-y-iapi账户订正语句，分线上，测试环境
 	session过期，本地和线上tomcat没问题，QA的jetty环境session很快过期
 
-	houyiapi表的订正：
-		houyiapi
+	h-o-u-y-iapi表的订正：
+		h-o-u-y-iapi
 		big_region
 		big_region_realserver
 
@@ -34061,7 +34062,7 @@ day347 Thursday, August 08, 2013
 		com.aliyun.luorigong.exception.WebException
 			at com.aliyun.luorigong.workflow.action.JobInstAction.getJobStatus(JobInstAction.java:110)
 		tab页切换时，触发了globalutilities.js中定义取job状态的请求，其中参数componentType作为key是错误的，需改为component
-		错误请求：10.1.170.193 -  -  [08/Aug/2013:15:47:13 +0800] "GET /services?action=jobInstAction.getJobStatus&_dc=1375948336041&componentType=houyi&componentId=12&statusType=running%2Cfinished&page=1&start=0&limit=25 HTTP/1.1" 200 101 
+		错误请求：10.1.170.193 -  -  [08/Aug/2013:15:47:13 +0800] "GET /services?action=jobInstAction.getJobStatus&_dc=1375948336041&componentType=h-o-u-y-i&componentId=12&statusType=running%2Cfinished&page=1&start=0&limit=25 HTTP/1.1" 200 101 
 	
 
 3. 加入product字段的几张表，排查
@@ -34388,7 +34389,7 @@ day349 Monday, August 12, 2013
 	* 落日弓
 	
 2. 落日弓
-	1）集群配置-配置houyiapi
+	1）集群配置-配置h-o-u-y-iapi
 		监控表和 zone_ip表的初始化有问题
 		DatabaseGenAction
 			initDbForHouyiDeploy
@@ -34533,12 +34534,12 @@ day350 Tuesday, August 13, 2013
 
 		clusteredChangeAction.syncRcLocalForKuorong
 	2）映射zone，失败
-		将nc所在zone的信息，映射到houyidb的rack表中
+		将nc所在zone的信息，映射到h-o-u-y-idb的rack表中
 			机架映射到zone
 			zone信息来自集群信息中的配置，一般为1个或2个
 			nc和rack的映射关系，从Armory中获取，rack和zone的关系由此处生成
 
-			最后，会将这些映射关系存到houyidb中，以便控制系统可以指定zone起VM。
+			最后，会将这些映射关系存到h-o-u-y-idb中，以便控制系统可以指定zone起VM。
 
 		syscontrolAction.listBufferNcRacks
 			查询buffer组nc的rack列表
@@ -34549,10 +34550,10 @@ day350 Tuesday, August 13, 2013
 		
 		nc表的rackId即为其值，不是外键
 	3）API初始化缺少ZONE_IP，monitor_datasource表初始化。
-		create_cluster接口报region不存在的错，因为region_alias表有houyici这个小region记录，而region表的记录已被删除
+		create_cluster接口报region不存在的错，因为region_alias表有h-o-u-y-ici这个小region记录，而region表的记录已被删除
 
 
-3. houyiai测试环境
+3. h-o-u-y-iai测试环境
 	ATDEV01_AG
 	10.230.227.11
 	admin,admin
@@ -34563,13 +34564,13 @@ day350 Tuesday, August 13, 2013
 
 		可通过 show processlist;看那些服务占用大量连接资源
 	
-	因为暴露的是80口，需要root权限启动houyiapi
+	因为暴露的是80口，需要root权限启动h-o-u-y-iapi
 
 	log在logs/openapi下
 
-	落日弓，通过houyiapi接口，插入大region，小region，zone_ip，zone等新建一个大region或小region所需要的数据。
+	落日弓，通过h-o-u-y-iapi接口，插入大region，小region，zone_ip，zone等新建一个大region或小region所需要的数据。
 	大region数据，由agent插入，具体是在那个步骤或按钮上？
-		以便构造数据，否则houyiapi报regionNo找不到
+		以便构造数据，否则h-o-u-y-iapi报regionNo找不到
 	
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 day351 Wednesday, August 14, 2013
@@ -34579,11 +34580,11 @@ day351 Wednesday, August 14, 2013
 
 2. 落日弓
 	1）API初始化缺少ZONE_IP，monitor_datasource表初始化。	
-		create_cluster 清除houyi库的region，region_alias,region_status,region_need_statistics
+		create_cluster 清除h-o-u-y-i库的region，region_alias,region_status,region_need_statistics
 		create_zone zone
 		join_zone_addresses zone_ip
 		
-		houyiapi在大region管理页面，选择大region对应的houyiapi。
+		h-o-u-y-iapi在大region管理页面，选择大region对应的h-o-u-y-iapi。
 
 		route_ip_segment
 
@@ -35219,7 +35220,7 @@ day354 Monday, August 19, 2013
 				最近10min是否有配置项变动
 		open api wiki: http://wiki.ec.alibaba-inc.com/index.php/落日弓
 		PET配置模板，配置项：
-		http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9248310#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0
+		http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9248310#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0
 	2）工作量估算
 		Aone上 ，wiki上看项目变更，落日弓跟踪项目
 			ecs产品项目，数据库变动，反映到落日弓上，需要做哪些工作
@@ -35307,8 +35308,8 @@ day355 Tuesday, August 20, 2013
 	1）磐禹项目 开启
 		分析 磐石项目 的改动，对应落日弓需要做的改动
 		拉新分支
-		web端：	 http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/branches/luorigongweb_for_panyu/ 
-		Agent端：http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigong/branches/luorigong_for_panyu/ 
+		web端：	 http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigongweb/branches/luorigongweb_for_panyu/ 
+		Agent端：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigong/branches/luorigong_for_panyu/ 
 
 	2）属性Agent端代码，准备编写Agent段程序 python
 		luorigongpy\orange\jobworker目录下    （原python api在orange\webapp\handlers目录下）
@@ -35333,15 +35334,15 @@ day356 Wednesday, August 21, 2013
 
 2. 磐禹项目
 	开发
-	1）调用houyiapi的create_cluster增加version参数(值为1.0)
-	2）调用houyiapi的create_zone增加参数disk_type;(locadisk集群值为io1(SATA),io2(SSD)，raf集群值为dfs1,dfs2)
+	1）调用h-o-u-y-iapi的create_cluster增加version参数(值为1.0)
+	2）调用h-o-u-y-iapi的create_zone增加参数disk_type;(locadisk集群值为io1(SATA),io2(SSD)，raf集群值为dfs1,dfs2)
 		目前zone的数据是在集群信息中录入，需要在2个字段，分别记录zoneA，zoneB的disk_type类型
 
-		找houyiapi PD要最新接口文档
+		找h-o-u-y-iapi PD要最新接口文档
 
 		集群信息页面加，2个zone的disk_type字段，并在集群存储类型变化时，combobox去掉对应的项（通过取得store，然后去掉record的方式，getRange）
 
-	3）houyidb初始化nc表时，不需要初始化cpu,memory,disk
+	3）h-o-u-y-idb初始化nc表时，不需要初始化cpu,memory,disk
 
 
 3. tomcat调用栈分析
@@ -35745,7 +35746,7 @@ day357 Thursday, August 22, 2013
 		虚拟化源，现在虚拟化源只有一个host deploy脚本，提供源的地址，里面有描述源信息的release.ini文件（落日弓与源交互的格式文本），落日弓依据release.ini
 		中的描述来使用源中的各个RPM包。
 
-		心动消息项目houyi源release.ini文件内容：
+		心动消息项目h-o-u-y-i源release.ini文件内容：
 		-----
 			[release]
 			name = Xin Dong Xiao Xi
@@ -35755,13 +35756,13 @@ day357 Thursday, August 22, 2013
 			release_id = 2013-07-09
 
 			[svn]
-			rhs_url = http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/service/rhs/0.1
+			rhs_url = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/service/rhs/0.1
 			rhs_revision = 1.0.0
-			rms_url = http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/service/rms/branches/0.1/rms-http
+			rms_url = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/service/rms/branches/0.1/rms-http
 			rms_revision = 0.1.0
 			api_url = 
 			api_revision = 
-			rabbitmq_url = http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/service/rabbitmq
+			rabbitmq_url = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/service/rabbitmq
 			rabbitmq_revision = 3.1.3
 
 			[wiki]
@@ -35773,43 +35774,43 @@ day357 Thursday, August 22, 2013
 
 			[location]
 
-			aos_houyi_http_proxy = http://10.202.66.27/package/houyi/release_deploy/2013_0717/houyi/aos_houyi_http_proxy_debug_64.tar.gz
-			config_crm_clone = http://10.202.66.27/package/houyi/release_deploy/2013_0717/ec_tools/config_crm_clone.sh
-			deploy_http_proxy = http://10.202.66.27/package/houyi/release_deploy/2013_0717/ec_tools/deploy_http_proxy.sh
-			http_proxy_ctl = http://10.202.66.27/package/houyi/release_deploy/2013_0717/ec_tools/http_proxy_ctl
+			aos_h-o-u-y-i_http_proxy = http://10.202.66.27/package/h-o-u-y-i/release_deploy/2013_0717/h-o-u-y-i/aos_h-o-u-y-i_http_proxy_debug_64.tar.gz
+			config_crm_clone = http://10.202.66.27/package/h-o-u-y-i/release_deploy/2013_0717/ec_tools/config_crm_clone.sh
+			deploy_http_proxy = http://10.202.66.27/package/h-o-u-y-i/release_deploy/2013_0717/ec_tools/deploy_http_proxy.sh
+			http_proxy_ctl = http://10.202.66.27/package/h-o-u-y-i/release_deploy/2013_0717/ec_tools/http_proxy_ctl
 
-			houyi_sync_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/houyi_sync-1.0.0-2427648.x86_64.rpm 
-			houyi_tools_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/ec_tools_trunk-1.0.21.2435368/houyi_tools-1.0.0-2435368.x86_64.rpm 
-			aos_houyi = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/aos_houyi_debug_64.tar.gz 
-			aos_houyi_monitor = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/aos_houyi_monitor_debug_64.tar.gz 
-			aos_houyi_nc = http://jenkins.aliyun-inc.com/package/houyi/ec/houyi_trunk-1.0.40.2427648/aos_houyi_nc_debug_64.tar.gz 
+			h-o-u-y-i_sync_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/h-o-u-y-i_trunk-1.0.40.2427648/h-o-u-y-i_sync-1.0.0-2427648.x86_64.rpm 
+			h-o-u-y-i_tools_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/ec_tools_trunk-1.0.21.2435368/h-o-u-y-i_tools-1.0.0-2435368.x86_64.rpm 
+			aos_h-o-u-y-i = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/h-o-u-y-i_trunk-1.0.40.2427648/aos_h-o-u-y-i_debug_64.tar.gz 
+			aos_h-o-u-y-i_monitor = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/h-o-u-y-i_trunk-1.0.40.2427648/aos_h-o-u-y-i_monitor_debug_64.tar.gz 
+			aos_h-o-u-y-i_nc = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/h-o-u-y-i_trunk-1.0.40.2427648/aos_h-o-u-y-i_nc_debug_64.tar.gz 
 
-			rhs_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/rhs/rhs-1.0.0-2442745.x86_64.rpm
-			regionmaster_env_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/region_master/houyi-regionmaster-env-1.0.0-2419923.x86_64.rpm
-			regionmaster_prj_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/region_master/houyi-regionmaster-prj-1.0.0-2398233.x86_64.rpm
-			api_env_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/houyiapi/houyi-api-env-1.0.0-2419927.x86_64.rpm
-			api_prj_rpm=http://jenkins.aliyun-inc.com/package/houyi/ec/houyiapi/houyi-api-prj-1.0.0-2420011.x86_64.rpm
-			rms_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/rms/rms-service-0.1.0-2443031.x86_64.rpm
-			rabbitmq_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/rms/rabbitmq-service-3.1.3-2443029.x86_64.rpm
-			pync_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/pync/pync-1.1.0-2398149.x86_64.rpm
-			apiproxy_rpm = http://jenkins.aliyun-inc.com/package/houyi/ec/apiproxy/apiproxy-1.0.0-2398246.x86_64.rpm
-			python_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/Python-2.7.5-20130724.x86_64.rpm
-			libevent_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/libevent-2.0.19-2.x86_64.rpm
-			libdrizzle_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/libdrizzle-2011.07.21-2.x86_64.rpm
-			memcache_rpm = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/memcached-1.4.14-1.x86_64.rpm
-			ngx_openresty = http://jenkins.aliyun-inc.com/package/houyi/api_base_package/ngx_openresty-1.2.8.6-2.x86_64.rpm
+			rhs_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/rhs/rhs-1.0.0-2442745.x86_64.rpm
+			regionmaster_env_rpm=http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/region_master/h-o-u-y-i-regionmaster-env-1.0.0-2419923.x86_64.rpm
+			regionmaster_prj_rpm=http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/region_master/h-o-u-y-i-regionmaster-prj-1.0.0-2398233.x86_64.rpm
+			api_env_rpm=http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/h-o-u-y-iapi/h-o-u-y-i-api-env-1.0.0-2419927.x86_64.rpm
+			api_prj_rpm=http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/h-o-u-y-iapi/h-o-u-y-i-api-prj-1.0.0-2420011.x86_64.rpm
+			rms_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/rms/rms-service-0.1.0-2443031.x86_64.rpm
+			rabbitmq_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/rms/rabbitmq-service-3.1.3-2443029.x86_64.rpm
+			pync_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/pync/pync-1.1.0-2398149.x86_64.rpm
+			apiproxy_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/ec/apiproxy/apiproxy-1.0.0-2398246.x86_64.rpm
+			python_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/Python-2.7.5-20130724.x86_64.rpm
+			libevent_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/libevent-2.0.19-2.x86_64.rpm
+			libdrizzle_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/libdrizzle-2011.07.21-2.x86_64.rpm
+			memcache_rpm = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/memcached-1.4.14-1.x86_64.rpm
+			ngx_openresty = http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/ngx_openresty-1.2.8.6-2.x86_64.rpm
 
 			[jobs]
-			api = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/api
-			rabbitmq = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/rabbitmq
-			regionmaster = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/regionmaster
-			rhs = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/rhs
-			rmshttp = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/rmshttp
-			pync = http://svn.alisoft-inc.com/repos/alisoft/houyi/deploy/xindongxiaoxi-201308/pync
+			api = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/xindongxiaoxi-201308/api
+			rabbitmq = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/xindongxiaoxi-201308/rabbitmq
+			regionmaster = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/xindongxiaoxi-201308/regionmaster
+			rhs = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/xindongxiaoxi-201308/rhs
+			rmshttp = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/xindongxiaoxi-201308/rmshttp
+			pync = http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/deploy/xindongxiaoxi-201308/pync
 
 			[md5sum]
-			houyi_sync_rpm = 656e17a31257ab33f81a70615aa2e7fa
-			houyi_tools_rpm = 0e7b92af4727eba498c594ab36c5f1fc
+			h-o-u-y-i_sync_rpm = 656e17a31257ab33f81a70615aa2e7fa
+			h-o-u-y-i_tools_rpm = 0e7b92af4727eba498c594ab36c5f1fc
 			rhs_rpm = fcd285bd75b633f6c5e2924a6745d5f5 
 			regionmaster_env_rpm=249a9d04090e4672e903bbfedece7192
 			regionmaster_prj_rpm=e00040c9b70dc3dffcae418f7a887c8c
@@ -35818,7 +35819,7 @@ day357 Thursday, August 22, 2013
 			rms_rpm = 67d7bcdcc55cca829ae3c9f86fa9424f
 			rabbitmq_rpm = 5ae162203b2f520a02039a817a3ca088
 			pync_rpm=01abccc3772516364feda32517bd2550
-			aos_houyi_http_proxy = d2a46adb8e9a52ce48563f25a742f12f  
+			aos_h-o-u-y-i_http_proxy = d2a46adb8e9a52ce48563f25a742f12f  
 			config_crm_clone = 52f0ed55b25bf0588300352314b25e6b  
 			deploy_http_proxy = d2a352daf547331f0127e7e97541a6fd  
 			http_proxy_ctl = eb9856df4f3571d52e26835af755e322  
@@ -35828,15 +35829,15 @@ day357 Thursday, August 22, 2013
 			libdrizzle_rpm = 3bfb75bc40a0b7af9f71dfeb05aed4c9
 			memcache_rpm = 7bfc51bb58a2fbaf4a4bb698ea986c44
 			ngx_openresty = f46a96cde529b6ccaa25b2c1b425f168
-			aos_houyi = 8db087479efd4427cb4157424ce915bf
-			aos_houyi_monitor = 50ab856b1a45d12d82fa435c78835d5a
-			aos_houyi_nc = ddaf32ca9a2dfa0a6a70aaefd28f8265
+			aos_h-o-u-y-i = 8db087479efd4427cb4157424ce915bf
+			aos_h-o-u-y-i_monitor = 50ab856b1a45d12d82fa435c78835d5a
+			aos_h-o-u-y-i_nc = ddaf32ca9a2dfa0a6a70aaefd28f8265
 		-----
 		PS: 落日弓与代码源操作的桥梁
 
 		host deploy脚本打包为RPM，作为源并提供地址给落日弓
 
-		增加houyi虚拟化源，houyi基础源（放类似jetty,python等业务无关的共用包）
+		增加h-o-u-y-i虚拟化源，h-o-u-y-i基础源（放类似jetty,python等业务无关的共用包）
 
 		* extjs 回显 extjs回显
 			store只负责加载数据，表单要回显数据需要调用 loadRecord 方法，将从store中匹配对应的属性，从而找到对应store中的record，并显示指定的字段。
@@ -36002,24 +36003,24 @@ day360 Tuesday, August 27, 2013
 						grep一把：self.pcheck('sudo rpm -qa | grep aresolve', iplist_tmp, 'cmd_b', '-F', True)
 
 					这里没有从代码源中取rpm的操作，换个按钮操作看看，看代码源管理中有哪些代码源：
-					参考：集群部署-部署后羿
-						HouyiWorker.HouyiJob.deploy_houyi
+					参考：集群部署-部署后-羿
+						HouyiWorker.HouyiJob.deploy_h-o-u-y-i
 						Web端传递下面的参数：
-							houyictrl_resource_path 代码源路径
+							h-o-u-y-ictrl_resource_path 代码源路径
 							revision 版本号
 						HouyiWorker.py：
-							self._deploy_houyi_rpms(houyi_resource_path, deploy_dir, [admingateway, VM])
+							self._deploy_h-o-u-y-i_rpms(h-o-u-y-i_resource_path, deploy_dir, [admingateway, VM])
 							实现如下：
 							-----
-							def _deploy_houyi_rpms(self, url_base, dir, ipfiles):
-								houyi_sync_rpm = os.path.basename(self.release_info['location']['houyi_sync_rpm'].rstrip('/'))
-								houyi_sync_md5 = self.release_info['md5sum']['houyi_sync_rpm']
-								houyi_tools_rpm = os.path.basename(self.release_info['location']['houyi_tools_rpm'].rstrip('/'))
-								houyi_tools_md5 = self.release_info['md5sum']['houyi_tools_rpm']
+							def _deploy_h-o-u-y-i_rpms(self, url_base, dir, ipfiles):
+								h-o-u-y-i_sync_rpm = os.path.basename(self.release_info['location']['h-o-u-y-i_sync_rpm'].rstrip('/'))
+								h-o-u-y-i_sync_md5 = self.release_info['md5sum']['h-o-u-y-i_sync_rpm']
+								h-o-u-y-i_tools_rpm = os.path.basename(self.release_info['location']['h-o-u-y-i_tools_rpm'].rstrip('/'))
+								h-o-u-y-i_tools_md5 = self.release_info['md5sum']['h-o-u-y-i_tools_rpm']
 
 								files = [
-									    [houyi_sync_rpm, houyi_sync_md5],
-									    [houyi_tools_rpm, houyi_tools_md5]
+									    [h-o-u-y-i_sync_rpm, h-o-u-y-i_sync_md5],
+									    [h-o-u-y-i_tools_rpm, h-o-u-y-i_tools_md5]
 									]
 
 								self.transfer_files(files, url_base, dir, ipfiles)
@@ -36032,9 +36033,9 @@ day360 Tuesday, August 27, 2013
 								self.multi_pcheck(cmdlist, ipfiles)
 
 								for f in ipfiles:
-								    self.pcheck("%s/gen_libvirt_storage_xml::/etc/houyi/" % (self.lrg_dir), f, 'scp', '-F')
-								    self.pcheck("%s/setip.template::/etc/houyi/" % (self.lrg_dir), f, 'scp', '-F')
-								    self.pcheck("%s/switch_to_pync.conf::/etc/houyi/" % (self.lrg_dir), f, 'scp', '-F')
+								    self.pcheck("%s/gen_libvirt_storage_xml::/etc/h-o-u-y-i/" % (self.lrg_dir), f, 'scp', '-F')
+								    self.pcheck("%s/setip.template::/etc/h-o-u-y-i/" % (self.lrg_dir), f, 'scp', '-F')
+								    self.pcheck("%s/switch_to_pync.conf::/etc/h-o-u-y-i/" % (self.lrg_dir), f, 'scp', '-F')
 							-----
 							PS:	上面的info是定义在jobx.py中的共用逻辑，将代码源release.ini文件转换为dict对象，便于使用，下面为其实现
 								-----
@@ -36068,9 +36069,9 @@ day361 Wednesday, August 28, 2013
 
 2. 磐禹项目
 	1）测试
-	2）apitask,houyiapi,apiproxy工作流化
+	2）apitask,h-o-u-y-iapi,apiproxy工作流化
 		apitask的资源视图增加
-			关联到houyi api域名，即houyiapi表
+			关联到h-o-u-y-i api域名，即h-o-u-y-iapi表
 			
 	3）host deploy脚本
 		Clone模板出来的机器，原配置都是对外生产的，在内部生产使用时，需要做一些包的安装和卸载
@@ -36091,17 +36092,17 @@ day361 Wednesday, August 28, 2013
 		env = param['env']
 		ncs = env['file_dayu_iplist_vm'] 
 		iptables_mock_path = env['iptables_mock_path']
-		arptables_mock = 'houyi-arptables-mock-0.1-0.1.release1315648.el5.x86_64.rpm'
-		iptables_mock = 'houyi-iptables-mock-0.1-0.1.release1315648.el5.x86_64.rpm '
+		arptables_mock = 'h-o-u-y-i-arptables-mock-0.1-0.1.release1315648.el5.x86_64.rpm'
+		iptables_mock = 'h-o-u-y-i-iptables-mock-0.1-0.1.release1315648.el5.x86_64.rpm '
 
 		cluster = param['region']['cluster_name']
 		self.lrg_dir = env['dir_luorigong']
-		houyivirt_resource_path = param["houyivirt_resource_path"]
+		h-o-u-y-ivirt_resource_path = param["h-o-u-y-ivirt_resource_path"]
 		revision = param['revision']
-		deploy_dir = '%s/houyi_%s' % (self.lrg_dir, revision)
+		deploy_dir = '%s/h-o-u-y-i_%s' % (self.lrg_dir, revision)
 		roledef = "%s/role.def_%s" % (env['dir_config_cluster'], cluster)
 
-		self._deploy_init(deploy_dir, houyi_resource_path)		 //解析release.ini，并赋值给self.release_info
+		self._deploy_init(deploy_dir, h-o-u-y-i_resource_path)		 //解析release.ini，并赋值给self.release_info
 
 		role = cfg_to_dict(roledef)["machines"]
 		VM = deploy_dir + '/' + "ip_VM"            
@@ -36110,7 +36111,7 @@ day361 Wednesday, August 28, 2013
 
 		#deploy host deloy tool 
 		self.logger_debug("deploy host deloy tool")
-		self._deploy_pync(houyivirt_resource_path, deploy_dir, [VM])
+		self._deploy_pync(h-o-u-y-ivirt_resource_path, deploy_dir, [VM])
 		-----
 		PS: _deploy_pync方法到VM角色的机器上安装rpm，如果有相应的配置文件（在生成配置步骤时，会根据模板生成各自的配置，并放到dir_luorigong的某个目录下），则
 		同步配置文件到VM角色的机器上。
@@ -36118,8 +36119,8 @@ day361 Wednesday, August 28, 2013
 			-----
 			 def _deploy_hostdeploy_tool(self, url_base, dir, ipfiles):
 
-				hostdeploy_rpm = os.path.basename(self.release_info['location']['houyi_virt_deploy'].rstrip('/'))
-				hostdeploy_md5 = self.release_info['md5sum']['houyi_virt_deploy']
+				hostdeploy_rpm = os.path.basename(self.release_info['location']['h-o-u-y-i_virt_deploy'].rstrip('/'))
+				hostdeploy_md5 = self.release_info['md5sum']['h-o-u-y-i_virt_deploy']
 
 				files = [
 					    [hostdeploy_rpm, hostdeploy_md5],
@@ -36137,8 +36138,8 @@ day361 Wednesday, August 28, 2013
 				for f in ipfiles:										     //同步配置文件
 				    self.pcheck("%s/pync.conf::/tmp/" % (self.lrg_dir), f, 'scp', '-F')
 				    self.pcheck("sudo cp /tmp/pync.conf /etc/" , f, 'cmd_b', '-F')
-				    self.pcheck('sudo chmod 755 /etc/houyi', f, 'cmd_b', '-F')
-				    self.pcheck('sudo /etc/init.d/houyi-supervisord restart', f, 'cmd_b', '-F', False)
+				    self.pcheck('sudo chmod 755 /etc/h-o-u-y-i', f, 'cmd_b', '-F')
+				    self.pcheck('sudo /etc/init.d/h-o-u-y-i-supervisord restart', f, 'cmd_b', '-F', False)
 				    self.pcheck('sudo /usr/local/python/bin/supervisorctl -c /usr/local/python/bin/supervisord.conf restart pync', f, 'cmd_b', '-F', False)
 				    self.pcheck('sudo /usr/local/python/bin/supervisorctl -c /usr/local/python/bin/supervisord.conf status pync', f, 'cmd_b', '-F')
 			-----
@@ -36150,7 +36151,7 @@ day361 Wednesday, August 28, 2013
 		[release]
 		name = alios5u7
 		description = alios5u7 
-		changes =  houyi virt
+		changes =  h-o-u-y-i virt
 		date = 2013-08-26
 		release_id = 2013-08-26
 
@@ -36161,15 +36162,15 @@ day361 Wednesday, August 28, 2013
 		[aone]
 
 		[location]
-		houyi_virt_deploy = http://ftp.ec.alibaba-inc.com/public/projects/alios_20130625/host_deploy/test2602255/bin/houyi-virt-deploy-0.1-0.1.test2602255.el5.x86_64.rpm
+		h-o-u-y-i_virt_deploy = http://ftp.ec.alibaba-inc.com/public/projects/alios_20130625/host_deploy/test2602255/bin/h-o-u-y-i-virt-deploy-0.1-0.1.test2602255.el5.x86_64.rpm
 
 		[jobs]
 
 
 		[md5sum]
-		houyi_virt_deploy = a7cb4daf5223dbf71d1610c732864e64
+		h-o-u-y-i_virt_deploy = a7cb4daf5223dbf71d1610c732864e64
 		-----
-		PS: FROM: http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyivirt/trunk_20130826_1444/release.ini
+		PS: FROM: http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ivirt/trunk_20130826_1444/release.ini
 	
 	4）落日弓获取角色ip列表的方式
 		vm角色ip列表获取
@@ -36184,7 +36185,7 @@ day361 Wednesday, August 28, 2013
 		依据wiki上dayu2的agent接口说明，wiki: http://wiki.ec.alibaba-inc.com/index.php/Dayu2_Worker_接口
 
 	6）磐石项目数据库变动
-		houyidb初始化nc表时，不需要初始化cpu,memory,disk
+		h-o-u-y-idb初始化nc表时，不需要初始化cpu,memory,disk
 		判断为local disk集群时，初始化sql去掉上面的字段
 
 		按钮：集群配置-生成数据库
@@ -36201,7 +36202,7 @@ day361 Wednesday, August 28, 2013
 	store加载数据，loadRecord即可
 	store中model的定义，与页面数据显示5. 
 
-5. api task, houyiapi, apiproxy发布步骤梳理会议
+5. api task, h-o-u-y-iapi, apiproxy发布步骤梳理会议
 	落日弓如何流程化这些部署操作？
 
 6. extjs * extjs
@@ -36223,62 +36224,62 @@ day362 Thursday, August 29, 2013
 
 2. 磐禹项目
 	1) 整理出api task的配置模板
-		参考houyiapi安装时所使用的的配置模板 
+		参考h-o-u-y-iapi安装时所使用的的配置模板 
 			
 			注：在工作流job中，不在原按钮布局的页面
 
 			HouyiAPIWorker.py
 				A. install_base_env		安装基础容器环境（jetty，部署目录）
-					解析参数及release.ini，得到env的rpm包，根据houyiapi的ip，远程安装：
+					解析参数及release.ini，得到env的rpm包，根据h-o-u-y-iapi的ip，远程安装：
 					ret = self.remote(r['ip'], 'sudo rpm -Uvh %s --force' % rpm_url)
 						ret = command.remote(addr, cmd )	    //pet工具提供的远程执行命令的方法
 							
-				B. install_houyiapi			安装houyiapi
+				B. install_h-o-u-y-iapi			安装h-o-u-y-iapi
 					-----
-					def install_houyiapi(self, param):
+					def install_h-o-u-y-iapi(self, param):
 					try:
 					    workflow_instance_param = json.loads(param['workflow_instance_param'])
-					    releasesrc = workflow_instance_param['releasesrc']['houyictrl']
-					    houyiapi = workflow_instance_param['app']['houyiapi']
-					    for r in houyiapi:
+					    releasesrc = workflow_instance_param['releasesrc']['h-o-u-y-ictrl']
+					    h-o-u-y-iapi = workflow_instance_param['app']['h-o-u-y-iapi']
+					    for r in h-o-u-y-iapi:
 						rpm_url = get_rpm_url(releasesrc, 'api_prj_rpm')
 						self.remote(r['ip'], 'sudo rpm -Uvh %s --force' % rpm_url)
 
 					    self.notify()
 					except Exception, e:
 					    self.logger_debug(exception=e)
-					    self.notify(rcode=get_code(e),errmsg='install houyiapi exception')
+					    self.notify(rcode=get_code(e),errmsg='install h-o-u-y-iapi exception')
 					-----
-				C. rsync_houyiapi_conf		同步houyiapi配置文件
+				C. rsync_h-o-u-y-iapi_conf		同步h-o-u-y-iapi配置文件
 					-----
-					def rsync_houyiapi_conf(self, param):
+					def rsync_h-o-u-y-iapi_conf(self, param):
 						try: 
 						    workdir = '%s/workflow_%s' % (param['env']['dir_luorigong'], param['workflow_instance_id']) 
 
 						    workflow_instance_param = json.loads(param['workflow_instance_param'])
-						    houyiapi = workflow_instance_param['app']['houyiapi']
+						    h-o-u-y-iapi = workflow_instance_param['app']['h-o-u-y-iapi']
 
-						    if len(houyiapi) < 1:
-							raise exception.InvalidParamException(reason="invalid houyiapi param")
+						    if len(h-o-u-y-iapi) < 1:
+							raise exception.InvalidParamException(reason="invalid h-o-u-y-iapi param")
 						  
 						    dict = {} 
-						    dict['odbs_ip'] = houyiapi[0]['odbs']['ip']
-						    dict['odbs_port'] = houyiapi[0]['odbs']['port']
-						    dict['odbs_user'] = houyiapi[0]['odbs']['user']
-						    dict['odbs_passwd'] = houyiapi[0]['odbs']['passwd']
-						    dict['odbs_db_name'] = houyiapi[0]['odbs']['db_name']
+						    dict['odbs_ip'] = h-o-u-y-iapi[0]['odbs']['ip']
+						    dict['odbs_port'] = h-o-u-y-iapi[0]['odbs']['port']
+						    dict['odbs_user'] = h-o-u-y-iapi[0]['odbs']['user']
+						    dict['odbs_passwd'] = h-o-u-y-iapi[0]['odbs']['passwd']
+						    dict['odbs_db_name'] = h-o-u-y-iapi[0]['odbs']['db_name']
 						    gen_file2('%s/ecs/api/jdbc.properties.tmpl' % self.templates, '%s/jdbc.properties' % workdir, dict) 
 						    gen_file2('%s/ecs/api/log4j.xml.tmpl' % self.templates, '%s/log4j.xml' % workdir) 
 						     
 						    dict = {}
-						    dict['mq_ip'] = houyiapi[0]['mq']['ip']
-						    dict['mq_port'] = houyiapi[0]['mq']['port']
-						    dict['mq_user'] = houyiapi[0]['mq']['user']
-						    dict['mq_passwd'] = houyiapi[0]['mq']['passwd']
-						    dict['mq_queue'] = houyiapi[0]['mq']['queue']
+						    dict['mq_ip'] = h-o-u-y-iapi[0]['mq']['ip']
+						    dict['mq_port'] = h-o-u-y-iapi[0]['mq']['port']
+						    dict['mq_user'] = h-o-u-y-iapi[0]['mq']['user']
+						    dict['mq_passwd'] = h-o-u-y-iapi[0]['mq']['passwd']
+						    dict['mq_queue'] = h-o-u-y-iapi[0]['mq']['queue']
 						    
-						    for r in houyiapi:
-							dict['message_flag'] = houyiapi[0]['message_flag']
+						    for r in h-o-u-y-iapi:
+							dict['message_flag'] = h-o-u-y-iapi[0]['message_flag']
 							
 							# self.templates目录在agent程序 orange/templates 下，此目录下按类别分目录存放各个组件，产品的配置模板
 							# 每个组件的每个配置文件，对应这里的一个配置模板文件，具体参数由java层传递过来
@@ -36286,13 +36287,13 @@ day362 Thursday, August 29, 2013
 								% (workdir, r['ip']), dict) 
 
 							self.remote_copy(r['ip'], '%s/env.properties.%s' %(workdir, r['ip']) , '%s/env.properties'\
-								% (param['env']['dir_houyiapi_cfg']), indirect = True, owner = 'admin:admin')
+								% (param['env']['dir_h-o-u-y-iapi_cfg']), indirect = True, owner = 'admin:admin')
 								       
 							self.remote_copy(r['ip'], '%s/jdbc.properties' % workdir , '%s/jdbc.properties'\
-								% (param['env']['dir_houyiapi_cfg']), indirect = True, owner = 'admin:admin')
+								% (param['env']['dir_h-o-u-y-iapi_cfg']), indirect = True, owner = 'admin:admin')
 
 							self.remote_copy(r['ip'], '%s/log4j.xml' % workdir , '%s/log4j.xml'\
-								% (param['env']['dir_houyiapi_cfg']), indirect = True, owner = 'admin:admin')
+								% (param['env']['dir_h-o-u-y-iapi_cfg']), indirect = True, owner = 'admin:admin')
 
 						    self.notify()
 						except Exception, e:
@@ -36307,16 +36308,16 @@ day362 Thursday, August 29, 2013
 					> 生成的配置文件的存放目录，放到workdir = '%s/workflow_%s' % (param['env']['dir_luorigong'], param['workflow_instance_id']) 目录下；
 					> pet工具common的 remote_copy 实现配置文件远程同步；
 					> 目标机器配置文件存放的目录，定义在config_path表中，通过env传递给agent：
-						(param['env']['dir_houyiapi_cfg']
+						(param['env']['dir_h-o-u-y-iapi_cfg']
 				
 
-				D. start_houyiapi			启动houyiapi
-				E. stop_houyiapi			停止houyiapi
+				D. start_h-o-u-y-iapi			启动h-o-u-y-iapi
+				E. stop_h-o-u-y-iapi			停止h-o-u-y-iapi
 		小节：
 			api task配置整理，先拿到api task有哪些配置文件（独立于程序配置的），然后拿到其配置文件所在目录并存在落日弓的config_path中。
 			
 			配置目录：
-				/home/admin/houyi-task/conf
+				/home/admin/h-o-u-y-i-task/conf
 			配置文件模板：
 				admin@ATHOUYI1_AG]$ go2atps
 				[admin@AT-PS_AG]$ ls
@@ -36328,8 +36329,8 @@ day362 Thursday, August 29, 2013
 
 
 		安装api task		
-			api task与houyiapi域名的关系
-				找到houyiapi库的信息
+			api task与h-o-u-y-iapi域名的关系
+				找到h-o-u-y-iapi库的信息
 			根据jobInstId，得到工作流id，从工作流中找到代码源信息。
 				
 
@@ -36346,7 +36347,7 @@ day362 Thursday, August 29, 2013
 				@永生，照团团那样做的话，对落日弓发布API TASK脚本无影响，不需要在发布时创建文件以防自启动了，也不需要在启动后删除该文件让监控脚本正常运行。
 
 				@团团，确认磐石项目上线时会修改该脚本功能，并且如果检测到进程不再时，能及时通知PE开启API TASK。
-				还有一点，磐石项目里，API TASK的目录会有所改变，磐石上后，其目录会为/home/admin/houyi-task/，不再是houyi目录。我看了下，监控脚本好像还有地方需要修改，麻烦@团团修改下，谢谢。
+				还有一点，磐石项目里，API TASK的目录会有所改变，磐石上后，其目录会为/home/admin/h-o-u-y-i-task/，不再是h-o-u-y-i目录。我看了下，监控脚本好像还有地方需要修改，麻烦@团团修改下，谢谢。
 
 	
 	3）API PROXY发布整理
@@ -36383,13 +36384,13 @@ day362 Thursday, August 29, 2013
 		{name: 'zoneADiskType',			type: 'array'},
 		{name: 'zoneBDiskType',			type: 'array'}
 		-----
-4. houyibase源 houyi基础源
+4. h-o-u-y-ibase源 h-o-u-y-i基础源
 	基础环境的包
-	eg： http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyibase/trunk_20130829_0934/
+	eg： http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ibase/trunk_20130829_0934/
 
 
 5. 代码源地址	   codssrc 代码源汇总目录 地址
-	http://jenkins.aliyun-inc.com/package/houyi/binary_release/
+	http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/
 
 6. dayu2的选择
 	在集群信息页面，配置结群的各种信息，比如集群的dayu客户端信息aresolve
@@ -36438,10 +36439,10 @@ day363 Friday, August 30, 2013
 	4）OpenAPI接口需求
 		接口一：查询集群有那些RPM包名称（去掉版本号）
 		接口二：根据RPM包名，查询各个集群的RPM包版本（解析release.ini）
-	5）houyictrl ，houyiapi
+	5）h-o-u-y-ictrl ，h-o-u-y-iapi
 		2种类型的job，对应发到不同的Agent去执行
 	
-	6）资源视图regionmaster，与houyiregiondb库关联
+	6）资源视图regionmaster，与h-o-u-y-iregiondb库关联
 		有bigRegionId
 		到odbs表，根据类型和bigRegionId，找到odbs
 
@@ -36460,7 +36461,7 @@ day364 Monday, September 02, 2013
 		落日弓只管理与环境相关的配置
 			region.json中的action直接写死，落日弓不支持修改，需要组件自己去维护
 			每期项目，组件action的变动，需要同时更新落日弓的模板文件
-			region.json模板文件 见其svn trunk： http://svn.alisoft-inc.com/repos/alisoft/houyi/ec/apiproxy/trunk/
+			region.json模板文件 见其svn trunk： http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/ec/apiproxy/trunk/
 
 			region.json.pre.default 双开
 			region.json.pro.default 生产   测试环境也是这个
@@ -36545,7 +36546,7 @@ day365 Tuesday, September 03, 2013
 		安装ApiProxy PASS
 
 	3) apiproxy基础环境安装
-		根据apiproxy基础环境需要的rpm包，到后羿源查找，并安装基础环境，也便于apiproxy其他功能的测试
+		根据apiproxy基础环境需要的rpm包，到后-羿源查找，并安装基础环境，也便于apiproxy其他功能的测试
 
 		由于项目本身是对apiproxy的升级，故其代码源中不会再次出现nginx的安装包；但为了测试需要，需要安装基础环境（包括nginx程序rpm包），可以
 		到发布源的trunk上找到他的rpm包。
@@ -36555,12 +36556,12 @@ day365 Tuesday, September 03, 2013
 		涉及从基础源和项目源中分别取rpm包安装。
 
 		workflow_instance_param中存储多个代码源？
-			{"releasesrc":{"houyibase":"http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyibase/trunk_20130829_1007/",
-			"houyictrl":"http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/trunk_20130828_1254"}}
+			{"releasesrc":{"h-o-u-y-ibase":"http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ibase/trunk_20130829_1007/",
+			"h-o-u-y-ictrl":"http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ictrl/trunk_20130828_1254"}}
 		workflow_instance_param表记录了每个工作流实例的参数（param），目前只保存代码源信息，格式如上，以releasesrc为键保存的Json Map对象，里面记录
 		了工作流需要的代码源Map，Agent根据需要的代码源类型找到需要的代码源地址。
 
-		配置houyictrl trunk代码源地址，再配置houyibase地址（memcached），这样job就可以从这2个代码源中找到基础rpm安装包。
+		配置h-o-u-y-ictrl trunk代码源地址，再配置h-o-u-y-ibase地址（memcached），这样job就可以从这2个代码源中找到基础rpm安装包。
 	
 	4）磐石项目改动review会议
 		相关改动：
@@ -36571,16 +36572,16 @@ day365 Tuesday, September 03, 2013
 			sata默认值 9.1T=9.1 * 1024 = 
 			
 			luorigong库region表修改
-			houyidb库nc_resource表的初始化sql修改
+			h-o-u-y-idb库nc_resource表的初始化sql修改
 	
 			DONE
 		(2). nc_resource表增加a_disk_io1,a_disk_io2,used_disk_io1,used_disk_io2,nc_disk_io1,nc_disk_io2 ,nc_disk_dfs 
-			初始化houyidb库的nc_resource表时加入上面字段的初始化
+			初始化h-o-u-y-idb库的nc_resource表时加入上面字段的初始化
 
 			DONE
 		(3). api task配置文件再确定下 
 			
-		(4). crontab变化，sudo /usr/ali/bin/python /etc/houyi/script/snapshot_tools_storage.py /etc/houyi/script/snapshot_tools_storage 7 3 1 1 both 4 21600 0 500 1500 144 2
+		(4). crontab变化，sudo /usr/ali/bin/python /etc/h-o-u-y-i/script/snapshot_tools_storage.py /etc/h-o-u-y-i/script/snapshot_tools_storage 7 3 1 1 both 4 21600 0 500 1500 144 2
 		若raf集群倒数第三个是0，若localdisk集群倒数第三个是1500
 			AGWorker
 				在append好后，根据集群类型不同（local disk OR raf）做相应修改
@@ -36621,7 +36622,7 @@ day365 Tuesday, September 03, 2013
 		[admin@ATZY_AG]$ ll /usr/local/python/lib/python2.7/site-packages/pypet/
 		total 0
 		lrwxrwxrwx 1 root root 38 Sep  3 11:27 common -> /home/admin/pet/trunk/lib/pypet/common
-		lrwxrwxrwx 1 root root 37 Sep  3 11:27 houyi -> /home/admin/pet/trunk/lib/pypet/houyi
+		lrwxrwxrwx 1 root root 37 Sep  3 11:27 h-o-u-y-i -> /home/admin/pet/trunk/lib/pypet/h-o-u-y-i
 		lrwxrwxrwx 1 root root 43 Sep  3 11:27 __init__.py -> /home/admin/pet/trunk/lib/pypet/__init__.py
 		lrwxrwxrwx 1 root root 41 Sep  3 11:27 luorigong -> /home/admin/pet/trunk/lib/pypet/luorigong
 		-----
@@ -36648,21 +36649,21 @@ day366 Wednesday, September 04, 2013
 2. 磐禹项目
 	1）day365-2-4) 任务处理
 
-	2）pet工具的common部分独立出rpm包，放到houyibase源中
+	2）pet工具的common部分独立出rpm包，放到h-o-u-y-ibase源中
 		rpm包如何进入源，步骤？
 
 		线索： 新版落日弓源创建成功 标题的邮件会通知源创建成功。
 		是CI出的源
-		找到邮件内容，从houyi标签进去，找到 新版落日弓所需 源 生成项目 ，进入就可以看到svn地址，修改此svn中的release.ini，然后出包，即可出新的代码源。
+		找到邮件内容，从h-o-u-y-i标签进去，找到 新版落日弓所需 源 生成项目 ，进入就可以看到svn地址，修改此svn中的release.ini，然后出包，即可出新的代码源。
 
 		http://jenkins.aliyun-inc.com:8080/view/06-Houyi/job/CI.Binary.Release/build?delay=0sec
 		请填写对应项目的ini文件的svn地址，点此查看所有分支：binary_release
-		e.g: 为心动消息项目生成houyictrl源，则只需填入对应svn地址：
-		http://svn.alisoft-inc.com/repos/alisoft/houyi/binary_release/houyictrl/branches/xindongxiaoxi/
+		e.g: 为心动消息项目生成h-o-u-y-ictrl源，则只需填入对应svn地址：
+		http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/binary_release/h-o-u-y-ictrl/branches/xindongxiaoxi/
 
 		注意：
 		代码源release.ini trunk地址：
-			svn : http://svn.alisoft-inc.com/repos/alisoft/houyi/binary_release/
+			svn : http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/binary_release/
 				目录结构：
 				apsara_client/	
 					branches/	
@@ -36677,10 +36678,10 @@ day366 Wednesday, September 04, 2013
 							release.ini	
 							release.py	
 					trunk/	
-				houyibase/	
-				houyictrl/	
-				houyiqa/	
-				houyivirt/	
+				h-o-u-y-ibase/	
+				h-o-u-y-ictrl/	
+				h-o-u-y-iqa/	
+				h-o-u-y-ivirt/	
 				oss_server/	
 				pechange/	
 				petools/	
@@ -36694,14 +36695,14 @@ day366 Wednesday, September 04, 2013
 		新RPM包加入代码源步骤整理：代码源管理 加入代码源
 			A. 将RPM包纳入CI管理，从CI处拿到RPM包的地址，MD5值（会填入下面的release.ini文件）
 			B. 在代码源release.ini维护的svn分支上，找到组件所属代码源类别的的svn地址，判断放入trunk OR branch，然后修改里面的release.ini文件并commit，
-				从CI上看release.ini所在的svn地址：http://svn.alisoft-inc.com/repos/alisoft/houyi/binary_release/apsara_client/branches/panshi/release.ini 
+				从CI上看release.ini所在的svn地址：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/binary_release/apsara_client/branches/panshi/release.ini 
 					上面这个地址，就是磐石项目，加入了oss_cmd这个包，放在了apsara_client分类中，当磐石项目发布后，会将此release.ini的修改合入对应trunk
 					的rele.ini文件中
 
 			C. 然后在CI上找到落日弓源的出包按钮，选择上面修改release.ini的svn地址，出包。
-			D.CI会调用打包脚本，解析release.ini，将包出到houyi_release目录下的branch OR trunk中（这里的trunk是指基于trunk出的实际包，所以命名为trunk+日期格式，
+			D.CI会调用打包脚本，解析release.ini，将包出到h-o-u-y-i_release目录下的branch OR trunk中（这里的trunk是指基于trunk出的实际包，所以命名为trunk+日期格式，
 			实际的trunk只有一个，release.ini也一样）
-				比如上面panshi这个branch的release.ini文件修改，从CI出包后就可以从 http://jenkins.aliyun-inc.com/package/houyi/binary_release/apsara_client/ 里看到新出的panshi代码源目录
+				比如上面panshi这个branch的release.ini文件修改，从CI出包后就可以从 http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/apsara_client/ 里看到新出的panshi代码源目录
 				；如果从trunk出，则为trunk+日期目录名称，对应一个实际的代码源地址。
 
 	3）crontab文件
@@ -36717,9 +36718,9 @@ day366 Wednesday, September 04, 2013
 	4）查看磐石项目发布wiki，熟悉过程与需要做的步骤，对应落日弓是否都已支持
 		http://wiki.ec.alibaba-inc.com/index.php/磐石业务系统发布步骤
 
-	5）houyiapi env.properties文件是否有变化？
+	5）h-o-u-y-iapi env.properties文件是否有变化？
 		确认？
-		与马达确认：相比与上一个心动消息项目，本次磐石项目，houyiapi的env.properties文件没有变化
+		与马达确认：相比与上一个心动消息项目，本次磐石项目，h-o-u-y-iapi的env.properties文件没有变化
 
 		但由于新的消息项目，对env.properties文件的修改未同步到落日弓，异常env.properties确实有变动，需要修改此模板。
 
@@ -36727,7 +36728,7 @@ day366 Wednesday, September 04, 2013
 
 		在页面，通过参数的方式传递下来。
 
-		conf文件位置：http://svn.alisoft-inc.com/repos/alisoft/houyi/console/branches/api_panshi/rpmbuild/conf/
+		conf文件位置：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/console/branches/api_panshi/rpmbuild/conf/
 		在rpmbuild目录下
 
 	6）HouyiApi agent测试
@@ -36874,7 +36875,7 @@ day367 Thursday, September 05, 2013
 	1）crontab修改并测试
 
 	2）
-	集群配置-导入houyidb
+	集群配置-导入h-o-u-y-idb
 	集群配置-生成数据库sql
 
 	上面2个按钮在不同集群页面中，同时操作时，报 innerSql.xml中的deleteInnerSqlByRegionStep操作时，等待锁超时。原因？
@@ -36898,7 +36899,7 @@ day367 Thursday, September 05, 2013
 
 	另外，一些写事务需要注意锁的级别，尽量避免触发表级锁，从而导致其他事务等待或超时失败。
 
-	3） pet common包放入houyibase源
+	3） pet common包放入h-o-u-y-ibase源
 		trunk上
 
 
@@ -36916,11 +36917,11 @@ http://www.atatech.org/article/detail/10648/0	    云梯
 	描述：
 	1.	落日弓OpenApi设计，以及接口需求梳理和实现
 	2.	参与大禹2的部署扩容流程
-	3.	磐石项目支持（apitask,apiproxy,houyiapi）落日弓支持部署
+	3.	磐石项目支持（apitask,apiproxy,h-o-u-y-iapi）落日弓支持部署
 	评估标准：
 	1.	落日弓OpenApi设计，以及接口需求梳理和实现 3.75
 	2.	参与大禹2的部署扩容流程 3
-	3.	磐石项目支持（apitask,apiproxy,houyiapi）落日弓支持部署 3.25
+	3.	磐石项目支持（apitask,apiproxy,h-o-u-y-iapi）落日弓支持部署 3.25
 
 	目标2：设计和实现
 	描述：
@@ -36974,7 +36975,7 @@ test
 	go2 apiproxy
 		xiaoyun.maoxy@pe1.ops.yh.aliyun.com $ sudo -u admin ssh 127.0.0.1
 		[admin@pe1]$ go2ag ay32c
-		[admin@AY32C_AG]$ vim houyiapilist
+		[admin@AY32C_AG]$ vim h-o-u-y-iapilist
 			apiproxy port 80
 			   3 vip:10.135.252.61
 			   4 rs1:10.200.98.52
@@ -36988,7 +36989,7 @@ day368 Friday, September 06, 2013
 2. 磐禹项目
 	1）落日弓诸葛线上环境问题排查
 	A. apiproxy接入时，报apiproxy找不到
-		region_id > big_region_id > big_region.id_houyiapi + type: apiproxy = ApiProxy
+		region_id > big_region_id > big_region.id_h-o-u-y-iapi + type: apiproxy = ApiProxy
 
 		api.ecs.aliyun-inc.com 这个域名对应的apiproxy没有配置
 	B. 嫦娥接入时，构造URL时，将参数的=号转义了，导致http请求的参数不合法。-tip-
@@ -37004,11 +37005,11 @@ day369 Monday, September 09, 2013
 	* 磐禹项目
 
 2. 磐禹项目
-	1）pet的2个包 pet-houyi , pet-common包 
+	1）pet的2个包 pet-h-o-u-y-i , pet-common包 
 		联系继刚，放到yum源
 	2）OpenApi kiffoff文档整理，明天call meeting kick off
 
-	3）磐石项目 apiproxy ,apitask,houyiapi部署工作流梳理 与马信一起	
+	3）磐石项目 apiproxy ,apitask,h-o-u-y-iapi部署工作流梳理 与马信一起	
 		目前，工作流模板由落日弓开发提供（因为一些job参数的格式问题），实例化的数据由业务PM填写
 
 
@@ -37156,7 +37157,7 @@ day369 Monday, September 09, 2013
 
 
 8. 2台机器测试api部分搭建
-	go2houyici
+	go2h-o-u-y-ici
 	10.230.226.151
 	10.230.226.152 
 
@@ -37168,13 +37169,13 @@ day370 Tuesday, September 10, 2013
 
 2. 磐禹项目
 	1）落日弓OpenApi项目kick off
-	2）local disk测试集群搭建houyiapi部分
+	2）local disk测试集群搭建h-o-u-y-iapi部分
 		落日弓提供mq安装job
 			
-		马达提供自定义job创建houyi库并初始化基础数据 （QA提供机器的mysql信息）
+		马达提供自定义job创建h-o-u-y-i库并初始化基础数据 （QA提供机器的mysql信息）
 	3）MQ安装job实现	  参考心动消息工作流mq的安装
 		erlang(及其依赖包)
-		rabbitmq server http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/trunk_20130904_1258/rabbitmq-service-3.1.3-2503202.x86_64.rpm
+		rabbitmq server http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ictrl/trunk_20130904_1258/rabbitmq-service-3.1.3-2503202.x86_64.rpm
 
 		MQ安装： http://wiki.qa.aliyun-inc.com/index.php/%E5%90%8E%E7%BE%BF%E9%83%A8%E7%BD%B2%E6%B5%81%E7%A8%8B#.E5.85.AB.EF.BC.9A.E5.AE.89.E8.A3.85RabbitMQ
 			-----
@@ -37216,18 +37217,18 @@ day370 Tuesday, September 10, 2013
 			#rabbitmq-server -detached
 
 			API配置MQ地址：
-			修改/home/admin/.houyi/message.properties ，将houyi.message.host改为配置的MQ地址。
+			修改/home/admin/.h-o-u-y-i/message.properties ，将h-o-u-y-i.message.host改为配置的MQ地址。
 			-----
 
-		houyi1: 10.230.204.67
+		h-o-u-y-i1: 10.230.204.67
 
-		同步houyiapi配置步骤
-			realserver中增加2个ip的houyiapi realserver   
-			增加houyiapi域名
-			增加houyiapi对应的odbs（数据库）
+		同步h-o-u-y-iapi配置步骤
+			realserver中增加2个ip的h-o-u-y-iapi realserver   
+			增加h-o-u-y-iapi域名
+			增加h-o-u-y-iapi对应的odbs（数据库）
 				数据库配置正确
 		
-		增加stop_houyiapi步骤
+		增加stop_h-o-u-y-iapi步骤
 
 		添加api task资源（ip地址）
 
@@ -37240,7 +37241,7 @@ day370 Tuesday, September 10, 2013
 				修改release.ini，将项目上源变动合入
 					changes字段修改
 				提交
-		trunk_test源地址： http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/trunk_test_20130906_1125
+		trunk_test源地址： http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ictrl/trunk_test_20130906_1125
 
 		安装apiproxy基础环境，依赖问题，卸载原libevent包后再安装：
 			sudo rpm -e --nodeps libevent-1.1a-3.2.1 
@@ -37251,20 +37252,20 @@ day370 Tuesday, September 10, 2013
 	
 			region.conf中，mysql的配置
 			缺少add bigregion步骤的调用（初始化upstream.conf）
-				配置好bigregion，根据bigRegion找到houyiapi域名（大region管理视图中维护），根据域名和rs类型找到proxy，根据bigRegion找到对应apiproxy
+				配置好bigregion，根据bigRegion找到h-o-u-y-iapi域名（大region管理视图中维护），根据域名和rs类型找到proxy，根据bigRegion找到对应apiproxy
 
 				upstream配置文件生成是否ok？
 
-		配置houyiapi（数据导入houyi库）
+		配置h-o-u-y-iapi（数据导入h-o-u-y-i库）
 			mysql -uapsara -p123456 -h10.230.226.151
 
 
 
 
-	4）QA两台机器上部署houyiapi相关部分，调通
-		磐石houyictrl源： http://jenkins.aliyun-inc.com/package/houyi/binary_release/houyictrl/panshi_20130906_1553/
+	4）QA两台机器上部署h-o-u-y-iapi相关部分，调通
+		磐石h-o-u-y-ictrl源： http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ictrl/panshi_20130906_1553/
 
-ssh 10.230.226.152 sudo rpm -Uvh http://jenkins.aliyun-inc.com/package/houyi/api_base_package/libevent-2.0.19-2.x86_64.rpm --force
+ssh 10.230.226.152 sudo rpm -Uvh http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/libevent-2.0.19-2.x86_64.rpm --force
 
 
 	
@@ -37287,7 +37288,7 @@ day371 Wednesday, September 11, 2013
 			nginx.conf中配置进来独立的配置文件：
 			include upstream/*.upstream.conf;
 		
-		新部署需要增加同步上面base.upstream.conf文件的步骤，数据一部分根据houyiapi找到odbs信息，memcached信息从页面输入（默认值采用模板中的值）
+		新部署需要增加同步上面base.upstream.conf文件的步骤，数据一部分根据h-o-u-y-iapi找到odbs信息，memcached信息从页面输入（默认值采用模板中的值）
 
 	2）合并诸葛最后的修改到磐禹分支
 
@@ -37345,10 +37346,10 @@ day372 Thursday, September 12, 2013
 		upstream目录下的文件，命名格式为 xxx.upsteam.conf
 			eg: upstream.conf.cn-hangzhou-xy2-ci01.1378816640 改为： cn-hangzhou-xy2-ci01.upstream.conf
 	
-		Proxy转发规则说明wiki：  -tip-	     参考：http://wiki.houyi.alibaba-inc.com/pages/viewpage.action?pageId=9247654
+		Proxy转发规则说明wiki：  -tip-	     参考：http://wiki.h-o-u-y-i.alibaba-inc.com/pages/viewpage.action?pageId=9247654
 			根据请求的action，从region.json文件中找到此action应该采用哪种转发规则，目前有的规则为：
-				a. check_vm_name_actions 根据vmName找转发目标（根据vmName从houyi库查询其所属的大regionNo，然后转发到upstream目录下对应大regionNo配置的RS上） 
-				b. check_ip_actions 根据ip从houyi库找到对应的大regionNo
+				a. check_vm_name_actions 根据vmName找转发目标（根据vmName从h-o-u-y-i库查询其所属的大regionNo，然后转发到upstream目录下对应大regionNo配置的RS上） 
+				b. check_ip_actions 根据ip从h-o-u-y-i库找到对应的大regionNo
 				c. redirect_actions	 直接重定向（默认upstream，即base.upstream.conf）
 				d. region_actions
 
@@ -37361,7 +37362,7 @@ day372 Thursday, September 12, 2013
 
 	4）权限设计思考
 	5）集群信息中 disk的默认值确认？
-	6）配置houyiapi连调
+	6）配置h-o-u-y-iapi连调
 		DatabaseGenAction.initDbForHouyiDeploy
 
 	7）推动MQ的rpm包？
@@ -37485,7 +37486,7 @@ day372 Thursday, September 12, 2013
 		    server 10.204.99.197:80;
 		}
 	-----
-	PS: 注意，api proxy会模拟返回某些和houyiapi一样的返回值
+	PS: 注意，api proxy会模拟返回某些和h-o-u-y-iapi一样的返回值
 
 4. onenote
 	记录邮件等
@@ -37501,7 +37502,7 @@ day372 Thursday, September 12, 2013
 
 	比如处理从文档拿到对象列表的应用场景，需要解析的文档类型可能很多种类，但
 
-7.  houyiapi的agent在112，具体houyictrl操作需要到houyici的AG上去看日志
+7.  h-o-u-y-iapi的agent在112，具体h-o-u-y-ictrl操作需要到h-o-u-y-ici的AG上去看日志
 注意
 
 
@@ -37529,7 +37530,7 @@ day373 Friday, September 13, 2013
 	Image上传，需要生成imageslist.conf，里面的device_size要和上传的Image的大小一致，（PS: 里面测试时，随意填了1，但后续却很难发现错误在哪里 why?）
 		另外，上传Image时，image的信息要填写正确
 			src_image_id=0   
-			iso_id 根据image类型，找到能启动此image的ISo，比如centos5u4_32_20G_alibase_v01.vhd要用 linux 32 iso 类型的iso，可以到houyi库iso_resource 表找  -tip- 业务
+			iso_id 根据image类型，找到能启动此image的ISo，比如centos5u4_32_20G_alibase_v01.vhd要用 linux 32 iso 类型的iso，可以到h-o-u-y-i库iso_resource 表找  -tip- 业务
 				image借助ISO启动，即启动vm
 			
 		
@@ -37633,7 +37634,7 @@ day373 Friday, September 13, 2013
 	-----
 
 5. [admin@HOUYICI_AG]$ pwd
-/home/admin/pet/trunk/conf.d/houyi/pyconf.d
+/home/admin/pet/trunk/conf.d/h-o-u-y-i/pyconf.d
 	所有配置，会覆盖
 
 6. image上传
@@ -37661,18 +37662,18 @@ day374 Monday, September 16, 2013
 		测试环境先在 osscmd的机器上绑定3级域名的解析
 
 		通过osscmd命令先测试下是否能找到oss服务？
-			/etc/houyi/osscmd/osscmd
+			/etc/h-o-u-y-i/osscmd/osscmd
 			
 			是因为3级域名是根据bucket来定义的，每次都可能变化，故需要dns解析    -坑-
 
-			查看iso.py脚本，获取oss信息时，从houyi,houyiregiondb中拿到对应小regionNo的oss info信息；用于后续与oss的交互。
+			查看iso.py脚本，获取oss信息时，从h-o-u-y-i,h-o-u-y-iregiondb中拿到对应小regionNo的oss info信息；用于后续与oss的交互。
 				-----
 				def make_oss_info(iso_name):
 				    '''Make oss infomations from database.'''
-				    houyi = db.Houyi()
+				    h-o-u-y-i = db.Houyi()
 				    region_no = config.get_region_no()
-				    cluster_id = houyi.get_cluster_id(region_no)
-				    houyi.close()
+				    cluster_id = h-o-u-y-i.get_cluster_id(region_no)
+				    h-o-u-y-i.close()
 
 				    regiondb = db.Houyiregiondb()
 				    results = regiondb.query('''select access_id,access_key,ocm_addr,domain
@@ -37707,11 +37708,11 @@ day374 Monday, September 16, 2013
 		3) Insert iso resource
 			return iso_id
 		4) Start to update iso id
-			修改houyi.image表中iso_id列
+			修改h-o-u-y-i.image表中iso_id列
 		
 	上传ISO的目的： -tip-
 		每个Image镜像都需要找到合适的ISO来启动，有多种分类，目的就是从vhd的image起vm并可进行一些系统配置。
-		这样，上传ISO时，先从houyi.iso_resource表插入iso记录，上传好后，更新houyi.image表，根据platform找到应该用此ISO启动的Image，更新
+		这样，上传ISO时，先从h-o-u-y-i.iso_resource表插入iso记录，上传好后，更新h-o-u-y-i.image表，根据platform找到应该用此ISO启动的Image，更新
 		它们的iso_id为刚上传的ISO.
 		发布ISO的需求，比如系统升级，系统配置修改，优化等。
 	
@@ -37721,33 +37722,33 @@ day374 Monday, September 16, 2013
 				Store定义在tab页上： IsoJob.js
 
 	ISO上传：
-	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/debian-64-gshell-livecd.iso
-	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/debian-live-6.0.5-amd64-rescue.iso
-	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/winpe.iso
-	http://jenkins.aliyun-inc.com/package/houyi/virt_release/2013_0619/iso/windows-virt-1802945-20130503.iso
+	http://jenkins.aliyun-inc.com/package/h-o-u-y-i/virt_release/2013_0619/iso/debian-64-gshell-livecd.iso
+	http://jenkins.aliyun-inc.com/package/h-o-u-y-i/virt_release/2013_0619/iso/debian-live-6.0.5-amd64-rescue.iso
+	http://jenkins.aliyun-inc.com/package/h-o-u-y-i/virt_release/2013_0619/iso/winpe.iso
+	http://jenkins.aliyun-inc.com/package/h-o-u-y-i/virt_release/2013_0619/iso/windows-virt-1802945-20130503.iso
 	http://ftp.ec.alibaba-inc.com/public/builds/iso/virt/linux_32-virt-release-2472418-20130729.iso
 	http://ftp.ec.alibaba-inc.com/public/builds/iso/virt/linux_64-virt-release-2472418-20130729.iso
 	http://ftp.ec.alibaba-inc.com/public/builds/iso/virt/ubuntu_12.04_64-virt-release-2472418-20130730.iso
 
 
-	2）houyici ag上起vm测试
-		sh houyi_api.sh  create_instance user_id=229 region_id=HOUYICI cores=2 memory=1004 group_id=default image_id=redhat54.64.20120823.qa_rpc.vhd system_disk.type=io1  
+	2）h-o-u-y-ici ag上起vm测试
+		sh h-o-u-y-i_api.sh  create_instance user_id=229 region_id=HOUYICI cores=2 memory=1004 group_id=default image_id=redhat54.64.20120823.qa_rpc.vhd system_disk.type=io1  
 		system_disk.bps=80 system_disk.iops=60
 
-		sh houyi_api.sh  create_instance user_id=229 region_id=HOUYICI cores=2 memory=1004 group_id=default image_id=redhat54.64.20120823.qa_rpc.vhd system_disk.type=io1  
+		sh h-o-u-y-i_api.sh  create_instance user_id=229 region_id=HOUYICI cores=2 memory=1004 group_id=default image_id=redhat54.64.20120823.qa_rpc.vhd system_disk.type=io1  
 		system_disk.bps=80 system_disk.iops=60 nc_id=3000-5		
 		
-		路径： /home/admin/pet/trunk/houyi/houyi_manage/toolkit
-		sh houyi_api.sh start_vm vm_name=VM-55379f86-0f1c-4b4d-8e71-8fcbdc3652df
-			配置： /etc/houyi_pet/conf.d/houyi/shconf.d/xxx.conf
-			修改为正确的houyi库
+		路径： /home/admin/pet/trunk/h-o-u-y-i/h-o-u-y-i_manage/toolkit
+		sh h-o-u-y-i_api.sh start_vm vm_name=VM-55379f86-0f1c-4b4d-8e71-8fcbdc3652df
+			配置： /etc/h-o-u-y-i_pet/conf.d/h-o-u-y-i/shconf.d/xxx.conf
+			修改为正确的h-o-u-y-i库
 		
 		启动vm后，到xen机器上看vm是否启动：
 			-----
-			控制系统角色/houyi角色查看 (AG上查看)/apsara/deploy/Fuxisrvd -v houyi status 	       （ag作为master访问入口admin gateway）
+			控制系统角色/h-o-u-y-i角色查看 (AG上查看)/apsara/deploy/Fuxisrvd -v h-o-u-y-i status 	       （ag作为master访问入口admin gateway）
 				master、netc
 				history |grep status
-				/apsara/deploy/Fuxisrvd -v houyi status
+				/apsara/deploy/Fuxisrvd -v h-o-u-y-i status
 					查看控制系统，集群的角色（由多少nc组成，有哪些服务角色，各自在那个ip上）
 			-----
 			PS: 查看day126 第3条
@@ -37756,10 +37757,10 @@ day374 Monday, September 16, 2013
 				工具根据vmName找到nc的ip并跳过去
 			
 			查看nc日志
-				vim /var/log/houyi/master/HouyiMaster.LOG
+				vim /var/log/h-o-u-y-i/master/HouyiMaster.LOG
 				...
 			/home/admin/.config_cluster/role.def_xxx.conf
-				记录houyi角色
+				记录h-o-u-y-i角色
 			
 
 3. 线上发布
@@ -37805,8 +37806,8 @@ day375 Tuesday, September 17, 2013
 2. 发布后小问题
 	1）集群完成部署后的，集群信息页面，加上zone存储类型的字段显示
 	2）加入嫦娥接口，db信息错误，源于代码查询odbs时有bug；同时api task配置生成也受影响
-		apitask的jobinst的componentId=0，因为它不属于小region，可以通过apitask对象的houyiapiId关联，到odbs查找dbTyep为ecs_houyiapi且idType（
-		根据dbType不同表示不同表的id）为此houyiapiId的记录，即为houyi库的odbs对象。
+		apitask的jobinst的componentId=0，因为它不属于小region，可以通过apitask对象的h-o-u-y-iapiId关联，到odbs查找dbTyep为ecs_h-o-u-y-iapi且idType（
+		根据dbType不同表示不同表的id）为此h-o-u-y-iapiId的记录，即为h-o-u-y-i库的odbs对象。
 
 3. 基于某个分支，建立trunk，然后基于trunk，建立用于并行开发的3个分支						合并分支 分支合并		    * svn
 	此时，trunk上有修改，在3个分支中的某一个分支上修改后，合入trunk，其他2个分支，合入trunk的修改并提交即可。
@@ -37858,29 +37859,29 @@ day376 9/18/2013
 	* 磐禹项目 发布后问题修复
 
 2. 磐禹项目 发布后问题修复
-	1）流量推送在 ，配置houyiapi步骤提前执行？
-		配置houyiapi，api接口，proxy接口 其中某一个步骤中，定位？
+	1）流量推送在 ，配置h-o-u-y-iapi步骤提前执行？
+		配置h-o-u-y-iapi，api接口，proxy接口 其中某一个步骤中，定位？
 
-		houyiapi步骤会调用houyiapi接口create_cluster，其中一个推送参数设置为不推送
+		h-o-u-y-iapi步骤会调用h-o-u-y-iapi接口create_cluster，其中一个推送参数设置为不推送
 
-		初步判断为，在集群信息中配置了数据推送为：是，所以在配置houyiapi按钮时，传入推送标识为true导致。
+		初步判断为，在集群信息中配置了数据推送为：是，所以在配置h-o-u-y-iapi按钮时，传入推送标识为true导致。
 
 		结果：
-			确实是因为集群信息页面，是否推送字段为“是”时，配置houyiapi按钮会使推送服务生效：
+			确实是因为集群信息页面，是否推送字段为“是”时，配置h-o-u-y-iapi按钮会使推送服务生效：
 			-----
 			10.230.226.152 -  -  [18/Sep/2013:13:04:07 +0800] "GET /open/services?weight=0&status=enabled&sign_type=MD5&region_id=cn-hangzhou-xy2-ci01
 				&format=json&aliyun_idkp=149&sign=oxLnh3cW%2F3TTPXFmk5Rfww%3D%3D&timestamp=2013-09-18+13%3A04%3A07&nuwa_address=10.230.204.55
 				&cluster_name=HOUYICI&push_measure_flag=true&session=lisw&master_version=1.0&action=create_cluster&router_address=10.230.204.55%3A38930
 				&cluster_no=HOUYICI HTTP/1.0" 200 56
 			-----
-			PS: 创建cluster时的houyiapi日志，看到push_measure_flag=true
-				houyiapi对外是apiproxy的vip
+			PS: 创建cluster时的h-o-u-y-iapi日志，看到push_measure_flag=true
+				h-o-u-y-iapi对外是apiproxy的vip
 			
 			修改为：注释掉create_cluster传入推送标识参数。
 
 		40 | cn-qingdao-cm9007 | 2013-09-17 09:20:12 | 2013-09-17 09:20:12 |
 	
-	2）houyi.zone表增加存储类型字段
+	2）h-o-u-y-i.zone表增加存储类型字段
 		对应老的数据，如何订正？
 
 3. OpenApi接口		      接口版本 接口版本过渡
@@ -38037,8 +38038,8 @@ day379 Tuesday, September 24, 2013
 		AG上rc.local文件的更新在 生成AG配置 步骤处理，会生成AG的rc.local文件并同步到AG上；
 		然后，在初始化AG配置时，将之前步骤已经放到落日弓指定目录的rc.local覆盖系统当前的rc.local文件，
 	3) 磐石项目，osscmd的位置
-		安装飞天客户端 时，其中一个步骤安装osscmd包，安装目录是 /etc/houyi/script/osscmd （为磐石项目的需求）
-		之前目录错写为：/etc/houyi/osscmd
+		安装飞天客户端 时，其中一个步骤安装osscmd包，安装目录是 /etc/h-o-u-y-i/script/osscmd （为磐石项目的需求）
+		之前目录错写为：/etc/h-o-u-y-i/osscmd
 	
 	5）.228 atzy环境，agent的service安装有问题，服务无法启动？
 		暂时用命令行启动
@@ -38075,7 +38076,7 @@ day380 Wednesday, September 25, 2013
 2. 落日弓
 	1） ocm_cmd包及其安装	     ？
 		在安装飞天客户端时安装
-			ocm_cmd是oss的一个client，拿到tar包，放到CI环境的一个目录下： http://jenkins.aliyun-inc.com/package/houyi/api_base_package/
+			ocm_cmd是oss的一个client，拿到tar包，放到CI环境的一个目录下： http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/
 			然后，在飞天客户端源中加入此包
 
 		另外，原oss_cmd的获取及安装方式：
@@ -38084,7 +38085,7 @@ day380 Wednesday, September 25, 2013
 		pm 谭总
 		线上发布中
 
-		a. houyi.json有变动 
+		a. h-o-u-y-i.json有变动 
 		
 		梳理思路：
 			先看三伏天的项目wiki，了解项目背景
@@ -38110,8 +38111,8 @@ day380 Wednesday, September 25, 2013
 	...
 
 6. 代码源svn结构
-	houyi_release
-	http://jenkins.aliyun-inc.com/package/houyi/api_base_package/
+	h-o-u-y-i_release
+	http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/
 		一部分包，比如ocm_cmd包放到CI对应上面链接的目录下
 
 
@@ -38122,18 +38123,18 @@ day381 Thursday, September 26, 2013
 	* 落日弓
 
 2. 落日弓
-	1）将ocm_cmd包放到CI环境 http://jenkins.aliyun-inc.com/package/houyi/api_base_package/ 目录下
+	1）将ocm_cmd包放到CI环境 http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/ 目录下
 		来自： 
-		http://jenkins.aliyun-inc.com/package/houyi/api_base_package/oss.tar.gz
+		http://jenkins.aliyun-inc.com/package/h-o-u-y-i/api_base_package/oss.tar.gz
 		然后配置到飞天客户端源中
 		参考day366，第2条第2）小部分
 			将ocm_cmd对应的包，加到磐石项目代码源branch中。
-				即 http://svn.alisoft-inc.com/repos/alisoft/houyi/binary_release/apsara_client/branches/panshi/release.ini 文件
-		新的panshi代码源地址： http://jenkins.aliyun-inc.com/package/houyi/binary_release/apsara_client/panshi_20130926_1317/
+				即 http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/binary_release/apsara_client/branches/panshi/release.ini 文件
+		新的panshi代码源地址： http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/apsara_client/panshi_20130926_1317/
 			可以取到安装ocm_cmd的包了。
 			ocm_cmd包的安装说明： 
 		
-		此包中已包含osscmd命令，对比了下与原 http://jenkins.aliyun-inc.com/package/houyi/binary_release/apsara_client/panshi_20130926_1317/OSS_Python_API_20130806.tar.gz 中的osscmd内容不一样？
+		此包中已包含osscmd命令，对比了下与原 http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/apsara_client/panshi_20130926_1317/OSS_Python_API_20130806.tar.gz 中的osscmd内容不一样？
 			与liuhang确认，用新包即可；原包不安装；
 		
 		在安装飞天客户端时，部署新包。
@@ -38147,17 +38148,17 @@ day381 Thursday, September 26, 2013
 		- list_region接口，增加big_region_no，product参数过滤
 		- region_no参数改为cluster_name，运维都用cluster_name（AY81E）
 		- list_rhs接口，rhs有一个vip，对应多个rs的ip，这个接口返回时，rs的返回方式改为realserver: ['1.1.1.1', '1.1.1.2']
-		- list_role接口，返回集群有那些角色列表；后续提供通过角色，查询角色信息接口，返回角色对应的ip信息，比如houyicc有那些ip列表，houyimaster有那些ip列表
-			houyicc:['1.1.1.1', '1.1.1.2']
+		- list_role接口，返回集群有那些角色列表；后续提供通过角色，查询角色信息接口，返回角色对应的ip信息，比如h-o-u-y-icc有那些ip列表，h-o-u-y-imaster有那些ip列表
+			h-o-u-y-icc:['1.1.1.1', '1.1.1.2']
 		- 从使用者的角度思考接口，及返回值
 
 	3）三伏天项目跟踪整理 及落日弓修改 Done
 		快照工具脚本
-		/etc/houyi/script/snapshot_tools_storage.py
+		/etc/h-o-u-y-i/script/snapshot_tools_storage.py
 
-		houyi.json文件有修改，具体见wiki: http://wiki.ec.alibaba-inc.com/index.php/落日弓与三伏天#.E8.B7.9F.E8.B8.AA.E6.96.87.E6.A1.A3
+		h-o-u-y-i.json文件有修改，具体见wiki: http://wiki.ec.alibaba-inc.com/index.php/落日弓与三伏天#.E8.B7.9F.E8.B8.AA.E6.96.87.E6.A1.A3
 
-		对应修改生成houyi.json配置的代码，在 生成配置 步骤中的生成AG配置的genApsaraAndHouyiConfig中的genHouyiJson方法中处理。
+		对应修改生成h-o-u-y-i.json配置的代码，在 生成配置 步骤中的生成AG配置的genApsaraAndHouyiConfig中的genHouyiJson方法中处理。
 			加入对应的修改；其中有一部分需要判断集群类型。
 
 	4）10.8 openapi设计再评审？		    Wating
@@ -38184,7 +38185,7 @@ day382 Friday, September 27, 2013
 			MQ的消息发送格式 rabbitMq消息广播
 
 	2）集群信息 增加ossdomain字段
-		在初始化houyiregiondb时，此集群对应的ossdomain字段初始化到此库的oss_info表的domain列中
+		在初始化h-o-u-y-iregiondb时，此集群对应的ossdomain字段初始化到此库的oss_info表的domain列中
 
 		syscontrolAction.updateDeployCluster
 
@@ -38195,14 +38196,14 @@ day382 Friday, September 27, 2013
 
 	3）nc_resource表初始化
 		io1，io1，dfs 大小时，需要判断nc的存储类型，再初始化对应的值
-	4）houyi.json的修改回滚
+	4）h-o-u-y-i.json的修改回滚
 
 		从一个业务方配置项变化引出的思考：		      -tip- 设计
 		只维护一个模板，如果因环境不同，则应该反映在value上的差异，对应的key是不变的。
 		从落日弓本身，希望所管理的业务系统的配置文件数目和配置项是可控的，一致的；如果有不一致的情况，需要推动业务方去作为，
 		保证模板配置的一致性。							
 
-		以本次houyi.json文件在内部生产和对外生产环境中有一个项不同为例，可以只维护一个houyi.josn模板，对应的value因不同环境而不同，业务程序
+		以本次h-o-u-y-i.json文件在内部生产和对外生产环境中有一个项不同为例，可以只维护一个h-o-u-y-i.josn模板，对应的value因不同环境而不同，业务程序
 		判断值的不同从而区分字段是否生效。		
 
 		定位自己，定位为一个产品，就需要考虑多个情况，就希望与交互者，集成者在各个方面大成一致，形成规范或约定；既能满足业务方自我的扩展，也能
@@ -38355,12 +38356,12 @@ day385 Friday, October 11, 2013
 
 2. 落日弓
 	1) bugfix
-		接入嫦娥接口，houyimon数据库信息部分，用户名和密码传入错误	       Done
+		接入嫦娥接口，h-o-u-y-imon数据库信息部分，用户名和密码传入错误	       Done
 		 ISO上传功能，导入时，URL中iso名称前的地址被覆盖，没有采用excel中填入的URL，只取了列表中的第一个 Done
 
 	5）集群部署模块划分，任务划分：
 		HouyiAPI： 
-		apiproxy  houyiapi   rhs  apitask   regionmaster  rms  API接入
+		apiproxy  h-o-u-y-iapi   rhs  apitask   regionmaster  rms  API接入
 
 		Apsara client
 		Tdc  apsaraclient  
@@ -38372,7 +38373,7 @@ day385 Friday, October 11, 2013
 		apsara    dayu    env  
 
 		HouyiCtrl：
-		pync   houyictrl  httpproxy  router  houyivirt  ossserver  数据库JOB
+		pync   h-o-u-y-ictrl  httpproxy  router  h-o-u-y-ivirt  ossserver  数据库JOB
 
 		工作流： 
 		RAF 集群部署/扩容
@@ -38400,13 +38401,13 @@ day386 Saturday, October 12, 2013
 		使用mock包和nose测试框架
 		在eclipse中的pydev中执行单元测试用例
 			导入需要的各个库，下载pet库并加入项目依赖库中
-	2）houyiapi相关服务部署问题：
+	2）h-o-u-y-iapi相关服务部署问题：
 	 (1）执行 添加大region的apiproxy配置 前需要启动apiproxy
 	 (2）apiproxy启动依赖memcached服务启动
 	 /usr/local/memcached/bin/memcached -u nobody -d -m 2000
-	 (3）生成apiproxy的配置中，houyi库的用户名和密码错误
+	 (3）生成apiproxy的配置中，h-o-u-y-i库的用户名和密码错误
 	 (4）apiproxy根据用户的默认region转发，但默认region也不存在
-	通过手动将用户所属的默认region加入houyi库的region和region_alias表中
+	通过手动将用户所属的默认region加入h-o-u-y-i库的region和region_alias表中
 	(5）多次执行添加大region的apiproxy配置，会导致upstream目录下的配置文件命名有问题且出现多个大region的配置文件
 3. 
 
@@ -38428,8 +38429,8 @@ day387 Monday, October 14, 2013
 		关键是给公司带来的价值
 
 	
-Agent：http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigong/branches/luorigong_for_workflow/
-Web：http://svn.alisoft-inc.com/repos/alisoft/houyi/luorigongweb/branches/luorigongweb_for_yichujifa/
+Agent：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigong/branches/luorigong_for_workflow/
+Web：http://svn.alisoft-inc.com/repos/alisoft/h-o-u-y-i/luorigongweb/branches/luorigongweb_for_yichujifa/
 
 
 Monday, October 14, 2013
