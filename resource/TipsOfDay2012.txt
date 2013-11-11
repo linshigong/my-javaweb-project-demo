@@ -9546,6 +9546,8 @@ search in index find pdf
 	    2.3)CentOS 5的yum源设为上海交通大学网站 
 
 * vim
+	- ctrl+r 重做
+		u为undo
 	- 通过 shift + * 以及 /xxx方式的搜索，查看代码时快速定位方法，单词
 		搜索的方式实现
 
@@ -12734,7 +12736,7 @@ It is also an FTP application platform. We have developed a Java API to let you 
 	- ibatis+oscache
 		
 
-	- sqlmap配置文件中的CacheModel
+	- sqlmap配置文件中的CacheModel		    ibatis缓存
 	cacheModel
 		A cacheModel is used to describe a cache for use with a  query mapped statement. Each query mapped statement can use a different cacheModel, or the same 
 		one. The following example will demonstrate how it looks related to a statement: 
@@ -20914,7 +20916,7 @@ day73 Friday, June 29, 2012
 		}
 	}
 
-	ResourceUtil中的其他工具方法，开源框架的工具类代码风格
+	ResourceUtil中的其他工具方法，开源框架的工具类的代码风格
 
 4. web服务，对应非法的url，需要设计相应的错误提示页面，不直接返回服务器错误内容比如404之类。
 		对于不同的web服务器，或web框架都提供错误url处理方式。
@@ -29089,7 +29091,7 @@ day278 Thursday, May 02, 2013
 	快照的getSnapshotType方法在：createImage，和SnapshotServiceImpl的isSnapshotCanUseInTargetRegion方法中用到，前者会将空传递给DAO层（表字段默认为1，即hash类型）
 	以默认值存储，后者已判断snapshotType是否为空，为空则报错（-50, "snapshot not exists"）。
 
-3. 通过wireshark分析chunked传输过程
+3. 通过wireshark分析chunked传输过程		   http请求
 	tcp3次握手后建立连接，client发出http请求，server返回一个tcp ack，接着继续返回http 200 ok以及的一个chunk的数据,client收到后返回一个tcp ack，
 	server开始以http返回数据(不包含状态码)，client收到后返回tcp ack，这样循环直到server返回chunk的结束标志，接着返回/r/n，client返回tcp ack，此时chunk数据
 	传输结束
@@ -31010,6 +31012,8 @@ day306 Wednesday, May 29, 2013
 	bubbly.cc
 	panac.cc
 	erland.cc
+	godaddy
+	Fei0---Big bang
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -32814,7 +32818,7 @@ day326 Tuesday, July 09, 2013
 	问题：阻塞在sqlexecutor的executeUpdate
 
 	Dbfit如何处理事务？
-		jtester采用自己的db配置生成datasource实例，并提供spring容器中的datasource实例，以保证测试框架和业务程序使用相同的datasource。
+		jtester采用自己的db配置生成datasource实例，并替换spring容器中的datasource实例，以保证测试框架和业务程序使用相同的datasource。
 
 	JTesterClassPathXmlApplicationContext 提供了proxy datasource来统一进行dao操作，
 	但本项目却debug不进来，why？

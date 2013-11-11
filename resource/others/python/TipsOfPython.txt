@@ -280,7 +280,7 @@ OR from book: Dive Into Python 20 May 2004
 					as well. (More on classes in Chapter 5.)
 					- The * operator works on lists as a repeater. li = [1, 2] * 3 is equivalent to li = [1, 2] + [1, 2] + [1, 2], which concatenates the three lists into one.
 	3.3. Introducing Tuples
-		A tuple is an immutable list. A tuple can not be changed in any way once it is created.
+		A tuple is an immutable list. A tuple can not be changed in any way once it is created.															    10/28/2013
 
 		Example 3.15. Defining a tuple
 			>>> t = ("a", "b", "mpilgrim", "z", "example") 
