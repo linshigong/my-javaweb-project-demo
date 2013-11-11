@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d  %5p [%t] (%F:%L) - %m%n" />
+		</layout>
+	</appender>
+
+
+	<logger name="test">
+		<level value="info" />
+	</logger>
+
+	<root>
+		<priority value="info" />
+		<appender-ref ref="stdout" />
+		<!-- 此处可定义一个指向日志文件的路径，日志将也会写入到文件中
+		<appender-ref ref="fileout" />
+		 -->
+	</root>
+
+</log4j:configuration>
