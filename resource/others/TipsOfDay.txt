@@ -23199,7 +23199,15 @@ day265 2011年8月30日
 	全局配置完成后：
 		只需要对需要避免重复提价的action配置时引入 <interceptor-ref name="duplicatesubmitstack"/> ，并在input页的form里加上
 	生成token值的 <s:token/> 标签即可。
+	
+	原理：
+		生成页面表单时，将token放到表单中，同时将token放到action的session中；请求提交后，对比token是否一致，一致的话就去掉session中的token，这样
+		下次再请求带着个token时就会判断出不合法。
+		
+		注：这里关键的地方是，token一开始是放到会话session中的，在本次会话过程中都有效。
 
+
+		
 
 5. 
 

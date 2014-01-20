@@ -265,7 +265,7 @@ ft2013-04-22
 	"在一个EJB容器中,容器如何知道事务已经完成并且可以提交了？用户如何控制事务回滚？"	 jee
 	AOP的含义与用途	 opensource
 	Ioc的含义与用途	 opensource
-	Spring用过那些功能	 opensource
+	Spring用过那些功能	 opensource										   n
 	Structs中处理请求的流程	 opensource
 	解释springaop，transaction，FactoryBean&BeanFactory	 opensource
 	你知道IoC(InversionofControl)吗？IoC有哪几种类型？使用IoC有哪些好处？现在有哪些比较流行的IoC容器？	 opensource
@@ -301,7 +301,7 @@ ft2013-04-22
 	-----
 * 佳丽摄影
 * AG
-* wRawac7ece	   ft
+* wRawac7ece	   mao
 * 6843 ft75
 * 静态路由
 * soa * wsdl
@@ -321,8 +321,7 @@ https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=11&ct=1379419025&rver=6.2.6
 			js如何捕获异常
 			在JavaScript可以使用try...catch来进行异常处理。例如： try {
 			foo.bar();
-			} catch (e) {
-			alert(e.name + ": " + e.message);
+			} catch (e) { n: " + e.message);
 			}
 			目前我们可能得到的系统异常主要包含以下6种:
 			EvalError: raised when an error occurs executing code in eval()
@@ -338,7 +337,7 @@ https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=11&ct=1379419025&rver=6.2.6
 			throw new Error("Whoops!");
 			} catch (e) {
 			alert(e.name + ": " + e.message);
-			}
+			}						   
 			如要判断异常信息的类型，可在catch中进行判断：
 			try {
 			foo.bar();
@@ -667,6 +666,22 @@ Read more: http://www.ehow.com/info_8075301_differences-between-iso-img-files.ht
 
 * 集群监控
 	Ganglia
+	-----
+	What is Ganglia?
+	Ganglia is a scalable distributed monitoring system for high-performance computing systems such as clusters and Grids. It is based on a hierarchical design targeted at 
+	federations of clusters. It leverages widely used technologies such as XML for data representation, XDR for compact, portable data transport, and RRDtool for data 
+	storage and visualization. It uses carefully engineered data structures and algorithms to achieve very low per-node overheads and high concurrency. The implementation 
+	is robust, has been ported to an extensive set of operating systems and processor architectures, and is currently in use on thousands of clusters around the world. It has 
+	been used to link clusters across university campuses and around the world and can scale to handle clusters with 2000 nodes.
+
+	Ganglia is a BSD-licensed open-source project that grew out of the University of California, Berkeley Millennium Project which was initially funded in large part by the 
+	National Partnership for Advanced Computational Infrastructure (NPACI) and National Science Foundation RI Award EIA-9802069. NPACI is funded by the National 
+	Science Foundation and strives to advance science by creating a ubiquitous, continuous, and pervasive national computational infrastructure: the Grid. Current support 
+	comes from Planet Lab: an open platform for developing, deploying, and accessing planetary-scale services.
+	-----
+	from: http://ganglia.sourceforge.net/
+	PS: c，python
+
 * personal web
 	dynamic DNS resolve动态域名解析服务（Dynamic Domain Name Server）
 		花生壳等（每次动态公网IP发生变化时，将新的IP更新到动态域名解析服务商的数据库中，这样每次域名都指向到新的IP）
@@ -4868,7 +4883,7 @@ ftian20130102
 	阻塞I/O	非阻塞I/O	I/O复用	信号驱动I/O	异步IO
 	see: http://www.cnblogs.com/aHuner/archive/2013/05/31/3110337.html
 
-* SSL
+* SSL					     E
 	- SSL协议详解 http://kb.cnblogs.com/page/162080/
 	- SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。
 		TLS与SSL在传输层对网络连接进行加密。
@@ -6334,6 +6349,21 @@ Storage for Interactive Services
 		EPHEMERAL_SEQUENTIAL 目录节点，然后调用 getChildren 方法获取当前的目录节点列表中最小的目录节点是不是就是自己创建的目录节点，如果正是自己创建的，
 		那么它就获得了这个锁，如果不是那么它就调用 exists (String  path, boolean watch) 方法并监控 Zookeeper 上目录节点列表的变化，一直到自己创建的节点是列表中最小编号的目录节点，
 		从而获得锁，释放锁很简单，只要删除前面它自己所创建的目录节点就行了。
+
+		more:
+		a. zookeeper中节点的创建类型有4类，这里我们重点关注下临时顺序节点。这种类型的节点有几下几个特性：
+		b. 节点的生命周期和客户端会话绑定，即创建节点的客户端会话一旦失效，那么这个节点也会被清除。
+		
+		每个父节点都会负责维护其子节点创建的先后顺序，并且如果创建的是顺序节点（SEQUENTIAL）的话，父节点会自动为这个节点分配一个整形数值，
+		以后缀的形式自动追加到节点名中，作为这个节点最终的节点名。
+
+		利用上面这两个特性，我们来看下获取实现分布式锁的基本逻辑：
+
+		a. 客户端调用create()方法创建名为“_locknode_/guid-lock-”的节点，需要注意的是，这里节点的创建类型需要设置为EPHEMERAL_SEQUENTIAL。
+		b. 客户端调用getChildren(“_locknode_”)方法来获取所有已经创建的子节点，同时在这个节点上注册上子节点变更通知的Watcher。
+		c. 客户端获取到所有子节点path之后，如果发现自己在步骤1中创建的节点是所有节点中序号最小的，那么就认为这个客户端获得了锁。
+		d. 如果在步骤3中发现自己并非是所有子节点中最小的，说明自己还没有获取到锁，就开始等待，直到下次子节点变更通知的时候，再进行子节点的获取，判断是否获取锁。
+		释放锁的过程相对比较简单，就是删除自己创建的那个子节点即可。
 
 		5) 队列管理
 
@@ -24599,10 +24629,12 @@ day163 Thursday, November 01, 2012
 
 2. 
 
-3. 禁用Java DNS缓存-Disable DNS caching
+3. 禁用Java DNS缓存-Disable DNS caching		      dns cache
 	http://itindex.net/blog/2007/01/22/1169462290428.html
 
-	java命令中加上参数：Dsun.net.inetaddr.ttl=0 
+
+
+	DNS spoofing attack
 
 
 4. too many open files 问题
@@ -27622,7 +27654,7 @@ day245 Friday, March 08, 2013
 	python
 	样例程序
 
-3. 创建userd的key和id例子	       access key access id
+3. 创建userd的key和id例子	       access key access id		 创建用户
 	--------
 		@Test
 		public void createUser() throws Exception{
@@ -32640,7 +32672,8 @@ day324 Friday, July 05, 2013
 	1）extjs更新form值回显逻辑	* Extjs form表单相关
 		以ManageNetSpaceGridPanel.js为例
 		弹出更新表单定义在双击事件中，回去加载表单用到的store，store中的model定义，与store请求所返回json的映射配置。
-			注意：这里服务端返回的json对象，要与store的model一一对应，并且属性类型也许一致。-tip-
+			注意：这里服务端返回的json对象，要与store的model一一对应，并且属性类型也许一致。grid页面的stroe定义正确，列表页面才能正确显示；且表单中的name属性名称
+			要与grid的store中定义的名称一致，然后表单的store回去取数据，表单中store的id与grid store中的id一致对上，然后取表单store中对应id对应的key的值 。。-tip-
 			vo全部用String类型
 
 		UpdateNetSpaceForm.js
@@ -37177,7 +37210,7 @@ day370 Tuesday, September 10, 2013
 		落日弓提供mq安装job
 			
 		马达提供自定义job创建h-o-u-y-i库并初始化基础数据 （QA提供机器的mysql信息）
-	3）MQ安装job实现	  参考心动消息工作流mq的安装
+	3）MQ安装job实现	  参考心动消息工作流mq的安装		  rabbitmq安装
 		erlang(及其依赖包)
 		rabbitmq server http://jenkins.aliyun-inc.com/package/h-o-u-y-i/binary_release/h-o-u-y-ictrl/trunk_20130904_1258/rabbitmq-service-3.1.3-2503202.x86_64.rpm
 
@@ -37883,6 +37916,9 @@ day376 9/18/2013
 			
 			修改为：注释掉create_cluster传入推送标识参数。
 
+			2013.11.14：
+				补充说明，   push_measure_flag要设置为fasle，不传默认是为true的，这点要特别注意
+
 		40 | cn-qingdao-cm9007 | 2013-09-17 09:20:12 | 2013-09-17 09:20:12 |
 	
 	2）h-o-u-y-i.zone表增加存储类型字段
@@ -38441,4 +38477,21 @@ Monday, October 14, 2013
 Motivate to evernote
 
 Tuesday, October 15, 2013
+
+
+
+
+
+Monday, December 16, 2013
+
+1. apiproxy到houyiapi的调用hack完成
+	后续用job实现
+
+	apiproxy：
+		修改region.json文件，hack默认转发的大regionNo名称
+		在upstream文件夹下创建上面大RegionNo的转发配置
+	houyiapi:
+		在region，region_alias，user表插入hack数据
+			user的default_region要存在
+	
 
