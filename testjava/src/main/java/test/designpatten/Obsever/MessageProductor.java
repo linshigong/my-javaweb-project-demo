@@ -13,7 +13,7 @@ public class MessageProductor extends Observable {
 	public void receiveDataAndNotify(String newStr){
 		setChanged();
 		if(true){//got data
-			notifyObservers("hi ,subscribers,newData is:"+newStr);
+			notifyObservers("t= " + Thread.currentThread().getId() + "hi ,subscribers,newData is:"+newStr);
 		}
 	}
 	

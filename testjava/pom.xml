@@ -5,7 +5,7 @@
 	<artifactId>test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>for test use</name>
-	<description>for test use</description>
+	<description>for test use </description>
 
 	<repositories>
 		<repository>

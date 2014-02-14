@@ -11,7 +11,7 @@ public class Subscriber implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("I got notified,the message is:" + arg.toString());
+		System.out.println("t=" + Thread.currentThread().getId() + "  I got notified,the message is:" + arg.toString());
 	}
 
 }
